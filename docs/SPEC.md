@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.2
+# SPEC – Revier (Arbeitstitel), MVP v0.3
 
+v0.3: Startregion (7.4) und Retention-Default (7.3) entschieden, Pausieren/Fortsetzen durch Besitzer (3.4), Schema-Ergänzungen für M1 (3.1).
 v0.2: Web-App als gleichwertige Plattform ergänzt, Android ausdrücklich ausgeschlossen. Offene Punkte stehen in Abschnitt 7. Änderungen an der Spezifikation werden hier versioniert, nicht nur im Chat.
 
 ## 1. Produkt in einem Satz
@@ -48,10 +49,11 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 
 **verifications**
 - `user_id`, `document_path` (privater Storage-Bucket), `document_type` (`jagdschein | jagdkarte | revierbescheinigung | gewerbe`), `status`, `reviewed_by`, `reviewed_at`, `reject_reason`
-- Dokumente werden nach Entscheidung automatisch nach X Tagen gelöscht (Retention in Abschnitt 7 klären).
+- Zusätzlich `decided_at`, `document_deleted_at`; `document_path` ist nullable. Nach Ablauf der Frist wird nur das Dokument gelöscht, die Zeile (Typ, Status, Prüfer, Datum) bleibt bis zur Account-Löschung (siehe 7.3, ADR 008).
 
 **regions**
-- `country`, `level` enum (`state | district`), `parent_id` null, `code` text, `name_de`, `name_en`, `name_cs`, `name_pl`, `centroid` geography(point)
+- `country`, `level` enum (`state | district`), `parent_id` null, `code` text (state: ISO 3166-2, z. B. `DE-BY`; district: amtlicher Schlüssel mit Länderpräfix, z. B. `DE-09162`), `slug` text, `name_de`, `name_en`, `name_cs`, `name_pl`, `centroid` geography(point); unique (`country`, `level`, `code`)
+- Anzeigen sind nur in Ländern möglich, für die `district`-Daten vorliegen (zunächst DE, AT).
 - Befüllt mit Bundesländern/Kantonen/Kraje/Woiwodschaften und Landkreisen/Bezirken.
 
 **listings**
@@ -117,7 +119,10 @@ Validierung im Client und per DB-Check/Edge Function.
 - Exakte Koordinaten werden nicht gespeichert. Die genaue Lage teilen Anbieter selbst im Chat.
 
 ### 3.4 Wichtige RLS-Regeln
-- `listings`: jeder darf `status = 'active'` lesen; Besitzer liest/ändert eigene (außer Statuswechsel auf `active`, das nur Admin darf); Admin liest alles.
+- `listings`: jeder darf `status = 'active'` mit `expires_at > now()` von nicht gesperrten Besitzern lesen; Besitzer liest/ändert eigene; Admin liest alles. Statuswechsel prüft ein Trigger:
+  - Besitzer: `draft → pending_review`, `pending_review → draft`, `active → paused`, `paused → active` (Fortsetzen ohne erneute Prüfung, nur solange `expires_at` nicht abgelaufen ist).
+  - Jede Inhaltsänderung an einer `active`- oder `paused`-Anzeige setzt sie auf `pending_review`.
+  - Nur Admin: `pending_review → active | rejected`, `* → removed`. `expires_at`, `reject_reason`, `owner_id` setzt nur der Server.
 - `messages`/`conversations`: nur Teilnehmer; gesperrte (blockierte) Paare dürfen nicht schreiben.
 - `verifications` und Dokument-Bucket: nur Besitzer (Insert/Read eigene) und Admin.
 - `profiles`: öffentlich lesbar nur `display_name`, `account_type`, `verification_status`, `business_name`, `country` (über eine View); alles andere nur Besitzer/Admin.
@@ -264,8 +269,8 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 ## 7. Offene Entscheidungen (bitte vor M1/M3 klären)
 1. **Name und Domain**, Bundle-ID, Entwickler-Account (Privatperson oder Firma)
 2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform
-3. **Retention:** Wie lange werden Verifizierungsdokumente gespeichert? Welche Daten müssen nach Account-Löschung aus Rechtsgründen bleiben?
-4. **Startregion** für den Seed (Vorschlag: Bayern + Österreich + Böhmen)
+3. **Retention:** *Technischer Default entschieden (v0.3, ADR 008), anwaltliche Prüfung offen.* Verifizierungsdokument 30 Tage nach Entscheidung löschen, bei Account-Löschung sofort; Metadaten bis zur Account-Löschung. Account-Löschung ist eine echte Löschung inkl. Chats; Audit- und Moderationsdaten bleiben pseudonymisiert. Alle Fristen konfigurierbar (`private.app_settings`). Rechtlich zu prüfen: Dauer für Jagdscheine, DSA-Fristen für Moderationsdaten, Beweissicherung, Nachrichten beim Gegenüber.
+4. **Startregion:** *Entschieden (v0.3, ADR 007).* DE und AT vollständig (Länder und Kreise/Bezirke) aus amtlichen Quellen. CZ, PL, CH folgen vor dem jeweiligen Marktstart.
 5. **Verifizierungspflicht:** Muss jeder Anbieter verifiziert sein, oder nur für Pachtanzeigen?
 6. **Glossar:** Jagdfachbegriffe in cs/pl durch Muttersprachler prüfen lassen (`docs/GLOSSARY.md`)
 7. **Moderationsprozess:** Wer prüft wie schnell? (Ziel: Freigabe < 24 h)
