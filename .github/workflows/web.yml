@@ -25,6 +25,13 @@ jobs:
             echo "::error::Server-Secrets dürfen nie mit NEXT_PUBLIC_ beginnen (docs/adr/002)."
             exit 1
           fi
+      - name: Keine Supabase-Secret-Keys oder privaten Schlüssel im Repo
+        run: |
+          if grep -rEln "sb_secret_[A-Za-z0-9_-]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----" \
+              --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=.git .; then
+            echo "::error::Secret im Repo gefunden. Entfernen und den Key rotieren (docs/adr/002)."
+            exit 1
+          fi
 
   check:
     runs-on: ubuntu-latest
@@ -44,6 +51,11 @@ jobs:
           node-version-file: web/.nvmrc
           cache: npm
           cache-dependency-path: web/package-lock.json
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: web/.next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}-${{ hashFiles('web/**/*.ts', 'web/**/*.tsx', 'web/**/*.json', 'web/**/*.css') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}-
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
