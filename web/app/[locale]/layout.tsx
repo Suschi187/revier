@@ -5,6 +5,7 @@ import { locale as rootLocale } from "next/root-params";
 import { notFound } from "next/navigation";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { routing } from "@/i18n/routing";
+import { publicEnv } from "@/lib/env";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -14,6 +15,7 @@ export function generateStaticParams() {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
   return {
+    metadataBase: new URL(publicEnv.NEXT_PUBLIC_SITE_URL),
     title: { default: t("siteName"), template: `%s | ${t("siteName")}` },
     description: t("siteDescription"),
   };
