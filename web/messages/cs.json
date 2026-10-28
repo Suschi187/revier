@@ -1,0 +1,24 @@
+{
+  "Metadata": {
+    "siteName": "Revier",
+    "siteDescription": "Tržiště loveckých příležitostí v Německu, Rakousku, Švýcarsku, Česku a Polsku."
+  },
+  "HomePage": {
+    "metaTitle": "Lovecké příležitosti ve střední Evropě",
+    "title": "Najděte lovecké příležitosti",
+    "intro": "Pronájem honiteb, povolenky k lovu, společné hony, trofejní lovy a pomocníci při lovu v Německu, Rakousku, Švýcarsku, Česku a Polsku."
+  },
+  "LocaleSwitcher": {
+    "label": "Jazyk",
+    "names": {
+      "de": "Deutsch",
+      "en": "English",
+      "cs": "Čeština",
+      "pl": "Polski"
+    }
+  },
+  "NotFound": {
+    "title": "Stránka nenalezena",
+    "backHome": "Zpět na úvodní stránku"
+  }
+}

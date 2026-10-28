@@ -1,0 +1,24 @@
+{
+  "Metadata": {
+    "siteName": "Revier",
+    "siteDescription": "Platforma ogłoszeń łowieckich w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
+  },
+  "HomePage": {
+    "metaTitle": "Możliwości polowań w Europie Środkowej",
+    "title": "Znajdź możliwości polowań",
+    "intro": "Dzierżawa obwodów łowieckich, odstrzały, polowania zbiorowe, polowania trofeowe i pomocnicy myśliwych w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
+  },
+  "LocaleSwitcher": {
+    "label": "Język",
+    "names": {
+      "de": "Deutsch",
+      "en": "English",
+      "cs": "Čeština",
+      "pl": "Polski"
+    }
+  },
+  "NotFound": {
+    "title": "Nie znaleziono strony",
+    "backHome": "Powrót do strony głównej"
+  }
+}

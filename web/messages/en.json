@@ -1,0 +1,24 @@
+{
+  "Metadata": {
+    "siteName": "Revier",
+    "siteDescription": "Marketplace for hunting opportunities in Germany, Austria, Switzerland, Czechia and Poland."
+  },
+  "HomePage": {
+    "metaTitle": "Hunting opportunities in Central Europe",
+    "title": "Find hunting opportunities",
+    "intro": "Hunting leases, hunting permits, driven hunts, trophy hunts and hunting helpers in Germany, Austria, Switzerland, Czechia and Poland."
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "names": {
+      "de": "Deutsch",
+      "en": "English",
+      "cs": "Čeština",
+      "pl": "Polski"
+    }
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "backHome": "Back to the home page"
+  }
+}

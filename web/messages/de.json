@@ -1,0 +1,24 @@
+{
+  "Metadata": {
+    "siteName": "Revier",
+    "siteDescription": "Marktplatz für Jagdgelegenheiten in Deutschland, Österreich, der Schweiz, Tschechien und Polen."
+  },
+  "HomePage": {
+    "metaTitle": "Jagdgelegenheiten in Mitteleuropa",
+    "title": "Jagdgelegenheiten finden",
+    "intro": "Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäenjagden und Jagdhelfer in Deutschland, Österreich, der Schweiz, Tschechien und Polen."
+  },
+  "LocaleSwitcher": {
+    "label": "Sprache",
+    "names": {
+      "de": "Deutsch",
+      "en": "English",
+      "cs": "Čeština",
+      "pl": "Polski"
+    }
+  },
+  "NotFound": {
+    "title": "Seite nicht gefunden",
+    "backHome": "Zur Startseite"
+  }
+}
