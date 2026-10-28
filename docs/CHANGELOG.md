@@ -35,9 +35,18 @@ npm run check:supabase               # zwei ✓
 - [x] Lint, Typecheck und Beispieltests (12) grün; `npm run build` ohne Warnungen
 - [x] Supabase-Verbindung funktioniert (`check:supabase`: Auth-Health 200, anon-Key akzeptiert; falscher Key → Fehler)
 
+### Nach QA (docs/QA-REPORT.md, F1–F9)
+- 404: statische, mehrsprachige `global-not-found` (serverseitig, `noindex`, ohne Canonical); `/foo.png` und `/api` enden in der 404
+- hreflang nur noch aus dem HTML, kein `Link`-Header der Middleware
+- Secret- und service_role-Keys in `NEXT_PUBLIC_SUPABASE_ANON_KEY` werden abgelehnt (Build und `check:supabase`)
+- CI: erweiterter Secret-Guard, Build-Cache
+- Testen zusätzlich: `curl -I http://localhost:3000/de/gibtsnicht` → 404; Build mit `sb_secret_…` als anon-Key bricht ab
+
 ### Bekannte Lücken
 - cs/pl-Texte sind von Muttersprachlern ungeprüft (SPEC 7.6).
 - Kein iOS-Gerüst: Das Xcode-Projekt wird in I1 direkt in Xcode angelegt (Planänderung, ADR 001).
 - Keine CSP: Sie folgt mit Auth und Drittanbietern (M2/M10).
 - Kein Cloud-Projekt: Supabase läuft nur lokal und wird ab M2 verbunden (ADR 002).
 - Die CI ist noch nicht gelaufen, weil das GitHub-Remote fehlt.
+- Die 404 für unbekannte Pfade ist mehrsprachig statt in der angefragten Sprache. Explizite `notFound()`-Aufrufe in Seiten nutzen die lokalisierte `[locale]/not-found.tsx`.
+- QA F4 (Glossar cs/pl) und F7 (Locale-Cookie vor Consent, M9) sind offen.

@@ -138,3 +138,19 @@ Reproduktion: `cd web && NEXT_PUBLIC_SUPABASE_ANON_KEY=x node scripts/check-supa
 ### Empfehlung
 
 M0 **abnehmen: ja, mit Auflagen.** Alle drei Akzeptanzkriterien sind erfüllt, es gibt keinen blockierenden oder hohen Fehler. F1 bis F4 (mittel) sollten vor oder spätestens in M2 behoben werden: F3 vor dem ersten Client-Einsatz des Keys, F4 vor I1.
+
+### Nachtrag 2026-10-29: Stand der Behebung
+
+| Fund | Status | Commit |
+|------|--------|--------|
+| F1 hreflang-Link-Header | behoben (`alternateLinks: false`) | d912428 |
+| F2 404 nur clientseitig | behoben (statische, mehrsprachige `global-not-found`, Catch-all entfernt) | a28ea72 |
+| F3 Secret-Key als anon-Key | behoben (Env-Validierung und `check:supabase` lehnen `sb_secret_*` und service_role-JWT ab) | d536f22 |
+| F4 Glossar | offen: Begriffe brauchen Muttersprachler (SPEC 7.6), vor I1 klären | – |
+| F5 Titel-Template Startseite | behoben | a28ea72 |
+| F6 Pfade mit Punkt / `/api` | behoben (Proxy leitet um → 404; öffentliche Dateien unter `public/static/`) | a28ea72 |
+| F7 Locale-Cookie | offen, bewusst nach M9 (Consent) verschoben | – |
+| F8 CI-Details | behoben (Guard erweitert, Build-Cache, ADR 004 angepasst, install-scripts dokumentiert) | 1181601 |
+| F9 Meldung `check-supabase` | behoben | d536f22 |
+
+Hinweis für M5: Unter `cacheComponents` brauchen dynamische Seiten mit `notFound()` (z. B. Anzeigen-Detail) eine `<Suspense>`-Grenze bzw. `use cache`. Das muss beim Bau geprüft werden, damit die 404 serverseitig mit Status 404 ausgeliefert wird.
