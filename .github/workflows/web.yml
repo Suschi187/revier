@@ -1,0 +1,51 @@
+# Siehe docs/adr/004-ci.md: Lint, Typecheck, Tests und Build der Web-App. Ohne Secrets, ohne Deploy.
+name: web
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secret-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Keine Server-Secrets mit NEXT_PUBLIC_-Präfix
+        run: |
+          if grep -rEn "NEXT_PUBLIC_[A-Z0-9_]*(SERVICE|SECRET)" \
+              --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=.git .; then
+            echo "::error::Server-Secrets dürfen nie mit NEXT_PUBLIC_ beginnen (docs/adr/002)."
+            exit 1
+          fi
+
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    env:
+      # Öffentliche Platzhalter, damit der Build die Env-Validierung besteht. Keine echten Werte.
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
