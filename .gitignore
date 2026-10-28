@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.env.*
+*.xcconfig.local
+xcuserdata/
+DerivedData/
+node_modules/
+supabase/.temp/
+Secrets.xcconfig
