@@ -1,0 +1,68 @@
+-- Gemeinsame Test-Helfer (docs/adr/009). Wird von jeder Testdatei per \ir eingebunden und
+-- liegt innerhalb der Test-Transaktion, verschwindet also mit dem Rollback.
+
+create extension if not exists pgtap with schema extensions;
+create schema if not exists tests;
+
+-- Legt einen Nutzer in auth.users an; der Profil-Trigger (ab M1 Schritt 3) erzeugt das Profil.
+create or replace function tests.create_user(email text, display_name text default null)
+returns uuid
+language plpgsql
+as $$
+declare
+  new_id uuid := gen_random_uuid();
+begin
+  insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, created_at, updated_at)
+  values (
+    new_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', email,
+    jsonb_build_object('display_name', coalesce(display_name, split_part(email, '@', 1))),
+    now(), now()
+  );
+  return new_id;
+end;
+$$;
+
+create or replace function tests.make_admin(user_id uuid)
+returns void
+language sql
+as $$
+  insert into private.user_roles (user_id, role) values (user_id, 'admin');
+$$;
+
+-- Wechselt in die Rolle authenticated mit passenden JWT-Claims. aal2 = 2FA bestätigt.
+create or replace function tests.authenticate_as(user_id uuid, aal text default 'aal1')
+returns void
+language plpgsql
+as $$
+begin
+  perform set_config('role', 'authenticated', true);
+  perform set_config(
+    'request.jwt.claims',
+    jsonb_build_object('sub', user_id, 'role', 'authenticated', 'aal', aal)::text,
+    true
+  );
+end;
+$$;
+
+create or replace function tests.as_anon()
+returns void
+language plpgsql
+as $$
+begin
+  perform set_config('role', 'anon', true);
+  perform set_config('request.jwt.claims', '{"role": "anon"}', true);
+end;
+$$;
+
+create or replace function tests.as_postgres()
+returns void
+language plpgsql
+as $$
+begin
+  perform set_config('role', 'postgres', true);
+  perform set_config('request.jwt.claims', '', true);
+end;
+$$;
+
+grant usage on schema tests to anon, authenticated;
+grant execute on all functions in schema tests to anon, authenticated;
