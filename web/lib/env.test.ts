@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 const valid = {
   NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
   NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: "test-anon-key",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "sb_publishable_test",
 };
 
 // env.ts validiert beim Import, daher vorher gültige Werte setzen.
@@ -19,6 +19,13 @@ describe("parsePublicEnv", () => {
     expect(() =>
       parsePublicEnv({ ...valid, NEXT_PUBLIC_SUPABASE_ANON_KEY: undefined }),
     ).toThrow(/NEXT_PUBLIC_SUPABASE_ANON_KEY/);
+  });
+
+  it("lehnt secret Keys in der öffentlichen Variable ab, ohne den Wert auszugeben", () => {
+    const call = () =>
+      parsePublicEnv({ ...valid, NEXT_PUBLIC_SUPABASE_ANON_KEY: "sb_secret_geheim123" });
+    expect(call).toThrow(/NEXT_PUBLIC_SUPABASE_ANON_KEY ist ein secret Key/);
+    expect(call).not.toThrow(/geheim123/);
   });
 
   it("lehnt ungültige URLs ab", () => {

@@ -1,10 +1,25 @@
 // M0-Akzeptanz "Supabase-Verbindung funktioniert":
 // prüft mit URL und anon-Key aus .env.local, dass Supabase erreichbar ist und den Key akzeptiert.
+import { publicKeyProblem } from "../lib/supabase/key.ts";
+
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!url || !anonKey) {
-  console.error("NEXT_PUBLIC_SUPABASE_URL und NEXT_PUBLIC_SUPABASE_ANON_KEY fehlen (siehe web/.env.example).");
+const missing = Object.entries({
+  NEXT_PUBLIC_SUPABASE_URL: url,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: anonKey,
+})
+  .filter(([, value]) => !value)
+  .map(([name]) => name);
+
+if (missing.length > 0) {
+  console.error(`Fehlt: ${missing.join(", ")} (siehe web/.env.example).`);
+  process.exit(1);
+}
+
+const keyProblem = publicKeyProblem(anonKey);
+if (keyProblem) {
+  console.error(`NEXT_PUBLIC_SUPABASE_ANON_KEY ${keyProblem}.`);
   process.exit(1);
 }
 
