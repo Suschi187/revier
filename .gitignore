@@ -1,9 +1,39 @@
+# System
 .DS_Store
+
+# Secrets (Vorlagen ausdrücklich erlaubt)
 .env
 .env.*
+!.env.example
+Secrets.xcconfig
+!Secrets.example.xcconfig
 *.xcconfig.local
+*.p8
+*.p12
+*.mobileprovision
+*.pem
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+.vercel/
+npm-debug.log*
+
+# Tests
+playwright-report/
+test-results/
+blob-report/
+
+# Supabase
+supabase/.temp/
+supabase/.branches/
+
+# Xcode / iOS
 xcuserdata/
 DerivedData/
-node_modules/
-supabase/.temp/
-Secrets.xcconfig
+ios/build/
+.build/
