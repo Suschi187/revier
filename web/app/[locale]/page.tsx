@@ -5,9 +5,10 @@ import type { AppLocale } from "@/i18n/routing";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = (await getLocale()) as AppLocale;
-  const t = await getTranslations("HomePage");
+  const t = await getTranslations();
   return {
-    title: t("metaTitle"),
+    // Das Titel-Template des Layouts greift im selben Segment nicht (QA M0 F5).
+    title: { absolute: `${t("HomePage.metaTitle")} | ${t("Metadata.siteName")}` },
     alternates: localeAlternates(locale),
   };
 }

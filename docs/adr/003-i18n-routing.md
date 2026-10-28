@@ -11,6 +11,9 @@ Vier Sprachen (de, en, cs, pl), fünf Märkte, vier Währungen. SEO verlangt ein
 - en ist die Quelle der Message-Dateien. Ein Test stellt sicher, dass alle Sprachen dieselben Keys haben.
 - **Sprache, Land/Markt und Währung sind unabhängig voneinander.** Ein Nutzer mit `cs` kann Anzeigen in AT mit Preisen in EUR sehen. Preise werden immer in der Originalwährung angezeigt und mit der UI-Locale formatiert.
 
+- Der Proxy (`web/proxy.ts`) läuft für alle Pfade außer Next-Interna, `/api/`, `/static/` und den Metadaten-Dateien im Root (favicon, robots, sitemap, manifest). Öffentliche Dateien liegen deshalb unter `web/public/static/`.
+- 404: `app/global-not-found.tsx` ist statisch und mehrsprachig, ein Abschnitt je Sprache mit eigenem `lang`, und gilt für alle unbekannten Pfade. `app/[locale]/not-found.tsx` ist die lokalisierte 404 für explizite `notFound()`-Aufrufe in Seiten. Grund: Unter `cacheComponents` liefert ein prerenderter Catch-all nur eine leere Fehler-Hülle (QA M0 F2).
+
 ## Alternativen
 - Domain pro Land: zu viel Aufwand für das MVP.
 - Default-Locale ohne Präfix: schlechter für eine konsistente `hreflang`-Struktur.
