@@ -18,6 +18,12 @@ export default async function GlobalNotFound() {
       return { locale, title: t("title"), backHome: t("backHome") };
     }),
   );
+  // Ohne Root-Layout auch ohne SiteFooter: Rechtliches hier in der Default-Locale (QA M2 F3).
+  const legal = await getTranslations({ locale: routing.defaultLocale, namespace: "Legal" });
+  const legalLinks = (["imprint", "privacy", "terms"] as const).map((page) => ({
+    href: `/${routing.defaultLocale}/${page}`,
+    label: legal(`${page}.title`),
+  }));
 
   return (
     <html lang={routing.defaultLocale} className="h-full antialiased">
@@ -39,6 +45,19 @@ export default async function GlobalNotFound() {
             </section>
           ))}
         </main>
+        <footer className="mt-auto border-t border-neutral-300 p-4">
+          <nav aria-label={legal("footerLabel")}>
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+              {legalLinks.map(({ href, label }) => (
+                <li key={href}>
+                  <a href={href} className="underline">
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </footer>
       </body>
     </html>
   );

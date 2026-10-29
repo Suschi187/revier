@@ -38,7 +38,8 @@
       "otherEmail": "Użyj innego adresu e-mail lub poproś o nową wiadomość",
       "networkError": "Brak połączenia. Spróbuj ponownie.",
       "termsHint": "Nowe konta po pierwszym logowaniu akceptują regulamin.",
-      "apple": "Zaloguj się przez Apple"
+      "apple": "Zaloguj się przez Apple",
+      "privacyHint": "Jak przetwarzamy Twój adres e-mail, wyjaśnia <link>polityka prywatności</link>."
     },
     "confirm": {
       "metaTitle": "Potwierdź logowanie",
@@ -98,7 +99,11 @@
     },
     "privacy": {
       "title": "Polityka prywatności"
-    }
+    },
+    "imprint": {
+      "title": "Nota prawna"
+    },
+    "footerLabel": "Informacje prawne"
   },
   "Account": {
     "metaTitle": "Moje konto",

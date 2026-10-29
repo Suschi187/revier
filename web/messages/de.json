@@ -38,7 +38,8 @@
       "otherEmail": "Andere E-Mail-Adresse verwenden oder neue E-Mail anfordern",
       "networkError": "Keine Verbindung. Bitte versuche es noch einmal.",
       "termsHint": "Neue Konten stimmen nach der ersten Anmeldung den Nutzungsbedingungen zu.",
-      "apple": "Mit Apple anmelden"
+      "apple": "Mit Apple anmelden",
+      "privacyHint": "Wie wir deine E-Mail-Adresse verarbeiten, steht in der <link>Datenschutzerklärung</link>."
     },
     "confirm": {
       "metaTitle": "Anmeldung bestätigen",
@@ -98,7 +99,11 @@
     },
     "privacy": {
       "title": "Datenschutzerklärung"
-    }
+    },
+    "imprint": {
+      "title": "Impressum"
+    },
+    "footerLabel": "Rechtliches"
   },
   "Account": {
     "metaTitle": "Mein Konto",

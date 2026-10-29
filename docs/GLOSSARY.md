@@ -50,3 +50,4 @@ Werden in Web und iOS gleich verwendet. cs/pl **ungeprüft**.
 | login_code | Sign-in code | Anmeldecode | Přihlašovací kód | Kod logowania | ungeprüft |
 | terms | Terms of use | Nutzungsbedingungen | Podmínky použití | Regulamin | ungeprüft |
 | privacy_policy | Privacy policy | Datenschutzerklärung | Zásady ochrany osobních údajů | Polityka prywatności | ungeprüft |
+| imprint | Legal notice | Impressum | Právní informace | Nota prawna | ungeprüft |

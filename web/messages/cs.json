@@ -38,7 +38,8 @@
       "otherEmail": "Použít jinou e-mailovou adresu nebo vyžádat nový e-mail",
       "networkError": "Žádné připojení. Zkuste to prosím znovu.",
       "termsHint": "Nové účty po prvním přihlášení souhlasí s podmínkami použití.",
-      "apple": "Přihlásit se přes Apple"
+      "apple": "Přihlásit se přes Apple",
+      "privacyHint": "Jak zpracováváme vaši e-mailovou adresu, se dozvíte v <link>zásadách ochrany osobních údajů</link>."
     },
     "confirm": {
       "metaTitle": "Potvrdit přihlášení",
@@ -98,7 +99,11 @@
     },
     "privacy": {
       "title": "Zásady ochrany osobních údajů"
-    }
+    },
+    "imprint": {
+      "title": "Právní informace"
+    },
+    "footerLabel": "Právní informace"
   },
   "Account": {
     "metaTitle": "Můj účet",

@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AuthNav } from "@/components/auth/AuthNav";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { SiteFooter } from "@/components/SiteFooter";
 import { routing } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
 import "../globals.css";
@@ -40,6 +41,7 @@ export default async function LocaleLayout({
             </Suspense>
           </header>
           {children}
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>

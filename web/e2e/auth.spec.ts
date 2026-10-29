@@ -198,3 +198,19 @@ test("Abgelaufene Session wird im Proxy erneuert, auch auf einem Redirect", asyn
   };
   expect(rotated.refresh_token).not.toBe(oldRefreshToken);
 });
+
+// CLAUDE.md (Web-Datenschutz), QA M2 F3: Impressum und Datenschutz von jeder Seite erreichbar.
+test("Impressum, Datenschutz und Nutzungsbedingungen sind von jeder Seite verlinkt", async ({ page }) => {
+  for (const path of ["/de", "/de/login", "/de/terms", "/de/gibt-es-nicht"]) {
+    await page.goto(path);
+    const footer = page.getByRole("navigation", { name: "Rechtliches" });
+    for (const [name, href] of [["Impressum", "/de/imprint"], ["Datenschutzerklärung", "/de/privacy"], ["Nutzungsbedingungen", "/de/terms"]]) {
+      await expect(footer.getByRole("link", { name }), `${path}: ${name}`).toHaveAttribute("href", href);
+    }
+  }
+  await page.goto("/de/login");
+  await expect(page.getByRole("main").getByRole("link", { name: "Datenschutzerklärung" })).toHaveAttribute("href", "/de/privacy");
+  await page.goto("/de/imprint");
+  await expect(page.getByRole("heading", { name: "Impressum" })).toBeVisible();
+  await expect(page.getByRole("note")).toContainText("Platzhalter");
+});

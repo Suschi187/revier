@@ -38,7 +38,8 @@
       "otherEmail": "Use a different email address or request a new email",
       "networkError": "No connection. Please try again.",
       "termsHint": "New accounts are asked to accept the terms of use after the first sign-in.",
-      "apple": "Sign in with Apple"
+      "apple": "Sign in with Apple",
+      "privacyHint": "How we process your email address is explained in the <link>privacy policy</link>."
     },
     "confirm": {
       "metaTitle": "Confirm sign-in",
@@ -98,7 +99,11 @@
     },
     "privacy": {
       "title": "Privacy policy"
-    }
+    },
+    "imprint": {
+      "title": "Legal notice"
+    },
+    "footerLabel": "Legal"
   },
   "Account": {
     "metaTitle": "My account",
