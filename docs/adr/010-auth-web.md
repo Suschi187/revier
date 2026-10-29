@@ -10,7 +10,7 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 ### Anmeldung ohne Passwort
 - Registrieren und Anmelden sind derselbe Ablauf: `signInWithOtp({ email, shouldCreateUser: true })`. Die Seite antwortet immer gleich, auch bei Rate-Limit, gesperrten Konten oder ungültigen Adressen, damit niemand Konten erraten kann.
 - Die Mail enthält einen Link und einen 6-stelligen Code.
-- Gültigkeit 10 Minuten (`otp_expiry = 600`), neue Mail frühestens nach 60 s.
+- Gültigkeit 10 Minuten (`otp_expiry = 600`), neue Mail frühestens nach 60 s (lokal 5 s für E2E-Tests).
 - Keine Passwörter: kein Reset-Ablauf, kein Leak-Risiko. `minimum_password_length = 10` steht nur für die Checkliste.
 - `enable_confirmations = true`: Neue Nutzer bekommen die Vorlage `confirmation`, bestehende die Vorlage `magic_link`. Beide Vorlagen bauen den Link gleich (`type=email`), und beide Pfade sind per E2E getestet.
 
@@ -18,7 +18,9 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - Code anfordern (`signInWithOtp`) und Code prüfen (`verifyOtp` mit `email` und `token`) laufen **im Browser** über `createBrowserClient` mit dem öffentlichen Key.
   - Grund: Liefen sie über den Web-Server, sähe Supabase Auth nur dessen IP. Alle Nutzer teilten sich dann die Limits (DoS), und es gäbe keine Drosselung pro Angreifer.
   - Ein Captcha-Token lässt sich später ebenso im Browser mitgeben.
-- Der Link führt auf `/{locale}/auth/confirm?token_hash=…&type=…&next=…`.
+- Der Link führt auf `{{ .SiteURL }}/{lang}/auth/confirm?token_hash=…&type=email&redirect_to={{ .RedirectTo }}`.
+  - Er baut immer auf `SiteURL` auf, weil Supabase eine nicht erlaubte `RedirectTo` still durch `SiteURL` ersetzt.
+  - Die Bestätigungsseite liest `next` aus `redirect_to` und prüft es (siehe Rücksprungziel).
   - **GET prüft nichts.** Die Seite zeigt nur den Button „Anmeldung bestätigen“. Mail-Scanner (Safe Links, Proofpoint) öffnen Links vorab und würden das Einmal-Token sonst verbrauchen.
   - Erst der Klick löst eine Server Action (POST) mit `verifyOtp({ type, token_hash })` aus und leitet dann weiter, sodass das Token aus URL und Verlauf verschwindet.
   - Die Seite ist `noindex`, sendet `Referrer-Policy: no-referrer` und lädt keine Fremdressourcen.
@@ -71,7 +73,7 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 ### Mails
 - Lokale Vorlagen liegen in `supabase/templates/`.
   - Sie wählen die Sprache über `{{ .Data.preferred_language }}` (aus `user_metadata`, nur zur Anzeige, nie für Rechte; ADR 005), Fallback de.
-  - Die Link-Sprache kommt aus `{{ .RedirectTo }}`, also aus der UI-Locale beim Anfordern.
+  - Die Seite hinter dem Link hat die Sprache der Mail, das Rücksprungziel bleibt das der UI-Locale beim Anfordern.
 - Ändert jemand die Sprache im Profil, wird sie per `auth.updateUser({ data })` auch in `user_metadata` geschrieben.
 - Cloud-Vorlagen und -Einstellungen werden nicht aus `config.toml` übernommen und gehören in die Cloud-Checkliste.
 - Ein Send-Email-Hook mit EU-Mailanbieter folgt erst mit SPEC 7.11.
