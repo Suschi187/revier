@@ -47,6 +47,9 @@ async function AccountContent() {
       <Link href="/account/profile" className="self-start underline">
         {t("editProfile")}
       </Link>
+      <Link href="/account/listings" className="self-start underline">
+        {t("myListings")}
+      </Link>
     </div>
   );
 }

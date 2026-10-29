@@ -132,6 +132,64 @@
       "saved": "Twój profil został zapisany.",
       "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
       "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
+    },
+    "myListings": "Moje ogłoszenia"
+  },
+  "Listings": {
+    "kinds": {
+      "lease": "Dzierżawa obwodu łowieckiego",
+      "permit": "Zezwolenie na polowanie",
+      "driven_hunt": "Polowanie zbiorowe",
+      "trophy_hunt": "Polowanie trofeowe / gościnne",
+      "helper": "Pomocnik myśliwego"
+    },
+    "directions": {
+      "offer": "Oferta",
+      "wanted": "Poszukiwane"
+    },
+    "status": {
+      "draft": "Szkic",
+      "pending_review": "W weryfikacji",
+      "active": "Aktywne",
+      "paused": "Wstrzymane",
+      "expired": "Wygasłe",
+      "rejected": "Odrzucone",
+      "removed": "Usunięte"
+    },
+    "mine": {
+      "metaTitle": "Moje ogłoszenia",
+      "title": "Moje ogłoszenia",
+      "back": "Powrót do mojego konta",
+      "empty": "Nie masz jeszcze żadnych ogłoszeń.",
+      "create": "Dodaj ogłoszenie",
+      "statusLabel": "Status",
+      "rejectReason": "Powód moderacji: {reason}",
+      "expiresAt": "Widoczne do {date}",
+      "createdAt": "Utworzono {date}",
+      "reviewHint": "Moderacja sprawdzi Twoje ogłoszenie przed publikacją."
+    },
+    "actions": {
+      "edit": "Edytuj",
+      "withdraw": "Wycofaj z weryfikacji",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "delete": "Usuń szkic",
+      "deleteConfirm": "Usuń na stałe",
+      "deleteQuestion": "Usunąć „{title}” na stałe? Tej operacji nie można cofnąć."
+    },
+    "notices": {
+      "withdrawn": "Ogłoszenie jest ponownie szkicem.",
+      "paused": "Ogłoszenie jest wstrzymane i nie jest już publiczne.",
+      "resumed": "Ogłoszenie jest ponownie publiczne.",
+      "resumedReview": "Ogłoszenie zmieniło się od zatwierdzenia i wraca do weryfikacji.",
+      "deleted": "Szkic został usunięty.",
+      "submitted": "Dziękujemy! Twoje ogłoszenie jest teraz weryfikowane."
+    },
+    "errors": {
+      "failed": "Nie udało się. Odśwież stronę i spróbuj ponownie.",
+      "legal": "Najpierw zaakceptuj aktualny regulamin.",
+      "rateLimited": "Osiągnięto dzienny limit nowych ogłoszeń. Kolejne możesz dodać od {time}.",
+      "rateLimitedNoTime": "Osiągnięto dzienny limit nowych ogłoszeń. Spróbuj ponownie jutro."
     }
   }
 }

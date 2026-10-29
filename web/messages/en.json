@@ -132,6 +132,64 @@
       "saved": "Your profile has been saved.",
       "failed": "Saving failed. Please try again.",
       "blocked": "Your account is blocked. You cannot change your profile."
+    },
+    "myListings": "My listings"
+  },
+  "Listings": {
+    "kinds": {
+      "lease": "Hunting lease",
+      "permit": "Hunting permit",
+      "driven_hunt": "Driven hunt",
+      "trophy_hunt": "Trophy / guest hunt",
+      "helper": "Hunting helper"
+    },
+    "directions": {
+      "offer": "Offer",
+      "wanted": "Wanted"
+    },
+    "status": {
+      "draft": "Draft",
+      "pending_review": "In review",
+      "active": "Active",
+      "paused": "Paused",
+      "expired": "Expired",
+      "rejected": "Rejected",
+      "removed": "Removed"
+    },
+    "mine": {
+      "metaTitle": "My listings",
+      "title": "My listings",
+      "back": "Back to my account",
+      "empty": "You have no listings yet.",
+      "create": "Create listing",
+      "statusLabel": "Status",
+      "rejectReason": "Reason from moderation: {reason}",
+      "expiresAt": "Visible until {date}",
+      "createdAt": "Created on {date}",
+      "reviewHint": "The moderation team checks your listing before it goes public."
+    },
+    "actions": {
+      "edit": "Edit",
+      "withdraw": "Withdraw from review",
+      "pause": "Pause",
+      "resume": "Resume",
+      "delete": "Delete draft",
+      "deleteConfirm": "Delete permanently",
+      "deleteQuestion": "Delete “{title}” permanently? This cannot be undone."
+    },
+    "notices": {
+      "withdrawn": "The listing is a draft again.",
+      "paused": "The listing is paused and no longer public.",
+      "resumed": "The listing is public again.",
+      "resumedReview": "The listing changed since approval and goes back to review.",
+      "deleted": "The draft has been deleted.",
+      "submitted": "Thank you! Your listing is now in review."
+    },
+    "errors": {
+      "failed": "That did not work. Please reload the page and try again.",
+      "legal": "Please accept the current terms of use first.",
+      "rateLimited": "You have reached the daily limit for new listings. You can create the next one from {time}.",
+      "rateLimitedNoTime": "You have reached the daily limit for new listings. Please try again tomorrow."
     }
   }
 }

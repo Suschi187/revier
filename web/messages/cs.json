@@ -132,6 +132,64 @@
       "saved": "Váš profil byl uložen.",
       "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
       "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
+    },
+    "myListings": "Moje inzeráty"
+  },
+  "Listings": {
+    "kinds": {
+      "lease": "Pronájem honitby",
+      "permit": "Povolenka k lovu",
+      "driven_hunt": "Společný hon",
+      "trophy_hunt": "Trofejový / hostovský lov",
+      "helper": "Pomocník při lovu"
+    },
+    "directions": {
+      "offer": "Nabídka",
+      "wanted": "Poptávka"
+    },
+    "status": {
+      "draft": "Koncept",
+      "pending_review": "Ve schvalování",
+      "active": "Aktivní",
+      "paused": "Pozastaveno",
+      "expired": "Vypršelo",
+      "rejected": "Zamítnuto",
+      "removed": "Odstraněno"
+    },
+    "mine": {
+      "metaTitle": "Moje inzeráty",
+      "title": "Moje inzeráty",
+      "back": "Zpět na Můj účet",
+      "empty": "Zatím nemáte žádné inzeráty.",
+      "create": "Podat inzerát",
+      "statusLabel": "Stav",
+      "rejectReason": "Důvod moderace: {reason}",
+      "expiresAt": "Viditelné do {date}",
+      "createdAt": "Vytvořeno {date}",
+      "reviewHint": "Moderátoři váš inzerát zkontrolují, než bude zveřejněn."
+    },
+    "actions": {
+      "edit": "Upravit",
+      "withdraw": "Stáhnout ze schvalování",
+      "pause": "Pozastavit",
+      "resume": "Obnovit",
+      "delete": "Smazat koncept",
+      "deleteConfirm": "Trvale smazat",
+      "deleteQuestion": "Trvale smazat „{title}“? Tuto akci nelze vrátit."
+    },
+    "notices": {
+      "withdrawn": "Inzerát je opět konceptem.",
+      "paused": "Inzerát je pozastaven a již není veřejný.",
+      "resumed": "Inzerát je opět veřejný.",
+      "resumedReview": "Inzerát se od schválení změnil a vrací se ke schválení.",
+      "deleted": "Koncept byl smazán.",
+      "submitted": "Děkujeme! Váš inzerát se nyní schvaluje."
+    },
+    "errors": {
+      "failed": "Nepodařilo se. Obnovte prosím stránku a zkuste to znovu.",
+      "legal": "Nejprve prosím přijměte aktuální podmínky použití.",
+      "rateLimited": "Dosáhli jste denního limitu nových inzerátů. Další můžete podat od {time}.",
+      "rateLimitedNoTime": "Dosáhli jste denního limitu nových inzerátů. Zkuste to prosím zítra."
     }
   }
 }

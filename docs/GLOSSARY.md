@@ -5,13 +5,27 @@ en ist die Quellsprache. cs/pl-Begriffe sind **ungeprüft**, bis Muttersprachler
 
 | Code | en | de | cs | pl | Status |
 |------|----|----|----|----|--------|
-| `lease` | Hunting lease | Jagdpacht | | | offen |
-| `permit` | Hunting permit | Begehungsschein | | | offen |
-| `driven_hunt` | Driven hunt | Gesellschaftsjagd | | | offen |
-| `trophy_hunt` | Trophy / guest hunt | Trophäen-/Gastjagd | | | offen |
-| `helper` | Hunting helper | Jagdhelfer/Mitjäger | | | offen |
-| `offer` | Offer | Angebot | | | offen |
-| `wanted` | Wanted | Gesuch | | | offen |
+| `lease` | Hunting lease | Jagdpacht | Pronájem honitby | Dzierżawa obwodu łowieckiego | ungeprüft |
+| `permit` | Hunting permit | Begehungsschein | Povolenka k lovu | Zezwolenie na polowanie | ungeprüft |
+| `driven_hunt` | Driven hunt | Gesellschaftsjagd | Společný hon | Polowanie zbiorowe | ungeprüft |
+| `trophy_hunt` | Trophy / guest hunt | Trophäen-/Gastjagd | Trofejový / hostovský lov | Polowanie trofeowe / gościnne | ungeprüft |
+| `helper` | Hunting helper | Jagdhelfer/Mitjäger | Pomocník při lovu | Pomocnik myśliwego | ungeprüft |
+| `offer` | Offer | Angebot | Nabídka | Oferta | ungeprüft |
+| `wanted` | Wanted | Gesuch | Poptávka | Poszukiwane | ungeprüft |
+
+## Status einer Anzeige (`listing_status`, M3)
+
+| Code | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| `draft` | Draft | Entwurf | Koncept | Szkic | ungeprüft |
+| `pending_review` | In review | In Prüfung | Ve schvalování | W weryfikacji | ungeprüft |
+| `active` | Active | Aktiv | Aktivní | Aktywne | ungeprüft |
+| `paused` | Paused | Pausiert | Pozastaveno | Wstrzymane | ungeprüft |
+| `expired` | Expired | Abgelaufen | Vypršelo | Wygasłe | ungeprüft |
+| `rejected` | Rejected | Abgelehnt | Zamítnuto | Odrzucone | ungeprüft |
+| `removed` | Removed | Entfernt | Odstraněno | Usunięte | ungeprüft |
+| my_listings | My listings | Meine Anzeigen | Moje inzeráty | Moje ogłoszenia | ungeprüft |
+| create_listing | Create listing | Anzeige aufgeben | Podat inzerát | Dodaj ogłoszenie | ungeprüft |
 
 ## Wildarten (`game_species`)
 

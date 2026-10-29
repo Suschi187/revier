@@ -132,6 +132,64 @@
       "saved": "Dein Profil wurde gespeichert.",
       "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal.",
       "blocked": "Dein Konto ist gesperrt. Du kannst dein Profil nicht ändern."
+    },
+    "myListings": "Meine Anzeigen"
+  },
+  "Listings": {
+    "kinds": {
+      "lease": "Jagdpacht",
+      "permit": "Begehungsschein",
+      "driven_hunt": "Gesellschaftsjagd",
+      "trophy_hunt": "Trophäen-/Gastjagd",
+      "helper": "Jagdhelfer/Mitjäger"
+    },
+    "directions": {
+      "offer": "Angebot",
+      "wanted": "Gesuch"
+    },
+    "status": {
+      "draft": "Entwurf",
+      "pending_review": "In Prüfung",
+      "active": "Aktiv",
+      "paused": "Pausiert",
+      "expired": "Abgelaufen",
+      "rejected": "Abgelehnt",
+      "removed": "Entfernt"
+    },
+    "mine": {
+      "metaTitle": "Meine Anzeigen",
+      "title": "Meine Anzeigen",
+      "back": "Zurück zu Mein Konto",
+      "empty": "Du hast noch keine Anzeigen.",
+      "create": "Anzeige aufgeben",
+      "statusLabel": "Status",
+      "rejectReason": "Grund der Moderation: {reason}",
+      "expiresAt": "Sichtbar bis {date}",
+      "createdAt": "Erstellt am {date}",
+      "reviewHint": "Die Moderation prüft deine Anzeige, bevor sie öffentlich wird."
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "withdraw": "Aus der Prüfung zurückziehen",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen",
+      "delete": "Entwurf löschen",
+      "deleteConfirm": "Endgültig löschen",
+      "deleteQuestion": "„{title}“ endgültig löschen? Das lässt sich nicht rückgängig machen."
+    },
+    "notices": {
+      "withdrawn": "Die Anzeige ist wieder ein Entwurf.",
+      "paused": "Die Anzeige ist pausiert und nicht mehr öffentlich.",
+      "resumed": "Die Anzeige ist wieder öffentlich.",
+      "resumedReview": "Die Anzeige wurde seit der Freigabe geändert und geht zurück in die Prüfung.",
+      "deleted": "Der Entwurf wurde gelöscht.",
+      "submitted": "Danke! Deine Anzeige ist jetzt in Prüfung."
+    },
+    "errors": {
+      "failed": "Das hat nicht geklappt. Bitte lade die Seite neu und versuche es noch einmal.",
+      "legal": "Bitte stimme zuerst den aktuellen Nutzungsbedingungen zu.",
+      "rateLimited": "Du hast das Tageslimit für neue Anzeigen erreicht. Die nächste kannst du ab {time} aufgeben.",
+      "rateLimitedNoTime": "Du hast das Tageslimit für neue Anzeigen erreicht. Bitte versuche es morgen wieder."
     }
   }
 }
