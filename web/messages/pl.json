@@ -99,5 +99,32 @@
     "privacy": {
       "title": "Polityka prywatności"
     }
+  },
+  "Account": {
+    "metaTitle": "Moje konto",
+    "title": "Moje konto",
+    "signedInAs": "Zalogowano jako {email}",
+    "displayName": "Nazwa wyświetlana",
+    "accountType": "Typ konta",
+    "accountTypes": {
+      "private": "Prywatne",
+      "business": "Firmowe"
+    },
+    "verification": "Weryfikacja",
+    "verificationStatus": {
+      "none": "Niezweryfikowane",
+      "pending": "W trakcie sprawdzania",
+      "verified": "Zweryfikowane",
+      "rejected": "Odrzucone"
+    },
+    "editProfile": "Edytuj profil",
+    "profile": {
+      "metaTitle": "Edytuj profil",
+      "title": "Edytuj profil",
+      "back": "Powrót do Moje konto",
+      "submit": "Zapisz",
+      "saved": "Twój profil został zapisany.",
+      "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+    }
   }
 }

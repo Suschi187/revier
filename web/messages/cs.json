@@ -99,5 +99,32 @@
     "privacy": {
       "title": "Zásady ochrany osobních údajů"
     }
+  },
+  "Account": {
+    "metaTitle": "Můj účet",
+    "title": "Můj účet",
+    "signedInAs": "Přihlášen(a) jako {email}",
+    "displayName": "Zobrazované jméno",
+    "accountType": "Typ účtu",
+    "accountTypes": {
+      "private": "Soukromý",
+      "business": "Firemní"
+    },
+    "verification": "Ověření",
+    "verificationStatus": {
+      "none": "Neověřeno",
+      "pending": "Probíhá kontrola",
+      "verified": "Ověřeno",
+      "rejected": "Zamítnuto"
+    },
+    "editProfile": "Upravit profil",
+    "profile": {
+      "metaTitle": "Upravit profil",
+      "title": "Upravit profil",
+      "back": "Zpět na Můj účet",
+      "submit": "Uložit",
+      "saved": "Váš profil byl uložen.",
+      "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+    }
   }
 }

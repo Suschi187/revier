@@ -99,5 +99,32 @@
     "privacy": {
       "title": "Datenschutzerklärung"
     }
+  },
+  "Account": {
+    "metaTitle": "Mein Konto",
+    "title": "Mein Konto",
+    "signedInAs": "Angemeldet als {email}",
+    "displayName": "Anzeigename",
+    "accountType": "Kontotyp",
+    "accountTypes": {
+      "private": "Privat",
+      "business": "Gewerblich"
+    },
+    "verification": "Verifizierung",
+    "verificationStatus": {
+      "none": "Nicht verifiziert",
+      "pending": "In Prüfung",
+      "verified": "Verifiziert",
+      "rejected": "Abgelehnt"
+    },
+    "editProfile": "Profil bearbeiten",
+    "profile": {
+      "metaTitle": "Profil bearbeiten",
+      "title": "Profil bearbeiten",
+      "back": "Zurück zu Mein Konto",
+      "submit": "Speichern",
+      "saved": "Dein Profil wurde gespeichert.",
+      "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
+    }
   }
 }

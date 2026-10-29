@@ -99,5 +99,32 @@
     "privacy": {
       "title": "Privacy policy"
     }
+  },
+  "Account": {
+    "metaTitle": "My account",
+    "title": "My account",
+    "signedInAs": "Signed in as {email}",
+    "displayName": "Display name",
+    "accountType": "Account type",
+    "accountTypes": {
+      "private": "Private",
+      "business": "Business"
+    },
+    "verification": "Verification",
+    "verificationStatus": {
+      "none": "Not verified",
+      "pending": "In review",
+      "verified": "Verified",
+      "rejected": "Rejected"
+    },
+    "editProfile": "Edit profile",
+    "profile": {
+      "metaTitle": "Edit profile",
+      "title": "Edit profile",
+      "back": "Back to my account",
+      "submit": "Save",
+      "saved": "Your profile has been saved.",
+      "failed": "Saving failed. Please try again."
+    }
   }
 }

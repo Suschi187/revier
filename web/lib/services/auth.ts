@@ -1,5 +1,6 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import type { AppLocale } from "@/i18n/routing";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -23,6 +24,8 @@ function nameFromMetadata(metadata: unknown): string | null {
  * Navigation, weil Rechte über RLS laufen. Logout/Sperre wirken erst nach Ablauf des JWT.
  */
 export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
+  // Session ist request-spezifisch; die Ablaufprüfung im JWT nutzt die aktuelle Zeit.
+  await connection();
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
@@ -45,6 +48,7 @@ export async function requireSessionUser(locale: AppLocale, path: string): Promi
  * damit Logout, Sperre und Löschung sofort wirken.
  */
 export async function getVerifiedUser(): Promise<SessionUser | null> {
+  await connection();
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
