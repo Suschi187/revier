@@ -42,6 +42,17 @@ export async function listRegions(country: Country, locale: AppLocale): Promise<
   };
 }
 
+/** Land eines Kreises, z. B. für das PLZ-Format; null bei unbekannter id. */
+export async function getRegionCountry(regionId: string): Promise<Country | null> {
+  "use cache";
+  cacheLife("days");
+  const { data } = await referenceClient().from("regions").select("country").eq("id", regionId).maybeSingle();
+  return data?.country ?? null;
+}
+
+/** Länder mit Regionsdaten (ADR 007); weitere Märkte kommen mit ihren Kreisen und PLZ. */
+export const LISTING_COUNTRIES = ["DE", "AT"] as const satisfies readonly Country[];
+
 export type Species = { code: string; name: string };
 
 export async function listSpecies(locale: AppLocale): Promise<Species[]> {

@@ -35,7 +35,10 @@ export default async function LocaleLayout({
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
           <header className="flex flex-wrap items-center justify-end gap-4 p-4">
-            <LocaleSwitcher />
+            {/* Suspense: Bei dynamischen Routen (z. B. /account/listings/[id]) ist der Pfad erst zur Anfrage bekannt. */}
+            <Suspense fallback={null}>
+              <LocaleSwitcher />
+            </Suspense>
             <Suspense fallback={null}>
               <AuthNav />
             </Suspense>
