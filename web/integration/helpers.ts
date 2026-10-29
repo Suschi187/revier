@@ -45,8 +45,16 @@ export async function createSignedInUser(
   return { id: created.data.user.id, email, token: verified.data.session.access_token, client };
 }
 
+/**
+ * Löscht Testkonten (cascade) und deren Audit-Einträge. Audit-Zeilen bleiben bei echten
+ * Löschungen pseudonymisiert erhalten (ADR 008); Testreste würden aber die globalen Zählungen
+ * der pgTAP-Tests verfälschen.
+ */
 export async function deleteUsers(f: Conn, ids: string[]): Promise<void> {
+  if (ids.length === 0) return;
   const admin = serviceClient(f);
+  const { error } = await admin.from("audit_log").delete().in("target_id", ids);
+  if (error) throw new Error(`Audit-Einträge der Testnutzer: ${error.message}`);
   for (const id of ids) await admin.auth.admin.deleteUser(id);
 }
 
