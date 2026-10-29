@@ -1,0 +1,95 @@
+{
+  "_comment": "Gemeinsame Fälle für die Anzeigenregeln (ADR 013): web/lib/validation/listing.test.ts prüft Zod, web/integration/listing-rules-parity.test.ts dieselben Fälle gegen die Datenbank. Region: Fixture-Kreis Dresden (DE-14612). PLZ 01067 passt, 80331 liegt in einem anderen Kreis, 99999 gibt es nicht.",
+  "readiness": [
+    {
+      "name": "Pacht-Angebot ohne Angaben",
+      "listing": { "kind": "lease", "direction": "offer", "description": "", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": ["description.length", "place.postal_code.required", "place.place_name.required", "attributes.lease_type", "attributes.revier_type", "area_hectares", "species"]
+    },
+    {
+      "name": "Pacht-Angebot vollständig",
+      "listing": { "kind": "lease", "direction": "offer", "description": "Genossenschaftsjagd mit viel Wald, Pachtbeginn im April.", "area_hectares": 420, "attributes": { "lease_type": "genossenschaft", "revier_type": ["wald"] } },
+      "species": 1, "place": { "postal_code": "01067", "place_name": "Dresden" },
+      "expected": []
+    },
+    {
+      "name": "Begehungsschein ohne Umfang und Entgelt",
+      "listing": { "kind": "permit", "direction": "offer", "description": "Begehungsschein für einen erfahrenen Jäger im Revier.", "area_hectares": null, "attributes": {} },
+      "species": 1, "place": { "postal_code": "01067", "place_name": "Dresden" },
+      "expected": ["attributes.permit_scope", "attributes.paid"]
+    },
+    {
+      "name": "Gesellschaftsjagd ohne Termin und Plätze",
+      "listing": { "kind": "driven_hunt", "direction": "offer", "description": "Drückjagd auf Schwarzwild, Treffpunkt am Forsthaus.", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": { "postal_code": "01067", "place_name": "Dresden" },
+      "expected": ["attributes.event_date", "attributes.spots_available"]
+    },
+    {
+      "name": "Gesellschaftsjagd mit Termin in der Vergangenheit",
+      "listing": { "kind": "driven_hunt", "direction": "offer", "description": "Drückjagd auf Schwarzwild, Treffpunkt am Forsthaus.", "area_hectares": null, "attributes": { "event_date": "2020-11-20", "spots_available": 12 } },
+      "species": 0, "place": { "postal_code": "01067", "place_name": "Dresden" },
+      "expected": ["attributes.event_date.past"]
+    },
+    {
+      "name": "Trophäenjagd-Angebot ohne Häkchen und Wildart",
+      "listing": { "kind": "trophy_hunt", "direction": "offer", "description": "Gastjagd auf Rothirsch in der Brunft, mit Unterkunft.", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": { "postal_code": "01067", "place_name": "Dresden" },
+      "expected": ["attributes.legal_ack", "species"]
+    },
+    {
+      "name": "Trophäen-Gesuch ohne Häkchen",
+      "listing": { "kind": "trophy_hunt", "direction": "wanted", "description": "Suche eine Gastjagd auf Rotwild im Herbst, gern Sachsen.", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": ["attributes.legal_ack"]
+    },
+    {
+      "name": "Jagdhelfer-Angebot ohne Aufgaben",
+      "listing": { "kind": "helper", "direction": "offer", "description": "Wir suchen Hilfe beim Ansitzbau im Frühjahr, zwei Tage.", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": { "postal_code": "01067", "place_name": "Dresden" },
+      "expected": ["attributes.tasks"]
+    },
+    {
+      "name": "Gesuch mit Mindestfeldern, ohne PLZ",
+      "listing": { "kind": "lease", "direction": "wanted", "description": "Suche eine Jagdpacht im Raum Dresden, gern Niederwild.", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": []
+    },
+    {
+      "name": "Gesuch mit PLZ eines anderen Kreises",
+      "listing": { "kind": "permit", "direction": "wanted", "description": "Suche einen Begehungsschein, bin Jungjäger mit Hund.", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": { "postal_code": "80331", "place_name": "München" },
+      "expected": ["place.postal_code.region_mismatch"]
+    },
+    {
+      "name": "Angebot mit unbekannter PLZ",
+      "listing": { "kind": "helper", "direction": "offer", "description": "Wir suchen Hilfe beim Ansitzbau im Frühjahr, zwei Tage.", "area_hectares": null, "attributes": { "tasks": ["Ansitzbau"] } },
+      "species": 0, "place": { "postal_code": "99999", "place_name": "Nirgendwo" },
+      "expected": ["place.postal_code.unknown"]
+    },
+    {
+      "name": "Beschreibung zu kurz, Leerzeichen am Rand zählen nicht",
+      "listing": { "kind": "helper", "direction": "wanted", "description": "   Kurze Beschreibung mit 29 Z   ", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": ["description.length"]
+    }
+  ],
+  "attributes": [
+    { "kind": "lease", "attributes": { "lease_type": "eigenjagd", "revier_type": ["wald", "feld"], "hunting_hut": true, "co_lessee_slots": 2, "submission_deadline": "2027-03-31" }, "expected": null },
+    { "kind": "lease", "attributes": { "foo": 1 }, "expected": "attributes.unknown" },
+    { "kind": "lease", "attributes": { "paid": true }, "expected": "attributes.unknown" },
+    { "kind": "lease", "attributes": { "lease_type": "kauf" }, "expected": "attributes.lease_type" },
+    { "kind": "lease", "attributes": { "revier_type": ["wald", "wald"] }, "expected": "attributes.revier_type" },
+    { "kind": "lease", "attributes": { "revier_type": [] }, "expected": "attributes.revier_type" },
+    { "kind": "lease", "attributes": { "submission_deadline": "2026-02-30" }, "expected": "attributes.submission_deadline" },
+    { "kind": "lease", "attributes": { "lease_duration_years": 2.5 }, "expected": "attributes.lease_duration_years" },
+    { "kind": "lease", "attributes": { "co_lessee_slots": 51 }, "expected": "attributes.co_lessee_slots" },
+    { "kind": "permit", "attributes": { "paid": "ja" }, "expected": "attributes.paid" },
+    { "kind": "permit", "attributes": { "permit_scope": "begleitet", "paid": false, "season": "Mai bis Januar" }, "expected": null },
+    { "kind": "driven_hunt", "attributes": { "spots_available": 0 }, "expected": "attributes.spots_available" },
+    { "kind": "trophy_hunt", "attributes": { "trophy_details": "   " }, "expected": "attributes.trophy_details" },
+    { "kind": "trophy_hunt", "attributes": { "legal_ack": true, "trophy_details": "Rothirsch, mindestens 10 kg Geweih" }, "expected": null },
+    { "kind": "helper", "attributes": { "tasks": ["Ansitzbau", "Ansitzbau"] }, "expected": "attributes.tasks" },
+    { "kind": "helper", "attributes": { "tasks": ["Ansitzbau", "Wildacker"], "experience_level": "Jungjäger" }, "expected": null }
+  ]
+}
