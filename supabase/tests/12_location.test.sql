@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(23);
+select plan(24);
 
 -- Standortverfremdung v2 (ADR 006, Plan M3 4.3, Review Plan M3 B1–B6).
 -- Ring 3–5 km um die Zellmitte; gegenüber dem Eingabepunkt ± halbe Zellendiagonale (707 m).
@@ -169,6 +169,12 @@ select ok(not has_table_privilege('authenticated', 'vault.decrypted_secrets', 's
   and not has_table_privilege('anon', 'vault.decrypted_secrets', 'select')
   and not has_table_privilege('authenticated', 'vault.secrets', 'select'),
   'Secret ist für anon/authenticated nicht lesbar');
+-- service_role darf vault lesen (Supabase-Standard, Grant von supabase_admin, per Migration nicht entziehbar;
+-- ADR 006, QA M3 F4). Deshalb darf außer dem Trigger keine Funktion und keine View vault verwenden.
+select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname not in ('vault', 'pg_catalog', 'information_schema') and p.prosrc ~* 'vault\.'
+  union all select schemaname || '.' || viewname from pg_views where schemaname <> 'vault' and definition ~* 'vault\.' $$,
+  array['private.listings_blur_location'], 'Nur die Verfremdungsfunktion verwendet vault');
 
 -- Falscher Fingerprint (Restore mit fremdem Secret): fail closed (B6)
 update private.app_settings set value = '"falsch"' where key = 'listing_location_key_fp';

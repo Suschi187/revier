@@ -129,7 +129,7 @@ Eingabe ist der Punkt `p` aus dem Client (WGS84); er wird nie gespeichert.
    - Richtung = `k[0..3] / 2^32 · 360°`
    - Distanz = `3000 + k[4..7] / 2^32 · 2000 m`
 3. **Ausgabe:** `display_location = ST_Project(c, Distanz, Richtung)`.
-4. **Plausibilität:** `p` muss höchstens 60 km vom Centroid des gewählten Kreises entfernt liegen, sonst `23514`. Polygone gibt es nicht (ADR 006).
+4. **Plausibilität:** `p` muss höchstens 80 km (`listing_location_max_km`; ursprünglich 60 km, nach Review B8 auf 80 km erhöht) vom Centroid des gewählten Kreises entfernt liegen, sonst `23514`. Polygone gibt es nicht (ADR 006).
 
 ### 4.2 Eigenschaften
 - **Stabil:** Derselbe Besitzer im selben Kreis bekommt immer denselben Versatz, für jede Anzeige und jedes Update. Neuauflagen und mehrere Arten desselben Reviers liefern denselben Punkt bzw. einen um denselben Vektor verschobenen. Das Mittel beliebig vieler Anzeigen ist `mittel(c_i) + Versatz` und bleibt 3–5 km neben der wahren Lage, es konvergiert nicht.
@@ -152,7 +152,7 @@ Eingabe ist der Punkt `p` aus dem Client (WGS84); er wird nie gespeichert.
   2. Gleicher Besitzer und Kreis, zehn Anzeigen über 6 km verteilt → der Vektor Ausgabe − Zellmitte ist für alle zehn identisch (in EPSG:3035 gerechnet); der Abstand der Mittelwerte liegt in [2,28; 5,72] km (Ring 3–5 km ± halbe Zellendiagonale 707 m, mit Rundungsreserve).
   3. Zehn Updates derselben Anzeige mit demselben Punkt → immer derselbe Wert. Änderung nur des Titels → Punkt unverändert.
   4. Zwei Besitzer, gleicher Punkt → verschiedene Ausgaben (kein Orakel).
-  5. 200 zufällige Besitzer → alle Distanzen liegen im Ring; die Richtungen sind gestreut (kein konstanter Versatz, mindestens 6 von 8 Oktanten belegt).
+  5. 40 zufällige Besitzer (statt 200: die Wahrscheinlichkeit, dass weniger als 6 Oktanten belegt sind, liegt bei etwa 4·10⁻⁷) → alle Distanzen liegen im Ring; die Richtungen sind gestreut (kein konstanter Versatz, mindestens 6 von 8 Oktanten belegt).
   6. Der Eingabepunkt steht nirgends: Keine `geography`/`geometry`-Spalte in `public` oder `private` hat einen Wert innerhalb von 1 km um `p`, keine Offsets-Tabelle mehr.
   7. Punkt 80 km vom Kreis-Centroid entfernt → `23514`.
   8. `authenticated`/`anon` lesen das Secret nicht (`vault.decrypted_secrets`) und können die Funktion nicht aufrufen.
@@ -374,7 +374,7 @@ Weitere, nicht blockierende Punkte für die Umsetzung:
 - **Preisgrenzen je Währung (D3):** EUR/CHF ≤ 10⁹, CZK ≤ 2,5·10¹⁰, PLN ≤ 5·10⁹ Minor-Einheiten. Betrag 0 nicht erlaubt (dann „auf Anfrage“). Vitest prüft Komma/Punkt, Tausendertrenner, mehr als 2 Nachkommastellen und negative Werte.
 - **Entwürfe (D6):** In ADR 008 Löschung nach 12 Monaten Inaktivität mit Hinweis vorab (Umsetzung M9). Frage an den Nutzer.
 - **Löschen (A10):** Der Web-Service löscht beim Entfernen eines Fotos oder Entwurfs zuerst die Dateien, dann die Zeile. Der M9-Job räumt Eingangsdateien älter als 24 h und Dateien ohne Zeile ab.
-- **Plausibilitätsradius (B8):** 60 km.
+- **Plausibilitätsradius (B8):** 80 km (umgesetzt; 60 km war der erste Vorschlag).
 - **`content_changed` (B9):** vergleicht den Rohpunkt. Ohne Punkt-UI in M3 ist das unkritisch, es steht aber im ADR.
 - **RV002 (F4):** `hint` mit dem Zeitpunkt, ab dem wieder inseriert werden kann.
 - **Kontrolle `alt_text` (F2):** in den Spalten-GRANTs; die Ausgabe wird nur escaped (React), JSON-LD folgt in M5 mit Escaping.

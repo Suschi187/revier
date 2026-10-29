@@ -720,3 +720,13 @@ Die drei Teil-Commits tragen. Keine Lücke erlaubt Dritten, den Eingabepunkt, de
 - **F1** mit Commit 6 beheben, zusammen mit A1, und dabei denselben Maßstab „Admin an eigener Anzeige = Besitzer“ für Kinder-Tabellen und `listing_places` (5b) anlegen.
 - **F2** vor Commit 12 (Assistent mit Ortsvorschlägen), am besten zusammen mit F5.
 - F4 und F6 bei Gelegenheit, F6 (ADR-006-Textschaden) mit dem nächsten Doku-Commit.
+
+### Nachtrag 2026-10-29: Stand der Behebung (QA M3 Zwischenstand)
+| Fund | Stand | Commit |
+|---|---|---|
+| F1: Admin-Besitzer umgeht die Prüfung | offen, mit Commit 6 (Guard neu, A1); TODO-Tests in `14_qa_m3` | – |
+| F2: Notiztexte als Ortsnamen | behoben: Gemeindenamen aus VG250 als Hauptquelle, OSM-Namen bereinigt, Abbruch bei verdächtigen Namen, pgTAP `13_postal_codes` | d978eea |
+| F3: Arbeitskopie mit Cloud-Projekt verlinkt | behoben: Link-Datei gelöscht, Teil-Ref aus dem Bericht entfernt. Ursache: `supabase functions list --project-ref …` im Repo-Ordner. CLI-Befehle gegen die Cloud laufen künftig nur außerhalb des Repos. | – |
+| F4: `service_role` liest das Standort-Secret | Grant von `supabase_admin`, per Migration nicht entziehbar. ADR 006 korrigiert, Restrisiko benannt; Meta-Test in `12_location`: nur die Verfremdungsfunktion verwendet `vault` | (dieser Commit) |
+| F5: Abbruchprüfungen des Generators | behoben: `inputs.sha256`, Kopfzeilenprüfung AT, Abbruch bei Relationen ohne Fläche und verdächtigen Namen | d978eea |
+| F6: Doku-Mängel | behoben: ADR-006-Textschäden, Plan auf 80 km und 40 Besitzer angeglichen, Lizenzvermerke BKG und Statistik Austria im Migrationskopf und in ADR 012 | d978eea, (dieser Commit) |

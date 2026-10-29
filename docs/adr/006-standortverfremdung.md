@@ -3,7 +3,9 @@
 Status: angenommen (M1), überarbeitet in M3 (v2: deterministischer Versatz je Besitzer und Kreis)
 
 ## Kontext
-SPEC 3.3: Exakte Revierkoordinaten werden nie gespeichert. Angezeigt wird ein verfremdeter Pun## Entscheidung (v2, M3)
+SPEC 3.3: Exakte Revierkoordinaten werden nie gespeichert. Angezeigt wird ein verfremdeter Punkt, der sich auch über viele Anzeigen desselben Reviers nicht herausmitteln lässt (Pflichtpunkt Plan M3).
+
+## Entscheidung (v2, M3)
 - Ein `BEFORE INSERT OR UPDATE OF display_location, region_id`-Trigger (`listings_zz_blur_location`, `security definer`) ersetzt den eingehenden Punkt `p` sofort. Der Eingabepunkt wird nie gespeichert.
   1. **Einrasten:** `c` = Mitte der 1-km-Rasterzelle von `p` in EPSG:3035 (LAEA Europa).
   2. **Schlüssel:** `k = HMAC-SHA256(secret, owner_id || ':' || region_id)` über `extensions.hmac`. Bytes 0–3 ergeben die Richtung (0–360°), Bytes 4–7 die Distanz (3000–5000 m), jeweils als vorzeichenlose Zahl / 2³².
@@ -18,7 +20,10 @@ SPEC 3.3: Exakte Revierkoordinaten werden nie gespeichert. Angezeigt wird ein ve
 - Für Clients (iOS, später Web mit Karte): einen gelesenen Punkt nie unverändert als neue Eingabe zurückschicken, außer exakt gleich (dann ändert sich nichts). Nach einer Rundung würde er als neuer Eingabepunkt erneut verschoben.
 
 ### Secret
-- `listing_location_key` im Vault, von der Migration `20261029104000_listing_location_v2` je Umgebung zufällig angelegt (32 Byte), nie im Repo, nie ausgegeben. Lesbar nur über die Trigger-Funktion; sie ist für keine API-Rolle ausführbar (`00_meta`).
+- `listing_location_key` im Vault, von der Migration `20261029104000_listing_location_v2` je Umgebung zufällig angelegt (32 Byte), nie im Repo, nie ausgegeben. Die Trigger-Funktion ist für keine API-Rolle ausführbar (`00_meta`), anon und authenticated lesen `vault` nicht.
+- `service_role` darf `vault.secrets` und `vault.decrypted_secrets` lesen (Supabase-Standard). Der Grant stammt von `supabase_admin` und lässt sich per Migration nicht entziehen. Über die API ist `vault` nicht erreichbar.
+  - Restrisiko: Server-Code mit direkter Datenbankverbindung oder eine spätere Funktion, die als `service_role` läuft, könnte das Secret lesen.
+  - Gegenmaßnahme: Außer `private.listings_blur_location` verwendet keine Funktion und keine View `vault` (Meta-Test in `12_location`). Edge Functions und Web-Server greifen nie auf `vault` zu.
 - `app_settings.listing_location_key_fp` = HMAC(secret, 'fingerprint'). Passt er nicht oder fehlt das Secret, bricht die Migration ab bzw. der Trigger antwortet mit `RV003` (fail closed). So entsteht nach einem Restore in ein anderes Projekt nicht still ein neues Secret.
 - **Nie rotieren:** Die Eingaben sind nicht gespeichert; nach einer Rotation spränge jeder Punkt beim nächsten Update, und alter und neuer Punkt ließen sich vergleichen.
 - **Runbook Stage/Prod:** Nach der Ersteinrichtung das Secret einmalig offline hinterlegen (Passwortmanager mit zwei Berechtigten). Bei Umzug oder Restore in ein anderes Projekt vor den Migrationen per `vault.create_secret(<hinterlegter Wert>, 'listing_location_key')` importieren und den Fingerprint vergleichen. Backups im selben Projekt enthalten das Secret verschlüsselt; die Wiederherstellung wird einmal real getestet (SPEC 8).
@@ -29,8 +34,6 @@ SPEC 3.3: Exakte Revierkoordinaten werden nie gespeichert. Angezeigt wird ein ve
 - Supabase-API- und Edge-Function-Logs speichern keine Request-Bodies
 - Server Actions protokollieren kein Payload (ab der Kartenauswahl läuft `p` durch den Next.js-Server)
 - Fehlermeldungen enthalten keine Koordinaten (Plausibilitätsprüfung, `RV003`)
-
-t`, `lng`, `lon`, `latitude`, `longitude`, `location` und `coordinates`.
 
 ## Alternativen
 - Verfremdung im Client: Die Regel würde je Plattform doppelt gepflegt und wäre umgehbar.

@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(5);
+select plan(4);
 
 -- QA M3 Zwischenstand (docs/QA-REPORT.md): offene Funde als TODO-Tests mit dem Soll-Verhalten.
 -- TODO-Tests schlagen den Lauf nicht fehl; nach der Behebung meldet pg_prove sie als „unexpectedly
@@ -42,11 +42,7 @@ select is((select status::text from listings where id = :'l'), 'pending_review',
   'Admin mit 2FA: Titel der eigenen aktiven Anzeige → pending_review');
 select todo_end();
 
-select tests.as_postgres();
-select todo_start('QA M3 F4: service_role liest das Standort-Secret (ADR 006: „nur über die Trigger-Funktion“)');
-select ok(not has_table_privilege('service_role', 'vault.decrypted_secrets', 'select'),
-  'service_role hat kein SELECT auf vault.decrypted_secrets');
-select todo_end();
+-- F4 erledigt durch Korrektur von ADR 006 und den Meta-Test in 12_location (Grant nicht entziehbar).
 
 select * from finish();
 rollback;
