@@ -2,7 +2,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 
 // Interne, nicht indexierte Bereiche nach dem Sprachpräfix (ADR 010).
 // Nur diese sind gültige Rücksprungziele; die Liste wächst mit den Schritten (z. B. Inserieren in M3).
-const PROTECTED_SECTIONS = ["account", "welcome"] as const;
+export const PROTECTED_SECTIONS = ["account", "welcome"] as const;
 
 const LOCALE_GROUP = routing.locales.join("|");
 const PROTECTED_RE = new RegExp(`^/(${LOCALE_GROUP})/(${PROTECTED_SECTIONS.join("|")})(/|$)`);

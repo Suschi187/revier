@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { formValues, PROFILE_KEYS, type ProfileFormState } from "@/lib/forms";
 import { isAppLocale, safeNextPath } from "@/lib/auth/paths";
-import { getSessionUser } from "@/lib/services/auth";
+import { requireSessionUser } from "@/lib/services/auth";
 import { acceptLegal } from "@/lib/services/legal";
 import { updateOwnProfile } from "@/lib/services/profile";
 import { fieldErrors, legalFromForm, profileFromForm } from "@/lib/validation/profile";
@@ -12,8 +12,7 @@ import { fieldErrors, legalFromForm, profileFromForm } from "@/lib/validation/pr
 export async function completeOnboarding(_previous: ProfileFormState, form: FormData): Promise<ProfileFormState> {
   const rawLocale = String(form.get("locale") ?? "");
   const locale = isAppLocale(rawLocale) ? rawLocale : "de";
-  const user = await getSessionUser();
-  if (!user) redirect(`/${locale}/login?next=${encodeURIComponent(`/${locale}/welcome`)}`);
+  const user = await requireSessionUser(locale, `/${locale}/welcome`);
 
   const values = formValues(form, PROFILE_KEYS);
   const profile = profileFromForm(form);

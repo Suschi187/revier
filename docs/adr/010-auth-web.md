@@ -52,7 +52,8 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - Regel im Auth-Service:
   - `getClaims()` genügt für Lesen und Navigation, denn Rechte entscheidet ohnehin RLS. Logout, Sperre und Löschung wirken dabei erst nach Ablauf des JWT (`jwt_expiry` 3600 s).
   - Für sicherheitskritische Aktionen (`/admin` M4, Account löschen M9) wird `getUser()` aufgerufen.
-- Der Proxy schützt nur optimistisch, autoritativ prüft das Layout der geschützten Routen auf dem Server.
+- Der Proxy schützt nur optimistisch. Autoritativ prüft **jede geschützte Seite und jede Server Action selbst** (`requireOnboardedUser` bzw. `requireSessionUser`), nicht das Layout: Layouts schützen keine Server Actions, und bei Client-Navigation rendert ein Layout nicht neu.
+  - Der Vitest `web/lib/auth/guards.test.ts` erzwingt das: Jede `page.tsx` in `PROTECTED_SECTIONS` und jede exportierte Server Action ruft eine Prüfung auf. Bewusst öffentliche Actions stehen mit Grund in einer Ausnahmeliste.
   - Diese Routen rendern dynamisch.
   - Ihre statische Hülle enthält keine Nutzerdaten.
 - Logout ist eine Server Action (POST mit Origin-Prüfung durch Next) mit `signOut({ scope: 'local' })`.
