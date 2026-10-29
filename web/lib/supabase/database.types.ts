@@ -617,6 +617,11 @@ isOneToOne: false
               "accepted": boolean,"privacy_version": string,"terms_version": string
             }[]
                            },
+"listing_content_hints":
+{ Args: { "p_listing_id": string }; Returns: {
+              "category": string,"field": string,"language": Database["public"]['Enums']["language_code"],"term": string
+            }[]
+                           },
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },

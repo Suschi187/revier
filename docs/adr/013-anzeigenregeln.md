@@ -21,6 +21,10 @@ Plan M3 Abschnitte 2, 5 und 6: Pflichtfelder je Art (vom Nutzer freigegeben), Le
   - `paused → active` gelingt nur, wenn der Hash gleich ist; sonst wird die Anzeige `pending_review`. Fehlt der Hash, ebenso (fail closed).
   - Der Hash ist für keine API-Rolle lesbar, weil er die PLZ enthält und bei rund 8 200 PLZ durchprobierbar wäre. `private.listing_resume_allowed` liefert dem Besitzer nur ja/nein.
 - **Vier-Augen-Prinzip:** Ein Admin an der eigenen Anzeige ist Besitzer. Inhaltsänderungen führen zurück in die Prüfung, die Limits gelten, und freigeben kann er die eigene Anzeige nicht (QA M3 F1).
+- **Hinweis auf Waffen und Munition** (Entscheidung 6, Commit 7): `rpc('listing_content_hints', { p_listing_id })` liefert Fundstellen `(field, term, language, category)` aus Titel, Beschreibung, Text-Attributen und Alt-Texten, abgeglichen mit der Begriffsliste aller 4 Sprachen in `private.content_terms` (keine API-Rechte).
+  - Web und iOS zeigen beim Absenden einen deutlichen Hinweis mit den Fundstellen und dem Verweis auf die Richtlinien; Absenden bleibt möglich.
+  - Fremde und unbekannte Anzeigen ergeben dieselbe leere Antwort; PLZ und Ort werden nicht ausgewertet.
+  - Die Liste ist bewusst breit (Hinweis, keine Sperre). In M4 markiert derselbe Abgleich Anzeigen für die Moderation; Änderungen an der Liste kommen als Migration.
 - **Status:** Nur der Guard setzt `status`; der Kinder-Guard und `complete_photo_processing` setzen höchstens `pending_review` (Meta-Test).
 
 ## Vertrag für Clients (Web, iOS I4)
@@ -44,4 +48,4 @@ Clients übersetzen die Feldcodes in die 4 Sprachen. Weil die Prüfung am Ende d
 
 ## Folgen
 - Die Feldliste ist rechtlich offen (SPEC 7.2). Änderungen kommen als neue Migration und gleichzeitig in die gemeinsamen Fixtures.
-- Tests: pgTAP `17_listing_rules` (Attribute, Preise, Bereitschaft je Feld, Freigabe mit Fotos, Hash, Statusmatrix auch als Admin-Besitzer, Legal-Gate, Rate-Limit, Meta-Tests), `14_qa_m3` (F1), `15_listing_places`; API-Tests folgen mit `listings.test.ts` (Commit 8).
+- Tests: pgTAP `18_content_hints` (Fundstellen, Sprachen, Komposita, keine Treffer in harmlosen Texten, Rechte), `17_listing_rules` (Attribute, Preise, Bereitschaft je Feld, Freigabe mit Fotos, Hash, Statusmatrix auch als Admin-Besitzer, Legal-Gate, Rate-Limit, Meta-Tests), `14_qa_m3` (F1), `15_listing_places`; API-Tests folgen mit `listings.test.ts` (Commit 8).
