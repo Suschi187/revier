@@ -35,8 +35,9 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - Das gilt für Login, Confirm, Callback und Logout und ist per Vitest geprüft.
 
 ### Session
-- `proxy.ts` erzeugt zuerst die next-intl-Response, dann den Supabase-Client.
-  - `setAll` schreibt auf die Request-Cookies **und** auf die Response, danach folgt `getClaims()`.
+- `proxy.ts` erneuert zuerst die Session (`getClaims()`), dann läuft next-intl.
+  - `setAll` schreibt die neuen Cookies in den Request. next-intl reicht `request.headers` weiter, so sehen Server Components das rotierte Token im selben Request.
+  - Danach werden die Cookies auf die Response übertragen.
   - Gesetzte Cookies werden auch auf jede Redirect-Response kopiert. Wegen der Rotation der Refresh-Tokens ginge die Session sonst verloren.
   - Antworten mit `Set-Cookie` tragen `Cache-Control: private, no-store`.
 - Ohne `sb-*`-Cookie überspringt der Proxy Supabase ganz. Das hält anonymen Traffic schnell.
