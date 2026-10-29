@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(32);
+select plan(38);
 
 select tests.create_user('a@test.local') as a_id \gset
 select tests.create_user('b@test.local') as b_id \gset
@@ -93,12 +93,24 @@ select is((select count(*)::int from reviews), 0, 'Bewertungen sind für Nutzer 
 select throws_ok(format($$ insert into reviews (conversation_id, author_id, target_id, rating) values (gen_random_uuid(), %L, %L, 5) $$, :'a_id', :'b_id'),
   '42501', null, 'Bewertungen lassen sich vor Phase 2 nicht anlegen');
 
--- Geräte ----------------------------------------------------------------------
+-- Geräte: Registrierung nur per RPC, Token wandert mit dem Konto (Review M1) -------
 select tests.authenticate_as(:'a_id');
-insert into devices (apns_token) values (repeat('ab', 32));
-select is((select count(*)::int from devices), 1, 'A registriert ein Gerät');
+select lives_ok(format($$ select register_device(%L, 'de') $$, repeat('ab', 32)), 'A registriert ein Gerät per RPC');
+select is((select count(*)::int from devices), 1, 'A sieht das eigene Gerät');
+select throws_ok(format($$ insert into devices (apns_token) values (%L) $$, repeat('cd', 32)), '42501', null, 'Direktes Anlegen ist gesperrt');
+-- B ist oben gesperrt worden; für den Kontowechsel ein frisches Konto C.
+select tests.as_postgres();
+select tests.create_user('c@test.local') as c_id \gset
+select tests.authenticate_as(:'c_id');
+select is((select count(*)::int from devices), 0, 'C sieht die Geräte von A nicht');
+select lives_ok(format($$ select register_device(%L, 'pl') $$, repeat('ab', 32)), 'C meldet sich auf demselben Gerät an');
+select tests.as_postgres();
+select results_eq(format($$ select user_id, language::text from devices where apns_token = %L $$, repeat('ab', 32)),
+  format($$ values (%L::uuid, 'pl') $$, :'c_id'), 'Token gehört jetzt C, Pushes für A landen nicht mehr bei C');
 select tests.authenticate_as(:'b_id');
-select is((select count(*)::int from devices), 0, 'B sieht die Geräte von A nicht');
+select throws_ok(format($$ select register_device(%L) $$, repeat('12', 32)), '42501', null, 'Gesperrte Konten registrieren keine Geräte');
+select tests.as_anon();
+select throws_ok(format($$ select register_device(%L) $$, repeat('ef', 32)), '42501', null, 'anon registriert keine Geräte');
 
 -- Pseudonymisierung bei Account-Löschung (ADR 008) --------------------------------
 select tests.as_postgres();
