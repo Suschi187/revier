@@ -80,15 +80,15 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 **game_species** (Referenz)
 - `code` (z. B. `roe_deer`, `red_deer`, `wild_boar`, `fallow_deer`, `chamois`, `mouflon`, `waterfowl`, `small_game`, …), `name_de/en/cs/pl`
 
-**listing_species** (n:m) – `listing_id`, `species_code`
+**listing_species** (n:m) – `listing_id`, `species_code` (zusammengesetzter Primärschlüssel statt `id`)
 
 **favorites** – `user_id`, `listing_id` (unique)
 
 **saved_searches**
-- `user_id`, `name`, `filters` jsonb, `notify_push` bool, `last_notified_at`
+- `user_id`, `name`, `filters` jsonb, `notify_push` bool, `notify_email` bool (Web, M8), `last_notified_at` (nur Server); max. 25 je Konto
 
 **conversations**
-- `listing_id`, `owner_id`, `interested_id`, `last_message_at`, unique (`listing_id`, `interested_id`)
+- `listing_id` (nullable: wird beim Löschen der Anzeige leer, der Chat bleibt), `owner_id` (aus der Anzeige), `interested_id`, `last_message_at`, unique (`listing_id`, `interested_id`)
 
 **messages**
 - `conversation_id`, `sender_id`, `body` text (max 2000), `read_at`
@@ -96,11 +96,11 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 **blocks** – `blocker_id`, `blocked_id` (unique)
 
 **reports**
-- `reporter_id`, `target_type` enum (`listing | message | profile`), `target_id`, `reason` enum (`scam | illegal | weapons | harassment | wrong_category | other`), `note`, `status` (`open | handled`), `handled_by`
+- `reporter_id`, `target_type` enum (`listing | message | profile`), `target_id` (ohne FK, überdauert Löschungen), `reason` enum (`scam | illegal | weapons | harassment | wrong_category | other`), `note`, `status` (`open | handled`), `handled_by`, `handled_at`; max. 20 Meldungen je Konto in 24 h
 
 **reviews** (Phase 2) – `conversation_id`, `author_id`, `target_id`, `rating` 1–5, `text`
 
-**devices** (nur iOS-Push) – `user_id`, `apns_token`, `platform` (`ios`), `language`
+**devices** (nur iOS-Push) – `user_id`, `apns_token`, `platform` (`ios`), `language`; Registrierung nur über die RPC `register_device` (hängt das Token beim Kontowechsel um)
 
 **audit_log** – Admin-Aktionen (Freigabe, Ablehnung, Sperre, Verifizierung)
 
@@ -126,7 +126,7 @@ Validierung im Client und per DB-Check/Edge Function.
 - `messages`/`conversations`: nur Teilnehmer; gesperrte (blockierte) Paare dürfen nicht schreiben.
 - `verifications` und Dokument-Bucket: nur Besitzer (Insert/Read eigene) und Admin.
 - `profiles`: öffentlich lesbar nur `display_name`, `account_type`, `verification_status`, `business_name`, `country` (über die View `public_profiles`); alles andere nur Besitzer/Admin. Öffentlich erscheinen nur Anbieter mit mindestens einer öffentlichen Anzeige, außerdem sehen Chatpartner einander. Der öffentliche Status zeigt nur „verifiziert“ oder nichts, `pending`/`rejected` sieht nur der Nutzer selbst (v0.3).
-- `reports`: Insert für eingeloggte Nutzer, Read nur Admin.
+- `reports`: Insert für eingeloggte Nutzer (nur sichtbare Ziele); Meldende lesen den Stand ihrer eigenen Meldungen (DSA), ohne den bearbeitenden Admin zu sehen; alles andere nur Admin.
 - Rolle `admin` über Custom Claim, nie über Client-Felder.
 
 ## 4. Screens

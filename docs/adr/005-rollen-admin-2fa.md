@@ -21,5 +21,13 @@ SPEC 3.4: Die Admin-Rolle kommt über einen Custom Claim, nie über Felder, die 
 
 ## Folgen
 - Admins anlegen geht nur per SQL bzw. Service-Rolle. Eine UI folgt in M4.
-- Der Hook muss in der Cloud aktiviert werden (M2). Lokal ist er in `supabase/config.toml` aktiv.
+- Checkliste Cloud-Projekt (M2, Review M1):
+  - Custom Access Token Hook aktivieren.
+  - „Expose new tables“ deaktivieren (entspricht `auto_expose_new_tables = false`).
+  - Nur das Schema `public` über die API exponieren, GraphQL abschalten.
+  - TOTP-MFA aktivieren, sonst entsteht nie `aal2` und es gibt faktisch keine Admins.
+  - `enable_confirmations = true`, Passwortlänge mindestens 10.
+  - Kein Logging von Statement-Parametern (ADR 006).
+  - Signed URLs für Dokumente kurz halten (M9).
+- Lokal sind Hook und Exposure in `supabase/config.toml` gesetzt.
 - In lokalen Tests wird `aal` über `request.jwt.claims` gesetzt.

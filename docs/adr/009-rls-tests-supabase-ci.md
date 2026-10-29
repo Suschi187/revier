@@ -7,9 +7,11 @@ CLAUDE.md: Jede Tabelle hat RLS, und Policies werden mit Tests abgesichert. Die 
 
 ## Entscheidung
 - pgTAP über `supabase test db`. Jede Testdatei läuft in einer Transaktion und wird zurückgerollt.
-- Rollen werden in Tests mit `set local role anon|authenticated` und `set local request.jwt.claims = '{"sub": …, "role": …, "aal": …}'` gewechselt. Die Helfer liegen in `supabase/tests/00000_helpers.sql` (Schema `tests`) und brauchen keine zusätzliche Abhängigkeit.
-- Prüfmatrix je Tabelle: anon, Nutzer A, Nutzer B, Admin ohne 2FA (aal1) und Admin mit 2FA (aal2), jeweils für SELECT, INSERT, UPDATE und DELETE.
-- Meta-Test: Jede Tabelle in `public` hat RLS aktiv und mindestens eine Policy oder ist bewusst ohne Policy gesperrt. Gesperrte Tabellen stehen auf einer Allowlist im Test.
+- Rollen werden in Tests mit `set local role anon|authenticated` und `set local request.jwt.claims = '{"sub": …, "role": …, "aal": …}'` gewechselt. Die Helfer liegen in `supabase/tests/_helpers.psql` (Schema `tests`). Jede Testdatei bindet sie per `\ir` ein; eine Datei mit Endung `.sql` würde selbst als Test laufen. Zusätzliche Abhängigkeiten gibt es nicht.
+- Prüfmatrix: Für jede Tabelle werden mindestens anon, Besitzer und ein fremder Nutzer geprüft. Wo Admin-Rechte bestehen, kommt Admin mit und ohne 2FA dazu. Geprüft werden die erlaubten und die verbotenen Operationen.
+- Den Server-Kontext prüfen die Tests als `service_role` (`09_grants`), nicht als `postgres`, weil `postgres` RLS und Grants umgeht.
+- Hinweis: Policies, die eine Zeile ausfiltern, lösen keinen Fehler aus. Ein UPDATE trifft dann 0 Zeilen, deshalb prüfen die Tests danach den unveränderten Zustand.
+- Meta-Test (`00_meta`): Jede Tabelle in `public` hat RLS aktiv und mindestens eine Policy. `private` hat keine Tabellenrechte für API-Rollen. In `public` sind nur RPCs von der Allowlist ausführbar. `09_grants` hält zusätzlich die Rechte von anon als Snapshot fest.
 - CI: Workflow `supabase.yml` bei Änderungen unter `supabase/**`. Die CLI ist auf 2.122 gepinnt. Der Workflow startet mit `supabase start` ohne Studio und nicht benötigte Dienste und führt dann `supabase db reset`, `supabase test db` und `supabase db lint --level warning` aus.
 
 ## Alternativen

@@ -71,14 +71,14 @@ isOneToOne: false
                   ]
                 },"conversations": {
                   Row: {
-                    "created_at": string,"id": string,"interested_id": string,"last_message_at": string | null,"listing_id": string,"owner_id": string
+                    "created_at": string,"id": string,"interested_id": string,"last_message_at": string | null,"listing_id": string | null,"owner_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"interested_id"?: string,"last_message_at"?: string | null,"listing_id": string,"owner_id": string
+                    "created_at"?: string,"id"?: string,"interested_id"?: string,"last_message_at"?: string | null,"listing_id"?: string | null,"owner_id": string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"interested_id"?: string,"last_message_at"?: string | null,"listing_id"?: string,"owner_id"?: string
+                    "created_at"?: string,"id"?: string,"interested_id"?: string,"last_message_at"?: string | null,"listing_id"?: string | null,"owner_id"?: string
                   }
                   Relationships: [
                     {
@@ -480,14 +480,14 @@ isOneToOne: false
           Views: {
             "public_profiles": {
                   Row: {
-                    "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"display_name": string,"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]
+                    "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"display_name": string,"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"] | null
                   }
                   ComputedFields: never
                   Insert: {
-                           "account_type"?: Database["public"]['Enums']["account_type"] | null,"business_name"?: never,"country"?: Database["public"]['Enums']["country_code"] | null,"display_name"?: string | null,"user_id"?: string | null,"verification_status"?: Database["public"]['Enums']["verification_status"] | null
+                           "account_type"?: Database["public"]['Enums']["account_type"] | null,"business_name"?: never,"country"?: Database["public"]['Enums']["country_code"] | null,"display_name"?: string | null,"user_id"?: string | null,"verification_status"?: never
                          }
                         Update: {
-                           "account_type"?: Database["public"]['Enums']["account_type"] | null,"business_name"?: never,"country"?: Database["public"]['Enums']["country_code"] | null,"display_name"?: string | null,"user_id"?: string | null,"verification_status"?: Database["public"]['Enums']["verification_status"] | null
+                           "account_type"?: Database["public"]['Enums']["account_type"] | null,"business_name"?: never,"country"?: Database["public"]['Enums']["country_code"] | null,"display_name"?: string | null,"user_id"?: string | null,"verification_status"?: never
                          }
                         Relationships: [
                     
@@ -495,7 +495,9 @@ isOneToOne: false
                 }
           }
           Functions: {
-            [_ in never]: never
+            "register_device":
+{ Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
+                           }
           }
           Enums: {
             "account_type": "private"|"business","country_code": "DE"|"AT"|"CH"|"CZ"|"PL","currency_code": "EUR"|"CHF"|"CZK"|"PLN","device_platform": "ios","document_type": "jagdschein"|"jagdkarte"|"revierbescheinigung"|"gewerbe","language_code": "de"|"en"|"cs"|"pl","listing_direction": "offer"|"wanted","listing_kind": "lease"|"permit"|"driven_hunt"|"trophy_hunt"|"helper","listing_status": "draft"|"pending_review"|"active"|"paused"|"expired"|"rejected"|"removed","price_unit": "total"|"per_year"|"per_hectare_year"|"per_day"|"per_animal"|"on_request","region_level": "state"|"district","report_reason": "scam"|"illegal"|"weapons"|"harassment"|"wrong_category"|"other","report_status": "open"|"handled","report_target": "listing"|"message"|"profile","verification_request_status": "pending"|"verified"|"rejected","verification_status": "none"|"pending"|"verified"|"rejected"

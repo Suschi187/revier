@@ -298,3 +298,24 @@ M1 **abnehmen: ja, mit Auflagen.** Alle drei Teile des Akzeptanzkriteriums sind 
 - F2 vor M4 beheben, spätestens bevor die erste Edge Function bzw. der erste service_role-Code entsteht.
 - F3 vor M3 (Foto-Upload) beheben.
 - F4 bis F6 bei Gelegenheit erledigen.
+
+### Nachtrag 2026-10-29: Stand der Behebung (QA und Architekt-Review M1)
+
+| Fund | Status | Commit |
+|------|--------|--------|
+| QA F1: Fallback-Name aus E-Mail, alle Konten auflistbar | behoben: „Nutzer“, öffentlich nur Anbieter und Chatpartner | 04e16d5 |
+| QA F2: `service_role` ohne Tabellenrechte | behoben: CRUD für `service_role`, kein TRUNCATE für API-Rollen, Test im echten `service_role`-Kontext | fd363d6 |
+| QA F3: `storage_path` nicht gebunden | behoben: Pfad an Besitzer und Anzeige gebunden, Upload nur für registrierte Fotos | c49d8a6 |
+| QA F4: Abweichungen von SPEC 3.1/3.4 | dokumentiert in SPEC v0.3 | (dieser Commit) |
+| QA F5: ADR 009 | korrigiert | (dieser Commit) |
+| QA F6: Admin-IDs sichtbar | behoben: Spalten-GRANT | da9422e |
+| Architekt 1: GraphQL-Orakel | behoben: vorsorglich, lokal war pg_graphql inaktiv | 7237b9a |
+| Architekt 4: Gerätetoken | behoben: RPC `register_device` | 9fac05f |
+| Architekt 6/7: Badge, Fallback-Name | behoben | 04e16d5 |
+| Architekt 8: Beweise löschbar | behoben: Chats bleiben, kein Löschen durch gesperrte Nutzer, Admin nur per `removed` | da9422e |
+| Architekt 9: Performance | teilweise: Storage über indizierten Pfad; `is_active_user` je Zeile bleibt, vor M5 messen | c49d8a6 |
+| Architekt 10: Herausmitteln über mehrere Anzeigen | offen bis M3 (ADR 006) | – |
+| Architekt 11–13 | behoben: Children-Guard prüft zuerst, Vier-Augen-Prinzip, Grund unveränderlich, Server-Erkennung über die Rolle | c49d8a6, da9422e |
+| Architekt 14: Cloud-Konfiguration | Checkliste in ADR 005 für M2 | (dieser Commit) |
+
+Zusätzlich gefunden: anon/authenticated hatten TRUNCATE auf allen Tabellen. Über PostgREST war das nicht erreichbar, die Rechte sind trotzdem entzogen (fd363d6).

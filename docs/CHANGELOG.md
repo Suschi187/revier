@@ -16,7 +16,7 @@ Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannt
   - Meldungen, Verifizierungen, Bewertungen (gesperrt), Geräte, Audit-Log
   - Storage-Buckets mit Policies
 - `supabase/data/regions/`: Generator, Quellen und Lizenzen
-- 170 pgTAP-Tests unter `supabase/tests/`, dazu ein Meta-Test: jede Tabelle hat RLS und eine Policy, `private` ist gesperrt
+- pgTAP-Tests unter `supabase/tests/` (nach Review 205), dazu ein Meta-Test: jede Tabelle hat RLS und eine Policy, `private` ist gesperrt
 - CI `supabase.yml`: `db reset`, `test db`, Prüfung der generierten Typen, `db lint`
 - `web/lib/supabase/database.types.ts` (`npm run gen:types`), Server-Client typisiert
 
@@ -24,7 +24,7 @@ Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannt
 ```sh
 supabase stop && supabase start      # Neustart nötig: config.toml (Hook, auto_expose) wurde geändert
 supabase db reset                    # alle Migrationen inkl. Regionendaten
-supabase test db                     # 170 Tests
+supabase test db                     # 205 Tests
 supabase db lint -s public,private --level warning
 cd web && npm run gen:types && git diff --exit-code lib/supabase/database.types.ts
 ```
@@ -36,7 +36,29 @@ cd web && npm run gen:types && git diff --exit-code lib/supabase/database.types.
 - [x] Migrationen für alle Tabellen aus SPEC 3, Enums, Indizes, Regionen DE/AT und Wildarten
 - [x] RLS-Policies mit automatisierten Tests
 
+### Nach Review (Architekt und QA, docs/QA-REPORT.md)
+- `service_role` hat CRUD-Rechte (Server-Pfade). API-Rollen haben kein TRUNCATE/REFERENCES/TRIGGER mehr.
+- Profile:
+  - Fallback-Name ist „Nutzer“.
+  - Öffentlich erscheinen nur Anbieter mit öffentlicher Anzeige, dazu sehen Chatpartner einander.
+  - Öffentlich sichtbar ist nur „verifiziert“.
+- Fotos:
+  - `storage_path` ist an Besitzer und Anzeige gebunden.
+  - Upload erst nach Registrierung, das Limit von 8 gilt damit auch im Bucket.
+  - Verwaiste Dateien sind nicht lesbar.
+- Gerätetoken nur noch per RPC `register_device`.
+- Kein GraphQL. Fremde Sperren sind nicht abfragbar.
+- Chats bleiben beim Löschen einer Anzeige erhalten.
+- Gesperrte Nutzer löschen keine Anzeigen, Admins entfernen per `removed`.
+- Moderatoren-IDs sind für Nutzer unsichtbar.
+- Admins geben keine eigenen Anzeigen frei.
+- 205 pgTAP-Tests.
+
 ### Bekannte Lücken
+- **Für Web-Code (M2):** `reports` und `verifications` haben Spalten-GRANTs. `select=*` schlägt dort fehl, Spalten müssen ausdrücklich genannt werden.
+- **Cloud-Checkliste für M2:** steht in ADR 005.
+- **Performance:** `is_active_user()` läuft in der öffentlichen Anzeigen-Policy pro Zeile. Vor M5 messen und bei Bedarf denormalisieren.
+- **Standort:** Über mehrere Anzeigen desselben Reviers lässt sich der Originalpunkt herausmitteln. Bis M3 offen, siehe ADR 006.
 - Rechtlich zu prüfen: Retention-Fristen und Löschregeln sind Platzhalter (ADR 008, SPEC 7.2/7.3).
 - Die Lösch- und Retention-Jobs fehlen noch (M9). Gelöschte Datensätze hinterlassen bis dahin Dateien in Storage.
 - `attributes` wird in M1 nur auf seine Form geprüft. Pflichtfelder je Anzeigenart folgen in M3.

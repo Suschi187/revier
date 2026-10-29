@@ -19,3 +19,6 @@ SPEC 3.3: Exakte Revierkoordinaten werden nie gespeichert. Angezeigt wird ein ve
 ## Folgen
 - Der Originalpunkt ist nur im Request kurz sichtbar. Statement-Logging darf in keiner Umgebung Parameter protokollieren (prüfen in M2/M10).
 - Es gibt keine Prüfung, ob der gewählte Punkt im Landkreis liegt, weil keine Polygone gespeichert werden. Bei Bedarf kommt eine grobe Distanzprüfung zum Centroid in M3.
+- **Offen bis M3 (Review M1):** Der Versatz gilt pro Anzeige. Mehrere Anzeigen zum selben Revier, etwa jährliche Neuauflagen oder mehrere Arten, bekommen unabhängige Versätze, deren Mittel sich dem Originalpunkt nähert.
+  - Geplant: Der Versatz wird deterministisch aus HMAC(Secret, Besitzer + auf etwa 1 km gerundeter Eingabepunkt) abgeleitet. Das Secret liegt im Vault.
+  - Warum erst in M3: Das Risiko entsteht erst mit vielen Anzeigen desselben Anbieters. Der Assistent in M3 legt außerdem fest, wie Punkte eingegeben werden.
