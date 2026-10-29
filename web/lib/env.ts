@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { publicKeyProblem } from "@/lib/supabase/key";
+// Relativ statt "@/…", weil next.config.ts dieses Modul lädt (dort gilt kein Pfad-Alias).
+import { publicKeyProblem } from "./supabase/key";
 
 // Öffentliche Variablen landen im Browser-Bundle. Hier nie Secrets ergänzen,
 // der service_role-Key gehört nur in serverseitigen Code (docs/adr/002).

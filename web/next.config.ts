@@ -1,9 +1,18 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import { publicEnv } from "./lib/env";
+import { buildCsp } from "./lib/security/csp";
 
-// Basis-Header (docs/adr/002). Eine CSP mit Nonce folgt, sobald Auth und
-// Drittanbieter feststehen (M2/M10); HSTS nur in Produktion.
+// Basis-Header (docs/adr/002) und feste CSP (docs/adr/010); HSTS nur in Produktion.
 const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: buildCsp({
+      supabaseUrl: publicEnv.NEXT_PUBLIC_SUPABASE_URL,
+      dev: process.env.NODE_ENV !== "production",
+      https: publicEnv.NEXT_PUBLIC_SITE_URL.startsWith("https://"),
+    }),
+  },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
