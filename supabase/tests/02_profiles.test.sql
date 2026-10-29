@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(29);
+select plan(32);
 
 select tests.create_user('a@test.local', 'Anna') as a_id \gset
 select tests.create_user('b@test.local', 'Bernd') as b_id \gset
@@ -8,7 +8,7 @@ select tests.create_user('admin@test.local') as admin_id \gset
 select tests.make_admin(:'admin_id');
 
 -- Anlegen per Trigger, Metadaten werden validiert
-select is((select display_name from profiles where user_id = :'a_id'), 'Anna', 'Profil wird beim Registrieren angelegt');
+select ok(exists (select 1 from profiles where user_id = :'a_id'), 'Profil wird beim Registrieren angelegt');
 
 insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data)
 values ('11111111-1111-1111-1111-111111111111', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'evil@test.local',
@@ -18,6 +18,8 @@ select results_eq(
   $$ values ('PL', 'de', 'none') $$,
   'Metadaten: gültiges Land übernommen, ungültige Sprache ersetzt, Status nie übernommen'
 );
+select is((select display_name from profiles where user_id = '11111111-1111-1111-1111-111111111111'), 'Nutzer',
+  'Anzeigename aus Metadaten wird nie übernommen (fremd registrierte Adressen)');
 select is((select count(*)::int from private.user_roles where user_id = '11111111-1111-1111-1111-111111111111'), 0, 'Metadaten machen niemanden zum Admin');
 
 -- Lesen
@@ -91,6 +93,10 @@ select tests.as_postgres();
 update profiles set is_blocked = true where user_id = :'b_id';
 select tests.as_anon();
 select is((select count(*)::int from public_profiles), 0, 'Gesperrte Anbieter sind nicht öffentlich');
+select tests.authenticate_as(:'b_id');
+update profiles set display_name = 'Neu' where user_id = :'b_id';
+select is((select display_name from profiles where user_id = :'b_id'), 'Bernd', 'Gesperrte ändern das eigene Profil nicht (QA M2 F4)');
+select is((select is_blocked from profiles where user_id = :'b_id'), true, 'Gesperrte lesen das eigene Profil weiter');
 
 -- Ohne Anzeigenamen kein E-Mail-Bestandteil als Name
 select tests.as_postgres();

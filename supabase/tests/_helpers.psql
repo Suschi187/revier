@@ -15,9 +15,11 @@ begin
   insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, created_at, updated_at)
   values (
     new_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', email,
-    jsonb_build_object('display_name', coalesce(display_name, split_part(email, '@', 1))),
-    now(), now()
+    '{}'::jsonb, now(), now()
   );
+  -- Der Trigger setzt nur den Platzhalter (Review M2); Testnamen direkt setzen.
+  update public.profiles p set display_name = coalesce(create_user.display_name, split_part(email, '@', 1))
+  where p.user_id = new_id;
   return new_id;
 end;
 $$;

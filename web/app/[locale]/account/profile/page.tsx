@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { BlockedNotice } from "@/components/profile/BlockedNotice";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -32,6 +33,7 @@ async function ProfileContent() {
   const user = await requireOnboardedUser(locale, `/${locale}/account/profile`);
   const profile = await getOwnProfile(user.id);
   if (!profile) throw new Error("Profil nicht verfügbar");
+  if (profile.isBlocked) return <BlockedNotice />;
   return (
     <ProfileForm
       locale={locale}

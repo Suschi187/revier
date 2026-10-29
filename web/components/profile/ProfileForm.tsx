@@ -23,7 +23,7 @@ export function ProfileForm({ locale, initial }: { locale: AppLocale; initial: P
       )}
       {state.formError && (
         <p role="alert" className="text-red-700">
-          {t("failed")}
+          {t(state.formError === "blocked" ? "blocked" : "failed")}
         </p>
       )}
       <button type="submit" disabled={pending} className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">

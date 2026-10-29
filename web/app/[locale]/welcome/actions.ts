@@ -5,7 +5,7 @@ import { formValues, PROFILE_KEYS, type ProfileFormState } from "@/lib/forms";
 import { isAppLocale, safeNextPath } from "@/lib/auth/paths";
 import { requireSessionUser } from "@/lib/services/auth";
 import { acceptLegal } from "@/lib/services/legal";
-import { updateOwnProfile } from "@/lib/services/profile";
+import { getOwnProfile, updateOwnProfile } from "@/lib/services/profile";
 import { fieldErrors, legalFromForm, profileFromForm } from "@/lib/validation/profile";
 
 // Onboarding (ADR 010): erst Profil speichern, dann zustimmen; eine Wiederholung ist harmlos.
@@ -26,6 +26,9 @@ export async function completeOnboarding(_previous: ProfileFormState, form: Form
     };
   }
 
+  if ((await getOwnProfile(user.id))?.isBlocked) {
+    return { status: "error", fieldErrors: {}, formError: "blocked", values };
+  }
   if ((await updateOwnProfile(user.id, profile.data)) !== "ok") {
     return { status: "error", fieldErrors: {}, formError: "failed", values };
   }

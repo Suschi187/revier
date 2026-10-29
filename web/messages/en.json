@@ -89,7 +89,8 @@
     "submit": "Save and continue",
     "errors": {
       "failed": "Saving failed. Please try again.",
-      "outdated": "The terms have just been updated. Please review them and confirm again."
+      "outdated": "The terms have just been updated. Please review them and confirm again.",
+      "blocked": "Your account is blocked. You cannot change your profile."
     }
   },
   "Legal": {
@@ -129,7 +130,8 @@
       "back": "Back to my account",
       "submit": "Save",
       "saved": "Your profile has been saved.",
-      "failed": "Saving failed. Please try again."
+      "failed": "Saving failed. Please try again.",
+      "blocked": "Your account is blocked. You cannot change your profile."
     }
   }
 }

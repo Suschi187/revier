@@ -51,3 +51,4 @@ Werden in Web und iOS gleich verwendet. cs/pl **ungeprüft**.
 | terms | Terms of use | Nutzungsbedingungen | Podmínky použití | Regulamin | ungeprüft |
 | privacy_policy | Privacy policy | Datenschutzerklärung | Zásady ochrany osobních údajů | Polityka prywatności | ungeprüft |
 | imprint | Legal notice | Impressum | Právní informace | Nota prawna | ungeprüft |
+| account_blocked | Blocked (account, by moderation) | gesperrt | zablokovaný | zablokowane | ungeprüft |

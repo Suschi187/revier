@@ -12,6 +12,8 @@ export type OwnProfile = {
   country: Enums["country_code"];
   preferredLanguage: Enums["language_code"];
   verificationStatus: Enums["verification_status"];
+  /** Von der Moderation gesperrt: Profil nur lesbar (RLS, Review M2). */
+  isBlocked: boolean;
 };
 
 // Platzhalter aus private.handle_new_user(); das Onboarding verlangt einen echten Namen.
@@ -21,7 +23,7 @@ export async function getOwnProfile(userId: string): Promise<OwnProfile | null> 
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from("profiles")
-    .select("display_name, account_type, business_name, country, preferred_language, verification_status")
+    .select("display_name, account_type, business_name, country, preferred_language, verification_status, is_blocked")
     .eq("user_id", userId)
     .maybeSingle();
   if (!data) return null;
@@ -32,6 +34,7 @@ export async function getOwnProfile(userId: string): Promise<OwnProfile | null> 
     country: data.country,
     preferredLanguage: data.preferred_language,
     verificationStatus: data.verification_status,
+    isBlocked: data.is_blocked,
   };
 }
 
@@ -50,7 +53,7 @@ export async function updateOwnProfile(userId: string, input: ProfileInput): Pro
     })
     .eq("user_id", userId)
     .select("user_id");
-  // RLS filtert still (0 Zeilen), z. B. bei gelöschten Konten.
+  // RLS filtert still (0 Zeilen), z. B. bei gelöschten oder gesperrten Konten.
   if (error || !data || data.length === 0) return "failed";
 
   // Sprache der Auth-Mails (ADR 010). Nur Anzeige, nie für Rechte; ein Fehler hier blockiert nicht.

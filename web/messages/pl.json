@@ -89,7 +89,8 @@
     "submit": "Zapisz i kontynuuj",
     "errors": {
       "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
-      "outdated": "Teksty prawne zostały właśnie zaktualizowane. Przeczytaj je i potwierdź ponownie."
+      "outdated": "Teksty prawne zostały właśnie zaktualizowane. Przeczytaj je i potwierdź ponownie.",
+      "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
     }
   },
   "Legal": {
@@ -129,7 +130,8 @@
       "back": "Powrót do Moje konto",
       "submit": "Zapisz",
       "saved": "Twój profil został zapisany.",
-      "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+      "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
+      "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
     }
   }
 }

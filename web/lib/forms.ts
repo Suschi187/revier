@@ -5,7 +5,7 @@ export type ProfileFormState = {
   status: "idle" | "error" | "saved";
   fieldErrors: ProfileFieldErrors;
   legalError?: boolean;
-  formError?: "failed" | "outdated";
+  formError?: "failed" | "outdated" | "blocked";
   /** Eingaben nach einem Fehler, damit das Formular sie wieder anzeigt. */
   values?: Record<string, string>;
 };

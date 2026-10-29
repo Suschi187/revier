@@ -89,7 +89,8 @@
     "submit": "Uložit a pokračovat",
     "errors": {
       "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
-      "outdated": "Právní texty byly právě aktualizovány. Přečtěte si je a potvrďte znovu."
+      "outdated": "Právní texty byly právě aktualizovány. Přečtěte si je a potvrďte znovu.",
+      "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
     }
   },
   "Legal": {
@@ -129,7 +130,8 @@
       "back": "Zpět na Můj účet",
       "submit": "Uložit",
       "saved": "Váš profil byl uložen.",
-      "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+      "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
+      "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
     }
   }
 }

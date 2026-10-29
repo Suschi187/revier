@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { BlockedNotice } from "@/components/profile/BlockedNotice";
 import { WelcomeForm } from "@/components/profile/WelcomeForm";
 import type { AppLocale } from "@/i18n/routing";
 import { safeNextPath } from "@/lib/auth/paths";
@@ -35,6 +36,8 @@ async function WelcomeContent({ searchParams }: Pick<PageProps<"/[locale]/welcom
   const [legal, profile] = await Promise.all([getLegalStatus(), getOwnProfile(user.id)]);
   if (legal?.accepted) redirect(next === `/${locale}/welcome` ? `/${locale}/account` : next);
   if (!legal || !profile) throw new Error("Profil oder Rechtsstatus nicht verfügbar");
+  // Gesperrte können weder zustimmen noch das Profil ändern (accept_legal und RLS lehnen ab).
+  if (profile.isBlocked) return <BlockedNotice />;
 
   const displayName =
     profile.displayName === PLACEHOLDER_DISPLAY_NAME ? (user.metadataName ?? "") : profile.displayName;

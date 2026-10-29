@@ -8,11 +8,15 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export type SessionUser = {
   id: string;
   email: string | null;
-  /** Name aus user_metadata (Apple liefert ihn nur beim ersten Login); nur zum Vorbelegen. */
+  /** Name von Apple (nur beim ersten Login geliefert); nur zum Vorbelegen im Onboarding. */
   metadataName: string | null;
 };
 
-function nameFromMetadata(metadata: unknown): string | null {
+// Nur der Name, den Apple liefert. user_metadata ist frei setzbar, auch von jemandem, der eine
+// fremde Adresse registriert (Review M2, Architekt 7); app_metadata setzt nur Supabase Auth.
+function nameFromMetadata(metadata: unknown, appMetadata: unknown): string | null {
+  const providers = (appMetadata as { providers?: unknown } | null)?.providers;
+  if (!Array.isArray(providers) || !providers.includes("apple")) return null;
   if (typeof metadata !== "object" || metadata === null) return null;
   const record = metadata as Record<string, unknown>;
   const name = record.full_name ?? record.name;
@@ -33,7 +37,7 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   return {
     id: claims.sub,
     email: typeof claims.email === "string" ? claims.email : null,
-    metadataName: nameFromMetadata(claims.user_metadata),
+    metadataName: nameFromMetadata(claims.user_metadata, claims.app_metadata),
   };
 });
 
@@ -52,7 +56,7 @@ export async function getVerifiedUser(): Promise<SessionUser | null> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
-  return { id: data.user.id, email: data.user.email ?? null, metadataName: nameFromMetadata(data.user.user_metadata) };
+  return { id: data.user.id, email: data.user.email ?? null, metadataName: nameFromMetadata(data.user.user_metadata, data.user.app_metadata) };
 }
 
 export async function signOutCurrentSession(): Promise<void> {

@@ -89,7 +89,8 @@
     "submit": "Speichern und weiter",
     "errors": {
       "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal.",
-      "outdated": "Die Rechtstexte wurden gerade aktualisiert. Bitte lies sie und bestätige erneut."
+      "outdated": "Die Rechtstexte wurden gerade aktualisiert. Bitte lies sie und bestätige erneut.",
+      "blocked": "Dein Konto ist gesperrt. Du kannst dein Profil nicht ändern."
     }
   },
   "Legal": {
@@ -129,7 +130,8 @@
       "back": "Zurück zu Mein Konto",
       "submit": "Speichern",
       "saved": "Dein Profil wurde gespeichert.",
-      "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
+      "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal.",
+      "blocked": "Dein Konto ist gesperrt. Du kannst dein Profil nicht ändern."
     }
   }
 }
