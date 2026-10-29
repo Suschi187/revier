@@ -427,3 +427,16 @@ Entscheidungen des Nutzers (vierte Runde):
   - Umsetzung: Der Server leitet `listings.postal_prefix` (2 Zeichen) aus `listing_places` ab (Trigger, nicht vom Client setzbar, Spaltenrecht nur lesend). Die volle PLZ und der Ortsname bleiben in `listing_places` privat.
   - Weil das Präfix öffentlich ist, ist ein Filter darauf kein Orakel. Die Regel „nie nach voller PLZ oder Ort filtern“ bleibt.
   - SPEC 3.3 und ADR 012 halten das fest; pgTAP prüft, dass anon nur das Präfix sieht.
+
+## 15. Spike-Ergebnis und Auflagen für Commit 5 (Architekt, 2026-10-29)
+Review: `docs/reviews/M3-spike-architekt.md`. Freigabe für Commit 5 mit `imagescript` 1.3.0 und 8 MP, mit diesen Auflagen:
+1. Nach einem Abbruch (`546`/Timeout) bleibt der Eingang liegen. Ein neuer Versuch braucht eine neue Fotozeile, die alte wird gelöscht. Den Eingang räumt der Job in M9 ab. Gleich für Web und iOS, Meldung in 4 Sprachen.
+2. Speicher lokal nachmessen (8 MP baseline, 8 MP progressive 4:4:4). Über etwa 200 MB → Grenze 6,6 MP.
+3. Wiederholung in eu-central-1 mit der echten Function (Blocker für den Go-live).
+4. Höchstens 3 Verarbeitungsversuche je Foto (Zähler nur vom Server gesetzt), mit Test.
+5. Strenger Header-Parser als eigenes Modul mit Unit-Tests; jede Ausnahme ergibt `corrupt`, nie 500.
+6. Formatspezifisch dekodieren mit `instanceof`-Prüfung, Abmessungen gegen den Header prüfen, EXIF-Parser mit Grenzprüfung, alle 8 Orientierungen mit Pixeltest, Ausgabe byteweise auf Metadaten prüfen.
+7. **Entschieden:** PNG fällt auf dem Server weg (der Client wandelt ohnehin nach JPEG); kleine Folgemigration für `allowed_mime_types`.
+8. `deno.json` mit genau `imagescript@1.3.0` und `deno.lock` mit Integrity; die CI prüft das Lockfile. Lädt die Bibliothek WASM zur Laufzeit nach, wird es vendored.
+9. Logs ohne GPS, EXIF oder Bildbytes.
+10. Keine Spike-Reste im Repo (Token, Projekt-Referenz, Testbilder); Fixtures erzeugt ein Generator im Repo.
