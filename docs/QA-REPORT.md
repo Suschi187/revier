@@ -319,3 +319,187 @@ M1 **abnehmen: ja, mit Auflagen.** Alle drei Teile des Akzeptanzkriteriums sind 
 | Architekt 14: Cloud-Konfiguration | Checkliste in ADR 005 für M2 | (dieser Commit) |
 
 Zusätzlich gefunden: anon/authenticated hatten TRUNCATE auf allen Tabellen. Über PostgREST war das nicht erreichbar, die Rechte sind trotzdem entzogen (fd363d6).
+
+## M2 – 2026-10-29
+
+Geprüfter Stand: `25bb981` (main, Arbeitsbaum sauber). M2-Commits `068dc36..25bb981`. Danach kamen nur QA-Commits mit Tests dazu (`3e4bb60`, `b462fb0`), kein Feature-Code.
+Umgebung: macOS, Node 24.22.1, Supabase CLI 2.122.0 lokal (nach `supabase stop && supabase start`), Mailpit, Playwright Chromium, Prod-Build per `next start -p 3456` für Header- und Cookie-Prüfungen.
+Vorgehen:
+- die Prüfbefehle aus dem CHANGELOG
+- unabhängige Proben gegen Auth, PostgREST und Storage mit Skripten im Scratchpad
+- zwei temporäre Playwright-Abläufe (Re-Consent, Sperre der Link-Bestätigung), danach gelöscht
+- neue automatisierte API-Tests (Auflage M1, siehe unten)
+
+### Ergebnis je Akzeptanzkriterium
+
+„Registrieren, ausloggen, wieder einloggen; Profil bearbeiten; geschützte Seiten leiten auf Login um“ (SPEC 6 M2) sowie die Umfangspunkte AGB-Zustimmung und Session-Handling.
+
+| # | Kriterium | Ergebnis | Nachweis |
+|---|-----------|----------|----------|
+| a | Registrieren (per Link und per Code) | **erfüllt** | E2E `auth.spec.ts` Test 1 (Link, Vorlage `confirmation`) und Test 2 (Code). Nachvollzogen: Ein GET auf den Link verbraucht das Token nicht (E2E `request.get` → 200, danach klappt der Button). Neue Nutzer landen ohne Zustimmung in `/welcome`. |
+| b | Ausloggen | **erfüllt** | E2E: Nach „Abmelden“ zeigt `/de` „Anmelden“, `/de/account/profile` → Login. API: Nach `signOut` ist das Refresh-Token ungültig (400). Das Access-Token gilt bis zum Ablauf weiter (ADR 010, bewusst; `integration/auth.test.ts`). Proxy: Bei widerrufener, abgelaufener Session kommt 307 auf den Login, und das Cookie wird gelöscht. |
+| c | Wieder einloggen (per Code und per Link) | **erfüllt** | E2E Test 1 (Code, Bestandsnutzer bekommt die Vorlage `magic_link`, falscher Code zeigt Fehler) und Test 2 (Link mit Rücksprung `/de/account/profile`). |
+| d | Profil bearbeiten | **erfüllt** | E2E: gewerblich ohne Firmenname → Fehler, mit Firmenname und Land AT → gespeichert. Vitest `validation/profile.test.ts`, pgTAP `02_profiles`. Einschränkung für gesperrte Konten: F4. |
+| e | Geschützte Seiten leiten auf Login um | **erfüllt** | curl gegen den Prod-Build: `/de/account` ohne Cookie → 307 `/de/login?next=%2Fde%2Faccount`. `/account` → `/de/account` → Login. Die Rücksprünge sind geprüft (E2E Test 5, Vitest, 22 eigene Zusatzfälle wie `%2e%2e`, `..%2f`, `//`, `\t`, `@host`, Unicode, doppelt kodiert, fremde Origin in `redirect_to`, doppeltes `next`): Alle landen sicher auf `/de/account` oder dem erlaubten Pfad. |
+| f | AGB-Zustimmung je Version | **erfüllt** | pgTAP `10_legal` (21 Tests), API-Tests (veraltete Version 22023, idempotent, nur über RPC). UI unabhängig per temporärem Playwright-Ablauf geprüft: Nach einer neuen Version `terms` führt `/de/account/profile` auf `/de/welcome?next=%2Fde%2Faccount%2Fprofile`. Ändert sich die Version, während das Formular offen ist, erscheint der Hinweis „Die Rechtstexte wurden gerade aktualisiert“, und das zweite Absenden speichert die neue Version. Nachweise danach: `terms:2026-10-draft, privacy:2026-10-draft, terms:2027-02`. Nicht als E2E im Repo, siehe Vorschläge. |
+| g | Session-Handling mit `@supabase/ssr` | **erfüllt** | Siehe Sicherheitsprüfung „Session“. |
+| h | Sign in with Apple | **nicht prüfbar** | Eingebaut, aber ausgeschaltet (`NEXT_PUBLIC_AUTH_APPLE_ENABLED`, SPEC 7.1). Die Routen `/auth/apple` und `/auth/callback` liefern dann 404 (Code-Review). |
+
+Die Akzeptanzkriterien selbst sind erfüllt. Die Zusage „passwortlos“ (SPEC 4.4 v0.4, ADR 010) hält aber nicht: Über die Auth-API lassen sich Passwörter setzen und registrieren, mit Folge Kontoübernahme (F1).
+
+### Definition of Done (CLAUDE.md)
+
+| Punkt | Ergebnis |
+|-------|----------|
+| Build ohne Warnungen, Lint und Typecheck grün | erfüllt: `npm run lint`, `npm run typecheck` und `npm run build` grün, ohne Warnungen |
+| Tests grün | erfüllt, Reihenfolge beachten (F6): `supabase db reset && supabase test db` 11 Dateien, 230 Tests PASS; `npm test` 6 Dateien, 65 Tests; `npm run test:e2e` 5/5; neu `npm run test:integration` 3 Dateien, 38 Tests |
+| `supabase db lint -s public,private --level warning` | erfüllt: „No schema errors found“ |
+| Texte in 4 Sprachen | erfüllt: 84 Schlüssel je Sprache, keiner fehlt oder ist leer, keine unübersetzten Kopien aus en. Die Mailvorlagen `confirmation` und `magic_link` sind 4-sprachig (Betreff in einer Zeile mit allen 4 Sprachen). cs/pl sind ungeprüft (Glossar). |
+| Glossar abgestimmt | erfüllt für M2: Alle 10 Begriffe aus „Konto und Anmeldung“ stehen wörtlich in den Messages der jeweiligen Sprache. M0 F4 (Muttersprachler für cs/pl) bleibt offen. |
+| Lücken Web/iOS vermerkt | erfüllt: CHANGELOG „iOS (I1)“: Code-Login, `accept_legal(…, 'ios')`, Onboarding |
+| RLS für neue Tabellen getestet | erfüllt: `legal_acceptances` mit 2 SELECT-Policies, ohne Schreibrechte für API-Rollen. `00_meta` und `10_legal` (anon, A, B, Admin aal1/aal2, gesperrt), dazu API-Tests (direktes INSERT/PATCH/DELETE → 403, fremde Nachweise unsichtbar, `count=exact` 0) |
+| CHANGELOG mit Testanleitung | erfüllt, nachvollzogen. Fehlt: Hinweis, dass `supabase test db` nach E2E-Läufen ohne `db reset` rot wird (F6) |
+| Secrets | erfüllt: Kein service_role-, secret- oder JWT-Secret-Wert in `.next/static` (Suche nach den echten lokalen Werten). Nur der publishable Key ist enthalten, wie vorgesehen. Treffer für `sb_secret_` sind nur der Text der Env-Validierung. `web/.env.local` ist unverändert. |
+
+### Sicherheitsprüfung
+
+| Thema | Ergebnis | Nachweis |
+|-------|----------|----------|
+| Open Redirect (`next`, `redirect_to`) | in Ordnung | `safeNextPath` gibt nur `url.pathname` nach Allowlist zurück. `nextFromRedirectTo` prüft die Origin. 22 Zusatzfälle (siehe e), Vitest, E2E Test 5. Login, Welcome, Confirm, Callback, Apple und Proxy nutzen alle die Prüfung. |
+| Account-Enumeration | **UI in Ordnung, API nicht** | Das Formular antwortet für alle Fehler außer Netzwerkfehlern gleich. Über die Auth-API verrät `create_user:false` die Existenz eines Kontos (F2). |
+| Mail-Scanner-Schutz | in Ordnung | GET zeigt nur den Button, erst die Server Action (POST, Origin-Prüfung durch Next) ruft `verifyOtp` auf. Die Seite hat `noindex, nofollow` und `Referrer-Policy: no-referrer` und lädt keine fremden Skripte. |
+| HTML-Injektion in Mails über `redirect_to` | in Ordnung | `redirect_to` mit `"><h1>…<a href=…>` (Muster `**` der Allowlist) wird in der Mail URL-kodiert ausgegeben, das Template escapt. |
+| Session-Refresh im Proxy | in Ordnung | Prod-Build: Mit abgelaufenem `expires_at` erneuert der Proxy die Session. `Set-Cookie: sb-127-auth-token` steht auch auf dem 307 von `/account` → `/de/account`, dazu `Cache-Control: private, no-store`. Bei widerrufenem Refresh-Token: 307 auf den Login, Cookie gelöscht. Cookies `SameSite=lax`, nicht `HttpOnly` (ADR 010, bewusst). |
+| Cache-Control | in Ordnung | Alle Seiten antworten mit `private, no-cache, no-store`, auch `/de` anonym (Hinweis H1). Persönliche Inhalte werden nicht geteilt gecacht. |
+| CSP und Header | in Ordnung, wie ADR 010 | `default-src 'self'; script-src 'self' 'unsafe-inline'` (Prod ohne `unsafe-eval`), `connect-src` nur Supabase, `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`. Dazu HSTS, `X-Frame-Options: DENY`, Permissions-Policy. E2E prüft, dass keine CSP-Verstöße auftreten. |
+| `legal_acceptances` RLS und RPCs | in Ordnung | Nur über `accept_legal` schreibbar, Versionen prüft der Server. anon: `legal_status`/`accept_legal` → 401. `private.setting_text` und `has_accepted_current_legal` sind über die API nicht erreichbar (406/404). |
+| Gesperrte Konten | DB in Ordnung, UI unklar | `accept_legal` → 42501. Neue Anzeigen → 42501. Anzeigen und `public_profiles` verschwinden öffentlich (API-Test). Login und Profiländerung sind weiter möglich, die Meldung ist irreführend (F4). |
+| Rechteausweitung | in Ordnung | `updateUser({ data: { app_role: 'admin', role: 'service_role' } })` ändert nach dem Refresh weder `role` noch `app_role`. Gefälschte Tokens (`alg: none`, falsches HS256-Secret, getauschtes `sub`, `role: service_role` mit alter Signatur) → 401 bei PostgREST, abgelehnt bei Storage. Die Admin-API mit Nutzer-Token → 403. |
+| Passwörter | **Lücke** | F1 |
+
+### Auflage aus M1: API-Tests gegen die lokale Supabase
+
+Angelegt in `web/integration/`, Aufruf mit `npm run test:integration` (eigene Config `vitest.integration.config.mts`, `npm test` schließt `integration/**` aus). Keine neue Abhängigkeit: Es reichen `@supabase/supabase-js`, Vitest und `node:http` (für rohe Pfade ohne URL-Normalisierung).
+- **Schlüssel:** zur Laufzeit aus `supabase status -o env`, nur für Hosts `127.0.0.1`/`localhost`, nie im Repo. Der service_role-Key dient nur dem Aufbau und Abbau.
+- **Verhalten ohne Supabase:** Ist sie nicht erreichbar, werden alle Tests übersprungen (Exit 0). Mit `CI=true` oder `INTEGRATION_REQUIRED=1` bricht der Lauf ab (geprüft).
+- **Aufbau:** Das globale Setup legt drei Nutzer an:
+  - A mit Entwurf, Foto, Jagdschein, Verifizierungsantrag und AGB-Zustimmung
+  - B mit freigegebener Anzeige und Foto, A schreibt B an
+  - C unbeteiligt
+
+  Danach wird alles gelöscht (Dateien, Konten, Audit-Einträge). Nach `db reset` → `test:integration` → `test db` ist pgTAP grün. Dreimal hintereinander stabil (ca. 2,5 s).
+- **Positivkontrollen:** Jede Ablehnung hat eine Gegenprobe (Besitzer bzw. Teilnehmer dürfen es), damit kein Test grundlos grün ist.
+
+| Datei | Tests | Inhalt |
+|-------|-------|--------|
+| `storage.test.ts` | 14 | Jagdschein: Signed URL einzeln und mehrfach (C, anon), `download`, `info`, `exists`, `object/public`, `object/authenticated`, `list` (Ordner, Wurzel, Suche), Upsert, `update`, `remove`, `copy`, `move`, `copy` in einen anderen Bucket. Der Besitzer überschreibt nicht. Pfadtricks beim Upload und beim Signieren (`..`, `%2e%2e`, `..%2F`, `%2F` im Ganzen, `./`, Backslash, UUID in Großbuchstaben). Fotos: freigegeben signierbar, Entwurf nicht. Fremde Fotos kopieren, verschieben, überschreiben oder löschen geht nicht. Upload nur für registrierte Fotos, HTML wird abgelehnt. Buckets anlegen, öffentlich schalten, leeren oder löschen geht nicht. |
+| `postgrest.test.ts` | 14 | `Accept-Profile`/`Content-Profile` für `private`, `auth`, `storage`, `extensions` → 406 PGRST106 (mit Token und anon). Interne RPCs → 404. OpenAPI ohne private Objekte. Embeddings: `listings→conversations→messages`, `conversations→messages`, `regions→listings`, `listings→listing_photos`, `listings→profiles`, Volltext. `public_profiles` (Anbieter, Chatpartner, nur öffentliche Spalten). Verifizierungen und Nachweise. `count=exact` für 9 Pfade inklusive `!inner`-Filter. anon zählt keine geschützten Tabellen (401). Schreibversuche. |
+| `auth.test.ts` | 10 | anon und Nutzer an der Admin-API, gefälschte Tokens, `user_metadata`, Logout und Refresh, gesperrte Konten, `accept_legal`. Dazu **3 Tests für offene Lücken (F1, F2):** Sie prüfen das heutige Fehlverhalten genau und werden rot, sobald die Lücke behoben ist. Dann sind sie auf das Soll umzustellen. |
+
+Ergebnis: Storage und PostgREST zeigen **keine neuen Lücken**. Die Auth-Tests haben F1 und F2 gefunden.
+
+**Vorschlag CI** (nicht umgesetzt, Workflow-Änderung ist Sache der Entwicklung): Im Job `e2e` von `.github/workflows/web.yml` läuft Supabase mit Auth und Storage schon. Nach dem Schritt „Öffentlichen lokalen Key übernehmen“ ergänzen:
+```yaml
+      - run: npm ci
+      - run: npm run test:integration   # CI=true: Abbruch, falls Supabase fehlt
+```
+Ein Lauf kostet etwa 3 s. Weil `web.yml` keinen `paths`-Filter hat, prüft das auch jede Migration. Den Abschnitt „Alternativen“ in ADR 009 („folgen ab M2“) auf „umgesetzt in `web/integration/`“ ändern.
+
+### Gefundene Fehler
+
+#### F1 – hoch – Passwort-Anmeldung ist trotz „passwortlos“ aktiv: Kontoübernahme vor der Registrierung und dauerhafter Zugang nach Session-Diebstahl
+ADR 010 (Zeile 14) sagt „Keine Passwörter: kein Reset-Ablauf, kein Leak-Risiko“. Supabase Auth nimmt aber weiter Passwörter an (`supabase/config.toml:229-238`: `[auth.email] enable_signup = true`, `secure_password_change = false`; einen Schalter nur für Passwörter gibt es nicht).
+1. **Kontoübernahme vor der Registrierung:** Ein Angreifer registriert die Adresse des Opfers per `POST /auth/v1/signup` mit eigenem Passwort. Ohne Bestätigung kann er sich nicht anmelden. Meldet sich das Opfer später ganz normal in der Web-App an, bekommt es die Vorlage „Willkommen bei Revier“. Mit Code oder Link bestätigt es damit die Adresse des Kontos, dessen Passwort der Angreifer kennt. Danach meldet sich der Angreifer per Passwort im Konto des Opfers an und sieht später Chats, Verifizierung und Anzeigen.
+2. **Dauerhafter Zugang:** Wer ein Access-Token erbeutet, setzt per `updateUser({ password })` ein Passwort, ohne erneute Anmeldung. Das Passwort überdauert einen globalen Logout. Die Cookies sind bewusst nicht `HttpOnly` und `script-src` erlaubt `unsafe-inline` (ADR 010). Ein XSS macht so aus einem Token-Diebstahl von höchstens 1 h einen dauerhaften Zugang.
+
+Reproduktion (lokal, `<pub>` = publishable Key):
+1. `curl -s -X POST http://127.0.0.1:54321/auth/v1/signup -H "apikey: <pub>" -H "Content-Type: application/json" -d '{"email":"opfer@test.local","password":"Angreifer-Passwort-1"}'` → 200
+2. Als Opfer in der Web-App unter `/de/login` dieselbe Adresse eingeben und den Code aus Mailpit eingeben → angemeldet, Onboarding
+3. `curl -s -X POST "http://127.0.0.1:54321/auth/v1/token?grant_type=password" -H "apikey: <pub>" -H "Content-Type: application/json" -d '{"email":"opfer@test.local","password":"Angreifer-Passwort-1"}'` → 200, `user.id` ist das Konto des Opfers
+
+Automatisiert: `web/integration/auth.test.ts:160` (Passwort setzen und nach globalem Logout anmelden) und `:171` (Kontoübernahme).
+Erwartet: Kein Passwort lässt sich setzen oder zur Anmeldung nutzen. Vorschläge für den Architekten:
+- (a) Trigger `before insert or update of encrypted_password on auth.users`, der das Passwort leert bzw. ablehnt (Verhalten von GoTrue bei leerem Hash testen)
+- oder (b) Auth-Hook „Password Verification Attempt“, der immer ablehnt (Verfügbarkeit im Cloud-Tarif prüfen)
+- `secure_password_change = true` allein reicht nicht (nur Reauth nach 24 h)
+- Danach ADR 010 korrigieren und die beiden Tests auf das Soll umstellen.
+
+Spätestens vor der Cloud-/Staging-Anbindung beheben.
+
+#### F2 – mittel – Konten lassen sich über die Auth-API aufzählen
+Die UI antwortet immer gleich, wie ADR 010 (Zeile 11) zusagt. Die API, die jeder mit dem öffentlichen Key aufrufen kann, unterscheidet aber: `POST /auth/v1/otp` mit `create_user:false` liefert für bestehende Konten `200 {}`, für unbekannte `422 otp_disabled` („Signups not allowed for otp“). Es sendet keine Mail. Gebremst wird das nur durch `sign_in_sign_ups = 30` je 5 min und IP. Ein schwächeres Orakel ist `429` bei einer zweiten Anfrage innerhalb von `max_frequency`. Die Zusage „damit niemand Konten erraten kann“ gilt also nur für die Oberfläche. Für eine Jagdplattform heißt das: Ein Dritter kann prüfen, ob eine Person dort ein Konto hat.
+Verwandt: Der 6-stellige Code ist 10 min gültig, und `token_verifications = 30` gilt je IP. Gegen verteiltes Raten hilft nur die geplante Captcha.
+Reproduktion:
+1. `curl -s -X POST http://127.0.0.1:54321/auth/v1/otp -H "apikey: <pub>" -H "Content-Type: application/json" -d '{"email":"<bestehend>","create_user":false}'` → 200
+2. dasselbe mit einer unbekannten Adresse → 422 `otp_disabled`
+
+Automatisiert: `web/integration/auth.test.ts:191`.
+Erwartet: Das Verhalten liegt in Supabase Auth und ist mit Bordmitteln kaum zu beheben. Vorschlag:
+- ADR 010 korrigieren und das Restrisiko annehmen bzw. bewerten (SPEC 8, Datenschutz)
+- die Captcha (Turnstile/hCaptcha) wie geplant vor dem Go-live, sie greift auch für `/otp`
+- die Cloud-Rate-Limits für `sign_in_sign_ups` und `token_verifications` bewusst setzen
+
+#### F3 – mittel – Kein Impressum, Datenschutz und Nutzungsbedingungen von keiner Seite verlinkt
+CLAUDE.md (Web-Datenschutz) verlangt: „Impressum und Datenschutz sind von jeder Seite erreichbar.“
+- Das Layout (`web/app/[locale]/layout.tsx:36-41`) hat nur einen Header mit Sprachumschalter und Anmeldung, keinen Footer.
+- `/de/privacy` und `/de/terms` gibt es seit M2, sie sind aber nur aus dem Onboarding verlinkt. Eine Impressumsseite gibt es nicht.
+- Die Login-Seite erhebt die E-Mail-Adresse ohne Link zur Datenschutzerklärung (`web/components/auth/LoginForm.tsx:99`, nur „Neue Konten stimmen … zu“). Art. 13 DSGVO verlangt die Information beim Erheben.
+
+SPEC M9 nennt „Rechtstext-Platzhalter“. Die Regel in CLAUDE.md gilt aber ohne Schritt-Bezug, und mit M2 werden erstmals personenbezogene Daten erhoben.
+Reproduktion: `curl -s http://localhost:3456/de | grep -cE 'href="/de/(privacy|terms|imprint|impressum)'` → 0; ebenso für `/de/login`.
+Erwartet: ein Footer im Layout mit Impressum (Platzhalterseite, `noindex`), Datenschutz und Nutzungsbedingungen, in 4 Sprachen. Auf der Login-Seite ein Link zur Datenschutzerklärung. Platzhalter bleiben als solche gekennzeichnet.
+
+#### F4 – niedrig – Gesperrte Konten: irreführende Meldung, Profil bleibt änderbar
+Ein gesperrtes Konto (`is_blocked = true`) kann sich anmelden. Ohne Zustimmung landet es in `/welcome`:
+- `updateOwnProfile` gelingt, denn `profiles_update_own` prüft nur `deleted_at` (`supabase/migrations/20261029100100_profiles.sql:34`).
+- `accept_legal` scheitert mit 42501.
+- `acceptLegal` macht daraus „failed“ (`web/lib/services/legal.ts:24`), und die Seite zeigt „Speichern fehlgeschlagen. Bitte versuche es noch einmal.“ Das Profil wurde aber gespeichert, und Wiederholen hilft nie.
+
+Gesperrte Konten mit Zustimmung können ihr Profil (Anzeigename, Firmenname) weiter ändern. Öffentlich ist das nicht sichtbar (`public_profiles` blendet Gesperrte aus), für die Moderation ist es aber unerwartet.
+Reproduktion:
+1. Konto anlegen, als `postgres` `update profiles set is_blocked = true where user_id = …`
+2. anmelden, `/de/welcome` ausfüllen, absenden → „Speichern fehlgeschlagen…“, `display_name` ist trotzdem geändert. API-Gegenprobe: `PATCH /rest/v1/profiles?user_id=eq.<id>` mit Token des Gesperrten → 200, Zeile geändert.
+
+Erwartet: eine verständliche Meldung „Konto gesperrt“ (lokalisiert, CLAUDE.md: Fehler verständlich anzeigen). Profiländerungen gesperrter Konten bewusst entscheiden (Policy um `not is_blocked` ergänzen oder in ADR festhalten). Passt zu M4 (Sperren).
+
+#### F5 – niedrig – Link-Bestätigung läuft über den Web-Server und teilt sich dessen IP-Limit (Risiko, lokal nicht reproduziert)
+`confirmSignIn` ruft `verifyOtp({ token_hash })` serverseitig auf (`web/app/[locale]/auth/actions.ts:18`, `web/lib/services/auth.ts:68`). Supabase sieht dann die IP des Web-Servers. Das ist dasselbe Argument, mit dem ADR 010 das Anfordern und Prüfen des Codes in den Browser verlegt. `token_verifications` (30 je 5 min und IP) würde in der Cloud für alle Link-Anmeldungen gemeinsam gelten. Ein Angreifer könnte die Link-Anmeldung aller sperren, indem er die öffentliche Bestätigungsseite mit erfundenen `token_hash` absendet. Der Code-Weg bliebe als Ausweg.
+Lokal nicht reproduzierbar: 31 Fehlversuche über die Bestätigungsseite, danach klappte ein gültiger Link in einem zweiten Browser. Die lokale Instanz setzt das Limit für `/verify` offenbar nicht so durch.
+Erwartet: in Staging bzw. Cloud prüfen. Alternative: Nach dem Klick (Mail-Scanner-Schutz bleibt) `verifyOtp({ token_hash })` im Browser-Client aufrufen, wie beim Code, und danach weiterleiten.
+
+#### F6 – niedrig – pgTAP-Tests zählen global und werden nach E2E-Läufen ohne `db reset` rot
+`02_profiles` Test 17 („Admin mit 2FA liest alle Profile“, have 19, want 4), `10_legal` Test 18 („have 20, want 2“) und `07_trust_audit` Tests 27/41 zählen Zeilen der ganzen Tabelle. Die E2E-Tests legen Konten an und räumen nicht auf. Nach `npm run test:e2e` schlägt `supabase test db` deshalb ohne vorheriges `db reset` fehl. Die CI ist nicht betroffen, weil `supabase.yml` vorher zurücksetzt. Die neuen API-Tests räumen vollständig auf (geprüft).
+Reproduktion: `supabase db reset && (cd web && npm run test:e2e) && supabase test db` → `Result: FAIL`.
+Erwartet: In pgTAP nur die Zeilen der eigenen Testnutzer zählen (`where user_id in (…)`), oder im CHANGELOG festhalten, dass vor `test db` immer `db reset` nötig ist.
+
+### Hinweise (keine Fehler)
+
+- **H1 Caching für M5:** Durch `AuthNav` im Layout rendert jede Seite dynamisch. Auch `/de` anonym antwortet mit `Cache-Control: private, no-cache, no-store`, in M0 war das noch `s-maxage`. Für die SEO-Seiten in M5 (CDN, Core Web Vitals) sollte der Anmeldestatus clientseitig oder hinter einer Grenze kommen, die die öffentliche Seite cachebar lässt.
+- **H2:** Geschützte Seiten mit Session, aber ohne Zustimmung, antworten mit HTTP 200 und leiten erst im Stream auf `/welcome` weiter (`requireOnboardedUser` hinter Suspense). Die statische Hülle enthält keine Nutzerdaten (geprüft: keine E-Mail im HTML).
+- **H3 UGC-Pflicht:** „Account löschen“ fehlt im Web bis M9 (CHANGELOG vermerkt). Seit M2 können Konten angelegt werden. Vor M9 darf es keinen öffentlichen Start und kein Staging mit echten Nutzern geben.
+- **H4:** `accept_legal` übernimmt `p_source` vom Client (Web-Nutzer können `ios` senden). Das ist nur eine Information und unkritisch, sollte aber nicht als Nachweis der Plattform gelten.
+- **H5:** Bei `/welcome?next=…` ohne Session geht `next` verloren, der Login führt dann auf `/welcome` und danach auf `/account`. Kosmetisch.
+
+### Nicht prüfbar in M2
+
+- Sign in with Apple (kein Apple-Developer-Account, SPEC 7.1)
+- Cloud-Konfiguration (Signing Keys, Redirect-URLs, Vorlagen, SMTP, Rate-Limits): kein Cloud-Projekt (ADR 002). F5 ist dort zu prüfen.
+- CI auf GitHub (`e2e`-Job): kein Remote. Lokal liefen dieselben Schritte gegen den Dev-Server, gegen den Prod-Build nur die Header- und Cookie-Proben.
+- iOS (I1), Gleichstand Web/iOS: noch nicht gebaut
+- Darstellung bei 360 px, Screenreader und Tastaturbedienung: nicht systematisch geprüft. Im Code haben Labels, `role="alert"`/`role="status"` und `aria-describedby` am Häkchen gepasst.
+- Offline-Verhalten: Der Netzwerkfehler beim Code-Anfordern bzw. -Prüfen ist übersetzt (`networkError`), wurde aber nicht im Browser offline geprüft.
+
+### Vorgeschlagene Tests (nicht angelegt)
+
+- Playwright: Re-Consent bei neuer AGB-Version (wie oben manuell; braucht einen Weg, die Version in `private.app_settings` zu ändern, z. B. per `psql` im CI-Job). Gesperrtes Konto zeigt einen Sperrhinweis (nach F4). Footer-Links von jeder Seite (nach F3). Login-Formular mit `context.setOffline(true)` → Netzwerkhinweis.
+- pgTAP: Zählungen auf Testnutzer einschränken (F6). Nach dem Fix von F1 ein Test, dass `auth.users.encrypted_password` leer bleibt.
+
+### Empfehlung
+
+M2 **abnehmen: ja, mit Auflagen.** Alle Akzeptanzkriterien sind erfüllt und unabhängig nachvollzogen. Die DoD ist erfüllt, Lint, Typecheck, Build, pgTAP, Vitest und Playwright sind grün. Die Auflage aus M1 (API-Tests) ist mit 38 automatisierten Tests erledigt.
+Auflagen:
+- **F1 (hoch)** vor jeder Cloud-/Staging-Anbindung und vor M3 beheben, inklusive Korrektur von ADR 010.
+- **F2** im ADR als Restrisiko bewerten, die Captcha bleibt harter Punkt vor dem Go-live.
+- **F3** vor dem ersten öffentlichen Staging.
+- F4 mit M4, F5 bei der Cloud-Anbindung prüfen, F6 bei Gelegenheit.
+- Die API-Tests in den CI-Job `e2e` aufnehmen.
