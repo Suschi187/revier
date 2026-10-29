@@ -59,7 +59,13 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - Logout ist eine Server Action (POST mit Origin-Prüfung durch Next) mit `signOut({ scope: 'local' })`.
 - Cookies sind `sameSite=lax`, in Produktion `secure`.
   - Sie sind nicht `httpOnly`, weil der Browser-Client (OTP, ab M7 Realtime) die Session braucht.
-  - Abgesichert ist das über die CSP und eine kurze JWT-Laufzeit.
+  - Folge (korrigiert nach Review M2, Architekt 4): Im Cookie steht auch das **Refresh-Token**. Ein XSS übernimmt das Konto damit bis zum Logout, nicht nur für die JWT-Laufzeit von 1 h. Die CSP bremst das wegen `script-src 'unsafe-inline'` kaum.
+  - Hauptschutz ist deshalb XSS-Hygiene:
+    - ESLint verbietet `dangerouslySetInnerHTML` (`react/no-danger`); eine Ausnahme braucht einen `eslint-disable`-Kommentar mit Grund.
+    - JSON-LD (M5) nur mit Escaping von `<`, `>` und `&`.
+    - Passwörter sind abgeschaltet (siehe oben), ein gestohlenes Token führt also nicht zu einem dauerhaften Passwort-Zugang.
+  - Cloud: Session-Timeouts (`[auth.sessions] inactivity_timeout`, `timebox`) setzen.
+  - Vor M7 als eigenes ADR bewerten: Session per POST an den Server übergeben und `httpOnly` setzen, Realtime mit kurzlebigem Token vom Server.
 
 ### AGB-Zustimmung
 - Tabelle `public.legal_acceptances (user_id, document, version, source, accepted_at)`.
@@ -109,6 +115,8 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - Account löschen, E-Mail ändern und Datenexport folgen in M9. Bis dahin ist die UGC-Pflicht offen (CHANGELOG).
 - Cloud-Checkliste (ergänzt ADR 005):
   - asymmetrische Signing Keys
+  - Session-Timeouts (`inactivity_timeout`, `timebox`)
+  - Trigger `discard_password` ist nach dem Push der Migrationen aktiv (Passwort-Login mit `invalid_credentials` prüfen)
   - OTP-Gültigkeit und Mail-Abstand
   - Redirect-URLs aller Locales für `/*/auth/confirm` und `/*/auth/callback`
   - beide Mail-Vorlagen
