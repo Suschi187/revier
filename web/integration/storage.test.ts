@@ -1,5 +1,5 @@
 import { request as httpRequest } from "node:http";
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
 import { fixture, SKIPPED } from "./context";
 import { anonClient, jpeg, serviceClient, userClient } from "./helpers";
 import type { Fixture } from "./types";
@@ -171,6 +171,8 @@ describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
   });
 });
 
+const basename = (path: string) => path.split("/").pop()!;
+
 describe.skipIf(!f)("Storage: Anzeigenfotos listing-photos", () => {
   const fx = f ?? SKIPPED;
   const { a, b, c } = fx.users;
@@ -202,26 +204,59 @@ describe.skipIf(!f)("Storage: Anzeigenfotos listing-photos", () => {
     expect((await photos().upload(fx.paths.activePhotoB, jpeg(9), { contentType: "image/jpeg", upsert: true })).error).not.toBeNull();
     expect((await photos().remove([fx.paths.activePhotoB, fx.paths.draftPhotoA])).data ?? []).toEqual([]);
 
-    expect(await serverList(fx, "listing-photos", `${b.id}/${fx.ids.activeB}`)).toEqual(["1.jpg"]);
-    expect(await serverList(fx, "listing-photos", `${a.id}/${fx.ids.draftA}`)).toEqual(["1.jpg"]);
+    expect(await serverList(fx, "listing-photos", `${b.id}/${fx.ids.activeB}`)).toEqual([basename(fx.paths.activePhotoB)]);
+    expect(await serverList(fx, "listing-photos", `${a.id}/${fx.ids.draftA}`)).toEqual([basename(fx.paths.draftPhotoA)]);
     expect(await serverList(fx, "listing-photos", c.id)).toEqual([]);
     const original = await photos(userClient(fx, b)).download(fx.paths.activePhotoB);
     expect(await bytesOf(original.data)).toEqual(await bytesOf(jpeg(3)));
   });
 
-  it("Upload ohne registriertes Foto und in fremde Anzeigen wird abgelehnt", async () => {
-    // eigener Ordner, aber fremde bzw. nicht registrierte Anzeige
+  it("Niemand außer dem Server schreibt in listing-photos, auch nicht der Besitzer (ADR 011)", async () => {
     expect((await photos().upload(`${c.id}/${fx.ids.activeB}/2.jpg`, jpeg(), { contentType: "image/jpeg" })).error).not.toBeNull();
-    expect((await photos().upload(`${a.id}/${fx.ids.draftA}/2.jpg`, jpeg(), { contentType: "image/jpeg" })).error).not.toBeNull();
-    // Auch der Besitzer braucht zuerst die Zeile in listing_photos (Limit 8)
-    expect((await photos(userClient(fx, a)).upload(`${a.id}/${fx.ids.draftA}/9.jpg`, jpeg(), { contentType: "image/jpeg" })).error).not.toBeNull();
-    expect(await serverList(fx, "listing-photos", `${a.id}/${fx.ids.draftA}`)).toEqual(["1.jpg"]);
+    expect((await photos(userClient(fx, a)).upload(`${a.id}/${fx.ids.draftA}/neu.jpg`, jpeg(), { contentType: "image/jpeg" })).error).not.toBeNull();
+    expect((await photos(userClient(fx, a)).upload(fx.paths.draftPhotoA, jpeg(8), { contentType: "image/jpeg", upsert: true })).error).not.toBeNull();
+    expect(await serverList(fx, "listing-photos", `${a.id}/${fx.ids.draftA}`)).toEqual([basename(fx.paths.draftPhotoA)]);
+  });
+});
+
+describe.skipIf(!f)("Storage: Eingang listing-uploads", () => {
+  const fx = f ?? SKIPPED;
+  const { a, c } = fx.users;
+  const uploads = (user: typeof a) => userClient(fx, user).storage.from("listing-uploads");
+  let photoId = "";
+  let uploadPath = "";
+
+  afterAll(async () => {
+    if (uploadPath) await serviceClient(fx).storage.from("listing-uploads").remove([uploadPath]);
+    if (photoId) await serviceClient(fx).from("listing_photos").delete().eq("id", photoId);
   });
 
-  it("HTML statt Bild wird abgelehnt (MIME-Allowlist)", async () => {
+  it("Besitzer lädt das Original unter dem Pfad des registrierten Fotos hoch, sonst niemand und nirgends sonst", async () => {
+    const row = await userClient(fx, a).from("listing_photos").insert({ listing_id: fx.ids.draftA, sort_order: 1 }).select("id, upload_path").single<{ id: string; upload_path: string }>();
+    expect(row.error).toBeNull();
+    photoId = row.data!.id;
+    uploadPath = row.data!.upload_path;
+    expect(uploadPath).toBe(`${a.id}/${fx.ids.draftA}/${photoId}`);
+
+    expect((await uploads(c).upload(uploadPath, jpeg(), { contentType: "image/jpeg" })).error).not.toBeNull();
+    expect((await uploads(a).upload(`${a.id}/${fx.ids.draftA}/frei`, jpeg(), { contentType: "image/jpeg" })).error).not.toBeNull();
     const html = new Blob(["<script>alert(1)</script>"], { type: "text/html" });
-    const result = await photos(userClient(fx, a)).upload(fx.paths.draftPhotoA, html, { contentType: "text/html", upsert: true });
-    expect(result.error).not.toBeNull();
+    expect((await uploads(a).upload(uploadPath, html, { contentType: "text/html" })).error).not.toBeNull();
+    expect((await uploads(a).upload(uploadPath, jpeg(5), { contentType: "image/jpeg" })).error).toBeNull();
+    expect(await serverList(fx, "listing-uploads", `${a.id}/${fx.ids.draftA}`)).toEqual([photoId]);
+  });
+
+  it("Das Original ist für niemanden über die API lesbar oder überschreibbar, auch nicht für den Besitzer", async () => {
+    for (const user of [a, c]) {
+      expect((await uploads(user).download(uploadPath)).data).toBeNull();
+      expect((await uploads(user).createSignedUrl(uploadPath, 60)).data).toBeNull();
+      expect((await uploads(user).list(`${a.id}/${fx.ids.draftA}`)).data ?? []).toEqual([]);
+      expect((await uploads(user).upload(uploadPath, jpeg(6), { contentType: "image/jpeg", upsert: true })).error).not.toBeNull();
+      expect((await uploads(user).remove([uploadPath])).data ?? []).toEqual([]);
+    }
+    expect((await anonClient(fx).storage.from("listing-uploads").download(uploadPath)).data).toBeNull();
+    const stored = await serviceClient(fx).storage.from("listing-uploads").download(uploadPath);
+    expect(await bytesOf(stored.data)).toEqual(await bytesOf(jpeg(5)));
   });
 });
 

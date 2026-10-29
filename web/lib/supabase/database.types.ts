@@ -213,14 +213,14 @@ isOneToOne: false
                   ]
                 },"listing_photos": {
                   Row: {
-                    "created_at": string,"id": string,"listing_id": string,"sort_order": number,"storage_path": string
+                    "alt_text": string | null,"created_at": string,"height": number | null,"id": string,"listing_id": string,"processed_at": string | null,"sort_order": number,"storage_path": string,"thumb_path": string | null,"upload_path": string | null,"width": number | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"listing_id": string,"sort_order": number,"storage_path": string
+                    "alt_text"?: string | null,"created_at"?: string,"height"?: number | null,"id"?: string,"listing_id": string,"processed_at"?: string | null,"sort_order": number,"storage_path"?: string,"thumb_path"?: string | null,"upload_path"?: string | null,"width"?: number | null
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"listing_id"?: string,"sort_order"?: number,"storage_path"?: string
+                    "alt_text"?: string | null,"created_at"?: string,"height"?: number | null,"id"?: string,"listing_id"?: string,"processed_at"?: string | null,"sort_order"?: number,"storage_path"?: string,"thumb_path"?: string | null,"upload_path"?: string | null,"width"?: number | null
                   }
                   Relationships: [
                     {

@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(42);
+select plan(43);
 
 select tests.create_user('a@test.local', 'Anna') as a_id \gset
 select tests.create_user('b@test.local', 'Bernd') as b_id \gset
@@ -148,11 +148,10 @@ select is((select count(*)::int from listings where display_location = 'SRID=432
 
 -- Fotos und Wildarten --------------------------------------------------------------
 select tests.authenticate_as(:'b_id');
-insert into listing_photos (listing_id, storage_path, sort_order)
-select :'loc', :'b_id' || '/' || :'loc' || '/foto' || n || '.jpg', n from generate_series(0, 7) n;
+insert into listing_photos (listing_id, sort_order) select :'loc', n from generate_series(0, 7) n;
 select is((select count(*)::int from listing_photos where listing_id = :'loc'), 8, 'Besitzer lädt 8 Fotos hoch');
-select throws_ok(format($$ insert into listing_photos (listing_id, storage_path, sort_order) values (%L, %L, 7) $$,
-  :'loc', :'b_id' || '/' || :'loc' || '/neunt.jpg'), '23514', null, 'Ein neuntes Foto wird abgelehnt');
+select throws_ok(format($$ insert into listing_photos (listing_id, sort_order) values (%L, 7) $$, :'loc'),
+  '23514', null, 'Ein neuntes Foto wird abgelehnt');
 insert into listing_species (listing_id, species_code) values (:'loc', 'roe_deer');
 
 select tests.authenticate_as(:'a_id');
@@ -165,7 +164,12 @@ update listings set status = 'pending_review' where id = :'loc';
 select tests.authenticate_as(:'admin_id', 'aal2');
 update listings set status = 'active' where id = :'loc';
 select tests.as_anon();
-select is((select count(*)::int from listing_photos where listing_id = :'loc'), 8, 'anon sieht die Fotos der aktiven Anzeige');
+select is((select count(*)::int from listing_photos where listing_id = :'loc'), 0, 'anon sieht unverarbeitete Fotos auch an aktiven Anzeigen nicht');
+-- Verarbeitung durch den Server (Edge Function, ADR 011)
+select tests.as_postgres();
+update listing_photos set processed_at = now(), width = 2048, height = 1365 where listing_id = :'loc';
+select tests.as_anon();
+select is((select count(*)::int from listing_photos where listing_id = :'loc'), 8, 'anon sieht die verarbeiteten Fotos der aktiven Anzeige');
 select tests.authenticate_as(:'b_id');
 delete from listing_photos where listing_id = :'loc' and sort_order = 7;
 select is((select status::text from listings where id = :'loc'), 'pending_review', 'Fotoänderung an aktiver Anzeige führt zurück in die Prüfung');

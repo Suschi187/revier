@@ -1,4 +1,5 @@
 import type { TestProject } from "vitest/node";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { isReachable, readLocalSupabase } from "./env";
 import { createSignedInUser, deleteUsers, jpeg, serviceClient, type Conn } from "./helpers";
 import type { Fixture } from "./types";
@@ -53,10 +54,8 @@ export default async function setup(project: TestProject) {
         .single<{ id: string }>(),
       "Entwurf A",
     ).id;
-    const draftPhotoA = `${a.id}/${draftA}/1.jpg`;
-    must(await a.client.from("listing_photos").insert({ listing_id: draftA, storage_path: draftPhotoA, sort_order: 0 }).select(), "Foto A registrieren");
-    must(await a.client.storage.from("listing-photos").upload(draftPhotoA, jpeg(1), { contentType: "image/jpeg" }), "Foto A hochladen");
-    uploaded.push({ bucket: "listing-photos", path: draftPhotoA });
+    // Fotos wie ADR 011: Zeile anlegen (Pfade setzt der Server), Verarbeitung simuliert der Service-Key.
+    const draftPhotoA = await processedPhoto(a.client, draftA, jpeg(1));
 
     // A: Jagdschein und Verifizierungsantrag
     const docA = `${a.id}/jagdschein.jpg`;
@@ -83,10 +82,7 @@ export default async function setup(project: TestProject) {
         .single<{ id: string }>(),
       "Anzeige B",
     ).id;
-    const activePhotoB = `${b.id}/${activeB}/1.jpg`;
-    must(await b.client.from("listing_photos").insert({ listing_id: activeB, storage_path: activePhotoB, sort_order: 0 }).select(), "Foto B registrieren");
-    must(await b.client.storage.from("listing-photos").upload(activePhotoB, jpeg(3), { contentType: "image/jpeg" }), "Foto B hochladen");
-    uploaded.push({ bucket: "listing-photos", path: activePhotoB });
+    const activePhotoB = await processedPhoto(b.client, activeB, jpeg(3));
     must(await b.client.from("listings").update({ status: "pending_review" }).eq("id", activeB).select(), "Anzeige B einreichen");
     must(
       await admin
@@ -120,9 +116,20 @@ export default async function setup(project: TestProject) {
     throw error;
   }
 
+  async function processedPhoto(client: SupabaseClient, listingId: string, bytes: Blob): Promise<string> {
+    const row = must(
+      await client.from("listing_photos").insert({ listing_id: listingId, sort_order: 0 }).select("id, storage_path").single<{ id: string; storage_path: string }>(),
+      "Foto registrieren",
+    );
+    must(await admin.storage.from("listing-photos").upload(row.storage_path, bytes, { contentType: "image/jpeg" }), "Foto ablegen (Server)");
+    uploaded.push({ bucket: "listing-photos", path: row.storage_path });
+    must(await admin.from("listing_photos").update({ processed_at: new Date().toISOString(), width: 1, height: 1 }).eq("id", row.id).select(), "Foto verarbeitet");
+    return row.storage_path;
+  }
+
   async function cleanup() {
     // Dateien zuerst (storage.objects hängt nicht per FK an den Nutzern), dann Konten (cascade).
-    for (const bucket of ["listing-photos", "verification-docs"]) {
+    for (const bucket of ["listing-photos", "listing-uploads", "verification-docs"]) {
       const paths = uploaded.filter((u) => u.bucket === bucket).map((u) => u.path);
       for (const id of createdIds) {
         const { data } = await admin.storage.from(bucket).list(id, { limit: 1000 });
