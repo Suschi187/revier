@@ -418,4 +418,12 @@ Review: `docs/reviews/M3-plan-architekt-plz.md`. Eingearbeitet:
 - Admin-Ansichten in M4: PLZ nur in der Moderations-Detailansicht.
 - Weitere Märkte: PLZ-Daten kommen zusammen mit den Kreisen.
 
-Offen beim Nutzer: Ort beim Gesuch = gesuchtes Gebiet oder Wohnort? Genügt beim Gesuch der Kreis ohne PLZ? Bis zur Antwort gilt „Pflicht für alle“.
+Entscheidungen des Nutzers (vierte Runde):
+- Der Ort beim Gesuch ist das **gesuchte Gebiet**, nicht der Wohnort. Es werden also keine Wohnortdaten erhoben.
+- Reihenfolge: Zuerst wird der Landkreis gewählt und geprüft, danach muss die PLZ zu diesem Kreis passen. Der Assistent schlägt nur PLZ des gewählten Kreises vor; das deckt auch die Auflage „Lookup nicht per GET je PLZ“ ab, weil die PLZ-Liste des Kreises auf einmal geladen wird.
+- PLZ bleibt Pflicht für alle Anzeigen (Annahme, vom Nutzer zu bestätigen).
+- **Öffentlich angezeigt werden dürfen die ersten beiden Ziffern der PLZ** (z. B. „PLZ 85…“).
+  - Bewertung: In DE gibt es rund 95 zweistellige Leitregionen bei rund 400 Kreisen, in AT rund 80 Bereiche bei 94 Bezirken. Die zwei Ziffern sind damit meist gröber als der Kreis und grenzen nur dort zusätzlich ein, wo ein Kreis über zwei Leitregionen reicht. Das liegt unter der Genauigkeit des verfremdeten Punkts und ist vertretbar.
+  - Umsetzung: Der Server leitet `listings.postal_prefix` (2 Zeichen) aus `listing_places` ab (Trigger, nicht vom Client setzbar, Spaltenrecht nur lesend). Die volle PLZ und der Ortsname bleiben in `listing_places` privat.
+  - Weil das Präfix öffentlich ist, ist ein Filter darauf kein Orakel. Die Regel „nie nach voller PLZ oder Ort filtern“ bleibt.
+  - SPEC 3.3 und ADR 012 halten das fest; pgTAP prüft, dass anon nur das Präfix sieht.
