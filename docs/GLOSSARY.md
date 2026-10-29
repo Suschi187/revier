@@ -33,3 +33,20 @@ Quelle: Migration `20261029100200_regions_species.sql`. cs/pl **ungeprüft**.
 | `partridge` | Grey partridge | Rebhuhn | Koroptev polní | Kuropatwa | ungeprüft |
 | `waterfowl` | Waterfowl | Wasserwild | Vodní pernatá zvěř | Ptactwo wodne | ungeprüft |
 | `small_game` | Other small game | Sonstiges Niederwild | Ostatní drobná zvěř | Inna drobna zwierzyna | ungeprüft |
+
+## Konto und Anmeldung (M2)
+
+Werden in Web und iOS gleich verwendet. cs/pl **ungeprüft**.
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| account | Account | Konto | Účet | Konto | ungeprüft |
+| display_name | Display name | Anzeigename | Zobrazované jméno | Nazwa wyświetlana | ungeprüft |
+| account_type.private | Private | Privat | Soukromý | Prywatne | ungeprüft |
+| account_type.business | Business | Gewerblich | Firemní | Firmowe | ungeprüft |
+| business_name | Business name | Firmenname | Název firmy | Nazwa firmy | ungeprüft |
+| sign_in | Sign in | Anmelden | Přihlásit se | Zaloguj się | ungeprüft |
+| sign_out | Sign out | Abmelden | Odhlásit se | Wyloguj się | ungeprüft |
+| login_code | Sign-in code | Anmeldecode | Přihlašovací kód | Kod logowania | ungeprüft |
+| terms | Terms of use | Nutzungsbedingungen | Podmínky použití | Regulamin | ungeprüft |
+| privacy_policy | Privacy policy | Datenschutzerklärung | Zásady ochrany osobních údajů | Polityka prywatności | ungeprüft |

@@ -8,6 +8,7 @@ Die SPEC nennt dev/prod. Die Architektur sieht dev/stage/prod vor. Das Hosting (
 ## Entscheidung
 - **M0:** nur lokal (`supabase start`). Es gibt noch kein Cloud-Projekt.
 - **Ab M2:** ein Supabase-Cloud-Projekt in der EU (Frankfurt). Stage kommt spätestens in M10 dazu.
+  - **Verschoben (Entscheidung M2):** M2 bleibt lokal, solange SPEC 7.1 (Inhaber), 7.9 (Hosting) und 7.11 (Mailanbieter) offen sind. Die Cloud-Einrichtung wird ein eigener Schritt vor dem ersten Deploy, nach den Checklisten in ADR 005 und ADR 010.
 - Env-Variablen im Web:
   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` – öffentlich
   - `SUPABASE_SERVICE_ROLE_KEY` – nur serverseitig, nie mit `NEXT_PUBLIC_`-Präfix. Wird in M0 nicht verwendet.
@@ -20,4 +21,4 @@ Die SPEC nennt dev/prod. Die Architektur sieht dev/stage/prod vor. Das Hosting (
 Das Cloud-Projekt schon in M0 anzulegen ist für das M0-Kriterium nicht nötig und würde Konto-/AVV-Fragen vorziehen.
 
 ## Folgen
-Vor M2 müssen Konto-Eigentümer (privat oder Firma) und Redirect-URLs geklärt sein.
+Vor der Cloud-Einrichtung müssen Konto-Eigentümer (privat oder Firma), Hosting und Mailanbieter geklärt sein. Die Redirect-URLs stehen in ADR 010.
