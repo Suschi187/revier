@@ -25,7 +25,11 @@ const nextConfig: NextConfig = {
     globalNotFound: true,
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Token im Query-String nie per Referer weitergeben (ADR 010).
+      { source: "/:locale/auth/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
+    ];
   },
   turbopack: {
     rules: {

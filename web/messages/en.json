@@ -20,5 +20,37 @@
   "NotFound": {
     "title": "Page not found",
     "backHome": "Back to the home page"
+  },
+  "Auth": {
+    "login": {
+      "metaTitle": "Sign in",
+      "title": "Sign in or register",
+      "intro": "Enter your email address. We will send you a link and a sign-in code. No password needed.",
+      "emailLabel": "Email address",
+      "submit": "Send sign-in email",
+      "sending": "Sending…",
+      "sentTitle": "Check your inbox",
+      "sentText": "If the address {email} can be used, we have sent you an email. Click the link in it or enter the 6-digit code.",
+      "codeLabel": "Sign-in code",
+      "codeSubmit": "Sign in",
+      "verifying": "Checking…",
+      "codeInvalid": "The code is invalid or has expired.",
+      "otherEmail": "Use a different email address or request a new email",
+      "networkError": "No connection. Please try again.",
+      "termsHint": "New accounts are asked to accept the terms of use after the first sign-in."
+    },
+    "confirm": {
+      "metaTitle": "Confirm sign-in",
+      "title": "Confirm sign-in",
+      "text": "To finish signing in, confirm with the button.",
+      "submit": "Confirm sign-in",
+      "invalid": "This link is invalid or has expired. Enter the code from the email or request a new email.",
+      "backToLogin": "Back to sign-in"
+    },
+    "nav": {
+      "signIn": "Sign in",
+      "account": "My account",
+      "signOut": "Sign out"
+    }
   }
 }

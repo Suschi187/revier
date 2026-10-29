@@ -20,5 +20,37 @@
   "NotFound": {
     "title": "Nie znaleziono strony",
     "backHome": "Powrót do strony głównej"
+  },
+  "Auth": {
+    "login": {
+      "metaTitle": "Zaloguj się",
+      "title": "Zaloguj się lub zarejestruj",
+      "intro": "Podaj swój adres e-mail. Wyślemy Ci link i kod logowania. Hasło nie jest potrzebne.",
+      "emailLabel": "Adres e-mail",
+      "submit": "Wyślij e-mail logowania",
+      "sending": "Wysyłanie…",
+      "sentTitle": "Sprawdź skrzynkę",
+      "sentText": "Jeśli adresu {email} można użyć, wysłaliśmy Ci wiadomość. Kliknij zawarty w niej link lub wpisz 6-cyfrowy kod.",
+      "codeLabel": "Kod logowania",
+      "codeSubmit": "Zaloguj się",
+      "verifying": "Sprawdzanie…",
+      "codeInvalid": "Kod jest nieprawidłowy lub wygasł.",
+      "otherEmail": "Użyj innego adresu e-mail lub poproś o nową wiadomość",
+      "networkError": "Brak połączenia. Spróbuj ponownie.",
+      "termsHint": "Nowe konta po pierwszym logowaniu akceptują regulamin."
+    },
+    "confirm": {
+      "metaTitle": "Potwierdź logowanie",
+      "title": "Potwierdź logowanie",
+      "text": "Aby dokończyć logowanie, potwierdź przyciskiem.",
+      "submit": "Potwierdź logowanie",
+      "invalid": "Ten link jest nieprawidłowy lub wygasł. Wpisz kod z wiadomości lub poproś o nową wiadomość.",
+      "backToLogin": "Powrót do logowania"
+    },
+    "nav": {
+      "signIn": "Zaloguj się",
+      "account": "Moje konto",
+      "signOut": "Wyloguj się"
+    }
   }
 }

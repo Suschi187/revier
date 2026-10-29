@@ -3,6 +3,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { locale as rootLocale } from "next/root-params";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { AuthNav } from "@/components/auth/AuthNav";
 import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { routing } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
@@ -31,8 +33,11 @@ export default async function LocaleLayout({
     <html lang={locale} className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <header className="flex justify-end p-4">
+          <header className="flex flex-wrap items-center justify-end gap-4 p-4">
             <LocaleSwitcher />
+            <Suspense fallback={null}>
+              <AuthNav />
+            </Suspense>
           </header>
           {children}
         </NextIntlClientProvider>

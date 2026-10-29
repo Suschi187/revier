@@ -20,5 +20,37 @@
   "NotFound": {
     "title": "Seite nicht gefunden",
     "backHome": "Zur Startseite"
+  },
+  "Auth": {
+    "login": {
+      "metaTitle": "Anmelden",
+      "title": "Anmelden oder registrieren",
+      "intro": "Gib deine E-Mail-Adresse ein. Wir schicken dir einen Link und einen Anmeldecode. Ein Passwort brauchst du nicht.",
+      "emailLabel": "E-Mail-Adresse",
+      "submit": "Anmelde-E-Mail senden",
+      "sending": "Wird gesendet …",
+      "sentTitle": "Sieh in dein Postfach",
+      "sentText": "Wenn die Adresse {email} verwendet werden kann, haben wir dir eine E-Mail geschickt. Klicke auf den Link darin oder gib den 6-stelligen Code ein.",
+      "codeLabel": "Anmeldecode",
+      "codeSubmit": "Anmelden",
+      "verifying": "Wird geprüft …",
+      "codeInvalid": "Der Code ist ungültig oder abgelaufen.",
+      "otherEmail": "Andere E-Mail-Adresse verwenden oder neue E-Mail anfordern",
+      "networkError": "Keine Verbindung. Bitte versuche es noch einmal.",
+      "termsHint": "Neue Konten stimmen nach der ersten Anmeldung den Nutzungsbedingungen zu."
+    },
+    "confirm": {
+      "metaTitle": "Anmeldung bestätigen",
+      "title": "Anmeldung bestätigen",
+      "text": "Bestätige mit dem Button, um die Anmeldung abzuschließen.",
+      "submit": "Anmeldung bestätigen",
+      "invalid": "Dieser Link ist ungültig oder abgelaufen. Gib den Code aus der E-Mail ein oder fordere eine neue E-Mail an.",
+      "backToLogin": "Zurück zur Anmeldung"
+    },
+    "nav": {
+      "signIn": "Anmelden",
+      "account": "Mein Konto",
+      "signOut": "Abmelden"
+    }
   }
 }

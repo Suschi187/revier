@@ -20,5 +20,37 @@
   "NotFound": {
     "title": "Stránka nenalezena",
     "backHome": "Zpět na úvodní stránku"
+  },
+  "Auth": {
+    "login": {
+      "metaTitle": "Přihlásit se",
+      "title": "Přihlásit se nebo zaregistrovat",
+      "intro": "Zadejte svou e-mailovou adresu. Pošleme vám odkaz a přihlašovací kód. Heslo nepotřebujete.",
+      "emailLabel": "E-mailová adresa",
+      "submit": "Poslat přihlašovací e-mail",
+      "sending": "Odesílá se…",
+      "sentTitle": "Zkontrolujte svou schránku",
+      "sentText": "Pokud lze adresu {email} použít, poslali jsme vám e-mail. Klikněte na odkaz v něm nebo zadejte šestimístný kód.",
+      "codeLabel": "Přihlašovací kód",
+      "codeSubmit": "Přihlásit se",
+      "verifying": "Ověřuje se…",
+      "codeInvalid": "Kód je neplatný nebo jeho platnost vypršela.",
+      "otherEmail": "Použít jinou e-mailovou adresu nebo vyžádat nový e-mail",
+      "networkError": "Žádné připojení. Zkuste to prosím znovu.",
+      "termsHint": "Nové účty po prvním přihlášení souhlasí s podmínkami použití."
+    },
+    "confirm": {
+      "metaTitle": "Potvrdit přihlášení",
+      "title": "Potvrdit přihlášení",
+      "text": "Přihlášení dokončíte potvrzením tlačítkem.",
+      "submit": "Potvrdit přihlášení",
+      "invalid": "Tento odkaz je neplatný nebo jeho platnost vypršela. Zadejte kód z e-mailu nebo si vyžádejte nový e-mail.",
+      "backToLogin": "Zpět k přihlášení"
+    },
+    "nav": {
+      "signIn": "Přihlásit se",
+      "account": "Můj účet",
+      "signOut": "Odhlásit se"
+    }
   }
 }
