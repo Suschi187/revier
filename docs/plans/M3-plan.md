@@ -283,9 +283,11 @@ Bis zur Bestätigung der Tabelle in Abschnitt 6 nur die Commits 1–5.
 3. Migration Standort v2 (inklusive „Punkt nur durch den Besitzer“, Trigger auch bei `region_id`, Fingerprint) und `12_location`, `00_meta` mit Allowlist für `private`
 4. Migration Fotos: Buckets, Spalten, Spalten-GRANTs, Pfad-Trigger, Policies, `alt_text`, Foto-Tageslimit; `08_storage` und `web/integration/storage.test.ts` im selben Commit angepasst
 5. Edge Function `process-listing-photo`, `deno check`/`lint`/`test` mit Lockfile, Integrationstests mit Allowlist-Prüfung, CI mit Edge Runtime
-6. Eine Migration fasst den `listings_guard` neu, mit benannten Hilfsfunktionen: Pflichtfelder, Legal-Gate, Rate-Limit, Hash, Admin-Bereitschaft (A1), Status-Matrix in pgTAP; Preisgrenzen je Währung, Attribut-Check
+5a. ADR 012, Generator und Daten-Migration (`supabase/data/postal_codes/`, Quell-Hashes) für PLZ, PLZ→Kreis und PLZ→Ortsname; Verschneidung gegen VG250 mit Flächenschwelle, Override-Datei, Statistik mit Abbruchprüfungen; RLS, pgTAP; Seite „Datenquellen“ mit OSM-Namensnennung und ODbL-Download
+5b. `listing_places` (RLS nur Besitzer und Admin mit aal2, Spaltenrechte, kein FK auf `postal_codes`), RPC `set_listing_location` (security invoker, Kreis und PLZ in einem Schritt), Children-Guard deckt `listing_places` ab, Meta-Test „wer darf `listing_places` verwenden“
+6. Eine Migration fasst den `listings_guard` neu (inklusive PLZ-Prüfung in der Bereitschaft beim Absenden und bei der Freigabe), mit benannten Hilfsfunktionen: Pflichtfelder, Legal-Gate, Rate-Limit, Hash, Admin-Bereitschaft (A1), Status-Matrix in pgTAP; Preisgrenzen je Währung, Attribut-Check
 7. RPC `listing_content_hints` und `private.content_terms`
-7a. ADR 012, Import-Skript und Seed `postal_codes` (DE aus OSM, AT aus Statistik Austria), Tabelle `listing_places` mit RLS, pgTAP; Namensnennung OSM im Impressum-Platzhalter
+
 8. Integration `listings.test.ts`
 9. Web: Services, Zod mit gemeinsamen Pflichtfeld-Fixtures, Preisumrechnung (Vitest)
 10. Web: „Meine Anzeigen“
@@ -404,3 +406,16 @@ Nachprüfung durch den Architekten: nur Abschnitt 6.1 (PLZ) und der zugehörige 
   - Ausfälle durch CPU- oder Speichergrenze (Status 546 bzw. Logs „CPU time exceeded“, „Memory limit exceeded“), dazu Kaltstart
 - Ergebnis kommt ins ADR 011 und geht vor Commit 5 an den Architekten.
 - Danach löschen: `supabase functions delete photo-spike`, `supabase secrets unset SPIKE_TOKEN`.
+
+## 14. Nachprüfung PLZ-Teil (Architekt, Freigabe mit Auflagen)
+Review: `docs/reviews/M3-plan-architekt-plz.md`. Eingearbeitet:
+- Prüfung „PLZ existiert und passt zum Kreis“ in der Bereitschaftsprüfung (Absenden, Admin-Freigabe), Kreis und PLZ ändert eine gemeinsame RPC; der Assistent fragt die PLZ vor dem Anlegen des Entwurfs ab.
+- Änderungen an PLZ/Ort führen an aktiven und pausierten Anzeigen nach `pending_review`; der Freigabe-Hash enthält PLZ und Ort und bleibt privat (bei rund 8 200 PLZ sonst per Durchprobieren knackbar).
+- Kein späteres Such-Orakel: Regel in ADR 012 und SPEC 3.3, Meta-Test; für M5 keine PLZ in Meta-Tags, JSON-LD, Sitemap, URL.
+- ODbL: Abweichung von ADR 007 begründen, Namensnennung am PLZ-Feld und auf „Datenquellen“, PLZ-Tabelle als ODbL-Download; Frage „Collective Database“ an den Anwalt (SPEC 7).
+- AT-Quelle vor dem Commit prüfen (Gemeindeverzeichnis enthält evtl. nur die PLZ des Gemeindeamts).
+- PLZ-Lookup per POST-RPC oder Laden aller PLZ des gewählten Kreises, nicht per GET (API-Log).
+- Admin-Ansichten in M4: PLZ nur in der Moderations-Detailansicht.
+- Weitere Märkte: PLZ-Daten kommen zusammen mit den Kreisen.
+
+Offen beim Nutzer: Ort beim Gesuch = gesuchtes Gebiet oder Wohnort? Genügt beim Gesuch der Kreis ohne PLZ? Bis zur Antwort gilt „Pflicht für alle“.
