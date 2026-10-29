@@ -321,6 +321,66 @@ isOneToOne: false
       referencedColumns: ["user_id"]
     }
                   ]
+                },"postal_code_places": {
+                  Row: {
+                    "code": string,"country": Database["public"]['Enums']["country_code"],"place_name": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "code": string,"country": Database["public"]['Enums']["country_code"],"place_name": string
+                  }
+                  Update: {
+                    "code"?: string,"country"?: Database["public"]['Enums']["country_code"],"place_name"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "postal_code_places_country_code_fkey"
+      columns: ["country","code"]
+isOneToOne: false
+      referencedRelation: "postal_codes"
+      referencedColumns: ["country","code"]
+    }
+                  ]
+                },"postal_code_regions": {
+                  Row: {
+                    "code": string,"country": Database["public"]['Enums']["country_code"],"region_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "code": string,"country": Database["public"]['Enums']["country_code"],"region_id": string
+                  }
+                  Update: {
+                    "code"?: string,"country"?: Database["public"]['Enums']["country_code"],"region_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "postal_code_regions_country_code_fkey"
+      columns: ["country","code"]
+isOneToOne: false
+      referencedRelation: "postal_codes"
+      referencedColumns: ["country","code"]
+    },{
+      foreignKeyName: "postal_code_regions_region_id_fkey"
+      columns: ["region_id"]
+isOneToOne: false
+      referencedRelation: "regions"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"postal_codes": {
+                  Row: {
+                    "code": string,"country": Database["public"]['Enums']["country_code"]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "code": string,"country": Database["public"]['Enums']["country_code"]
+                  }
+                  Update: {
+                    "code"?: string,"country"?: Database["public"]['Enums']["country_code"]
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"profiles": {
                   Row: {
                     "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"created_at": string,"deleted_at": string | null,"display_name": string,"id": string,"is_blocked": boolean,"preferred_language": Database["public"]['Enums']["language_code"],"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]

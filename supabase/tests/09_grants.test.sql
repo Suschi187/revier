@@ -7,6 +7,7 @@ select set_eq(
   $$ select table_name::text || ':' || privilege_type::text from information_schema.role_table_grants
      where table_schema = 'public' and grantee = 'anon' $$,
   array['game_species:SELECT', 'listing_photos:SELECT', 'listing_species:SELECT', 'listings:SELECT',
+        'postal_code_places:SELECT', 'postal_code_regions:SELECT', 'postal_codes:SELECT',
         'public_profiles:SELECT', 'regions:SELECT'],
   'anon darf nur die öffentlichen Tabellen lesen'
 );

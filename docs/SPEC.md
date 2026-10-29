@@ -120,6 +120,7 @@ Validierung im Client und per DB-Check/Edge Function.
 - Nutzer wählt den Landkreis (Pflicht) und optional einen Punkt auf der Karte.
 - Gespeichert wird in `display_location` ein **verfremdeter Punkt** (zufälliger Versatz im Radius ~3–5 km, einmal bei Erstellung festgelegt, nicht bei jedem Abruf neu).
 - Exakte Koordinaten werden nicht gespeichert. Die genaue Lage teilen Anbieter selbst im Chat.
+- Ort mit PLZ (ADR 012): Angebote brauchen PLZ und Ortsnamen, die PLZ muss zum Kreis passen; bei Gesuchen (gesuchtes Gebiet) reicht der Kreis. Volle PLZ und Ort sind nie öffentlich und nie Such- oder Filterkriterium, öffentlich erscheinen nur die ersten beiden Ziffern.
 
 ### 3.4 Wichtige RLS-Regeln
 - `listings`: jeder darf `status = 'active'` mit `expires_at > now()` von nicht gesperrten Besitzern lesen; Besitzer liest/ändert eigene; Admin liest alles. Statuswechsel prüft ein Trigger:
@@ -271,7 +272,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 
 ## 7. Offene Entscheidungen (bitte vor M1/M3 klären)
 1. **Name und Domain**, Bundle-ID, Entwickler-Account (Privatperson oder Firma). *Blockiert:* Sign in with Apple (Web ist eingebaut, aber ausgeschaltet) und das Supabase-Cloud-Projekt (ADR 002).
-2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform
+2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform Außerdem: ODbL der PLZ-Daten aus OpenStreetMap, ob die Produktdatenbank als Sammlung (Collective Database) gilt und die Anzeigen nicht unter Share-Alike fallen (ADR 012).
 3. **Retention:** *Technischer Default entschieden (v0.3, ADR 008), anwaltliche Prüfung offen.* Verifizierungsdokument 30 Tage nach Entscheidung löschen, bei Account-Löschung sofort; Metadaten bis zur Account-Löschung. Account-Löschung ist eine echte Löschung inkl. Chats; Audit- und Moderationsdaten bleiben pseudonymisiert. Alle Fristen konfigurierbar (`private.app_settings`). Rechtlich zu prüfen: Dauer für Jagdscheine, DSA-Fristen für Moderationsdaten, Beweissicherung, Nachrichten beim Gegenüber.
    - **Verlassene Entwürfe** (Entscheidung 2026-10-29, Umsetzung M9): Entwürfe samt Fotos werden nach 12 Monaten Inaktivität gelöscht, mit Hinweis an den Besitzer vorab. *Anwaltlich zu prüfen:* Frist, Form und Vorlauf des Hinweises.
 4. **Startregion:** *Entschieden (v0.3, ADR 007).* DE und AT vollständig (Länder und Kreise/Bezirke) aus amtlichen Quellen. CZ, PL, CH folgen vor dem jeweiligen Marktstart.
