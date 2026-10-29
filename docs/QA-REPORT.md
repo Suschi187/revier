@@ -524,3 +524,199 @@ Auflagen:
 | Architekt 12: API-Tests | erledigt durch die QA | 3e4bb60 |
 | Architekt 13: CHANGELOG | berichtigt | (dieser Commit) |
 | Architekt 5, 6, 8, 10, 14–16 | offen mit Termin, siehe CHANGELOG M2 „Noch offen“ | – |
+
+## M3 – Zwischenstand 2026-10-29
+
+Geprüfter Stand: `a85568c` (main, sauber). Geprüft werden nur die fertigen Teile:
+- `5180272` Standortverfremdung v2
+- `fd96087` Foto-Grundlage
+- `a85568c` PLZ-Verzeichnis
+
+Grundlage: Plan M3 inklusive der Abschnitte 12–15, die Reviews des Architekten (Plan, PLZ, Spike), CLAUDE.md und SPEC 3.3. M3 ist **nicht abnahmereif**, das ist auch nicht der Anspruch dieses Zwischenstands. Akzeptanzkriterien von M3 (Assistent, „Meine Anzeigen“, Pflichtfelder) sind noch nicht prüfbar.
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase db reset && supabase test db` | grün, 15 Dateien, 289 Tests. Davon sind 5 neu in `14_qa_m3`, 4 dieser 5 sind TODO-Tests für F1 und F4. Dreimal mit Reset, also jedes Mal mit neuem Vault-Secret. `12_location` lief 25-mal hintereinander grün (zufällige Besitzer-IDs je Lauf). |
+| `supabase db lint -s public,private --level warning` | keine Funde |
+| Typen (`gen types --local` gegen `database.types.ts`) | identisch |
+| `npm run lint`, `npm run typecheck`, `npm run build` | grün |
+| `npm test` (Vitest) | 68/68 |
+| `npm run test:integration` | 58/58, davon 17 neu (`location.test.ts` 9, `photo-rows.test.ts` 8). Dreimal stabil. Danach ist `test db` ohne Reset grün. |
+| `npm run test:e2e` | 7/7, zweimal (vor und nach den neuen Tests). Danach ist `test db` grün. |
+| Laufzeit der PLZ-Datenmigration | 0,43 s für 10 402 PLZ, 11 530 Zuordnungen und 13 340 Ortsnamen. Datei 1,0 MB, Tabellen 4,2 MB. Unkritisch. |
+
+### Ergebnis je Teil
+
+**1. Standortverfremdung v2: erfüllt, mit F4 und F6.**
+- Kein Orakel für fremde Versätze gefunden:
+  - Den Punkt setzt nur der Besitzer. Ein Admin bekommt `42501`, `service_role` ebenfalls (`auth.uid()` ist null). Entfernen (`null`) ist erlaubt.
+  - Ein PATCH von C auf eine Anzeige von A antwortet byte-gleich wie ein PATCH auf eine unbekannte id.
+  - Der Schlüssel enthält `owner_id`. Damit liefern eigene Probe-Anzeigen nur den eigenen Versatz.
+- Kreiswechsel:
+  - ohne Punkt → `null`
+  - mit zurückgeschicktem gelesenem Punkt → ebenfalls `null`. Es entsteht also keine zweite Stichprobe.
+- Rundweg: PostgREST liefert EWKB-Hex, und `geography`-Gleichheit ist exakt (geprüft auf 0,07 m). Der zurückgeschickte Wert ändert nichts, ein gerundeter Wert würde neu verschoben (ADR 006 nennt das).
+- Plausibilität:
+  - Die Meldung enthält keine Koordinaten.
+  - Die Prüfung ist kein Distanz-Orakel, weil der Centroid des Kreises ohnehin öffentlich ist und nur der eigene Punkt geprüft wird.
+  - Andere Geometrien (LINESTRING) werden abgelehnt, ohne Koordinaten in der Meldung.
+- Secret:
+  - Für `anon` und `authenticated` sind `vault` und `listings_blur_location` nicht erreichbar.
+  - Über die API: `rpc/listings_blur_location` → 404, `Accept-Profile: vault`/`private` → 406.
+  - Alle `security definer`-Funktionen in `public`/`private` setzen `search_path`. Die Abfrage auf Funktionen ohne `search_path` ergab 0 Treffer.
+  - `decrypted_secrets` liest außerhalb von `vault` nur der Trigger.
+  - Ausnahme: siehe F4.
+- Der Fingerprint schlägt fail-closed zu (`RV003`, pgTAP).
+- Neu ist ein Integrationstest über PostgREST (Plan 4.3 „Integration“, bisher fehlend):
+  - Ring 2,28–5,72 km
+  - gleicher Versatz für eine zweite Anzeige
+  - anderer Besitzer → anderer Punkt
+  - Rundweg, Kreiswechsel, Server, Admin, Fehlermeldungen
+
+**2. Foto-Grundlage: erfüllt, mit F1.** Über die echte API geprüft, alles abgelehnt oder unsichtbar:
+- Spaltenrechte per PostgREST:
+  - Insert mit `processed_at`, `width`/`height`, `storage_path`, `upload_path`, `thumb_path` oder `id` → `42501`
+  - PATCH derselben Spalten und von `listing_id` → `42501`
+  - Positivkontrolle: Alt-Text und Reihenfolge
+- Upsert `on_conflict=id` mit `merge-duplicates` auf eine fremde Foto-id → abgelehnt, die Zeile bleibt unverändert.
+- Unverarbeitete Fotozeilen an einer freigegebenen Anzeige sehen weder anon noch Fremde, weder direkt noch per Embedding `listings→listing_photos`.
+- Eingang `listing-uploads`:
+  - Gesperrte Wege zum Original, auch für den Besitzer:
+    - kein Lesen, keine Signed URL (einzeln und mehrfach), kein `info`/`exists`, kein `object/public`
+    - weder `copy`/`move` nach `listing-photos` noch innerhalb des Eingangs
+    - kein Upsert
+  - Signed Upload URL gibt es nur für den eigenen registrierten Pfad (nicht für Fremde, nicht für freie Pfade) und nie für `listing-photos`.
+- Tageslimit (100):
+  - Löschen und Neuanlegen umgeht es nicht.
+  - Von 10 parallelen Inserts bei Stand 95 kommen genau 5 durch, die anderen bekommen `RV002`. Dreimal stabil.
+  - Ein Bulk-Insert über dem Limit legt nichts teilweise an.
+
+**3. PLZ-Verzeichnis: weitgehend erfüllt, mit F2, F5 und F6.**
+- Stichprobe von 35 bekannten Paaren, alle richtig:
+  - DE (23): z. B. 80331→München Stadt, 85521→LK München, 17033→Mecklenburgische Seenplatte, 83471→Berchtesgadener Land, 66111→Regionalverband Saarbrücken
+  - kreisübergreifend: 21039→Hamburg **und** Herzogtum Lauenburg
+  - AT (12): z. B. 1010→Wien, 8970→Liezen, 6370→Kitzbühel; 8010, 6020, 4020 und 9020 jeweils Stadt **und** Umland-Bezirk
+- Alle 401 Kreise und 94 Bezirke haben mindestens eine PLZ.
+- Im Repo und in der ganzen Git-Historie gibt es keine Polygone und keine Exportdateien (`POLYGON((`/`MULTIPOLYGON`: 0 Treffer).
+- Rechte: Die Tabellen sind nur lesbar.
+- Abbruchprüfungen des Generators:
+  - vorhanden: 16 Exporte, Mindestzahlen, unbekannte Kreise, PLZ ohne Kreis, Kreise ohne PLZ
+  - Lücken siehe F5
+- Lizenzen:
+  - `SOURCES.md` nennt alle drei Pflichtvermerke (ODbL, dl-de/by-2-0, CC BY 4.0).
+  - Die Seite „Datenquellen“ ist offen laut Plan.
+  - Kleinere Lücken siehe F6.
+
+**4. Projekt-Ref, Token, Spike-Reste: im Repo sauber, in der Arbeitskopie nicht (F3).**
+- `git log --all -p` enthält
+  - keine Projekt-Referenz
+  - keinen `SPIKE_TOKEN`-Wert (nur der Name in Plan und Review)
+  - keine `*.supabase.co`-Projekt-URL (außer dem Testwert `abc`)
+  - kein `sbp_`/`sb_secret_`/JWT
+  - keine Spike-Dateien oder Testbilder
+- `supabase/functions/` gibt es noch nicht.
+
+**5. Regressionen M1/M2: keine.** Alle Suiten sind grün. Die Fixtures aus M1/M2 (`storage.test.ts`, `postgrest.test.ts`) laufen unverändert mit dem neuen Pfad-Trigger.
+
+### Gefundene Fehler
+
+#### F1 – mittel – Admin-Besitzer ändert eigene freigegebene Anzeigen ohne erneute Prüfung (Fotos, Alt-Text, Inhalte)
+`supabase/migrations/20261029104100_listing_photo_processing.sql:93,104,115`: Der neu gefasste `listing_children_guard` zählt `is_admin()` zu `privileged`. Er setzt deshalb eine `active`/`paused`-Anzeige nicht auf `pending_review`, wenn deren Besitzer Admin mit `aal2` ist, und das Foto-Tageslimit gilt für ihn nicht. Dasselbe gilt für Inhaltsänderungen im `listings_guard` (`20261029101500_review_medium.sql:124`, `content_changed and not is_admin`). Das Vier-Augen-Prinzip (Plan 5.1, Review M1) gilt also nur für den Statuswechsel, nicht für spätere Änderungen. Ist die Edge Function da, kann ein Admin an seiner eigenen aktiven Anzeige ungeprüft Fotos, Alt-Texte und Texte veröffentlichen. Auflage 1 (die Function setzt nach der Verarbeitung auf `pending_review`) deckt nur neue Fotos ab, nicht Alt-Text, Reihenfolge, Löschen und Text.
+
+Reproduktion (`supabase/tests/14_qa_m3.test.sql`, TODO-Tests 2–4):
+1. Admin (aal2) legt eine Anzeige an. Ein anderer Admin bzw. `postgres` gibt sie frei (`active`).
+2. Als derselbe Admin: `insert into listing_photos (listing_id, sort_order) values (<id>, 1)` → Status bleibt `active`.
+3. Danach `update listing_photos set alt_text = …` und `update listings set title = …` → Status bleibt `active`.
+4. Gegenprobe: Dieselbe Person mit `aal1` → `pending_review`.
+
+Erwartung:
+- Für die Rückführung nach `pending_review` und das Tageslimit gilt „privilegiert“ nur für Server-Aufrufe und für Admins an **fremden** Anzeigen (`is_admin() and not owner`).
+- Zusammen mit Commit 6 (Guard neu, Statusschleife „als Admin-Besitzer“ laut Auflage 8/C5) beheben, danach `todo_start/todo_end` in `14_qa_m3` entfernen.
+
+#### F2 – mittel – Rund 270 Ortsnamen sind Notiztexte statt Orte
+`supabase/data/postal_codes/generate.py:55-61` zerlegt den OSM-Tag `note` an `,`, `/` und `;` und übernimmt jeden Teil als Ortsnamen. Von 9 379 Ortsnamen in DE sind etwa 270 (2,9 %) unbrauchbar:
+- 246 enden auf „u.a.“ (`16866 Kyritz u.a.`), einer ist nur `u.a.` (67822)
+- Sätze und Satzteile:
+  - 99976: „die Postleitzahl ist aber weiterhin 99976“, „die Adressen sind aber weiterhin gültig. Gde. Rodewald wurde 1.1.24 aufgelöst“, „für Rodeberg“
+  - 06847: „incl. Kochstedt“, 24796: „und Krummwisch“, 63925: „dazu gehört noch Brunnthal in Hessen“
+- Englisch: 26759 „Hinte is different from the municipal boundary“
+- PLZ im Namen: „74321 Tamm“, „73635 Welzheim“ (unter 73667)
+- abgeschnitten: 73453 „Hüttlingen (bestehend aus Abtsgmünd sowie Fach“
+- Tippfehler: 24361 „ittensee“
+
+Die Namen sind laut Plan 6.1 und ADR 012 Vorschläge im Assistenten und landen damit in `listing_places`.
+Reproduktion: `select code, place_name from postal_code_places where place_name ~ 'u\.\s?a\.' or place_name ~ '^[a-zäöü]' or place_name ~ '\d' or char_length(place_name) > 40;`
+Erwartung:
+- Der Generator bereinigt die Namen: „u.a.“ und ein PLZ-Präfix entfernen, nicht an Kommas innerhalb von Klammern trennen.
+- Teile, die mit Kleinbuchstaben beginnen oder Ziffern bzw. Satzzeichen eines Satzes enthalten, verwirft er oder schreibt sie in eine Prüfliste.
+- Besser ist es, die Namen aus `place`-Knoten bzw. dem Gemeindenamen zu nehmen (Plan 6.1 nennt beides).
+- Eine Abbruchprüfung „verdächtige Namen > 0“ verhindert den Rückfall, dazu ein pgTAP-Test mit derselben Abfrage.
+
+#### F3 – mittel – Arbeitskopie ist mit dem Spike-Projekt verlinkt
+`supabase/.temp/linked-project.json` (vom 29.10., 17:30) existiert und enthält die Projekt-Referenz. Die Datei ist per `.gitignore` nicht im Repo, Git ist sauber. Plan 13 erlaubte für den Spike ausdrücklich **kein** `supabase link`. Spike-Auflage 10 verlangt „keine Spike-Reste“. Solange der Link besteht, wirken CLI-Befehle ohne `--local`, die auf das verlinkte Projekt zielen, auf das Cloud-Projekt des Nutzers. Das betrifft z. B. `db push`, `functions deploy`, `secrets` und `gen types --linked`. Die Prüfbefehle dieses Berichts liefen alle lokal.
+Reproduktion: `ls supabase/.temp/linked-project.json && grep -c "\"ref\"" supabase/.temp/linked-project.json` → 1. Inhalt nicht ausgeben.
+Erwartung:
+- Der Nutzer führt selbst `supabase unlink` aus (bzw. löscht die Datei) und prüft im Dashboard, dass `photo-spike` und `SPIKE_TOKEN` gelöscht sind (Plan 13.2).
+- Für das Spike-Protokoll ergänzen, wie der Link entstanden ist.
+- Die QA hat das bewusst nicht selbst getan (keine Cloud-Befehle).
+
+#### F4 – niedrig – `service_role` darf das Standort-Secret lesen
+ADR 006 (Zeile 21) sagt: „Lesbar nur über die Trigger-Funktion“. Tatsächlich hat `service_role` (Supabase-Standard) `SELECT` auf `vault.secrets` und `vault.decrypted_secrets` sowie `EXECUTE` auf `vault.create_secret`/`update_secret`. `12_location.test.sql:168-171` prüft nur anon und authenticated. Über PostgREST ist `vault` nicht erreichbar (406, getestet). Eine spätere `public`-Funktion mit `security invoker`, die als `service_role` läuft, oder ein Server-Pfad mit direkter DB-Verbindung könnte das Secret aber lesen. Nach ADR 006 („Ernstfall“) liegen dann alle Zellen offen.
+Reproduktion: `select has_table_privilege('service_role', 'vault.decrypted_secrets', 'select');` → `t` (TODO-Test 5 in `14_qa_m3`).
+Erwartung: entweder `revoke select on vault.decrypted_secrets, vault.secrets from service_role` (prüfen, ob Supabase-Funktionen das brauchen) **oder** die Aussage im ADR korrigieren und das Restrisiko benennen. Danach den Test in `12_location` um `service_role` ergänzen.
+
+#### F5 – niedrig – Abbruchprüfungen des PLZ-Generators lückenhaft
+`supabase/data/postal_codes/generate.py`:
+- Die SHA-256-Werte der Eingaben stehen nur in `SOURCES.md`. Der Generator prüft oder druckt sie nicht. Eine andere Datei fällt also nicht auf, und die Reproduzierbarkeit ist nicht belegt.
+- AT-CSV (Zeilen 145-155): feste Spaltenpositionen `row[4]`/`row[5]` ohne Prüfung der Kopfzeile. Bei geänderter Spaltenfolge entstünden still falsche Zuordnungen, solange die Mindestzahl erreicht wird.
+- `relationen_ohne_flaeche` (Zeile 116) wird nur gezählt, ist aber keine Abbruchbedingung. Heute 0. PLZ ohne Fläche fallen still weg.
+- Keine Prüfung der Ortsnamen (siehe F2).
+
+Erwartung: Hash-Abgleich gegen `SOURCES.md` (oder `--expect-sha`), Kopfzeilenprüfung, Abbruch bei `relationen_ohne_flaeche > 0` und bei verdächtigen Namen.
+
+#### F6 – niedrig – Doku- und Konsistenzmängel
+- `docs/adr/006-standortverfremdung.md`:
+  - Zeile 6: Der Kontextsatz bricht mitten im Wort ab („verfremdeter Pun## Entscheidung (v2, M3)“).
+  - Zeile 33: Ein Rest der alten Fassung steht verwaist da („t`, `lng`, … `coordinates`.“).
+  - Beides entstand in `5180272`.
+- Plausibilitätsradius:
+  - Plan 4.1 (Zeile 132) und 12 „B8“ (Zeile 377) nennen 60 km.
+  - Migration (`20261029104000_listing_location_v2.sql:43`) und ADR 006 setzen 80 km, wie es das Review B8 als Alternative empfiehlt.
+  - Den Plan angleichen.
+- Plan 4.3 Test 5 verlangt 200 zufällige Besitzer, `12_location.test.sql:103-129` nimmt 40. Fachlich reicht das: Die Wahrscheinlichkeit, dass weniger als 6 Oktanten belegt sind, liegt bei etwa 4·10⁻⁷. Die Abweichung sollte trotzdem im Plan oder im Testkommentar stehen.
+- Kopf der Datenmigration (`generate.py:181-183`, `20261029104300_postal_codes_data.sql:2-3`): Der Kopf nennt OSM und Statistik Austria, aber nicht „© GeoBasis-DE / BKG (2026)“ (dl-de/by-2-0). Die Zuordnung PLZ→Kreis ist aus VG250 abgeleitet. CC BY 4.0 verlangt zudem einen Hinweis auf Änderungen (Bezirk aus der Gemeindekennziffer abgeleitet). ADR 012 nennt unter „ODbL-Pflichten“ nur OSM. Die Pflichtvermerke für BKG und Statistik Austria auf der Seite „Datenquellen“ ergänzen (CHANGELOG Zeile 146 kennt sie schon).
+
+### Offen laut Plan (keine Funde)
+- **A1 / Auflage 1:** Admin gibt mit unverarbeiteten Fotos frei. Heute gelingt das. Die Bereitschaftsprüfung bei der Admin-Freigabe kommt mit Commit 6. Ebenso kommt mit Commit 5 das Zurücksetzen auf `pending_review` durch die Function.
+- **Commit 5** (Edge Function `process-listing-photo`):
+  - Header-Parser, Versuchszähler (Spike-Auflage 4)
+  - Folgemigration „kein PNG“ (Spike-Auflage 7; `listing-uploads` nimmt heute noch `image/png` an)
+  - `deno.lock`, CI mit Edge Runtime
+  - Integrationstests der Metadaten-Entfernung, E2E mit GPS-Fixture
+- **Commit 5b:** `listing_places`, `set_listing_location`, `postal_prefix`, Meta-Test „wer darf `listing_places` verwenden“
+- **Commit 6:** Guard neu (Pflichtfelder, Legal-Gate `RV001`, Anzeigen-Rate-Limit, Freigabe-Hash, Preisgrenzen, Attribut-Check). Der Koordinaten-Check in `attributes` prüft heute nur Schlüssel der obersten Ebene.
+- **Commit 7 ff.:** `listing_content_hints`, `listings.test.ts`, Web-Oberfläche, E2E Inserieren, CHANGELOG M3 (hat noch keinen M3-Eintrag)
+- Seite „Datenquellen“ mit ODbL-Download und Namensnennung am PLZ-Feld (M5/M9)
+- iOS (I4)
+- Messung in eu-central-1 (Spike-Auflage 3, Blocker für den Go-live)
+
+### Nicht prüfbar
+- Cloud-Logs, Logging-Checkliste ADR 006 und gehostete Limits: kein Stage-Projekt (ADR 002)
+- Web/iOS-Gleichstand, Lokalisierung, App-Store-Pflichten: Für die geprüften Teile gibt es noch keine Oberfläche.
+
+### Neue Tests
+- `supabase/tests/14_qa_m3.test.sql` (5): Positivkontrolle aal1, TODO-Tests für F1 (3) und F4 (1). Sie schlagen den Lauf nicht fehl. Nach der Behebung meldet pg_prove sie als „unexpectedly succeeded“, dann `todo_start/todo_end` entfernen.
+- `web/integration/location.test.ts` (9): Plan 4.3 „Integration“ und die Orakel-Proben aus Teil 1
+- `web/integration/photo-rows.test.ts` (8):
+  - Spaltenrechte per PostgREST, Upsert über fremde id, Sichtbarkeit unverarbeiteter Zeilen
+  - Wege zum Original (`copy`/`move`, Signed Upload URL, `info`/`exists`)
+  - Tageslimit (Löschen, parallel, Bulk). Der Test legt einen eigenen Nutzer an und löscht ihn wieder.
+
+### Empfehlung
+Die drei Teil-Commits tragen. Keine Lücke erlaubt Dritten, den Eingabepunkt, den Versatz oder unverarbeitete Originale zu ermitteln, und das Tageslimit hält auch parallel. Vor Commit 5 bzw. 6:
+- **F3** sofort (Nutzer: `supabase unlink`, Spike-Reste in der Cloud prüfen).
+- **F1** mit Commit 6 beheben, zusammen mit A1, und dabei denselben Maßstab „Admin an eigener Anzeige = Besitzer“ für Kinder-Tabellen und `listing_places` (5b) anlegen.
+- **F2** vor Commit 12 (Assistent mit Ortsvorschlägen), am besten zusammen mit F5.
+- F4 und F6 bei Gelegenheit, F6 (ADR-006-Textschaden) mit dem nächsten Doku-Commit.
