@@ -81,6 +81,12 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - DB-Gate: `private.has_accepted_current_legal()` wird in M2 angelegt und getestet.
   - Ab M3 nutzen es die Insert-Policies und Status-Trigger der Anzeigen, ab M7 Chat und Nachrichten.
   - Meldungen sind bewusst nicht daran gebunden (DSA: Melden bleibt niedrigschwellig).
+  - In Policies immer als `(select private.has_accepted_current_legal())`, damit es pro Statement nur einmal läuft.
+- Fehlersignal für die Clients (Review M2, Architekt 9), gleich für Web und iOS:
+  - Schreibende RPCs ab M3 rufen zuerst `private.require_current_legal()` auf. Fehlt die Zustimmung, kommt `error.code = 'RV001'` (Meldung `legal_consent_required`, HTTP 400). Der Client leitet dann ins Onboarding bzw. zeigt den Zustimmungsdialog.
+  - RLS-Policies können keinen eigenen Fehler werfen. Nach einem `42501` fragen die Clients deshalb `legal_status()` ab; ist `accepted = false`, gilt dasselbe wie bei `RV001`.
+  - Zusätzlich fragen die Clients `legal_status()` beim Start bzw. beim Wechsel in den Vordergrund (iOS) und auf jeder geschützten Seite (Web, `requireOnboardedUser`) ab.
+- Offen mit dem Anwalt (SPEC 7.2): Version auf `/terms` und `/privacy` anzeigen, Texte je Version unveränderlich ablegen, und ob eine neue Datenschutz-Version überhaupt sperren darf (Information nach Art. 13, keine Einwilligung).
 - Die Texte bleiben Platzhalter, bis der Anwalt liefert (SPEC 7.2).
 
 ### Mails
