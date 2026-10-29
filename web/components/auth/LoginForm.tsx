@@ -88,6 +88,14 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
             {errorText}
           </p>
         )}
+        {publicEnv.NEXT_PUBLIC_AUTH_APPLE_ENABLED && (
+          <a
+            href={`/${locale}/auth/apple?next=${encodeURIComponent(next)}`}
+            className="rounded border border-neutral-900 px-4 py-2 text-center font-medium"
+          >
+            {t("apple")}
+          </a>
+        )}
         <p className="text-sm text-neutral-600">{t("termsHint")}</p>
       </form>
     );

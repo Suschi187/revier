@@ -37,7 +37,8 @@
       "codeInvalid": "Kod jest nieprawidłowy lub wygasł.",
       "otherEmail": "Użyj innego adresu e-mail lub poproś o nową wiadomość",
       "networkError": "Brak połączenia. Spróbuj ponownie.",
-      "termsHint": "Nowe konta po pierwszym logowaniu akceptują regulamin."
+      "termsHint": "Nowe konta po pierwszym logowaniu akceptują regulamin.",
+      "apple": "Zaloguj się przez Apple"
     },
     "confirm": {
       "metaTitle": "Potwierdź logowanie",

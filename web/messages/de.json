@@ -37,7 +37,8 @@
       "codeInvalid": "Der Code ist ungültig oder abgelaufen.",
       "otherEmail": "Andere E-Mail-Adresse verwenden oder neue E-Mail anfordern",
       "networkError": "Keine Verbindung. Bitte versuche es noch einmal.",
-      "termsHint": "Neue Konten stimmen nach der ersten Anmeldung den Nutzungsbedingungen zu."
+      "termsHint": "Neue Konten stimmen nach der ersten Anmeldung den Nutzungsbedingungen zu.",
+      "apple": "Mit Apple anmelden"
     },
     "confirm": {
       "metaTitle": "Anmeldung bestätigen",

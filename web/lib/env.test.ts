@@ -12,7 +12,12 @@ const { parsePublicEnv } = await import("./env");
 
 describe("parsePublicEnv", () => {
   it("akzeptiert vollständige Werte", () => {
-    expect(parsePublicEnv(valid)).toEqual(valid);
+    expect(parsePublicEnv(valid)).toEqual({ ...valid, NEXT_PUBLIC_AUTH_APPLE_ENABLED: false });
+  });
+
+  it("schaltet Apple nur mit true ein", () => {
+    expect(parsePublicEnv({ ...valid, NEXT_PUBLIC_AUTH_APPLE_ENABLED: "true" }).NEXT_PUBLIC_AUTH_APPLE_ENABLED).toBe(true);
+    expect(() => parsePublicEnv({ ...valid, NEXT_PUBLIC_AUTH_APPLE_ENABLED: "yes" })).toThrow(/NEXT_PUBLIC_AUTH_APPLE_ENABLED/);
   });
 
   it("nennt fehlende Variablen", () => {

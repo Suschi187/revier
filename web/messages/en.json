@@ -37,7 +37,8 @@
       "codeInvalid": "The code is invalid or has expired.",
       "otherEmail": "Use a different email address or request a new email",
       "networkError": "No connection. Please try again.",
-      "termsHint": "New accounts are asked to accept the terms of use after the first sign-in."
+      "termsHint": "New accounts are asked to accept the terms of use after the first sign-in.",
+      "apple": "Sign in with Apple"
     },
     "confirm": {
       "metaTitle": "Confirm sign-in",

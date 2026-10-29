@@ -49,6 +49,16 @@ export async function confirmEmailToken(tokenHash: string): Promise<ConfirmResul
   return error ? "invalid" : "ok";
 }
 
+/** Startet Sign in with Apple (PKCE); liefert die Weiterleitungs-URL zu Supabase/Apple. */
+export async function startAppleSignIn(callbackUrl: string): Promise<string | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "apple",
+    options: { redirectTo: callbackUrl, skipBrowserRedirect: true },
+  });
+  return error ? null : data.url;
+}
+
 /** PKCE-Code aus dem OAuth-Rücksprung (Apple). */
 export async function exchangeOAuthCode(code: string): Promise<ConfirmResult> {
   const supabase = await createSupabaseServerClient();

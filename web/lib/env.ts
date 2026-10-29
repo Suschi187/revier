@@ -13,9 +13,14 @@ const publicEnvSchema = z.object({
       const problem = publicKeyProblem(key);
       if (problem) ctx.addIssue({ code: "custom", message: problem });
     }),
+  // Sign in with Apple erst mit Apple-Developer-Account (SPEC 7.1, ADR 010).
+  NEXT_PUBLIC_AUTH_APPLE_ENABLED: z
+    .enum(["true", "false"])
+    .default("false")
+    .transform((value) => value === "true"),
 });
 
-export type PublicEnv = z.infer<typeof publicEnvSchema>;
+export type PublicEnv = z.output<typeof publicEnvSchema>;
 
 export function parsePublicEnv(raw: Record<string, string | undefined>): PublicEnv {
   const result = publicEnvSchema.safeParse(raw);
@@ -36,4 +41,5 @@ export const publicEnv = parsePublicEnv({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_AUTH_APPLE_ENABLED: process.env.NEXT_PUBLIC_AUTH_APPLE_ENABLED,
 });

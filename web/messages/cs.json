@@ -37,7 +37,8 @@
       "codeInvalid": "Kód je neplatný nebo jeho platnost vypršela.",
       "otherEmail": "Použít jinou e-mailovou adresu nebo vyžádat nový e-mail",
       "networkError": "Žádné připojení. Zkuste to prosím znovu.",
-      "termsHint": "Nové účty po prvním přihlášení souhlasí s podmínkami použití."
+      "termsHint": "Nové účty po prvním přihlášení souhlasí s podmínkami použití.",
+      "apple": "Přihlásit se přes Apple"
     },
     "confirm": {
       "metaTitle": "Potvrdit přihlášení",
