@@ -53,5 +53,51 @@
       "account": "Můj účet",
       "signOut": "Odhlásit se"
     }
+  },
+  "Profile": {
+    "displayName": "Zobrazované jméno",
+    "displayNameHint": "Zobrazuje se veřejně u vašich inzerátů a v chatu.",
+    "accountType": "Typ účtu",
+    "accountTypes": {
+      "private": "Soukromý",
+      "business": "Firemní"
+    },
+    "businessName": "Název firmy",
+    "country": "Země",
+    "countries": {
+      "DE": "Německo",
+      "AT": "Rakousko",
+      "CH": "Švýcarsko",
+      "CZ": "Česko",
+      "PL": "Polsko"
+    },
+    "preferredLanguage": "Jazyk e-mailů",
+    "preferredLanguageHint": "Přihlašovací e-maily a oznámení dostanete v tomto jazyce.",
+    "errors": {
+      "required": "Vyplňte prosím toto pole.",
+      "tooLong": "Zadaný text je příliš dlouhý.",
+      "invalid": "Vyberte prosím platnou možnost."
+    }
+  },
+  "Welcome": {
+    "metaTitle": "Vítejte",
+    "title": "Vítejte v Revieru",
+    "intro": "Než budete pokračovat, nastavte si profil.",
+    "accept": "Souhlasím s <terms>podmínkami použití</terms> a přečetl(a) jsem si <privacy>zásady ochrany osobních údajů</privacy>.",
+    "acceptRequired": "Chcete-li pokračovat, souhlaste prosím s podmínkami použití.",
+    "submit": "Uložit a pokračovat",
+    "errors": {
+      "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
+      "outdated": "Právní texty byly právě aktualizovány. Přečtěte si je a potvrďte znovu."
+    }
+  },
+  "Legal": {
+    "placeholder": "Zástupný text: konečné znění dodá před spuštěním advokát.",
+    "terms": {
+      "title": "Podmínky použití"
+    },
+    "privacy": {
+      "title": "Zásady ochrany osobních údajů"
+    }
   }
 }

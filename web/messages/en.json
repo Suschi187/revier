@@ -53,5 +53,51 @@
       "account": "My account",
       "signOut": "Sign out"
     }
+  },
+  "Profile": {
+    "displayName": "Display name",
+    "displayNameHint": "Shown publicly next to your listings and in chats.",
+    "accountType": "Account type",
+    "accountTypes": {
+      "private": "Private",
+      "business": "Business"
+    },
+    "businessName": "Business name",
+    "country": "Country",
+    "countries": {
+      "DE": "Germany",
+      "AT": "Austria",
+      "CH": "Switzerland",
+      "CZ": "Czechia",
+      "PL": "Poland"
+    },
+    "preferredLanguage": "Language for emails",
+    "preferredLanguageHint": "Sign-in emails and notifications are sent in this language.",
+    "errors": {
+      "required": "Please fill in this field.",
+      "tooLong": "This entry is too long.",
+      "invalid": "Please choose a valid option."
+    }
+  },
+  "Welcome": {
+    "metaTitle": "Welcome",
+    "title": "Welcome to Revier",
+    "intro": "Set up your profile before you continue.",
+    "accept": "I accept the <terms>terms of use</terms> and have read the <privacy>privacy policy</privacy>.",
+    "acceptRequired": "Please accept the terms of use to continue.",
+    "submit": "Save and continue",
+    "errors": {
+      "failed": "Saving failed. Please try again.",
+      "outdated": "The terms have just been updated. Please review them and confirm again."
+    }
+  },
+  "Legal": {
+    "placeholder": "Placeholder: the final text will be provided by a lawyer before launch.",
+    "terms": {
+      "title": "Terms of use"
+    },
+    "privacy": {
+      "title": "Privacy policy"
+    }
   }
 }

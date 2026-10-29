@@ -53,5 +53,51 @@
       "account": "Mein Konto",
       "signOut": "Abmelden"
     }
+  },
+  "Profile": {
+    "displayName": "Anzeigename",
+    "displayNameHint": "Wird öffentlich bei deinen Anzeigen und im Chat angezeigt.",
+    "accountType": "Kontotyp",
+    "accountTypes": {
+      "private": "Privat",
+      "business": "Gewerblich"
+    },
+    "businessName": "Firmenname",
+    "country": "Land",
+    "countries": {
+      "DE": "Deutschland",
+      "AT": "Österreich",
+      "CH": "Schweiz",
+      "CZ": "Tschechien",
+      "PL": "Polen"
+    },
+    "preferredLanguage": "Sprache für E-Mails",
+    "preferredLanguageHint": "Anmelde-E-Mails und Benachrichtigungen kommen in dieser Sprache.",
+    "errors": {
+      "required": "Bitte fülle dieses Feld aus.",
+      "tooLong": "Die Eingabe ist zu lang.",
+      "invalid": "Bitte wähle eine gültige Option."
+    }
+  },
+  "Welcome": {
+    "metaTitle": "Willkommen",
+    "title": "Willkommen bei Revier",
+    "intro": "Richte dein Profil ein, bevor es weitergeht.",
+    "accept": "Ich stimme den <terms>Nutzungsbedingungen</terms> zu und habe die <privacy>Datenschutzerklärung</privacy> gelesen.",
+    "acceptRequired": "Bitte stimme den Nutzungsbedingungen zu, um fortzufahren.",
+    "submit": "Speichern und weiter",
+    "errors": {
+      "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal.",
+      "outdated": "Die Rechtstexte wurden gerade aktualisiert. Bitte lies sie und bestätige erneut."
+    }
+  },
+  "Legal": {
+    "placeholder": "Platzhalter: Der endgültige Text wird vor dem Start von einem Anwalt geliefert.",
+    "terms": {
+      "title": "Nutzungsbedingungen"
+    },
+    "privacy": {
+      "title": "Datenschutzerklärung"
+    }
   }
 }

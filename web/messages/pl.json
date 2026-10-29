@@ -53,5 +53,51 @@
       "account": "Moje konto",
       "signOut": "Wyloguj się"
     }
+  },
+  "Profile": {
+    "displayName": "Nazwa wyświetlana",
+    "displayNameHint": "Widoczna publicznie przy Twoich ogłoszeniach i w czacie.",
+    "accountType": "Typ konta",
+    "accountTypes": {
+      "private": "Prywatne",
+      "business": "Firmowe"
+    },
+    "businessName": "Nazwa firmy",
+    "country": "Kraj",
+    "countries": {
+      "DE": "Niemcy",
+      "AT": "Austria",
+      "CH": "Szwajcaria",
+      "CZ": "Czechy",
+      "PL": "Polska"
+    },
+    "preferredLanguage": "Język wiadomości e-mail",
+    "preferredLanguageHint": "E-maile logowania i powiadomienia otrzymasz w tym języku.",
+    "errors": {
+      "required": "Wypełnij to pole.",
+      "tooLong": "Wpis jest za długi.",
+      "invalid": "Wybierz prawidłową opcję."
+    }
+  },
+  "Welcome": {
+    "metaTitle": "Witamy",
+    "title": "Witamy w Revier",
+    "intro": "Zanim przejdziesz dalej, skonfiguruj swój profil.",
+    "accept": "Akceptuję <terms>regulamin</terms> i zapoznałem(-am) się z <privacy>polityką prywatności</privacy>.",
+    "acceptRequired": "Aby kontynuować, zaakceptuj regulamin.",
+    "submit": "Zapisz i kontynuuj",
+    "errors": {
+      "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
+      "outdated": "Teksty prawne zostały właśnie zaktualizowane. Przeczytaj je i potwierdź ponownie."
+    }
+  },
+  "Legal": {
+    "placeholder": "Tekst zastępczy: ostateczną treść przed startem dostarczy prawnik.",
+    "terms": {
+      "title": "Regulamin"
+    },
+    "privacy": {
+      "title": "Polityka prywatności"
+    }
   }
 }

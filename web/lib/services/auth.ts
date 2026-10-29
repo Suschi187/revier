@@ -4,7 +4,19 @@ import { cache } from "react";
 import type { AppLocale } from "@/i18n/routing";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export type SessionUser = { id: string; email: string | null };
+export type SessionUser = {
+  id: string;
+  email: string | null;
+  /** Name aus user_metadata (Apple liefert ihn nur beim ersten Login); nur zum Vorbelegen. */
+  metadataName: string | null;
+};
+
+function nameFromMetadata(metadata: unknown): string | null {
+  if (typeof metadata !== "object" || metadata === null) return null;
+  const record = metadata as Record<string, unknown>;
+  const name = record.full_name ?? record.name;
+  return typeof name === "string" && name.trim() ? name.trim().slice(0, 60) : null;
+}
 
 /**
  * Aktueller Nutzer aus dem JWT (Signatur lokal per JWKS geprüft, ADR 010). Genügt für Lesen und
@@ -15,7 +27,11 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
   if (!claims || typeof claims.sub !== "string") return null;
-  return { id: claims.sub, email: typeof claims.email === "string" ? claims.email : null };
+  return {
+    id: claims.sub,
+    email: typeof claims.email === "string" ? claims.email : null,
+    metadataName: nameFromMetadata(claims.user_metadata),
+  };
 });
 
 export async function requireSessionUser(locale: AppLocale, path: string): Promise<SessionUser> {
@@ -32,7 +48,7 @@ export async function getVerifiedUser(): Promise<SessionUser | null> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
-  return { id: data.user.id, email: data.user.email ?? null };
+  return { id: data.user.id, email: data.user.email ?? null, metadataName: nameFromMetadata(data.user.user_metadata) };
 }
 
 export async function signOutCurrentSession(): Promise<void> {
