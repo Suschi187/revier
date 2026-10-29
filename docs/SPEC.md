@@ -125,7 +125,7 @@ Validierung im Client und per DB-Check/Edge Function.
   - Nur Admin: `pending_review → active | rejected`, `* → removed`. `expires_at`, `reject_reason`, `owner_id` setzt nur der Server.
 - `messages`/`conversations`: nur Teilnehmer; gesperrte (blockierte) Paare dürfen nicht schreiben.
 - `verifications` und Dokument-Bucket: nur Besitzer (Insert/Read eigene) und Admin.
-- `profiles`: öffentlich lesbar nur `display_name`, `account_type`, `verification_status`, `business_name`, `country` (über eine View); alles andere nur Besitzer/Admin.
+- `profiles`: öffentlich lesbar nur `display_name`, `account_type`, `verification_status`, `business_name`, `country` (über die View `public_profiles`); alles andere nur Besitzer/Admin. Öffentlich erscheinen nur Anbieter mit mindestens einer öffentlichen Anzeige, außerdem sehen Chatpartner einander. Der öffentliche Status zeigt nur „verifiziert“ oder nichts, `pending`/`rejected` sieht nur der Nutzer selbst (v0.3).
 - `reports`: Insert für eingeloggte Nutzer, Read nur Admin.
 - Rolle `admin` über Custom Claim, nie über Client-Felder.
 
