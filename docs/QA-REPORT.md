@@ -503,3 +503,24 @@ Auflagen:
 - **F3** vor dem ersten öffentlichen Staging.
 - F4 mit M4, F5 bei der Cloud-Anbindung prüfen, F6 bei Gelegenheit.
 - Die API-Tests in den CI-Job `e2e` aufnehmen.
+
+### Nachtrag 2026-10-29: Stand der Behebung (QA und Architekt-Review M2)
+
+| Fund | Status | Commit |
+|------|--------|--------|
+| QA F1: Passwort-Anmeldung aktiv | behoben: Trigger `discard_password` leert jeden Hash. Ablehnen ging nicht, weil Auth auch bei OTP intern ein Zufallspasswort setzt. Tests auf Soll umgestellt, pgTAP `11_no_passwords` | 439f336 |
+| QA F2: Aufzählung über die Auth-API | als Restrisiko bis zur Captcha in ADR 010 dokumentiert; Test hält das Verhalten fest | (dieser Commit) |
+| QA F3: Impressum, Footer | behoben: Footer auf jeder Seite inklusive 404, Impressum-Platzhalter, Datenschutz-Hinweis beim Login, E2E | e4dfccc |
+| QA F4: Gesperrte Konten | behoben: Profiländerung per RLS gesperrt, Hinweis statt Formular | 1af7a43 |
+| QA F5: Link-Bestätigung und IP-Limit | offen, in Staging prüfen | – |
+| QA F6: pgTAP nach E2E | behoben: Zählungen gegen die Gesamtzahl; API-Tests in der CI | 70340de |
+| Architekt 1: Mailvorlagen | behoben: feste Sprache je Zweig, Mailpit-Test | 5143269 |
+| Architekt 2: Prüfung je Seite | behoben: Vitest `guards.test.ts`, ADR 010 | 9ac5a97 |
+| Architekt 3: Cookie-Rotation | behoben: E2E mit abgelaufenem Token | b7ec086 |
+| Architekt 4: Cookie-Begründung | behoben: ADR 010, `react/no-danger` | 749e672 |
+| Architekt 7: Fremde Metadaten | behoben: kein Name aus `user_metadata`, Löschjob in ADR 008 (M9) | 1af7a43 |
+| Architekt 9: Fehlersignal | behoben: `RV001` über `private.require_current_legal()`, ADR 010 | 847b2dc |
+| Architekt 11: Impressum | siehe QA F3 | e4dfccc |
+| Architekt 12: API-Tests | erledigt durch die QA | 3e4bb60 |
+| Architekt 13: CHANGELOG | berichtigt | (dieser Commit) |
+| Architekt 5, 6, 8, 10, 14–16 | offen mit Termin, siehe CHANGELOG M2 „Noch offen“ | – |

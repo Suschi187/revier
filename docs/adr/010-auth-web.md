@@ -8,7 +8,10 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 ## Entscheidung
 
 ### Anmeldung ohne Passwort
-- Registrieren und Anmelden sind derselbe Ablauf: `signInWithOtp({ email, shouldCreateUser: true })`. Die Seite antwortet immer gleich, auch bei Rate-Limit, gesperrten Konten oder ungültigen Adressen, damit niemand Konten erraten kann.
+- Registrieren und Anmelden sind derselbe Ablauf: `signInWithOtp({ email, shouldCreateUser: true })`. Die Seite antwortet immer gleich, auch bei Rate-Limit, gesperrten Konten oder ungültigen Adressen, damit niemand über die Oberfläche Konten erraten kann.
+  - Restrisiko (QA M2 F2): Die Auth-API selbst verrät es. `POST /auth/v1/otp` mit `create_user: false` antwortet bei bekannten Adressen mit 200, bei unbekannten mit 422 `otp_disabled`. Das liegt in Supabase Auth und ist mit Bordmitteln nicht abschaltbar.
+  - Bis zur Captcha bremsen nur die Rate-Limits je IP (`sign_in_sign_ups`). Die Captcha greift auch für `/otp` und ist vor dem Go-live Pflicht; das Restrisiko wird in der Datenschutzbewertung (SPEC 8) festgehalten.
+- Beim Anlegen übernimmt `handle_new_user` keinen Anzeigenamen aus `user_metadata` (Review M2, Architekt 7), denn wer eine fremde Adresse registriert, kann die Metadaten frei setzen. Vorbelegt wird nur der Name von Apple (`app_metadata.providers` enthält `apple`).
 - Die Mail enthält einen Link und einen 6-stelligen Code.
 - Gültigkeit 10 Minuten (`otp_expiry = 600`), neue Mail frühestens nach 60 s (lokal 5 s für E2E-Tests).
 - Keine Passwörter: kein Reset-Ablauf, kein Leak-Risiko.

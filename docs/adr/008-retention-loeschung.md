@@ -16,6 +16,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
   - Der Löschantrag setzt `profiles.deleted_at`. Das Profil verschwindet sofort aus der öffentlichen Sicht.
   - Danach folgt die harte Löschung über `auth.admin.deleteUser`, und `on delete cascade` räumt die Daten ab.
   - Dateien in Storage löscht der Lösch-Job über die Storage-API.
+- Nie bestätigte Konten (Review M2, Architekt 7): Jeder kann für eine fremde Adresse ein unbestätigtes Konto samt Profil erzeugen. Ein Job löscht Konten mit `email_confirmed_at is null` nach `unconfirmed_account_days` (Startwert 7, Platzhalter, wird in M9 in `app_settings` angelegt) hart über `auth.admin.deleteUser`.
 - Audit- und Moderationsdaten bleiben pseudonymisiert: `audit_log.actor_id` und `reports.reporter_id`/`handled_by` werden NULL. Meldeziele werden ohne FK gespeichert (`target_type`, `target_id`).
 - Die Jobs (pg_cron, Edge Function für Storage) folgen in M9. M1 legt nur Schema, Spalten und Einstellungen an.
 

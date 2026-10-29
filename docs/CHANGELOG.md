@@ -29,11 +29,12 @@ Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannt
 ### Wie testen
 ```sh
 supabase stop && supabase start      # Neustart nötig: config.toml und Mailvorlagen wurden geändert
-supabase db reset && supabase test db   # 230 Tests
+supabase db reset && supabase test db   # 240 Tests
 cd web
-npm run lint && npm run typecheck && npm test   # 65 Vitest-Tests
+npm run lint && npm run typecheck && npm test   # 68 Vitest-Tests
+npm run test:integration             # 40 API-Tests gegen die lokale Supabase (Storage, PostgREST, Auth, Mails)
 npx playwright install chromium      # einmalig
-npm run test:e2e                     # 5 Kernflows; nutzt einen laufenden Dev-Server oder startet einen
+npm run test:e2e                     # 7 Kernflows; nutzt einen laufenden Dev-Server oder startet einen
 ```
 Manuell: `npm run dev`, dann http://localhost:3000/de/account öffnen. Die Seite leitet auf den Login um. Die Mail kommt in Mailpit unter http://127.0.0.1:54324 an.
 
@@ -41,7 +42,7 @@ Manuell: `npm run dev`, dann http://localhost:3000/de/account öffnen. Die Seite
 - [x] Registrieren (per Link und per Code), ausloggen, wieder einloggen (per Code und per Link): `e2e/auth.spec.ts`
 - [x] Profil bearbeiten, inklusive gewerblich mit Firmenname und Wechsel zurück auf privat (E2E, Vitest, `02_profiles`)
 - [x] Geschützte Seiten leiten auf den Login um und kehren danach zum Ziel zurück, fremde Ziele werden ignoriert (E2E, Vitest)
-- [x] AGB-Zustimmung ist Pflicht und je Version gespeichert, eine neue Version verlangt erneute Zustimmung (`10_legal`, E2E)
+- [x] AGB-Zustimmung ist Pflicht und je Version gespeichert, eine neue Version verlangt erneute Zustimmung (`10_legal`, API-Tests; im UI von der QA manuell geprüft, kein E2E)
 - [x] Session-Handling mit `@supabase/ssr`: Refresh im Proxy, `getClaims` per JWKS (ES256)
 - [x] Texte in 4 Sprachen. cs/pl sind ungeprüft (Glossar).
 
@@ -56,6 +57,28 @@ Manuell: `npm run dev`, dann http://localhost:3000/de/account öffnen. Die Seite
 - `script-src 'unsafe-inline'` bis zur Nonce-CSP in M4 (`/admin`) bzw. M10.
 - Rechtstexte sind Platzhalter, bis der Anwalt liefert.
 - Die Sprache in Kopfzeile und Formularen folgt der URL. Die Profilsprache steuert nur die Mails (Cookie für die Locale: QA M0 F7, M9).
+
+### Nachtrag nach QA und Architekten-Review (2026-10-29)
+Berichte: `docs/QA-REPORT.md` (M2) und `docs/reviews/M2-architekt.md`.
+- **Keine Passwörter (QA F1, hoch):** Supabase Auth nahm trotz passwortloser App Passwörter an, mit Folge Kontoübernahme vor der Registrierung. Der Trigger `discard_password` leert jetzt jeden Passwort-Hash in `auth.users`.
+- **Mailvorlagen (Architekt 1):** Die Sprache im Link ist je Zweig fest. Ein API-Test prüft über Mailpit die Kodierung.
+- **Anmeldeprüfung (Architekt 2):** Ein Vitest erzwingt sie in jeder geschützten Seite und Server Action.
+- **Session-Erneuerung (Architekt 3):** Ein E2E prüft das abgelaufene Access-Token und die rotierten Cookies auf dem Redirect.
+- **XSS-Hygiene (Architekt 4):** ADR 010 nennt jetzt, dass das Refresh-Token per JS lesbar ist. ESLint verbietet `dangerouslySetInnerHTML`.
+- **Fehlercode `RV001` (Architekt 9):** Er meldet die fehlende Zustimmung (`private.require_current_legal()`), damit Web und iOS ihn ab M3 auswerten können.
+- **Footer (QA F3, Architekt 11):** Impressum (Platzhalter), Datenschutz und Nutzungsbedingungen sind auf jeder Seite verlinkt, beim Login steht ein Datenschutz-Hinweis.
+- **API-Tests (Auflage M1, QA F6):** `web/integration/` läuft in der CI im Job `e2e`. Die pgTAP-Zählungen sind unabhängig von E2E-Resten.
+- **Gesperrte Konten (QA F4):** Sie ändern ihr Profil nicht mehr und sehen einen klaren Hinweis.
+- **Metadaten (Architekt 7):** Kein Anzeigename aus `user_metadata` mehr, ADR 008 sieht einen Löschjob für nie bestätigte Konten vor (M9).
+- **Konten-Aufzählung (QA F2):** Die Aufzählung über die Auth-API bleibt als Restrisiko bis zur Captcha in ADR 010 dokumentiert.
+
+Noch offen (vor dem ersten Deploy bzw. später):
+- Captcha mit ADR, Cloud-Checkliste vervollständigen (Architekt 5), Link-Bestätigung und IP-Limit in Staging prüfen (QA F5)
+- Mail-Sprache per DB-Trigger statt Client-Aufruf (Architekt 10)
+- `otp_length` vor I1 (Architekt 6)
+- Apple-Token-Widerruf bei Löschung vor M9/I6 (Architekt 8)
+- CI-Traces und Rate-Limits der E2E-Suite (Architekt 14)
+- Kleinigkeiten aus Architekt 15 und 16
 
 ## M1 Datenbank und Sicherheit – 2026-10-29
 
