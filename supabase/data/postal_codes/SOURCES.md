@@ -8,11 +8,12 @@ Siehe docs/adr/012-postleitzahlen.md.
 - **Abfrage:** Overpass API (`https://overpass-api.de/api/interpreter`), je Bundesland
   `area["ISO3166-2"="DE-<Land>"]["admin_level"="4"]->.a;relation["boundary"="postal_code"](area.a);out geom;`
 - **Datenstand OSM:** 2026-10-29T16:31:11Z
-- **Ortsnamen:** aus dem Tag `note` der Relation („80331 München“)
+- **Ortsnamen (Ergänzung):** Ortsteile aus dem Tag `note` der Relation („80331 München“), bereinigt: Füllwörter
+  („und“, „incl.“) und „u.a.“ entfernt, Sätze, Ziffern und abgetrennte Zusätze verworfen (39 Teile)
 - **Lizenz:** Open Database License 1.0 (ODbL). **Pflichtvermerk:** © OpenStreetMap-Mitwirkende
   (https://www.openstreetmap.org/copyright). Die erzeugte PLZ-Tabelle ist eine abgeleitete Datenbank und
   steht ebenfalls unter ODbL (Download-Pflicht, ADR 012).
-- **SHA-256 der Exporte (erste 16 Zeichen):**
+- **SHA-256:** vollständig in `inputs.sha256`, der Generator bricht bei Abweichung ab. Erste 16 Zeichen:
   - `osm-DE-BB.json` 3b8ab1bf46668b1e
   - `osm-DE-BE.json` 3703781f9accbc1e
   - `osm-DE-BW.json` 93dfd391ab0d606b
@@ -31,12 +32,16 @@ Siehe docs/adr/012-postleitzahlen.md.
   - `osm-DE-TH.json` edbb90517d847b3c
 
 ## Deutschland: Kreisgrenzen für die Verschneidung
-- **Datensatz:** BKG VG250 (Ebenen, Stand 01.01.), dieselbe Quelle wie `regions` (ADR 007), `vg250_krs` mit `GF = 4`
+- **Datensatz:** BKG VG250 (Ebenen, Stand 01.01.), dieselbe Quelle wie `regions` (ADR 007), `vg250_krs` und `vg250_gem`
+  mit `GF = 4`. Der Generator liest `DE_VG250.gpkg` (SHA-256 in `inputs.sha256`).
 - **Datei:** `vg250_01-01.utm32s.gpkg.ebenen.zip`, MD5 `912ebecfc58bade695cf31271f4e0e85` (abgerufen 2026-10-29;
   die MD5 weicht von der Datei der Regionen ab, alle 401 Kreisschlüssel stimmen überein, geprüft vom Generator)
 - **Lizenz:** dl-de/by-2-0, **Pflichtvermerk:** © GeoBasis-DE / BKG (2026)
 - **Regel:** Eine PLZ gehört zu einem Kreis, wenn mindestens 1 % ihrer Fläche oder 0,5 km² darin liegen, und
   immer zum Kreis mit dem größten Anteil. Ergebnis: 15 785 Schnittpaare vor, 8 975 nach der Schwelle.
+- **Ortsnamen (Hauptquelle):** Gemeindenamen (`GEN`) aus `vg250_gem`. Eine Gemeinde wird vorgeschlagen, wenn sie
+  mindestens 10 % der PLZ-Fläche bedeckt oder mindestens 25 % ihrer Fläche in der PLZ liegt, und immer die Gemeinde
+  mit dem größten Anteil.
 
 ## Österreich
 - **Datensatz:** Statistik Austria, Gemeindeliste mit Postleitzahlen, Gebietsstand 2026
@@ -46,9 +51,21 @@ Siehe docs/adr/012-postleitzahlen.md.
   Gemeindekennziffer, Wien als Ganzes (900). Ortsname ist der Gemeindename.
 - **Lizenz:** CC BY 4.0, **Pflichtvermerk:** Datenquelle: Statistik Austria
 
+- **Prüfung:** Die Kopfzeile muss genau `Gemeindekennziffer;Gemeindename;Gemeindecode;Status;PLZ des Gem.Amtes;weitere Postleitzahlen` lauten.
+
 ## Ergebnis
-DE 8 170 PLZ (778 in mehreren Kreisen), AT 2 232 PLZ (304 in mehreren Bezirken), 12 PLZ ohne Ortsnamen.
-Jeder Kreis und Bezirk hat mindestens eine PLZ (Abbruchprüfung im Generator, pgTAP `13_postal_codes`).
+DE 8 170 PLZ (778 in mehreren Kreisen), AT 2 232 PLZ (304 in mehreren Bezirken), 18 007 Ortsnamen, jede PLZ hat
+mindestens einen. Jeder Kreis und Bezirk hat mindestens eine PLZ.
+
+## Abbruchprüfungen im Generator
+- Eingaben weichen von `inputs.sha256` ab (neue Daten bewusst mit `--update-hashes` übernehmen)
+- Kopfzeile der Gemeindeliste weicht ab
+- eine OSM-Relation ergibt keine Fläche
+- ein Kreis aus den Daten fehlt in `regions`, ein Kreis hat keine PLZ, eine PLZ hat keinen Kreis
+- weniger als 8 000 PLZ in DE oder 2 000 in AT
+- ein Ortsname ist verdächtig (`suspicious_name`: Notiztext, Ziffern, „u.a.“, abgetrennter Zusatz)
+
+pgTAP `13_postal_codes` prüft Umfang, Abdeckung und Ortsnamen noch einmal in der Datenbank.
 
 ## Korrekturen
 `overrides.csv` (Spalten `action` = add/remove, `country`, `code`, `region_code`, `reason`). Meldet ein Nutzer, dass
@@ -59,6 +76,7 @@ eine echte Kombination abgelehnt wird, kommt hier eine Zeile mit Begründung daz
 supabase start   # Docker-CLI im PATH, alle anderen Migrationen eingespielt
 python3 -I supabase/data/postal_codes/generate.py --osm-dir <dir> --vg250 <pfad>/DE_VG250.gpkg \
   --at <pfad>/gemliste_knz.csv --overrides supabase/data/postal_codes/overrides.csv \
-  --out supabase/migrations/<neuer-timestamp>_postal_codes_data.sql
+  --out supabase/migrations/<neuer-timestamp>_postal_codes_data.sql [--update-hashes]
 ```
+Mit denselben Eingaben entsteht byte-gleich dieselbe Migration.
 Eine Aktualisierung kommt als **neue** Migration, die bestehende Zeilen ersetzt (Referenzdaten ohne FK von Anzeigen).

@@ -21,10 +21,12 @@ Eine volle PLZ grenzt ein Revier oft enger ein als der verfremdete Punkt (ADR 00
     - Eine PLZ gehört zu einem Kreis ab 1 % ihrer Fläche oder 0,5 km², immer zum Kreis mit dem größten Anteil.
     - Ohne Schwelle hinge fast jede Rand-PLZ wegen Ungenauigkeiten auch am Nachbarkreis.
   - **AT:** Statistik Austria, Gemeindeliste mit „PLZ des Gemeindeamts“ und „weitere Postleitzahlen“ (CC BY 4.0), Bezirk aus der Gemeindekennziffer.
+  - **Ortsnamen:** in DE die Gemeinden aus VG250, die einen nennenswerten Teil der PLZ-Fläche bedecken, dazu bereinigte Ortsteile aus OSM; in AT der Gemeindename. Der Generator bricht bei verdächtigen Namen ab (QA M3 F2).
   - Korrekturen über `overrides.csv` mit Begründung. Die Fehlermeldung „PLZ passt nicht zum Kreis“ nennt einen Meldeweg, damit eine echte Kombination nicht dauerhaft blockiert ist.
 - **Abweichung von ADR 007** (dort wurde OSM wegen Share-Alike verworfen):
   - Für Kreise gibt es amtliche offene Daten (VG250), für PLZ-Flächen in DE nicht. Die Alternative wäre die kostenpflichtige Lizenz der Deutsche Post Datafactory oder eine reine Formatprüfung.
   - Der Nutzer hat OSM gewählt.
+- **Weitere Pflichtvermerke** (Seite „Datenquellen“, M5/M9): „© GeoBasis-DE / BKG (2026)“ (dl-de/by-2-0) für die Zuordnung zu Kreisen und die Gemeindenamen; „Datenquelle: Statistik Austria“ (CC BY 4.0) mit dem Hinweis, dass der Bezirk aus der Gemeindekennziffer abgeleitet ist.
 - **ODbL-Pflichten:**
   - Namensnennung „© OpenStreetMap-Mitwirkende“ direkt am PLZ-Feld (Web und iOS) und auf der Seite „Datenquellen“ (M5/M9).
   - Die abgeleitete PLZ-Tabelle wird unter ODbL zum Download angeboten (Seite „Datenquellen“).
