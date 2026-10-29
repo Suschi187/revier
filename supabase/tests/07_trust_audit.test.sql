@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(38);
+select plan(42);
 
 select tests.create_user('a@test.local') as a_id \gset
 select tests.create_user('b@test.local') as b_id \gset
@@ -36,8 +36,15 @@ select tests.authenticate_as(:'admin_id', 'aal2');
 select is((select count(*)::int from verifications), 1, 'Admin mit 2FA liest Verifizierungen');
 select throws_ok(format($$ update verifications set status = 'rejected' where id = %L $$, :'ver_a'), '23514', null, 'Ablehnung braucht einen Grund');
 update verifications set status = 'verified' where id = :'ver_a';
+select tests.as_postgres();
 select results_eq(format($$ select reviewed_by, decided_at is not null from verifications where id = %L $$, :'ver_a'),
   format($$ values (%L::uuid, true) $$, :'admin_id'), 'Entscheidung setzt Prüfer und Datum');
+select tests.authenticate_as(:'admin_id', 'aal2');
+select throws_ok(format($$ update verifications set reject_reason = 'nachträglich' where id = %L $$, :'ver_a'), '42501', null,
+  'Grund einer entschiedenen Verifizierung ist unveränderlich');
+select tests.authenticate_as(:'a_id');
+select throws_ok($$ select reviewed_by from verifications $$, '42501', null, 'Antragsteller sieht nicht, welcher Admin geprüft hat');
+select tests.authenticate_as(:'admin_id', 'aal2');
 select is((select verification_status::text from profiles where user_id = :'a_id'), 'verified', 'Profil wird verifiziert');
 select throws_ok(format($$ update verifications set status = 'rejected', reject_reason = 'doch nicht' where id = %L $$, :'ver_a'), '42501', null,
   'Entschiedene Verifizierungen sind abgeschlossen');
@@ -62,7 +69,11 @@ select is((select count(*)::int from reports), 0, 'Gemeldeter sieht die Meldung 
 
 select tests.authenticate_as(:'admin_id', 'aal2');
 update reports set status = 'handled' where id = :'rep';
+select tests.as_postgres();
 select is((select handled_by from reports where id = :'rep'), :'admin_id'::uuid, 'Erledigt setzt handled_by');
+select tests.authenticate_as(:'a_id');
+select throws_ok($$ select handled_by from reports $$, '42501', null, 'Meldende sehen nicht, welcher Admin entschieden hat');
+select is((select status::text from reports where id = :'rep'), 'handled', 'Meldende sehen den Stand ihrer Meldung');
 
 select tests.authenticate_as(:'a_id');
 insert into reports (target_type, target_id, reason) select 'listing', :'listing', 'other' from generate_series(1, 19);

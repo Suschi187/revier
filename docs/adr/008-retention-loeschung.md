@@ -33,7 +33,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `private.listing_location_offsets.listing_id → listings` | cascade |
 | `favorites.user_id → profiles`, `favorites.listing_id → listings` | cascade |
 | `saved_searches.user_id → profiles` | cascade |
-| `conversations.listing_id → listings` | cascade |
+| `conversations.listing_id → listings` | set null (Chats bleiben als Beweis, Entscheidung Review M1) |
 | `conversations.owner_id`/`interested_id → profiles` | cascade |
 | `messages.conversation_id → conversations` | cascade |
 | `messages.sender_id → profiles` | cascade |
@@ -44,6 +44,8 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `reviews.*_id` → conversations/profiles | cascade |
 | `devices.user_id → profiles` | cascade |
 | `audit_log.actor_id → profiles` | set null |
+
+Löscht ein Besitzer nur eine Anzeige, bleiben die Chats für beide Seiten erhalten, angezeigt als „Anzeige gelöscht“. Gesperrte Nutzer können keine Anzeigen löschen, und Admins entfernen Anzeigen über den Status `removed` (auditiert) statt per DELETE.
 
 Bekannte Folge: Bei einer Account-Löschung verschwinden auch die Chats beim Gegenüber. Ob sie dort bleiben müssen oder dürfen, ist rechtlich zu prüfen.
 

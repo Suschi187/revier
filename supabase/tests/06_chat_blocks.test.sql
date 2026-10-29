@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(23);
+select plan(25);
 
 select tests.create_user('owner@test.local') as o_id \gset
 select tests.create_user('a@test.local') as a_id \gset
@@ -82,10 +82,17 @@ select throws_ok(format($$ select private.is_blocked_pair(%L, %L) $$, :'o_id', :
   'Fremde Sperrbeziehungen sind nicht abfragbar');
 select ok(private.is_blocked_with(:'o_id'), 'Eigene Sperrbeziehung ist für die Policy prüfbar');
 
--- Löschen einer Anzeige entfernt Unterhaltungen
+-- Gelöschte Anzeige: Chats bleiben als Beweis erhalten (Entscheidung Review M1)
 select tests.as_postgres();
+delete from blocks;
+select tests.authenticate_as(:'o_id');
 delete from listings where id = :'listing';
-select is((select count(*)::int from messages), 0, 'Gelöschte Anzeige entfernt Unterhaltungen und Nachrichten (cascade)');
+select tests.as_postgres();
+select is((select count(*)::int from listings where id = :'listing'), 0, 'Besitzer löscht die eigene Anzeige');
+select results_eq(format($$ select listing_id is null, (select count(*)::int from messages m where m.conversation_id = c.id) from conversations c where id = %L $$, :'conv'),
+  $$ values (true, 2) $$, 'Unterhaltung und Nachrichten bleiben, Verweis auf die Anzeige ist leer');
+select tests.authenticate_as(:'a_id');
+select is((select count(*)::int from messages where conversation_id = :'conv'), 2, 'Interessent behält den Verlauf');
 
 select * from finish();
 rollback;

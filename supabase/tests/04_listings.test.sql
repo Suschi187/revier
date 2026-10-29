@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(40);
+select plan(42);
 
 select tests.create_user('a@test.local', 'Anna') as a_id \gset
 select tests.create_user('b@test.local', 'Bernd') as b_id \gset
@@ -112,6 +112,23 @@ select throws_ok(format($$ update listings set title = 'Neuer Versuch' where id 
 delete from listings where id = :'draft_a';
 select tests.as_postgres();
 select is((select count(*)::int from listings where id = :'draft_a'), 1, 'Entfernte Anzeige kann der Besitzer nicht löschen (DSA)');
+
+-- Vier-Augen-Prinzip und Löschen durch gesperrte Nutzer (Review M1)
+select tests.authenticate_as(:'admin_id', 'aal2');
+insert into listings (kind, direction, title, content_language, region_id, status)
+values ('lease', 'offer', 'Anzeige des Admins', 'de', :'district', 'pending_review') returning id as own_admin \gset
+select throws_ok(format($$ update listings set status = 'active' where id = %L $$, :'own_admin'), '42501', null,
+  'Admin gibt die eigene Anzeige nicht frei');
+select tests.as_postgres();
+update profiles set is_blocked = true where user_id = :'b_id';
+insert into listings (owner_id, kind, direction, title, content_language, region_id)
+values (:'b_id', 'lease', 'offer', 'Beweis', 'de', :'district') returning id as evidence \gset
+select tests.authenticate_as(:'b_id');
+delete from listings where id = :'evidence';
+select tests.as_postgres();
+select is((select count(*)::int from listings where id = :'evidence'), 1, 'Gesperrte Nutzer löschen keine Anzeigen (Beweise bleiben)');
+delete from listings where id = :'evidence';
+update profiles set is_blocked = false where user_id = :'b_id';
 
 -- Standortverfremdung (ADR 006) ---------------------------------------------------
 select tests.authenticate_as(:'b_id');
