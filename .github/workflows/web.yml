@@ -61,3 +61,38 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+
+  # Kernflows im Browser gegen ein lokales Supabase mit Mailpit (docs/adr/010, CLAUDE.md: Playwright).
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: web
+    env:
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
+        with:
+          version: 2.122.0
+      - name: Supabase starten (mit Auth und Mailpit)
+        working-directory: .
+        run: supabase start -x realtime,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+      - name: Öffentlichen lokalen Key übernehmen (nur der publishable Key)
+        working-directory: .
+        run: |
+          key=$(supabase status -o env | sed -n 's/^PUBLISHABLE_KEY="\(.*\)"$/\1/p')
+          test -n "$key"
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$key" >> "$GITHUB_ENV"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:e2e
