@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import type { NextRequest, NextResponse } from "next/server";
 import { publicEnv } from "@/lib/env";
+import { authCookieOptions } from "./cookie-options";
 import type { Database } from "./database.types";
 
 type CookieToSet = { name: string; value: string; options: Parameters<NextResponse["cookies"]["set"]>[2] };
@@ -29,6 +30,7 @@ export async function refreshSession(request: NextRequest): Promise<SessionRefre
     publicEnv.NEXT_PUBLIC_SUPABASE_URL,
     publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
+      cookieOptions: authCookieOptions,
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookies, headers) => {
