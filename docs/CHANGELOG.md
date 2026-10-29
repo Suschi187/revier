@@ -2,6 +2,61 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M2 Auth und Profil (Web) – 2026-10-29
+
+### Geändert
+- SPEC v0.4, ADR 010 (Anmeldung, Session, AGB-Zustimmung, CSP), ADR 002 (Cloud verschoben), Glossar „Konto und Anmeldung“
+- Migration `legal_acceptances`:
+  - RPCs `accept_legal` und `legal_status`
+  - DB-Gate `private.has_accepted_current_legal()`
+  - Versionen in `app_settings`
+- `supabase/config.toml`:
+  - Bestätigung aktiv, OTP 10 Minuten
+  - Redirect-URLs nur für `/*/auth/confirm` und `/*/auth/callback`
+- Mailvorlagen `confirmation` und `magic_link` in 4 Sprachen (Link und Code)
+- Web:
+  - Session-Refresh im Proxy, geschützte Pfade, geprüfte Rücksprungziele
+  - Login per Code und Link: Code anfordern und prüfen im Browser, Link bestätigt erst per Button
+  - Logout
+  - Onboarding `/welcome` mit Profil und AGB-Häkchen
+  - `/account`, `/account/profile`
+  - Sign in with Apple hinter `NEXT_PUBLIC_AUTH_APPLE_ENABLED`
+  - Platzhalterseiten Nutzungsbedingungen und Datenschutz (`noindex`)
+  - feste CSP
+- Service-Schicht `web/lib/services/{auth,profile,legal,gate}.ts`, Zod-Schemas in `web/lib/validation/`
+- Neue devDependency `@playwright/test` 1.64.1, CI-Job `e2e` in `web.yml`
+
+### Wie testen
+```sh
+supabase stop && supabase start      # Neustart nötig: config.toml und Mailvorlagen wurden geändert
+supabase db reset && supabase test db   # 230 Tests
+cd web
+npm run lint && npm run typecheck && npm test   # 65 Vitest-Tests
+npx playwright install chromium      # einmalig
+npm run test:e2e                     # 5 Kernflows; nutzt einen laufenden Dev-Server oder startet einen
+```
+Manuell: `npm run dev`, dann http://localhost:3000/de/account öffnen. Die Seite leitet auf den Login um. Die Mail kommt in Mailpit unter http://127.0.0.1:54324 an.
+
+### Akzeptanz
+- [x] Registrieren (per Link und per Code), ausloggen, wieder einloggen (per Code und per Link): `e2e/auth.spec.ts`
+- [x] Profil bearbeiten, inklusive gewerblich mit Firmenname und Wechsel zurück auf privat (E2E, Vitest, `02_profiles`)
+- [x] Geschützte Seiten leiten auf den Login um und kehren danach zum Ziel zurück, fremde Ziele werden ignoriert (E2E, Vitest)
+- [x] AGB-Zustimmung ist Pflicht und je Version gespeichert, eine neue Version verlangt erneute Zustimmung (`10_legal`, E2E)
+- [x] Session-Handling mit `@supabase/ssr`: Refresh im Proxy, `getClaims` per JWKS (ES256)
+- [x] Texte in 4 Sprachen. cs/pl sind ungeprüft (Glossar).
+
+### Bekannte Lücken
+- **Sign in with Apple** ist eingebaut, aber aus. Es fehlt ein Apple-Developer-Account (SPEC 7.1), deshalb ist es nicht E2E-getestet.
+- **Account löschen**, E-Mail ändern, Datenexport und Benachrichtigungen folgen in M9. Bis dahin ist die UGC-Pflicht „Account löschen“ im Web offen.
+- **Captcha** fehlt noch, bis dahin schützen nur die Rate-Limits von Supabase. Die Captcha ist harter Punkt der Release-Checkliste vor dem Go-live.
+- **Cloud-Projekt** noch nicht verbunden (ADR 002). Checklisten in ADR 005 und 010.
+  - Lokal gilt ein Mail-Abstand von 5 s, in der Cloud 60 s.
+  - Die Cloud braucht eigenes SMTP über einen EU-Anbieter (SPEC 7.11).
+- **iOS (I1):** Login per Code, `accept_legal(…, 'ios')` und Onboarding fehlen noch und werden in I1 nachgezogen.
+- `script-src 'unsafe-inline'` bis zur Nonce-CSP in M4 (`/admin`) bzw. M10.
+- Rechtstexte sind Platzhalter, bis der Anwalt liefert.
+- Die Sprache in Kopfzeile und Formularen folgt der URL. Die Profilsprache steuert nur die Mails (Cookie für die Locale: QA M0 F7, M9).
+
 ## M1 Datenbank und Sicherheit – 2026-10-29
 
 ### Geändert

@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.3
+# SPEC – Revier (Arbeitstitel), MVP v0.4
 
+v0.4: Anmeldung passwortlos per Link und Code, AGB-Zustimmung je Version in `legal_acceptances` (3.1, 4.4, ADR 010); Cloud-Projekt erst nach 7.1/7.9/7.11.
 v0.3: Startregion (7.4) und Retention-Default (7.3) entschieden, Pausieren/Fortsetzen durch Besitzer (3.4), Schema-Ergänzungen für M1 (3.1).
 v0.2: Web-App als gleichwertige Plattform ergänzt, Android ausdrücklich ausgeschlossen. Offene Punkte stehen in Abschnitt 7. Änderungen an der Spezifikation werden hier versioniert, nicht nur im Chat.
 
@@ -104,6 +105,8 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 
 **audit_log** – Admin-Aktionen (Freigabe, Ablehnung, Sperre, Verifizierung)
 
+**legal_acceptances** (v0.4) – `user_id`, `document` (`terms` | `privacy`), `version`, `source` (`web` | `ios`), `accepted_at`; schreibbar nur über die RPC `accept_legal`, die gegen die aktuellen Versionen prüft. Ohne Zustimmung zur aktuellen Version führt der Client ins Onboarding; ab M3/M7 prüfen auch Anzeigen- und Chat-Policies die Zustimmung (`private.has_accepted_current_legal()`), Meldungen bewusst nicht.
+
 ### 3.2 `attributes` je Anzeigenart
 Validierung im Client und per DB-Check/Edge Function.
 
@@ -171,7 +174,7 @@ Die Web-App und die iOS-App bieten dieselben Funktionen mit plattformgerechter B
 
 ### 4.4 Unterschiede nach Plattform
 - Benachrichtigungen: iOS per Push (APNs), Web per E-Mail (Push im Browser erst Phase 2)
-- Login: iOS mit Sign in with Apple und E-Mail; Web mit E-Mail/Magic Link und Sign in with Apple (Pflicht, sobald es andere Social-Logins gibt)
+- Login: iOS mit Sign in with Apple und E-Mail; Web mit E-Mail/Magic Link und Sign in with Apple (Pflicht, sobald es andere Social-Logins gibt). E-Mail ist passwortlos: eine Mail mit Link und 6-stelligem Code, der Link bestätigt erst per Button (v0.4, ADR 010). iOS nutzt denselben Code.
 - Kamera/Dokumentenscan: iOS direkt aus der App, Web per Datei-Upload
 - Karte: iOS MapKit, Web MapLibre mit OpenStreetMap-Kacheln (Anbieter und Datenschutz in ADR festlegen)
 
@@ -267,7 +270,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 **Phase 2:** Bewertungen, bezahlte Hervorhebungen (Regeln für In-App-Käufe und Web-Zahlungen prüfen), CZ/PL-Regionendaten vollständig, CH, Anzeigen-Übersetzungshilfe, Browser-Push. **Android ist nicht geplant.**
 
 ## 7. Offene Entscheidungen (bitte vor M1/M3 klären)
-1. **Name und Domain**, Bundle-ID, Entwickler-Account (Privatperson oder Firma)
+1. **Name und Domain**, Bundle-ID, Entwickler-Account (Privatperson oder Firma). *Blockiert:* Sign in with Apple (Web ist eingebaut, aber ausgeschaltet) und das Supabase-Cloud-Projekt (ADR 002).
 2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform
 3. **Retention:** *Technischer Default entschieden (v0.3, ADR 008), anwaltliche Prüfung offen.* Verifizierungsdokument 30 Tage nach Entscheidung löschen, bei Account-Löschung sofort; Metadaten bis zur Account-Löschung. Account-Löschung ist eine echte Löschung inkl. Chats; Audit- und Moderationsdaten bleiben pseudonymisiert. Alle Fristen konfigurierbar (`private.app_settings`). Rechtlich zu prüfen: Dauer für Jagdscheine, DSA-Fristen für Moderationsdaten, Beweissicherung, Nachrichten beim Gegenüber.
 4. **Startregion:** *Entschieden (v0.3, ADR 007).* DE und AT vollständig (Länder und Kreise/Bezirke) aus amtlichen Quellen. CZ, PL, CH folgen vor dem jeweiligen Marktstart.
