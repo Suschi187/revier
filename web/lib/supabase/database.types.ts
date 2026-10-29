@@ -185,6 +185,32 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"legal_acceptances": {
+                  Row: {
+                    "accepted_at": string,"document": Database["public"]['Enums']["legal_document"],"id": string,"source": Database["public"]['Enums']["client_source"],"user_id": string,"version": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "accepted_at"?: string,"document": Database["public"]['Enums']["legal_document"],"id"?: string,"source": Database["public"]['Enums']["client_source"],"user_id": string,"version": string
+                  }
+                  Update: {
+                    "accepted_at"?: string,"document"?: Database["public"]['Enums']["legal_document"],"id"?: string,"source"?: Database["public"]['Enums']["client_source"],"user_id"?: string,"version"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "legal_acceptances_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "legal_acceptances_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
                 },"listing_photos": {
                   Row: {
                     "created_at": string,"id": string,"listing_id": string,"sort_order": number,"storage_path": string
@@ -495,12 +521,20 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "register_device":
+            "accept_legal":
+{ Args: { "p_privacy_version": string,"p_source": Database["public"]['Enums']["client_source"],"p_terms_version": string }; Returns: undefined
+                           },
+"legal_status":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "accepted": boolean,"privacy_version": string,"terms_version": string
+            }[]
+                           },
+"register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            }
           }
           Enums: {
-            "account_type": "private"|"business","country_code": "DE"|"AT"|"CH"|"CZ"|"PL","currency_code": "EUR"|"CHF"|"CZK"|"PLN","device_platform": "ios","document_type": "jagdschein"|"jagdkarte"|"revierbescheinigung"|"gewerbe","language_code": "de"|"en"|"cs"|"pl","listing_direction": "offer"|"wanted","listing_kind": "lease"|"permit"|"driven_hunt"|"trophy_hunt"|"helper","listing_status": "draft"|"pending_review"|"active"|"paused"|"expired"|"rejected"|"removed","price_unit": "total"|"per_year"|"per_hectare_year"|"per_day"|"per_animal"|"on_request","region_level": "state"|"district","report_reason": "scam"|"illegal"|"weapons"|"harassment"|"wrong_category"|"other","report_status": "open"|"handled","report_target": "listing"|"message"|"profile","verification_request_status": "pending"|"verified"|"rejected","verification_status": "none"|"pending"|"verified"|"rejected"
+            "account_type": "private"|"business","client_source": "web"|"ios","country_code": "DE"|"AT"|"CH"|"CZ"|"PL","currency_code": "EUR"|"CHF"|"CZK"|"PLN","device_platform": "ios","document_type": "jagdschein"|"jagdkarte"|"revierbescheinigung"|"gewerbe","language_code": "de"|"en"|"cs"|"pl","legal_document": "terms"|"privacy","listing_direction": "offer"|"wanted","listing_kind": "lease"|"permit"|"driven_hunt"|"trophy_hunt"|"helper","listing_status": "draft"|"pending_review"|"active"|"paused"|"expired"|"rejected"|"removed","price_unit": "total"|"per_year"|"per_hectare_year"|"per_day"|"per_animal"|"on_request","region_level": "state"|"district","report_reason": "scam"|"illegal"|"weapons"|"harassment"|"wrong_category"|"other","report_status": "open"|"handled","report_target": "listing"|"message"|"profile","verification_request_status": "pending"|"verified"|"rejected","verification_status": "none"|"pending"|"verified"|"rejected"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -616,7 +650,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "account_type": ["private", "business"],"country_code": ["DE", "AT", "CH", "CZ", "PL"],"currency_code": ["EUR", "CHF", "CZK", "PLN"],"device_platform": ["ios"],"document_type": ["jagdschein", "jagdkarte", "revierbescheinigung", "gewerbe"],"language_code": ["de", "en", "cs", "pl"],"listing_direction": ["offer", "wanted"],"listing_kind": ["lease", "permit", "driven_hunt", "trophy_hunt", "helper"],"listing_status": ["draft", "pending_review", "active", "paused", "expired", "rejected", "removed"],"price_unit": ["total", "per_year", "per_hectare_year", "per_day", "per_animal", "on_request"],"region_level": ["state", "district"],"report_reason": ["scam", "illegal", "weapons", "harassment", "wrong_category", "other"],"report_status": ["open", "handled"],"report_target": ["listing", "message", "profile"],"verification_request_status": ["pending", "verified", "rejected"],"verification_status": ["none", "pending", "verified", "rejected"]
+            "account_type": ["private", "business"],"client_source": ["web", "ios"],"country_code": ["DE", "AT", "CH", "CZ", "PL"],"currency_code": ["EUR", "CHF", "CZK", "PLN"],"device_platform": ["ios"],"document_type": ["jagdschein", "jagdkarte", "revierbescheinigung", "gewerbe"],"language_code": ["de", "en", "cs", "pl"],"legal_document": ["terms", "privacy"],"listing_direction": ["offer", "wanted"],"listing_kind": ["lease", "permit", "driven_hunt", "trophy_hunt", "helper"],"listing_status": ["draft", "pending_review", "active", "paused", "expired", "rejected", "removed"],"price_unit": ["total", "per_year", "per_hectare_year", "per_day", "per_animal", "on_request"],"region_level": ["state", "district"],"report_reason": ["scam", "illegal", "weapons", "harassment", "wrong_category", "other"],"report_status": ["open", "handled"],"report_target": ["listing", "message", "profile"],"verification_request_status": ["pending", "verified", "rejected"],"verification_status": ["none", "pending", "verified", "rejected"]
           }
         }
 } as const

@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(25);
+select plan(29);
 
 select tests.create_user('a@test.local', 'Anna') as a_id \gset
 select tests.create_user('b@test.local', 'Bernd') as b_id \gset
@@ -95,6 +95,16 @@ insert into auth.users (id, instance_id, aud, role, email)
 values ('22222222-2222-2222-2222-222222222222', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'max.mustermann@test.local');
 select is((select display_name from profiles where user_id = '22222222-2222-2222-2222-222222222222'), 'Nutzer',
   'Fallback-Name verrät nichts aus der E-Mail-Adresse');
+
+-- Onboarding/Profilformular (M2): Kontotyp und Firmenname
+select tests.authenticate_as(:'a_id');
+select throws_ok($$ update profiles set business_name = 'Forst GmbH' $$, '23514', null, 'Firmenname nur bei gewerblichem Konto');
+update profiles set account_type = 'business', business_name = 'Forst GmbH', country = 'AT', preferred_language = 'en';
+select results_eq($$ select account_type::text, business_name, country::text, preferred_language::text from profiles $$,
+  $$ values ('business', 'Forst GmbH', 'AT', 'en') $$, 'A wird gewerblich mit Firmenname, Land und Sprache');
+select throws_ok($$ update profiles set account_type = 'private' $$, '23514', null, 'Wechsel auf privat ohne Leeren des Firmennamens schlägt fehl');
+update profiles set account_type = 'private', business_name = null;
+select is((select account_type::text from profiles), 'private', 'Wechsel auf privat mit Leeren des Firmennamens');
 
 select * from finish();
 rollback;

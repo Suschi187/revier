@@ -43,6 +43,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `verifications.reviewed_by → profiles` | set null |
 | `reviews.*_id` → conversations/profiles | cascade |
 | `devices.user_id → profiles` | cascade |
+| `legal_acceptances.user_id → profiles` | cascade (M2; Aufbewahrung des Zustimmungsnachweises nach Löschung rechtlich prüfen) |
 | `audit_log.actor_id → profiles` | set null |
 
 Löscht ein Besitzer nur eine Anzeige, bleiben die Chats für beide Seiten erhalten, angezeigt als „Anzeige gelöscht“. Gesperrte Nutzer können keine Anzeigen löschen, und Admins entfernen Anzeigen über den Status `removed` (auditiert) statt per DELETE.
