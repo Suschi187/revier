@@ -45,6 +45,16 @@ export async function createSignedInUser(
   return { id: created.data.user.id, email, token: verified.data.session.access_token, client };
 }
 
+/** Stimmt den aktuellen Rechtstexten zu (Legal-Gate beim Inserieren, ab M3). */
+export async function acceptLegal(client: SupabaseClient): Promise<void> {
+  const legal = await client.rpc("legal_status").single<{ terms_version: string; privacy_version: string }>();
+  if (legal.error || !legal.data) throw legal.error ?? new Error("legal_status");
+  const accepted = await client.rpc("accept_legal", {
+    p_terms_version: legal.data.terms_version, p_privacy_version: legal.data.privacy_version, p_source: "web",
+  });
+  if (accepted.error) throw accepted.error;
+}
+
 /**
  * Löscht Testkonten (cascade) und deren Audit-Einträge. Audit-Zeilen bleiben bei echten
  * Löschungen pseudonymisiert erhalten (ADR 008); Testreste würden aber die globalen Zählungen

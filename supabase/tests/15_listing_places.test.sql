@@ -6,7 +6,7 @@ select plan(33);
 select tests.create_user('owner@test.local') as a_id \gset
 select tests.create_user('fremd@test.local') as b_id \gset
 select tests.create_user('admin@test.local') as adm \gset
-select tests.create_user('ohne-zustimmung@test.local') as c_id \gset
+select tests.create_user('ohne-zustimmung@test.local', accepted => false) as c_id \gset
 select tests.make_admin(:'adm');
 select id as muenchen from regions where code = 'DE-09162' \gset
 select id as miesbach from regions where code = 'DE-09182' \gset
@@ -119,9 +119,11 @@ update listing_places set postal_code = '80333' where listing_id = :'la';
 select is((select status::text from listings where id = :'la'), 'pending_review', 'Admin-Besitzer: Ort geändert → pending_review');
 
 -- Ohne Zustimmung zu den Rechtstexten: RV001.
+-- Die Anzeige legt der Server an, weil das Anlegen selbst schon RV001 ergibt (17_listing_rules).
+select tests.as_postgres();
+insert into listings (owner_id, kind, direction, title, content_language, region_id)
+values (:'c_id', 'lease', 'offer', 'Ohne Zustimmung', 'de', :'muenchen') returning id as lc \gset
 select tests.authenticate_as(:'c_id');
-insert into listings (kind, direction, title, content_language, region_id)
-values ('lease', 'offer', 'Ohne Zustimmung', 'de', :'muenchen') returning id as lc \gset
 select throws_ok(format($$ select set_listing_location(%L, %L, '80331', 'München') $$, :'lc', :'muenchen'),
   'RV001', null, 'Ohne Zustimmung: RV001');
 
@@ -139,10 +141,11 @@ select is((select count(*)::int from listing_places where listing_id = :'w'), 0,
 
 -- Kein Such-Orakel (Review Plan M3 PLZ 2): nur diese Funktionen und keine View verwenden listing_places.
 select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-    where n.nspname not in ('pg_catalog', 'information_schema') and p.prosrc ~ 'listing_places'
+    where n.nspname not in ('pg_catalog', 'information_schema', 'tests') and p.prosrc ~ 'listing_places'
   union all select schemaname || '.' || viewname from pg_views where definition ~ 'listing_places' $$,
-  array['private.listing_children_guard', 'public.set_listing_location'],
-  'Nur Guard und RPC verwenden listing_places (Allowlist; Trigger-Funktionen der Tabelle lesen nur NEW)');
+  array['private.listing_children_guard', 'private.listing_content_hash', 'private.listing_readiness',
+        'public.set_listing_location'],
+  'Nur Guard, Bereitschaft, Freigabe-Hash und RPC verwenden listing_places (Allowlist; Trigger der Tabelle lesen nur NEW)');
 
 select * from finish();
 rollback;

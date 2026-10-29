@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { fixture, SKIPPED } from "./context";
-import { anonClient, createSignedInUser, deleteUsers, jpeg, rest, serviceClient, userClient } from "./helpers";
+import { acceptLegal, anonClient, createSignedInUser, deleteUsers, jpeg, rest, serviceClient, userClient } from "./helpers";
 import type { TestUser } from "./types";
 
 // Fotozeilen, Eingang und Tageslimit über die echte API (ADR 011, Migration listing_photo_processing,
@@ -135,6 +135,7 @@ describe.skipIf(!f)("Fotos: Tageslimit 100 (RV002)", () => {
 
   beforeAll(async () => {
     d = await createSignedInUser(fx, "photolimit");
+    await acceptLegal(d.client);
     for (let i = 0; i < 13; i++) {
       const res = await d.client
         .from("listings")

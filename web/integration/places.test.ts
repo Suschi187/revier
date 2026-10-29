@@ -1,6 +1,6 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { fixture, SKIPPED } from "./context";
-import { anonClient, exactCount, rest, serviceClient, userClient } from "./helpers";
+import { anonClient, exactCount, rest, userClient } from "./helpers";
 
 // PLZ und Ort je Anzeige über die echte API (ADR 012, Review Plan M3 PLZ 1–2): nie öffentlich,
 // auch nicht über Embedding, Filter oder Zählungen; öffentlich ist nur postal_prefix.
@@ -10,19 +10,9 @@ const f = fixture();
 describe.skipIf(!f)("Ort der Anzeige: listing_places per PostgREST", () => {
   const fx = f ?? SKIPPED;
   const { a, b } = fx.users;
+  // Ort der freigegebenen Anzeige von B aus dem globalen Setup
   const postalCode = "01067";
-  const placeName = "Dresden-Altstadt";
-
-  beforeAll(async () => {
-    // Als Server, damit die freigegebene Anzeige von B aktiv bleibt.
-    const res = await serviceClient(fx).from("listing_places").insert({ listing_id: fx.ids.activeB, postal_code: postalCode, place_name: placeName });
-    expect(res.error).toBeNull();
-  });
-
-  afterAll(async () => {
-    await serviceClient(fx).from("listing_places").delete().eq("listing_id", fx.ids.activeB);
-    await serviceClient(fx).from("listings").update({ postal_prefix: null }).eq("id", fx.ids.activeB);
-  });
+  const placeName = "Dresden";
 
   it("anon sieht nur das Präfix, Embedding von listing_places verrät nichts", async () => {
     const listing = await anonClient(fx).from("listings").select("id, postal_prefix").eq("id", fx.ids.activeB).single<{ postal_prefix: string }>();

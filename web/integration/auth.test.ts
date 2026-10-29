@@ -1,7 +1,7 @@
 import { createHmac } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 import { fixture, SKIPPED } from "./context";
-import { anonClient, createSignedInUser, deleteUsers, exactCount, rest, serviceClient, uniqueEmail } from "./helpers";
+import { acceptLegal, anonClient, createSignedInUser, deleteUsers, exactCount, rest, serviceClient, uniqueEmail } from "./helpers";
 
 // Supabase Auth über die echte API (ADR 009/010): anon und fremde Nutzer, gefälschte Tokens,
 // keine Rechteausweitung über user_metadata, gesperrte Konten. Bekannte Lücken (QA-Bericht M2)
@@ -111,9 +111,11 @@ describe.skipIf(!f)("Auth: Session und Rechte", () => {
     const admin = serviceClient(fx);
     const e = await createSignedInUser(fx, "blocked");
     created.push(e.id);
+    await acceptLegal(e.client);
+    // Entwurf anlegen, Freigabe durch den Server (Pflichtfelder prüft listings.test.ts)
     const listing = await e.client
       .from("listings")
-      .insert({ kind: "helper", direction: "offer", title: "Anzeige gesperrt", content_language: "de", region_id: fx.ids.district, status: "pending_review" })
+      .insert({ kind: "helper", direction: "offer", title: "Anzeige gesperrt", content_language: "de", region_id: fx.ids.district })
       .select("id")
       .single<{ id: string }>();
     expect(listing.error).toBeNull();

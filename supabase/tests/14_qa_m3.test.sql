@@ -2,9 +2,7 @@ begin;
 \ir _helpers.psql
 select plan(4);
 
--- QA M3 Zwischenstand (docs/QA-REPORT.md): offene Funde als TODO-Tests mit dem Soll-Verhalten.
--- TODO-Tests schlagen den Lauf nicht fehl; nach der Behebung meldet pg_prove sie als „unexpectedly
--- succeeded“, dann todo_start/todo_end entfernen.
+-- QA M3 Zwischenstand (docs/QA-REPORT.md): Funde als Tests mit dem Soll-Verhalten (alle behoben).
 
 select tests.create_user('owner-admin@test.local') as adm \gset
 select tests.make_admin(:'adm');
@@ -27,7 +25,7 @@ select tests.as_postgres();
 update listings set status = 'active' where id = :'l';
 select tests.authenticate_as(:'adm', 'aal2');
 
-select todo_start('QA M3 F1: Admin-Besitzer umgeht die Prüfung (Vier-Augen-Prinzip)');
+-- QA M3 F1, behoben in Commit 6 (listing_rules): Admin an der eigenen Anzeige = Besitzer.
 insert into listing_photos (listing_id, sort_order) values (:'l', 1);
 select is((select status::text from listings where id = :'l'), 'pending_review',
   'Admin mit 2FA: neues Foto an eigener aktiver Anzeige → pending_review');
@@ -40,7 +38,6 @@ select is((select status::text from listings where id = :'l'), 'pending_review',
 update listings set title = 'Eigene Anzeige, ungeprüft umgeschrieben' where id = :'l';
 select is((select status::text from listings where id = :'l'), 'pending_review',
   'Admin mit 2FA: Titel der eigenen aktiven Anzeige → pending_review');
-select todo_end();
 
 -- F4 erledigt durch Korrektur von ADR 006 und den Meta-Test in 12_location (Grant nicht entziehbar).
 

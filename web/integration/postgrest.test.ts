@@ -121,7 +121,7 @@ describe.skipIf(!f)("PostgREST: Embeddings auf fremde und private Daten", () => 
     expect((await rest(fx, "verifications?select=*", { token: a.token })).status).toBe(403);
     expect(await json(await rest(fx, "verifications?select=id,user_id,document_path", { token: c.token }))).toEqual([]);
     expect(await json(await rest(fx, `verifications?select=id&id=eq.${fx.ids.verificationA}`, { token: c.token }))).toEqual([]);
-    expect(await json(await rest(fx, "legal_acceptances?select=*", { token: c.token }))).toEqual([]);
+    expect(await json(await rest(fx, `legal_acceptances?select=*&user_id=neq.${c.id}`, { token: c.token }))).toEqual([]);
     expect(await json(await rest(fx, `legal_acceptances?user_id=eq.${a.id}`, { token: b.token }))).toEqual([]);
     // Positivkontrolle
     const own = (await json(await rest(fx, "legal_acceptances?select=document,source", { token: a.token }))) as unknown[];

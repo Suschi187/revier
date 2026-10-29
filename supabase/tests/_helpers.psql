@@ -5,7 +5,8 @@ create extension if not exists pgtap with schema extensions;
 create schema if not exists tests;
 
 -- Legt einen Nutzer in auth.users an; der Profil-Trigger (ab M1 Schritt 3) erzeugt das Profil.
-create or replace function tests.create_user(email text, display_name text default null)
+-- `accepted`: hat den aktuellen Rechtstexten zugestimmt (Legal-Gate ab M3); false für Tests ohne Zustimmung.
+create or replace function tests.create_user(email text, display_name text default null, accepted boolean default true)
 returns uuid
 language plpgsql
 as $$
@@ -20,7 +21,41 @@ begin
   -- Der Trigger setzt nur den Platzhalter (Review M2); Testnamen direkt setzen.
   update public.profiles p set display_name = coalesce(create_user.display_name, split_part(email, '@', 1))
   where p.user_id = new_id;
+  if accepted then
+    insert into public.legal_acceptances (user_id, document, version, source) values
+      (new_id, 'terms', private.setting_text('legal_terms_version'), 'web'),
+      (new_id, 'privacy', private.setting_text('legal_privacy_version'), 'web');
+  end if;
   return new_id;
+end;
+$$;
+
+-- Füllt eine Anzeige so, dass sie die Bereitschaftsprüfung besteht (Plan M3 6): Beschreibung, Pflicht-
+-- attribute je Art, Fläche, Wildart, Ort mit einer PLZ des Kreises. Als postgres aufrufen (Server-Pfad).
+create or replace function tests.make_ready(listing uuid)
+returns void
+language plpgsql
+as $$
+declare
+  l public.listings;
+  code text;
+begin
+  select * into l from public.listings where id = listing;
+  update public.listings set
+    description = 'Beschreibung mit mehr als dreißig Zeichen für die Prüfung.',
+    area_hectares = case when l.kind = 'lease' then 250 else area_hectares end,
+    attributes = case l.kind
+      when 'lease' then '{"lease_type": "genossenschaft", "revier_type": ["wald"]}'::jsonb
+      when 'permit' then '{"permit_scope": "selbststaendig", "paid": true}'::jsonb
+      when 'driven_hunt' then jsonb_build_object('event_date', to_char(current_date + 30, 'YYYY-MM-DD'), 'spots_available', 5)
+      when 'trophy_hunt' then '{"legal_ack": true}'::jsonb
+      else '{"tasks": ["Ansitz"]}'::jsonb
+    end
+  where id = listing;
+  insert into public.listing_species (listing_id, species_code) values (listing, 'roe_deer') on conflict do nothing;
+  select r.code into code from public.postal_code_regions r where r.region_id = l.region_id order by r.code limit 1;
+  insert into public.listing_places (listing_id, postal_code, place_name) values (listing, code, 'Testort')
+  on conflict (listing_id) do update set postal_code = excluded.postal_code, place_name = excluded.place_name;
 end;
 $$;
 

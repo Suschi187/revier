@@ -724,7 +724,7 @@ Die drei Teil-Commits tragen. Keine Lücke erlaubt Dritten, den Eingabepunkt, de
 ### Nachtrag 2026-10-29: Stand der Behebung (QA M3 Zwischenstand)
 | Fund | Stand | Commit |
 |---|---|---|
-| F1: Admin-Besitzer umgeht die Prüfung | offen, mit Commit 6 (Guard neu, A1); TODO-Tests in `14_qa_m3` | – |
+| F1: Admin-Besitzer umgeht die Prüfung | behoben: Admin an der eigenen Anzeige = Besitzer in Guard und Kinder-Guard (Migration `listing_rules`, ADR 013); TODO-Tests in `14_qa_m3` sind jetzt reguläre Tests, Statusmatrix als Admin-Besitzer in `17_listing_rules` | (Commit 6) |
 | F2: Notiztexte als Ortsnamen | behoben: Gemeindenamen aus VG250 als Hauptquelle, OSM-Namen bereinigt, Abbruch bei verdächtigen Namen, pgTAP `13_postal_codes` | d978eea |
 | F3: Arbeitskopie mit Cloud-Projekt verlinkt | behoben: Link-Datei gelöscht, Teil-Ref aus dem Bericht entfernt. Ursache: `supabase functions list --project-ref …` im Repo-Ordner. CLI-Befehle gegen die Cloud laufen künftig nur außerhalb des Repos. | – |
 | F4: `service_role` liest das Standort-Secret | Grant von `supabase_admin`, per Migration nicht entziehbar. ADR 006 korrigiert, Restrisiko benannt; Meta-Test in `12_location`: nur die Verfremdungsfunktion verwendet `vault` | (dieser Commit) |

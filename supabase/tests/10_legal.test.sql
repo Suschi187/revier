@@ -2,9 +2,9 @@ begin;
 \ir _helpers.psql
 select plan(25);
 
-select tests.create_user('a@test.local') as a_id \gset
-select tests.create_user('b@test.local') as b_id \gset
-select tests.create_user('admin@test.local') as admin_id \gset
+select tests.create_user('a@test.local', accepted => false) as a_id \gset
+select tests.create_user('b@test.local', accepted => false) as b_id \gset
+select tests.create_user('admin@test.local', accepted => false) as admin_id \gset
 select tests.make_admin(:'admin_id');
 
 -- Ausgangslage: keine Zustimmung

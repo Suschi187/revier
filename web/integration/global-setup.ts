@@ -1,7 +1,7 @@
 import type { TestProject } from "vitest/node";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isReachable, readLocalSupabase } from "./env";
-import { createSignedInUser, deleteUsers, jpeg, serviceClient, type Conn } from "./helpers";
+import { acceptLegal, createSignedInUser, deleteUsers, jpeg, serviceClient, type Conn } from "./helpers";
 import type { Fixture } from "./types";
 
 // Baut einmal je Lauf drei Nutzer und deren Daten auf (wenige verifyOtp-Aufrufe wegen des
@@ -40,6 +40,9 @@ export default async function setup(project: TestProject) {
     ]);
     createdIds.push(a.id, b.id, c.id);
 
+    // Alle drei stimmen den aktuellen Rechtstexten zu (Legal-Gate beim Inserieren, ab M3 Commit 6).
+    await Promise.all([a, b, c].map((user) => acceptLegal(user.client)));
+
     const district = must(
       await admin.from("regions").select("id").eq("code", "DE-14612").single<{ id: string }>(),
       "Region",
@@ -66,22 +69,26 @@ export default async function setup(project: TestProject) {
       "Verifizierung A",
     ).id;
 
-    // A: aktuelle Rechtstexte akzeptiert (Nachweise in legal_acceptances)
-    const legal = must(await a.client.rpc("legal_status").single<{ terms_version: string; privacy_version: string }>(), "legal_status");
-    must(
-      await a.client.rpc("accept_legal", { p_terms_version: legal.terms_version, p_privacy_version: legal.privacy_version, p_source: "web" }).then((r) => ({ ...r, data: r.error ? null : true })),
-      "accept_legal",
-    );
-
     // B: Anzeige mit Foto, eingereicht und vom Server freigegeben
     const activeB = must(
       await b.client
         .from("listings")
-        .insert({ kind: "permit", direction: "offer", title: "Begehungsschein B", content_language: "de", region_id: district })
+        .insert({
+          kind: "permit", direction: "offer", title: "Begehungsschein B", content_language: "de", region_id: district,
+          description: "Begehungsschein im Revier bei Dresden, Rehwild und Schwarzwild.",
+          attributes: { permit_scope: "selbststaendig", paid: true },
+        })
         .select("id")
         .single<{ id: string }>(),
       "Anzeige B",
     ).id;
+    // Pflichtangaben für das Absenden (Plan M3 6): Wildart und Ort mit PLZ des Kreises.
+    must(await b.client.from("listing_species").insert({ listing_id: activeB, species_code: "roe_deer" }).select(), "Wildart B");
+    must(
+      await b.client.rpc("set_listing_location", { p_listing_id: activeB, p_region_id: district, p_postal_code: "01067", p_place_name: "Dresden" })
+        .then((r) => ({ ...r, data: r.error ? null : true })),
+      "Ort B",
+    );
     const activePhotoB = await processedPhoto(b.client, activeB, jpeg(3));
     must(await b.client.from("listings").update({ status: "pending_review" }).eq("id", activeB).select(), "Anzeige B einreichen");
     must(
@@ -112,6 +119,8 @@ export default async function setup(project: TestProject) {
     };
     project.provide("supabaseFixture", fixture);
   } catch (error) {
+    // Vitest kann Fehler aus dem globalen Setup nicht immer ausgeben (Stacktrace-Mapping); Text sichern.
+    console.error(`[integration] ${error instanceof Error ? error.message : String(error)}`);
     await cleanup();
     throw error;
   }
