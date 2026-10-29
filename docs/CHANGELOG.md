@@ -2,6 +2,51 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M1 Datenbank und Sicherheit – 2026-10-29
+
+### Geändert
+- SPEC v0.3 mit den Entscheidungen zu Startregion (7.4), Retention (7.3) und Pausieren/Fortsetzen (3.4); ADRs 005–009
+- 9 Migrationen unter `supabase/migrations/`:
+  - Fundament: Enums, Schema `private`, Admin-Rolle mit 2FA, Access Token Hook, `app_settings`
+  - `profiles` mit `public_profiles`
+  - Regionen DE/AT (16 + 401, 9 + 94) und 14 Wildarten
+  - Anzeigen mit Statuslogik, Standortverfremdung, Fotos und Wildarten
+  - Favoriten und Suchaufträge
+  - Chat und Blockieren
+  - Meldungen, Verifizierungen, Bewertungen (gesperrt), Geräte, Audit-Log
+  - Storage-Buckets mit Policies
+- `supabase/data/regions/`: Generator, Quellen und Lizenzen
+- 170 pgTAP-Tests unter `supabase/tests/`, dazu ein Meta-Test: jede Tabelle hat RLS und eine Policy, `private` ist gesperrt
+- CI `supabase.yml`: `db reset`, `test db`, Prüfung der generierten Typen, `db lint`
+- `web/lib/supabase/database.types.ts` (`npm run gen:types`), Server-Client typisiert
+
+### Wie testen
+```sh
+supabase stop && supabase start      # Neustart nötig: config.toml (Hook, auto_expose) wurde geändert
+supabase db reset                    # alle Migrationen inkl. Regionendaten
+supabase test db                     # 170 Tests
+supabase db lint -s public,private --level warning
+cd web && npm run gen:types && git diff --exit-code lib/supabase/database.types.ts
+```
+
+### Akzeptanz
+- [x] Nutzer A liest keine Nachrichten von B (`06_chat_blocks`)
+- [x] Nutzer A liest keine Verifizierungsdokumente von B, weder in der Tabelle (`07_trust_audit`) noch im Bucket (`08_storage`, zusätzlich über die Storage-API geprüft)
+- [x] Nutzer A liest keine Entwürfe von B (`04_listings`)
+- [x] Migrationen für alle Tabellen aus SPEC 3, Enums, Indizes, Regionen DE/AT und Wildarten
+- [x] RLS-Policies mit automatisierten Tests
+
+### Bekannte Lücken
+- Rechtlich zu prüfen: Retention-Fristen und Löschregeln sind Platzhalter (ADR 008, SPEC 7.2/7.3).
+- Die Lösch- und Retention-Jobs fehlen noch (M9). Gelöschte Datensätze hinterlassen bis dahin Dateien in Storage.
+- `attributes` wird in M1 nur auf seine Form geprüft. Pflichtfelder je Anzeigenart folgen in M3.
+- Für TOTP-2FA braucht es in M4 noch `enroll`/`verify`. In M1 wird `aal2` nur in Tests simuliert.
+- Rate-Limits und Spam-Erkennung für Nachrichten fehlen noch (M7). Meldungen sind auf 20 pro 24 h begrenzt.
+- cs/pl-Namen (Wildarten, Länder) sind ungeprüft (SPEC 7.6).
+- Die Seite „Datenquellen“ mit den Pflichtvermerken BKG und Statistik Austria fehlt noch (M5/M9).
+- In der Cloud müssen Hook, `auto_expose_new_tables = false` und die Buckets in M2 ebenso eingerichtet werden.
+- Die CI ist noch nicht gelaufen, weil das GitHub-Remote fehlt.
+
 ## M0 Fundament – abgeschlossen 2026-10-29
 
 ### Geändert
