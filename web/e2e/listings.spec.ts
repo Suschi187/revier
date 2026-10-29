@@ -144,3 +144,39 @@ test("Waffenbegriffe: deutlicher Hinweis in der Vorschau, Absenden bleibt mögli
   await page.getByRole("button", { name: "Zur Prüfung absenden" }).click();
   await expect(page).toHaveURL("/de/account/listings?notice=submitted");
 });
+
+// Die übrigen vier Arten per Pflichtfeld-Prüfung (Plan M3 Commit 13): Die Vorschau nennt genau die
+// fehlenden Angaben der Art, mit Link zum Schritt.
+const KIND_CASES = [
+  { kind: "Begehungsschein", missing: ["Bitte wähle den Umfang des Begehungsscheins.", "Bitte gib an, ob der Begehungsschein entgeltlich ist.", "Bitte wähle mindestens eine Wildart."] },
+  { kind: "Gesellschaftsjagd", missing: ["Bitte gib das Datum der Jagd an.", "Bitte gib die Zahl der freien Plätze an (1 bis 500)."] },
+  { kind: "Trophäen-/Gastjagd", missing: ["Bitte bestätige, dass du die rechtlichen Voraussetzungen kennst.", "Bitte wähle mindestens eine Wildart."] },
+  { kind: "Jagdhelfer/Mitjäger", missing: ["Bitte nenne mindestens eine Aufgabe."] },
+];
+
+test("Pflichtfelder je Art: Vorschau nennt, was fehlt", async ({ page }) => {
+  await signUp(page, "Arten Test");
+  for (const { kind, missing } of KIND_CASES) {
+    await page.goto("/de/account/listings/new");
+    await page.getByLabel(kind).check();
+    await page.getByLabel("Angebot", { exact: true }).check();
+    await page.getByLabel("Titel").fill(`${kind} bei Dresden`);
+    await page.getByLabel("Landkreis bzw. Bezirk").selectOption({ label: "Dresden" });
+    await page.getByRole("button", { name: "Entwurf anlegen" }).click();
+    await expect(page.getByText("Schritt 2 von 6")).toBeVisible();
+    await page.getByLabel("PLZ des Reviers").fill("01067");
+    await page.getByLabel("Ort des Reviers").fill("Dresden");
+    await page.getByRole("button", { name: "Speichern und weiter" }).click();
+    await expect(page.getByText("Schritt 3 von 6")).toBeVisible();
+    await page.getByLabel("Beschreibung").fill(`Ausführliche Beschreibung für ${kind}, mehr als dreißig Zeichen.`);
+    await page.getByRole("button", { name: "Speichern und weiter" }).click();
+    await expect(page.getByText("Schritt 4 von 6")).toBeVisible();
+    await page.getByRole("link", { name: /Vorschau und Absenden/ }).click();
+
+    const section = page.getByRole("region", { name: "Vor dem Absenden fehlt noch:" });
+    await expect(section.getByRole("listitem")).toHaveText(missing);
+    // Absenden ist trotzdem möglich zu versuchen; die DB lehnt mit denselben Feldcodes ab.
+    await page.getByRole("button", { name: "Zur Prüfung absenden" }).click();
+    await expect(page.getByRole("alert").getByRole("listitem")).toHaveCount(missing.length);
+  }
+});
