@@ -2,6 +2,72 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M3 Anzeigen erstellen (Web) – 2026-10-30
+
+### Geändert
+- **Doku:** Plan `docs/plans/M3-plan.md` mit Architekt-Reviews; ADR 006 (Standortverfremdung v2), ADR 011 (Fotoverarbeitung), ADR 012 (Postleitzahlen), ADR 013 (Anzeigenregeln, Vertrag für Web und iOS); SPEC 3.3 und 7; Glossar (Arten, Richtungen, Status)
+- **Migrationen:**
+  - `listing_location_v2`: verfremdeter Punkt je Besitzer und Kreis (HMAC, Secret im Vault, Fingerprint)
+  - `listing_photo_processing`, `photo_processing_function`: privater Eingang nur für JPEG, verarbeitete Bilder nur vom Server, Tageslimit, höchstens 3 Verarbeitungsversuche
+  - `postal_codes`, `postal_codes_data`: PLZ DE (OpenStreetMap, VG250) und AT (Statistik Austria), Generator mit Prüfsummen unter `supabase/data/postal_codes/`
+  - `listing_places`: PLZ und Ort je Anzeige, nie öffentlich; öffentlich nur `postal_prefix`; RPC `set_listing_location`
+  - `listing_rules`: Attribute je Art, Preisgrenzen, Bereitschaftsprüfung am Ende der Transaktion, Legal-Gate `RV001`, Rate-Limit `RV002` (3 bzw. 10 in 24 h), Freigabe-Hash, Admin an der eigenen Anzeige = Besitzer
+  - `listing_content_hints`: Hinweis auf Waffen- und Munitionsbegriffe in 4 Sprachen
+  - `reorder_listing_photos`: Reihenfolge der Fotos in einem Schritt
+- **Edge Function `process-listing-photo`:**
+  - vendored JPEG-Codec aus imagescript 1.3.0
+  - strenger Header-Parser, Grenzen 8 MP Baseline und 5 MP progressiv
+  - entfernt alle Metadaten, `deno.lock`, CI-Job `functions`
+- **Web:**
+  - „Meine Anzeigen“ (`/account/listings`) mit Status, Ablehnungsgrund, Zurückziehen, Pausieren, Fortsetzen und Entwurf löschen
+  - Assistent `/account/listings/new` und `/[id]/edit` mit 6 Schritten: Grunddaten, Ort, Details, Fotos, Preis und Zeitraum, Vorschau und Absenden
+  - Fotos werden im Browser nach JPEG gewandelt und verkleinert; HEIC wird abgelehnt
+  - Services `listings`, `regions`, `photos`; Zod-Regeln mit gemeinsamen Fixtures (`supabase/tests/fixtures/listing_rules.json`); Preisumrechnung ohne Gleitkomma
+- `supabase/seed.sql` hebt das Anzeigen-Limit nur lokal an (API- und E2E-Tests)
+- **Neue Abhängigkeiten,** nur in der Edge Function:
+  - JPEG-Codec (WASM) aus imagescript 1.3.0, vendored, MIT
+  - `@supabase/supabase-js` 2.117.3
+  - Begründung in ADR 011
+- Im Web keine neuen Abhängigkeiten.
+
+### Wie testen
+```sh
+supabase stop && supabase start      # Neustart nötig: config.toml (Edge Function) geändert
+supabase db reset && supabase test db   # 410 Tests
+# Deno-Tests der Function (Deno aus Docker, keine Installation nötig)
+docker run --rm -v "$PWD/supabase/functions:/fn" -w /fn/process-listing-photo denoland/deno:2.1.4 \
+  sh -c "deno task check && deno lint && deno task test"   # 24 Tests
+cd web
+npm run lint && npm run typecheck && npm test   # 143 Vitest-Tests
+npm run test:integration             # 104 API-Tests, u. a. Fotoverarbeitung, Regeln, Parität DB/Zod
+npm run test:e2e                     # 10 Kernflows, davon 3 Inserieren
+```
+Manuell: `npm run dev`, anmelden, „Mein Konto“ → „Meine Anzeigen“ → „Anzeige aufgeben“. Freigeben kann nur die Moderation, ab M4 im Admin-Bereich. Bis dahin geht es lokal so: `update listings set status = 'active', expires_at = now() + interval '30 days' where id = '…'` in Studio.
+
+### Akzeptanz
+- [x] Assistent für alle 5 Arten (E2E: Pacht vollständig mit Foto, die anderen 4 über die Pflichtfeld-Prüfung)
+- [x] Foto-Upload: Verkleinerung im Browser, höchstens 8 Fotos, Metadaten serverseitig entfernt (Deno-Tests, `photo-processing.test.ts`, E2E mit GPS-Fixture)
+- [x] Preisfeld mit Währung, Umrechnung in `price_minor` ohne Gleitkomma (Vitest, Grenzen wie in der DB)
+- [x] Entwurf wird nach jedem Schritt gespeichert; Absenden setzt `pending_review` (E2E, `listings.test.ts`)
+- [x] Anzeige erscheint in „Meine Anzeigen“ mit Status, ohne Aktion zum Freischalten (E2E)
+- [x] Pflichtfelder je Art werden validiert: in DB und Zod mit denselben Feldcodes (`17_listing_rules`, `listing-rules-parity.test.ts`, E2E)
+- [x] Pflichtpunkte des Plans: Standort nicht herausmittelbar (`12_location`, `location.test.ts`); der Nutzer setzt nie selbst `active` (Statusmatrix in `17_listing_rules`, `listings.test.ts`)
+- [x] Texte in 4 Sprachen. cs/pl sind ungeprüft (Glossar).
+
+### Bekannte Lücken
+- **iOS (I4):** Inserieren fehlt in der App. Der Vertrag steht in ADR 011, 012 und 013.
+- **Freigabe:** Der Admin-Bereich folgt in M4. Dort kommen auch die Moderations-Detailansicht mit PLZ und die Markierung über die Waffenbegriffe.
+- **Fotoverarbeitung in der Cloud:** Die Messung in eu-central-1 steht noch aus (Spike-Auflage 3). Sie ist Blocker für den Go-live.
+- **Aufräumjob (M9):**
+  - verwaiste Eingangsdateien nach Abbrüchen
+  - Dateien ohne Zeile
+  - Entwürfe nach 12 Monaten Inaktivität, mit Hinweis vorab (SPEC 7.3)
+- **Seite „Datenquellen“** mit ODbL-Download der PLZ-Tabelle folgt mit M5/M9. Die Namensnennung steht bereits am PLZ-Feld.
+- **Karte:** M3 nutzt nur den Kreis. Die Verfremdung des Punkts ist gebaut und getestet, eine Kartenauswahl gibt es noch nicht (SPEC 7.10).
+- **Märkte CH, CZ, PL:** Dort gibt es noch keine Kreise und PLZ, deshalb ist das Inserieren nur in DE und AT möglich.
+- **Ohne JavaScript:** Fotos lassen sich nur mit JavaScript hochladen. Alle anderen Schritte gehen ohne.
+- **Pflichtangaben je Art:** Der Anwalt prüft sie noch (SPEC 7.2).
+
 ## M2 Auth und Profil (Web) – 2026-10-29
 
 ### Geändert
