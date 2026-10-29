@@ -1,0 +1,40 @@
+begin;
+\ir _helpers.psql
+select plan(4);
+
+-- Jede Tabelle in public hat RLS (CLAUDE.md: keine Tabelle ohne Policy).
+select is(
+  array(select c.relname::text from pg_class c join pg_namespace n on n.oid = c.relnamespace
+        where n.nspname = 'public' and c.relkind in ('r', 'p') and not c.relrowsecurity order by 1),
+  array[]::text[],
+  'Alle Tabellen in public haben RLS aktiv'
+);
+
+select is(
+  array(select c.relname::text from pg_class c join pg_namespace n on n.oid = c.relnamespace
+        where n.nspname = 'public' and c.relkind in ('r', 'p')
+          and not exists (select 1 from pg_policy p where p.polrelid = c.oid) order by 1),
+  array[]::text[],
+  'Alle Tabellen in public haben mindestens eine Policy'
+);
+
+-- Tabellen in private sind für API-Rollen nicht erreichbar.
+select is(
+  array(select distinct table_name::text from information_schema.role_table_grants
+        where table_schema = 'private' and grantee in ('anon', 'authenticated') order by 1),
+  array[]::text[],
+  'Keine Tabellenrechte für anon/authenticated im Schema private'
+);
+
+-- Keine Funktion in public ist für anon/authenticated ausführbar, ohne dass sie bewusst freigegeben wurde.
+select is(
+  array(select p.proname::text from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+        where n.nspname = 'public'
+          and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
+        order by 1),
+  array[]::text[],
+  'Keine öffentlich ausführbaren Funktionen in public (RPCs werden einzeln freigegeben und hier ergänzt)'
+);
+
+select * from finish();
+rollback;
