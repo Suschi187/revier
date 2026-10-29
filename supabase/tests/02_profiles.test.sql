@@ -52,8 +52,11 @@ select throws_ok(format($$ insert into profiles (user_id, display_name) values (
 select throws_ok($$ delete from profiles $$, '42501', null, 'A löscht keine Profile direkt');
 
 -- Admin
+-- Gegen die Gesamtzahl als postgres, nicht gegen eine feste Zahl: Konten aus E2E-Läufen bleiben ohne db reset liegen (QA M2 F6).
+select tests.as_postgres();
+select count(*)::int as all_profiles from profiles \gset
 select tests.authenticate_as(:'admin_id', 'aal2');
-select is((select count(*)::int from profiles), 4, 'Admin mit 2FA liest alle Profile');
+select is((select count(*)::int from profiles), :all_profiles, 'Admin mit 2FA liest alle Profile');
 select tests.authenticate_as(:'admin_id', 'aal1');
 select is((select count(*)::int from profiles), 1, 'Admin ohne 2FA liest nur das eigene Profil');
 

@@ -93,6 +93,8 @@ jobs:
           test -n "$key"
           echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$key" >> "$GITHUB_ENV"
       - run: npm ci
+      # API-Tests gegen die lokale Supabase (ADR 009, QA M2). CI=true: Abbruch, falls Supabase fehlt.
+      - run: npm run test:integration
       - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: npm run test:e2e

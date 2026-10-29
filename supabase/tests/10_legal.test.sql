@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(24);
+select plan(25);
 
 select tests.create_user('a@test.local') as a_id \gset
 select tests.create_user('b@test.local') as b_id \gset
@@ -48,8 +48,12 @@ select throws_ok($$ select * from legal_acceptances $$, '42501', null, 'anon lie
 select throws_ok($$ select accept_legal('2026-10-draft', '2026-10-draft', 'web') $$, '42501', null, 'anon stimmt nicht zu');
 
 -- Admin nur mit 2FA
+-- Gegen die Gesamtzahl als postgres, nicht gegen eine feste Zahl: Konten aus E2E-Läufen bleiben ohne db reset liegen (QA M2 F6).
+select tests.as_postgres();
+select count(*)::int as all_acceptances from legal_acceptances \gset
 select tests.authenticate_as(:'admin_id', 'aal2');
-select is((select count(*)::int from legal_acceptances), 2, 'Admin mit 2FA liest Nachweise');
+select is((select count(*)::int from legal_acceptances), :all_acceptances, 'Admin mit 2FA liest alle Nachweise');
+select is((select count(*)::int from legal_acceptances where user_id = :'a_id'), 2, 'Admin mit 2FA sieht die Nachweise von A');
 select tests.authenticate_as(:'admin_id', 'aal1');
 select is((select count(*)::int from legal_acceptances), 0, 'Admin ohne 2FA liest keine fremden Nachweise');
 
