@@ -14,7 +14,7 @@ function loginRedirect(request: NextRequest): NextResponse {
 }
 
 // ADR 010: Session erneuern (nur mit Supabase-Cookie, anonymer Traffic bleibt schnell), dann
-// Sprachrouting. Der Schutz hier ist nur optimistisch; autoritativ prüft das Layout auf dem Server.
+// Sprachrouting. Der Schutz hier ist nur optimistisch; autoritativ prüft jede Seite und Action selbst.
 export default async function proxy(request: NextRequest) {
   const protectedPath = isProtectedPath(request.nextUrl.pathname);
 

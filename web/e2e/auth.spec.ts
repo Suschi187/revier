@@ -142,3 +142,59 @@ test("Fremde Rücksprungziele werden ignoriert", async ({ page }) => {
   await completeWelcome(page, "Sicher");
   await expect(page).toHaveURL("/de/account");
 });
+
+// ADR 010 / Review M2 (Architekt 3): Läuft das Access-Token ab, erneuert der Proxy die Session
+// und überträgt die rotierten Cookies auch auf Redirects. Sonst ginge die Session verloren,
+// weil der alte Refresh-Token nach der Rotation nicht mehr gilt.
+test("Abgelaufene Session wird im Proxy erneuert, auch auf einem Redirect", async ({ page }) => {
+  const email = uniqueEmail("refresh");
+  await page.goto("/de/login");
+  const signup = await requestMail(page, email);
+  await page.getByLabel("Anmeldecode").fill(signup.code);
+  await page.getByRole("button", { name: "Anmelden", exact: true }).click();
+  await completeWelcome(page, "Refresh");
+  await expect(page).toHaveURL("/de/account");
+
+  // Session-Cookie so verändern, dass das Access-Token als abgelaufen gilt.
+  const context = page.context();
+  const authCookies = (await context.cookies()).filter((cookie) => /^sb-.*-auth-token(\.\d+)?$/.test(cookie.name));
+  expect(authCookies.length).toBeGreaterThan(0);
+  const raw = authCookies
+    .sort((a, b) => a.name.localeCompare(b.name, "en", { numeric: true }))
+    .map((cookie) => cookie.value)
+    .join("");
+  const session = JSON.parse(Buffer.from(raw.replace(/^base64-/, ""), "base64url").toString()) as {
+    expires_at: number;
+    refresh_token: string;
+  };
+  const oldRefreshToken = session.refresh_token;
+  const baseName = authCookies[0].name.replace(/\.\d+$/, "");
+  await context.clearCookies({ name: new RegExp(`^${baseName}`) });
+  await context.addCookies([
+    {
+      ...authCookies[0],
+      name: baseName,
+      value: `base64-${Buffer.from(JSON.stringify({ ...session, expires_at: Math.floor(Date.now() / 1000) - 60 })).toString("base64url")}`,
+    },
+  ]);
+
+  // /account ohne Sprache antwortet mit einem Redirect; schon dieser trägt die neuen Cookies.
+  const redirect = await context.request.get("/account", { maxRedirects: 0 });
+  expect(redirect.status()).toBe(307);
+  const setCookies = redirect.headersArray().filter((header) => header.name.toLowerCase() === "set-cookie");
+  expect(setCookies.some((header) => header.value.startsWith(baseName))).toBe(true);
+  expect(redirect.headers()["cache-control"]).toBe("private, no-store");
+
+  // Mit den rotierten Cookies bleibt man angemeldet, der alte Refresh-Token ist verbraucht.
+  await page.goto("/de/account");
+  await expect(page.getByText(`Angemeldet als ${email}`)).toBeVisible();
+  const rotatedRaw = (await context.cookies())
+    .filter((cookie) => cookie.name.startsWith(baseName))
+    .sort((a, b) => a.name.localeCompare(b.name, "en", { numeric: true }))
+    .map((cookie) => cookie.value)
+    .join("");
+  const rotated = JSON.parse(Buffer.from(rotatedRaw.replace(/^base64-/, ""), "base64url").toString()) as {
+    refresh_token: string;
+  };
+  expect(rotated.refresh_token).not.toBe(oldRefreshToken);
+});
