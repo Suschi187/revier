@@ -154,3 +154,147 @@ M0 **abnehmen: ja, mit Auflagen.** Alle drei Akzeptanzkriterien sind erfüllt, e
 | F9 Meldung `check-supabase` | behoben | d536f22 |
 
 Hinweis für M5: Unter `cacheComponents` brauchen dynamische Seiten mit `notFound()` (z. B. Anzeigen-Detail) eine `<Suspense>`-Grenze bzw. `use cache`. Das muss beim Bau geprüft werden, damit die 404 serverseitig mit Status 404 ausgeliefert wird.
+
+## M1 – 2026-10-29
+
+Geprüfter Stand: `196e53c` (main, Arbeitsbaum sauber). Umgebung: macOS, Node 24.22.1, Supabase CLI 2.122.0 (lokal), Docker.
+Vorgehen: `supabase db reset` und `supabase test db`, danach eine unabhängige Prüfung über die echten APIs mit vier echten Nutzern (`/auth/v1/signup`, `/rest/v1`, `/storage/v1`): 170 Einzelprüfungen per Skript außerhalb des Repos, keine neuen Testdateien. Admin mit 2FA: Die lokale TOTP-Anmeldung ist abgeschaltet (`[auth.mfa.totp] enroll_enabled = false`). Deshalb wurden JWTs mit `aal1`/`aal2` mit dem lokalen JWT-Secret signiert; ein echter Login wurde zusätzlich geprüft (Hook setzt `app_role = admin`, `aal1`).
+
+### Ergebnis je Akzeptanzkriterium
+
+„Test beweist, dass Nutzer A weder Nachrichten, Verifizierungsdokumente noch Entwürfe von Nutzer B lesen kann“
+
+| # | Teil | Ergebnis | Nachweis pgTAP | Nachweis API (unabhängig) |
+|---|------|----------|----------------|---------------------------|
+| a | Nachrichten | **erfüllt** | `supabase/tests/06_chat_blocks.test.sql`: „B liest die Nachrichten von A und dem Anbieter nicht“, „B sieht die Unterhaltung nicht“, „anon liest keine Nachrichten“, „Auch Admins lesen Chats nicht pauschal“ | Fremder Nutzer A: `messages?select=*`, `messages?id=eq.<fremd>`, `messages?body=like.*geheim*`, `conversations?select=*,messages(*)`, `listings?select=id,conversations(*,messages(*))` liefern `[]`. anon: 401/42501. Schreiben in fremde Unterhaltung 403, fremde Nachricht als gelesen markieren 0 Zeilen, Textänderung 403. |
+| b | Verifizierungsdokumente | **erfüllt** | Tabelle: `07_trust_audit.test.sql` („B liest die Verifizierung von A nicht“, anon 42501, Admin aal1 0, aal2 1). Bucket: `08_storage.test.sql` („B sieht den Jagdschein von A nicht“, anon, Admin aal1/aal2, kein Upload in fremden Ordner) | B und anon: `verifications` leer bzw. 401. Storage: `object/`, `object/authenticated/`, `object/public/`, `object/info/…`, HEAD, Signed URL (einzeln und mehrfach), `list` mit Präfix `<A>` und leerem Präfix, PUT, Upsert, DELETE, `copy`/`move` in den eigenen Ordner bzw. anderen Bucket: alle abgelehnt oder leer, die Datei bleibt erhalten. Pfadtricks beim Upload (`<B>/../<A>/…`, `%2e%2e`, `%2F`, `./<A>/…`, UUID in Großbuchstaben) und beim Lesen: abgelehnt. Admin: aal1 sieht nichts, aal2 sieht Zeile und Datei, nach Entzug der Rolle sofort nichts mehr. |
+| c | Entwürfe | **erfüllt** | `04_listings.test.sql` („B liest den Entwurf von A nicht“, „anon sieht keine Entwürfe“, „A sieht die Fotos des Entwurfs von B nicht“), `08_storage.test.sql` (Entwurfsfotos für A und anon unsichtbar) | B und anon: `listings?id=eq.<Entwurf>`, `HEAD` mit `count=exact` (`*/0`), `listings?select=*,listing_photos(*),listing_species(*)`, `listing_photos`/`listing_species` des Entwurfs, Embeddings über `public_profiles→listings`, `regions→listings`, `game_species→listing_species`, Volltext `wfts(german)`: kein Entwurf. Storage-Foto des Entwurfs: GET/authenticated/public/sign/list abgelehnt bzw. leer. Existenz-Orakel über Favorit, Unterhaltung, Meldung: 42501. PATCH/DELETE durch B: 0 Zeilen. |
+
+Die Akzeptanz ist in pgTAP für alle drei Teile ausdrücklich abgedeckt. Die Storage-API-Prüfung im CHANGELOG („zusätzlich über die Storage-API geprüft“) ist nicht automatisiert, das ist nach ADR 009 für M2 geplant.
+
+### Vollständigkeit gegen SPEC 3.1 (v0.3)
+
+| Tabelle | Ergebnis | Abweichung | Dokumentiert? |
+|---------|----------|------------|---------------|
+| profiles | vollständig | – | – |
+| verifications | vollständig inkl. `decided_at`, `document_deleted_at`, `document_path` nullable | eigenes Enum `verification_request_status` (ohne `none`); `reviewed_at` und `decided_at` werden identisch gesetzt | Enum nein (nur Migration), sonst ja (SPEC 3.1, ADR 008) |
+| regions | vollständig | `unique (code)` statt `unique (country, level, code)` (strenger); Slug eindeutig je (`country`, `level`) statt „je Land“ (ADR 007), Berlin/Hamburg/Wien haben denselben Slug auf beiden Ebenen | nein (F4) |
+| listings | vollständig, alle Enums wie SPEC | `country` wird aus der Region abgeleitet; `search_vector` je Sprache (de/en mit Stemming, cs/pl `simple`) | ja (Migration, sinnvoll) |
+| listing_photos | vollständig, max. 8 per Trigger und Check | `storage_path` nicht an Besitzer/Anzeige gebunden (F3) | – |
+| game_species | vollständig, 14 Arten inkl. aller in SPEC genannten Codes | – | cs/pl ungeprüft (CHANGELOG) |
+| listing_species | Spalten vollständig | keine Spalte `id` (zusammengesetzter PK), SPEC verlangt `id` für alle Tabellen | nein (F4) |
+| favorites, blocks, conversations, messages | vollständig inkl. Unique-Constraints | – | – |
+| saved_searches | vollständig | zusätzliche Spalte `notify_email` | nur Migrationskommentar (F4) |
+| reports | vollständig | zusätzliche Spalte `handled_at`; Meldende lesen eigene Meldungen (SPEC 3.4: „Read nur Admin“) | nur Migrationskommentar (F4) |
+| reviews | vollständig, gesperrt (nur Admin liest) | – | ja |
+| devices | vollständig | – | – |
+| audit_log | angelegt (`actor_id`, `action`, `target_type`, `target_id`, `details`) | – | ja |
+| SPEC 3.4 Statuslogik | umgesetzt | zusätzliche Übergänge: Besitzer `rejected→draft`, `rejected→pending_review`, `expired→pending_review`; Admin `pending_review→draft` („Bearbeitung anfordern“, SPEC 5) | nein in SPEC 3.4 (F4) |
+| Indizes | vorhanden (Status/Land/Art, Region, Besitzer, Preis, GIN Volltext, GiST Standort, Chat, Meldungen) | – | – |
+
+### Definition of Done (CLAUDE.md)
+
+| Punkt | Ergebnis |
+|-------|----------|
+| RLS für jede Tabelle | erfüllt: Meta-Test `00_meta.test.sql` (RLS an, mindestens eine Policy, keine Rechte auf `private`, keine ausführbaren Funktionen in `public`). Gegenprobe über PostgREST siehe unten. |
+| Policies getestet | erfüllt für das Akzeptanzkriterium und die Kernregeln (170 pgTAP-Tests grün). Die in ADR 009 versprochene volle Prüfmatrix je Tabelle fehlt teilweise, und der Server-Pfad (`service_role`) ist ungetestet (F2, F5). |
+| Tests grün | erfüllt: `supabase test db` 9 Dateien, 170 Tests PASS; Web `npm test` 3 Dateien, 18 Tests PASS |
+| Lint, Typecheck, Build (Web, mit `web/.env.local`) | erfüllt: `npm run lint`, `npm run typecheck`, `npm run build` grün, ohne Warnungen |
+| `supabase db lint -s public,private --level warning` | erfüllt: „No schema errors found“ |
+| Generierte Typen aktuell | erfüllt: `supabase gen types typescript --local --schema public` ist identisch mit `web/lib/supabase/database.types.ts` |
+| CHANGELOG mit Testanleitung | erfüllt, die Anleitung wurde nachvollzogen |
+| Texte in 4 Sprachen | nicht zutreffend für UI; Datennamen cs/pl ungeprüft (CHANGELOG) |
+| Lücken Web/iOS vermerkt | nicht zutreffend (nur Backend) |
+
+### Explorative Negativtests (PostgREST, Storage)
+
+Alle erwarteten Ablehnungen sind eingetreten, außer F1–F3:
+- **Besitzer-PATCH:** `draft→active`, `draft→removed` und `draft→expired` werden abgelehnt (42501 „Statuswechsel … nicht erlaubt“). `owner_id`, `expires_at`, `country`, `created_at`, `id` → 42501 (keine Spaltenrechte). `reject_reason` → 42501 (Trigger). `region_id` auf Bundesland → 23514. POST mit `status=active`, `expires_at` oder fremder `owner_id` → 42501. `draft→pending_review` ist erlaubt.
+- **Profile:** PATCH auf `verification_status`, `is_blocked`, `deleted_at`, `user_id` → 42501. B sieht in `profiles` nur sich selbst; anon 401.
+- **Embedding:** `listings?select=*,profiles(*)` gibt für anon 401, für Nutzer bei fremden Anzeigen `profiles: null`. `listings?select=id,public_profiles(*)` liefert nur die freigegebenen Spalten (gewollt). `listings→reports` hat keine Beziehung (PGRST200, gewollt: Meldeziele ohne FK).
+- **Schema private:** `Accept-Profile: private` / `Content-Profile: private` für `user_roles`, `app_settings`, `listing_location_offsets`, RPC `is_admin` und `custom_access_token_hook` → 406 PGRST106. Ebenso für `extensions`, `auth` und `storage`. RPCs `is_admin`, `write_audit`, `setting_int` im Standardschema → 404 PGRST202. Das OpenAPI-Schema nennt keine private-Objekte. `spatial_ref_sys` ist nicht erreichbar. GraphQL ist nicht aktiv.
+- **Standort:** Der gespeicherte Punkt weicht vom eingegebenen ab (pgTAP prüft 3–5 km).
+- **Storage, sonstiges:** HTML-Upload (MIME) wird abgelehnt. Bucket anlegen oder öffentlich schalten als Nutzer: abgelehnt. `<B>//x.jpg` und `<B>/./x.jpg` werden von der Storage-API zu `<B>/x.jpg` normalisiert und landen im eigenen Ordner. Das ist kein Fehler.
+- **Admin:** aal1 (echter Login und signiertes Token) sieht keine Verifizierungen, Entwürfe oder Dokumente und kann nicht entfernen. aal2 sieht alles und gibt frei (`expires_at` +60 Tage). Ein Entzug der Rolle wirkt sofort. Admins lesen keine fremden Chats, das Audit-Log ist für alle über die API leer, solange noch keine Moderationsaktion lief.
+
+### Regionendaten (Stichprobe)
+
+Anzahl: DE 16 Länder + 401 Kreise, AT 9 Bundesländer + 94 Bezirke. 401 ist plausibel für Stand 01.01.2026: Hessen hat 27 Einträge, weil Hanau (`DE-06415`) seit 2026 kreisfrei ist. Alle Codes passen zum Präfix des Elternlands, kein Punkt liegt außerhalb der Landes-Bounding-Box, keine doppelten Slugs.
+
+| Code | Name | Eltern | Punkt (lat, lon) | Bewertung |
+|------|------|--------|------------------|-----------|
+| DE-09162 | München (Stadt) | DE-BY | 48.154, 11.524 | plausibel |
+| DE-05315 | Köln | DE-NW | 50.957, 6.953 | plausibel |
+| DE-11000 | Berlin | DE-BE | 52.514, 13.374 | plausibel |
+| DE-04012 | Bremerhaven | DE-HB | 53.540, 8.609 | plausibel |
+| DE-16063 | Wartburgkreis | DE-TH | 50.888, 10.239 | plausibel (Eisenach eingegliedert, 22 Kreise in TH korrekt) |
+| AT-601 | Graz (Stadt) | AT-6 | 47.073, 15.445 | plausibel |
+| AT-701 | Innsbruck-Stadt | AT-7 | 47.285, 11.375 | plausibel |
+| AT-900 | Wien | AT-9 | 48.221, 16.368 | plausibel |
+
+Kosmetisch: Die AT-Namen sind uneinheitlich („Graz (Stadt)“, aber „Innsbruck-Stadt“). Das entspricht vermutlich der amtlichen Schreibweise und ist kein Fehler.
+
+### Gefundene Fehler
+
+#### F1 – hoch – E-Mail-Lokalteil wird öffentlich als Anzeigename gezeigt, alle Konten sind aufzählbar
+`private.handle_new_user()` setzt ohne `display_name` in den Metadaten den Teil der E-Mail vor dem `@` als `display_name`. `public_profiles` ist für anon lesbar und listet **alle** aktiven Konten mit `user_id` und `display_name`, auch ohne Anzeige. Das betrifft z. B. Magic Link und Sign in with Apple, wenn kein Name mitkommt. Aus `max.mustermann@…` wird öffentlich „max.mustermann“. Das widerspricht „keine Kontaktdaten auf öffentlichen Seiten“ und der Datensparsamkeit (SPEC 8). `user_id` steht außerdem nicht in der Liste der öffentlichen Felder in SPEC 3.4.
+Reproduktion:
+1. `curl -s -X POST http://127.0.0.1:54321/auth/v1/signup -H "apikey: <publishable>" -H "Content-Type: application/json" -d '{"email":"max.mustermann@example.com","password":"Test-Passwort-123!"}'`
+2. `curl -s "http://127.0.0.1:54321/rest/v1/public_profiles?select=*" -H "apikey: <publishable>"` → Eintrag mit `"display_name":"max.mustermann"`. Alle Konten erscheinen.
+Erwartet: ein neutraler Platzhalter (z. B. „Jäger 4711“) oder Pflichteingabe in M2. Öffentlich nur Profile, die etwas Öffentliches haben (aktive Anzeige) bzw. nur gezielt per ID abrufbar. Test ergänzen.
+
+#### F2 – hoch – `service_role` hat keine Tabellenrechte, Server-Pfade funktionieren nicht
+Wegen `auto_expose_new_tables = false` bekommt keine Rolle automatisch Rechte, und die Migrationen vergeben an `service_role` nur `EXECUTE`/`USAGE`. `service_role` hat auf allen 17 Objekten in `public` nur `REFERENCES, TRIGGER, TRUNCATE`. Edge Functions und serverseitiger Web-Code mit service_role-Key (Freigabe-Jobs, Suchaufträge M8, Lösch-/Retention-Jobs M9, „setzt nur der Server“ in SPEC 3.4) scheitern mit 42501. `private.is_server()` und `is_server_caller()` nennen `service_role`, der Pfad ist aber nicht erreichbar. Die pgTAP-Tests simulieren „Server“ nur als `postgres` und finden das deshalb nicht.
+Reproduktion: `curl -s -X PATCH "http://127.0.0.1:54321/rest/v1/listings?id=eq.<id>" -H "apikey: <service_role>" -H "Authorization: Bearer <service_role>" -H "Content-Type: application/json" -d '{"status":"active"}'` → 403 `42501`, Hint „GRANT SELECT, UPDATE ON public.listings TO service_role“. SQL-Gegenprobe: `select table_name, string_agg(privilege_type, ',') from information_schema.role_table_grants where grantee = 'service_role' and table_schema = 'public' group by 1;`
+Erwartet: bewusste Grants für `service_role` je Tabelle (oder eine ADR, dass Server-Logik nur über `security definer`-Funktionen läuft). Dazu ein pgTAP-Test mit `set local role service_role`.
+
+#### F3 – mittel – `listing_photos.storage_path` ist nicht an Besitzer und Anzeige gebunden
+Der Check prüft nur das Muster `uuid/uuid/datei`. Die Policy prüft nur, dass die Zeile zur eigenen Anzeige gehört. B kann deshalb in seiner Anzeige einen Pfad aus dem Ordner von A eintragen. Folgen: (1) Weil `storage_path` unique ist, kann A sein eigenes Foto danach nicht mehr eintragen (Blockade, 23505). (2) Sobald die Anzeige von A aktiv ist, zeigt die Anzeige von B das Foto von A (Inhalte kapern). Ein Lesezugriff auf Entwürfe entsteht nicht, weil die Storage-Policy nach der Anzeige im Pfad entscheidet.
+Reproduktion (als B, Bearer = Token B):
+1. `POST /rest/v1/listings` → eigener Entwurf `<draftB>`.
+2. `POST /rest/v1/listing_photos {"listing_id":"<draftB>","storage_path":"<A-id>/<draftA>/2.jpg","sort_order":0}` → 201.
+3. Als A: `POST /rest/v1/listing_photos {"listing_id":"<draftA>","storage_path":"<A-id>/<draftA>/2.jpg","sort_order":1}` → 409 `23505`.
+Erwartet: Check bzw. Policy verlangt `storage_path` = `owner_id || '/' || listing_id || '/…'`. Test ergänzen.
+
+#### F4 – niedrig – Abweichungen von SPEC 3.1/3.4 nicht in SPEC, ADR oder CHANGELOG dokumentiert
+Die folgenden Abweichungen sind fachlich vertretbar, stehen aber höchstens als Kommentar in der Migration:
+- `saved_searches.notify_email`, `reports.handled_at`
+- Meldende lesen eigene Meldungen (SPEC 3.4: „Read nur Admin“)
+- zusätzliche Statusübergänge (`rejected→draft`, `rejected→pending_review`, `expired→pending_review`, Admin `pending_review→draft`)
+- `listing_species` ohne `id`
+- Enum `verification_request_status`
+- `regions` mit `unique (code)`; Slug eindeutig je (`country`, `level`) statt „je Land“ wie in ADR 007
+Reproduktion: SPEC 3.1/3.4 mit den Migrationen `20261029100500`, `…100700`, `…100400`, `…100200` vergleichen.
+Erwartet: SPEC v0.4 oder ein CHANGELOG-Abschnitt „Abweichungen“.
+
+#### F5 – niedrig – ADR 009 passt nicht zur Umsetzung
+- Der Helfer heißt `supabase/tests/_helpers.psql` (per `\ir` eingebunden), nicht `00000_helpers.sql`.
+- Die versprochene Prüfmatrix (anon, A, B, Admin aal1/aal2 × SELECT/INSERT/UPDATE/DELETE je Tabelle) ist nicht vollständig. Beispiele: `devices` ohne UPDATE/DELETE durch B und ohne anon, `service_role` nirgends (F2).
+- Die „Allowlist“ gesperrter Tabellen im Meta-Test gibt es nicht. Das ist derzeit unnötig, weil jede Tabelle eine Policy hat.
+Reproduktion: ADR 009 mit `supabase/tests/` vergleichen.
+
+#### F6 – niedrig – Nutzer sehen die `user_id` des prüfenden Admins
+`reports.handled_by` (über `reports_select_own`) und `verifications.reviewed_by` sind für den Meldenden bzw. Antragsteller lesbar. Admins lassen sich so über Fälle hinweg wiedererkennen und über `public_profiles` mit einem Namen verbinden.
+Reproduktion: als A eine Meldung anlegen, Admin (aal2) setzt `status=handled`, dann als A `GET /rest/v1/reports?select=handled_by` → Admin-UUID.
+Erwartet: Spalte für Nutzer ausblenden (View oder Spaltenrechte) oder in ADR 005/008 bewusst entscheiden.
+
+### Nicht prüfbar in M1
+
+- CI auf GitHub (`supabase.yml`): kein Remote. Lokal wurden dieselben Schritte nachvollzogen. Offen ist, ob `gen types --local` ohne den ausgeschlossenen `postgres-meta`-Dienst in CI läuft.
+- Echte 2FA (TOTP): lokal abgeschaltet, `aal2` nur mit signiertem Test-Token geprüft (M4)
+- Realtime-RLS für Chat: keine Publication in M1 (M7)
+- Cloud-Konfiguration (Hook, `auto_expose_new_tables`, Buckets): kein Cloud-Projekt (M2)
+- iOS, Gleichstand der Filter Web/iOS, E2E-Kernflows, Lokalisierung der UI: noch keine Funktionen
+
+### Vorgeschlagene Tests (nicht angelegt)
+
+- pgTAP: `set local role service_role` → SELECT/UPDATE auf `listings`, `verifications`, `profiles` (F2); `public_profiles` zeigt keinen E-Mail-Lokalteil (F1); `listing_photos.storage_path` mit fremdem Präfix wird abgelehnt (F3); Spaltensichtbarkeit `handled_by`/`reviewed_by` (F6).
+- API-Tests ab M2 (ADR 009): die oben genannten Storage-Prüfungen (Signed URL, `list`, `copy`/`move`, Upsert, Pfadtricks) und PostgREST-Prüfungen (`Accept-Profile: private`, Embeddings, `count=exact`) automatisieren.
+
+### Empfehlung
+
+M1 **abnehmen: ja, mit Auflagen.** Alle drei Teile des Akzeptanzkriteriums sind erfüllt und unabhängig über die echten APIs bestätigt. DoD, Lint, Typecheck, Build, Tests und `db lint` sind grün. Es gibt keinen blockierenden Fehler. Auflagen:
+- F1 vor M2 beheben, weil dort die Registrierung live geht.
+- F2 vor M4 beheben, spätestens bevor die erste Edge Function bzw. der erste service_role-Code entsteht.
+- F3 vor M3 (Foto-Upload) beheben.
+- F4 bis F6 bei Gelegenheit erledigen.
