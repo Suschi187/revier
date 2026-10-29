@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(4);
+select plan(5);
 
 -- Jede Tabelle in public hat RLS (CLAUDE.md: keine Tabelle ohne Policy).
 select is(
@@ -34,6 +34,19 @@ select is(
         order by 1),
   array['accept_legal', 'legal_status', 'register_device']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
+);
+
+-- Auch in private nur bewusst ausführbare Hilfsfunktionen (Policies brauchen sie). Ableitungen wie die
+-- Standortverfremdung dürfen nie darunter sein (Review Plan M3, B2).
+select is(
+  array(select p.proname::text from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+        where n.nspname = 'private'
+          and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
+        order by 1),
+  array['can_report', 'can_write_in', 'has_accepted_current_legal', 'has_admin_role', 'is_active_user', 'is_admin',
+        'is_blocked_with', 'is_conversation_participant', 'is_server', 'is_server_caller', 'owns_editable_listing',
+        'setting_int']::text[],
+  'Nur bewusst freigegebene Hilfsfunktionen in private sind ausführbar (Allowlist)'
 );
 
 select * from finish();

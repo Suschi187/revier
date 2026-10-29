@@ -134,8 +134,9 @@ update profiles set is_blocked = false where user_id = :'b_id';
 select tests.authenticate_as(:'b_id');
 insert into listings (kind, direction, title, content_language, region_id, display_location)
 values ('permit', 'offer', 'Mit Standort', 'de', :'district', 'SRID=4326;POINT(11.5 48.0)') returning id as loc \gset
-select ok((select extensions.st_distance(display_location, 'SRID=4326;POINT(11.5 48.0)'::extensions.geography) between 2990 and 5010
-  from listings where id = :'loc'), 'Gespeicherter Punkt liegt 3–5 km vom eingegebenen entfernt');
+-- Ring 3–5 km um die 1-km-Zelle, also ± halbe Zellendiagonale um den Eingabepunkt (ADR 006, Details in 12_location).
+select ok((select extensions.st_distance(display_location, 'SRID=4326;POINT(11.5 48.0)'::extensions.geography) between 2280 and 5720
+  from listings where id = :'loc'), 'Gespeicherter Punkt liegt 3–5 km neben der Zelle des eingegebenen Punkts');
 select display_location::text as first_blur from listings where id = :'loc' \gset
 update listings set display_location = 'SRID=4326;POINT(11.6 48.1)' where id = :'loc';
 update listings set display_location = 'SRID=4326;POINT(11.5 48.0)' where id = :'loc';
