@@ -153,26 +153,23 @@ describe.skipIf(!f)("Auth: Session und Rechte", () => {
   });
 });
 
-// Bekannte Lücken (QA-Bericht M2): prüfen das heutige Verhalten, rot nach der Behebung.
-describe.skipIf(!f)("Auth: offene Lücken (QA M2), Test wird nach Behebung rot", () => {
+// QA M2 F1 behoben: Die DB verwirft jeden Passwort-Hash (Migration no_passwords, ADR 010).
+describe.skipIf(!f)("Auth: keine Passwörter", () => {
   const fx = f ?? SKIPPED;
 
-  it("QA M2 F1 offen: Ein passwortloses Konto kann sich ein Passwort setzen (soll: abgelehnt)", async () => {
+  it("Ein gesetztes Passwort ist nie zur Anmeldung nutzbar, auch nicht nach globalem Logout", async () => {
     const d = await createSignedInUser(fx, "pw");
     created.push(d.id);
-    const update = await d.client.auth.updateUser({ password: "Ein-langes-Passwort-123" });
-    expect(update.error).toBeNull();
-    // Das Passwort überdauert einen globalen Logout.
+    await d.client.auth.updateUser({ password: "Ein-langes-Passwort-123" });
     await d.client.auth.signOut({ scope: "global" });
     const login = await authPost("token?grant_type=password", { email: d.email, password: "Ein-langes-Passwort-123" });
-    expect(login.status).toBe(200);
+    expect(login.status).toBe(400);
   });
 
-  it("QA M2 F1 offen: Passwort-Registrierung einer fremden Adresse übernimmt das spätere Konto (soll: unmöglich)", async () => {
+  it("Passwort-Registrierung einer fremden Adresse übernimmt das spätere Konto nicht", async () => {
     const email = uniqueEmail("takeover");
     // Angreifer registriert die Adresse des Opfers mit eigenem Passwort (ohne Bestätigung).
     const signup = await authPost("signup", { email, password: "Angreifer-Passwort-123" });
-    expect(signup.status).toBe(200);
     const signupBody = (await signup.json()) as { id?: string; user?: { id: string } };
     const id = signupBody.user?.id ?? signupBody.id;
     if (id) created.push(id);
@@ -182,13 +179,17 @@ describe.skipIf(!f)("Auth: offene Lücken (QA M2), Test wird nach Behebung rot",
     expect(link.error).toBeNull();
     const victim = anonClient(fx);
     expect((await victim.auth.verifyOtp({ token_hash: link.data.properties!.hashed_token, type: "email" })).error).toBeNull();
-    // Heute: Der Angreifer meldet sich danach mit seinem Passwort im Konto des Opfers an.
+    // Vor dem Fix: 200 und die Nutzer-ID des Opfers.
     const login = await authPost("token?grant_type=password", { email, password: "Angreifer-Passwort-123" });
-    expect(login.status).toBe(200);
-    expect(((await login.json()) as { user: { id: string } }).user.id).toBe(id);
+    expect(login.status).toBe(400);
   });
+});
 
-  it("QA M2 F2 offen: Die OTP-API verrät mit create_user=false, ob ein Konto existiert (soll: gleiche Antwort)", async () => {
+// Bekannte Lücke (QA-Bericht M2 F2, Restrisiko in ADR 010): prüft das heutige Verhalten.
+describe.skipIf(!f)("Auth: bekannte Restrisiken", () => {
+  const fx = f ?? SKIPPED;
+
+  it("QA M2 F2 (angenommen bis Captcha): Die OTP-API verrät mit create_user=false, ob ein Konto existiert", async () => {
     // Nur anlegen, nicht anmelden: generateLink zählt sonst für den Mail-Abstand (max_frequency).
     const email = uniqueEmail("enum");
     const existing = await serviceClient(fx).auth.admin.createUser({ email, email_confirm: true });

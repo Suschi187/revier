@@ -11,7 +11,12 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
 - Registrieren und Anmelden sind derselbe Ablauf: `signInWithOtp({ email, shouldCreateUser: true })`. Die Seite antwortet immer gleich, auch bei Rate-Limit, gesperrten Konten oder ungültigen Adressen, damit niemand Konten erraten kann.
 - Die Mail enthält einen Link und einen 6-stelligen Code.
 - Gültigkeit 10 Minuten (`otp_expiry = 600`), neue Mail frühestens nach 60 s (lokal 5 s für E2E-Tests).
-- Keine Passwörter: kein Reset-Ablauf, kein Leak-Risiko. `minimum_password_length = 10` steht nur für die Checkliste.
+- Keine Passwörter: kein Reset-Ablauf, kein Leak-Risiko.
+  - Supabase Auth hat keinen Schalter nur für Passwörter, Registrierung und `updateUser({ password })` bleiben über die API möglich (QA M2 F1: Kontoübernahme vor der Registrierung).
+  - Deshalb leert der Trigger `discard_password` auf `auth.users` bei jedem Schreiben den Hash (Migration `20261029103000_no_passwords`). Ablehnen geht nicht, weil Auth auch bei der Anmeldung per Code intern ein zufälliges Passwort setzt.
+  - Folge: Jede Passwort-Anmeldung scheitert mit `invalid_credentials`. `updateUser({ password })` antwortet weiter mit Erfolg, bewirkt aber nichts. Getestet in pgTAP `11_no_passwords` und `web/integration/auth.test.ts`.
+  - Kommt je ein Passwort-Login, muss dieser Trigger bewusst entfernt werden.
+  - `minimum_password_length = 10` steht nur für die Checkliste.
 - `enable_confirmations = true`: Neue Nutzer bekommen die Vorlage `confirmation`, bestehende die Vorlage `magic_link`. Beide Vorlagen bauen den Link gleich (`type=email`), und beide Pfade sind per E2E getestet.
 
 ### Wo die Aufrufe laufen
