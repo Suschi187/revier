@@ -404,6 +404,11 @@ inspector_port = 8083
 # The Deno major version to use.
 deno_version = 2
 
+# Revier: Fotoverarbeitung (ADR 011). JWT-Prüfung am Gateway; die Function prüft zusätzlich den Besitz.
+[functions.process-listing-photo]
+enabled = true
+verify_jwt = true
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

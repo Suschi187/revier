@@ -33,3 +33,16 @@ jobs:
           supabase gen types typescript --local --schema public > web/lib/supabase/database.types.ts
           git diff --exit-code web/lib/supabase/database.types.ts
       - run: supabase db lint -s public,private --level warning --fail-on warning
+
+  # Edge Functions (ADR 011): Typcheck, Lint und Tests mit gefrorenem Lockfile (deno.json: lock.frozen).
+  # Deno aus dem offiziellen Image, per Digest gepinnt; Version wie die lokale Edge Runtime (Deno 2).
+  functions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: process-listing-photo
+        run: |
+          docker run --rm -v "$PWD/supabase/functions:/fn" -w /fn/process-listing-photo \
+            denoland/deno:2.1.4@sha256:3bf75873714baa410dcf7fabaf76d806d20f0ac8a7579df11577b4ed97416e34 \
+            sh -c "deno task check && deno lint && deno task test"
