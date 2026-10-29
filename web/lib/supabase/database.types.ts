@@ -1,0 +1,620 @@
+
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+
+export type Database = {
+  
+  "public": {
+          Tables: {
+            "audit_log": {
+                  Row: {
+                    "action": string,"actor_id": string | null,"created_at": string,"details": NonNullable<Json>,"id": string,"target_id": string,"target_type": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"actor_id"?: string | null,"created_at"?: string,"details"?: NonNullable<Json>,"id"?: string,"target_id": string,"target_type": string
+                  }
+                  Update: {
+                    "action"?: string,"actor_id"?: string | null,"created_at"?: string,"details"?: NonNullable<Json>,"id"?: string,"target_id"?: string,"target_type"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "audit_log_actor_id_fkey"
+      columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "audit_log_actor_id_fkey"
+      columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"blocks": {
+                  Row: {
+                    "blocked_id": string,"blocker_id": string,"created_at": string,"id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "blocked_id": string,"blocker_id"?: string,"created_at"?: string,"id"?: string
+                  }
+                  Update: {
+                    "blocked_id"?: string,"blocker_id"?: string,"created_at"?: string,"id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "blocks_blocked_id_fkey"
+      columns: ["blocked_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "blocks_blocked_id_fkey"
+      columns: ["blocked_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "blocks_blocker_id_fkey"
+      columns: ["blocker_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "blocks_blocker_id_fkey"
+      columns: ["blocker_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"conversations": {
+                  Row: {
+                    "created_at": string,"id": string,"interested_id": string,"last_message_at": string | null,"listing_id": string,"owner_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"interested_id"?: string,"last_message_at"?: string | null,"listing_id": string,"owner_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"interested_id"?: string,"last_message_at"?: string | null,"listing_id"?: string,"owner_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "conversations_interested_id_fkey"
+      columns: ["interested_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "conversations_interested_id_fkey"
+      columns: ["interested_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "conversations_listing_id_fkey"
+      columns: ["listing_id"]
+isOneToOne: false
+      referencedRelation: "listings"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "conversations_owner_id_fkey"
+      columns: ["owner_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "conversations_owner_id_fkey"
+      columns: ["owner_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"devices": {
+                  Row: {
+                    "apns_token": string,"created_at": string,"id": string,"language": Database["public"]['Enums']["language_code"],"platform": Database["public"]['Enums']["device_platform"],"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "apns_token": string,"created_at"?: string,"id"?: string,"language"?: Database["public"]['Enums']["language_code"],"platform"?: Database["public"]['Enums']["device_platform"],"user_id"?: string
+                  }
+                  Update: {
+                    "apns_token"?: string,"created_at"?: string,"id"?: string,"language"?: Database["public"]['Enums']["language_code"],"platform"?: Database["public"]['Enums']["device_platform"],"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "devices_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "devices_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"favorites": {
+                  Row: {
+                    "created_at": string,"id": string,"listing_id": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"listing_id": string,"user_id"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"listing_id"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "favorites_listing_id_fkey"
+      columns: ["listing_id"]
+isOneToOne: false
+      referencedRelation: "listings"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "favorites_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "favorites_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"game_species": {
+                  Row: {
+                    "code": string,"created_at": string,"id": string,"name_cs": string,"name_de": string,"name_en": string,"name_pl": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "code": string,"created_at"?: string,"id"?: string,"name_cs": string,"name_de": string,"name_en": string,"name_pl": string
+                  }
+                  Update: {
+                    "code"?: string,"created_at"?: string,"id"?: string,"name_cs"?: string,"name_de"?: string,"name_en"?: string,"name_pl"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"listing_photos": {
+                  Row: {
+                    "created_at": string,"id": string,"listing_id": string,"sort_order": number,"storage_path": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"listing_id": string,"sort_order": number,"storage_path": string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"listing_id"?: string,"sort_order"?: number,"storage_path"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "listing_photos_listing_id_fkey"
+      columns: ["listing_id"]
+isOneToOne: false
+      referencedRelation: "listings"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"listing_species": {
+                  Row: {
+                    "created_at": string,"listing_id": string,"species_code": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"listing_id": string,"species_code": string
+                  }
+                  Update: {
+                    "created_at"?: string,"listing_id"?: string,"species_code"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "listing_species_listing_id_fkey"
+      columns: ["listing_id"]
+isOneToOne: false
+      referencedRelation: "listings"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "listing_species_species_code_fkey"
+      columns: ["species_code"]
+isOneToOne: false
+      referencedRelation: "game_species"
+      referencedColumns: ["code"]
+    }
+                  ]
+                },"listings": {
+                  Row: {
+                    "area_hectares": number | null,"attributes": NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at": string,"currency": Database["public"]['Enums']["currency_code"] | null,"description": string,"direction": Database["public"]['Enums']["listing_direction"],"display_location": unknown,"end_date": string | null,"expires_at": string | null,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id": string,"price_minor": number | null,"price_unit": Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason": string | null,"search_vector": unknown,"start_date": string | null,"status": Database["public"]['Enums']["listing_status"],"title": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction": Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title": string
+                  }
+                  Update: {
+                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language"?: Database["public"]['Enums']["language_code"],"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction"?: Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id"?: string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "listings_owner_id_fkey"
+      columns: ["owner_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "listings_owner_id_fkey"
+      columns: ["owner_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "listings_region_id_fkey"
+      columns: ["region_id"]
+isOneToOne: false
+      referencedRelation: "regions"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"messages": {
+                  Row: {
+                    "body": string,"conversation_id": string,"created_at": string,"id": string,"read_at": string | null,"sender_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body": string,"conversation_id": string,"created_at"?: string,"id"?: string,"read_at"?: string | null,"sender_id"?: string
+                  }
+                  Update: {
+                    "body"?: string,"conversation_id"?: string,"created_at"?: string,"id"?: string,"read_at"?: string | null,"sender_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "messages_conversation_id_fkey"
+      columns: ["conversation_id"]
+isOneToOne: false
+      referencedRelation: "conversations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "messages_sender_id_fkey"
+      columns: ["sender_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "messages_sender_id_fkey"
+      columns: ["sender_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"profiles": {
+                  Row: {
+                    "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"created_at": string,"deleted_at": string | null,"display_name": string,"id": string,"is_blocked": boolean,"preferred_language": Database["public"]['Enums']["language_code"],"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "account_type"?: Database["public"]['Enums']["account_type"],"business_name"?: string | null,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"deleted_at"?: string | null,"display_name": string,"id"?: string,"is_blocked"?: boolean,"preferred_language"?: Database["public"]['Enums']["language_code"],"user_id": string,"verification_status"?: Database["public"]['Enums']["verification_status"]
+                  }
+                  Update: {
+                    "account_type"?: Database["public"]['Enums']["account_type"],"business_name"?: string | null,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"deleted_at"?: string | null,"display_name"?: string,"id"?: string,"is_blocked"?: boolean,"preferred_language"?: Database["public"]['Enums']["language_code"],"user_id"?: string,"verification_status"?: Database["public"]['Enums']["verification_status"]
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"regions": {
+                  Row: {
+                    "centroid": unknown,"code": string,"country": Database["public"]['Enums']["country_code"],"created_at": string,"id": string,"level": Database["public"]['Enums']["region_level"],"name_cs": string,"name_de": string,"name_en": string,"name_pl": string,"parent_id": string | null,"slug": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "centroid": unknown,"code": string,"country": Database["public"]['Enums']["country_code"],"created_at"?: string,"id"?: string,"level": Database["public"]['Enums']["region_level"],"name_cs": string,"name_de": string,"name_en": string,"name_pl": string,"parent_id"?: string | null,"slug": string
+                  }
+                  Update: {
+                    "centroid"?: unknown,"code"?: string,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"id"?: string,"level"?: Database["public"]['Enums']["region_level"],"name_cs"?: string,"name_de"?: string,"name_en"?: string,"name_pl"?: string,"parent_id"?: string | null,"slug"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "regions_parent_id_fkey"
+      columns: ["parent_id"]
+isOneToOne: false
+      referencedRelation: "regions"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"reports": {
+                  Row: {
+                    "created_at": string,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id": string | null,"status": Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+                  }
+                  Update: {
+                    "created_at"?: string,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"reason"?: Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id"?: string,"target_type"?: Database["public"]['Enums']["report_target"]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "reports_handled_by_fkey"
+      columns: ["handled_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "reports_handled_by_fkey"
+      columns: ["handled_by"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "reports_reporter_id_fkey"
+      columns: ["reporter_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "reports_reporter_id_fkey"
+      columns: ["reporter_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"reviews": {
+                  Row: {
+                    "author_id": string,"conversation_id": string,"created_at": string,"id": string,"rating": number,"target_id": string,"text": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "author_id": string,"conversation_id": string,"created_at"?: string,"id"?: string,"rating": number,"target_id": string,"text"?: string | null
+                  }
+                  Update: {
+                    "author_id"?: string,"conversation_id"?: string,"created_at"?: string,"id"?: string,"rating"?: number,"target_id"?: string,"text"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "reviews_author_id_fkey"
+      columns: ["author_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "reviews_author_id_fkey"
+      columns: ["author_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "reviews_conversation_id_fkey"
+      columns: ["conversation_id"]
+isOneToOne: false
+      referencedRelation: "conversations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "reviews_target_id_fkey"
+      columns: ["target_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "reviews_target_id_fkey"
+      columns: ["target_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"saved_searches": {
+                  Row: {
+                    "created_at": string,"filters": NonNullable<Json>,"id": string,"last_notified_at": string | null,"name": string,"notify_email": boolean,"notify_push": boolean,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"filters"?: NonNullable<Json>,"id"?: string,"last_notified_at"?: string | null,"name": string,"notify_email"?: boolean,"notify_push"?: boolean,"user_id"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"filters"?: NonNullable<Json>,"id"?: string,"last_notified_at"?: string | null,"name"?: string,"notify_email"?: boolean,"notify_push"?: boolean,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "saved_searches_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "saved_searches_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"verifications": {
+                  Row: {
+                    "created_at": string,"decided_at": string | null,"document_deleted_at": string | null,"document_path": string | null,"document_type": Database["public"]['Enums']["document_type"],"id": string,"reject_reason": string | null,"reviewed_at": string | null,"reviewed_by": string | null,"status": Database["public"]['Enums']["verification_request_status"],"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"decided_at"?: string | null,"document_deleted_at"?: string | null,"document_path"?: string | null,"document_type": Database["public"]['Enums']["document_type"],"id"?: string,"reject_reason"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"status"?: Database["public"]['Enums']["verification_request_status"],"user_id"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"decided_at"?: string | null,"document_deleted_at"?: string | null,"document_path"?: string | null,"document_type"?: Database["public"]['Enums']["document_type"],"id"?: string,"reject_reason"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"status"?: Database["public"]['Enums']["verification_request_status"],"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "verifications_reviewed_by_fkey"
+      columns: ["reviewed_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "verifications_reviewed_by_fkey"
+      columns: ["reviewed_by"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "verifications_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "verifications_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                }
+          }
+          Views: {
+            "public_profiles": {
+                  Row: {
+                    "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"display_name": string,"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                           "account_type"?: Database["public"]['Enums']["account_type"] | null,"business_name"?: never,"country"?: Database["public"]['Enums']["country_code"] | null,"display_name"?: string | null,"user_id"?: string | null,"verification_status"?: Database["public"]['Enums']["verification_status"] | null
+                         }
+                        Update: {
+                           "account_type"?: Database["public"]['Enums']["account_type"] | null,"business_name"?: never,"country"?: Database["public"]['Enums']["country_code"] | null,"display_name"?: string | null,"user_id"?: string | null,"verification_status"?: Database["public"]['Enums']["verification_status"] | null
+                         }
+                        Relationships: [
+                    
+                  ]
+                }
+          }
+          Functions: {
+            [_ in never]: never
+          }
+          Enums: {
+            "account_type": "private"|"business","country_code": "DE"|"AT"|"CH"|"CZ"|"PL","currency_code": "EUR"|"CHF"|"CZK"|"PLN","device_platform": "ios","document_type": "jagdschein"|"jagdkarte"|"revierbescheinigung"|"gewerbe","language_code": "de"|"en"|"cs"|"pl","listing_direction": "offer"|"wanted","listing_kind": "lease"|"permit"|"driven_hunt"|"trophy_hunt"|"helper","listing_status": "draft"|"pending_review"|"active"|"paused"|"expired"|"rejected"|"removed","price_unit": "total"|"per_year"|"per_hectare_year"|"per_day"|"per_animal"|"on_request","region_level": "state"|"district","report_reason": "scam"|"illegal"|"weapons"|"harassment"|"wrong_category"|"other","report_status": "open"|"handled","report_target": "listing"|"message"|"profile","verification_request_status": "pending"|"verified"|"rejected","verification_status": "none"|"pending"|"verified"|"rejected"
+          }
+          CompositeTypes: {
+            [_ in never]: never
+          }
+        }
+}
+
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+  ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+  ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+  ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+  ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+  : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+  ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+  : never
+
+export const Constants = {
+  "public": {
+          Enums: {
+            "account_type": ["private", "business"],"country_code": ["DE", "AT", "CH", "CZ", "PL"],"currency_code": ["EUR", "CHF", "CZK", "PLN"],"device_platform": ["ios"],"document_type": ["jagdschein", "jagdkarte", "revierbescheinigung", "gewerbe"],"language_code": ["de", "en", "cs", "pl"],"listing_direction": ["offer", "wanted"],"listing_kind": ["lease", "permit", "driven_hunt", "trophy_hunt", "helper"],"listing_status": ["draft", "pending_review", "active", "paused", "expired", "rejected", "removed"],"price_unit": ["total", "per_year", "per_hectare_year", "per_day", "per_animal", "on_request"],"region_level": ["state", "district"],"report_reason": ["scam", "illegal", "weapons", "harassment", "wrong_category", "other"],"report_status": ["open", "handled"],"report_target": ["listing", "message", "profile"],"verification_request_status": ["pending", "verified", "rejected"],"verification_status": ["none", "pending", "verified", "rejected"]
+          }
+        }
+} as const

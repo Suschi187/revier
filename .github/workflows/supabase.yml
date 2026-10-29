@@ -4,9 +4,9 @@ name: supabase
 on:
   push:
     branches: [main]
-    paths: ["supabase/**", ".github/workflows/supabase.yml"]
+    paths: ["supabase/**", "web/lib/supabase/database.types.ts", ".github/workflows/supabase.yml"]
   pull_request:
-    paths: ["supabase/**", ".github/workflows/supabase.yml"]
+    paths: ["supabase/**", "web/lib/supabase/database.types.ts", ".github/workflows/supabase.yml"]
 
 permissions:
   contents: read
@@ -28,4 +28,8 @@ jobs:
       - run: supabase start -x realtime,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
       - run: supabase db reset
       - run: supabase test db
+      - name: "TypeScript-Typen sind aktuell (sonst: cd web && npm run gen:types)"
+        run: |
+          supabase gen types typescript --local --schema public > web/lib/supabase/database.types.ts
+          git diff --exit-code web/lib/supabase/database.types.ts
       - run: supabase db lint -s public,private --level warning --fail-on warning
