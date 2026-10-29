@@ -32,7 +32,7 @@ select is(
         where n.nspname = 'public'
           and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
         order by 1),
-  array['accept_legal', 'legal_status', 'register_device']::text[],
+  array['accept_legal', 'legal_status', 'register_device', 'set_listing_location']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );
 

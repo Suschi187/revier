@@ -231,6 +231,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"listing_places": {
+                  Row: {
+                    "listing_id": string,"place_name": string | null,"postal_code": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "listing_id": string,"place_name"?: string | null,"postal_code"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "listing_id"?: string,"place_name"?: string | null,"postal_code"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "listing_places_listing_id_fkey"
+      columns: ["listing_id"]
+isOneToOne: true
+      referencedRelation: "listings"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"listing_species": {
                   Row: {
                     "created_at": string,"listing_id": string,"species_code": string
@@ -259,14 +279,14 @@ isOneToOne: false
                   ]
                 },"listings": {
                   Row: {
-                    "area_hectares": number | null,"attributes": NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at": string,"currency": Database["public"]['Enums']["currency_code"] | null,"description": string,"direction": Database["public"]['Enums']["listing_direction"],"display_location": unknown,"end_date": string | null,"expires_at": string | null,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id": string,"price_minor": number | null,"price_unit": Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason": string | null,"search_vector": unknown,"start_date": string | null,"status": Database["public"]['Enums']["listing_status"],"title": string
+                    "area_hectares": number | null,"attributes": NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at": string,"currency": Database["public"]['Enums']["currency_code"] | null,"description": string,"direction": Database["public"]['Enums']["listing_direction"],"display_location": unknown,"end_date": string | null,"expires_at": string | null,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id": string,"postal_prefix": string | null,"price_minor": number | null,"price_unit": Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason": string | null,"search_vector": unknown,"start_date": string | null,"status": Database["public"]['Enums']["listing_status"],"title": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction": Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title": string
+                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction": Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"postal_prefix"?: string | null,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title": string
                   }
                   Update: {
-                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language"?: Database["public"]['Enums']["language_code"],"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction"?: Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id"?: string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title"?: string
+                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language"?: Database["public"]['Enums']["language_code"],"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction"?: Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"postal_prefix"?: string | null,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id"?: string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title"?: string
                   }
                   Relationships: [
                     {
@@ -591,6 +611,9 @@ isOneToOne: false
                            },
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
+                           },
+"set_listing_location":
+{ Args: { "p_listing_id": string,"p_place_name"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined
                            }
           }
           Enums: {

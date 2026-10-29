@@ -32,9 +32,16 @@ Eine volle PLZ grenzt ein Revier oft enger ein als der verfremdete Punkt (ADR 00
   - Die abgeleitete PLZ-Tabelle wird unter ODbL zum Download angeboten (Seite „Datenquellen“).
   - Die Produktdatenbank gilt als Sammlung (Collective Database): `listing_places` speichert nur die Eingabe des Nutzers, die Anzeigen fallen nicht unter Share-Alike.
   - Anwaltlich zu prüfen (SPEC 7.2).
-- **Ort der Anzeige** (Plan M3 Commit 5b):
-  - eigene Tabelle `listing_places` mit PLZ und Ortsname, nur Besitzer und Admin (aal2) lesbar, nie öffentlich
+- **Ort der Anzeige** (Plan M3 Commit 5b, Migration `listing_places`):
+  - eigene Tabelle `listing_places (listing_id, postal_code, place_name, updated_at)`, 1:1 zur Anzeige, nur Besitzer und Admin (aal2, `is_admin`) lesbar, nie öffentlich
+  - Schreiben nur der Besitzer einer bearbeitbaren Anzeige eines aktiven Kontos; Admins schreiben nicht, ein Admin an der eigenen Anzeige gilt als Besitzer. Kein DELETE, die Zeile verschwindet mit der Anzeige.
+  - PLZ und Ort sind nullable, weil Gesuche ohne PLZ auskommen; Pflicht bei Angeboten prüft die Bereitschaftsprüfung (Commit 6).
+  - Das Land wird nicht gespeichert, es folgt dem Kreis. Das Format prüft ein Trigger nach dem Land der Anzeige (DE 5 Ziffern, AT/CH 4 Ziffern ohne führende 0, CZ `123 45`, PL `12-345`), Fehler `23514` mit `hint` `place.postal_code.format`, ohne den Wert.
   - kein FK auf `postal_codes`, damit Anzeigen ein Update der Referenzdaten überstehen; der Ortsname ist Freitext mit Vorschlägen
+- **Vertrag für Clients (Web, iOS I4):** `rpc('set_listing_location', { p_listing_id, p_region_id, p_postal_code, p_place_name })`
+  - setzt Kreis und Ort in einer Transaktion (security invoker, RLS und Guards greifen)
+  - `RV001` ohne aktuelle Zustimmung, `42501` für fremde und unbekannte Anzeigen (gleiche Antwort), `23514` bei falschem Format
+  - Unverändert zurückgeschrieben bleibt eine freigegebene Anzeige aktiv; jede Änderung an PLZ, Ort oder Kreis führt nach `pending_review`.
 - **Öffentliches Präfix:** Der Server leitet `listings.postal_prefix` (2 Zeichen) aus `listing_places` ab.
   - In DE gibt es rund 95 zweistellige Leitregionen bei 401 Kreisen, in AT rund 80 Bereiche bei 94 Bezirken.
   - Das Präfix ist damit meist gröber als der Kreis.
@@ -55,4 +62,4 @@ Eine volle PLZ grenzt ein Revier oft enger ein als der verfremdete Punkt (ADR 00
 ## Folgen
 - Weitere Märkte (CH, CZ, PL) brauchen ihre PLZ-Daten zusammen mit den Kreisen, sonst lassen sich dort keine Angebote absenden.
 - PLZ-Änderungen kommen als neue Daten-Migration.
-- Tests: pgTAP `13_postal_codes` (Umfang, jeder Kreis abgedeckt, Stichproben, Rechte), `09_grants` (Snapshot).
+- Tests: pgTAP `13_postal_codes` (Umfang, jeder Kreis abgedeckt, Ortsnamen, Stichproben, Rechte), `15_listing_places` (RLS, Präfix, Format, Statuswechsel, Legal-Gate, Allowlist der Funktionen), `09_grants` (Snapshot); API-Tests `web/integration/places.test.ts` (Embedding, Filter, Zählung, RPC-Antworten).
