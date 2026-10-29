@@ -7,6 +7,7 @@ export default defineConfig({
   },
   test: {
     include: ["**/*.test.ts"],
-    exclude: ["node_modules/**", ".next/**"],
+    // API-Tests gegen die lokale Supabase laufen separat: npm run test:integration
+    exclude: ["node_modules/**", ".next/**", "integration/**"],
   },
 });

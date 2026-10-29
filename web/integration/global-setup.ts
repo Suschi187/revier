@@ -1,0 +1,143 @@
+import type { TestProject } from "vitest/node";
+import { isReachable, readLocalSupabase } from "./env";
+import { createSignedInUser, deleteUsers, jpeg, serviceClient, type Conn } from "./helpers";
+import type { Fixture } from "./types";
+
+// Baut einmal je Lauf drei Nutzer und deren Daten auf (wenige verifyOtp-Aufrufe wegen des
+// Rate-Limits token_verifications) und löscht alles am Ende wieder:
+// - A: Entwurf mit Foto, Jagdschein im privaten Bucket mit Verifizierungsantrag
+// - B: freigegebene Anzeige mit Foto
+// - A schreibt B zur Anzeige von B; C ist unbeteiligt.
+
+function must<T>(result: { data: T | null; error: unknown }, step: string): T {
+  if (result.error || result.data === null) {
+    throw new Error(`Setup ${step}: ${JSON.stringify(result.error)}`);
+  }
+  return result.data;
+}
+
+export default async function setup(project: TestProject) {
+  const local = readLocalSupabase();
+  const required = process.env.CI === "true" || process.env.INTEGRATION_REQUIRED === "1";
+  if (!local || !(await isReachable(local.url))) {
+    if (required) throw new Error("Lokale Supabase nicht erreichbar (supabase start im Repo-Root).");
+    console.warn("[integration] Lokale Supabase nicht erreichbar, API-Tests werden übersprungen.");
+    project.provide("supabaseFixture", null);
+    return;
+  }
+
+  const conn: Conn = local;
+  const admin = serviceClient(conn);
+  const createdIds: string[] = [];
+  const uploaded: { bucket: string; path: string }[] = [];
+
+  try {
+    const [a, b, c] = await Promise.all([
+      createSignedInUser(conn, "a"),
+      createSignedInUser(conn, "b"),
+      createSignedInUser(conn, "c"),
+    ]);
+    createdIds.push(a.id, b.id, c.id);
+
+    const district = must(
+      await admin.from("regions").select("id").eq("code", "DE-14612").single<{ id: string }>(),
+      "Region",
+    ).id;
+
+    // A: Entwurf mit registriertem und hochgeladenem Foto
+    const draftA = must(
+      await a.client
+        .from("listings")
+        .insert({ kind: "helper", direction: "wanted", title: "Entwurf A geheim", content_language: "de", region_id: district })
+        .select("id")
+        .single<{ id: string }>(),
+      "Entwurf A",
+    ).id;
+    const draftPhotoA = `${a.id}/${draftA}/1.jpg`;
+    must(await a.client.from("listing_photos").insert({ listing_id: draftA, storage_path: draftPhotoA, sort_order: 0 }).select(), "Foto A registrieren");
+    must(await a.client.storage.from("listing-photos").upload(draftPhotoA, jpeg(1), { contentType: "image/jpeg" }), "Foto A hochladen");
+    uploaded.push({ bucket: "listing-photos", path: draftPhotoA });
+
+    // A: Jagdschein und Verifizierungsantrag
+    const docA = `${a.id}/jagdschein.jpg`;
+    must(await a.client.storage.from("verification-docs").upload(docA, jpeg(2), { contentType: "image/jpeg" }), "Jagdschein A");
+    uploaded.push({ bucket: "verification-docs", path: docA });
+    const verificationA = must(
+      await a.client.from("verifications").insert({ document_path: docA, document_type: "jagdschein" }).select("id").single<{ id: string }>(),
+      "Verifizierung A",
+    ).id;
+
+    // A: aktuelle Rechtstexte akzeptiert (Nachweise in legal_acceptances)
+    const legal = must(await a.client.rpc("legal_status").single<{ terms_version: string; privacy_version: string }>(), "legal_status");
+    must(
+      await a.client.rpc("accept_legal", { p_terms_version: legal.terms_version, p_privacy_version: legal.privacy_version, p_source: "web" }).then((r) => ({ ...r, data: r.error ? null : true })),
+      "accept_legal",
+    );
+
+    // B: Anzeige mit Foto, eingereicht und vom Server freigegeben
+    const activeB = must(
+      await b.client
+        .from("listings")
+        .insert({ kind: "permit", direction: "offer", title: "Begehungsschein B", content_language: "de", region_id: district })
+        .select("id")
+        .single<{ id: string }>(),
+      "Anzeige B",
+    ).id;
+    const activePhotoB = `${b.id}/${activeB}/1.jpg`;
+    must(await b.client.from("listing_photos").insert({ listing_id: activeB, storage_path: activePhotoB, sort_order: 0 }).select(), "Foto B registrieren");
+    must(await b.client.storage.from("listing-photos").upload(activePhotoB, jpeg(3), { contentType: "image/jpeg" }), "Foto B hochladen");
+    uploaded.push({ bucket: "listing-photos", path: activePhotoB });
+    must(await b.client.from("listings").update({ status: "pending_review" }).eq("id", activeB).select(), "Anzeige B einreichen");
+    must(
+      await admin
+        .from("listings")
+        .update({ status: "active", expires_at: new Date(Date.now() + 86_400_000).toISOString() })
+        .eq("id", activeB)
+        .select(),
+      "Anzeige B freigeben",
+    );
+
+    // A schreibt B
+    const conversation = must(
+      await a.client.from("conversations").insert({ listing_id: activeB }).select("id").single<{ id: string }>(),
+      "Unterhaltung",
+    ).id;
+    const message = must(
+      await a.client.from("messages").insert({ conversation_id: conversation, body: "Geheime Nachricht von A" }).select("id").single<{ id: string }>(),
+      "Nachricht",
+    ).id;
+
+    const strip = ({ id, email, token }: { id: string; email: string; token: string }) => ({ id, email, token });
+    const fixture: Fixture = {
+      ...conn,
+      users: { a: strip(a), b: strip(b), c: strip(c) },
+      ids: { district, draftA, activeB, conversation, message, verificationA },
+      paths: { docA, draftPhotoA, activePhotoB },
+    };
+    project.provide("supabaseFixture", fixture);
+  } catch (error) {
+    await cleanup();
+    throw error;
+  }
+
+  async function cleanup() {
+    // Dateien zuerst (storage.objects hängt nicht per FK an den Nutzern), dann Konten (cascade).
+    for (const bucket of ["listing-photos", "verification-docs"]) {
+      const paths = uploaded.filter((u) => u.bucket === bucket).map((u) => u.path);
+      for (const id of createdIds) {
+        const { data } = await admin.storage.from(bucket).list(id, { limit: 1000 });
+        for (const entry of data ?? []) {
+          if (entry.id) paths.push(`${id}/${entry.name}`);
+          else {
+            const { data: nested } = await admin.storage.from(bucket).list(`${id}/${entry.name}`, { limit: 1000 });
+            for (const file of nested ?? []) paths.push(`${id}/${entry.name}/${file.name}`);
+          }
+        }
+      }
+      if (paths.length > 0) await admin.storage.from(bucket).remove([...new Set(paths)]);
+    }
+    await deleteUsers(conn, createdIds);
+  }
+
+  return cleanup;
+}
