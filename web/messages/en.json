@@ -203,7 +203,8 @@
         "location": "Location",
         "details": "Details",
         "price": "Price and dates",
-        "preview": "Preview and submit"
+        "preview": "Preview and submit",
+        "photos": "Photos"
       },
       "save": "Save and continue",
       "create": "Create draft",
@@ -213,7 +214,8 @@
       "lockedNote": "This listing was removed by the moderation team and can no longer be changed.",
       "errorSummary": "Please check the following:",
       "draftHint": "Your draft is saved after each step. Only you can see it.",
-      "countryApply": "Change country"
+      "countryApply": "Change country",
+      "continue": "Continue"
     },
     "fields": {
       "kind": "Type of listing",
@@ -354,6 +356,40 @@
       "altText": "Alt text of a photo",
       "onRequest": "On request",
       "noPrice": "No price given"
+    },
+    "photos": {
+      "choose": "Choose photos",
+      "intro": "Up to 8 photos (JPEG, PNG or WebP). Photos are reduced in size before uploading; the server removes all metadata such as the GPS location.",
+      "limit": "This listing already has 8 photos.",
+      "uploading": "Uploading {name} …",
+      "done": "{count, plural, one {# photo uploaded.} other {# photos uploaded.}}",
+      "empty": "No photos yet.",
+      "noscript": "Uploading photos requires JavaScript.",
+      "unprocessed": "Not processed yet. If it stays like this, remove the photo and upload it again.",
+      "photoLabel": "Photo {n} of {total}",
+      "altText": "Alt text (optional)",
+      "altTextHint": "Briefly describe what can be seen. Without it, the title is used.",
+      "saveAltText": "Save alt text",
+      "moveUp": "Move forward",
+      "moveDown": "Move back",
+      "remove": "Remove",
+      "notices": {
+        "alt": "Alt text saved.",
+        "up": "Order saved.",
+        "down": "Order saved.",
+        "remove": "Photo removed."
+      },
+      "errors": {
+        "heic": "HEIC is not supported. Please export the photo as JPEG.",
+        "unsupported": "This format is not supported. JPEG, PNG and WebP are allowed.",
+        "tooLarge": "The photo is too large.",
+        "corrupt": "The file is damaged or not an image.",
+        "limit": "At most 8 photos per listing.",
+        "dailyLimit": "You have uploaded a great many photos today. Please try again tomorrow.",
+        "attempts": "Too many attempts for this photo. Please choose it again.",
+        "network": "No connection. Please try again.",
+        "failed": "The photo could not be processed. Please choose it again."
+      }
     }
   }
 }

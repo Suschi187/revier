@@ -14,7 +14,7 @@ import {
 
 type Enums = Database["public"]["Enums"];
 
-export const WIZARD_STEPS = ["basics", "location", "details", "price", "preview"] as const;
+export const WIZARD_STEPS = ["basics", "location", "details", "photos", "price", "preview"] as const;
 export type WizardStep = (typeof WIZARD_STEPS)[number];
 
 export function isWizardStep(value: unknown): value is WizardStep {
@@ -30,7 +30,7 @@ export function stepOfField(code: string): WizardStep {
   if (code.startsWith("place.") || code === "district" || code === "postal_format") return "location";
   if (code === "title") return "basics";
   if (code.startsWith("price") || code === "dates") return "price";
-  if (code === "photos.unprocessed") return "preview";
+  if (code === "photos.unprocessed") return "photos";
   return "details";
 }
 

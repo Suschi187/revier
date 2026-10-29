@@ -203,7 +203,8 @@
         "location": "Ort",
         "details": "Details",
         "price": "Preis und Zeitraum",
-        "preview": "Vorschau und Absenden"
+        "preview": "Vorschau und Absenden",
+        "photos": "Fotos"
       },
       "save": "Speichern und weiter",
       "create": "Entwurf anlegen",
@@ -213,7 +214,8 @@
       "lockedNote": "Diese Anzeige wurde von der Moderation entfernt und lässt sich nicht mehr ändern.",
       "errorSummary": "Bitte prüfe diese Angaben:",
       "draftHint": "Dein Entwurf wird nach jedem Schritt gespeichert. Nur du siehst ihn.",
-      "countryApply": "Land wechseln"
+      "countryApply": "Land wechseln",
+      "continue": "Weiter"
     },
     "fields": {
       "kind": "Art der Anzeige",
@@ -354,6 +356,40 @@
       "altText": "Alt-Text eines Fotos",
       "onRequest": "Auf Anfrage",
       "noPrice": "Keine Preisangabe"
+    },
+    "photos": {
+      "choose": "Fotos auswählen",
+      "intro": "Bis zu 8 Fotos (JPEG, PNG oder WebP). Fotos werden vor dem Hochladen verkleinert; der Server entfernt alle Metadaten wie den GPS-Standort.",
+      "limit": "Diese Anzeige hat schon 8 Fotos.",
+      "uploading": "{name} wird hochgeladen …",
+      "done": "{count, plural, one {# Foto hochgeladen.} other {# Fotos hochgeladen.}}",
+      "empty": "Noch keine Fotos.",
+      "noscript": "Zum Hochladen von Fotos wird JavaScript benötigt.",
+      "unprocessed": "Noch nicht verarbeitet. Bleibt es so, entferne das Foto und lade es neu hoch.",
+      "photoLabel": "Foto {n} von {total}",
+      "altText": "Alt-Text (optional)",
+      "altTextHint": "Beschreibe kurz, was zu sehen ist. Ohne Angabe wird der Titel verwendet.",
+      "saveAltText": "Alt-Text speichern",
+      "moveUp": "Nach vorn",
+      "moveDown": "Nach hinten",
+      "remove": "Entfernen",
+      "notices": {
+        "alt": "Alt-Text gespeichert.",
+        "up": "Reihenfolge gespeichert.",
+        "down": "Reihenfolge gespeichert.",
+        "remove": "Foto entfernt."
+      },
+      "errors": {
+        "heic": "HEIC wird nicht unterstützt. Bitte exportiere das Foto als JPEG.",
+        "unsupported": "Dieses Format wird nicht unterstützt. Erlaubt sind JPEG, PNG und WebP.",
+        "tooLarge": "Das Foto ist zu groß.",
+        "corrupt": "Die Datei ist beschädigt oder kein Bild.",
+        "limit": "Höchstens 8 Fotos je Anzeige.",
+        "dailyLimit": "Du hast heute schon sehr viele Fotos hochgeladen. Bitte versuche es morgen wieder.",
+        "attempts": "Zu viele Versuche für dieses Foto. Bitte wähle es noch einmal aus.",
+        "network": "Keine Verbindung. Bitte versuche es noch einmal.",
+        "failed": "Das Foto konnte nicht verarbeitet werden. Bitte wähle es noch einmal aus."
+      }
     }
   }
 }

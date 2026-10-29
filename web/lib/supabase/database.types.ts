@@ -625,6 +625,9 @@ isOneToOne: false
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },
+"reorder_listing_photos":
+{ Args: { "p_listing_id": string,"p_photo_ids": (string)[] }; Returns: undefined
+                           },
 "set_listing_location":
 { Args: { "p_listing_id": string,"p_place_name"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined
                            }

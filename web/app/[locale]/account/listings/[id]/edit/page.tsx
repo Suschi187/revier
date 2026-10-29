@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { BasicsStep, CountrySwitch } from "@/components/listings/steps/BasicsStep";
 import { DetailsStep } from "@/components/listings/steps/DetailsStep";
 import { LocationStep } from "@/components/listings/steps/LocationStep";
+import { PhotosStep } from "@/components/listings/steps/PhotosStep";
 import { PreviewStep } from "@/components/listings/steps/PreviewStep";
 import { PriceStep } from "@/components/listings/steps/PriceStep";
 import { ErrorSummary, StepNav } from "@/components/listings/WizardChrome";
@@ -13,9 +14,10 @@ import type { AppLocale } from "@/i18n/routing";
 import { DEFAULT_CURRENCY, isWizardStep, parseErrorCodes, type WizardStep } from "@/lib/listing-wizard";
 import { requireOnboardedUser } from "@/lib/services/gate";
 import { getContentHints, getOwnListing } from "@/lib/services/listings";
+import { thumbnailUrls } from "@/lib/services/photos";
 import { LISTING_COUNTRIES, listPostalCodes, listRegions, listSpecies } from "@/lib/services/regions";
 import { listingReadiness } from "@/lib/validation/listing";
-import { saveListingStep } from "./actions";
+import { changePhoto, saveListingStep } from "./actions";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Listings.wizard");
@@ -39,6 +41,7 @@ export default async function EditListingPage(props: Props) {
   );
 }
 
+const PHOTO_NOTICES = ["alt", "up", "down", "remove"] as const;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 async function EditListing({ params, searchParams }: Props) {
@@ -69,6 +72,16 @@ async function EditListing({ params, searchParams }: Props) {
         </p>
       )}
       <ErrorSummary codes={errors} listingId={listing.id} current={step} />
+      {step === "photos" && PHOTO_NOTICES.includes(query.photoNotice as (typeof PHOTO_NOTICES)[number]) && (
+        <p role="status" className="mt-4 text-emerald-800">
+          {t(`photos.notices.${query.photoNotice as (typeof PHOTO_NOTICES)[number]}`)}
+        </p>
+      )}
+      {step === "photos" && query.photoError === "failed" && (
+        <p role="alert" className="mt-4 text-red-800">
+          {t("errors.failed")}
+        </p>
+      )}
       <Step step={step} locale={locale} listing={listing} errors={errors} country={query.country} />
     </>
   );
@@ -128,6 +141,10 @@ async function Step({ step, locale, listing, errors, country }: {
           errors={errors}
         />
       );
+    }
+    case "photos": {
+      const thumbnails = await thumbnailUrls(listing.photos);
+      return <PhotosStep locale={locale} action={changePhoto} listingId={listing.id} title={listing.title} photos={listing.photos} thumbnails={thumbnails} />;
     }
     case "price":
       return (

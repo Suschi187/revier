@@ -15,8 +15,9 @@ import {
   type ListingError,
   type Result,
 } from "@/lib/services/listings";
+import { removePhoto, reorderPhotos, setAltText } from "@/lib/services/photos";
 import { getRegionCountry, listPostalCodes } from "@/lib/services/regions";
-import { DESCRIPTION_MAX, LISTING_DIRECTIONS, LISTING_KINDS, POSTAL_CODE_FORMAT, titleSchema } from "@/lib/validation/listing";
+import { ALT_TEXT_MAX, DESCRIPTION_MAX, LISTING_DIRECTIONS, LISTING_KINDS, POSTAL_CODE_FORMAT, titleSchema } from "@/lib/validation/listing";
 import { parsePrice } from "@/lib/validation/price";
 import { Constants } from "@/lib/supabase/database.types";
 
@@ -120,4 +121,37 @@ export async function saveListingStep(form: FormData): Promise<void> {
       return handle(result, "preview");
     }
   }
+}
+
+/** Foto-Aktionen im Schritt „Fotos“: Alt-Text, nach vorn/hinten, entfernen (ADR 011). */
+export async function changePhoto(form: FormData): Promise<void> {
+  const rawLocale = text(form, "locale");
+  const locale = isAppLocale(rawLocale) ? rawLocale : "de";
+  const id = text(form, "id");
+  const path = `/${locale}/account/listings/${UUID.test(id) ? id : ""}/edit`;
+  const user = await requireOnboardedUser(locale, path);
+  const photoId = text(form, "photoId");
+  if (!UUID.test(id) || !UUID.test(photoId)) redirect(`/${locale}/account/listings?error=failed`);
+
+  const listing = await getOwnListing(user.id, id);
+  const photo = listing?.photos.find((p) => p.id === photoId);
+  if (!listing || !photo) redirect(`${path}?step=photos&photoError=failed`);
+
+  let result: "ok" | "failed" = "failed";
+  const op = text(form, "op");
+  if (op === "alt") {
+    const altText = text(form, "altText").trim();
+    result = altText.length > ALT_TEXT_MAX ? "failed" : await setAltText(photo.id, altText || null);
+  } else if (op === "up" || op === "down") {
+    const order = listing.photos.map((p) => p.id);
+    const from = order.indexOf(photo.id);
+    const to = op === "up" ? from - 1 : from + 1;
+    if (to >= 0 && to < order.length) {
+      [order[from], order[to]] = [order[to], order[from]];
+      result = await reorderPhotos(listing.id, order);
+    }
+  } else if (op === "remove") {
+    result = await removePhoto(listing.id, photo);
+  }
+  redirect(`${path}?step=photos&${result === "ok" ? `photoNotice=${op}` : "photoError=failed"}`);
 }

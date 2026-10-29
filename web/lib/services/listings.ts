@@ -80,6 +80,7 @@ export type OwnPhoto = {
   sortOrder: number;
   altText: string | null;
   uploadPath: string;
+  storagePath: string;
   thumbPath: string;
   processed: boolean;
   attempts: number;
@@ -110,7 +111,7 @@ export async function getOwnListing(userId: string, id: string): Promise<OwnList
       "id, title, kind, direction, status, reject_reason, expires_at, created_at, description, content_language, country, region_id, " +
         "price_minor, currency, price_unit, area_hectares, start_date, end_date, attributes, " +
         "listing_species(species_code), listing_places(postal_code, place_name), " +
-        "listing_photos(id, sort_order, alt_text, upload_path, thumb_path, processed_at, processing_attempts)",
+        "listing_photos(id, sort_order, alt_text, upload_path, storage_path, thumb_path, processed_at, processing_attempts)",
     )
     .eq("id", id)
     .eq("owner_id", userId)
@@ -119,7 +120,7 @@ export async function getOwnListing(userId: string, id: string): Promise<OwnList
   const row = data as unknown as Database["public"]["Tables"]["listings"]["Row"] & {
     listing_species: { species_code: string }[];
     listing_places: { postal_code: string | null; place_name: string | null } | null;
-    listing_photos: { id: string; sort_order: number; alt_text: string | null; upload_path: string; thumb_path: string; processed_at: string | null; processing_attempts: number }[];
+    listing_photos: { id: string; sort_order: number; alt_text: string | null; upload_path: string; storage_path: string; thumb_path: string; processed_at: string | null; processing_attempts: number }[];
   };
   return {
     id: row.id,
@@ -149,6 +150,7 @@ export async function getOwnListing(userId: string, id: string): Promise<OwnList
         sortOrder: p.sort_order,
         altText: p.alt_text,
         uploadPath: p.upload_path,
+        storagePath: p.storage_path,
         thumbPath: p.thumb_path,
         processed: p.processed_at !== null,
         attempts: p.processing_attempts,

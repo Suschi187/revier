@@ -203,7 +203,8 @@
         "location": "Lokalizacja",
         "details": "Szczegóły",
         "price": "Cena i termin",
-        "preview": "Podgląd i wysłanie"
+        "preview": "Podgląd i wysłanie",
+        "photos": "Zdjęcia"
       },
       "save": "Zapisz i dalej",
       "create": "Utwórz szkic",
@@ -213,7 +214,8 @@
       "lockedNote": "To ogłoszenie zostało usunięte przez moderację i nie można go już zmieniać.",
       "errorSummary": "Sprawdź następujące dane:",
       "draftHint": "Szkic zapisuje się po każdym kroku. Widzisz go tylko Ty.",
-      "countryApply": "Zmień kraj"
+      "countryApply": "Zmień kraj",
+      "continue": "Dalej"
     },
     "fields": {
       "kind": "Rodzaj ogłoszenia",
@@ -354,6 +356,40 @@
       "altText": "Tekst alternatywny zdjęcia",
       "onRequest": "Na zapytanie",
       "noPrice": "Nie podano ceny"
+    },
+    "photos": {
+      "choose": "Wybierz zdjęcia",
+      "intro": "Do 8 zdjęć (JPEG, PNG lub WebP). Zdjęcia są zmniejszane przed wysłaniem; serwer usuwa wszystkie metadane, np. lokalizację GPS.",
+      "limit": "To ogłoszenie ma już 8 zdjęć.",
+      "uploading": "Wysyłanie {name} …",
+      "done": "{count, plural, one {Wysłano # zdjęcie.} few {Wysłano # zdjęcia.} other {Wysłano # zdjęć.}}",
+      "empty": "Brak zdjęć.",
+      "noscript": "Wysyłanie zdjęć wymaga JavaScriptu.",
+      "unprocessed": "Jeszcze nie przetworzono. Jeśli tak zostanie, usuń zdjęcie i wyślij je ponownie.",
+      "photoLabel": "Zdjęcie {n} z {total}",
+      "altText": "Tekst alternatywny (opcjonalnie)",
+      "altTextHint": "Krótko opisz, co widać. Bez opisu użyty zostanie tytuł.",
+      "saveAltText": "Zapisz tekst alternatywny",
+      "moveUp": "Przesuń do przodu",
+      "moveDown": "Przesuń do tyłu",
+      "remove": "Usuń",
+      "notices": {
+        "alt": "Zapisano tekst alternatywny.",
+        "up": "Zapisano kolejność.",
+        "down": "Zapisano kolejność.",
+        "remove": "Usunięto zdjęcie."
+      },
+      "errors": {
+        "heic": "Format HEIC nie jest obsługiwany. Wyeksportuj zdjęcie jako JPEG.",
+        "unsupported": "Ten format nie jest obsługiwany. Dozwolone są JPEG, PNG i WebP.",
+        "tooLarge": "Zdjęcie jest zbyt duże.",
+        "corrupt": "Plik jest uszkodzony lub nie jest obrazem.",
+        "limit": "Maksymalnie 8 zdjęć na ogłoszenie.",
+        "dailyLimit": "Dziś wysłano już bardzo dużo zdjęć. Spróbuj ponownie jutro.",
+        "attempts": "Zbyt wiele prób dla tego zdjęcia. Wybierz je ponownie.",
+        "network": "Brak połączenia. Spróbuj ponownie.",
+        "failed": "Nie udało się przetworzyć zdjęcia. Wybierz je ponownie."
+      }
     }
   }
 }

@@ -203,7 +203,8 @@
         "location": "Místo",
         "details": "Podrobnosti",
         "price": "Cena a termín",
-        "preview": "Náhled a odeslání"
+        "preview": "Náhled a odeslání",
+        "photos": "Fotografie"
       },
       "save": "Uložit a pokračovat",
       "create": "Vytvořit koncept",
@@ -213,7 +214,8 @@
       "lockedNote": "Tento inzerát odstranila moderace a nelze jej již měnit.",
       "errorSummary": "Zkontrolujte prosím tyto údaje:",
       "draftHint": "Váš koncept se ukládá po každém kroku. Vidíte jej jen vy.",
-      "countryApply": "Změnit zemi"
+      "countryApply": "Změnit zemi",
+      "continue": "Pokračovat"
     },
     "fields": {
       "kind": "Druh inzerátu",
@@ -354,6 +356,40 @@
       "altText": "Alternativní text fotografie",
       "onRequest": "Na dotaz",
       "noPrice": "Cena neuvedena"
+    },
+    "photos": {
+      "choose": "Vybrat fotografie",
+      "intro": "Až 8 fotografií (JPEG, PNG nebo WebP). Fotografie se před nahráním zmenší; server odstraní všechna metadata, například polohu GPS.",
+      "limit": "Tento inzerát už má 8 fotografií.",
+      "uploading": "Nahrává se {name} …",
+      "done": "{count, plural, one {Nahrána # fotografie.} few {Nahrány # fotografie.} other {Nahráno # fotografií.}}",
+      "empty": "Zatím žádné fotografie.",
+      "noscript": "Nahrávání fotografií vyžaduje JavaScript.",
+      "unprocessed": "Zatím nezpracováno. Pokud to tak zůstane, fotografii odstraňte a nahrajte znovu.",
+      "photoLabel": "Fotografie {n} z {total}",
+      "altText": "Alternativní text (nepovinné)",
+      "altTextHint": "Stručně popište, co je vidět. Bez něj se použije název.",
+      "saveAltText": "Uložit alternativní text",
+      "moveUp": "Posunout dopředu",
+      "moveDown": "Posunout dozadu",
+      "remove": "Odstranit",
+      "notices": {
+        "alt": "Alternativní text uložen.",
+        "up": "Pořadí uloženo.",
+        "down": "Pořadí uloženo.",
+        "remove": "Fotografie odstraněna."
+      },
+      "errors": {
+        "heic": "Formát HEIC není podporován. Exportujte prosím fotografii jako JPEG.",
+        "unsupported": "Tento formát není podporován. Povoleny jsou JPEG, PNG a WebP.",
+        "tooLarge": "Fotografie je příliš velká.",
+        "corrupt": "Soubor je poškozený nebo to není obrázek.",
+        "limit": "Nejvýše 8 fotografií na inzerát.",
+        "dailyLimit": "Dnes jste nahráli velmi mnoho fotografií. Zkuste to prosím zítra.",
+        "attempts": "Příliš mnoho pokusů pro tuto fotografii. Vyberte ji prosím znovu.",
+        "network": "Bez připojení. Zkuste to prosím znovu.",
+        "failed": "Fotografii se nepodařilo zpracovat. Vyberte ji prosím znovu."
+      }
     }
   }
 }

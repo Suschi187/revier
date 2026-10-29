@@ -1,5 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { latestMail, uniqueEmail } from "./mailpit";
+// Echte JPEGs mit GPS, XMP und Orientierung aus den Fixtures der Function (keine Binärdateien im Repo).
+import { encode, quadrants, withMetadata } from "../../supabase/functions/process-listing-photo/tests/fixtures.ts";
 
 // Kernflow Inserieren (SPEC 6 M3, Plan M3 Commit 13): Assistent bis „Zur Prüfung absenden“, danach
 // „Meine Anzeigen“ mit Status „In Prüfung“ und ohne Aktion zum Freischalten. Freigeben kann nur die
@@ -38,7 +40,7 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
   await page.getByRole("link", { name: "Anzeige aufgeben" }).click();
 
   // Schritt 1: Grunddaten, Kreis (Pflichtspalten des Entwurfs)
-  await expect(page.getByText("Schritt 1 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 1 von 6")).toBeVisible();
   await page.getByLabel("Jagdpacht").check();
   await page.getByLabel("Angebot", { exact: true }).check();
   await page.getByLabel("Titel").fill("Genossenschaftsjagd bei Dresden");
@@ -46,7 +48,7 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
   await page.getByRole("button", { name: "Entwurf anlegen" }).click();
 
   // Schritt 2: Ort; eine PLZ aus einem anderen Kreis wird abgelehnt
-  await expect(page.getByText("Schritt 2 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 2 von 6")).toBeVisible();
   await page.getByLabel("PLZ des Reviers").fill("80331");
   await page.getByLabel("Ort des Reviers").fill("München");
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
@@ -54,7 +56,7 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
   await page.getByLabel("PLZ des Reviers").fill("01067");
   await page.getByLabel("Ort des Reviers").fill("Dresden");
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
-  await expect(page.getByText("Schritt 3 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 3 von 6")).toBeVisible();
 
   // Vorschau zeigt, was fehlt, mit Links zu den Schritten
   await page.getByRole("link", { name: /Vorschau und Absenden/ }).click();
@@ -63,7 +65,7 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
   await page.getByRole("link", { name: "Bitte wähle die Pachtart." }).click();
 
   // Schritt 3: Details
-  await expect(page.getByText("Schritt 3 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 3 von 6")).toBeVisible();
   await page.getByLabel("Beschreibung").fill("Genossenschaftsjagd mit 420 Hektar Wald und Feld, Rehwild und Schwarzwild.");
   await page.getByLabel("Fläche in Hektar").fill("420,5");
   await page.getByLabel("Pachtart").selectOption({ label: "Genossenschaftsjagd" });
@@ -74,8 +76,23 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
   await page.getByLabel("Schwarzwild").check();
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
 
-  // Schritt 4: Preis; falsche Eingabe wird erklärt
-  await expect(page.getByText("Schritt 4 von 5")).toBeVisible();
+  // Schritt 4: Fotos. HEIC wird mit klarer Meldung abgelehnt; ein JPEG mit GPS wird verarbeitet.
+  await expect(page.getByText("Schritt 4 von 6")).toBeVisible();
+  const heic = Buffer.from([0, 0, 0, 24, ...Buffer.from("ftypheic"), 0, 0, 0, 0]);
+  await page.getByLabel("Fotos auswählen").setInputFiles({ name: "IMG_0001.HEIC", mimeType: "image/heic", buffer: heic });
+  await expect(page.getByRole("alert").getByText("HEIC wird nicht unterstützt. Bitte exportiere das Foto als JPEG.")).toBeVisible();
+  const photo = Buffer.from(withMetadata(encode(quadrants(1200, 800)), 6));
+  await page.getByLabel("Fotos auswählen").setInputFiles({ name: "revier.jpg", mimeType: "image/jpeg", buffer: photo });
+  await expect(page.getByText("1 Foto hochgeladen.")).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("img", { name: "Genossenschaftsjagd bei Dresden" })).toBeVisible();
+  await page.getByLabel("Alt-Text (optional)").fill("Waldrand mit Hochsitz");
+  await page.getByRole("button", { name: "Alt-Text speichern" }).click();
+  await expect(page.getByText("Alt-Text gespeichert.")).toBeVisible();
+  await expect(page.getByRole("img", { name: "Waldrand mit Hochsitz" })).toBeVisible();
+  await page.getByRole("link", { name: "Weiter" }).click();
+
+  // Schritt 5: Preis; falsche Eingabe wird erklärt
+  await expect(page.getByText("Schritt 5 von 6")).toBeVisible();
   await page.getByRole("radio", { name: "Betrag" }).check();
   await page.getByRole("textbox", { name: "Betrag" }).fill("12,345.6.7");
   await page.getByLabel("Einheit").selectOption({ label: "pro Jahr" });
@@ -86,8 +103,8 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
   await page.getByLabel("Einheit").selectOption({ label: "pro Jahr" });
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
 
-  // Schritt 5: Vorschau und Absenden
-  await expect(page.getByText("Schritt 5 von 5")).toBeVisible();
+  // Schritt 6: Vorschau und Absenden
+  await expect(page.getByText("Schritt 6 von 6")).toBeVisible();
   await expect(page.getByText("Alles bereit zum Absenden.")).toBeVisible();
   await expect(page.getByText("8.400 € pro Jahr")).toBeVisible();
   await expect(page.getByText("nur für dich und die Moderation")).toBeVisible();
@@ -111,14 +128,16 @@ test("Waffenbegriffe: deutlicher Hinweis in der Vorschau, Absenden bleibt mögli
   await page.getByLabel("Titel").fill("Suche Mitjäger, Munition vorhanden");
   await page.getByLabel("Landkreis bzw. Bezirk").selectOption({ label: "Dresden" });
   await page.getByRole("button", { name: "Entwurf anlegen" }).click();
-  await expect(page.getByText("Schritt 2 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 2 von 6")).toBeVisible();
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
-  await expect(page.getByText("Schritt 3 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 3 von 6")).toBeVisible();
   await page.getByLabel("Beschreibung").fill("Ich suche einen erfahrenen Mitjäger für die Ansitzjagd im Herbst.");
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
-  await expect(page.getByText("Schritt 4 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 4 von 6")).toBeVisible();
+  await page.getByRole("link", { name: "Weiter" }).click();
+  await expect(page.getByText("Schritt 5 von 6")).toBeVisible();
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
-  await expect(page.getByText("Schritt 5 von 5")).toBeVisible();
+  await expect(page.getByText("Schritt 6 von 6")).toBeVisible();
 
   await expect(page.getByRole("heading", { name: "Hinweis: Waffen und Munition" })).toBeVisible();
   await expect(page.getByText("Titel: „Munition“")).toBeVisible();
