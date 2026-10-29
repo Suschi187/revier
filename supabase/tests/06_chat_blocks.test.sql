@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(21);
+select plan(23);
 
 select tests.create_user('owner@test.local') as o_id \gset
 select tests.create_user('a@test.local') as a_id \gset
@@ -75,6 +75,12 @@ insert into blocks (blocker_id, blocked_id) values (:'o_id', :'b_id');
 select tests.authenticate_as(:'b_id');
 select throws_ok(format($$ insert into conversations (listing_id) values (%L) $$, :'listing'), '42501', null,
   'Blockierter Nutzer startet keine neue Unterhaltung');
+
+-- Kein Orakel für fremde Sperren (Review M1)
+select tests.authenticate_as(:'b_id');
+select throws_ok(format($$ select private.is_blocked_pair(%L, %L) $$, :'o_id', :'a_id'), '42501', null,
+  'Fremde Sperrbeziehungen sind nicht abfragbar');
+select ok(private.is_blocked_with(:'o_id'), 'Eigene Sperrbeziehung ist für die Policy prüfbar');
 
 -- Löschen einer Anzeige entfernt Unterhaltungen
 select tests.as_postgres();
