@@ -213,7 +213,7 @@ Die DB prüft beim Übergang nach `pending_review` und bei der Admin-Freigabe (`
 |---|---|
 | Art (`kind`) | Pflicht |
 | Angebot/Gesuch (`direction`) | Pflicht |
-| Ort: PLZ und Ortsname | Pflicht; PLZ wird gegen ein Verzeichnis geprüft und muss zum Landkreis passen (siehe 6.1) |
+| Ort: PLZ und Ortsname | Pflicht bei **Angeboten**; bei Gesuchen optional (Entscheidung 4. Runde). Wenn angegeben, wird die PLZ gegen das Verzeichnis geprüft und muss zum Landkreis passen (siehe 6.1) |
 | Land und Landkreis (`region_id`); Bundesland folgt daraus | Pflicht |
 | Titel | Pflicht, 3–100 Zeichen |
 | Beschreibung | Pflicht, 30–5000 Zeichen |
@@ -421,7 +421,7 @@ Review: `docs/reviews/M3-plan-architekt-plz.md`. Eingearbeitet:
 Entscheidungen des Nutzers (vierte Runde):
 - Der Ort beim Gesuch ist das **gesuchte Gebiet**, nicht der Wohnort. Es werden also keine Wohnortdaten erhoben.
 - Reihenfolge: Zuerst wird der Landkreis gewählt und geprüft, danach muss die PLZ zu diesem Kreis passen. Der Assistent schlägt nur PLZ des gewählten Kreises vor; das deckt auch die Auflage „Lookup nicht per GET je PLZ“ ab, weil die PLZ-Liste des Kreises auf einmal geladen wird.
-- PLZ bleibt Pflicht für alle Anzeigen (Annahme, vom Nutzer zu bestätigen).
+- PLZ ist Pflicht bei Angeboten. Bei Gesuchen reicht der geprüfte Kreis; eine PLZ ist optional und wird, wenn angegeben, geprüft (vom Nutzer bestätigt).
 - **Öffentlich angezeigt werden dürfen die ersten beiden Ziffern der PLZ** (z. B. „PLZ 85…“).
   - Bewertung: In DE gibt es rund 95 zweistellige Leitregionen bei rund 400 Kreisen, in AT rund 80 Bereiche bei 94 Bezirken. Die zwei Ziffern sind damit meist gröber als der Kreis und grenzen nur dort zusätzlich ein, wo ein Kreis über zwei Leitregionen reicht. Das liegt unter der Genauigkeit des verfremdeten Punkts und ist vertretbar.
   - Umsetzung: Der Server leitet `listings.postal_prefix` (2 Zeichen) aus `listing_places` ab (Trigger, nicht vom Client setzbar, Spaltenrecht nur lesend). Die volle PLZ und der Ortsname bleiben in `listing_places` privat.
