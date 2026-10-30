@@ -52,7 +52,8 @@
     "nav": {
       "signIn": "Anmelden",
       "account": "Mein Konto",
-      "signOut": "Abmelden"
+      "signOut": "Abmelden",
+      "admin": "Admin"
     }
   },
   "Profile": {
@@ -394,6 +395,34 @@
         "network": "Keine Verbindung. Bitte versuche es noch einmal.",
         "failed": "Das Foto konnte nicht verarbeitet werden. Bitte wähle es noch einmal aus."
       }
+    }
+  },
+  "Admin": {
+    "forbidden": {
+      "metaTitle": "Kein Zugriff",
+      "title": "Kein Zugriff",
+      "text": "Dieser Bereich ist der Moderation vorbehalten.",
+      "backHome": "Zur Startseite"
+    },
+    "mfa": {
+      "metaTitle": "Zwei-Faktor-Authentifizierung",
+      "title": "Zwei-Faktor-Authentifizierung",
+      "intro": "Der Admin-Bereich verlangt einen zweiten Faktor. Nutze dafür eine Authenticator-App (zum Beispiel auf dem Handy).",
+      "setupIntro": "Für dein Konto ist noch kein Authenticator eingerichtet.",
+      "setupButton": "Authenticator einrichten",
+      "qrAlt": "QR-Code für die Authenticator-App",
+      "secretLabel": "Oder gib diesen Schlüssel von Hand ein:",
+      "codeLabel": "6-stelliger Code aus der App",
+      "verify": "Bestätigen",
+      "errors": {
+        "code": "Der Code stimmt nicht oder ist abgelaufen. Bitte versuche es noch einmal.",
+        "setup": "Die Einrichtung ist fehlgeschlagen. Bitte starte sie neu."
+      }
+    },
+    "overview": {
+      "metaTitle": "Admin-Bereich",
+      "title": "Admin-Bereich",
+      "pending": "{count, plural, =0 {Keine Anzeigen zur Freigabe.} one {# Anzeige zur Freigabe.} other {# Anzeigen zur Freigabe.}}"
     }
   }
 }

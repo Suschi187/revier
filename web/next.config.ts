@@ -35,10 +35,15 @@ const nextConfig: NextConfig = {
   experimental: {
     // Eine 404 für die ganze App, nötig weil das Root-Layout unter [locale] liegt.
     globalNotFound: true,
+    // forbidden() für den Admin-Bereich (403, ADR 014).
+    authInterrupts: true,
   },
   async headers() {
     return [
-      { source: "/:path*", headers: securityHeaders },
+      // /admin bekommt seine CSP mit Nonce aus dem Proxy (ADR 014); die übrigen Header gelten überall.
+      { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)).*)", headers: securityHeaders },
+      // `:path*` deckt auch /:locale/admin selbst ab.
+      { source: "/:locale/admin/:path*", headers: securityHeaders.filter((h) => h.key !== "Content-Security-Policy") },
       // Token im Query-String nie per Referer weitergeben (ADR 010).
       { source: "/:locale/auth/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
     ];

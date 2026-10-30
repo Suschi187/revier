@@ -8,7 +8,9 @@ import { PROTECTED_SECTIONS } from "./paths";
 // Seite oder Action die Prüfung vergisst (Review M2, Architekt 2).
 
 const APP_DIR = join(__dirname, "..", "..", "app");
-const GUARD_RE = /\bawait (requireOnboardedUser|requireSessionUser)\(/;
+const GUARD_RE = /\bawait (requireOnboardedUser|requireSessionUser|requireAdmin|requireAdminRole)\(/;
+// Unter /admin zählt nur die Admin-Prüfung (ADR 014, Review A1).
+const ADMIN_GUARD_RE = /\bawait (requireAdmin|requireAdminRole)\(/;
 
 // Bewusst öffentliche Actions, jeweils mit Grund.
 const PUBLIC_ACTIONS: Record<string, string> = {
@@ -41,6 +43,16 @@ describe("Geschützte Seiten und Server Actions", () => {
     expect(pages.length).toBeGreaterThan(0);
     for (const { file, path } of pages) {
       expect(readFileSync(file, "utf8"), path).toMatch(GUARD_RE);
+    }
+  });
+
+  it("Seiten und Actions unter /admin prüfen die Admin-Rolle selbst", () => {
+    const admin = all.filter(({ path }) => path.startsWith("[locale]/admin/") && /\.(tsx?)$/.test(path));
+    const pages = admin.filter(({ path }) => path.endsWith("/page.tsx"));
+    expect(pages.length).toBeGreaterThan(0);
+    for (const { file, path } of pages) expect(readFileSync(file, "utf8"), path).toMatch(ADMIN_GUARD_RE);
+    for (const { file, path } of admin.filter(({ file }) => /^\s*["']use server["']/.test(readFileSync(file, "utf8")))) {
+      for (const { name, body } of exportedFunctions(readFileSync(file, "utf8"))) expect(body, `${path}#${name}`).toMatch(ADMIN_GUARD_RE);
     }
   });
 

@@ -52,7 +52,8 @@
     "nav": {
       "signIn": "Přihlásit se",
       "account": "Můj účet",
-      "signOut": "Odhlásit se"
+      "signOut": "Odhlásit se",
+      "admin": "Administrace"
     }
   },
   "Profile": {
@@ -394,6 +395,34 @@
         "network": "Bez připojení. Zkuste to prosím znovu.",
         "failed": "Fotografii se nepodařilo zpracovat. Vyberte ji prosím znovu."
       }
+    }
+  },
+  "Admin": {
+    "forbidden": {
+      "metaTitle": "Přístup odepřen",
+      "title": "Přístup odepřen",
+      "text": "Tato oblast je vyhrazena moderátorům.",
+      "backHome": "Zpět na úvodní stránku"
+    },
+    "mfa": {
+      "metaTitle": "Dvoufázové ověření",
+      "title": "Dvoufázové ověření",
+      "intro": "Administrace vyžaduje druhý faktor. Použijte ověřovací aplikaci (například v telefonu).",
+      "setupIntro": "Pro váš účet zatím není nastavena ověřovací aplikace.",
+      "setupButton": "Nastavit ověřovací aplikaci",
+      "qrAlt": "QR kód pro ověřovací aplikaci",
+      "secretLabel": "Nebo zadejte tento klíč ručně:",
+      "codeLabel": "Šestimístný kód z aplikace",
+      "verify": "Potvrdit",
+      "errors": {
+        "code": "Kód není správný nebo vypršel. Zkuste to prosím znovu.",
+        "setup": "Nastavení se nezdařilo. Začněte prosím znovu."
+      }
+    },
+    "overview": {
+      "metaTitle": "Administrace",
+      "title": "Administrace",
+      "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}"
     }
   }
 }

@@ -17,6 +17,11 @@ export async function AuthNav() {
 
   return (
     <div className="flex items-center gap-4">
+      {user.adminHint && (
+        <Link href="/admin" className="underline">
+          {t("admin")}
+        </Link>
+      )}
       <Link href="/account" className="underline">
         {t("account")}
       </Link>

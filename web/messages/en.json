@@ -52,7 +52,8 @@
     "nav": {
       "signIn": "Sign in",
       "account": "My account",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "admin": "Admin"
     }
   },
   "Profile": {
@@ -394,6 +395,34 @@
         "network": "No connection. Please try again.",
         "failed": "The photo could not be processed. Please choose it again."
       }
+    }
+  },
+  "Admin": {
+    "forbidden": {
+      "metaTitle": "No access",
+      "title": "No access",
+      "text": "This area is reserved for the moderation team.",
+      "backHome": "Back to the home page"
+    },
+    "mfa": {
+      "metaTitle": "Two-factor authentication",
+      "title": "Two-factor authentication",
+      "intro": "The admin area requires a second factor. Use an authenticator app (for example on your phone).",
+      "setupIntro": "No authenticator is set up for your account yet.",
+      "setupButton": "Set up authenticator",
+      "qrAlt": "QR code for your authenticator app",
+      "secretLabel": "Or enter this key manually:",
+      "codeLabel": "6-digit code from the app",
+      "verify": "Confirm",
+      "errors": {
+        "code": "The code is not correct or has expired. Please try again.",
+        "setup": "Setup failed. Please start again."
+      }
+    },
+    "overview": {
+      "metaTitle": "Admin area",
+      "title": "Admin area",
+      "pending": "{count, plural, =0 {No listings awaiting review.} one {# listing awaiting review.} other {# listings awaiting review.}}"
     }
   }
 }

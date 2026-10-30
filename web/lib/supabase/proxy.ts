@@ -11,6 +11,8 @@ export type SessionRefresh = {
   userId: string | null;
   /** Auf jede Antwort dieses Requests übertragen, auch auf Redirects (ADR 010). */
   apply: (response: NextResponse) => NextResponse;
+  /** Admin-Rolle (ohne 2FA, nur zum Leiten) per RPC aus der DB, nicht aus dem Claim (ADR 014). */
+  hasAdminRole: () => Promise<boolean>;
 };
 
 export function hasAuthCookie(request: NextRequest): boolean {
@@ -48,6 +50,10 @@ export async function refreshSession(request: NextRequest): Promise<SessionRefre
 
   return {
     userId: typeof sub === "string" ? sub : null,
+    hasAdminRole: async () => {
+      const { data, error } = await supabase.rpc("admin_access").single();
+      return !error && data?.has_role === true;
+    },
     apply: (response) => {
       for (const { name, value, options } of cookiesToSet) response.cookies.set(name, value, options);
       if (cookiesToSet.length > 0) {

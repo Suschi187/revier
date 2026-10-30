@@ -49,5 +49,7 @@ export async function deleteTestUsers(emails: string[]): Promise<void> {
     }
     await client.from("audit_log").delete().eq("target_id", id);
     await client.auth.admin.deleteUser(id);
+    // Die Kaskade auf Rollen erzeugt per Trigger neue Audit-Zeilen (ADR 014); auch die entfernen.
+    await client.from("audit_log").delete().eq("target_id", id);
   }
 }

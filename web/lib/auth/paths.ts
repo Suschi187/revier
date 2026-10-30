@@ -2,7 +2,7 @@ import { routing, type AppLocale } from "@/i18n/routing";
 
 // Interne, nicht indexierte Bereiche nach dem Sprachpräfix (ADR 010).
 // Nur diese sind gültige Rücksprungziele; die Liste wächst mit den Schritten (z. B. Inserieren in M3).
-export const PROTECTED_SECTIONS = ["account", "welcome"] as const;
+export const PROTECTED_SECTIONS = ["account", "welcome", "admin"] as const;
 
 const LOCALE_GROUP = routing.locales.join("|");
 const PROTECTED_RE = new RegExp(`^/(${LOCALE_GROUP})/(${PROTECTED_SECTIONS.join("|")})(/|$)`);
@@ -26,6 +26,13 @@ export function localeFromPath(pathname: string): AppLocale {
 
 export function isProtectedPath(pathname: string): boolean {
   return PROTECTED_RE.test(pathname);
+}
+
+const ADMIN_RE = new RegExp(`^/(${LOCALE_GROUP})/admin(/|$)`);
+
+/** Admin-Bereich (ADR 014): Proxy prüft die Rolle, setzt die Nonce-CSP und antwortet sonst mit 403. */
+export function isAdminPath(pathname: string): boolean {
+  return ADMIN_RE.test(pathname);
 }
 
 export function defaultNextPath(locale: AppLocale): string {

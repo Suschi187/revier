@@ -26,4 +26,11 @@ describe("buildCsp", () => {
     expect(directive(dev, "connect-src")).toBe("connect-src 'self' http://127.0.0.1:54321 ws://127.0.0.1:54321");
     expect(dev).not.toContain("upgrade-insecure-requests");
   });
+
+  it("mit Nonce (nur /admin): keine Inline-Skripte ohne Nonce, strict-dynamic", () => {
+    const admin = buildCsp({ supabaseUrl: "https://abc.supabase.co", dev: false, https: true, nonce: "abc123" });
+    expect(directive(admin, "script-src")).toBe("script-src 'nonce-abc123' 'strict-dynamic'");
+    expect(admin).not.toContain("'unsafe-inline' ");
+    expect(directive(admin, "img-src")).toBe("img-src 'self' data: blob: https://abc.supabase.co");
+  });
 });

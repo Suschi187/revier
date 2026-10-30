@@ -1,14 +1,20 @@
 // ADR 010: feste CSP ohne Nonce. Eine Nonce erzwänge dynamisches Rendering; die vorgerenderte
-// Hülle (cacheComponents) enthält Inline-Skripte ohne Nonce. Nonce-CSP zuerst für /admin (M4).
-export type CspOptions = { supabaseUrl: string; dev: boolean; https: boolean };
+// Hülle (cacheComponents) enthält Inline-Skripte ohne Nonce. /admin rendert ohnehin dynamisch und
+// bekommt die Nonce-CSP aus dem Proxy (ADR 014).
+export type CspOptions = { supabaseUrl: string; dev: boolean; https: boolean; nonce?: string };
 
-export function buildCsp({ supabaseUrl, dev, https }: CspOptions): string {
+export function buildCsp({ supabaseUrl, dev, https, nonce }: CspOptions): string {
   const supabase = new URL(supabaseUrl);
   const supabaseWs = `${supabase.protocol === "https:" ? "wss:" : "ws:"}//${supabase.host}`;
 
   const directives: [string, string[]][] = [
     ["default-src", ["'self'"]],
-    ["script-src", ["'self'", "'unsafe-inline'", ...(dev ? ["'unsafe-eval'"] : [])]],
+    [
+      "script-src",
+      nonce
+        ? [`'nonce-${nonce}'`, "'strict-dynamic'", ...(dev ? ["'unsafe-eval'"] : [])]
+        : ["'self'", "'unsafe-inline'", ...(dev ? ["'unsafe-eval'"] : [])],
+    ],
     ["style-src", ["'self'", "'unsafe-inline'"]],
     ["img-src", ["'self'", "data:", "blob:", supabase.origin]],
     ["font-src", ["'self'"]],

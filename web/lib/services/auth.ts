@@ -10,6 +10,8 @@ export type SessionUser = {
   email: string | null;
   /** Name von Apple (nur beim ersten Login geliefert); nur zum Vorbelegen im Onboarding. */
   metadataName: string | null;
+  /** Claim app_role (ADR 005): nur als UI-Hinweis (Link „Admin“), nie für Rechte. */
+  adminHint?: boolean;
 };
 
 // Nur der Name, den Apple liefert. user_metadata ist frei setzbar, auch von jemandem, der eine
@@ -38,6 +40,7 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
     id: claims.sub,
     email: typeof claims.email === "string" ? claims.email : null,
     metadataName: nameFromMetadata(claims.user_metadata, claims.app_metadata),
+    adminHint: claims.app_role === "admin",
   };
 });
 

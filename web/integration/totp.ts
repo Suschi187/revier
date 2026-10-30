@@ -1,12 +1,13 @@
 import { createHmac } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import path from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Nur für Tests (Integration und E2E): TOTP nach RFC 6238 mit node:crypto statt eines Pakets (Plan M4 7),
 // MFA-Einrichtung per supabase-js und Rollen per `supabase db query --local` (nie gegen die Cloud).
 
-const REPO_ROOT = fileURLToPath(new URL("../..", import.meta.url));
+// Ohne import.meta, damit auch Playwright (CommonJS) die Datei laden kann; beide laufen in web/.
+const REPO_ROOT = path.resolve(process.cwd(), "..");
 
 function base32Decode(input: string): Buffer {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";

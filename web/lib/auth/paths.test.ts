@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isProtectedPath, localeFromPath, nextFromRedirectTo, safeNextPath } from "./paths";
+import { isAdminPath, isProtectedPath, localeFromPath, nextFromRedirectTo, safeNextPath } from "./paths";
 
 const SITE = "http://localhost:3000";
 
@@ -10,6 +10,9 @@ describe("safeNextPath", () => {
     ["/cs/welcome", "/cs/welcome"],
     ["/pl", "/pl"],
     ["/de/account?tab=x#y", "/de/account"],
+    // Seit M4 ein geschützter Bereich (ADR 014, Review A1); Rechte prüft die Seite selbst.
+    ["/de/admin", "/de/admin"],
+    ["/de/account/../admin", "/de/admin"],
   ])("erlaubt %s", (input, expected) => {
     expect(safeNextPath(input, "de")).toBe(expected);
   });
@@ -31,9 +34,8 @@ describe("safeNextPath", () => {
     "/de/account\r\nSet-Cookie: x=1",
     "/de/../../evil",
     "/fr/account",
-    "/de/admin",
     "/de/login",
-    "/de/account/../admin",
+    "/de/adminx",
     "javascript:alert(1)",
     "/" + "a".repeat(600),
   ])("lehnt %j ab", (input) => {
@@ -64,6 +66,11 @@ describe("isProtectedPath / localeFromPath", () => {
     expect(isProtectedPath("/en/account/profile")).toBe(true);
     expect(isProtectedPath("/pl/welcome")).toBe(true);
     expect(isProtectedPath("/de/accounts")).toBe(false);
+    expect(isProtectedPath("/cs/admin/listings")).toBe(true);
+    expect(isAdminPath("/de/admin")).toBe(true);
+    expect(isAdminPath("/pl/admin/mfa")).toBe(true);
+    expect(isAdminPath("/de/adminx")).toBe(false);
+    expect(isAdminPath("/de/account/admin")).toBe(false);
     expect(isProtectedPath("/de/login")).toBe(false);
     expect(isProtectedPath("/de")).toBe(false);
   });
