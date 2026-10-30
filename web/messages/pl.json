@@ -165,6 +165,8 @@
       "create": "Dodaj ogłoszenie",
       "statusLabel": "Status",
       "rejectReason": "Powód moderacji: {reason}",
+      "moderationNote": "Uwaga moderacji: „{note}”",
+      "changesRequested": "Moderacja prosi o zmiany. Po edycji możesz ponownie przesłać ogłoszenie.",
       "expiresAt": "Widoczne do {date}",
       "createdAt": "Utworzono {date}",
       "reviewHint": "Moderacja sprawdzi Twoje ogłoszenie przed publikacją."

@@ -7,6 +7,7 @@ import { LocationStep } from "@/components/listings/steps/LocationStep";
 import { PhotosStep } from "@/components/listings/steps/PhotosStep";
 import { PreviewStep } from "@/components/listings/steps/PreviewStep";
 import { PriceStep } from "@/components/listings/steps/PriceStep";
+import { ModerationNote } from "@/components/listings/ModerationNote";
 import { ErrorSummary, StepNav } from "@/components/listings/WizardChrome";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -64,6 +65,7 @@ async function EditListing({ params, searchParams }: Props) {
   return (
     <>
       <StepNav listingId={listing.id} current={step} />
+      <ModerationNote status={listing.status} code={listing.rejectCode} note={listing.rejectReason} className="mt-4 rounded bg-red-50 p-3" />
       {(listing.status === "active" || listing.status === "paused") && (
         <p className="mt-4 rounded bg-amber-50 p-3 text-amber-950">{t("wizard.publishedNote")}</p>
       )}

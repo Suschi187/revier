@@ -165,6 +165,8 @@
       "create": "Create listing",
       "statusLabel": "Status",
       "rejectReason": "Reason from moderation: {reason}",
+      "moderationNote": "Note from moderation: “{note}”",
+      "changesRequested": "The moderation team has asked for changes. After editing, you can submit the listing again.",
       "expiresAt": "Visible until {date}",
       "createdAt": "Created on {date}",
       "reviewHint": "The moderation team checks your listing before it goes public."

@@ -165,6 +165,8 @@
       "create": "Anzeige aufgeben",
       "statusLabel": "Status",
       "rejectReason": "Grund der Moderation: {reason}",
+      "moderationNote": "Hinweis der Moderation: „{note}“",
+      "changesRequested": "Die Moderation bittet um Änderungen. Danach kannst du die Anzeige erneut absenden.",
       "expiresAt": "Sichtbar bis {date}",
       "createdAt": "Erstellt am {date}",
       "reviewHint": "Die Moderation prüft deine Anzeige, bevor sie öffentlich wird."

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import { ModerationNote } from "@/components/listings/ModerationNote";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireOnboardedUser } from "@/lib/services/gate";
@@ -100,9 +101,7 @@ async function ListingRow({ listing, locale }: { listing: OwnListingSummary; loc
       {listing.status === "active" && listing.expiresAt && (
         <p className="mt-2 text-sm">{t("mine.expiresAt", { date: date(listing.expiresAt) })}</p>
       )}
-      {listing.rejectReason && (listing.status === "rejected" || listing.status === "removed" || listing.status === "draft") && (
-        <p className="mt-2 text-sm text-red-800">{t("mine.rejectReason", { reason: listing.rejectReason })}</p>
-      )}
+      <ModerationNote status={listing.status} code={listing.rejectCode} note={listing.rejectReason} className="mt-2" />
       <div className="mt-3 flex flex-wrap items-center gap-3">
         {editable && (
           <Link href={`/account/listings/${listing.id}/edit`} className="underline">

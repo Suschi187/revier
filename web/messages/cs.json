@@ -165,6 +165,8 @@
       "create": "Podat inzerát",
       "statusLabel": "Stav",
       "rejectReason": "Důvod moderace: {reason}",
+      "moderationNote": "Poznámka moderace: „{note}“",
+      "changesRequested": "Moderace žádá o úpravy. Poté můžete inzerát znovu odeslat.",
       "expiresAt": "Viditelné do {date}",
       "createdAt": "Vytvořeno {date}",
       "reviewHint": "Moderátoři váš inzerát zkontrolují, než bude zveřejněn."

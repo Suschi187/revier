@@ -219,3 +219,52 @@ test("Warteschlange: Freigeben, Bearbeitung anfordern, Ablehnen mit Grund, geän
     await expect(page.getByRole("link", { name: title })).toHaveCount(0);
   }
 });
+
+test("Besitzer sieht den Grund in seiner Sprache und im Assistenten (Akzeptanz b)", async ({ page, browser }) => {
+  test.skip(!local, "Lokale Supabase nötig");
+  test.setTimeout(120_000);
+  const ownerContext = await browser.newContext();
+  const ownerPage = await ownerContext.newPage();
+  const owner = await signUp(ownerPage, "Inserent Grund");
+  const { data: region } = await admin().from("regions").select("id").eq("code", "DE-14612").single();
+  const insert = async (title: string) =>
+    (await admin()
+      .from("listings")
+      .insert({
+        owner_id: owner.id, kind: "helper", direction: "wanted", title, content_language: "de", region_id: region!.id,
+        description: "Wir suchen Hilfe beim Ansitzbau im Frühjahr, zwei Wochenenden.", attributes: { tasks: ["Ansitzbau"] }, status: "pending_review",
+      })
+      .select("id")
+      .single()).data!.id;
+  const rejectedId = await insert("Abgelehnt mit Grund");
+  const returnedId = await insert("Zurück mit Grund");
+
+  await becomeAdmin(page, "Admin Gründe");
+  await page.goto(`/de/admin/listings/${rejectedId}`);
+  await page.getByLabel("Ablehnen").check();
+  await page.getByLabel("Grund", { exact: true }).selectOption({ label: "Kontaktdaten im Text" });
+  await page.getByLabel("Hinweis an den Inserenten (optional)").fill("Bitte ohne Telefonnummer.");
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Die Anzeige ist abgelehnt.")).toBeVisible();
+  await page.goto(`/de/admin/listings/${returnedId}`);
+  await page.getByLabel("Bearbeitung anfordern").check();
+  await page.getByLabel("Grund", { exact: true }).selectOption({ label: "Angaben unvollständig" });
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Die Anzeige ist zur Bearbeitung zurückgegeben.")).toBeVisible();
+
+  // Besitzer auf Polnisch: Vorlage übersetzt, Freitext unverändert
+  await ownerPage.goto("/pl/account/listings");
+  const rejected = ownerPage.getByRole("listitem").filter({ hasText: "Abgelehnt mit Grund" });
+  await expect(rejected.getByText("Powód moderacji: Dane kontaktowe w treści")).toBeVisible();
+  await expect(rejected.getByText("Uwaga moderacji: „Bitte ohne Telefonnummer.”")).toBeVisible();
+  const returned = ownerPage.getByRole("listitem").filter({ hasText: "Zurück mit Grund" });
+  await expect(returned.getByText("Moderacja prosi o zmiany.")).toBeVisible();
+
+  // Im Assistenten steht der Grund oben, bis erneut abgesendet wird
+  await ownerPage.goto(`/de/account/listings/${returnedId}/edit?step=preview`);
+  await expect(ownerPage.getByText("Grund der Moderation: Angaben unvollständig")).toBeVisible();
+  await ownerPage.getByRole("button", { name: "Zur Prüfung absenden" }).click();
+  await expect(ownerPage).toHaveURL(/notice=submitted/);
+  await expect(ownerPage.getByRole("listitem").filter({ hasText: "Zurück mit Grund" }).getByText("Grund der Moderation")).toHaveCount(0);
+  await ownerContext.close();
+});
