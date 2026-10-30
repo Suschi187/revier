@@ -32,7 +32,8 @@ export async function PriceStep({
   errors: string[];
 }) {
   const t = await getTranslations("Listings");
-  const mode = priceUnit === "on_request" ? "on_request" : priceMinor !== null ? "amount" : "none";
+  // Ohne gespeicherten Preis ist keine Option gewählt; ein eingetragener Betrag gilt dann als Betrag (QA M3 F3).
+  const mode = priceUnit === "on_request" ? "on_request" : priceMinor !== null ? "amount" : null;
   const decimal = locale === "en" ? "." : ",";
   return (
     <form action={action} className="mt-6 flex flex-col gap-6">

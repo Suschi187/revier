@@ -93,12 +93,12 @@ test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ pa
 
   // Schritt 5: Preis; falsche Eingabe wird erklärt
   await expect(page.getByText("Schritt 5 von 6")).toBeVisible();
-  await page.getByRole("radio", { name: "Betrag" }).check();
+  await page.getByRole("radio", { name: "Betrag angeben" }).check();
   await page.getByRole("textbox", { name: "Betrag" }).fill("12,345.6.7");
   await page.getByLabel("Einheit").selectOption({ label: "pro Jahr" });
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
   await expect(page.getByRole("alert").getByText(/Bitte gib den Betrag als Zahl an/)).toBeVisible();
-  await page.getByRole("radio", { name: "Betrag" }).check();
+  await page.getByRole("radio", { name: "Betrag angeben" }).check();
   await page.getByRole("textbox", { name: "Betrag" }).fill("8.400");
   await page.getByLabel("Einheit").selectOption({ label: "pro Jahr" });
   await page.getByRole("button", { name: "Speichern und weiter" }).click();

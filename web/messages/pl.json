@@ -242,7 +242,7 @@
       "price": "Cena",
       "priceNone": "Bez ceny",
       "priceOnRequest": "Na zapytanie",
-      "priceAmount": "Kwota",
+      "priceAmount": "Podaj kwotę",
       "amount": "Kwota",
       "amountHint": "Na przykład 1500 lub 1 500,50",
       "currency": "Waluta",
@@ -339,6 +339,7 @@
       "price_tooManyDecimals": "Użyj maksymalnie dwóch miejsc po przecinku.",
       "price_zero": "Podaj kwotę większą od 0 lub wybierz „Na zapytanie”.",
       "price_tooLarge": "Kwota jest zbyt wysoka.",
+      "price_conflict": "Wpisano kwotę. Wybierz „Podaj kwotę” lub wyczyść pole „Kwota”.",
       "dates": "Koniec jest przed początkiem.",
       "form": "Sprawdź wprowadzone dane."
     },

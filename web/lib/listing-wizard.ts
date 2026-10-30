@@ -41,7 +41,7 @@ const KNOWN_CODES = new Set([
   "attributes.revier_type", "area_hectares", "attributes.permit_scope", "attributes.paid", "attributes.event_date",
   "attributes.spots_available", "attributes.tasks", "species", "photos.unprocessed", "attributes.unknown",
   "title", "district", "postal_format", "area_invalid", "dates", "price_required", "price_invalid", "price_negative",
-  "price_tooManyDecimals", "price_zero", "price_tooLarge",
+  "price_tooManyDecimals", "price_zero", "price_tooLarge", "price_conflict",
 ]);
 
 /** Feldcode als Schlüssel für die Message-Dateien (next-intl verschachtelt an Punkten). */

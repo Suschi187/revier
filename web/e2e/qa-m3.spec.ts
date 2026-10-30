@@ -342,19 +342,22 @@ test("360 px in Polnisch: keine horizontale Überbreite in Assistent und „Mein
   expect(overflow).toEqual([]);
 });
 
-// Bekannter Fehler (QA M3, siehe Bericht): Ein eingegebener Betrag geht ohne Hinweis verloren, wenn die
-// Option „Betrag“ nicht zusätzlich gewählt ist. Erwartet: Betrag wird gespeichert oder es gibt eine Meldung.
+// QA M3 F3: Ein eingetragener Betrag geht nie stumm verloren. Ohne gewählte Option gilt „Betrag angeben“,
+// bei „Auf Anfrage“ mit Betrag gibt es einen Feldfehler. Die Option heißt anders als das Feld (F7).
 test("Preis: eingegebener Betrag geht nicht stumm verloren", async ({ page }) => {
-  test.fail();
   await signUp(page, "Preis QA");
   const id = await newHelperDraft(page, "Preisprüfung");
   await page.goto(`/de/account/listings/${id}/edit?step=price`);
-  await page.getByRole("textbox", { name: "Betrag" }).fill("1200");
+  await page.getByRole("radio", { name: "Auf Anfrage" }).check();
+  await page.getByLabel("Betrag", { exact: true }).fill("1200");
+  await page.getByRole("button", { name: "Speichern und weiter" }).click();
+  await expect(page.getByRole("alert").getByText(/Du hast einen Betrag eingetragen/)).toBeVisible();
+  await expect(page.getByText("Schritt 5 von 6")).toBeVisible();
+
+  await page.goto(`/de/account/listings/${id}/edit?step=price`);
+  await page.getByLabel("Betrag", { exact: true }).fill("1200");
   await page.getByRole("button", { name: "Speichern und weiter" }).click();
   await expect(page.getByText("Schritt 6 von 6")).toBeVisible();
-  const lost = page.getByText("Keine Preisangabe");
-  const alert = page.getByRole("alert");
-  // Erfüllt, wenn der Betrag in der Vorschau steht oder der Assistent eine Meldung zeigt.
-  await expect(page.getByText(/1\.200,00 €|1\.200 €/).or(alert)).toBeVisible({ timeout: 3_000 });
-  await expect(lost).toHaveCount(0);
+  await expect(page.getByText(/1\.200(,00)?\s€/)).toBeVisible();
+  await expect(page.getByText("Keine Preisangabe")).toHaveCount(0);
 });

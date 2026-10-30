@@ -242,7 +242,7 @@
       "price": "Preis",
       "priceNone": "Keine Angabe",
       "priceOnRequest": "Auf Anfrage",
-      "priceAmount": "Betrag",
+      "priceAmount": "Betrag angeben",
       "amount": "Betrag",
       "amountHint": "Zum Beispiel 1500 oder 1.500,50",
       "currency": "Währung",
@@ -339,6 +339,7 @@
       "price_tooManyDecimals": "Bitte höchstens zwei Nachkommastellen.",
       "price_zero": "Bitte gib einen Betrag größer 0 an oder wähle „Auf Anfrage“.",
       "price_tooLarge": "Der Betrag ist zu groß.",
+      "price_conflict": "Du hast einen Betrag eingetragen. Wähle „Betrag angeben“ oder leere das Feld „Betrag“.",
       "dates": "Das Ende liegt vor dem Beginn.",
       "form": "Bitte prüfe deine Angaben."
     },

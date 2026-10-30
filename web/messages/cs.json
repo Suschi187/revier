@@ -242,7 +242,7 @@
       "price": "Cena",
       "priceNone": "Bez ceny",
       "priceOnRequest": "Na dotaz",
-      "priceAmount": "Částka",
+      "priceAmount": "Uvést částku",
       "amount": "Částka",
       "amountHint": "Například 1500 nebo 1 500,50",
       "currency": "Měna",
@@ -339,6 +339,7 @@
       "price_tooManyDecimals": "Použijte prosím nejvýše dvě desetinná místa.",
       "price_zero": "Zadejte prosím částku větší než 0 nebo zvolte „Na dotaz“.",
       "price_tooLarge": "Částka je příliš vysoká.",
+      "price_conflict": "Zadali jste částku. Zvolte „Uvést částku“ nebo pole „Částka“ vymažte.",
       "dates": "Konec je před začátkem.",
       "form": "Zkontrolujte prosím své údaje."
     },

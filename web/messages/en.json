@@ -242,7 +242,7 @@
       "price": "Price",
       "priceNone": "No price",
       "priceOnRequest": "On request",
-      "priceAmount": "Amount",
+      "priceAmount": "Enter an amount",
       "amount": "Amount",
       "amountHint": "For example 1500 or 1.500,50",
       "currency": "Currency",
@@ -339,6 +339,7 @@
       "price_tooManyDecimals": "Please use at most two decimal places.",
       "price_zero": "Please enter an amount greater than 0 or choose “On request”.",
       "price_tooLarge": "The amount is too large.",
+      "price_conflict": "You entered an amount. Choose “Enter an amount” or clear the amount field.",
       "dates": "The end lies before the start.",
       "form": "Please check your entries."
     },

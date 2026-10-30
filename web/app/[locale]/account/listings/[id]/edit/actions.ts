@@ -98,7 +98,13 @@ export async function saveListingStep(form: FormData): Promise<void> {
       return handle(await updateListing(id, { description, attributes, areaHectares }));
     }
     case "price": {
-      const mode = text(form, "priceMode");
+      // Ein eingetragener Betrag geht nie stumm verloren (QA M3 F3): ohne gewählte Option gilt „Betrag“,
+      // bei „Keine Angabe“ oder „Auf Anfrage“ mit Betrag gibt es einen Feldfehler.
+      const amount = text(form, "amount").trim();
+      const chosen = text(form, "priceMode");
+      const mode = chosen || (amount ? "amount" : "none");
+      if (mode !== "none" && mode !== "on_request" && mode !== "amount") back(["form"]);
+      if (mode !== "amount" && amount) back(["price_conflict"]);
       const dates = z.object({ start: optionalDate, end: optionalDate }).safeParse({ start: text(form, "startDate"), end: text(form, "endDate") });
       if (!dates.success) back(["dates"]);
       const startDate = dates.data.start || null;
