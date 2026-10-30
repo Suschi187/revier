@@ -13,10 +13,10 @@ as $$
 declare
   new_id uuid := gen_random_uuid();
 begin
-  insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, created_at, updated_at)
+  insert into auth.users (id, instance_id, aud, role, email, raw_user_meta_data, created_at, updated_at, email_confirmed_at)
   values (
     new_id, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', email,
-    '{}'::jsonb, now(), now()
+    '{}'::jsonb, now(), now(), now()
   );
   -- Der Trigger setzt nur den Platzhalter (Review M2); Testnamen direkt setzen.
   update public.profiles p set display_name = coalesce(create_user.display_name, split_part(email, '@', 1))
@@ -59,11 +59,14 @@ begin
 end;
 $$;
 
+-- Der Audit-Eintrag der Ernennung (Trigger, ADR 014) wird wieder entfernt, damit Audit-Zählungen in den
+-- Tests nur ihre eigenen Aktionen sehen; 23_admin_roles prüft das Audit der Rollen.
 create or replace function tests.make_admin(user_id uuid)
 returns void
 language sql
 as $$
   insert into private.user_roles (user_id, role) values (user_id, 'admin');
+  delete from public.audit_log a where a.action = 'role.granted' and a.target_id = make_admin.user_id;
 $$;
 
 -- Wechselt in die Rolle authenticated mit passenden JWT-Claims. aal2 = 2FA bestätigt.
@@ -103,6 +106,26 @@ $$;
 
 grant usage on schema tests to anon, authenticated;
 grant execute on all functions in schema tests to anon, authenticated;
+
+-- Wie authenticate_as mit aal2 und einer TOTP-Bestätigung vor `minutes_ago` Minuten im Claim amr
+-- (Supabase: [{"method": "totp", "timestamp": <epoch>}]), für den Step-up bei Rollenänderungen (ADR 014).
+create or replace function tests.authenticate_totp(user_id uuid, minutes_ago integer default 0)
+returns void
+language plpgsql
+as $$
+begin
+  perform set_config('role', 'authenticated', true);
+  perform set_config(
+    'request.jwt.claims',
+    jsonb_build_object('sub', user_id, 'role', 'authenticated', 'aal', 'aal2',
+      'amr', jsonb_build_array(
+        jsonb_build_object('method', 'otp', 'timestamp', extract(epoch from now() - interval '1 day')::bigint),
+        jsonb_build_object('method', 'totp', 'timestamp', extract(epoch from now() - make_interval(mins => minutes_ago))::bigint)))::text,
+    true
+  );
+end;
+$$;
+grant execute on function tests.authenticate_totp(uuid, integer) to anon, authenticated;
 
 -- Moderation läuft im Produkt nur über die RPC moderate_listing, die dieses Flag setzt (ADR 014, A4). Die
 -- älteren Tests moderieren per Roh-UPDATE und setzen es deshalb für die ganze Sitzung; 21_moderation prüft

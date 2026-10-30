@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(42);
+select plan(43);
 
 select tests.create_user('a@test.local') as a_id \gset
 select tests.create_user('b@test.local') as b_id \gset
@@ -126,7 +126,10 @@ select throws_ok(format($$ select register_device(%L) $$, repeat('ef', 32)), '42
 -- Pseudonymisierung bei Account-Löschung (ADR 008) --------------------------------
 select tests.as_postgres();
 delete from auth.users where id = :'admin_id';
-select is((select count(*)::int from audit_log where actor_id is null), 4, 'Audit-Einträge bleiben, Admin-ID wird entfernt');
+select is((select count(*)::int from audit_log where actor_id is null and action not like 'role.%'), 4, 'Audit-Einträge bleiben, Admin-ID wird entfernt');
+-- Die Rolle fällt per Kaskade weg; der Trigger auf user_roles protokolliert das (ADR 014).
+select is((select details ->> 'via' from audit_log where action = 'role.revoked' and target_id = :'admin_id'), 'sql',
+  'Wegfall der Admin-Rolle beim Löschen ist protokolliert');
 delete from auth.users where id = :'a_id';
 select is((select count(*)::int from reports where reporter_id is null), 20, 'Meldungen bleiben pseudonymisiert erhalten');
 
