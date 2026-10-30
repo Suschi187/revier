@@ -926,3 +926,169 @@ M3 ist **mit Auflagen abnahmereif**. Die beiden Akzeptanzkriterien sind erfüllt
 | F10 Testlücken | behoben (Vitest `listing-errors`, E2E Tageslimit, SKIPPED-Schlüssel, ADR 013 Branching) | `1b94e35` |
 
 Testlauf danach: pgTAP 424, Vitest 153, API 111, E2E 19; `supabase test db` nach E2E ohne Reset grün; Lint, Typecheck, DB-Lint und Build grün.
+
+## M4 – Abnahme 2026-10-30
+
+Geprüfter Stand: `6890685` (main, Arbeitsbaum sauber). Geprüft wurden die M4-Commits `a96cf1d` bis `6890685`. Umgebung: macOS, Node 24.22.1, Next.js 16.4.1, Supabase CLI 2.122.0 (lokal, nach `supabase stop && supabase start` wegen TOTP in `config.toml`), Chromium headless (Playwright). Produktions-Build per `npx next start -p 3456`.
+Grundlage: SPEC v0.6 (5, 6 M4), Plan M4 mit Architekt-Review (10) und „Eingearbeitet“ (11), ADR 014, ADR 005/010/013, CHANGELOG „M4 Admin-Bereich (Freigabe)“, CLAUDE.md. iOS ist laut Plan nicht Teil von M4 (Lücke im CHANGELOG vermerkt).
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase db reset && supabase test db` | grün, 24 Dateien, **506** Tests. Mit der neuen QA-Datei 25 Dateien und **541** Tests, davon 1 TODO (F4). |
+| `supabase test db` ohne Reset direkt nach `npm run test:e2e` | grün (506 bzw. 541). Rollen, MFA-Faktoren, Audit-Zeilen und Anzeigen sind nach E2E weg. Reste siehe F5 und Hinweise. |
+| `npm run lint`, `npm run typecheck` | grün, auch mit der neuen E2E-Datei |
+| `npm test` (Vitest) | **161/161** |
+| `npm run test:integration` | **117/117** |
+| `npm run test:e2e` (Dev-Server) | **25/25**; mit `qa-m4.spec.ts` **36/36** (davon 3 erwartete Fehlschläge per `test.fail`: F1 CSP, F2, F4) |
+| `admin.spec.ts` gegen den Produktions-Build (`QA_BASE_URL=http://localhost:3456`) | **6/6**, ohne CSP-Verletzungen |
+| `qa-m4.spec.ts` gegen den Produktions-Build | **11/11** (davon 5 erwartete Fehlschläge: F1 Status anonym/Nicht-Admin, F1 CSP, F2, F4) |
+| `npm run build` | grün, ohne Warnungen. Auffällig: alle Admin-Routen sind dynamisch (ƒ) oder PPR (◐ bei `/admin/listings/[id]`), die Antworten tragen `x-nextjs-postponed: 1` (F1). |
+
+### Ergebnis je Akzeptanzkriterium
+
+| # | Kriterium (SPEC 6 M4, Plan 0) | Ergebnis | Nachweis |
+|---|---|---|---|
+| a | Freigegebene Anzeige wird sichtbar (`active`, für anon lesbar) | **erfüllt** | `22_moderate_listing` (anon liest), `admin.test.ts`, E2E „Warteschlange“; öffentliche Seiten folgen in M5 |
+| b | Abgelehnte Anzeige zeigt den Grund im Dashboard | **erfüllt** | E2E auf Polnisch: Vorlage übersetzt, Freitext unverändert; „Bearbeitung anfordern“ zeigt den Hinweis in „Meine Anzeigen“ und im Assistenten, er verschwindet nach erneutem Absenden |
+| c | Nicht-Admins erhalten 403 | **erfüllt** auf allen kanonischen Pfaden (`/{locale}/admin…`, auch `/de/./admin`, Query, unbekannte Unterpfade, gesperrte und gelöschte Admins), Dev und Produktion. **Einschränkung F1:** Über prozentkodierte Pfade (`/de/%61dmin`) liefert der Produktions-Build 200 mit der Seite „Kein Zugriff“, die zweite Schicht hinter dem Proxy setzt den Status nicht. |
+| – | `/admin` mit Admin-Rolle und 2FA | **erfüllt** | aal1 → `/admin/mfa`, alle RPCs verlangen aal2 (`is_admin`), Integration mit echtem aal2 |
+| – | Freigabe/Ablehnung inkl. Grund | **erfüllt** | RPC mit Versionsvergleich, Vorlage plus Freitext, Pflicht bei „anderer Grund“ |
+| – | Audit-Log | **erfüllt** | Entscheidungen mit Akteur, Code und Freitext; `role.*` per Trigger (auch SQL); `user.looked_up` ohne E-Mail; Filter und Paging. Audit ist für Admins nicht schreib- oder löschbar (QA-pgTAP). |
+
+### Architekt-Auflagen (Plan 10)
+
+| Auflage | Status | Bemerkung |
+|---|---|---|
+| B1 Freigabe nur für gesehenen Stand | **erfüllt** | `for update`, Version vor Inhalt gelesen. QA ergänzt: neues Foto, Alt-Text, „Bearbeitung anfordern“ mit altem Stand, Version `null`/leer → `RV004` |
+| B2 Schutz der Admin-Ernennung | **erfüllt** | Step-up per `amr` in der DB, 3/10 in 24 h, 7 Tage Karenz, letzter **aktiver** Admin unter Advisory-Lock, Trigger-Audit, Runbooks in ADR 005. Kleine Lücke F3 (Kandidat per URL). |
+| B3 MFA-Einrichtung nicht per GET | **erfüllt** mit JS | GET legt nichts an (E2E), unbestätigte Faktoren werden vor jedem Start entfernt (höchstens 1 offener Faktor), Secret nur in der Action-Antwort (`no-store`), nie in URL/Cookie. Ohne JS ist die Einrichtung nicht möglich (F2). |
+| A1 403 im Proxy und im Gate | **teilweise** | Proxy, `PROTECTED_SECTIONS`, `guards.test.ts`, `requireAdmin()` in allen Seiten und Actions erfüllt. Server-Action-POST als Nicht-Admin fehlte im E2E (QA ergänzt, wird abgelehnt). **Nicht erfüllt:** „blockierendes Rendern“ (F1); die geforderte Quelle zur Next-Option fehlt in ADR 014. |
+| A2 `admin_access()` | **erfüllt** | invoker, nur `authenticated`, Meta-Allowlist; gesperrte und gelöschte Admins `has_role = false` |
+| A3 Nonce-CSP für `/admin` | **teilweise** | Kanonische Pfade in Dev und Produktion mit Nonce und `strict-dynamic`, keine Verletzungen. Über kodierte Pfade gilt die feste CSP mit `'unsafe-inline'` (F1). |
+| A4 Moderation nur über die RPC | **erfüllt** | Roh-UPDATE auf `active`/`rejected`/`draft`/`removed` → `42501` |
+| A5 Keine Inhaltsänderung durch Moderatoren | **erfüllt** | auch an aktiven Anzeigen, `expires_at`, `owner_id`, Fotos, Wildarten; kein Löschen (QA-pgTAP). `listings_delete_admin` wurde schon in `review_medium` entfernt. |
+| A6 `reject_code` durch alle Pfade | **erfüllt** | Constraints, Hash-Ausschluss, Audit-Bedingung auf Code, Trigger `listings_zz_moderation_fields` leert Grund außerhalb von Entwurf/abgelehnt/entfernt |
+| A7 Hinweise für Admins | **erfüllt** | Zahl in der Warteschlange ohne N+1 (`admin_review_queue`) |
+| A8 `submitted_at` | **erfüllt** | Trigger auf allen Pfaden, Index, Keyset |
+| A9 `admin_find_user` | **erfüllt** | exakt, normalisiert, ohne eigenes/gesperrtes/unbestätigtes Konto, 30/h (QA-pgTAP), Audit ohne E-Mail; Suche per POST, E-Mail nie in der URL (E2E) |
+| A10 Signierte URLs | **erfüllt** | Session des Admins, 600 s, kein `use cache`, Antworten `private, no-store` |
+| A11 Gesperrte/gelöschte Admins | **erfüllt** | `is_admin`, `admin_access`, 403 im Browser geprüft |
+| A12 Testplan | **teilweise** | pgTAP und Integration wie gefordert; fehlend: E2E „eigene Anzeige nicht entscheidbar“, E2E „letzter Admin“, B1 mit Foto (QA ergänzt). Der CHANGELOG nennt die Lücken ehrlich. |
+| A13 Commit-Reihenfolge | **erfüllt** | E2E-Commit entfiel, Tests kamen mit 6–10 (im CHANGELOG vermerkt) |
+| A14 Doku | **teilweise** | ADR 005/010/013, Cloud-Checkliste und Fehlervertrag vorhanden. ADR 014 und CHANGELOG beschreiben `instant = false` fälschlich als blockierendes Rendern (F1). |
+
+Hinweise H1–H8: H1, H4, H7 und H8 umgesetzt bzw. dokumentiert. H2 und H3 (Re-Auth nach 12 h, zweiter Faktor) sind nicht umgesetzt (optional). Der Index aus H5 `(created_at desc, id desc)` fehlt, es gibt nur `audit_log_created_idx (created_at)`. Für den heutigen Umfang ist das unkritisch. H6 ist teilweise umgesetzt (F4).
+
+### Definition of Done (CLAUDE.md)
+
+| Punkt | Ergebnis |
+|---|---|
+| Build ohne Warnungen, Lint und Typecheck grün | erfüllt |
+| Tests grün | erfüllt, auch `supabase test db` nach E2E ohne Reset |
+| Neue Texte in 4 Sprachen | erfüllt. Die Schlüssel sind in allen 4 Dateien gleich, alle dynamischen Schlüssel (`errors.*`, `notices.*`, `reasons.*`, `decisions.*`, `actions.*`) sind vorhanden. Auf 5 Admin-Seiten in en/cs/pl erscheinen keine rohen Schlüssel, `lang` stimmt, bei 360 px gibt es keine Überbreite (QA-E2E). Mit en identisch sind nur „Admins“, „Details“ und „System“ (de/pl), das ist vertretbar. Die Begriffe stimmen mit `docs/GLOSSARY.md` überein (cs/pl ungeprüft, korrekt markiert). |
+| Lücke Web/iOS im CHANGELOG | erfüllt (I4, Admin nur Web) |
+| RLS für neue Tabellen, getestet | erfüllt: `private.admin_lookups` mit RLS und ohne API-Rechte (Schema `private`); neue RPCs in der Meta-Allowlist |
+| CHANGELOG mit Testanleitung | erfüllt. Die Anleitung wurde nachvollzogen und funktioniert. Inhaltliche Abweichung: F1 („rendert blockierend“). |
+
+### Sicherheitsprüfung (eigene Proben)
+
+| Probe | Ergebnis |
+|---|---|
+| Nicht-Admin auf `/de/admin`, `/de/admin/`, `/de/./admin`, `/de/admin?x=1`, `/pl/admin/listings`, `/de/admin/foo`, `/de/admin/listings/<uuid>`, `/de/forbidden` | 403 (bzw. 308 auf `/de/admin`), `X-Robots-Tag: noindex`, `private, no-store` |
+| Nicht-Admin auf `/de/%61dmin`, `/de/%61dmin/listings`, `/de/admi%6E/mfa` u. a. (Produktion) | **200** mit „Kein Zugriff“ und `<meta robots noindex>`, ohne `X-Robots-Tag`; keine Daten (F1) |
+| Anonym auf `/de/%61dmin/listings` (Produktion) | **200**, Redirect zur Anmeldung nur im Stream (`NEXT_REDIRECT`) (F1) |
+| Admin (aal2) auf `/de/%61dmin/listings/<id>` | volle Prüfansicht mit Version, CSP `script-src 'self' 'unsafe-inline'`, 13 Skripte ohne Nonce (F1) |
+| Rollenentzug zwischen Proxy und Seite | nicht im Wettlauf ausgeführt. Die Proxy-Umgehung oben ist gleichwertig: die Seite liefert 200 mit „Kein Zugriff“, also die Hülle, die A1 verhindern sollte. |
+| Server Action „Entscheidung“ als Nicht-Admin (echte Action-ID, gültige Version) | kanonisch 409 (Rewrite auf `/forbidden`, Action nicht ausgeführt), kodiert 404 mit „Kein Zugriff“; die Anzeige bleibt `pending_review` |
+| Gesperrter bzw. gelöschter Admin | 403 auf allen Admin-Seiten; RPCs `42501` |
+| aal1-Admin | nur `/admin/mfa`; alle Admin-RPCs `42501`, Warteschlange leer, Version `null` |
+| Roh-UPDATE, Kinder-Tabellen, Löschen, Audit fälschen (aal2-Admin) | alles abgelehnt (QA-pgTAP) |
+| Definer-Pfade | öffentliche Definer-Funktionen für `authenticated`: `accept_legal`, `admin_*`, `grant/revoke_admin`, `legal_status`, `listing_content_hints`, `register_device`. Keine davon schreibt in `listings`; der Kinder-Guard schreibt nur für Besitzer. |
+| Selbst-Moderation | RPC `42501`, Warteschlange ohne eigene Anzeigen, Version `null` |
+| Ernennen: Step-up, Karenz (6 Tage 23 Stunden), Gesamtlimit, letzter aktiver Admin (anderer gesperrt), unbestätigtes Konto | wie spezifiziert (QA-pgTAP) |
+| TOTP-Faktoren-Flut | GET erzeugt keinen Faktor; wiederholtes POST lässt höchstens einen unbestätigten Faktor stehen (auch ohne JS geprüft) |
+| Secret-Leak | Das Secret steht nur in der POST-Antwort (`no-store`). Ohne JS steht es unsichtbar im Flight-Payload derselben Antwort (F2). |
+| XSS in Titel (`<script>`) in Warteschlange/Prüfansicht | escaped |
+
+### Gefundene Fehler
+
+#### F1 – hoch – Zweite Schicht hinter dem Proxy greift nicht: 200 statt 403, Nonce-CSP per kodiertem Pfad umgehbar
+Die Admin-Seiten rendern nicht blockierend. `export const instant = false` ist in Next 16 eine Prefetch-Option (`build/segment-config/app/app-segment-config.js`: „How this segment should be prefetched“). Alle Admin-Antworten tragen `x-nextjs-postponed: 1`. Der Status 200 ist also gesendet, bevor `requireAdmin()` `forbidden()` oder `redirect()` aufruft. Den 403 liefert heute nur der Proxy. Dessen Regex prüft den rohen Pfad, `next-intl` dekodiert ihn aber und schreibt `/de/%61dmin` intern auf `/de/admin` um (`x-middleware-rewrite: /de/admin`). Folgen:
+- Nicht-Admin und anonym bekommen im Produktions-Build 200 („Kein Zugriff“ bzw. Redirect erst im Stream). Daten fließen keine ab, die Autorisierung im Gate hält.
+- Ein Admin auf einem kodierten Pfad bekommt die feste CSP mit `'unsafe-inline'` statt der Nonce-CSP, ohne `X-Robots-Tag` (das Meta-`noindex` bleibt). Ein Link in einer Nachricht oder Mail reicht, damit die Admin-Seiten, die UGC zeigen, ohne die Schutzschicht aus A3 laufen.
+- Dasselbe gilt für den Fall „Rolle zwischen Proxy und Seite entzogen“, den A1 ausdrücklich ausschließen sollte.
+- ADR 014 und CHANGELOG („rendert blockierend“) sind in diesem Punkt falsch, die in A1 geforderte Quelle fehlt.
+
+Reproduktion:
+1. `npm run build && npx next start -p 3456`, als Nicht-Admin angemeldet: `curl -s -o /dev/null -w '%{http_code}' -H 'Cookie: <sb-…-auth-token>' http://localhost:3456/de/%61dmin` → `200`, Body enthält „Kein Zugriff“.
+2. Als aal2-Admin `curl -sD - …/de/%61dmin/listings/<id>` → `Content-Security-Policy: … script-src 'self' 'unsafe-inline'`, Inhalt der Prüfansicht.
+3. `QA_BASE_URL=http://localhost:3456 npx playwright test e2e/qa-m4.spec.ts -g "kodierter"` (3 Tests als `test.fail`; im Dev-Server ist nur der CSP-Test rot, weil `next dev` nicht vorrendert).
+
+Vorschlag:
+- Im Proxy den Pfad vor dem Abgleich normalisieren (`decodeURIComponent` je Segment, Fehler → 400), oder Admin-Erkennung und CSP auf den von `next-intl` umgeschriebenen Pfad stützen. Besser zusätzlich: die Nonce-CSP für `/admin` als Standard setzen, sobald der dekodierte Pfad passt, und kodierte Varianten von `/admin` per Redirect auf den kanonischen Pfad schicken.
+- Für den echten 403 der Seite: den Zugriff vor dem ersten Byte entscheiden, z. B. in einem `layout.tsx` unter `/admin`, das ohne Suspense-Grenze vor der Hülle prüft (mit `cacheComponents` ggf. `connection()`/dynamische Hülle), oder auf den Proxy als einzige Status-Quelle setzen und das ADR korrigieren. Danach die `test.fail` in `qa-m4.spec.ts` entfernen.
+- ADR 014 und CHANGELOG korrigieren (Quelle zur Option angeben).
+
+#### F2 – mittel – TOTP-Einrichtung geht ohne JavaScript nicht
+Plan 4.1 verlangt: „die Einrichtung selbst braucht kein Client-JS“. `EnrollTotp` nutzt `useActionState` in einer Client-Komponente. Ohne JS läuft die Action zwar (POST 200, ein unbestätigter Faktor entsteht), die Seite zeigt danach aber wieder nur „Authenticator einrichten“, ohne QR-Code und ohne Schlüssel. Das Secret steht dabei unsichtbar im Flight-Payload der Antwort (`no-store`, also kein Cache-Leck). Die Code-Eingabe für einen bestehenden Faktor funktioniert ohne JS, die Entscheidung über Anzeigen ebenfalls (QA-E2E).
+Nebenbefund (UX): Ein falscher Code bei der Ersteinrichtung verwirft den Faktor. Der Admin muss einen neuen QR-Code scannen, der alte Eintrag in der App ist dann ungültig. Das E2E dokumentiert das so, eine Meldung („bitte den alten Eintrag löschen“) fehlt.
+Reproduktion: `npx playwright test e2e/qa-m4.spec.ts -g "TOTP-Einrichtung per POST ohne JavaScript"` (`test.fail`).
+Vorschlag: Die Einrichtung als Server-Action mit Redirect auf eine Seite bauen, die das Secret serverseitig aus dem unbestätigten Faktor liest. Supabase liefert das Secret nur beim `enroll`, deshalb alternativ: im selben POST rendern, statt `useActionState` zu verwenden. Oder die Einschränkung im CHANGELOG nennen und `<noscript>` ergänzen. Bei falschem Code den Faktor behalten und nur die Code-Eingabe wiederholen.
+
+#### F3 – niedrig – Ernennung per Nutzer-ID über `?candidate=` ohne Kontosuche
+`findAdminCandidate` leitet auf `/admin/admins?candidate=<uuid>`. Die Seite lädt jedes Profil per ID (`candidateProfile`, RLS `profiles_select_admin`) und zeigt das Ernennungsformular. Ein Admin kann so eine beliebige ID ernennen, z. B. aus dem Audit-Log (die Links dort enthalten die volle `target_id`), ohne die Suche per E-Mail. Damit entfallen Rate-Limit und `user.looked_up`-Eintrag der Suche. Das Review (10.1.3, A9) schließt die Ernennung per ID ausdrücklich aus. Step-up, Limits und das Audit der Ernennung greifen weiter. Das Formular erscheint auch für gesperrte oder unbestätigte Konten, die RPC lehnt dann mit „nicht gefunden“ ab.
+Reproduktion: als aal2-Admin `/de/admin/admins?candidate=<user-id eines Inserenten>` öffnen → „<Name>, Mitglied seit …“ mit Formular „Zum Admin ernennen“.
+Vorschlag: Den Kandidaten nach der Suche nicht in der URL führen. Stattdessen ein kurzlebiges, signiertes Token (HMAC über `user_id`, Admin und Zeit) oder ein Cookie mit `no-store` verwenden, oder die Suche und die Bestätigung in einem POST erledigen. `grant_admin` könnte zusätzlich einen `user.looked_up`-Eintrag desselben Admins aus der letzten Stunde verlangen.
+
+#### F4 – niedrig – Prüfansicht zeigt fremde Entwürfe (H6 teilweise)
+`getListingForReview` lädt mit `loadListing(id, null)` jede Anzeige, die RLS dem Admin zeigt, auch fremde Entwürfe (inklusive PLZ, Beschreibung und Attribute, serverseitig). Für Anzeigen außerhalb der Prüfung rendert die Seite Titel und Status („QA geheimer Entwurf“). `admin_listing_version` liefert auch für fremde Entwürfe einen Hash, `listing_content_hints` die Treffer. Moderierbar sind Entwürfe nicht (`RV003`), Daten über die Zeile hinaus zeigt die Seite nicht. Der Kommentar im Service („keine fremden Entwürfe, H6“) trifft aber nicht zu.
+Reproduktion: als aal2-Admin `/de/admin/listings/<id eines fremden Entwurfs>` → Überschrift mit dem Entwurfstitel. pgTAP `24_qa_m4_abnahme` TODO 22, E2E „Prüfansicht zeigt keine fremden Entwürfe“ (`test.fail`).
+Vorschlag: in `getListingForReview` zuerst nur `status` lesen und außerhalb von `pending_review` (bzw. bei Entwürfen) `notFound()`; `listing_review_version` und `listing_content_hints` für Admins auf `status = 'pending_review'` beschränken. Mittelfristig `listings_select_admin` auf Nicht-Entwürfe einschränken (M9-Meldungen prüfen).
+
+#### F5 – niedrig – `private.admin_lookups` wird nie bereinigt und überlebt die Kontolöschung
+Die Tabelle hat keinen Fremdschlüssel auf `auth.users` und keinen Aufräumjob. Nach jedem Lauf von Integration und `admin.spec.ts` bleiben Zeilen gelöschter Testkonten stehen (lokal 7 nach zwei Läufen). Für M9 („Gelöschter Account verschwindet aus allen Tabellen“) und die Datensparsamkeit fehlt eine Regel. Die Zeilen enthalten Akteur und Zeitpunkt, keine E-Mail.
+Reproduktion: `npm run test:e2e`, dann `select count(*) from private.admin_lookups l where not exists (select 1 from auth.users u where u.id = l.actor_id)` → > 0.
+Vorschlag: `actor_id references auth.users on delete cascade` und eine Bereinigung älter als 1 Stunde (oder bei jedem Aufruf `delete … where created_at < now() - interval '1 hour'`). E2E-Cleanup um die Tabelle ergänzen.
+
+#### F6 – niedrig – Kleinere Unstimmigkeiten in der Admin-Oberfläche
+- Übersicht und Warteschlange zählen verschieden: `countPendingListings` zählt alle `pending_review` inklusive der eigenen, die Warteschlange zeigt eigene Anzeigen nicht. Ein Admin mit eigener Anzeige sieht „1 Anzeige zur Freigabe“ und eine leere Warteschlange.
+- Der Regeltext und `errors.waiting` nennen 7 Tage, 3 und 10 fest. Die Werte stehen aber in `private.app_settings` und können abweichen.
+- Audit-Details zeigen Schlüssel und Werte roh (`from`, `code`, `reason`, `pending_review`, `contact_in_text`). Die Codes sind nicht in der Sprache des Admins.
+- `/admin/admins`: Alle Code-Felder zum Entziehen heißen gleich („Aktueller Code aus deiner Authenticator-App“). Der Name des Admins steht nur am Button.
+- Das Fehlerfeld der Entscheidung (`role=alert`) ist nicht per `aria-describedby` mit dem Feld verbunden; `aria-invalid` ist gesetzt.
+
+Vorschlag: Zähler aus `admin_review_queue` bzw. mit `owner_id <> auth.uid()`, Werte per RPC an die Oberfläche geben, Audit-Codes über `Moderation.reasons`/`Listings.status` übersetzen, Feldnamen eindeutig machen.
+
+### Hinweise (keine M4-Fehler)
+- `e2e/auth.spec.ts` räumt nicht auf: Nach jedem Lauf bleiben 4 Konten (`register-…`, `code-…`, `redirect-…`, `refresh-…@test.local`). pgTAP bleibt grün, die Konten sammeln sich aber an.
+- Die E2E-CSP-Prüfung in `admin.spec.ts` deckt nur `/de/admin` ab. `qa-m4.spec.ts` prüft zusätzlich die Prüfansicht (Header).
+- Gleichzeitiges Entziehen durch zwei Admins ist weiter nur per Code-Review abgesichert (Advisory-Lock vor dem Zählen, korrekt).
+
+### Nicht prüfbar
+- E-Mail in Server-Logs der Cloud (PostgREST/Postgres-Logparameter): Lokal steht die Adresse nur im POST-Body. Das Logging der Cloud ist nicht einsehbar.
+- Supabase-Rate-Limits für MFA-Verifizierungen in der Cloud (H1), Access Token Hook und Session-Timeouts (Cloud-Checkliste).
+- iOS (Grund ab I4), Gleichstand Web/iOS, App-Store-Pflichten: Es gibt noch keine App.
+- Muttersprachliche Prüfung cs/pl.
+
+### Neue Tests
+- `supabase/tests/24_qa_m4_abnahme.test.sql` (35, davon 1 TODO für F4). Läuft in einer Transaktion mit Rollback und entfernt fremde Admin-Rollen nur innerhalb der Transaktion, damit Reste anderer Läufe nicht stören.
+  - B1: neues Foto, Alt-Text, „Bearbeitung anfordern“ mit altem Stand, Version `null`/leer
+  - A4/A5: Roh-UPDATE auf `removed`, Umschreiben aktiver Anzeigen, `expires_at`, `owner_id`, Löschen, fremde Fotos und Wildarten
+  - Audit: nicht lösch-, änder- oder fälschbar; Akteur bei der Freigabe
+  - H6: Entwurf nicht moderierbar, nicht in der Warteschlange
+  - A11: gelöschter und gesperrter Admin (`is_admin`, `admin_access`, Moderation, Ernennen, Suche)
+  - B2/A9: letzter aktiver Admin, Selbstentzug, Karenz knapp unter 7 Tagen, Gesamtlimit, unbestätigtes Konto, Such-Limit 30/h
+- `web/e2e/qa-m4.spec.ts` (11). Die Konten entstehen per Magic-Link-Token in Node und werden in `afterAll` samt Audit-Zeilen gelöscht. Gegen den Produktions-Build lauffähig (`QA_BASE_URL`). Bekannte Fehler stehen als `test.fail`, bei F1 nur im Produktions-Build bzw. in CI.
+  - kodierte Pfade: Status als Nicht-Admin/anonym (F1), CSP und `X-Robots-Tag` als Admin (F1)
+  - Server-Action-POST als Nicht-Admin, kanonisch und kodiert (A1, besteht)
+  - fremder Entwurf in der Prüfansicht (F4)
+  - ohne JS: TOTP-Einrichtung (F2), Entscheidung mit Fehler und Erfolg (besteht)
+  - Tastatur-Entscheidung; en/cs/pl auf 5 Seiten: übersetzt, `lang`, `noindex`, 360 px
+
+### Empfehlung
+M4 ist **mit Auflagen abnahmereif**. Alle drei Akzeptanzkriterien sind auf den kanonischen Wegen erfüllt. Moderation, Versionsvergleich, Selbst-Moderation, Ernennung und Audit halten allen Angriffen auf DB- und API-Ebene stand.
+- Vor M5: **F1** beheben. M5 bringt öffentliche Seiten mit denselben Render-Mustern, und `noindex`/Status für nicht freigegebene Anzeigen hängen dort an derselben Mechanik. ADR 014 und CHANGELOG korrigieren.
+- Bald: **F2** (beheben oder als Lücke im CHANGELOG führen), **F3**.
+- Bei Gelegenheit bzw. mit M9: F4, F5, F6.
