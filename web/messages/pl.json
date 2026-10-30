@@ -212,6 +212,7 @@
       "saved": "Zapisano.",
       "publishedNote": "To ogłoszenie jest opublikowane. Każda zmiana odsyła je do ponownej weryfikacji.",
       "lockedNote": "To ogłoszenie zostało usunięte przez moderację i nie można go już zmieniać.",
+      "typeLockedNote": "W przesłanych i opublikowanych ogłoszeniach nie można już zmienić rodzaju ani kierunku (oferta/poszukiwanie). Dodaj w tym celu nowe ogłoszenie.",
       "errorSummary": "Sprawdź następujące dane:",
       "draftHint": "Szkic zapisuje się po każdym kroku. Widzisz go tylko Ty.",
       "countryApply": "Zmień kraj",

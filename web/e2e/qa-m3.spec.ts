@@ -316,3 +316,27 @@ test("Preis: eingegebener Betrag geht nicht stumm verloren", async ({ page }) =>
   await expect(page.getByText(/1\.200(,00)?\s€/)).toBeVisible();
   await expect(page.getByText("Keine Preisangabe")).toHaveCount(0);
 });
+
+// QA M3 F5: Eingereicht oder veröffentlicht stehen Art und Richtung fest; der Titel bleibt änderbar.
+test("Grunddaten: Art und Richtung einer eingereichten Anzeige sind gesperrt", async ({ page }) => {
+  test.skip(!local, "Lokale Supabase nötig");
+  await signUp(page, "Sperre QA");
+  const id = await newHelperDraft(page, "Sperre prüfen");
+  // Direkt in die Prüfung legen (Server-Pfad, ohne die übrigen Schritte des Assistenten).
+  const { error } = await admin()
+    .from("listings")
+    .update({ description: "Ich suche Hilfe beim Ansitzbau im Frühjahr.", attributes: { tasks: ["Ansitzbau"] }, status: "pending_review" })
+    .eq("id", id);
+  expect(error).toBeNull();
+
+  await page.goto(`/de/account/listings/${id}/edit?step=basics`);
+  await expect(page.getByText("lassen sich Art und Richtung nicht mehr ändern")).toBeVisible();
+  await expect(page.getByRole("radio", { name: "Jagdpacht" })).toBeDisabled();
+  await expect(page.getByRole("radio", { name: "Angebot" })).toBeDisabled();
+  await page.getByLabel("Titel").fill("Sperre geprüft");
+  await page.getByRole("button", { name: "Speichern und weiter" }).click();
+  await expect(page.getByText("Schritt 2 von 6")).toBeVisible();
+
+  const { data } = await admin().from("listings").select("kind, direction, title, status").eq("id", id).single();
+  expect(data).toEqual({ kind: "helper", direction: "wanted", title: "Sperre geprüft", status: "pending_review" });
+});

@@ -212,6 +212,7 @@
       "saved": "Uloženo.",
       "publishedNote": "Tento inzerát je zveřejněn. Každá změna jej vrátí ke schválení.",
       "lockedNote": "Tento inzerát odstranila moderace a nelze jej již měnit.",
+      "typeLockedNote": "U odeslaných a zveřejněných inzerátů již nelze měnit druh a směr (nabídka/poptávka). Vytvořte prosím nový inzerát.",
       "errorSummary": "Zkontrolujte prosím tyto údaje:",
       "draftHint": "Váš koncept se ukládá po každém kroku. Vidíte jej jen vy.",
       "countryApply": "Změnit zemi",

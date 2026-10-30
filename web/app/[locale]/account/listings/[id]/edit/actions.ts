@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { routing } from "@/i18n/routing";
 import { isAppLocale } from "@/lib/auth/paths";
-import { attributesFromForm, isWizardStep, nextStep, parseHectares, PRICE_UNITS, type WizardStep } from "@/lib/listing-wizard";
+import { attributesFromForm, isWizardStep, nextStep, parseHectares, PRICE_UNITS, TYPE_LOCKED, type WizardStep } from "@/lib/listing-wizard";
 import { requireOnboardedUser } from "@/lib/services/gate";
 import {
   getOwnListing,
@@ -62,9 +62,12 @@ export async function saveListingStep(form: FormData): Promise<void> {
         })
         .safeParse({ kind: form.get("kind"), direction: form.get("direction"), title: text(form, "title"), contentLanguage: form.get("contentLanguage") });
       if (!parsed.success) back(parsed.error.issues.some((i) => i.path[0] === "title") ? ["title"] : ["form"]);
-      const changedKind = parsed.data.kind !== listing.kind;
+      // Eingereicht oder veröffentlicht: Art und Richtung bleiben, was gespeichert ist (QA M3 F5). Ein Wechsel
+      // leerte die Attribute, die Bereitschaftsprüfung lehnte ab, und die neuen Details ließen sich nie speichern.
+      const values = TYPE_LOCKED.includes(listing.status) ? { ...parsed.data, kind: listing.kind, direction: listing.direction } : parsed.data;
+      const changedKind = values.kind !== listing.kind;
       // Bei einer anderen Art passen die bisherigen Angaben nicht mehr (Attribute je Art, ADR 013).
-      return handle(await updateListing(id, { ...parsed.data, ...(changedKind ? { attributes: {}, areaHectares: null } : {}) }));
+      return handle(await updateListing(id, { ...values, ...(changedKind ? { attributes: {}, areaHectares: null } : {}) }));
     }
     case "location": {
       const regionId = text(form, "regionId");

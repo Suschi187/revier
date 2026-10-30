@@ -10,7 +10,7 @@ import { PriceStep } from "@/components/listings/steps/PriceStep";
 import { ErrorSummary, StepNav } from "@/components/listings/WizardChrome";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
-import { DEFAULT_CURRENCY, isWizardStep, parseErrorCodes, type WizardStep } from "@/lib/listing-wizard";
+import { DEFAULT_CURRENCY, isWizardStep, parseErrorCodes, TYPE_LOCKED, type WizardStep } from "@/lib/listing-wizard";
 import { requireOnboardedUser } from "@/lib/services/gate";
 import { getContentHints, getOwnListing } from "@/lib/services/listings";
 import { thumbnailUrls } from "@/lib/services/photos";
@@ -104,6 +104,7 @@ async function Step({ step, locale, listing, errors, country }: {
           listingId={listing.id}
           values={{ kind: listing.kind, direction: listing.direction, title: listing.title, contentLanguage: listing.contentLanguage }}
           errors={errors}
+          typeLocked={TYPE_LOCKED.includes(listing.status)}
         />
       );
     case "location": {

@@ -212,6 +212,7 @@
       "saved": "Saved.",
       "publishedNote": "This listing is published. Any change sends it back to review.",
       "lockedNote": "This listing was removed by the moderation team and can no longer be changed.",
+      "typeLockedNote": "Type and offer/request can no longer be changed once a listing has been submitted or published. Please create a new listing instead.",
       "errorSummary": "Please check the following:",
       "draftHint": "Your draft is saved after each step. Only you can see it.",
       "countryApply": "Change country",

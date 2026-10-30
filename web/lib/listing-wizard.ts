@@ -84,6 +84,9 @@ export const DEFAULT_CURRENCY: Record<Enums["country_code"], Enums["currency_cod
   DE: "EUR", AT: "EUR", CH: "CHF", CZ: "CZK", PL: "PLN",
 };
 
+/** Status, in denen Art und Richtung feststehen: eingereicht oder veröffentlicht (QA M3 F5). */
+export const TYPE_LOCKED: readonly Enums["listing_status"][] = ["pending_review", "active", "paused"];
+
 export const PRICE_UNITS = ["total", "per_year", "per_hectare_year", "per_day", "per_animal"] as const;
 
 // Feldtypen der Attribute für die Formularfelder je Art.

@@ -14,6 +14,7 @@ export async function BasicsStep({
   values,
   errors,
   district,
+  typeLocked = false,
 }: {
   locale: AppLocale;
   action: (form: FormData) => Promise<void>;
@@ -21,6 +22,8 @@ export async function BasicsStep({
   values: BasicsValues;
   errors: string[];
   district?: React.ReactNode;
+  /** Eingereicht oder veröffentlicht: Art und Richtung stehen fest (QA M3 F5). */
+  typeLocked?: boolean;
 }) {
   const t = await getTranslations("Listings");
   const tLocale = await getTranslations("LocaleSwitcher");
@@ -30,7 +33,16 @@ export async function BasicsStep({
       {listingId && <input type="hidden" name="id" value={listingId} />}
       <input type="hidden" name="step" value="basics" />
 
-      <fieldset className="flex flex-col gap-2" id="f-kind">
+      {typeLocked && (
+        <>
+          <p id="type-locked" className="rounded bg-stone-100 p-3 text-sm">
+            {t("wizard.typeLockedNote")}
+          </p>
+          <input type="hidden" name="kind" value={values.kind ?? ""} />
+          <input type="hidden" name="direction" value={values.direction ?? ""} />
+        </>
+      )}
+      <fieldset className="flex flex-col gap-2" id="f-kind" disabled={typeLocked} aria-describedby={typeLocked ? "type-locked" : undefined}>
         <legend className={labelClass}>{t("fields.kind")}</legend>
         {LISTING_KINDS.map((kind) => (
           <label key={kind} className="flex items-center gap-2">
@@ -40,7 +52,7 @@ export async function BasicsStep({
         ))}
       </fieldset>
 
-      <fieldset className="flex flex-col gap-2" id="f-direction">
+      <fieldset className="flex flex-col gap-2" id="f-direction" disabled={typeLocked} aria-describedby={typeLocked ? "type-locked" : undefined}>
         <legend className={labelClass}>{t("fields.direction")}</legend>
         {LISTING_DIRECTIONS.map((direction) => (
           <label key={direction} className="flex items-center gap-2">

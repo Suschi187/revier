@@ -212,6 +212,7 @@
       "saved": "Gespeichert.",
       "publishedNote": "Diese Anzeige ist veröffentlicht. Jede Änderung führt zurück in die Prüfung.",
       "lockedNote": "Diese Anzeige wurde von der Moderation entfernt und lässt sich nicht mehr ändern.",
+      "typeLockedNote": "Bei eingereichten und veröffentlichten Anzeigen lassen sich Art und Richtung nicht mehr ändern. Gib dafür bitte eine neue Anzeige auf.",
       "errorSummary": "Bitte prüfe diese Angaben:",
       "draftHint": "Dein Entwurf wird nach jedem Schritt gespeichert. Nur du siehst ihn.",
       "countryApply": "Land wechseln",
