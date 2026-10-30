@@ -99,14 +99,17 @@ select is((select count(*)::int from storage.objects where bucket_id = 'listing-
 select tests.as_postgres();
 update listings set status = 'active', expires_at = now() + interval '30 days' where id = :'listing_b';
 select tests.as_anon();
-select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos'), 2,
+select is((select count(*)::int from storage.objects
+           where bucket_id = 'listing-photos' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 2,
   'anon sieht Bild und Thumbnail des verarbeiteten Fotos, nicht das unverarbeitete');
 select is((select count(*)::int from listing_photos where listing_id = :'listing_b'), 1, 'anon sieht nur die verarbeitete Fotozeile');
 
 select tests.authenticate_as(:'a_id');
 delete from storage.objects where bucket_id = 'listing-photos';
 select tests.as_postgres();
-select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos'), 3, 'A löscht keine Fotos von B');
+-- Nur Dateien der Testnutzer zählen: Reste aus E2E-Läufen ohne Reset dürfen das Ergebnis nicht ändern (QA M3 F4).
+select is((select count(*)::int from storage.objects
+           where bucket_id = 'listing-photos' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 3, 'A löscht keine Fotos von B');
 
 -- Verwaiste Datei (Zeile gelöscht) ist nicht mehr lesbar, der Besitzer kann sie entfernen
 select tests.authenticate_as(:'b_id');

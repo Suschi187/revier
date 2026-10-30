@@ -1,8 +1,7 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
-import { createClient } from "@supabase/supabase-js";
-import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import { admin, deleteTestUsers, local } from "./cleanup";
 import { latestMail, uniqueEmail } from "./mailpit";
 // Fixtures der Function (keine Binärdateien im Repo), wie in listings.spec.ts.
 import {
@@ -28,51 +27,7 @@ const created: string[] = [];
 // Optional gegen einen Produktions-Build (`npx next start -p 3456`): QA_BASE_URL=http://localhost:3456
 if (process.env.QA_BASE_URL) test.use({ baseURL: process.env.QA_BASE_URL });
 
-/** Lokale Supabase wie integration/env.ts (dort import.meta, das Playwright hier nicht lädt); nur 127.0.0.1/localhost. */
-function readLocal(): { url: string; serviceKey: string } | null {
-  try {
-    const out = execFileSync("supabase", ["status", "-o", "env"], {
-      cwd: path.resolve(process.cwd(), ".."), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 30_000,
-    });
-    const env = Object.fromEntries(
-      out.split("\n").flatMap((line) => {
-        const m = /^([A-Z0-9_]+)="?(.*?)"?$/.exec(line.trim());
-        return m ? [[m[1], m[2]]] : [];
-      }),
-    );
-    const url = env.API_URL;
-    const serviceKey = env.SERVICE_ROLE_KEY || env.SECRET_KEY;
-    if (!url || !serviceKey || !["127.0.0.1", "localhost"].includes(new URL(url).hostname)) return null;
-    return { url, serviceKey };
-  } catch {
-    return null;
-  }
-}
-const local = readLocal();
-
-function admin() {
-  if (!local) throw new Error("Lokale Supabase nicht erreichbar (supabase start im Repo-Root).");
-  return createClient(local.url, local.serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
-}
-
-test.afterAll(async () => {
-  if (!local || created.length === 0) return;
-  const client = admin();
-  const { data } = await client.auth.admin.listUsers({ perPage: 1000 });
-  const ids = (data?.users ?? []).filter((u) => u.email && created.includes(u.email)).map((u) => u.id);
-  for (const id of ids) {
-    for (const bucket of ["listing-photos", "listing-uploads"]) {
-      const { data: folders } = await client.storage.from(bucket).list(id);
-      for (const folder of folders ?? []) {
-        const { data: files } = await client.storage.from(bucket).list(`${id}/${folder.name}`);
-        const paths = (files ?? []).map((f) => `${id}/${folder.name}/${f.name}`);
-        if (paths.length) await client.storage.from(bucket).remove(paths);
-      }
-    }
-    await client.from("audit_log").delete().eq("target_id", id);
-    await client.auth.admin.deleteUser(id);
-  }
-});
+test.afterAll(() => deleteTestUsers(created));
 
 type Messages = { Auth: { login: Record<string, string> }; Profile: Record<string, string>; Welcome: Record<string, string> };
 const messages = (locale: string) =>

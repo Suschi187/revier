@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { deleteTestUsers } from "./cleanup";
 import { latestMail, uniqueEmail } from "./mailpit";
 // Echte JPEGs mit GPS, XMP und Orientierung aus den Fixtures der Function (keine Binärdateien im Repo).
 import { encode, quadrants, withMetadata } from "../../supabase/functions/process-listing-photo/tests/fixtures.ts";
@@ -18,8 +19,13 @@ test.afterEach(() => {
   expect(cspViolations).toEqual([]);
 });
 
+// Konten samt Fotos am Ende löschen, damit pgTAP ohne Reset grün bleibt (QA M3 F4).
+const created: string[] = [];
+test.afterAll(() => deleteTestUsers(created));
+
 async function signUp(page: Page, name: string) {
   const email = uniqueEmail("listing");
+  created.push(email);
   await page.goto("/de/login?next=/de/account/listings");
   const since = new Date(Date.now() - 1000);
   await page.getByLabel("E-Mail-Adresse").fill(email);
