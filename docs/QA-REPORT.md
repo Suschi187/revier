@@ -730,3 +730,182 @@ Die drei Teil-Commits tragen. Keine Lücke erlaubt Dritten, den Eingabepunkt, de
 | F4: `service_role` liest das Standort-Secret | Grant von `supabase_admin`, per Migration nicht entziehbar. ADR 006 korrigiert, Restrisiko benannt; Meta-Test in `12_location`: nur die Verfremdungsfunktion verwendet `vault` | (dieser Commit) |
 | F5: Abbruchprüfungen des Generators | behoben: `inputs.sha256`, Kopfzeilenprüfung AT, Abbruch bei Relationen ohne Fläche und verdächtigen Namen | d978eea |
 | F6: Doku-Mängel | behoben: ADR-006-Textschäden, Plan auf 80 km und 40 Besitzer angeglichen, Lizenzvermerke BKG und Statistik Austria im Migrationskopf und in ADR 012 | d978eea, (dieser Commit) |
+
+## M3 – Abnahme 2026-10-30
+
+Geprüfter Stand: `b7aaf92` (main, Arbeitsbaum sauber). Geprüft wurden die M3-Commits `16b6369` bis `4e0743e` sowie `b8e71cb` (Dev-Origin) und `b7aaf92` (Wildart `other_predators`). Umgebung: macOS, Node 24.22.1, Supabase CLI 2.122.0 (lokal, nach `supabase stop && supabase start` wegen `config.toml`), Deno 2.1.4 aus Docker, Chromium headless (Playwright).
+Grundlage: SPEC 6 (M3), Plan M3 inklusive der Abschnitte 12–15, ADR 006, 011, 012 und 013, CHANGELOG „M3“ und „Nachtrag M3“, CLAUDE.md. iOS (I4) ist laut Plan nicht Teil von M3.
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase db reset && supabase test db` | grün, 20 Dateien, **410** Tests. Mit der neuen QA-Datei sind es 21 Dateien und 418 Tests, davon 5 TODO (F2). |
+| `supabase test db` ohne Reset nach `npm run test:e2e` | **rot**: `08_storage` Test 28 „A löscht keine Fotos von B“ (have 5, want 3), siehe F4 |
+| Deno (`deno task check && deno lint && deno task test`, Image wie CI-Job `functions`) | grün, **24/24** (Header-Parser 10, Pipeline 14) |
+| `npm run lint`, `npm run typecheck` | grün, auch mit der neuen E2E-Datei |
+| `npm test` (Vitest) | **143/143** |
+| `npm run test:integration` | **104/104**. Der erste Lauf direkt nach dem Neustart der Container brach mit „supabaseKey is required“ ab, statt zu überspringen (F10). |
+| `npm run test:e2e` | **10/10** (Stand `b7aaf92`); mit `qa-m3.spec.ts` sind es 16/16, davon 2 erwartete Fehlschläge (`test.fail`, F1 und F3) |
+| `npm run build` | grün |
+| Browser-Bundle (`.next/static`) | Die Werte von `SECRET_KEY` und `SERVICE_ROLE_KEY`: 0 Treffer. Die Zeichenkette `sb_secret_` steht nur in der Env-Prüfung („darf nie in den Browser“) und in supabase-js. Der publishable Key ist jetzt im Bundle. Das ist gewollt, weil der Foto-Upload über den Browser-Client läuft. |
+
+### Ergebnis je Akzeptanzkriterium
+
+| # | Kriterium (SPEC 6 M3, Plan 0) | Ergebnis | Nachweis |
+|---|---|---|---|
+| a | Assistent für alle 5 Arten, jeweils Angebot und Gesuch | **erfüllt** (Einschränkung F5) | E2E: Pacht vollständig, die anderen 4 Arten über die Pflichtfeldprüfung; QA-E2E: Helfer-Gesuch, Tastatur, 360 px in pl |
+| b | Foto-Upload mit Verkleinerung, höchstens 8 | **erfüllt** | Vitest `targetSize`, pgTAP-Limit 8, E2E. QA-E2E: JPEG mit GPS und WebP mit EXIF über den ganzen Weg; Bild und Thumbnail ohne Exif, GPS, XMP und Kommentar; nichts nach EOI; Eingang gelöscht; Orientierung 6 gedreht |
+| c | Preisfeld mit Währung | **erfüllt** mit F3 | Vitest `price.test.ts`, DB `price_bounds`, E2E „8.400 € pro Jahr“ |
+| d | Entwurf speichern | **erfüllt** | Jeder Schritt speichert per Server Action, E2E |
+| e | Absenden → `pending_review` | **erfüllt** | E2E, `listings.test.ts`, Statusmatrix in `17_listing_rules` |
+| f | **Akzeptanz:** Anzeige erscheint in „Meine Anzeigen“ mit Status | **erfüllt** | E2E: „In Prüfung“, keine Aktion zum Freischalten; Zurückziehen und Löschen im QA-E2E |
+| g | **Akzeptanz:** Pflichtfelder je Art werden validiert | **erfüllt**, Lücke F2 | DB und Zod mit denselben Feldcodes (`17_listing_rules`, `listing-rules-parity.test.ts`, E2E). Leerraum außer U+0020 zählt in der DB als Inhalt. |
+| h | Pflichtpunkt A: EXIF/GPS serverseitig entfernt | **erfüllt** | Deno-Tests, `photo-processing.test.ts`, QA-E2E |
+| i | Pflichtpunkt B: Standort nicht herausmittelbar | **erfüllt** | `12_location`, `location.test.ts` (Zwischenstand-QA), unverändert grün |
+| j | Der Nutzer setzt nie selbst `active` | **erfüllt** | Statusmatrix, Upsert-Wege, Admin-Besitzer, eigene Proben (siehe unten) |
+
+### Definition of Done (CLAUDE.md)
+
+| Punkt | Ergebnis |
+|---|---|
+| Build ohne Warnungen, Lint und Typecheck grün | erfüllt |
+| Tests grün | erfüllt; nach E2E ohne Reset aber rot (F4) |
+| Neue Texte in 4 Sprachen | erfüllt. Die Schlüssel sind in allen 4 Dateien gleich. 106 im Code benutzte Schlüssel (Arten, Status, Feldcodes, Attribute, Optionen, Fotofehler, Hinweise) sind überall vorhanden. Es gibt keine hartcodierten Strings in `components/listings` und `app/[locale]/account/listings`. |
+| Fachbegriffe im Glossar abgestimmt | teilweise: Arten, Richtungen, Status und Wildarten ja, die Attributbegriffe aus SPEC 3.2 fehlen (F8) |
+| Lücke Web/iOS im CHANGELOG | erfüllt (I4) |
+| RLS für neue Tabellen, getestet | erfüllt: `listing_places` (Policies und Tests); `private.listing_creations`, `listing_approvals` und `content_terms` mit RLS und ohne API-Rechte (Meta-Test `private`) |
+| CHANGELOG mit Testanleitung | erfüllt. Die Anleitung wurde nachvollzogen und funktioniert. Inhaltliche Abweichungen: F1, F8. |
+
+### Sicherheitsprüfung (eigene Proben, Transaktion mit Rollback bzw. API)
+
+| Probe | Ergebnis |
+|---|---|
+| B liest `listing_places` von A, auch per Embedding und Zählung | 0 Zeilen (zusätzlich `places.test.ts`) |
+| anon liest `listing_places` | `42501` (kein Grant); öffentlich ist nur `postal_prefix` |
+| Admin mit `aal1` / `aal2` liest Orte | 0 / alle (nur mit 2FA, wie Plan) |
+| B ruft `set_listing_location`, `reorder_listing_photos`, `listing_content_hints` für eine Anzeige von A auf | `42501` bzw. leer, gleiche Antwort wie bei einer unbekannten id |
+| Freigabe-Hash lesen oder als Orakel nutzen | `listing_approvals` und `listing_content_hash` sind für API-Rollen nicht erreichbar, `listing_resume_allowed` liefert nur ja/nein für eigene Anzeigen |
+| Fortsetzen nach Änderung (Text, Foto, Alt-Text, Ort, Wildart) | `pending_review` (pgTAP, API); kein Weg zu `active` ohne Freigabe gefunden |
+| Admin gibt mit unverarbeitetem Foto frei | `23514 photos.unprocessed` |
+| Foto an aktiver Anzeige | Der Kinder-Guard setzt sofort `pending_review`, die Function danach erneut (`complete_photo_processing`) |
+| Rate-Limit | Advisory-Lock, Zähler übersteht Löschen (pgTAP mit echten Grenzen). Lokal ist es per `seed.sql` auf 1000 angehoben, deshalb gibt es keinen API- oder E2E-Nachweis (F10). |
+| Legal-Gate | `RV001` beim Anlegen, Ändern, Absenden, Fortsetzen und bei `set_listing_location`; nicht beim Pausieren, Zurückziehen und Löschen |
+| Exakte Lage | Das Web setzt keinen Punkt (`display_location` bleibt leer); Hints und Fehlermeldungen nennen nie PLZ oder Koordinaten |
+| Waffen/Munition in Kategorien | keine; Arten, Optionen und Wildarten sind neutral. Der Begriffsabgleich (`18_content_hints`) trifft in allen 4 Sprachen auch Großbuchstaben mit Diakritika (`BÜCHSE`, `ZBRAŇ`, `BROŃ`, `STŘELIVO`; DB-Locale `en_US.UTF-8`). |
+| **Leerraum als Pflichtinhalt** | **Lücke:** 30 Zeilenumbrüche bzw. 30 × U+00A0 als Beschreibung und `\t\t\t` als Titel werden angenommen und abgesendet (F2) |
+
+### Web-Pflichten und Lokalisierung
+- Alle Assistent- und Kontoseiten haben `noindex` (QA-E2E prüft das auf 8 Seiten in pl).
+- Impressum, Datenschutz und Nutzungsbedingungen sind im Footer verlinkt.
+- Cookie-Consent: nicht zutreffend (M9). M3 setzt keine neuen Cookies außer der Session.
+- Öffentliche Seiten gibt es noch nicht (M5).
+- 360 px in pl (längste Sprache): keine horizontale Überbreite auf „Meine Anzeigen“, „Neu“ und allen 6 Schritten (QA-E2E).
+- cs/pl sind muttersprachlich ungeprüft (bekannt, SPEC 7.6). Zur neuen Wildart siehe F9.
+- Offline: Der Foto-Upload meldet „network“, das ist lokalisiert (Code geprüft, nicht simuliert). Server Actions zeigen offline die Fehlerseite des Browsers. Ein Offline-Hinweis nach SPEC 4.3 fehlt im Web noch, das ist kein M3-Kriterium.
+
+### Gefundene Fehler
+
+#### F1 – mittel – Ohne JavaScript ist der Assistent unsichtbar (CHANGELOG sagt das Gegenteil)
+Die Seiten rendern ihren Inhalt in `<Suspense fallback={null}>`. Mit `cacheComponents`/PPR kommt der dynamische Teil gestreamt in `<div hidden id="S:…">` und wird erst per Inline-Skript (`$RC`) eingesetzt. Ohne JavaScript sieht der Nutzer nur Kopfzeile, Überschrift „Anzeige aufgeben“ und Footer. Formular, Schritte und Fehlerzusammenfassung fehlen. Das gilt im Dev-Server und im Produktions-Build (`next start`). Der CHANGELOG M3 („Bekannte Lücken“) sagt: „Fotos lassen sich nur mit JavaScript hochladen. Alle anderen Schritte gehen ohne.“ Dieselbe Bauweise haben „Meine Anzeigen“ und `/account`, dort nicht einzeln geprüft.
+Reproduktion:
+1. Anmelden, dann in einem Kontext mit `javaScriptEnabled: false` `/de/account/listings/new` öffnen. Das Feld „Titel“ ist nicht sichtbar.
+2. `QA_DUMP_HTML=1 npx playwright test e2e/qa-m3.spec.ts -g "ohne JavaScript"` → `QA-HTML … hiddenS: 122 form-at: 46157 firstHidden-at: 34076 RC: true`: Das Formular steht hinter dem ersten versteckten Streaming-Container.
+3. Test „Assistent ohne JavaScript“ in `qa-m3.spec.ts` (als `test.fail` markiert).
+
+Erwartet: Entweder geht der Assistent ohne JS (Inhalt nicht im versteckten Stream, z. B. Daten im Seitensegment statt in einer Suspense-Grenze laden), oder der CHANGELOG nennt die Einschränkung ehrlich und es gibt einen `<noscript>`-Hinweis.
+**Risiko für M5:** Öffentliche Seiten mit demselben Muster lieferten Crawlern ohne JS-Rendering und Link-Vorschauen einen leeren Hauptteil.
+
+#### F2 – mittel – Pflichtfelder lassen sich mit Leerraum füllen; DB und Zod zählen verschieden
+Die DB kürzt mit `btrim(x)`, das entfernt nur U+0020 (`listing_readiness`: `char_length(btrim(l.description)) < 30`; Check `listings_title_check`). Zod kürzt mit `String.trim()` jeden Leerraum. Über die API gilt deshalb:
+- 30 Zeilenumbrüche, Tabs/CRLF oder 30 × U+00A0 bestehen als Beschreibung die Bereitschaftsprüfung, die Anzeige geht in die Prüfung.
+- Ein Titel aus drei Tabs wird angelegt.
+
+Das Web lehnt dieselben Eingaben ab. Damit ist die zugesagte Parität DB/Zod (ADR 013) verletzt, und die Pflichtangabe „Beschreibung 30 Zeichen“ ist über iOS oder direkt per API umgehbar.
+Nebenbefund: Für Höchstlängen zählt Zod UTF-16-Einheiten (`length`), die DB Codepoints (`char_length`). Ein Titel aus 60 Emoji wird im Web als zu lang abgelehnt, in der DB angenommen.
+Reproduktion:
+- `supabase test db` → `20_qa_m3_abnahme`, TODO-Tests 4–8 („have: ok, want: 23514“)
+- als `authenticated` per psql (gleiche Rolle und Claims wie PostgREST): `update listings set description = repeat(E'\n', 30), status = 'pending_review' where id = <eigener Entwurf, helper/wanted>` → ok, Status `pending_review`. Über HTTP nicht eigens ausgeführt.
+
+Vorschlag:
+- In der DB `regexp_replace(x, '^[[:space:]  -​　]+|[[:space:]  -​　]+$', '', 'g')` (oder eine Hilfsfunktion `private.trim_all`) in der Bereitschaftsprüfung und im Titel-Check verwenden.
+- In Zod Codepoints zählen (`[...v].length`).
+- Die Fälle in `supabase/tests/fixtures/listing_rules.json` aufnehmen.
+- Danach `todo_start/todo_end` in `20_qa_m3_abnahme` entfernen.
+
+#### F3 – mittel – Eingegebener Preis geht ohne Hinweis verloren
+Im Schritt „Preis und Zeitraum“ sind Betrag, Währung und Einheit immer sichtbar. Gespeichert wird der Betrag aber nur, wenn zusätzlich die Option „Betrag“ gewählt ist (`actions.ts`: `if (mode === "amount")`). Sonst speichert die Action „Keine Angabe“ und geht ohne Meldung weiter. Die Vorschau zeigt „Keine Preisangabe“. Bei neuen Anzeigen ist keine Option vorgewählt, der naheliegende Weg (Betrag eintippen, „Speichern und weiter“) verliert also die Eingabe. Das verstößt gegen „Fehler nie stumm schlucken“.
+Reproduktion:
+1. Entwurf anlegen, Schritt 5 öffnen.
+2. „Betrag“ = 1200 eingeben, keine Option wählen, „Speichern und weiter“.
+3. Die Vorschau zeigt „Keine Preisangabe“.
+
+Test „Preis: eingegebener Betrag geht nicht stumm verloren“ in `qa-m3.spec.ts` (`test.fail`).
+Vorschlag: Ist ein Betrag eingetragen und keine Option gewählt, den Modus `amount` annehmen. Bei „Keine Angabe“ bzw. „Auf Anfrage“ mit Betrag einen Feldfehler zeigen. Alternativ die Betragsfelder erst nach Wahl von „Betrag“ anbieten, ohne JS über eigene Formularabschnitte.
+
+#### F4 – niedrig – pgTAP wird nach E2E-Läufen rot (Regression zu QA M2 F6)
+`e2e/listings.spec.ts` räumt nicht auf. Nach einem Lauf bleiben 6 Anzeigen, die Testkonten und 2 Dateien in `listing-photos`. `08_storage` zählt `storage.objects` global, deshalb schlägt Test 28 fehl („have: 5, want: 3“). In der CI laufen die Jobs getrennt, lokal stimmt nach dem Nachtrag zu M2 („pgTAP-Zählungen sind unabhängig von E2E-Resten“) die Erwartung nicht mehr.
+Reproduktion: `supabase db reset && npm run test:e2e && supabase test db` → `08_storage` Test 28 FAIL.
+Vorschlag: `afterAll` in `listings.spec.ts` löscht Konten und Dateien, wie `qa-m3.spec.ts` es tut. Zusätzlich die Zählungen in `08_storage` auf die Ordner der Testnutzer beschränken.
+
+#### F5 – niedrig – Art oder Richtung einer freigegebenen Anzeige lässt sich im Assistenten nicht ändern
+Ändert der Besitzer in „Grunddaten“ die Art einer aktiven oder pausierten Anzeige, leert die Action die Attribute (`attributes: {}`). Der Guard setzt `pending_review`, und die Bereitschaftsprüfung lehnt den Zwischenstand ab, z. B. `{"fields": ["attributes.lease_type","attributes.revier_type","area_hectares"]}`. Die neuen Pflichtfelder lassen sich erst im Schritt „Details“ der neuen Art speichern. Dorthin kommt der Nutzer aber nicht, und „Zurückziehen“ gibt es für `active`/`paused` nicht. Bei `pending_review` hilft Zurückziehen. Per API geht der Wechsel in einem Update (geprüft). Dasselbe gilt für Gesuch → Angebot, wenn der Ort fehlt.
+Reproduktion (DB-Seite per psql als Besitzer geprüft, UI-Ablauf aus dem Code abgeleitet): freigegebene Helfer-Anzeige → `update listings set kind = 'lease', attributes = '{}', area_hectares = null` → `23514 listing_not_ready`. Im UI: Bearbeiten → Grunddaten → „Jagdpacht“ → Speichern → Fehlerzusammenfassung mit Feldern aus „Details“, Art unverändert.
+Vorschlag: Art und Richtung bei `active`/`paused` sperren und erklären („neue Anzeige aufgeben“), oder Grunddaten und Details beim Wechsel gemeinsam speichern.
+
+#### F6 – niedrig – „Entwurf löschen“ löscht Fotodateien auch dann, wenn die Anzeige kein Entwurf mehr ist
+`deleteDraft` liest die Fotos ohne Statusfilter und entfernt die Dateien aus `listing-photos`. Erst danach löscht es die Zeile mit `.eq("status", "draft")`. Bei veralteter Ansicht (zweiter Tab hat schon abgesendet) oder einem nachgebauten Aufruf der Server Action schlägt das Löschen der Zeile fehl. Die Bilddateien sind dann aber weg, die Fotozeilen bleiben als verarbeitet stehen. Die Anzeige geht mit kaputten Bildern in die Prüfung bzw. bleibt so öffentlich. Die Storage-Policy erlaubt das Löschen, weil `owns_editable_listing` auch für `active` gilt. Es gibt keine Statusänderung.
+Reproduktion (aus dem Code abgeleitet, nicht ausgeführt): Tab A „Meine Anzeigen“ mit Entwurf (mit Foto), „Entwurf löschen“ aufklappen. In Tab B denselben Entwurf absenden. In Tab A „Endgültig löschen“ → Meldung „fehlgeschlagen“. Die Anzeige ist „In Prüfung“, `storage.objects` enthält ihre Bilder nicht mehr.
+Vorschlag: Zuerst den Status prüfen (oder die Zeile zuerst löschen und die Dateien danach), Dateien nur bei Status `draft` entfernen.
+
+#### F7 – niedrig – Fotos und Formular: kleinere Barrierefreiheits- und UX-Mängel
+- `PhotoUploader`: Wählt der Nutzer mehr Dateien als freie Plätze, wird der Hinweis „limit“ sofort von „wird hochgeladen“/„n hochgeladen“ überschrieben. Dass Dateien übersprungen wurden, erfährt er nicht.
+- Ersatz-Alt-Text: Es wird immer nur der Titel verwendet. Plan 2.7 verlangt bei mehreren Fotos „{Titel}, Foto n von m“, heute haben alle Fotos denselben Alt-Text (QA-E2E prüft den Ist-Zustand).
+- Preis: Die Option „Betrag“ und das Textfeld „Betrag“ haben denselben zugänglichen Namen (de „Betrag“). Screenreader-Nutzer können sie nicht unterscheiden. Auch der E2E-Test muss über die Rolle trennen.
+- Mehrere Alt-Text-Felder heißen gleich („Alt-Text (optional)“). Der Name sollte die Fotonummer enthalten, wie bei den Buttons.
+- Der Client prüft die Größe der Originaldatei nicht vor dem Dekodieren. Sehr große PNG/WebP (z. B. 20 000 × 20 000) würden voll in den Speicher geladen, der Tab könnte einfrieren (nicht ausprobiert). Die 15-MB-Grenze gilt erst nach der Umwandlung.
+- `aria-invalid` steht auf `<fieldset>` (Wildarten, Mehrfachauswahl). ARIA 1.2 sieht das für `group` nicht vor; die Fehlermeldung ist aber per `aria-describedby` verbunden.
+
+#### F8 – niedrig – Doku nicht nachgezogen
+- **SPEC ist nicht auf v0.5** (Plan 8):
+  - 3.2 nennt für `trophy_hunt` noch `species_targeted[]` (entfallen, Antwort 2) und weder `trophy_details` noch `legal_ack`.
+  - 3.1 kennt weder `listing_places` noch `listings.postal_prefix`, die neuen Fotospalten (`upload_path`, `thumb_path`, `processed_at`, `width`, `height`, `alt_text`, `processing_attempts`) oder die Tabelle `listing_species` mit Pflicht je Art.
+  - iOS (I4) baut auf der SPEC auf.
+- **Glossar:** Die Attributbegriffe aus SPEC 3.2 fehlen in `docs/GLOSSARY.md`, obwohl Plan 7 sie verlangt. Gemeint sind Pachtart (Eigenjagd, Genossenschaftsjagd, Pachtnachfolge, Pachtanteil), Reviertyp (Hochwild … Wasser), Umfang (selbstständig/in Begleitung), Abschussplan, Abgabefrist, Mitpächter, Preiseinheiten usw. Die cs/pl-Begriffe stehen nur in den Message-Dateien und werden in I4 sonst anders übersetzt.
+- **CORS:** Die Function antwortet mit `Access-Control-Allow-Origin: *`, Plan 7 sagt „CORS auf `SITE_URL`“. Mit Bearer-Token ohne Cookies ist das sicherheitlich vertretbar (Kommentar in `index.ts`), es fehlt aber in ADR 011.
+- **CHANGELOG:**
+  - „E2E mit GPS-Fixture“ belegt die Metadatenfreiheit nicht, weil `listings.spec.ts` nur den Upload prüft. Den Nachweis führen Deno- und Integrationstests, über den ganzen Weg jetzt `qa-m3.spec.ts`.
+  - Spike-Auflage 5 („E2E: WebP mit EXIF durch den ganzen Weg“) war offen und ist mit `qa-m3.spec.ts` erfüllt.
+  - Zur Aussage über den Assistenten ohne JS siehe F1.
+
+#### F9 – niedrig – Neue Wildart: cs-Begriff fraglich, Cache verzögert neue Referenzdaten
+- `other_predators`: Die Namen in de („Sonstiges Raubwild“) und en („Other predators“) sind passend und in Glossar und Migration gleich. cs „Ostatní dravá zvěř“: Im Tschechischen meint „dravci/dravý“ vorwiegend Greifvögel, die nicht bejagbar sind. Für Haarraubwild (Dachs, Marder, Waschbär, Marderhund) ist „šelmy“ üblich, etwa „Ostatní šelmy“. pl „Inne drapieżniki“ ist vertretbar; analog zu `small_game` („Inna drobna zwierzyna“) eher „Inne drapieżniki (zwierzyna)“ oder „Pozostałe drapieżniki“. Beides von Muttersprachlern prüfen lassen (SPEC 7.6). Bis dahin bleibt der Glossar-Status „ungeprüft“, das ist korrekt.
+- `listSpecies`/`listRegions` sind mit `cacheLife("days")` gecacht. Eine neue Wildart oder ein neuer Kreis erscheint im Web erst nach Ablauf des Caches bzw. nach einem Deploy. Der CHANGELOG nennt das nur für den Dev-Server. Für die Cloud gehört ein Punkt „nach Referenzdaten-Migration Cache revalidieren/deployen“ in die Release-Checkliste.
+
+#### F10 – niedrig – Testlücken und Test-Infrastruktur
+- **`RV002` im Web:** Die Meldung „Limit erreicht“ mit Zeitpunkt (`?error=rateLimited&retry=…`) ist weder per Vitest noch per E2E geprüft. Lokal hebt `seed.sql` das Limit auf 1000, manuell ist das also nicht nachvollziehbar. Vorschlag: ein API-Test, der für einen Testnutzer das Limit per `app_settings` senkt, oder ein Vitest für `toError`.
+- `seed.sql` läuft auch bei Supabase Branching (Preview-Branches). Dort gälte dann das Limit 1000. Das gehört in ADR 013 bzw. die Cloud-Checkliste.
+- `integration/listings.test.ts` und `photo-processing.test.ts` rufen `serviceClient(fx)` schon im `describe` auf. Ist Supabase nicht erreichbar, brechen sie mit „supabaseKey is required“ ab, statt wie die übrigen Dateien zu überspringen. Das ist einmal direkt nach dem Container-Neustart aufgetreten.
+
+### Nicht prüfbar
+- iOS (I4), Gleichstand Web/iOS, App-Store-Pflichten: Es gibt noch keine App.
+- Freigabe im Admin-Bereich (M4), öffentliche Detailseite und Suche (M5): Bis dahin wurde nur über die DB freigegeben.
+- Fotoverarbeitung in eu-central-1 (Spike-Auflage 3, Blocker für den Go-live).
+- Muttersprachliche Prüfung cs/pl.
+
+### Neue Tests
+- `supabase/tests/20_qa_m3_abnahme.test.sql` (8): 3 Positivkontrollen und 5 TODO-Tests für F2 (Beschreibung aus Zeilenumbrüchen, Tabs/CRLF, U+00A0; Titel aus Tabs bzw. U+3000)
+- `web/e2e/qa-m3.spec.ts` (6). Die Testkonten samt Dateien werden in `afterAll` gelöscht.
+  - Assistent ohne JavaScript inklusive Länderwechsel, Absenden, Zurückziehen, Entwurf löschen (`test.fail`, F1)
+  - Fotos: JPEG mit GPS/XMP/Kommentar und WebP (VP8X) mit EXIF/GPS über den ganzen Weg. Bild und Thumbnail ohne Metadaten und ohne Anhang, Eingang gelöscht, Orientierung angewandt, lange Seite ≤ 2048. Dazu der Ist-Zustand des Alt-Fallbacks (F7).
+  - Fehlerzusammenfassung: `role=alert`, Anker `#f-postal`, `aria-invalid`, `aria-describedby`, Fehlertext am Feld, Sprung per Tastatur
+  - Tastatur: Schritt 1 nur mit Pfeiltasten, Leertaste, Tab und Enter
+  - 360 px in pl ohne Überbreite auf 8 Seiten, alle mit `noindex`
+  - Preis geht nicht stumm verloren (`test.fail`, F3)
+  - Optional gegen den Produktions-Build: `QA_BASE_URL=http://localhost:3456`
+
+### Empfehlung
+M3 ist **mit Auflagen abnahmereif**. Die beiden Akzeptanzkriterien sind erfüllt. Es gibt keinen blockierenden oder hohen Fund, und kein Weg führt an Moderation, Freigabe-Hash, Legal-Gate oder Standortschutz vorbei.
+- Vor M4: **F2** beheben (Pflichtfeld-Parität, betrifft auch iOS), **F3** beheben, **F1** entscheiden (beheben oder CHANGELOG korrigieren, vor M5 unbedingt klären), **F4** (Aufräumen in `listings.spec.ts`).
+- Mit dem nächsten Doku-Commit: **F8** (SPEC v0.5, Glossar-Attribute), **F9** (cs-Begriff an die Muttersprachler).
+- Bei Gelegenheit: F5, F6, F7, F10.
