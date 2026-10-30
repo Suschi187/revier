@@ -533,6 +533,7 @@
         "waitingNoDate": "Role můžete měnit až 7 dní po vlastním jmenování.",
         "limit": "Příliš mnoho změn rolí nebo vyhledávání v krátké době. Zkuste to prosím později.",
         "lastAdmin": "Posledního administrátora nelze odebrat.",
+        "lookup": "Nejprve prosím vyhledejte účet podle e-mailové adresy (platí 1 hodinu).",
         "forbidden": "K tomu nemáte oprávnění.",
         "failed": "Změnu se nepodařilo uložit. Zkuste to prosím znovu."
       }

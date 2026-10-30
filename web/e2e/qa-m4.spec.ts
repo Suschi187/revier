@@ -157,6 +157,15 @@ test.describe("Admin-Zugang auf Umwegen", () => {
     await userContext.close();
   });
 
+  test("Ernennen per ?candidate= ohne Kontosuche zeigt kein Formular (F3)", async ({ page }) => {
+    await account(page.context(), "QA Admin Kandidat", { admin: true, totp: true });
+    const other = await account(await page.context().browser()!.newContext(), "QA Fremdkonto");
+    await page.goto(`/de/admin/admins?candidate=${other.id}`);
+    await expect(page.getByRole("heading", { name: "Admins", exact: true })).toBeVisible();
+    await expect(page.getByText("QA Fremdkonto")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Zum Admin ernennen" })).toHaveCount(0);
+  });
+
   test("Prüfansicht zeigt keine fremden Entwürfe (H6)", async ({ page }) => {
     test.fail(true, "QA M4 F4: Titel und Status eines fremden Entwurfs sind sichtbar");
     await account(page.context(), "QA Admin H6", { admin: true, totp: true });
@@ -176,7 +185,7 @@ test.describe("Admin ohne JavaScript", () => {
     await page.goto("/de/admin/mfa");
     await expect(page.getByRole("button", { name: "Authenticator einrichten" })).toBeDisabled();
     // Playwright blendet <noscript> auch ohne JS aus; der Hinweis wird deshalb im HTML geprüft.
-    expect(await page.content()).toMatch(/<noscript>.*Die Einrichtung braucht JavaScript/s);
+    expect(await page.content()).toMatch(/<noscript>[\s\S]*Die Einrichtung braucht JavaScript/);
     const factors = (await admin().auth.admin.mfa.listFactors({ userId: me.id })).data?.factors ?? [];
     expect(factors).toHaveLength(0);
   });

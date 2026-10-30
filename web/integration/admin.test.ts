@@ -110,6 +110,11 @@ describe.skipIf(!f)("Moderation und Admin-Verwaltung über PostgREST", () => {
     const amr = claims(data.session!.access_token).amr as { method: string; timestamp: number }[];
     expect(amr.some((e) => e.method === "totp" && Date.now() / 1000 - e.timestamp < 600)).toBe(true);
 
+    // Ohne vorherige Suche kein Ernennen (QA M4 F3)
+    const unseen = await mod.client.rpc("grant_admin", { p_user_id: c.id });
+    expect(unseen.error?.code).toBe("42501");
+    expect(unseen.error?.hint).toBe('{"reason":"lookup_required"}');
+
     const found = await mod.client.rpc("admin_find_user", { p_email: candidate.email.toUpperCase() });
     expect(found.data).toEqual([expect.objectContaining({ user_id: candidate.id, is_admin: false })]);
     expect(JSON.stringify(found.data)).not.toContain(candidate.email);

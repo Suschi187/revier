@@ -91,16 +91,33 @@ export async function findCandidate(email: string): Promise<Candidate | null | "
   return row ? { userId: row.user_id, displayName: row.display_name, memberSince: row.member_since, isAdmin: row.is_admin } : null;
 }
 
-/** Profil eines Kandidaten für die Bestätigung (Admins lesen Profile per RLS). */
-export async function candidateProfile(userId: string): Promise<{ displayName: string; memberSince: string } | null> {
+/** Gültigkeit einer Kontosuche für die Ernennung; dieselbe Grenze prüft `grant_admin` (QA M4 F3). */
+export const LOOKUP_WINDOW_MS = 60 * 60 * 1000;
+
+/**
+ * Profil eines Kandidaten für die Bestätigung, nur nach eigener Suche per E-Mail in der letzten Stunde
+ * (QA M4 F3): Eine Nutzer-ID in der URL allein zeigt kein Ernennungsformular. Admins lesen Audit und
+ * Profile per RLS.
+ */
+export async function candidateProfile(adminId: string, userId: string): Promise<{ displayName: string; memberSince: string } | null> {
   const supabase = await createSupabaseServerClient();
+  const { data: lookup } = await supabase
+    .from("audit_log")
+    .select("id")
+    .eq("action", "user.looked_up")
+    .eq("target_type", "profile")
+    .eq("target_id", userId)
+    .eq("actor_id", adminId)
+    .gt("created_at", new Date(Date.now() - LOOKUP_WINDOW_MS).toISOString())
+    .limit(1);
+  if (!lookup?.length) return null;
   const { data } = await supabase.from("profiles").select("display_name, created_at").eq("user_id", userId).maybeSingle();
   return data ? { displayName: data.display_name, memberSince: data.created_at } : null;
 }
 
 export type RoleChangeResult =
   | { ok: true }
-  | { ok: false; error: "code" | "stepUp" | "waiting" | "limit" | "lastAdmin" | "notFound" | "forbidden" | "failed"; until?: string };
+  | { ok: false; error: "code" | "stepUp" | "waiting" | "limit" | "lastAdmin" | "lookup" | "notFound" | "forbidden" | "failed"; until?: string };
 
 /**
  * Rolle ändern mit Step-up (Review B2): erst den frischen TOTP-Code bestätigen (neuer Claim amr), dann die
@@ -122,6 +139,7 @@ export async function changeAdminRole(change: "grant" | "revoke", userId: string
     try {
       const hint = JSON.parse(error.hint ?? "{}") as { reason?: string; until?: string };
       if (hint.reason === "waiting_period") return { ok: false, error: "waiting", until: hint.until };
+      if (hint.reason === "lookup_required") return { ok: false, error: "lookup" };
     } catch {
       // kein JSON-Hint: allgemeine Ablehnung
     }

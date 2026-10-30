@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const NOTICES = ["granted", "revoked"] as const;
-const ERRORS = ["notFound", "code", "stepUp", "waiting", "limit", "lastAdmin", "forbidden", "failed"] as const;
+const ERRORS = ["notFound", "code", "stepUp", "waiting", "limit", "lastAdmin", "lookup", "forbidden", "failed"] as const;
 const input = "mt-1 block w-full max-w-md rounded border border-stone-400 px-3 py-2";
 const codeInput = "mt-1 block w-40 rounded border border-stone-400 px-3 py-2 tracking-widest";
 const button = "rounded bg-emerald-800 px-4 py-2 font-medium text-white";
@@ -33,7 +33,7 @@ export default async function AdminsPage({ searchParams }: Props) {
     getTranslations("Admin.admins"),
     getFormatter(),
     listAdmins(),
-    candidateId ? candidateProfile(candidateId) : Promise.resolve(null),
+    candidateId ? candidateProfile(me.id, candidateId) : Promise.resolve(null),
   ]);
   const date = (value: string) => format.dateTime(new Date(value), { dateStyle: "medium" });
   const notice = NOTICES.find((n) => n === query.notice);

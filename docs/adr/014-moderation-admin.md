@@ -36,7 +36,7 @@ SPEC 5/6 M4: Admins geben Anzeigen frei, lehnen sie mit Grund ab oder fordern ei
 - **Limits:** höchstens 3 Rollenänderungen je Admin und 10 insgesamt in 24 h; ein Admin ändert Rollen erst 7 Tage nach seiner eigenen Ernennung (Werte in `private.app_settings`).
 - **Letzter Admin:** nicht entziehbar; gezählt unter `pg_advisory_xact_lock`, nur aktive Konten.
 - **Audit per Trigger auf `private.user_roles`**, damit auch SQL-Änderungen protokolliert sind.
-- **Kontosuche** nur per exakter E-Mail, Ergebnis ohne E-Mail, Rate-Limit, Abfrage im Audit-Log. Keine Ernennung per Klick aus Anzeigen oder Audit-Log.
+- **Kontosuche** nur per exakter E-Mail, Ergebnis ohne E-Mail, Rate-Limit, Abfrage im Audit-Log. Keine Ernennung per Klick aus Anzeigen oder Audit-Log. `grant_admin` verlangt dafür einen `user.looked_up`-Eintrag desselben Admins für dasselbe Konto aus der letzten Stunde (`42501`, Hint `lookup_required`); die Seite zeigt das Ernennungsformular nur unter derselben Bedingung (QA M4 F3).
 - `private.is_admin()` verlangt zusätzlich ein aktives Konto (nicht gesperrt, nicht gelöscht).
 
 ### Zugang im Web

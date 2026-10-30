@@ -533,6 +533,7 @@
         "waitingNoDate": "You can only change roles 7 days after your own appointment.",
         "limit": "Too many role changes or searches in a short time. Please try again later.",
         "lastAdmin": "The last admin cannot be removed.",
+        "lookup": "Please look up the account by email address first (valid for 1 hour).",
         "forbidden": "You are not allowed to do this.",
         "failed": "The change could not be saved. Please try again."
       }

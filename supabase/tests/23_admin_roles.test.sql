@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(27);
+select plan(31);
 
 -- M4 Commit 4 (ADR 014, Review B2/A2/A9): Admins ernennen und entziehen.
 create function tests.state_of(statement text) returns text language plpgsql as $$
@@ -12,6 +12,18 @@ exception when others then
 end;
 $$;
 grant execute on function tests.state_of(text) to authenticated, anon;
+create function tests.hint_of(statement text) returns text language plpgsql as $$
+declare
+  h text;
+begin
+  execute statement;
+  return null;
+exception when others then
+  get stacked diagnostics h = pg_exception_hint;
+  return h;
+end;
+$$;
+grant execute on function tests.hint_of(text) to authenticated, anon;
 
 select tests.create_user('alt@test.local') as old_id \gset
 select tests.create_user('neu@test.local') as new_id \gset
@@ -68,6 +80,16 @@ select tests.authenticate_totp(:'old_id', 0);
 select is(tests.state_of(format($$ select revoke_admin(%L) $$, :'cand_id')), 'ok', 'Entziehen');
 select is(tests.state_of(format($$ select revoke_admin(%L) $$, :'old_id')), '23514', 'Letzten Admin nicht entziehbar (auch nicht sich selbst)');
 select is(tests.state_of(format($$ select revoke_admin(%L) $$, :'cand2_id')), 'P0002', 'Kein Admin: nichts zu entziehen');
+-- Ernennen nur nach der Suche (QA M4 F3): ohne Suche, mit zu alter Suche, mit Suche eines anderen Admins
+select is(tests.state_of(format($$ select grant_admin(%L) $$, :'cand2_id')), '42501', 'Ohne Kontosuche kein Ernennen');
+select tests.as_postgres();
+insert into audit_log (actor_id, action, target_type, target_id, created_at)
+values (:'old_id', 'user.looked_up', 'profile', :'cand2_id', now() - interval '61 minutes'),
+       (:'cand_id', 'user.looked_up', 'profile', :'cand2_id', now());
+select tests.authenticate_totp(:'old_id', 0);
+select is(tests.state_of(format($$ select grant_admin(%L) $$, :'cand2_id')), '42501', 'Suche älter als 1 Stunde oder von anderem Admin reicht nicht');
+select is(tests.hint_of(format($$ select grant_admin(%L) $$, :'cand2_id')), '{"reason":"lookup_required"}', 'Hinweis für die Oberfläche');
+select is((select user_id from admin_find_user('zweiter@test.local')), :'cand2_id'::uuid, 'Suche nach dem zweiten Kandidaten');
 select is(tests.state_of(format($$ select grant_admin(%L) $$, :'cand2_id')), 'ok', 'Dritte Rollenänderung');
 select is(tests.state_of(format($$ select revoke_admin(%L) $$, :'cand2_id')), '54000', 'Vierte Änderung in 24 h: Limit');
 

@@ -533,6 +533,7 @@
         "waitingNoDate": "Rollen kannst du erst 7 Tage nach deiner eigenen Ernennung ändern.",
         "limit": "Zu viele Rollenänderungen oder Suchen in kurzer Zeit. Bitte versuche es später noch einmal.",
         "lastAdmin": "Der letzte Admin kann nicht entfernt werden.",
+        "lookup": "Bitte suche das Konto zuerst per E-Mail-Adresse (gültig 1 Stunde).",
         "forbidden": "Das darfst du nicht.",
         "failed": "Die Änderung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
       }

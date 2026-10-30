@@ -533,6 +533,7 @@
         "waitingNoDate": "Role możesz zmieniać dopiero 7 dni po własnym mianowaniu.",
         "limit": "Zbyt wiele zmian ról lub wyszukiwań w krótkim czasie. Spróbuj ponownie później.",
         "lastAdmin": "Nie można usunąć ostatniego administratora.",
+        "lookup": "Najpierw wyszukaj konto po adresie e-mail (ważne przez 1 godzinę).",
         "forbidden": "Nie masz do tego uprawnień.",
         "failed": "Nie udało się zapisać zmiany. Spróbuj ponownie."
       }
