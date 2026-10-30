@@ -82,7 +82,7 @@ select throws_ok(format($$ insert into reports (target_type, target_id, reason) 
 
 -- Audit-Log -------------------------------------------------------------------
 select tests.authenticate_as(:'admin_id', 'aal2');
-update listings set status = 'removed', reject_reason = 'Betrug' where id = :'listing';
+update listings set status = 'removed', reject_code = 'prohibited_content', reject_reason = 'Betrug' where id = :'listing';
 select tests.as_postgres();
 update profiles set is_blocked = true where user_id = :'b_id';
 select set_eq($$ select action from audit_log $$,

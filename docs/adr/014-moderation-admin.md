@@ -15,8 +15,9 @@ SPEC 5/6 M4: Admins geben Anzeigen frei, lehnen sie mit Grund ab oder fordern ei
   - Ein Admin moderiert nie die eigene Anzeige.
 - **Gesehener Stand (B1):** `p_expected_version` ist der Inhalts-Hash (`private.listing_content_hash`, hex), den die Detailseite **vor** den Inhalten liest (`public.admin_listing_version`, liefert nur Admins einen Wert, sonst `null`). Die RPC sperrt die Zeile (`for update`), prüft Status und Version und ändert dann in einem UPDATE.
 - **Grund:** `listings.reject_code` aus fester Liste (`incomplete`, `wrong_category`, `weapons`, `prohibited_content`, `duplicate`, `contact_in_text`, `implausible`, `other`), Pflicht bei Ablehnen und Zurückgeben; `reject_reason` ist optionaler Freitext (1–1000 Zeichen, `trim_all`), Pflicht bei `other`. Der Besitzer sieht den Code in seiner Sprache. Constraints: Freitext nur mit Code, Code nur bei `draft`/`rejected`, `other` nur mit Freitext.
-- **Moderatoren ändern keine fremden Inhalte**, auch nicht ohne Statuswechsel (`42501`). Entfernen aktiver Anzeigen kommt mit den Meldungen über den Status `removed`.
-- **Warteschlange:** `listings.submitted_at` (Trigger bei jedem Wechsel nach `pending_review`), Sortierung `(submitted_at, id)`. `reject_code` und `submitted_at` gehören nicht zum Inhalts-Hash, sonst müssten alle pausierten Anzeigen nach der Migration neu geprüft werden.
+- **Moderatoren ändern keine fremden Inhalte**, auch nicht ohne Statuswechsel und nicht an Fotos, Wildarten oder Ort (`42501`). Einzige Ausnahme bleibt das Entfernen des Kartenpunkts (ADR 006, schützt die Lage). Entfernen aktiver Anzeigen kommt mit den Meldungen über den Status `removed`.
+- **Trigger `listings_zz_moderation_fields`** (läuft auf allen Pfaden, auch Server): setzt `submitted_at` bei jedem Wechsel nach `pending_review` und leert Code und Freitext außerhalb von `draft`, `rejected` und `removed`. Check-Constraints fangen vergessene Pfade.
+- **Warteschlange:** `listings.submitted_at`, Sortierung `(submitted_at, id)`. `reject_code` und `submitted_at` gehören nicht zum Inhalts-Hash, sonst müssten alle pausierten Anzeigen nach der Migration neu geprüft werden.
 
 ### Fehlervertrag (Web und spätere Tools/iOS gleich)
 | Code | Bedeutung |

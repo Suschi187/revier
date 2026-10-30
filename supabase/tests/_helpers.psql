@@ -103,3 +103,8 @@ $$;
 
 grant usage on schema tests to anon, authenticated;
 grant execute on all functions in schema tests to anon, authenticated;
+
+-- Moderation läuft im Produkt nur über die RPC moderate_listing, die dieses Flag setzt (ADR 014, A4). Die
+-- älteren Tests moderieren per Roh-UPDATE und setzen es deshalb für die ganze Sitzung; 21_moderation prüft
+-- die RPC und den Fall ohne Flag.
+select set_config('revier.moderation', 'on', false);

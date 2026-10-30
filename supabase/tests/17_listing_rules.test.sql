@@ -199,7 +199,8 @@ begin
     perform tests.make_ready(listing);
     update public.listings set status = 'pending_review' where id = listing;
     update public.listings set status = 'active', expires_at = now() + interval '30 days' where id = listing;
-    update public.listings set status = s, reject_reason = case when s in ('rejected', 'removed') then 'Grund' end
+    update public.listings set status = s, reject_code = case when s in ('rejected', 'removed') then 'other' end,
+      reject_reason = case when s in ('rejected', 'removed') then 'Grund' end
     where id = listing;
     perform tests.authenticate_as(owner, aal);
     -- Zwei Anweisungen: Ein Subselect im selben Ausdruck sähe den Snapshot vor dem Update.
@@ -286,12 +287,12 @@ select ok(not has_table_privilege('authenticated', 'private.listing_creations', 
 -- ---------------------------------------------------------------------------
 -- Meta-Tests (Auflage 8)
 -- ---------------------------------------------------------------------------
--- Jede Spalte des UPDATE-GRANT (außer status und reject_reason) zählt im Guard als Inhalt.
+-- Jede Spalte des UPDATE-GRANT (außer status, reject_code und reject_reason) zählt im Guard als Inhalt.
 select is(array(
   select c.column_name::text from information_schema.columns c
   where c.table_schema = 'public' and c.table_name = 'listings'
     and has_column_privilege('authenticated', 'public.listings', c.column_name, 'update')
-    and c.column_name not in ('status', 'reject_reason')
+    and c.column_name not in ('status', 'reject_code', 'reject_reason')
     and (select prosrc from pg_proc where oid = 'private.listings_guard'::regproc) !~ ('new\.' || c.column_name || '[,)]')
   order by 1), array[]::text[], 'Inhaltsvergleich im Guard deckt alle änderbaren Spalten ab');
 -- Nur diese Funktionen schreiben den Status einer Anzeige.

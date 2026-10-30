@@ -73,7 +73,7 @@ select is((select state from claim_photo_processing(:'p4', :'a_id')), 'not_found
 reset role;
 select tests.as_postgres();
 update profiles set is_blocked = false where user_id = :'a_id';
-update listings set status = 'removed', reject_reason = 'Test' where id = :'l';
+update listings set status = 'removed', reject_code = 'other', reject_reason = 'Test' where id = :'l';
 select set_config('role', 'service_role', true);
 select set_config('request.jwt.claims', '{"role": "service_role"}', true);
 select is((select state from claim_photo_processing(:'p4', :'a_id')), 'not_found', 'Entfernte Anzeige: not_found');

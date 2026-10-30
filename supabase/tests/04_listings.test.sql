@@ -75,7 +75,7 @@ update listings set title = 'Umgeschrieben nach Freigabe' where id = :'draft_a';
 select is((select status::text from listings where id = :'draft_a'), 'pending_review', 'Inhaltsänderung an aktiver Anzeige führt zurück in die Prüfung');
 
 select tests.authenticate_as(:'admin_id', 'aal2');
-update listings set status = 'rejected', reject_reason = 'Bitte Pachtdauer angeben' where id = :'draft_a';
+update listings set status = 'rejected', reject_code = 'incomplete', reject_reason = 'Bitte Pachtdauer angeben' where id = :'draft_a';
 select tests.authenticate_as(:'a_id');
 select is((select reject_reason from listings where id = :'draft_a'), 'Bitte Pachtdauer angeben', 'Besitzer sieht den Ablehnungsgrund');
 update listings set status = 'pending_review' where id = :'draft_a';
@@ -106,7 +106,7 @@ update profiles set is_blocked = false where user_id = :'a_id';
 
 -- Entfernen durch die Moderation -------------------------------------------------
 select tests.authenticate_as(:'admin_id', 'aal2');
-update listings set status = 'removed', reject_reason = 'Betrugsverdacht' where id = :'draft_a';
+update listings set status = 'removed', reject_code = 'prohibited_content', reject_reason = 'Betrugsverdacht' where id = :'draft_a';
 select tests.authenticate_as(:'a_id');
 select throws_ok(format($$ update listings set title = 'Neuer Versuch' where id = %L $$, :'draft_a'), '42501', null, 'Entfernte Anzeige ist für den Besitzer gesperrt');
 delete from listings where id = :'draft_a';
