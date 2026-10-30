@@ -11,7 +11,10 @@ import { getListingForReview } from "@/lib/services/moderation";
 import { listRegions, listSpecies } from "@/lib/services/regions";
 import { decideListing } from "./actions";
 
-// Blockierend (403 per forbidden(), ADR 014). Die Version wird vor dem Inhalt gelesen (Review B1).
+// `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
+// Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
+// den schon gesendeten Status nicht mehr ändern (ADR 014, QA M4 F1).
+// Die Version wird vor dem Inhalt gelesen (Review B1).
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {

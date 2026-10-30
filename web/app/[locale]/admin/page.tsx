@@ -5,7 +5,9 @@ import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
 import { countPendingListings } from "@/lib/services/moderation";
 
-// Blockierend rendern: Nur so kann forbidden() noch den Status 403 setzen (ADR 014, Lehre aus QA M3 F1).
+// `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
+// Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
+// den schon gesendeten Status nicht mehr ändern (ADR 014, QA M4 F1).
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {

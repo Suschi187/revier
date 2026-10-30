@@ -10,8 +10,9 @@ import { getOwnProfile } from "@/lib/services/profile";
 import { LISTING_COUNTRIES, listRegions } from "@/lib/services/regions";
 import { createListing } from "./actions";
 
-// Blockierend rendern statt Hülle plus Stream: Gestreamte Inhalte setzt erst ein Inline-Skript ein, ohne
-// JavaScript blieben Formulare unsichtbar (QA M3 F1). Der Assistent muss bis auf den Foto-Upload ohne JS gehen.
+// Inhalt ohne Suspense-Grenze statt Hülle plus Stream: Gestreamte Inhalte setzt erst ein Inline-Skript ein,
+// ohne JavaScript blieben Formulare unsichtbar (QA M3 F1). Der Assistent muss bis auf den Foto-Upload ohne JS
+// gehen. `instant = false` erlaubt das Lesen der Session außerhalb einer Grenze; den Status bestimmt es nicht.
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -8,7 +8,7 @@ import { uniqueEmail } from "./mailpit";
 import { makeAdmin, totp } from "../integration/totp";
 
 // QA M4 (docs/QA-REPORT.md, Abschnitt „M4 – Abnahme“): ergänzende Prüfungen zum Admin-Bereich.
-// - 403 auch dann, wenn der Proxy die Anfrage nicht als Admin-Pfad erkennt (zweite Schicht, A1)
+// - Kodierte Schreibweisen von /admin landen per 308 auf der kanonischen Form (Status aus dem Proxy, A1, F1)
 // - Nonce-CSP auf jedem Weg zu Admin-Seiten (A3)
 // - Server Action als Nicht-Admin (A1, fehlte in admin.spec.ts)
 // - Datensparsamkeit: fremde Entwürfe in der Prüfansicht (H6)
@@ -90,42 +90,45 @@ async function pendingListing(title: string, status: "pending_review" | "draft" 
   return data!.id;
 }
 
-// Der Status-Fehler (F1) tritt nur im Produktions-Build auf (Partial Prerendering); `next dev` rendert dynamisch.
-const prodBuild = Boolean(process.env.QA_BASE_URL || process.env.CI);
-
 const ENCODED = ["/de/%61dmin", "/de/%61dmin/listings", "/de/%61dmin/audit", "/de/%61dmin/admins", "/de/admi%6E/mfa"];
 
 test.describe("Admin-Zugang auf Umwegen", () => {
   test.skip(!local, "Lokale Supabase nötig");
 
-  test("Nicht-Admin: kodierter Pfad liefert ebenfalls HTTP 403 (zweite Schicht, A1)", async ({ page }) => {
-    test.fail(prodBuild, "QA M4 F1: Seiten unter /admin streamen (x-nextjs-postponed), forbidden() kommt nach dem Status 200");
+  test("Nicht-Admin: kodierter Pfad leitet auf die kanonische Form, dort HTTP 403 (A1, F1)", async ({ page }) => {
     await account(page.context(), "QA Kein Admin");
     for (const pathname of ENCODED) {
       const response = await page.request.get(pathname, { maxRedirects: 0 });
-      // Inhalt ist geschützt, der Status nicht
-      expect(await response.text(), pathname).toContain("Kein Zugriff");
-      expect(response.status(), pathname).toBe(403);
+      expect(response.status(), pathname).toBe(308);
+      const target = new URL(response.headers()["location"], "http://x").pathname;
+      expect(target, pathname).toBe(decodeURIComponent(pathname));
+      const final = await page.request.get(pathname);
+      expect(final.status(), pathname).toBe(403);
+      expect(await final.text(), pathname).toContain("Kein Zugriff");
     }
   });
 
   test("Anonym: kodierter Pfad leitet per HTTP zur Anmeldung", async ({ page }) => {
-    test.fail(prodBuild, "QA M4 F1: Redirect erst im Stream (200 mit NEXT_REDIRECT), kein 307");
     const response = await page.request.get("/de/%61dmin/listings", { maxRedirects: 0 });
-    expect([303, 307, 308]).toContain(response.status());
+    expect(response.status()).toBe(308);
+    const login = await page.request.get(response.headers()["location"], { maxRedirects: 0 });
+    expect(login.status()).toBe(307);
+    expect(login.headers()["location"]).toContain("/de/login");
   });
 
   test("Admin: kodierter Pfad trägt die Nonce-CSP und noindex-Header (A3)", async ({ page }) => {
-    test.fail(true, "QA M4 F1: Proxy erkennt den Pfad nicht; es gilt die feste CSP mit 'unsafe-inline'");
     await account(page.context(), "QA Admin CSP", { admin: true, totp: true });
     const id = await pendingListing("QA CSP Umweg");
     const ok = await page.request.get(`/de/admin/listings/${id}`);
     expect(ok.status()).toBe(200);
     expect(ok.headers()["content-security-policy"]).toMatch(/'nonce-/);
-    const response = await page.request.get(`/de/%61dmin/listings/${id}`);
-    expect(await response.text()).toContain("QA CSP Umweg");
-    expect(response.headers()["content-security-policy"]).toMatch(/script-src 'nonce-[^']+' 'strict-dynamic'/);
-    expect(response.headers()["x-robots-tag"]).toBe("noindex");
+    for (const pathname of [`/de/%61dmin/listings/${id}`, `/de//admin/listings/${id}`, `/de%2Fadmin/listings/${id}`]) {
+      const response = await page.request.get(pathname);
+      expect(response.url(), pathname).toMatch(new RegExp(`/de/admin/listings/${id}$`));
+      expect(await response.text()).toContain("QA CSP Umweg");
+      expect(response.headers()["content-security-policy"]).toMatch(/script-src 'nonce-[^']+' 'strict-dynamic'/);
+      expect(response.headers()["x-robots-tag"]).toBe("noindex");
+    }
   });
 
   test("Server Action „Entscheidung“ als Nicht-Admin wird abgelehnt (A1)", async ({ browser }) => {
@@ -145,7 +148,8 @@ test.describe("Admin-Zugang auf Umwegen", () => {
         multipart: { [`$ACTION_ID_${actionId}`]: "", locale: "de", id, version, decision: "approve" },
         maxRedirects: 0,
       });
-      expect(response.status(), pathname).toBeGreaterThanOrEqual(400);
+      // kanonisch 403-Rewrite (Action nicht ausgeführt), kodiert 308 auf die kanonische Form
+      expect(response.status(), pathname).toBeGreaterThanOrEqual(300);
     }
     const { data } = await admin().from("listings").select("status").eq("id", id).single();
     expect(data!.status).toBe("pending_review");

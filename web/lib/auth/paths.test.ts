@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isAdminPath, isProtectedPath, localeFromPath, nextFromRedirectTo, safeNextPath } from "./paths";
+import { canonicalPath, isAdminPath, isProtectedPath, localeFromPath, nextFromRedirectTo, safeNextPath } from "./paths";
 
 const SITE = "http://localhost:3000";
 
@@ -57,6 +57,32 @@ describe("nextFromRedirectTo", () => {
     undefined,
   ])("fällt bei %j auf das Konto zurück", (input) => {
     expect(nextFromRedirectTo(input, SITE, "cs")).toBe("/cs/account");
+  });
+});
+
+describe("canonicalPath", () => {
+  it.each([
+    ["/de/admin", "/de/admin"],
+    ["/de/%61dmin", "/de/admin"],
+    ["/de/admi%6E/mfa", "/de/admin/mfa"],
+    ["/de/%2561dmin", "/de/admin"],
+    ["/de%2Fadmin", "/de/admin"],
+    ["/de/admin%2Flistings", "/de/admin/listings"],
+    ["/de//admin", "/de/admin"],
+    ["/de/%5Cadmin", "/de/admin"],
+    ["/de/x/%2E%2E/admin", "/de/admin"],
+    ["/de/%09admin", "/de/admin"],
+    ["/de/j%C3%A4ger", "/de/j%C3%A4ger"],
+    ["/de/j%c3%a4ger", "/de/j%C3%A4ger"],
+    ["/de/a%20b", "/de/a%20b"],
+  ])("%s → %s", (input, expected) => {
+    expect(canonicalPath(input)).toBe(expected);
+    // Fixpunkt: der Redirect auf die kanonische Form führt nie in eine Schleife.
+    expect(canonicalPath(expected)).toBe(expected);
+  });
+
+  it.each(["/de/%zz", "/de/%E0%A4%A", "/de/admin%3Fx", "/de/admin%23x"])("lehnt %s ab", (input) => {
+    expect(canonicalPath(input)).toBeNull();
   });
 });
 

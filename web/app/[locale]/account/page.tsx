@@ -5,7 +5,8 @@ import type { AppLocale } from "@/i18n/routing";
 import { requireOnboardedUser } from "@/lib/services/gate";
 import { getOwnProfile } from "@/lib/services/profile";
 
-// Blockierend rendern, damit der Weg zu „Meine Anzeigen“ ohne JavaScript sichtbar ist (QA M3 F1).
+// Inhalt ohne Suspense-Grenze, damit der Weg zu „Meine Anzeigen“ ohne JavaScript sichtbar ist (QA M3 F1);
+// `instant = false` erlaubt das Lesen der Session außerhalb einer Grenze.
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {

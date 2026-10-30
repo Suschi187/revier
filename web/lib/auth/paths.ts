@@ -35,6 +35,31 @@ export function isAdminPath(pathname: string): boolean {
   return ADMIN_RE.test(pathname);
 }
 
+/**
+ * Kanonische Form eines Request-Pfads (QA M4 F1): vollständig dekodiert (auch mehrfach kodiert, `%2F`),
+ * Steuerzeichen entfernt, Backslash und Mehrfach-Schrägstriche zu `/`, Punktsegmente aufgelöst und wieder
+ * so kodiert, wie ein Browser den Pfad sendet. next-intl dekodiert Pfade vor dem Routing, `/de/%61dmin`
+ * rendert also `/de/admin`; der Proxy darf deshalb nur über die kanonische Form entscheiden.
+ * null bei ungültiger Kodierung oder kodiertem `?`/`#`.
+ */
+export function canonicalPath(pathname: string): string | null {
+  let path = pathname;
+  for (let round = 0; round < 5; round++) {
+    let decoded: string;
+    try {
+      decoded = decodeURIComponent(path);
+    } catch {
+      return null;
+    }
+    if (/[?#]/.test(decoded)) return null;
+    decoded = decoded.replace(/[\u0000-\u001f\u007f]/g, "").replace(/\\/g, "/").replace(/\/{2,}/g, "/");
+    const next = new URL(decoded, BASE).pathname;
+    if (next === path) return path;
+    path = next;
+  }
+  return null;
+}
+
 export function defaultNextPath(locale: AppLocale): string {
   return `/${locale}/account`;
 }

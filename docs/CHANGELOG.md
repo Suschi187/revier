@@ -13,7 +13,7 @@ Plan `docs/plans/M4-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 014.
   - `admin_roles`: `grant_admin`, `revoke_admin` mit Step-up (frischer TOTP-Code laut Claim `amr`, `RV005`), 3 je Admin und 10 insgesamt in 24 h, 7 Tage Karenz, letzter Admin geschützt; Audit per Trigger auf `private.user_roles`; `admin_find_user` (exakte E-Mail, Rate-Limit, Audit), `admin_list_admins`, `admin_access`.
 - **Supabase:** TOTP-MFA lokal an (`config.toml`).
 - **Web:**
-  - Zugang: Proxy prüft `/admin` per RPC (403-Rewrite ohne Rolle) und setzt eine Nonce-CSP; jede Seite und Action prüft `requireAdmin()` mit `getUser()`, rendert blockierend und ruft sonst `forbidden()`.
+  - Zugang: Proxy prüft `/admin` per RPC (403-Rewrite ohne Rolle) und setzt eine Nonce-CSP; jede Seite und Action prüft `requireAdmin()` mit `getUser()` und ruft sonst `forbidden()`. (Korrigiert nach QA M4 F1: Den Status setzt nur der Proxy, `instant = false` macht das Rendern nicht blockierend.)
   - `/admin/mfa`: TOTP einrichten nur per POST, Code-Eingabe ohne JS.
   - `/admin/listings`: Warteschlange; `/admin/listings/[id]`: Prüfansicht mit Fotos (signierte URLs, 10 min) und Entscheidung.
   - `/admin/audit`: Audit-Log mit Filter; `/admin/admins`: Admins ernennen und entziehen mit frischem Code.

@@ -1,7 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
-import { isAdminPath, isProtectedPath, localeFromPath } from "./lib/auth/paths";
+import { canonicalPath, isAdminPath, isProtectedPath, localeFromPath } from "./lib/auth/paths";
 import { publicEnv } from "./lib/env";
 import { buildCsp } from "./lib/security/csp";
 import { hasAuthCookie, refreshSession } from "./lib/supabase/proxy";
@@ -44,8 +44,18 @@ function withAdminCsp(request: NextRequest, respond: () => NextResponse): NextRe
 
 // ADR 010: Session erneuern (nur mit Supabase-Cookie, anonymer Traffic bleibt schnell), dann
 // Sprachrouting. Der Schutz hier ist nur optimistisch; autoritativ prüft jede Seite und Action selbst.
+// Status und CSP für geschützte Bereiche entscheidet nur der Proxy: Mit cacheComponents ist die Hülle
+// vorgerendert und der Status 200 gesendet, bevor die Seite forbidden() oder redirect() aufruft (QA M4 F1).
 export default async function proxy(request: NextRequest) {
-  const protectedPath = isProtectedPath(request.nextUrl.pathname);
+  const { pathname, search } = request.nextUrl;
+  const canonical = canonicalPath(pathname);
+  if (canonical === null) return new NextResponse(null, { status: 400 });
+  // Geschützte Bereiche nur unter ihrer kanonischen Form ausliefern, sonst greifen die Prüfungen unten
+  // nicht (`/de/%61dmin` rendert dank next-intl `/de/admin`).
+  if (canonical !== pathname && isProtectedPath(canonical)) {
+    return NextResponse.redirect(new URL(canonical + search, request.url), 308);
+  }
+  const protectedPath = isProtectedPath(pathname);
 
   if (!hasAuthCookie(request)) {
     return protectedPath ? loginRedirect(request) : intl(request);
@@ -54,7 +64,7 @@ export default async function proxy(request: NextRequest) {
   const session = await refreshSession(request);
   if (protectedPath && !session.userId) return session.apply(loginRedirect(request));
   // Admin: Rolle per RPC (nicht per Claim, ADR 014); aal2 prüft die Seite und leitet zu /admin/mfa.
-  if (isAdminPath(request.nextUrl.pathname)) {
+  if (isAdminPath(pathname)) {
     if (!(await session.hasAdminRole())) return session.apply(forbiddenResponse(request));
     return withAdminCsp(request, () => session.apply(intl(request)));
   }

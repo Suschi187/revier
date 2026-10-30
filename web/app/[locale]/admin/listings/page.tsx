@@ -6,7 +6,9 @@ import { requireAdmin } from "@/lib/services/admin";
 import { getReviewQueue, QUEUE_PAGE } from "@/lib/services/moderation";
 import { listRegions } from "@/lib/services/regions";
 
-// Blockierend (403 per forbidden(), ADR 014).
+// `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
+// Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
+// den schon gesendeten Status nicht mehr ändern (ADR 014, QA M4 F1).
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {
