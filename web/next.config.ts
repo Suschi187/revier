@@ -29,6 +29,9 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // Nur `next dev`: 127.0.0.1 ist wie localhost ein erlaubter Auth-Host (config.toml). Ohne den Eintrag
+  // lehnt Next die HMR-Verbindung ab, und der Browser versucht sie endlos neu („Compiling“).
+  allowedDevOrigins: ["127.0.0.1"],
   experimental: {
     // Eine 404 für die ganze App, nötig weil das Root-Layout unter [locale] liegt.
     globalNotFound: true,
