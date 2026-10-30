@@ -8,7 +8,7 @@ import { buttonClass, inputClass } from "../WizardChrome";
 
 /**
  * Fotos (ADR 011): Hochladen im Browser, Reihenfolge per Tastatur (Nach vorn/Nach hinten), optionaler
- * Alt-Text je Foto (Fallback ist der Titel), Entfernen. Alles bis auf das Hochladen geht ohne JavaScript.
+ * Alt-Text je Foto (Fallback „Titel, Foto n von m“, Plan 2.7), Entfernen. Alles bis auf das Hochladen geht ohne JavaScript.
  */
 export async function PhotosStep({
   locale,
@@ -55,7 +55,7 @@ export async function PhotosStep({
                 <div className="w-full shrink-0 sm:w-40">
                   {thumbnails[photo.id] ? (
                     // eslint-disable-next-line @next/next/no-img-element -- signierte URL aus privatem Bucket, kein Optimizer
-                    <img src={thumbnails[photo.id]} alt={photo.altText ?? title} className="aspect-[4/3] w-full rounded object-cover" />
+                    <img src={thumbnails[photo.id]} alt={photo.altText ?? (photos.length > 1 ? t("photos.altFallback", { title, n: index + 1, total: photos.length }) : title)} className="aspect-[4/3] w-full rounded object-cover" />
                   ) : (
                     <p className="flex aspect-[4/3] items-center justify-center rounded bg-stone-100 p-2 text-center text-sm">
                       {t("photos.unprocessed")}
@@ -69,6 +69,7 @@ export async function PhotosStep({
                       {hidden(photo, "alt")}
                       <label htmlFor={`alt-${photo.id}`} className="text-sm font-medium">
                         {t("photos.altText")}
+                        <span className="sr-only">: {label}</span>
                       </label>
                       <input
                         id={`alt-${photo.id}`}

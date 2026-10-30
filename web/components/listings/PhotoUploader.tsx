@@ -19,6 +19,7 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
   const router = useRouter();
   const inputId = useId();
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  const [skipped, setSkipped] = useState(0);
   // Ohne JavaScript bleibt die Auswahl gesperrt; den Grund nennt der <noscript>-Hinweis im PhotosStep.
   const ready = useSyncExternalStore(noSubscription, () => true, () => false);
 
@@ -26,9 +27,8 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
     const files = [...(event.target.files ?? [])];
     event.target.value = "";
     if (!files.length) return;
-    if (files.length > freeSlots.length) {
-      setStatus({ kind: "error", name: files[freeSlots.length]?.name ?? "", error: "limit" });
-    }
+    // Übersprungene Dateien bleiben sichtbar gemeldet, auch während die übrigen hochladen (QA M3 F7).
+    setSkipped(Math.max(0, files.length - freeSlots.length));
     const supabase = getSupabaseBrowserClient();
     let count = 0;
     for (const [index, file] of files.slice(0, freeSlots.length).entries()) {
@@ -70,6 +70,11 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
         {status.kind === "working" && t("uploading", { name: status.name })}
         {status.kind === "done" && t("done", { count: status.count })}
       </p>
+      {skipped > 0 && (
+        <p role="alert" className="text-sm text-red-800">
+          {t("skipped", { count: skipped })}
+        </p>
+      )}
       {status.kind === "error" && (
         <p role="alert" className="text-sm text-red-800">
           {status.name ? `${status.name}: ` : ""}

@@ -220,9 +220,16 @@ test("Fotos: GPS, EXIF, XMP und Kommentar sind in Bild und Thumbnail entfernt, E
   // Orientierung 6: 1200 × 800 steht nach dem Drehen hochkant
   expect(photos![0].height).toBeGreaterThan(photos![0].width);
 
-  // Ohne Alt-Text bekommen beide Fotos denselben Ersatztext (Titel); Plan M3 2.7 verlangt „Titel, Foto n von m“.
+  // Ohne Alt-Text: „Titel, Foto n von m“ (Plan M3 2.7, QA M3 F7); die Alt-Text-Felder nennen die Fotonummer.
   const alts = await page.locator("#f-photos img").evaluateAll((imgs) => imgs.map((img) => img.getAttribute("alt")));
-  expect(alts).toEqual(["Fotoprüfung Metadaten", "Fotoprüfung Metadaten"]);
+  expect(alts).toEqual(["Fotoprüfung Metadaten, Foto 1 von 2", "Fotoprüfung Metadaten, Foto 2 von 2"]);
+  await expect(page.getByLabel("Alt-Text (optional): Foto 2 von 2")).toBeVisible();
+
+  // Mehr Dateien als freie Plätze: Der Hinweis auf übersprungene Fotos bleibt stehen.
+  const small = { mimeType: "image/jpeg", buffer: Buffer.from(encode(quadrants(400, 300))) };
+  await page.getByLabel("Fotos auswählen").setInputFiles(Array.from({ length: 7 }, (_, i) => ({ name: `viele-${i}.jpg`, ...small })));
+  await expect(page.getByText("Foto 8 von 8", { exact: true })).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByRole("alert").getByText("1 Foto wurde nicht hochgeladen")).toBeVisible();
 });
 
 test("Fehlerzusammenfassung: Anker, aria-invalid und Fehlertext am Feld", async ({ page }) => {

@@ -79,10 +79,19 @@ export async function FieldError({ codes, fieldId }: { codes: string[]; fieldId:
   );
 }
 
-export function describedBy(codes: string[], fieldId: string, hintId?: string): { "aria-invalid"?: true; "aria-describedby"?: string } {
+/**
+ * Hinweis und Fehler am Feld. Für Gruppen (`<fieldset>`) ohne `aria-invalid`, das ARIA 1.2 dort nicht vorsieht;
+ * der Fehlertext hängt per `aria-describedby` an (QA M3 F7).
+ */
+export function describedBy(
+  codes: string[],
+  fieldId: string,
+  hintId?: string,
+  group = false,
+): { "aria-invalid"?: true; "aria-describedby"?: string } {
   const invalid = codes.some((c) => fieldIdOf(c) === fieldId);
   const ids = [hintId, invalid ? `${fieldId}-error` : undefined].filter(Boolean).join(" ");
-  return { ...(invalid ? { "aria-invalid": true as const } : {}), ...(ids ? { "aria-describedby": ids } : {}) };
+  return { ...(invalid && !group ? { "aria-invalid": true as const } : {}), ...(ids ? { "aria-describedby": ids } : {}) };
 }
 
 export const inputClass = "mt-1 w-full rounded border border-stone-400 px-3 py-2";

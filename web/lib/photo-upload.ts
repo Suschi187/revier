@@ -6,6 +6,9 @@ import type { Database } from "@/lib/supabase/database.types";
 
 export const CLIENT_MAX_LONG_SIDE = 2560;
 export const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;
+/** Vor dem Dekodieren: größere Originale würden den Tab einfrieren lassen (QA M3 F7). */
+export const MAX_SOURCE_BYTES = 40 * 1024 * 1024;
+export const MAX_SOURCE_PIXELS = 50_000_000;
 const JPEG_QUALITY = 0.9;
 const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 
@@ -37,6 +40,10 @@ export function targetSize(width: number, height: number, max = CLIENT_MAX_LONG_
 export async function prepareForUpload(file: File): Promise<{ ok: true; blob: Blob } | { ok: false; error: PhotoError }> {
   if (await isHeic(file)) return { ok: false, error: "heic" };
   if (!acceptedType(file.type)) return { ok: false, error: "unsupported" };
+  if (file.size > MAX_SOURCE_BYTES) return { ok: false, error: "tooLarge" };
+  const dimensions = await readDimensions(file);
+  if (!dimensions) return { ok: false, error: "corrupt" };
+  if (dimensions.width * dimensions.height > MAX_SOURCE_PIXELS) return { ok: false, error: "tooLarge" };
   let bitmap: ImageBitmap;
   try {
     bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
@@ -57,6 +64,24 @@ export async function prepareForUpload(file: File): Promise<{ ok: true; blob: Bl
   if (!blob) return { ok: false, error: "failed" };
   if (blob.size > MAX_UPLOAD_BYTES) return { ok: false, error: "tooLarge" };
   return { ok: true, blob };
+}
+
+/** Abmessungen aus dem Bildkopf, ohne die Pixel in voller Größe zu dekodieren. */
+async function readDimensions(file: Blob): Promise<{ width: number; height: number } | null> {
+  const url = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.src = url;
+    await new Promise<void>((resolve, reject) => {
+      image.onload = () => resolve();
+      image.onerror = () => reject(new Error("load"));
+    });
+    return { width: image.naturalWidth, height: image.naturalHeight };
+  } catch {
+    return null;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }
 
 /** Antwortcode der Function bzw. Plattform → Fehler für die Meldung (Spike-Review Auflage 1). */

@@ -79,7 +79,7 @@ export async function DetailsStep({
         ))}
       </fieldset>
 
-      <fieldset className="flex flex-col gap-2" id="f-species" {...describedBy(errors, "f-species", "f-species-hint")}>
+      <fieldset className="flex flex-col gap-2" id="f-species" {...describedBy(errors, "f-species", "f-species-hint", true)}>
         <legend className={labelClass}>{t("fields.species")}</legend>
         <p id="f-species-hint" className="text-sm text-stone-700">
           {t("fields.speciesHint")}
@@ -115,6 +115,7 @@ async function AttributeInput({ field, value, errors }: { field: AttributeField;
     </p>
   ) : null;
   const aria = describedBy(errors, id, hintId);
+  const groupAria = describedBy(errors, id, hintId, true);
   const error = <FieldError codes={errors} fieldId={id} />;
 
   switch (field.type) {
@@ -137,7 +138,7 @@ async function AttributeInput({ field, value, errors }: { field: AttributeField;
       );
     case "choices":
       return (
-        <fieldset id={id} {...aria}>
+        <fieldset id={id} {...groupAria}>
           <legend className={labelClass}>{label}</legend>
           {error}
           <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -152,7 +153,7 @@ async function AttributeInput({ field, value, errors }: { field: AttributeField;
       );
     case "yesno":
       return (
-        <fieldset id={id} {...aria}>
+        <fieldset id={id} {...groupAria}>
           <legend className={labelClass}>{label}</legend>
           {error}
           <div className="flex gap-4">
