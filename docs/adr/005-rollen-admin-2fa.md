@@ -20,7 +20,19 @@ SPEC 3.4: Die Admin-Rolle kommt über einen Custom Claim, nie über Felder, die 
 - Rolle in `profiles`: Die Spalte wäre schreibbar und fehleranfällig.
 
 ## Folgen
-- Admins anlegen geht nur per SQL bzw. Service-Rolle. Eine UI folgt in M4.
+- Seit M4 (ADR 014) ernennen und entziehen Admins andere Admins im Admin-Bereich: frischer TOTP-Code (≤ 10 min, Claim `amr`), höchstens 3 Änderungen je Admin und 10 insgesamt in 24 h, 7 Tage Karenz nach der eigenen Ernennung, letzter aktiver Admin nicht entziehbar. Jede Rollenänderung protokolliert ein Trigger auf `private.user_roles`, auch per SQL.
+- `private.is_admin()` verlangt seit M4 zusätzlich ein aktives Konto (nicht gesperrt, nicht gelöscht).
+- TOTP ist lokal in `supabase/config.toml` eingeschaltet (M4).
+
+### Runbook: erster Admin
+1. Das Konto meldet sich normal an und schließt das Onboarding ab.
+2. Im SQL-Editor (Cloud: Studio, lokal: `supabase db query --local`): `insert into private.user_roles (user_id, role, created_at) values ('<user-id>', 'admin', now() - interval '7 days');` Das Zurückdatieren hebt die Karenz für den ersten Admin auf; der Trigger schreibt `role.granted` mit `via = sql` ins Audit-Log.
+3. Der Admin öffnet `/de/admin`, richtet TOTP ein und ist danach mit aal2 im Admin-Bereich.
+
+### Runbook: Admin-Konto kompromittiert
+1. Rolle per SQL entziehen: `delete from private.user_roles where user_id = '<user-id>';` (auch der letzte Admin; danach per Runbook einen neuen anlegen).
+2. MFA-Faktoren und Sessions löschen: `delete from auth.mfa_factors where user_id = '<user-id>'; delete from auth.sessions where user_id = '<user-id>';`
+3. Audit-Log der letzten Tage prüfen: `role.*`, `user.looked_up`, `listing.*` mit diesem Akteur; von ihm ernannte Admins ebenso entziehen und Entscheidungen nachprüfen.
 - Checkliste Cloud-Projekt (M2, Review M1):
   - Custom Access Token Hook aktivieren.
   - „Expose new tables“ deaktivieren (entspricht `auto_expose_new_tables = false`).

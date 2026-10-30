@@ -2,6 +2,54 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M4 Admin-Bereich (Freigabe) – 2026-10-30
+
+Plan `docs/plans/M4-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 014.
+
+### Geändert
+- **Migrationen:**
+  - `moderation_fields`: `reject_code` (Grund-Vorlage) plus optionaler Freitext mit Constraints, `submitted_at` mit Index für die Warteschlange, Trigger für Grund und Zeitpunkt auf allen Pfaden, Inhalts-Hash ohne diese Spalten. Moderation nur noch über die RPC (Flag im Guard), Moderatoren ändern keine fremden Inhalte (außer Kartenpunkt entfernen), `is_admin` nur für aktive Konten.
+  - `moderate_listing`: RPC (security invoker) für Freigeben, Bearbeitung anfordern, Ablehnen, mit Zeilensperre und Versionsvergleich (`RV003` bereits entschieden, `RV004` inzwischen geändert); `admin_listing_version`, `admin_review_queue`; Waffenbegriff-Hinweise auch für Admins.
+  - `admin_roles`: `grant_admin`, `revoke_admin` mit Step-up (frischer TOTP-Code laut Claim `amr`, `RV005`), 3 je Admin und 10 insgesamt in 24 h, 7 Tage Karenz, letzter Admin geschützt; Audit per Trigger auf `private.user_roles`; `admin_find_user` (exakte E-Mail, Rate-Limit, Audit), `admin_list_admins`, `admin_access`.
+- **Supabase:** TOTP-MFA lokal an (`config.toml`).
+- **Web:**
+  - Zugang: Proxy prüft `/admin` per RPC (403-Rewrite ohne Rolle) und setzt eine Nonce-CSP; jede Seite und Action prüft `requireAdmin()` mit `getUser()`, rendert blockierend und ruft sonst `forbidden()`.
+  - `/admin/mfa`: TOTP einrichten nur per POST, Code-Eingabe ohne JS.
+  - `/admin/listings`: Warteschlange; `/admin/listings/[id]`: Prüfansicht mit Fotos (signierte URLs, 10 min) und Entscheidung.
+  - `/admin/audit`: Audit-Log mit Filter; `/admin/admins`: Admins ernennen und entziehen mit frischem Code.
+  - „Meine Anzeigen“ und Assistent zeigen den Grund in der Sprache des Besitzers plus Freitext.
+  - `ListingSummary` aus der Vorschau ausgelagert (Besitzer und Moderation sehen dasselbe).
+- **Doku:** ADR 014; ADR 005 (Ernennung per UI, Runbooks erster und kompromittierter Admin), ADR 010 (Nonce-CSP für `/admin`), ADR 013 (Hash-Ausschlüsse, Moderation); SPEC v0.6; Glossar (Moderation, Grund-Vorlagen).
+- **Tests:** pgTAP `21_moderation_fields`, `22_moderate_listing`, `23_admin_roles`; API-Tests `admin.test.ts` mit echtem aal2; E2E `admin.spec.ts` (auch gegen den Produktions-Build lauffähig); TOTP-Helfer `integration/totp.ts` ohne neue Abhängigkeit.
+
+### Testen
+- `supabase stop && supabase start` (TOTP in `config.toml`), dann `supabase db reset && supabase test db` (506)
+- `cd web && npm test` (161), `npm run test:integration` (117), `npm run test:e2e` (25)
+- Manuell:
+  1. Konto anmelden, per Runbook (ADR 005) zum Admin machen: `supabase db query --local "insert into private.user_roles (user_id, role, created_at) select id, 'admin', now() - interval '7 days' from auth.users where email = '<deine Adresse>'"`
+  2. `/de/admin` öffnen, Authenticator einrichten (QR-Code oder Schlüssel), Code eingeben.
+  3. Mit einem zweiten Konto eine Anzeige absenden; als Admin unter „Zur Warteschlange“ freigeben, zurückgeben oder ablehnen; das zweite Konto sieht Status und Grund in „Meine Anzeigen“.
+  4. Ein Konto ohne Rolle bekommt auf `/de/admin` die Seite „Kein Zugriff“ (HTTP 403).
+
+### Akzeptanz (SPEC 6 M4)
+- [x] Freigegebene Anzeige wird sichtbar: `active` mit Ablaufdatum, für anon lesbar (`admin.test.ts`, `22_moderate_listing`, E2E); öffentliche Seiten folgen in M5
+- [x] Abgelehnte Anzeige zeigt den Grund im Dashboard („Meine Anzeigen“, in der Sprache des Besitzers; E2E auf Polnisch)
+- [x] Nicht-Admins erhalten 403 (echter HTTP-Status auf allen Admin-Seiten, E2E auch gegen den Produktions-Build)
+
+### Bekannte Lücken
+- **iOS (I4):** Den Grund zeigt die App erst ab I4; die Grund-Codes gehören dann mit denselben Glossar-Begriffen in den String Catalog. Admin bleibt reines Web (SPEC 5).
+- **Eigene Anzeigen von Admins:** Kein Admin moderiert die eigene Anzeige (Vier-Augen-Prinzip), die Warteschlange zeigt sie ihm nicht. Gibt es nur einen Admin, bleibt dessen eigene Anzeige liegen, bis ein zweiter ernannt ist.
+- **Nicht im Umfang:** Verifizierungen, Meldungen, Nutzer sperren, Anzeigen entfernen (spätere Schritte); Benachrichtigung des Besitzers per Mail/Push (M8).
+- **Tests:** Ein E2E-POST auf eine Admin-Server-Action als Nicht-Admin fehlt; dass jede Action `requireAdmin()` aufruft, sichert `guards.test.ts`. Gleichzeitiges Entziehen durch zwei Admins ist nur über die Sperre im Code abgesichert, nicht parallel getestet. Der letzte Admin ist per pgTAP geprüft, nicht per E2E. Ein eigener Commit „E2E“ entfiel, die Tests entstanden mit den Commits 6–10.
+- **Rechtliches:** Begründung nach DSA Art. 17 (AGB-Bezug, Rechtsbehelf) klärt der Anwalt; Grund-Texte bleiben vorläufig, cs/pl ungeprüft.
+- **Restrisiko:** TOTP-Codes lassen sich mit einer `aal1`-Session raten; Schutz sind die Supabase-Limits (ADR 014).
+
+### Cloud-Checkliste (neu)
+- TOTP enroll/verify aktiv und nach dem Deploy geprüft; `max_enrolled_factors`; Rate-Limits für Token- und MFA-Prüfungen
+- Custom Access Token Hook aktiv (sonst kein Link „Admin“ im Kopf; Rechte hängen nicht daran)
+- Session-Timeouts (`inactivity_timeout`, `timebox`) setzen, sonst gilt aal2 so lange wie das Refresh-Token
+- Erster Admin per Runbook (ADR 005); beim Account löschen (M9) nachweisen, dass MFA-Faktoren und Rollen mitgelöscht werden
+
 ## Nachtrag M3: QA-Funde F1–F10 – 2026-10-30
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M3 – Abnahme“.

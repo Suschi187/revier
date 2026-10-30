@@ -105,7 +105,7 @@ SPEC 4.4/6 M2: Das Web nutzt E-Mail/Magic Link und Sign in with Apple, Sessions 
   - `script-src 'self' 'unsafe-inline'`, im Dev-Modus zusätzlich `'unsafe-eval'`.
   - `connect-src` erlaubt Supabase per https und wss.
   - Außerdem `frame-ancestors 'none'`, `object-src 'none'`, `base-uri 'self'` und `form-action 'self'`.
-- Eine Nonce-CSP mit `strict-dynamic` kommt zuerst für `/admin` in M4, der Rest wird in M10 neu bewertet.
+- Eine Nonce-CSP mit `strict-dynamic` gilt seit M4 für `/admin` (Proxy, ADR 014; `next.config.ts` nimmt `/admin` aus der festen CSP aus). Der Rest wird in M10 neu bewertet.
 
 ### URLs
 - `/{locale}/login`, `/welcome`, `/account`, `/account/profile`, `/auth/confirm`, `/auth/callback`: feste Slugs, `noindex`.

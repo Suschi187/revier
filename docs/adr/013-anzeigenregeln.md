@@ -20,7 +20,9 @@ Plan M3 Abschnitte 2, 5 und 6: Pflichtfelder je Art (vom Nutzer freigegeben), Le
 - **Freigabe-Hash:** Bei jeder Freigabe (`pending_review → active`) speichert ein Trigger den SHA-256 über den Inhalt in `private.listing_approvals`.
   - Inhalt: alle Spalten der Anzeige außer Verwaltungsspalten (neue Spalten zählen automatisch mit), Wildarten, Fotos mit Reihenfolge, Alt-Text und Verarbeitung, PLZ und Ort.
   - `paused → active` gelingt nur, wenn der Hash gleich ist; sonst wird die Anzeige `pending_review`. Fehlt der Hash, ebenso (fail closed).
-  - Der Hash ist für keine API-Rolle lesbar, weil er die PLZ enthält und bei rund 8 200 PLZ durchprobierbar wäre. `private.listing_resume_allowed` liefert dem Besitzer nur ja/nein.
+  - Der Hash ist für keine API-Rolle lesbar, weil er die PLZ enthält und bei rund 8 200 PLZ durchprobierbar wäre. `private.listing_resume_allowed` liefert dem Besitzer nur ja/nein. Ausnahme seit M4: Admins mit aal2 lesen ihn als Version für die Freigabe (`admin_listing_version`, ADR 014); sie sehen die PLZ ohnehin.
+  - Nicht im Hash (M4): `reject_code` und `submitted_at`, sonst müssten alle pausierten Anzeigen nach der Migration neu geprüft werden.
+- **Moderation (M4, ADR 014):** Entscheidungen nur über `moderate_listing` (Flag im Guard); Moderatoren ändern keine fremden Inhalte, außer den Kartenpunkt zu entfernen.
 - **Vier-Augen-Prinzip:** Ein Admin an der eigenen Anzeige ist Besitzer. Inhaltsänderungen führen zurück in die Prüfung, die Limits gelten, und freigeben kann er die eigene Anzeige nicht (QA M3 F1).
 - **Hinweis auf Waffen und Munition** (Entscheidung 6, Commit 7): `rpc('listing_content_hints', { p_listing_id })` liefert Fundstellen `(field, term, language, category)` aus Titel, Beschreibung, Text-Attributen und Alt-Texten, abgeglichen mit der Begriffsliste aller 4 Sprachen in `private.content_terms` (keine API-Rechte).
   - Web und iOS zeigen beim Absenden einen deutlichen Hinweis mit den Fundstellen und dem Verweis auf die Richtlinien; Absenden bleibt möglich.
