@@ -2,6 +2,7 @@ import "server-only";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 import { toError, type DbError, type ListingError } from "@/lib/listing-errors";
+import { asRejectCode, type RejectCode } from "@/lib/moderation";
 import type { Attributes, ListingDirection, ListingKind } from "@/lib/validation/listing";
 
 // Anzeigen des angemeldeten Nutzers (Plan M3 7, ADR 013). Rechte und Regeln liegen in der DB (RLS, Guard,
@@ -24,6 +25,8 @@ export type OwnListingSummary = {
   kind: ListingKind;
   direction: ListingDirection;
   status: ListingStatus;
+  /** Grund-Vorlage der Moderation (ADR 014) und optionaler Freitext dazu. */
+  rejectCode: RejectCode | null;
   rejectReason: string | null;
   expiresAt: string | null;
   createdAt: string;
@@ -33,7 +36,7 @@ export async function listOwnListings(userId: string): Promise<OwnListingSummary
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase
     .from("listings")
-    .select("id, title, kind, direction, status, reject_reason, expires_at, created_at")
+    .select("id, title, kind, direction, status, reject_code, reject_reason, expires_at, created_at")
     .eq("owner_id", userId)
     .order("created_at", { ascending: false });
   return (data ?? []).map((row) => ({
@@ -42,6 +45,7 @@ export async function listOwnListings(userId: string): Promise<OwnListingSummary
     kind: row.kind,
     direction: row.direction,
     status: row.status,
+    rejectCode: asRejectCode(row.reject_code),
     rejectReason: row.reject_reason,
     expiresAt: row.expires_at,
     createdAt: row.created_at,
@@ -77,18 +81,26 @@ export type OwnListing = OwnListingSummary & {
 };
 
 export async function getOwnListing(userId: string, id: string): Promise<OwnListing | null> {
+  return loadListing(id, userId);
+}
+
+/**
+ * Eine Anzeige mit allen Angaben. Mit `ownerId` nur die eigene; ohne nur, was RLS dem Aufrufer zeigt
+ * (Admin mit aal2 im Moderations-Service, ADR 014).
+ */
+export async function loadListing(id: string, ownerId: string | null): Promise<OwnListing | null> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  let query = supabase
     .from("listings")
     .select(
-      "id, title, kind, direction, status, reject_reason, expires_at, created_at, description, content_language, country, region_id, " +
+      "id, title, kind, direction, status, reject_code, reject_reason, expires_at, created_at, description, content_language, country, region_id, " +
         "price_minor, currency, price_unit, area_hectares, start_date, end_date, attributes, " +
         "listing_species(species_code), listing_places(postal_code, place_name), " +
         "listing_photos(id, sort_order, alt_text, upload_path, storage_path, thumb_path, processed_at, processing_attempts)",
     )
-    .eq("id", id)
-    .eq("owner_id", userId)
-    .maybeSingle();
+    .eq("id", id);
+  if (ownerId) query = query.eq("owner_id", ownerId);
+  const { data } = await query.maybeSingle();
   if (!data) return null;
   const row = data as unknown as Database["public"]["Tables"]["listings"]["Row"] & {
     listing_species: { species_code: string }[];
@@ -101,6 +113,7 @@ export async function getOwnListing(userId: string, id: string): Promise<OwnList
     kind: row.kind,
     direction: row.direction,
     status: row.status,
+    rejectCode: asRejectCode(row.reject_code),
     rejectReason: row.reject_reason,
     expiresAt: row.expires_at,
     createdAt: row.created_at,

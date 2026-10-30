@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
 import { countPendingListings } from "@/lib/services/moderation";
@@ -20,6 +21,9 @@ export default async function AdminPage() {
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <h1 className="text-3xl font-semibold">{t("title")}</h1>
       <p className="mt-4">{t("pending", { count: pending })}</p>
+      <Link href="/admin/listings" className="mt-2 inline-block underline">
+        {t("queueLink")}
+      </Link>
     </main>
   );
 }

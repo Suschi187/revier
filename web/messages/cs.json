@@ -347,6 +347,7 @@
     },
     "preview": {
       "privateBadge": "jen pro vás a moderaci",
+      "privateBadgeModerator": "neveřejné",
       "missing": "Před odesláním ještě chybí:",
       "ready": "Vše je připraveno k odeslání.",
       "submit": "Odeslat ke schválení",
@@ -422,7 +423,65 @@
     "overview": {
       "metaTitle": "Administrace",
       "title": "Administrace",
-      "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}"
+      "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}",
+      "queueLink": "Otevřít frontu"
+    },
+    "queue": {
+      "metaTitle": "Inzeráty ke schválení",
+      "title": "Inzeráty ke schválení",
+      "empty": "Žádné inzeráty nečekají na schválení.",
+      "waiting": "Odesláno {time}",
+      "owner": "Od {name}",
+      "hints": "{count, plural, one {# výraz týkající se zbraní} few {# výrazy týkající se zbraní} other {# výrazů týkajících se zbraní}}",
+      "rejections": "Dříve zamítnuto: inzerát {listing}, inzerent {owner}",
+      "more": "Další stránka",
+      "back": "Zpět do administrace",
+      "notices": {
+        "approved": "Inzerát byl schválen.",
+        "returned": "Inzerát byl vrácen k úpravám.",
+        "rejected": "Inzerát byl zamítnut.",
+        "decided": "O tomto inzerátu již rozhodl jiný administrátor."
+      }
+    },
+    "review": {
+      "metaTitle": "Kontrola inzerátu",
+      "back": "Zpět na frontu",
+      "owner": "Inzerent: {name}, členem od {date}",
+      "previousRejections": "{count, plural, =0 {Dosud nikdy nezamítnuto.} one {Dosud zamítnuto #krát.} few {Dosud zamítnuto #krát.} other {Dosud zamítnuto #krát.}}",
+      "contentLanguage": "Jazyk inzerátu: {language}",
+      "notPending": "Tento inzerát nečeká na schválení (stav: {status}).",
+      "decision": "Rozhodnutí",
+      "reason": "Důvod",
+      "reasonNone": "– zvolte důvod –",
+      "reasonHint": "Povinné u „Vyžádat úpravy“ a „Zamítnout“. Inzerent uvidí důvod ve svém jazyce.",
+      "note": "Poznámka pro inzerenta (nepovinné)",
+      "noteHint": "Povinné u „Jiný důvod“. Inzerent ji uvidí přesně takto, nejvýše 1000 znaků.",
+      "submit": "Uložit rozhodnutí",
+      "errors": {
+        "changed": "Inzerent mezitím inzerát změnil. Zkontrolujte prosím aktuální verzi.",
+        "code": "Zvolte prosím důvod.",
+        "note": "U „Jiný důvod“ prosím doplňte poznámku.",
+        "notReady": "Inzerát nelze schválit, protože chybí nebo jsou neplatné některé údaje:",
+        "forbidden": "O tomto inzerátu nemůžete rozhodnout.",
+        "failed": "Rozhodnutí se nepodařilo uložit. Zkuste to prosím znovu."
+      }
+    }
+  },
+  "Moderation": {
+    "reasons": {
+      "incomplete": "Neúplné údaje",
+      "wrong_category": "Nesprávná kategorie",
+      "weapons": "Nabídka zbraní nebo střeliva",
+      "prohibited_content": "Nepovolený obsah",
+      "duplicate": "Duplicitní inzerát",
+      "contact_in_text": "Kontaktní údaje v textu",
+      "implausible": "Nevěrohodné údaje",
+      "other": "Jiný důvod"
+    },
+    "decisions": {
+      "approve": "Schválit",
+      "request_changes": "Vyžádat úpravy",
+      "reject": "Zamítnout"
     }
   }
 }

@@ -347,6 +347,7 @@
     },
     "preview": {
       "privateBadge": "tylko dla Ciebie i moderacji",
+      "privateBadgeModerator": "niepubliczne",
       "missing": "Przed wysłaniem brakuje jeszcze:",
       "ready": "Wszystko gotowe do wysłania.",
       "submit": "Wyślij do weryfikacji",
@@ -422,7 +423,65 @@
     "overview": {
       "metaTitle": "Panel administracyjny",
       "title": "Panel administracyjny",
-      "pending": "{count, plural, =0 {Brak ogłoszeń do zatwierdzenia.} one {# ogłoszenie do zatwierdzenia.} few {# ogłoszenia do zatwierdzenia.} other {# ogłoszeń do zatwierdzenia.}}"
+      "pending": "{count, plural, =0 {Brak ogłoszeń do zatwierdzenia.} one {# ogłoszenie do zatwierdzenia.} few {# ogłoszenia do zatwierdzenia.} other {# ogłoszeń do zatwierdzenia.}}",
+      "queueLink": "Otwórz kolejkę"
+    },
+    "queue": {
+      "metaTitle": "Ogłoszenia do zatwierdzenia",
+      "title": "Ogłoszenia do zatwierdzenia",
+      "empty": "Żadne ogłoszenia nie czekają na zatwierdzenie.",
+      "waiting": "Przesłano {time}",
+      "owner": "Od {name}",
+      "hints": "{count, plural, one {# termin dotyczący broni} few {# terminy dotyczące broni} other {# terminów dotyczących broni}}",
+      "rejections": "Wcześniej odrzucono: ogłoszenie {listing}, ogłoszeniodawca {owner}",
+      "more": "Następna strona",
+      "back": "Wróć do panelu administracyjnego",
+      "notices": {
+        "approved": "Ogłoszenie zostało zatwierdzone.",
+        "returned": "Ogłoszenie zostało zwrócone do poprawek.",
+        "rejected": "Ogłoszenie zostało odrzucone.",
+        "decided": "O tym ogłoszeniu zdecydował już inny administrator."
+      }
+    },
+    "review": {
+      "metaTitle": "Sprawdź ogłoszenie",
+      "back": "Wróć do kolejki",
+      "owner": "Ogłoszeniodawca: {name}, członek od {date}",
+      "previousRejections": "{count, plural, =0 {Dotąd nigdy nie odrzucono.} one {Dotąd odrzucono # raz.} few {Dotąd odrzucono # razy.} other {Dotąd odrzucono # razy.}}",
+      "contentLanguage": "Język ogłoszenia: {language}",
+      "notPending": "To ogłoszenie nie czeka na zatwierdzenie (status: {status}).",
+      "decision": "Decyzja",
+      "reason": "Powód",
+      "reasonNone": "– wybierz powód –",
+      "reasonHint": "Wymagane przy „Poproś o poprawki” i „Odrzuć”. Ogłoszeniodawca zobaczy powód w swoim języku.",
+      "note": "Uwaga dla ogłoszeniodawcy (opcjonalnie)",
+      "noteHint": "Wymagane przy „Inny powód”. Ogłoszeniodawca zobaczy ją dokładnie tak, maksymalnie 1000 znaków.",
+      "submit": "Zapisz decyzję",
+      "errors": {
+        "changed": "Ogłoszeniodawca zmienił w międzyczasie ogłoszenie. Sprawdź aktualną wersję.",
+        "code": "Wybierz powód.",
+        "note": "Przy „Inny powód” dodaj uwagę.",
+        "notReady": "Nie można zatwierdzić ogłoszenia, ponieważ brakuje danych lub są nieprawidłowe:",
+        "forbidden": "Nie możesz podjąć decyzji w sprawie tego ogłoszenia.",
+        "failed": "Nie udało się zapisać decyzji. Spróbuj ponownie."
+      }
+    }
+  },
+  "Moderation": {
+    "reasons": {
+      "incomplete": "Niekompletne informacje",
+      "wrong_category": "Niewłaściwa kategoria",
+      "weapons": "Oferowanie broni lub amunicji",
+      "prohibited_content": "Niedozwolone treści",
+      "duplicate": "Zduplikowane ogłoszenie",
+      "contact_in_text": "Dane kontaktowe w treści",
+      "implausible": "Niewiarygodne informacje",
+      "other": "Inny powód"
+    },
+    "decisions": {
+      "approve": "Zatwierdź",
+      "request_changes": "Poproś o poprawki",
+      "reject": "Odrzuć"
     }
   }
 }

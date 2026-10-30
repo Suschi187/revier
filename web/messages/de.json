@@ -347,6 +347,7 @@
     },
     "preview": {
       "privateBadge": "nur für dich und die Moderation",
+      "privateBadgeModerator": "nicht öffentlich",
       "missing": "Vor dem Absenden fehlt noch:",
       "ready": "Alles bereit zum Absenden.",
       "submit": "Zur Prüfung absenden",
@@ -422,7 +423,65 @@
     "overview": {
       "metaTitle": "Admin-Bereich",
       "title": "Admin-Bereich",
-      "pending": "{count, plural, =0 {Keine Anzeigen zur Freigabe.} one {# Anzeige zur Freigabe.} other {# Anzeigen zur Freigabe.}}"
+      "pending": "{count, plural, =0 {Keine Anzeigen zur Freigabe.} one {# Anzeige zur Freigabe.} other {# Anzeigen zur Freigabe.}}",
+      "queueLink": "Zur Warteschlange"
+    },
+    "queue": {
+      "metaTitle": "Anzeigen zur Freigabe",
+      "title": "Anzeigen zur Freigabe",
+      "empty": "Keine Anzeigen warten auf die Freigabe.",
+      "waiting": "Eingereicht {time}",
+      "owner": "Von {name}",
+      "hints": "{count, plural, one {# Waffenbegriff} other {# Waffenbegriffe}}",
+      "rejections": "Früher abgelehnt: Anzeige {listing}, Inserent {owner}",
+      "more": "Nächste Seite",
+      "back": "Zurück zum Admin-Bereich",
+      "notices": {
+        "approved": "Die Anzeige ist freigegeben.",
+        "returned": "Die Anzeige ist zur Bearbeitung zurückgegeben.",
+        "rejected": "Die Anzeige ist abgelehnt.",
+        "decided": "Über diese Anzeige hat schon ein anderer Admin entschieden."
+      }
+    },
+    "review": {
+      "metaTitle": "Anzeige prüfen",
+      "back": "Zurück zur Warteschlange",
+      "owner": "Inserent: {name}, Mitglied seit {date}",
+      "previousRejections": "{count, plural, =0 {Bisher nie abgelehnt.} one {Bisher # Mal abgelehnt.} other {Bisher # Mal abgelehnt.}}",
+      "contentLanguage": "Sprache der Anzeige: {language}",
+      "notPending": "Diese Anzeige wartet nicht auf die Freigabe (Status: {status}).",
+      "decision": "Entscheidung",
+      "reason": "Grund",
+      "reasonNone": "– Grund wählen –",
+      "reasonHint": "Pflicht bei „Bearbeitung anfordern“ und „Ablehnen“. Der Inserent sieht den Grund in seiner Sprache.",
+      "note": "Hinweis an den Inserenten (optional)",
+      "noteHint": "Pflicht bei „Anderer Grund“. Der Inserent sieht ihn genau so, höchstens 1000 Zeichen.",
+      "submit": "Entscheidung speichern",
+      "errors": {
+        "changed": "Der Inserent hat die Anzeige inzwischen geändert. Bitte prüfe den aktuellen Stand.",
+        "code": "Bitte wähle einen Grund.",
+        "note": "Bitte ergänze bei „Anderer Grund“ einen Hinweis.",
+        "notReady": "Die Anzeige kann nicht freigegeben werden, weil Angaben fehlen oder ungültig sind:",
+        "forbidden": "Über diese Anzeige kannst du nicht entscheiden.",
+        "failed": "Die Entscheidung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
+      }
+    }
+  },
+  "Moderation": {
+    "reasons": {
+      "incomplete": "Angaben unvollständig",
+      "wrong_category": "Falsche Kategorie",
+      "weapons": "Waffen oder Munition angeboten",
+      "prohibited_content": "Unzulässige Inhalte",
+      "duplicate": "Doppelte Anzeige",
+      "contact_in_text": "Kontaktdaten im Text",
+      "implausible": "Unplausible Angaben",
+      "other": "Anderer Grund"
+    },
+    "decisions": {
+      "approve": "Freigeben",
+      "request_changes": "Bearbeitung anfordern",
+      "reject": "Ablehnen"
     }
   }
 }

@@ -135,3 +135,87 @@ async function signIn(page: Page, email: string) {
   await page.getByRole("button", { name: "Anmelden", exact: true }).click();
   await expect(page).toHaveURL("/de/account");
 }
+
+/** Admin mit eingerichtetem TOTP (über die UI); liefert das Secret für weitere Codes. */
+async function becomeAdmin(page: Page, name: string): Promise<string> {
+  const { id } = await signUp(page, name);
+  makeAdmin(id);
+  await page.goto("/de/admin/mfa");
+  await page.getByRole("button", { name: "Authenticator einrichten" }).click();
+  const secret = (await page.locator("code").textContent())!.trim();
+  await page.getByLabel("6-stelliger Code aus der App").fill(totp(secret));
+  await page.getByRole("button", { name: "Bestätigen" }).click();
+  await expect(page).toHaveURL("/de/admin");
+  return secret;
+}
+
+/** Eingereichte Anzeige eines eigenen Testkontos (Server-Pfad); liefert die id. */
+async function submittedListing(title: string): Promise<string> {
+  const client = admin();
+  const email = uniqueEmail("owner");
+  created.push(email);
+  const user = await client.auth.admin.createUser({ email, email_confirm: true });
+  const { data: region } = await client.from("regions").select("id").eq("code", "DE-14612").single();
+  const { data, error } = await client
+    .from("listings")
+    .insert({
+      owner_id: user.data.user!.id, kind: "helper", direction: "wanted", title, content_language: "pl", region_id: region!.id,
+      description: "Szukam pomocy przy budowie ambony wiosną, dwa weekendy.", attributes: { tasks: ["Ambona"] }, status: "pending_review",
+    })
+    .select("id")
+    .single();
+  expect(error).toBeNull();
+  return data!.id;
+}
+
+test("Warteschlange: Freigeben, Bearbeitung anfordern, Ablehnen mit Grund, geänderter Stand", async ({ page }) => {
+  test.skip(!local, "Lokale Supabase nötig");
+  test.setTimeout(120_000);
+  const approveId = await submittedListing("Freigabe E2E");
+  const returnId = await submittedListing("Zurückgeben E2E");
+  const changedId = await submittedListing("Geändert E2E");
+  await becomeAdmin(page, "Admin Moderation");
+
+  await page.goto("/de/admin/listings");
+  for (const title of ["Freigabe E2E", "Zurückgeben E2E", "Geändert E2E"]) {
+    await expect(page.getByRole("link", { name: title })).toBeVisible();
+  }
+
+  // Freigeben
+  await page.getByRole("link", { name: "Freigabe E2E" }).click();
+  await expect(page.getByText("Sprache der Anzeige: Polski")).toBeVisible();
+  await page.getByLabel("Freigeben").check();
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Die Anzeige ist freigegeben.")).toBeVisible();
+  const { data: approved } = await admin().from("listings").select("status").eq("id", approveId).single();
+  expect(approved!.status).toBe("active");
+
+  // Bearbeitung anfordern: ohne Grund Fehler, mit Grund zurück in den Entwurf
+  await page.goto(`/de/admin/listings/${returnId}`);
+  await page.getByLabel("Bearbeitung anfordern").check();
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Bitte wähle einen Grund.")).toBeVisible();
+  await page.getByLabel("Bearbeitung anfordern").check();
+  await page.getByLabel("Grund", { exact: true }).selectOption({ label: "Kontaktdaten im Text" });
+  await page.getByLabel("Hinweis an den Inserenten (optional)").fill("Bitte die Telefonnummer entfernen.");
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Die Anzeige ist zur Bearbeitung zurückgegeben.")).toBeVisible();
+  const { data: returned } = await admin().from("listings").select("status, reject_code, reject_reason").eq("id", returnId).single();
+  expect(returned).toEqual({ status: "draft", reject_code: "contact_in_text", reject_reason: "Bitte die Telefonnummer entfernen." });
+
+  // Geänderter Stand nach dem Öffnen: Hinweis statt Entscheidung (B1)
+  await page.goto(`/de/admin/listings/${changedId}`);
+  await admin().from("listings").update({ title: "Geändert E2E (neu)" }).eq("id", changedId);
+  await page.getByLabel("Ablehnen").check();
+  await page.getByLabel("Grund", { exact: true }).selectOption({ label: "Doppelte Anzeige" });
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Der Inserent hat die Anzeige inzwischen geändert.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Geändert E2E (neu)" })).toBeVisible();
+  await page.getByLabel("Ablehnen").check();
+  await page.getByLabel("Grund", { exact: true }).selectOption({ label: "Doppelte Anzeige" });
+  await page.getByRole("button", { name: "Entscheidung speichern" }).click();
+  await expect(page.getByText("Die Anzeige ist abgelehnt.")).toBeVisible();
+  for (const title of ["Freigabe E2E", "Zurückgeben E2E", "Geändert E2E (neu)"]) {
+    await expect(page.getByRole("link", { name: title })).toHaveCount(0);
+  }
+});

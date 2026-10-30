@@ -347,6 +347,7 @@
     },
     "preview": {
       "privateBadge": "only for you and the moderation team",
+      "privateBadgeModerator": "not public",
       "missing": "Before submitting, the following is still missing:",
       "ready": "Everything is ready to submit.",
       "submit": "Submit for review",
@@ -422,7 +423,65 @@
     "overview": {
       "metaTitle": "Admin area",
       "title": "Admin area",
-      "pending": "{count, plural, =0 {No listings awaiting review.} one {# listing awaiting review.} other {# listings awaiting review.}}"
+      "pending": "{count, plural, =0 {No listings awaiting review.} one {# listing awaiting review.} other {# listings awaiting review.}}",
+      "queueLink": "Open the review queue"
+    },
+    "queue": {
+      "metaTitle": "Review queue",
+      "title": "Listings awaiting review",
+      "empty": "No listings are awaiting review.",
+      "waiting": "Submitted {time}",
+      "owner": "By {name}",
+      "hints": "{count, plural, one {# weapon term} other {# weapon terms}}",
+      "rejections": "Previously rejected: listing {listing}, owner {owner}",
+      "more": "Next page",
+      "back": "Back to the admin area",
+      "notices": {
+        "approved": "The listing has been approved.",
+        "returned": "The listing has been sent back for changes.",
+        "rejected": "The listing has been rejected.",
+        "decided": "This listing has already been decided by another admin."
+      }
+    },
+    "review": {
+      "metaTitle": "Review listing",
+      "back": "Back to the review queue",
+      "owner": "Advertiser: {name}, member since {date}",
+      "previousRejections": "{count, plural, =0 {Never rejected before.} one {Rejected # time before.} other {Rejected # times before.}}",
+      "contentLanguage": "Language of the listing: {language}",
+      "notPending": "This listing is not awaiting review (status: {status}).",
+      "decision": "Decision",
+      "reason": "Reason",
+      "reasonNone": "– choose a reason –",
+      "reasonHint": "Required for “Request changes” and “Reject”. The advertiser sees the reason in their language.",
+      "note": "Note for the advertiser (optional)",
+      "noteHint": "Required for “Other reason”. Visible to the advertiser exactly as written, at most 1000 characters.",
+      "submit": "Save decision",
+      "errors": {
+        "changed": "The advertiser has changed the listing in the meantime. Please review the current version.",
+        "code": "Please choose a reason.",
+        "note": "Please add a note for “Other reason”.",
+        "notReady": "The listing cannot be approved because information is missing or invalid:",
+        "forbidden": "You cannot decide on this listing.",
+        "failed": "The decision could not be saved. Please try again."
+      }
+    }
+  },
+  "Moderation": {
+    "reasons": {
+      "incomplete": "Information incomplete",
+      "wrong_category": "Wrong category",
+      "weapons": "Weapons or ammunition offered",
+      "prohibited_content": "Prohibited content",
+      "duplicate": "Duplicate listing",
+      "contact_in_text": "Contact details in the text",
+      "implausible": "Implausible information",
+      "other": "Other reason"
+    },
+    "decisions": {
+      "approve": "Approve",
+      "request_changes": "Request changes",
+      "reject": "Reject"
     }
   }
 }
