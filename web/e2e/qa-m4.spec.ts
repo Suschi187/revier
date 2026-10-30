@@ -12,7 +12,7 @@ import { makeAdmin, totp } from "../integration/totp";
 // - Nonce-CSP auf jedem Weg zu Admin-Seiten (A3)
 // - Server Action als Nicht-Admin (A1, fehlte in admin.spec.ts)
 // - Datensparsamkeit: fremde Entwürfe in der Prüfansicht (H6)
-// - Ohne JavaScript: TOTP-Einrichtung und Entscheidung (Plan 4.1)
+// - Ohne JavaScript: Entscheidung (Plan 4.1); die TOTP-Einrichtung ist gesperrt und nennt den Grund (F2)
 // - Tastatur, 360 px und Texte in en/cs/pl
 // Bekannte Fehler sind test.fail (Playwright meldet sie, sobald sie behoben sind). Sessions entstehen per
 // Magic-Link-Token in Node (wie integration/helpers.ts), nicht per Mail, damit der Lauf kurz bleibt.
@@ -171,19 +171,14 @@ test.describe("Admin ohne JavaScript", () => {
   test.skip(!local, "Lokale Supabase nötig");
   test.use({ javaScriptEnabled: false });
 
-  test("TOTP-Einrichtung per POST ohne JavaScript (Plan 4.1)", async ({ page }) => {
-    test.fail(true, "QA M4 F2: useActionState ohne JS zeigt QR und Schlüssel nicht an; es entsteht nur ein unbestätigter Faktor");
-    test.setTimeout(20_000);
+  test("TOTP-Einrichtung ohne JavaScript: gesperrt mit Hinweis, kein Faktor (F2)", async ({ page }) => {
     const me = await account(page.context(), "QA Admin ohne JS", { admin: true });
     await page.goto("/de/admin/mfa");
-    await page.getByRole("button", { name: "Authenticator einrichten" }).click();
-    const secret = (await page.locator("code").textContent({ timeout: 5_000 }))!.trim();
-    expect(secret).toMatch(/^[A-Z2-7]{16,}$/);
-    await page.getByLabel("6-stelliger Code aus der App").fill(totp(secret));
-    await page.getByRole("button", { name: "Bestätigen" }).click();
-    await expect(page.getByRole("heading", { name: "Admin-Bereich" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Authenticator einrichten" })).toBeDisabled();
+    // Playwright blendet <noscript> auch ohne JS aus; der Hinweis wird deshalb im HTML geprüft.
+    expect(await page.content()).toMatch(/<noscript>.*Die Einrichtung braucht JavaScript/s);
     const factors = (await admin().auth.admin.mfa.listFactors({ userId: me.id })).data?.factors ?? [];
-    expect(factors.filter((f) => f.status === "verified")).toHaveLength(1);
+    expect(factors).toHaveLength(0);
   });
 
   test("Entscheidung ohne JavaScript: Ablehnen mit Grund, Fehler ohne Grund", async ({ page }) => {

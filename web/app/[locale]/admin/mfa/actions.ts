@@ -22,16 +22,31 @@ export async function startEnrollment(_previous: EnrollState, form: FormData): P
   return enrollment ? { enrollment, error: null } : { enrollment: null, error: "setup" };
 }
 
-/** Code prüfen; danach aal2 und weiter zum Ziel im Admin-Bereich. */
-export async function confirmTotp(form: FormData): Promise<void> {
+type Checked = { target: string; ok: boolean };
+
+async function checkCode(form: FormData): Promise<Checked> {
   const locale = localeOf(form);
   await requireAdminRole(locale, `/${locale}/admin/mfa`);
   const factorId = String(form.get("factorId") ?? "");
   const code = String(form.get("code") ?? "").replace(/\s/g, "");
   const next = safeNextPath(form.get("next"), locale);
   const target = next.startsWith(`/${locale}/admin`) ? next : `/${locale}/admin`;
-  if (!UUID.test(factorId) || !/^\d{6}$/.test(code) || !(await verifyTotp(factorId, code))) {
-    redirect(`/${locale}/admin/mfa?error=code&next=${encodeURIComponent(target)}`);
-  }
+  const ok = UUID.test(factorId) && /^\d{6}$/.test(code) && (await verifyTotp(factorId, code));
+  return { target, ok };
+}
+
+/** Code für einen bestehenden Faktor prüfen; danach aal2 und weiter zum Ziel im Admin-Bereich. */
+export async function confirmTotp(form: FormData): Promise<void> {
+  const { target, ok } = await checkCode(form);
+  if (!ok) redirect(`/${localeOf(form)}/admin/mfa?error=code&next=${encodeURIComponent(target)}`);
+  redirect(target);
+}
+
+export type ConfirmState = { error: "code" | null };
+
+/** Ersteinrichtung bestätigen: Bei falschem Code bleiben Faktor, QR-Code und Schlüssel stehen (QA M4 F2). */
+export async function confirmEnrollment(_previous: ConfirmState, form: FormData): Promise<ConfirmState> {
+  const { target, ok } = await checkCode(form);
+  if (!ok) return { error: "code" };
   redirect(target);
 }

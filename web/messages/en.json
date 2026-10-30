@@ -417,6 +417,7 @@
       "secretLabel": "Or enter this key manually:",
       "codeLabel": "6-digit code from the app",
       "verify": "Confirm",
+      "noscript": "Setup requires JavaScript: the key is generated only once and shown immediately. Please enable JavaScript for this page.",
       "errors": {
         "code": "The code is not correct or has expired. Please try again.",
         "setup": "Setup failed. Please start again."

@@ -88,13 +88,14 @@ test("Admin: TOTP einrichten per POST, danach Zugang mit aal2 und Nonce-CSP", as
   const secret = (await page.locator("code").textContent())!.trim();
   expect(await factors()).toHaveLength(1);
 
-  // Falscher Code: lokalisierte Meldung; der Faktor bleibt unbestätigt, die Einrichtung startet neu.
+  // Falscher Code: lokalisierte Meldung am Feld; Faktor, QR-Code und Schlüssel bleiben (QA M4 F2).
   await page.getByLabel("6-stelliger Code aus der App").fill("000000");
   await page.getByRole("button", { name: "Bestätigen" }).click();
-  await expect(page.getByText("Der Code stimmt nicht oder ist abgelaufen.")).toBeVisible();
-  await page.getByRole("button", { name: "Authenticator einrichten" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "Der Code stimmt nicht oder ist abgelaufen." })).toBeVisible();
+  await expect(page.getByLabel("6-stelliger Code aus der App")).toHaveAttribute("aria-invalid", "true");
   const secret2 = (await page.locator("code").textContent())!.trim();
-  expect(secret2).not.toBe(secret);
+  expect(secret2).toBe(secret);
+  expect(await factors()).toHaveLength(1);
   await page.getByLabel("6-stelliger Code aus der App").fill(totp(secret2));
   await page.getByRole("button", { name: "Bestätigen" }).click();
   await expect(page).toHaveURL("/de/admin");

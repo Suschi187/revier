@@ -417,6 +417,7 @@
       "secretLabel": "Oder gib diesen Schlüssel von Hand ein:",
       "codeLabel": "6-stelliger Code aus der App",
       "verify": "Bestätigen",
+      "noscript": "Die Einrichtung braucht JavaScript: Der Schlüssel entsteht nur einmal und wird sofort angezeigt. Bitte aktiviere JavaScript für diese Seite.",
       "errors": {
         "code": "Der Code stimmt nicht oder ist abgelaufen. Bitte versuche es noch einmal.",
         "setup": "Die Einrichtung ist fehlgeschlagen. Bitte starte sie neu."

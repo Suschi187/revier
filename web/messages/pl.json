@@ -417,6 +417,7 @@
       "secretLabel": "Lub wpisz ten klucz ręcznie:",
       "codeLabel": "6-cyfrowy kod z aplikacji",
       "verify": "Potwierdź",
+      "noscript": "Konfiguracja wymaga JavaScriptu: klucz jest tworzony tylko raz i od razu wyświetlany. Włącz JavaScript dla tej strony.",
       "errors": {
         "code": "Kod jest nieprawidłowy lub wygasł. Spróbuj ponownie.",
         "setup": "Konfiguracja nie powiodła się. Zacznij od nowa."

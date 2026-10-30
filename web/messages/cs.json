@@ -417,6 +417,7 @@
       "secretLabel": "Nebo zadejte tento klíč ručně:",
       "codeLabel": "Šestimístný kód z aplikace",
       "verify": "Potvrdit",
+      "noscript": "Nastavení vyžaduje JavaScript: klíč se vytvoří jen jednou a hned se zobrazí. Povolte prosím pro tuto stránku JavaScript.",
       "errors": {
         "code": "Kód není správný nebo vypršel. Zkuste to prosím znovu.",
         "setup": "Nastavení se nezdařilo. Začněte prosím znovu."

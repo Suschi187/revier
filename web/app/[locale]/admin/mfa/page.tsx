@@ -5,7 +5,7 @@ import { CodeForm, EnrollTotp } from "@/components/admin/TotpForms";
 import type { AppLocale } from "@/i18n/routing";
 import { safeNextPath } from "@/lib/auth/paths";
 import { requireAdminRole, verifiedTotpFactor } from "@/lib/services/admin";
-import { confirmTotp, startEnrollment } from "./actions";
+import { confirmEnrollment, confirmTotp, startEnrollment } from "./actions";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
 // Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
@@ -33,15 +33,10 @@ export default async function AdminMfaPage({ searchParams }: Props) {
     <main className="mx-auto w-full max-w-xl flex-1 px-4 py-12">
       <h1 className="text-3xl font-semibold">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
-      {query.error === "code" && (
-        <p role="alert" className="mt-4 text-red-800">
-          {t("errors.code")}
-        </p>
-      )}
       {factor ? (
-        <CodeForm action={confirmTotp} locale={locale} factorId={factor.id} next={next} />
+        <CodeForm action={confirmTotp} locale={locale} factorId={factor.id} next={next} error={query.error === "code"} />
       ) : (
-        <EnrollTotp start={startEnrollment} confirm={confirmTotp} locale={locale} next={next} />
+        <EnrollTotp start={startEnrollment} confirm={confirmEnrollment} locale={locale} next={next} />
       )}
     </main>
   );
