@@ -279,14 +279,14 @@ isOneToOne: false
                   ]
                 },"listings": {
                   Row: {
-                    "area_hectares": number | null,"attributes": NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at": string,"currency": Database["public"]['Enums']["currency_code"] | null,"description": string,"direction": Database["public"]['Enums']["listing_direction"],"display_location": unknown,"end_date": string | null,"expires_at": string | null,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id": string,"postal_prefix": string | null,"price_minor": number | null,"price_unit": Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason": string | null,"search_vector": unknown,"start_date": string | null,"status": Database["public"]['Enums']["listing_status"],"title": string
+                    "area_hectares": number | null,"attributes": NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at": string,"currency": Database["public"]['Enums']["currency_code"] | null,"description": string,"direction": Database["public"]['Enums']["listing_direction"],"display_location": unknown,"end_date": string | null,"expires_at": string | null,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id": string,"postal_prefix": string | null,"price_minor": number | null,"price_unit": Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_code": string | null,"reject_reason": string | null,"search_vector": unknown,"start_date": string | null,"status": Database["public"]['Enums']["listing_status"],"submitted_at": string | null,"title": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction": Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"postal_prefix"?: string | null,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title": string
+                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language": Database["public"]['Enums']["language_code"],"country": Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction": Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"postal_prefix"?: string | null,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id": string,"reject_code"?: string | null,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"submitted_at"?: string | null,"title": string
                   }
                   Update: {
-                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language"?: Database["public"]['Enums']["language_code"],"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction"?: Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"postal_prefix"?: string | null,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id"?: string,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"title"?: string
+                    "area_hectares"?: number | null,"attributes"?: NonNullable<Json>,"content_language"?: Database["public"]['Enums']["language_code"],"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"currency"?: Database["public"]['Enums']["currency_code"] | null,"description"?: string,"direction"?: Database["public"]['Enums']["listing_direction"],"display_location"?: unknown,"end_date"?: string | null,"expires_at"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["listing_kind"],"owner_id"?: string,"postal_prefix"?: string | null,"price_minor"?: number | null,"price_unit"?: Database["public"]['Enums']["price_unit"] | null,"region_id"?: string,"reject_code"?: string | null,"reject_reason"?: string | null,"search_vector"?: never,"start_date"?: string | null,"status"?: Database["public"]['Enums']["listing_status"],"submitted_at"?: string | null,"title"?: string
                   }
                   Relationships: [
                     {
@@ -604,6 +604,29 @@ isOneToOne: false
             "accept_legal":
 { Args: { "p_privacy_version": string,"p_source": Database["public"]['Enums']["client_source"],"p_terms_version": string }; Returns: undefined
                            },
+"admin_access":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "aal2": boolean,"has_role": boolean
+            }[]
+                           },
+"admin_find_user":
+{ Args: { "p_email": string }; Returns: {
+              "display_name": string,"is_admin": boolean,"member_since": string,"user_id": string
+            }[]
+                           },
+"admin_list_admins":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "active": boolean,"admin_since": string,"display_name": string,"user_id": string
+            }[]
+                           },
+"admin_listing_version":
+{ Args: { "p_listing_id": string }; Returns: string
+                           },
+"admin_review_queue":
+{ Args: { "p_after_id"?: string,"p_after_submitted"?: string,"p_limit"?: number }; Returns: {
+              "country": Database["public"]['Enums']["country_code"],"direction": Database["public"]['Enums']["listing_direction"],"hint_count": number,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"listing_rejections": number,"owner_id": string,"owner_name": string,"owner_rejections": number,"region_id": string,"submitted_at": string,"title": string
+            }[]
+                           },
 "claim_photo_processing":
 { Args: { "p_photo_id": string,"p_user_id": string }; Returns: {
               "state": string,"storage_path": string,"thumb_path": string,"upload_path": string
@@ -611,6 +634,9 @@ isOneToOne: false
                            },
 "complete_photo_processing":
 { Args: { "p_height": number,"p_photo_id": string,"p_width": number }; Returns: string
+                           },
+"grant_admin":
+{ Args: { "p_user_id": string }; Returns: undefined
                            },
 "legal_status":
 { Args: Record<PropertyKey, never>; Returns: {
@@ -622,11 +648,17 @@ isOneToOne: false
               "category": string,"field": string,"language": Database["public"]['Enums']["language_code"],"term": string
             }[]
                            },
+"moderate_listing":
+{ Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
+                           },
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },
 "reorder_listing_photos":
 { Args: { "p_listing_id": string,"p_photo_ids": (string)[] }; Returns: undefined
+                           },
+"revoke_admin":
+{ Args: { "p_user_id": string }; Returns: undefined
                            },
 "set_listing_location":
 { Args: { "p_listing_id": string,"p_place_name"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined

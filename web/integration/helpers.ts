@@ -66,6 +66,8 @@ export async function deleteUsers(f: Conn, ids: string[]): Promise<void> {
   const { error } = await admin.from("audit_log").delete().in("target_id", ids);
   if (error) throw new Error(`Audit-Einträge der Testnutzer: ${error.message}`);
   for (const id of ids) await admin.auth.admin.deleteUser(id);
+  // Das Löschen entfernt per Kaskade auch Rollen; der Trigger protokolliert das (ADR 014) und erzeugt neue Zeilen.
+  await admin.from("audit_log").delete().in("target_id", ids);
 }
 
 type RestOptions = {
