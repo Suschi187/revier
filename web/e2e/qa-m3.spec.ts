@@ -379,3 +379,13 @@ test("Entwurf löschen aus veralteter Ansicht: eingereichte Anzeige behält ihre
   const names = (files ?? []).map((f) => `${folder}/${f.name}`);
   expect(names).toEqual(expect.arrayContaining([photo!.storage_path, photo!.thumb_path]));
 });
+
+// QA M3 F10: Meldung bei erreichtem Tageslimit (RV002) mit Zeitpunkt. Das Limit selbst prüft pgTAP mit den
+// echten Grenzen (17_listing_rules), die Zuordnung RV002 → Meldung Vitest (listing-errors.test.ts).
+test("Tageslimit: Assistent nennt, ab wann wieder inseriert werden kann", async ({ page }) => {
+  await signUp(page, "Limit QA");
+  await page.goto("/de/account/listings/new?error=rateLimited&retry=2026-10-31T09%3A15%3A00Z");
+  await expect(page.getByText(/Tageslimit für neue Anzeigen erreicht\. Die nächste kannst du ab 31\.10\.2026/)).toBeVisible();
+  await page.goto("/de/account/listings/new?error=rateLimited&retry=kein-datum");
+  await expect(page.getByText(/Tageslimit für neue Anzeigen erreicht\. Bitte versuche es morgen wieder/)).toBeVisible();
+});

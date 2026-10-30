@@ -1,7 +1,8 @@
 import "server-only";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
-import { fieldsFromHint, type Attributes, type ListingDirection, type ListingKind } from "@/lib/validation/listing";
+import { toError, type DbError, type ListingError } from "@/lib/listing-errors";
+import type { Attributes, ListingDirection, ListingKind } from "@/lib/validation/listing";
 
 // Anzeigen des angemeldeten Nutzers (Plan M3 7, ADR 013). Rechte und Regeln liegen in der DB (RLS, Guard,
 // Bereitschaftsprüfung); diese Schicht übersetzt nur deren Fehler. 0 betroffene Zeilen gelten als Fehler (D2).
@@ -9,37 +10,9 @@ import { fieldsFromHint, type Attributes, type ListingDirection, type ListingKin
 type Enums = Database["public"]["Enums"];
 export type ListingStatus = Enums["listing_status"];
 
-export type ListingError =
-  | { kind: "legal" }
-  | { kind: "rateLimited"; retryAfter: string | null }
-  | { kind: "fields"; fields: string[] }
-  | { kind: "notFound" }
-  | { kind: "failed" };
+export type { ListingError };
 
 export type Result<T = void> = { ok: true; value: T } | { ok: false; error: ListingError };
-
-type DbError = { code?: string; hint?: string | null } | null;
-
-function toError(error: DbError): ListingError {
-  if (!error) return { kind: "notFound" };
-  if (error.code === "RV001") return { kind: "legal" };
-  if (error.code === "RV002") {
-    let retryAfter: string | null = null;
-    try {
-      const value = (JSON.parse(error.hint ?? "{}") as { retry_after?: unknown }).retry_after;
-      retryAfter = typeof value === "string" ? value : null;
-    } catch {
-      retryAfter = null;
-    }
-    return { kind: "rateLimited", retryAfter };
-  }
-  if (error.code === "23514") {
-    const fields = fieldsFromHint(error.hint);
-    return { kind: "fields", fields: fields.length ? fields : ["form"] };
-  }
-  if (error.code === "42501") return { kind: "notFound" };
-  return { kind: "failed" };
-}
 
 function fail(error: DbError): { ok: false; error: ListingError } {
   return { ok: false, error: toError(error) };
