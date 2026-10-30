@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.5
+# SPEC – Revier (Arbeitstitel), MVP v0.6
 
+v0.6: M4 Moderation (ADR 014): `reject_code` plus optionaler Freitext, `submitted_at`, Entscheidungen nur per RPC `moderate_listing` (Freigeben, Bearbeitung anfordern, Ablehnen), Admins per UI mit Step-up, Karenz und Limits (3.1, 3.4, 5).
 v0.5: Stand nach M3 (Plan M3 8, QA M3 F8): Fotospalten und Verarbeitung (3.1, ADR 011), `listing_places` und `postal_prefix` (3.1, 3.3, ADR 012), Attribute und Pflichtangaben je Art (3.2, ADR 013), Wildart `other_predators`.
 v0.4: Anmeldung passwortlos per Link und Code, AGB-Zustimmung je Version in `legal_acceptances` (3.1, 4.4, ADR 010); Cloud-Projekt erst nach 7.1/7.9/7.11.
 v0.3: Startregion (7.4) und Retention-Default (7.3) entschieden, Pausieren/Fortsetzen durch Besitzer (3.4), Schema-Ergänzungen für M1 (3.1).
@@ -72,7 +73,9 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 - `area_hectares` numeric null
 - `start_date`, `end_date` date null
 - `status` enum: `draft | pending_review | active | paused | expired | rejected | removed`
-- `reject_reason` text null
+- `reject_code` text null (v0.6): Grund-Vorlage der Moderation (`incomplete | wrong_category | weapons | prohibited_content | duplicate | contact_in_text | implausible | other`), nur bei `draft` (Bearbeitung angefordert) und `rejected`
+- `reject_reason` text null: optionaler Freitext zum Code (Pflicht bei `other`)
+- `submitted_at` timestamptz null (v0.6): letzter Wechsel nach `pending_review`, nur Server
 - `expires_at` timestamptz (Standard: 60 Tage nach Freigabe, `app_settings.listing_active_days`)
 - `attributes` jsonb (siehe 3.2), bei jedem Schreiben geprüft (`private.listing_attributes_error`)
 - `search_vector` tsvector (generiert aus Titel, Beschreibung)
@@ -197,8 +200,9 @@ Die Web-App und die iOS-App bieten dieselben Funktionen mit plattformgerechter B
 - Karte: iOS MapKit, Web MapLibre mit OpenStreetMap-Kacheln (Anbieter und Datenschutz in ADR festlegen)
 
 ## 5. Admin-Bereich (Web, `/admin`)
-- Zugriff nur mit Admin-Rolle, zusätzlich Zwei-Faktor-Authentifizierung
-- Warteschlange „Anzeigen zur Freigabe“ (Freigeben, Ablehnen mit Grund, Bearbeitung anfordern)
+- Zugriff nur mit Admin-Rolle, zusätzlich Zwei-Faktor-Authentifizierung (TOTP); Nicht-Admins erhalten 403 (v0.6, ADR 014)
+- Warteschlange „Anzeigen zur Freigabe“ (Freigeben, Ablehnen mit Grund, Bearbeitung anfordern); Grund als Vorlage plus Freitext, der Besitzer sieht ihn in seiner Sprache (M4)
+- Admins ernennen und entziehen (M4): Suche per exakter E-Mail, frische 2FA-Bestätigung, Limits, 7 Tage Karenz, letzter Admin geschützt
 - Warteschlange „Verifizierungen“ (Dokument ansehen, Entscheidung)
 - Meldungen bearbeiten (Anzeige entfernen, Nutzer verwarnen/sperren)
 - Nutzer suchen und sperren

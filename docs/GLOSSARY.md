@@ -104,6 +104,32 @@ Quelle: `web/messages/*.json` (`Listings.attributes`, `Listings.options`, `Listi
 | `per_day` | per day | pro Tag | za den | za dzień | ungeprüft |
 | `per_animal` | per animal | pro Stück Wild | za kus zvěře | za sztukę zwierzyny | ungeprüft |
 
+## Moderation (M4)
+
+Quelle: ADR 014. cs/pl **ungeprüft**.
+
+| Begriff | en | de | cs | pl | Status |
+|---------|----|----|----|----|--------|
+| approve | Approve | Freigeben | Schválit | Zatwierdź | ungeprüft |
+| request_changes | Request changes | Bearbeitung anfordern | Vyžádat úpravy | Poproś o poprawki | ungeprüft |
+| reject | Reject | Ablehnen | Zamítnout | Odrzuć | ungeprüft |
+| review queue | Review queue | Anzeigen zur Freigabe | Inzeráty ke schválení | Ogłoszenia do zatwierdzenia | ungeprüft |
+| audit log | Audit log | Audit-Log | Protokol auditu | Dziennik audytu | ungeprüft |
+| two-factor authentication | Two-factor authentication | Zwei-Faktor-Authentifizierung | Dvoufázové ověření | Uwierzytelnianie dwuskładnikowe | ungeprüft |
+
+### Grund-Vorlagen (`reject_code`)
+
+| Code | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| `incomplete` | Information incomplete | Angaben unvollständig | Neúplné údaje | Niekompletne informacje | ungeprüft |
+| `wrong_category` | Wrong category | Falsche Kategorie | Nesprávná kategorie | Niewłaściwa kategoria | ungeprüft |
+| `weapons` | Weapons or ammunition offered | Waffen oder Munition angeboten | Nabídka zbraní nebo střeliva | Oferowanie broni lub amunicji | ungeprüft |
+| `prohibited_content` | Prohibited content | Unzulässige Inhalte | Nepovolený obsah | Niedozwolone treści | ungeprüft |
+| `duplicate` | Duplicate listing | Doppelte Anzeige | Duplicitní inzerát | Zduplikowane ogłoszenie | ungeprüft |
+| `contact_in_text` | Contact details in the text | Kontaktdaten im Text | Kontaktní údaje v textu | Dane kontaktowe w treści | ungeprüft |
+| `implausible` | Implausible information | Unplausible Angaben | Nevěrohodné údaje | Niewiarygodne informacje | ungeprüft |
+| `other` | Other reason | Anderer Grund | Jiný důvod | Inny powód | ungeprüft |
+
 ## Konto und Anmeldung (M2)
 
 Werden in Web und iOS gleich verwendet. cs/pl **ungeprüft**.
