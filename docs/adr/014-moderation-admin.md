@@ -47,6 +47,7 @@ SPEC 5/6 M4: Admins geben Anzeigen frei, lehnen sie mit Grund ab oder fordern ei
 - **TOTP:** Einrichtung nur per Server Action (POST), vorher werden unbestätigte Faktoren entfernt. Secret und QR erscheinen nur in dieser Antwort (`no-store`). Die Einrichtung braucht JavaScript (QA M4 F2): Supabase liefert das Secret nur beim Anlegen, Next 16 rendert mit `cacheComponents` den Zustand einer Action ohne JS nicht in die Seite, und Secret in Cookie oder URL schließt B3 aus. Ohne JS ist der Knopf gesperrt, `<noscript>` nennt den Grund. Die Code-Eingabe für einen bestehenden Faktor geht ohne JS. Ein falscher Code bei der Ersteinrichtung behält den Faktor.
 - **Nonce-CSP** für `/admin` (Zusage aus ADR 010): Der Proxy setzt `script-src 'nonce-…' 'strict-dynamic'` ohne `'unsafe-inline'`. Scheitert das technisch, wird es hier mit Grund verschoben und im CHANGELOG als Lücke geführt.
 - Signierte Foto-URLs mit dem Client des Admins, 10 Minuten, nie in geteilten Caches.
+- Prüfansicht nur für Anzeigen in der Prüfung (QA M4 F4): Version (`admin_listing_version`) und Waffenbegriff-Hinweise gibt es für Admins nur bei `pending_review`. Fremde Entwürfe liefern 404, entschiedene Anzeigen nur Titel und Status.
 
 ## Alternativen
 - Roh-UPDATE durch Admins (wie bis M3): kein Versionsvergleich, Konflikte und ungesehene Inhalte möglich.

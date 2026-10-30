@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(35);
+select plan(36);
 
 -- QA-Abnahme M4 (docs/QA-REPORT.md, „M4 – Abnahme“): Angriffe auf Moderation und Admin-Verwaltung, die
 -- 21–23 nicht abdecken. Alles in dieser Transaktion, Rollback am Ende (keine Reste, keine Zählungen kippen).
@@ -121,8 +121,11 @@ select tests.authenticate_as(:'mod_id', 'aal2');
 select is(tests.state_of(format($$ select moderate_listing(%L, 'approve', %L) $$, :'draft', coalesce(admin_listing_version(:'draft'), 'x'))), 'RV003',
   'Entwurf ist nicht moderierbar');
 select is((select count(*)::int from admin_review_queue() where id = :'draft'), 0, 'Entwurf nicht in der Warteschlange');
-select todo('QA M4 F4: admin_listing_version liefert auch für fremde Entwürfe einen Hash (H6)', 1);
 select is(admin_listing_version(:'draft'), null, 'Version nur für Anzeigen in der Prüfung');
+select tests.as_postgres();
+update listings set title = 'QA privater Entwurf mit Munition' where id = :'draft';
+select tests.authenticate_as(:'mod_id', 'aal2');
+select is((select count(*)::int from listing_content_hints(:'draft')), 0, 'Hinweise nur für Anzeigen in der Prüfung (F4)');
 
 -- ---------------------------------------------------------------------------
 -- A11: gesperrte und gelöschte Admins

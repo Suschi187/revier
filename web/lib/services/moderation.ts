@@ -57,25 +57,39 @@ export async function getReviewQueue(after: { submittedAt: string; id: string } 
 
 export type ReviewPhoto = { id: string; url: string; alt: string };
 
-export type Review = {
-  /** Version des Inhalts, gelesen vor dem Inhalt (Review B1); null, wenn die Anzeige nicht moderierbar ist. */
-  version: string | null;
-  listing: OwnListing;
-  owner: { name: string | null; memberSince: string | null };
-  previousRejections: number;
-  hints: ContentHint[];
-  photos: ReviewPhoto[];
-};
+export type Review =
+  | {
+      /** Version des Inhalts, gelesen vor dem Inhalt (Review B1). */
+      version: string;
+      listing: OwnListing;
+      owner: { name: string | null; memberSince: string | null };
+      previousRejections: number;
+      hints: ContentHint[];
+      photos: ReviewPhoto[];
+    }
+  | {
+      /** Nicht moderierbar (schon entschieden oder eigene Anzeige): nur Titel und Status (H6). */
+      version: null;
+      listing: Pick<OwnListing, "id" | "title" | "status">;
+    };
 
-/** Anzeige zur Prüfung. Die Version kommt zuerst, damit sie nie zu einem neueren Stand passt als angezeigt. */
+/**
+ * Anzeige zur Prüfung. Die Version kommt zuerst, damit sie nie zu einem neueren Stand passt als angezeigt.
+ * Fremde Entwürfe gibt es hier nicht (null, also 404), und außerhalb der Prüfung lädt der Dienst nur Titel
+ * und Status statt der ganzen Anzeige (QA M4 F4, Review H6).
+ */
 export async function getListingForReview(id: string): Promise<Review | null> {
   const supabase = await createSupabaseServerClient();
   const { data: version } = await supabase.rpc("admin_listing_version", { p_listing_id: id });
+  if (!version) {
+    const { data: row } = await supabase.from("listings").select("id, title, status").eq("id", id).maybeSingle();
+    if (!row || row.status === "draft") return null;
+    return { version: null, listing: { id: row.id, title: row.title, status: row.status } };
+  }
   const listing = await loadListing(id, null);
-  if (!listing) return null;
-  // Schon entschieden oder (eigene) nicht moderierbar: nur der Status, keine weiteren Daten (H6).
-  if (listing.status !== "pending_review" || !version) {
-    return { version: null, listing, owner: { name: null, memberSince: null }, previousRejections: 0, hints: [], photos: [] };
+  // Zwischen Version und Inhalt entschieden oder zurückgegeben: wie oben nur Titel und Status.
+  if (!listing || listing.status !== "pending_review") {
+    return listing && listing.status !== "draft" ? { version: null, listing: { id: listing.id, title: listing.title, status: listing.status } } : null;
   }
 
   const [{ data: row }, { count }, hints, photos] = await Promise.all([
@@ -86,7 +100,7 @@ export async function getListingForReview(id: string): Promise<Review | null> {
   ]);
   const profile = (row as unknown as { profiles: { display_name: string; created_at: string } | null } | null)?.profiles ?? null;
   return {
-    version: (version as string | null) ?? null,
+    version: version as string,
     listing,
     owner: { name: profile?.display_name ?? null, memberSince: profile?.created_at ?? null },
     previousRejections: count ?? 0,

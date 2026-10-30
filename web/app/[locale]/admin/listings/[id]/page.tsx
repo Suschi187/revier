@@ -42,18 +42,18 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
     getTranslations("LocaleSwitcher"),
     getFormatter(),
   ]);
-  const { listing } = review;
   if (!review.version) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/admin/listings" className="underline">
           {t("back")}
         </Link>
-        <h1 className="mt-4 text-3xl font-semibold break-words">{listing.title}</h1>
-        <p className="mt-4">{t("notPending", { status: tl(`status.${listing.status}`) })}</p>
+        <h1 className="mt-4 text-3xl font-semibold break-words">{review.listing.title}</h1>
+        <p className="mt-4">{t("notPending", { status: tl(`status.${review.listing.status}`) })}</p>
       </main>
     );
   }
+  const { listing } = review;
 
   const [regions, species] = await Promise.all([listRegions(listing.country, locale), listSpecies(locale)]);
   const error = ERRORS.find((e) => e === query.error);

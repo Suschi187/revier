@@ -167,11 +167,11 @@ test.describe("Admin-Zugang auf Umwegen", () => {
   });
 
   test("Prüfansicht zeigt keine fremden Entwürfe (H6)", async ({ page }) => {
-    test.fail(true, "QA M4 F4: Titel und Status eines fremden Entwurfs sind sichtbar");
     await account(page.context(), "QA Admin H6", { admin: true, totp: true });
     const id = await pendingListing("QA geheimer Entwurf", "draft");
     const response = await page.goto(`/de/admin/listings/${id}`);
     expect(response?.status()).toBeLessThan(500);
+    await expect(page.getByRole("heading", { name: "Seite nicht gefunden" })).toBeVisible();
     await expect(page.getByText("QA geheimer Entwurf")).toHaveCount(0);
   });
 });
