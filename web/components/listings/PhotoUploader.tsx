@@ -2,11 +2,13 @@
 
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useId, useState } from "react";
+import { useId, useState, useSyncExternalStore } from "react";
 import { prepareForUpload, uploadPhoto, type PhotoError } from "@/lib/photo-upload";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 type Status = { kind: "idle" } | { kind: "working"; name: string } | { kind: "done"; count: number } | { kind: "error"; name: string; error: PhotoError };
+
+const noSubscription = () => () => {};
 
 /**
  * Fotos auswählen, im Browser verkleinern und nach JPEG wandeln, hochladen und verarbeiten lassen.
@@ -17,6 +19,8 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
   const router = useRouter();
   const inputId = useId();
   const [status, setStatus] = useState<Status>({ kind: "idle" });
+  // Ohne JavaScript bleibt die Auswahl gesperrt; den Grund nennt der <noscript>-Hinweis im PhotosStep.
+  const ready = useSyncExternalStore(noSubscription, () => true, () => false);
 
   async function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = [...(event.target.files ?? [])];
@@ -55,7 +59,7 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
         type="file"
         accept="image/jpeg,image/png,image/webp,.heic,.heif"
         multiple
-        disabled={freeSlots.length === 0 || status.kind === "working"}
+        disabled={!ready || freeSlots.length === 0 || status.kind === "working"}
         onChange={onChange}
         aria-describedby={`${inputId}-hint`}
       />

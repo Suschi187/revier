@@ -114,10 +114,9 @@ async function newHelperDraft(page: Page, title: string) {
   return page.url().match(/listings\/([0-9a-f-]{36})\/edit/)![1];
 }
 
-// Bekannter Fehler (QA M3, siehe Bericht): Ohne JavaScript bleibt der per Suspense gestreamte Inhalt in
-// <div hidden> stehen; der Assistent ist unsichtbar. Der CHANGELOG nennt nur Fotos als JS-pflichtig.
+// QA M3 F1: Ohne JavaScript blieb der per Suspense gestreamte Inhalt in <div hidden> stehen. Die Seiten
+// rendern jetzt blockierend (`instant = false`); bis auf den Foto-Upload geht alles ohne JS.
 test("Assistent ohne JavaScript: Gesuch anlegen, Land wechseln, absenden, Entwurf löschen", async ({ page, browser }) => {
-  test.fail();
   test.setTimeout(90_000);
   await signUp(page, "Ohne JS");
   const nojs = await withoutJs(browser, page);
@@ -147,7 +146,9 @@ test("Assistent ohne JavaScript: Gesuch anlegen, Land wechseln, absenden, Entwur
   await nojs.getByLabel("Aufgaben").fill("Ansitzbau\nKirrung");
   await nojs.getByRole("button", { name: "Speichern und weiter" }).click();
   await expect(nojs.getByText("Schritt 4 von 6")).toBeVisible();
-  await expect(nojs.getByText("Zum Hochladen von Fotos wird JavaScript benötigt.")).toBeVisible();
+  // Playwright schaltet nur die Skriptausführung ab, der Parser blendet <noscript> weiter aus; deshalb im HTML prüfen.
+  expect(await nojs.content()).toContain("<noscript><p class=\"text-sm\">Zum Hochladen von Fotos wird JavaScript benötigt.</p></noscript>");
+  await expect(nojs.getByRole("button", { name: "Fotos auswählen" })).toBeDisabled();
   await nojs.getByRole("link", { name: "Weiter" }).click();
   await expect(nojs.getByText("Schritt 5 von 6")).toBeVisible();
   await nojs.getByRole("radio", { name: "Auf Anfrage" }).check();
@@ -163,7 +164,7 @@ test("Assistent ohne JavaScript: Gesuch anlegen, Land wechseln, absenden, Entwur
   await row.getByRole("button", { name: "Aus der Prüfung zurückziehen" }).click();
   await expect(nojs).toHaveURL(/notice=withdrawn/);
   const draft = nojs.getByRole("listitem").filter({ hasText: "Suche Mitjäger ohne JavaScript" });
-  await expect(draft.getByText("Entwurf")).toBeVisible();
+  await expect(draft.getByText("Status: Entwurf")).toBeVisible();
   await draft.locator("summary").click();
   await draft.getByRole("button", { name: "Endgültig löschen" }).click();
   await expect(nojs).toHaveURL(/notice=deleted/);

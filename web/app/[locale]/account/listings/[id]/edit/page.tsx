@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import { BasicsStep, CountrySwitch } from "@/components/listings/steps/BasicsStep";
 import { DetailsStep } from "@/components/listings/steps/DetailsStep";
 import { LocationStep } from "@/components/listings/steps/LocationStep";
@@ -19,6 +18,10 @@ import { LISTING_COUNTRIES, listPostalCodes, listRegions, listSpecies } from "@/
 import { listingReadiness } from "@/lib/validation/listing";
 import { changePhoto, saveListingStep } from "./actions";
 
+// Blockierend rendern statt Hülle plus Stream: Gestreamte Inhalte setzt erst ein Inline-Skript ein, ohne
+// JavaScript blieben Formulare unsichtbar (QA M3 F1). Der Assistent muss bis auf den Foto-Upload ohne JS gehen.
+export const instant = false;
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Listings.wizard");
   return { title: t("editMetaTitle"), robots: { index: false, follow: false } };
@@ -34,9 +37,7 @@ export default async function EditListingPage(props: Props) {
         {t("back")}
       </Link>
       <h1 className="mt-4 text-3xl font-semibold">{t("editTitle")}</h1>
-      <Suspense fallback={null}>
-        <EditListing {...props} />
-      </Suspense>
+      <EditListing {...props} />
     </main>
   );
 }

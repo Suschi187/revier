@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
-import { Suspense } from "react";
 import { BasicsStep, CountrySwitch, DistrictSelect } from "@/components/listings/steps/BasicsStep";
 import { ErrorSummary, StepNav } from "@/components/listings/WizardChrome";
 import { Link } from "@/i18n/navigation";
@@ -10,6 +9,10 @@ import { requireOnboardedUser } from "@/lib/services/gate";
 import { getOwnProfile } from "@/lib/services/profile";
 import { LISTING_COUNTRIES, listRegions } from "@/lib/services/regions";
 import { createListing } from "./actions";
+
+// Blockierend rendern statt Hülle plus Stream: Gestreamte Inhalte setzt erst ein Inline-Skript ein, ohne
+// JavaScript blieben Formulare unsichtbar (QA M3 F1). Der Assistent muss bis auf den Foto-Upload ohne JS gehen.
+export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Listings.wizard");
@@ -26,9 +29,7 @@ export default async function NewListingPage({ searchParams }: { searchParams: S
         {t("back")}
       </Link>
       <h1 className="mt-4 text-3xl font-semibold">{t("newTitle")}</h1>
-      <Suspense fallback={null}>
-        <NewListing searchParams={searchParams} />
-      </Suspense>
+      <NewListing searchParams={searchParams} />
     </main>
   );
 }
