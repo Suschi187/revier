@@ -71,3 +71,61 @@ export async function verifyTotp(factorId: string, code: string): Promise<boolea
   const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId, code });
   return !error;
 }
+
+export type AdminEntry = { userId: string; displayName: string | null; adminSince: string; active: boolean };
+
+export async function listAdmins(): Promise<AdminEntry[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.rpc("admin_list_admins");
+  return (data ?? []).map((row) => ({ userId: row.user_id, displayName: row.display_name, adminSince: row.admin_since, active: row.active }));
+}
+
+export type Candidate = { userId: string; displayName: string; memberSince: string; isAdmin: boolean };
+
+/** Konto per exakter E-Mail (ADR 014, A9); null ohne Treffer. Die E-Mail steht nie in URL oder Ergebnis. */
+export async function findCandidate(email: string): Promise<Candidate | null | "limit"> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("admin_find_user", { p_email: email });
+  if (error?.code === "54000") return "limit";
+  const row = data?.[0];
+  return row ? { userId: row.user_id, displayName: row.display_name, memberSince: row.member_since, isAdmin: row.is_admin } : null;
+}
+
+/** Profil eines Kandidaten für die Bestätigung (Admins lesen Profile per RLS). */
+export async function candidateProfile(userId: string): Promise<{ displayName: string; memberSince: string } | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.from("profiles").select("display_name, created_at").eq("user_id", userId).maybeSingle();
+  return data ? { displayName: data.display_name, memberSince: data.created_at } : null;
+}
+
+export type RoleChangeResult =
+  | { ok: true }
+  | { ok: false; error: "code" | "stepUp" | "waiting" | "limit" | "lastAdmin" | "notFound" | "forbidden" | "failed"; until?: string };
+
+/**
+ * Rolle ändern mit Step-up (Review B2): erst den frischen TOTP-Code bestätigen (neuer Claim amr), dann die
+ * RPC mit derselben Session. Die DB prüft das Alter der Bestätigung selbst (RV005).
+ */
+export async function changeAdminRole(change: "grant" | "revoke", userId: string, code: string): Promise<RoleChangeResult> {
+  // Ein Client für beides: Die RPC muss das neue Token mit der frischen Bestätigung tragen.
+  const supabase = await createSupabaseServerClient();
+  const { data: factors } = await supabase.auth.mfa.listFactors();
+  const factor = factors?.totp.find((f) => f.status === "verified");
+  if (!factor || (await supabase.auth.mfa.challengeAndVerify({ factorId: factor.id, code })).error) return { ok: false, error: "code" };
+  const { error } = await supabase.rpc(change === "grant" ? "grant_admin" : "revoke_admin", { p_user_id: userId });
+  if (!error) return { ok: true };
+  if (error.code === "RV005") return { ok: false, error: "stepUp" };
+  if (error.code === "54000") return { ok: false, error: "limit" };
+  if (error.code === "P0002") return { ok: false, error: "notFound" };
+  if (error.code === "23514") return { ok: false, error: "lastAdmin" };
+  if (error.code === "42501") {
+    try {
+      const hint = JSON.parse(error.hint ?? "{}") as { reason?: string; until?: string };
+      if (hint.reason === "waiting_period") return { ok: false, error: "waiting", until: hint.until };
+    } catch {
+      // kein JSON-Hint: allgemeine Ablehnung
+    }
+    return { ok: false, error: "forbidden" };
+  }
+  return { ok: false, error: "failed" };
+}

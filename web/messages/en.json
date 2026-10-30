@@ -427,7 +427,8 @@
       "title": "Admin area",
       "pending": "{count, plural, =0 {No listings awaiting review.} one {# listing awaiting review.} other {# listings awaiting review.}}",
       "queueLink": "Open the review queue",
-      "auditLink": "Audit log"
+      "auditLink": "Audit log",
+      "adminsLink": "Manage admins"
     },
     "queue": {
       "metaTitle": "Review queue",
@@ -498,6 +499,41 @@
         "verification_verified": "Verification confirmed",
         "verification_rejected": "Verification rejected",
         "report_handled": "Report handled"
+      }
+    },
+    "admins": {
+      "metaTitle": "Admins",
+      "title": "Admins",
+      "back": "Back to the admin area",
+      "intro": "Admins can review listings and appoint or remove other admins. Every change requires a fresh code from your authenticator app and is recorded in the audit log.",
+      "listTitle": "Current admins",
+      "since": "Admin since {date}",
+      "inactive": "blocked or deleted",
+      "you": "(you)",
+      "revoke": "Revoke admin role",
+      "revokeConfirm": "Revoke for {name}",
+      "findTitle": "Appoint an admin",
+      "email": "Exact email address of the account",
+      "find": "Find account",
+      "candidate": "{name}, member since {date}",
+      "alreadyAdmin": "This account is already an admin.",
+      "grant": "Appoint as admin",
+      "code": "Current code from your authenticator app",
+      "rules": "New admins can review listings immediately, but can only change roles themselves after 7 days. At most 3 role changes per admin and 10 in total per 24 hours.",
+      "notices": {
+        "granted": "The account is now an admin. The new admin must set up two-factor authentication before acting.",
+        "revoked": "The admin role has been revoked."
+      },
+      "errors": {
+        "notFound": "No active, confirmed account with this exact email address.",
+        "code": "The code is not correct or has expired.",
+        "stepUp": "Please confirm again with a fresh code.",
+        "waiting": "You can only change roles from {date} (7 days after your own appointment).",
+        "waitingNoDate": "You can only change roles 7 days after your own appointment.",
+        "limit": "Too many role changes or searches in a short time. Please try again later.",
+        "lastAdmin": "The last admin cannot be removed.",
+        "forbidden": "You are not allowed to do this.",
+        "failed": "The change could not be saved. Please try again."
       }
     }
   },

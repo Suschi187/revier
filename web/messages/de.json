@@ -427,7 +427,8 @@
       "title": "Admin-Bereich",
       "pending": "{count, plural, =0 {Keine Anzeigen zur Freigabe.} one {# Anzeige zur Freigabe.} other {# Anzeigen zur Freigabe.}}",
       "queueLink": "Zur Warteschlange",
-      "auditLink": "Audit-Log"
+      "auditLink": "Audit-Log",
+      "adminsLink": "Admins verwalten"
     },
     "queue": {
       "metaTitle": "Anzeigen zur Freigabe",
@@ -498,6 +499,41 @@
         "verification_verified": "Verifizierung bestätigt",
         "verification_rejected": "Verifizierung abgelehnt",
         "report_handled": "Meldung bearbeitet"
+      }
+    },
+    "admins": {
+      "metaTitle": "Admins",
+      "title": "Admins",
+      "back": "Zurück zum Admin-Bereich",
+      "intro": "Admins prüfen Anzeigen und ernennen oder entfernen andere Admins. Jede Änderung verlangt einen frischen Code aus deiner Authenticator-App und steht im Audit-Log.",
+      "listTitle": "Aktuelle Admins",
+      "since": "Admin seit {date}",
+      "inactive": "gesperrt oder gelöscht",
+      "you": "(du)",
+      "revoke": "Admin-Rolle entziehen",
+      "revokeConfirm": "Für {name} entziehen",
+      "findTitle": "Admin ernennen",
+      "email": "Genaue E-Mail-Adresse des Kontos",
+      "find": "Konto suchen",
+      "candidate": "{name}, Mitglied seit {date}",
+      "alreadyAdmin": "Dieses Konto ist schon Admin.",
+      "grant": "Zum Admin ernennen",
+      "code": "Aktueller Code aus deiner Authenticator-App",
+      "rules": "Neue Admins prüfen sofort Anzeigen, ändern Rollen aber erst nach 7 Tagen selbst. Höchstens 3 Rollenänderungen je Admin und 10 insgesamt in 24 Stunden.",
+      "notices": {
+        "granted": "Das Konto ist jetzt Admin. Vor der ersten Aktion richtet der neue Admin die Zwei-Faktor-Authentifizierung ein.",
+        "revoked": "Die Admin-Rolle ist entzogen."
+      },
+      "errors": {
+        "notFound": "Kein aktives, bestätigtes Konto mit genau dieser E-Mail-Adresse.",
+        "code": "Der Code stimmt nicht oder ist abgelaufen.",
+        "stepUp": "Bitte bestätige noch einmal mit einem frischen Code.",
+        "waiting": "Rollen kannst du erst ab {date} ändern (7 Tage nach deiner eigenen Ernennung).",
+        "waitingNoDate": "Rollen kannst du erst 7 Tage nach deiner eigenen Ernennung ändern.",
+        "limit": "Zu viele Rollenänderungen oder Suchen in kurzer Zeit. Bitte versuche es später noch einmal.",
+        "lastAdmin": "Der letzte Admin kann nicht entfernt werden.",
+        "forbidden": "Das darfst du nicht.",
+        "failed": "Die Änderung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
       }
     }
   },

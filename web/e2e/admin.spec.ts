@@ -44,7 +44,7 @@ async function signUp(page: Page, name: string): Promise<{ email: string; id: st
   return { email, id };
 }
 
-const ADMIN_PAGES = ["/de/admin", "/de/admin/mfa", "/de/admin/listings", "/de/admin/audit"];
+const ADMIN_PAGES = ["/de/admin", "/de/admin/mfa", "/de/admin/listings", "/de/admin/audit", "/de/admin/admins"];
 
 test("Anonym: Admin-Seiten leiten zur Anmeldung", async ({ page }) => {
   for (const path of ADMIN_PAGES) {
@@ -277,4 +277,51 @@ test("Besitzer sieht den Grund in seiner Sprache und im Assistenten (Akzeptanz b
   await expect(ownerPage).toHaveURL(/notice=submitted/);
   await expect(ownerPage.getByRole("listitem").filter({ hasText: "Zurück mit Grund" }).getByText("Grund der Moderation")).toHaveCount(0);
   await ownerContext.close();
+});
+
+test("Admins ernennen und entziehen: exakte E-Mail, frischer Code (Step-up)", async ({ page }) => {
+  test.skip(!local, "Lokale Supabase nötig");
+  test.setTimeout(180_000);
+  const client = admin();
+  const email = uniqueEmail("kandidat");
+  created.push(email);
+  const candidate = await client.auth.admin.createUser({ email, email_confirm: true });
+  await client.from("profiles").update({ display_name: "Kandidatin Kraus" }).eq("user_id", candidate.data.user!.id);
+  const secret = await becomeAdmin(page, "Admin Verwaltung");
+
+  await page.goto("/de/admin/admins");
+  await page.getByLabel("Genaue E-Mail-Adresse des Kontos").fill(email.replace("@", "x@"));
+  await page.getByRole("button", { name: "Konto suchen" }).click();
+  await expect(page.getByText("Kein aktives, bestätigtes Konto")).toBeVisible();
+  expect(page.url()).not.toContain("@");
+
+  await page.getByLabel("Genaue E-Mail-Adresse des Kontos").fill(email.toUpperCase());
+  await page.getByRole("button", { name: "Konto suchen" }).click();
+  await expect(page.getByText(/^Kandidatin Kraus, Mitglied seit/)).toBeVisible();
+  expect(page.url()).not.toContain(email);
+
+  // Falscher Code: nichts passiert
+  await page.locator("#grant-code").fill("000000");
+  await page.getByRole("button", { name: "Zum Admin ernennen" }).click();
+  await expect(page.getByText("Der Code stimmt nicht oder ist abgelaufen.")).toBeVisible();
+
+  // Frischer Code im nächsten Fenster (derselbe Code gilt nur einmal)
+  await nextTotpWindow();
+  await page.locator("#grant-code").fill(totp(secret));
+  await page.getByRole("button", { name: "Zum Admin ernennen" }).click();
+  await expect(page.getByText("Das Konto ist jetzt Admin.")).toBeVisible();
+  const entry = page.getByRole("listitem").filter({ hasText: "Kandidatin Kraus" });
+  await expect(entry).toBeVisible();
+
+  await nextTotpWindow();
+  await entry.locator("summary").click();
+  await entry.getByLabel("Aktueller Code aus deiner Authenticator-App").fill(totp(secret));
+  await entry.getByRole("button", { name: "Für Kandidatin Kraus entziehen" }).click();
+  await expect(page.getByText("Die Admin-Rolle ist entzogen.")).toBeVisible();
+  await expect(page.getByRole("listitem").filter({ hasText: "Kandidatin Kraus" })).toHaveCount(0);
+
+  await page.goto(`/de/admin/audit?target=${candidate.data.user!.id}`);
+  await expect(page.getByRole("row").filter({ hasText: "Admin ernannt" }).getByText("Admin Verwaltung")).toBeVisible();
+  await expect(page.getByRole("row").filter({ hasText: "Admin-Rolle entzogen" })).toHaveCount(1);
+  await expect(page.getByRole("row").filter({ hasText: "Konto gesucht" })).toHaveCount(1);
 });

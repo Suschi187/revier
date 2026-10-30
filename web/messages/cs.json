@@ -427,7 +427,8 @@
       "title": "Administrace",
       "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}",
       "queueLink": "Otevřít frontu",
-      "auditLink": "Protokol auditu"
+      "auditLink": "Protokol auditu",
+      "adminsLink": "Spravovat administrátory"
     },
     "queue": {
       "metaTitle": "Inzeráty ke schválení",
@@ -498,6 +499,41 @@
         "verification_verified": "Ověření potvrzeno",
         "verification_rejected": "Ověření zamítnuto",
         "report_handled": "Hlášení vyřízeno"
+      }
+    },
+    "admins": {
+      "metaTitle": "Administrátoři",
+      "title": "Administrátoři",
+      "back": "Zpět do administrace",
+      "intro": "Administrátoři kontrolují inzeráty a jmenují nebo odebírají další administrátory. Každá změna vyžaduje nový kód z ověřovací aplikace a zapisuje se do protokolu auditu.",
+      "listTitle": "Současní administrátoři",
+      "since": "Administrátorem od {date}",
+      "inactive": "zablokován nebo smazán",
+      "you": "(vy)",
+      "revoke": "Odebrat roli administrátora",
+      "revokeConfirm": "Odebrat pro {name}",
+      "findTitle": "Jmenovat administrátora",
+      "email": "Přesná e-mailová adresa účtu",
+      "find": "Vyhledat účet",
+      "candidate": "{name}, členem od {date}",
+      "alreadyAdmin": "Tento účet už je administrátorem.",
+      "grant": "Jmenovat administrátorem",
+      "code": "Aktuální kód z ověřovací aplikace",
+      "rules": "Noví administrátoři mohou ihned kontrolovat inzeráty, role ale sami mění až po 7 dnech. Nejvýše 3 změny rolí na administrátora a 10 celkem za 24 hodin.",
+      "notices": {
+        "granted": "Účet je nyní administrátorem. Před první akcí si nový administrátor nastaví dvoufázové ověření.",
+        "revoked": "Role administrátora byla odebrána."
+      },
+      "errors": {
+        "notFound": "Žádný aktivní potvrzený účet s přesně touto e-mailovou adresou.",
+        "code": "Kód není správný nebo vypršel.",
+        "stepUp": "Potvrďte to prosím znovu novým kódem.",
+        "waiting": "Role můžete měnit až od {date} (7 dní po vlastním jmenování).",
+        "waitingNoDate": "Role můžete měnit až 7 dní po vlastním jmenování.",
+        "limit": "Příliš mnoho změn rolí nebo vyhledávání v krátké době. Zkuste to prosím později.",
+        "lastAdmin": "Posledního administrátora nelze odebrat.",
+        "forbidden": "K tomu nemáte oprávnění.",
+        "failed": "Změnu se nepodařilo uložit. Zkuste to prosím znovu."
       }
     }
   },

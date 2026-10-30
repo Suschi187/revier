@@ -427,7 +427,8 @@
       "title": "Panel administracyjny",
       "pending": "{count, plural, =0 {Brak ogłoszeń do zatwierdzenia.} one {# ogłoszenie do zatwierdzenia.} few {# ogłoszenia do zatwierdzenia.} other {# ogłoszeń do zatwierdzenia.}}",
       "queueLink": "Otwórz kolejkę",
-      "auditLink": "Dziennik audytu"
+      "auditLink": "Dziennik audytu",
+      "adminsLink": "Zarządzaj administratorami"
     },
     "queue": {
       "metaTitle": "Ogłoszenia do zatwierdzenia",
@@ -498,6 +499,41 @@
         "verification_verified": "Weryfikacja potwierdzona",
         "verification_rejected": "Weryfikacja odrzucona",
         "report_handled": "Zgłoszenie rozpatrzone"
+      }
+    },
+    "admins": {
+      "metaTitle": "Administratorzy",
+      "title": "Administratorzy",
+      "back": "Wróć do panelu administracyjnego",
+      "intro": "Administratorzy sprawdzają ogłoszenia oraz mianują lub usuwają innych administratorów. Każda zmiana wymaga nowego kodu z aplikacji uwierzytelniającej i trafia do dziennika audytu.",
+      "listTitle": "Obecni administratorzy",
+      "since": "Administrator od {date}",
+      "inactive": "zablokowany lub usunięty",
+      "you": "(Ty)",
+      "revoke": "Odbierz rolę administratora",
+      "revokeConfirm": "Odbierz dla {name}",
+      "findTitle": "Mianuj administratora",
+      "email": "Dokładny adres e-mail konta",
+      "find": "Znajdź konto",
+      "candidate": "{name}, członek od {date}",
+      "alreadyAdmin": "To konto jest już administratorem.",
+      "grant": "Mianuj administratorem",
+      "code": "Aktualny kod z aplikacji uwierzytelniającej",
+      "rules": "Nowi administratorzy od razu sprawdzają ogłoszenia, ale role mogą zmieniać sami dopiero po 7 dniach. Maksymalnie 3 zmiany ról na administratora i 10 łącznie w ciągu 24 godzin.",
+      "notices": {
+        "granted": "Konto jest teraz administratorem. Przed pierwszą czynnością nowy administrator konfiguruje uwierzytelnianie dwuskładnikowe.",
+        "revoked": "Rola administratora została odebrana."
+      },
+      "errors": {
+        "notFound": "Brak aktywnego, potwierdzonego konta z dokładnie tym adresem e-mail.",
+        "code": "Kod jest nieprawidłowy lub wygasł.",
+        "stepUp": "Potwierdź ponownie nowym kodem.",
+        "waiting": "Role możesz zmieniać dopiero od {date} (7 dni po własnym mianowaniu).",
+        "waitingNoDate": "Role możesz zmieniać dopiero 7 dni po własnym mianowaniu.",
+        "limit": "Zbyt wiele zmian ról lub wyszukiwań w krótkim czasie. Spróbuj ponownie później.",
+        "lastAdmin": "Nie można usunąć ostatniego administratora.",
+        "forbidden": "Nie masz do tego uprawnień.",
+        "failed": "Nie udało się zapisać zmiany. Spróbuj ponownie."
       }
     }
   },

@@ -27,6 +27,9 @@ export default async function AdminPage() {
       <Link href="/admin/audit" className="mt-2 block underline">
         {t("auditLink")}
       </Link>
+      <Link href="/admin/admins" className="mt-2 block underline">
+        {t("adminsLink")}
+      </Link>
     </main>
   );
 }
