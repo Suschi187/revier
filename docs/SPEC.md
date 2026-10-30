@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.4
+# SPEC – Revier (Arbeitstitel), MVP v0.5
 
+v0.5: Stand nach M3 (Plan M3 8, QA M3 F8): Fotospalten und Verarbeitung (3.1, ADR 011), `listing_places` und `postal_prefix` (3.1, 3.3, ADR 012), Attribute und Pflichtangaben je Art (3.2, ADR 013), Wildart `other_predators`.
 v0.4: Anmeldung passwortlos per Link und Code, AGB-Zustimmung je Version in `legal_acceptances` (3.1, 4.4, ADR 010); Cloud-Projekt erst nach 7.1/7.9/7.11.
 v0.3: Startregion (7.4) und Retention-Default (7.3) entschieden, Pausieren/Fortsetzen durch Besitzer (3.4), Schema-Ergänzungen für M1 (3.1).
 v0.2: Web-App als gleichwertige Plattform ergänzt, Android ausdrücklich ausgeschlossen. Offene Punkte stehen in Abschnitt 7. Änderungen an der Spezifikation werden hier versioniert, nicht nur im Chat.
@@ -62,26 +63,36 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 - `kind` enum: `lease | permit | driven_hunt | trophy_hunt | helper`
   (Jagdpacht, Begehungsschein, Gesellschafts-/Drückjagd, Trophäen-/Gastjagd, Jagdhelfer/Mitjäger)
 - `direction` enum: `offer | wanted`
-- `title` text (max 100), `description` text (max 5000)
+- `title` text (3–100 Zeichen), `description` text (max 5000; zum Absenden mindestens 30). Längen in Codepoints, Leerraum am Rand zählt nicht (ADR 013).
 - `content_language` enum: `de | en | cs | pl`
 - `country`, `region_id` fk regions (Landkreis-Ebene)
 - `display_location` geography(point) – verfremdet, siehe 3.3
+- `postal_prefix` text null – die ersten beiden Ziffern der PLZ, einzige öffentliche Ortsangabe außer dem Kreis (v0.5, nur vom Server gesetzt)
 - `price_minor` bigint null, `currency` enum: `EUR | CHF | CZK | PLN`, `price_unit` enum: `total | per_year | per_hectare_year | per_day | per_animal | on_request`
 - `area_hectares` numeric null
 - `start_date`, `end_date` date null
 - `status` enum: `draft | pending_review | active | paused | expired | rejected | removed`
 - `reject_reason` text null
-- `expires_at` timestamptz (Standard: 60 Tage nach Freigabe)
-- `attributes` jsonb (siehe 3.2)
+- `expires_at` timestamptz (Standard: 60 Tage nach Freigabe, `app_settings.listing_active_days`)
+- `attributes` jsonb (siehe 3.2), bei jedem Schreiben geprüft (`private.listing_attributes_error`)
 - `search_vector` tsvector (generiert aus Titel, Beschreibung)
 
-**listing_photos**
-- `listing_id`, `storage_path`, `sort_order` (max 8 pro Anzeige)
+**listing_photos** (v0.5, ADR 011)
+- `listing_id`, `sort_order` (0–7, max 8 pro Anzeige, unique je Anzeige)
+- `upload_path` – Eingang im privaten Bucket `listing-uploads` (nur JPEG, vom Server vergeben, nach der Verarbeitung gelöscht)
+- `storage_path`, `thumb_path` – verarbeitete Dateien in `listing-photos` (ohne Metadaten, lange Seite ≤ 2048 bzw. Thumbnail), nur vom Server gesetzt
+- `processed_at`, `width`, `height`, `processing_attempts` (höchstens 3) – nur Server
+- `alt_text` text null (1–200 Zeichen; ohne Angabe „Titel, Foto n von m“)
+- Ablauf: Client legt die Zeile an, lädt in den Eingang, ruft die Edge Function `process-listing-photo`; öffentlich sind nur verarbeitete Fotos aktiver Anzeigen.
+
+**listing_places** (v0.5, ADR 012) – `listing_id` (PK), `postal_code`, `place_name`, `updated_at`; nur Besitzer und Admins mit 2FA, nie öffentlich. Schreiben über die RPC `set_listing_location` (Kreis, PLZ, Ort in einem Schritt).
+
+**postal_codes**, **postal_code_places**, **postal_code_regions** (v0.5, ADR 012) – PLZ-Verzeichnis DE und AT mit Ortsnamen und Kreiszuordnung (Referenzdaten, öffentlich lesbar).
 
 **game_species** (Referenz)
-- `code` (z. B. `roe_deer`, `red_deer`, `wild_boar`, `fallow_deer`, `chamois`, `mouflon`, `waterfowl`, `small_game`, …), `name_de/en/cs/pl`
+- `code` (z. B. `roe_deer`, `red_deer`, `wild_boar`, `fallow_deer`, `chamois`, `mouflon`, `waterfowl`, `small_game`, `other_predators`, …), `name_de/en/cs/pl`; vollständige Liste im Glossar
 
-**listing_species** (n:m) – `listing_id`, `species_code` (zusammengesetzter Primärschlüssel statt `id`)
+**listing_species** (n:m) – `listing_id`, `species_code` (zusammengesetzter Primärschlüssel statt `id`); Pflicht (mindestens eine) bei Angeboten für Pacht, Begehungsschein und Trophäenjagd (3.2)
 
 **favorites** – `user_id`, `listing_id` (unique)
 
@@ -108,17 +119,23 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 **legal_acceptances** (v0.4) – `user_id`, `document` (`terms` | `privacy`), `version`, `source` (`web` | `ios`), `accepted_at`; schreibbar nur über die RPC `accept_legal`, die gegen die aktuellen Versionen prüft. Ohne Zustimmung zur aktuellen Version führt der Client ins Onboarding; ab M3/M7 prüfen auch Anzeigen- und Chat-Policies die Zustimmung (`private.has_accepted_current_legal()`), Meldungen bewusst nicht.
 
 ### 3.2 `attributes` je Anzeigenart
-Validierung im Client und per DB-Check/Edge Function.
+Validierung in der DB bei jedem Schreiben (`private.listing_attributes_error`) und gleichlautend im Client (Zod im Web, gemeinsame Fälle in `supabase/tests/fixtures/listing_rules.json`). Unbekannte Schlüssel sind Fehler. Verbindlich ist ADR 013; die endgültigen Pflichtangaben prüft der Anwalt (7.2).
 
-- `lease`: `lease_type` (`eigenjagd | genossenschaft | pachtnachfolge | anteil`), `revier_type[]` (`hochwild | niederwild | feld | wald | berg | wasser`), `submission_deadline` (Datum), `lease_duration_years`, `shooting_plan` (Text), `hunting_hut` bool, `co_lessee_slots` int
-- `permit`: `paid` bool, `permit_scope` (`selbststaendig | begleitet`), `season`, `species_limits`
-- `driven_hunt`: `event_date`, `spots_available`, `meeting_point_description`, `dogs_required` bool
-- `trophy_hunt`: `species_targeted[]`, `season`, `includes_accommodation` bool, `import_export_note` (Hinweis auf Trophäen-/Waffenvorschriften, Pflichtfeld-Checkbox „Nutzer kennt rechtliche Voraussetzungen“)
-- `helper`: `experience_level`, `tasks[]`
+- `lease`: `lease_type` (`eigenjagd | genossenschaft | pachtnachfolge | anteil`), `revier_type[]` (`hochwild | niederwild | feld | wald | berg | wasser`), `submission_deadline` (Datum), `lease_duration_years` (1–99), `shooting_plan` (Text ≤ 2000), `hunting_hut` bool, `co_lessee_slots` (0–50)
+- `permit`: `paid` bool, `permit_scope` (`selbststaendig | begleitet`), `season` (≤ 200), `species_limits` (≤ 1000)
+- `driven_hunt`: `event_date` (nicht in der Vergangenheit), `spots_available` (1–500), `meeting_point_description` (≤ 500), `dogs_required` bool
+- `trophy_hunt`: `legal_ack` bool (Pflicht-Häkchen „Nutzer kennt die rechtlichen Voraussetzungen“), `trophy_details` (≤ 1000), `season`, `includes_accommodation` bool, `import_export_note` (≤ 1000). `species_targeted[]` entfällt (v0.5): Wildarten stehen wie bei allen Arten in `listing_species`.
+- `helper`: `experience_level` (≤ 200), `tasks[]` (1–20 Einträge, je ≤ 100)
+
+**Pflichtangaben zum Absenden** (Bereitschaftsprüfung, ADR 013):
+- alle: Beschreibung ≥ 30 Zeichen; eine angegebene PLZ muss existieren und zum Kreis passen; `event_date` nie in der Vergangenheit; Fotos verarbeitet
+- Trophäenjagd, Angebot und Gesuch: `legal_ack = true`
+- nur Angebote: PLZ und Ort, dazu je Art Pacht `lease_type`, `revier_type`, `area_hectares`, Wildart; Begehungsschein `permit_scope`, `paid`, Wildart; Gesellschaftsjagd `event_date`, `spots_available`; Trophäenjagd Wildart; Jagdhelfer `tasks`
+- Gesuche sonst ohne weitere Pflichtfelder
 
 ### 3.3 Standortschutz
 - Nutzer wählt den Landkreis (Pflicht) und optional einen Punkt auf der Karte.
-- Gespeichert wird in `display_location` ein **verfremdeter Punkt** (zufälliger Versatz im Radius ~3–5 km, einmal bei Erstellung festgelegt, nicht bei jedem Abruf neu).
+- Gespeichert wird in `display_location` ein **verfremdeter Punkt** (v0.5, ADR 006 v2): Der Eingabepunkt rastet auf die Mitte seiner 1-km-Zelle ein und wird um einen festen Vektor von 3–5 km verschoben, der je Besitzer und Kreis gleich bleibt (HMAC mit Secret). So mittelt sich der Versatz auch über viele Anzeigen nicht heraus. Den Punkt setzt nur der Besitzer; er liegt höchstens 80 km vom Kreismittelpunkt. Ohne Punkt zeigen Clients den Kreismittelpunkt (Web in M3 ohne Karte).
 - Exakte Koordinaten werden nicht gespeichert. Die genaue Lage teilen Anbieter selbst im Chat.
 - Ort mit PLZ (ADR 012): Angebote brauchen PLZ und Ortsnamen, die PLZ muss zum Kreis passen; bei Gesuchen (gesuchtes Gebiet) reicht der Kreis. Volle PLZ und Ort sind nie öffentlich und nie Such- oder Filterkriterium, öffentlich erscheinen nur die ersten beiden Ziffern.
 

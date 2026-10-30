@@ -49,6 +49,61 @@ Quelle: Migrationen `20261029100200_regions_species.sql` und `20261030090000_spe
 | `small_game` | Other small game | Sonstiges Niederwild | Ostatní drobná zvěř | Inna drobna zwierzyna | ungeprüft |
 | `other_predators` | Other predators | Sonstiges Raubwild | Ostatní dravá zvěř | Inne drapieżniki | ungeprüft |
 
+## Anzeigenattribute (`attributes`, M3)
+
+Quelle: `web/messages/*.json` (`Listings.attributes`, `Listings.options`, `Listings.priceUnits`), Schlüssel aus SPEC 3.2. iOS (I4) übernimmt diese Begriffe. cs/pl **ungeprüft**.
+
+| Schlüssel | en | de | cs | pl | Status |
+|-----------|----|----|----|----|--------|
+| `lease_type` | Type of lease | Pachtart | Druh pronájmu | Rodzaj dzierżawy | ungeprüft |
+| `revier_type` | Type of hunting ground | Reviertyp | Typ honitby | Typ obwodu | ungeprüft |
+| `submission_deadline` | Application deadline | Abgabefrist | Termín podání | Termin składania ofert | ungeprüft |
+| `lease_duration_years` | Lease term in years | Pachtdauer in Jahren | Doba pronájmu v letech | Okres dzierżawy w latach | ungeprüft |
+| `shooting_plan` | Shooting plan | Abschussplan | Plán lovu | Plan odstrzału | ungeprüft |
+| `hunting_hut` | Hunting lodge available | Jagdhütte vorhanden | K dispozici myslivecká chata | Dostępny domek myśliwski | ungeprüft |
+| `co_lessee_slots` | Places for co-lessees | Plätze für Mitpächter | Místa pro spolunájemce | Miejsca dla współdzierżawców | ungeprüft |
+| `paid` | Paid | Entgeltlich | Placené | Odpłatne | ungeprüft |
+| `permit_scope` | Scope | Umfang | Rozsah | Zakres | ungeprüft |
+| `season` | Season | Saison | Sezóna | Sezon | ungeprüft |
+| `species_limits` | Shooting limits | Abschussgrenzen | Limity odstřelu | Limity odstrzału | ungeprüft |
+| `event_date` | Date | Datum | Datum | Data | ungeprüft |
+| `spots_available` | Places available | Freie Plätze | Volná místa | Wolne miejsca | ungeprüft |
+| `meeting_point_description` | Meeting point | Treffpunkt | Místo srazu | Miejsce zbiórki | ungeprüft |
+| `dogs_required` | Dogs required | Hunde erforderlich | Psi nutní | Wymagane psy | ungeprüft |
+| `legal_ack` | I know the legal requirements for trophies, firearms and import/export. | Ich kenne die rechtlichen Voraussetzungen für Trophäen, Waffen sowie Ein- und Ausfuhr. | Znám právní požadavky na trofeje, zbraně a dovoz/vývoz. | Znam wymogi prawne dotyczące trofeów, broni oraz przywozu i wywozu. | ungeprüft |
+| `trophy_details` | Trophy details | Trophäendetails | Podrobnosti o trofeji | Szczegóły trofeum | ungeprüft |
+| `includes_accommodation` | Accommodation included | Mit Unterkunft | S ubytováním | Z zakwaterowaniem | ungeprüft |
+| `import_export_note` | Note on import and export | Hinweis zu Ein- und Ausfuhr | Poznámka k dovozu a vývozu | Uwagi dotyczące przywozu i wywozu | ungeprüft |
+| `experience_level` | Experience | Erfahrung | Zkušenosti | Doświadczenie | ungeprüft |
+| `tasks` | Tasks | Aufgaben | Úkoly | Zadania | ungeprüft |
+
+### Auswahlwerte
+
+| Schlüssel | en | de | cs | pl | Status |
+|-----------|----|----|----|----|--------|
+| `lease_type.eigenjagd` | Private hunting ground | Eigenjagd | Vlastní honitba | Obwód własny | ungeprüft |
+| `lease_type.genossenschaft` | Communal hunting ground | Genossenschaftsjagd | Společenstevní honitba | Obwód dzierżawny (wspólnota) | ungeprüft |
+| `lease_type.pachtnachfolge` | Lease succession | Pachtnachfolge | Převzetí pronájmu | Przejęcie dzierżawy | ungeprüft |
+| `lease_type.anteil` | Share of a lease | Pachtanteil | Podíl na pronájmu | Udział w dzierżawie | ungeprüft |
+| `revier_type.hochwild` | Big game | Hochwild | Vysoká zvěř | Zwierzyna gruba | ungeprüft |
+| `revier_type.niederwild` | Small game | Niederwild | Drobná zvěř | Zwierzyna drobna | ungeprüft |
+| `revier_type.feld` | Fields | Feld | Pole | Pola | ungeprüft |
+| `revier_type.wald` | Forest | Wald | Les | Las | ungeprüft |
+| `revier_type.berg` | Mountains | Gebirge | Hory | Góry | ungeprüft |
+| `revier_type.wasser` | Water | Wasser | Voda | Wody | ungeprüft |
+| `permit_scope.selbststaendig` | Independent | Selbstständig | Samostatně | Samodzielnie | ungeprüft |
+| `permit_scope.begleitet` | Accompanied | In Begleitung | S doprovodem | Z osobą towarzyszącą | ungeprüft |
+
+### Preiseinheiten (`price_unit`)
+
+| Code | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| `total` | total | gesamt | celkem | łącznie | ungeprüft |
+| `per_year` | per year | pro Jahr | za rok | za rok | ungeprüft |
+| `per_hectare_year` | per hectare and year | pro Hektar und Jahr | za hektar a rok | za hektar rocznie | ungeprüft |
+| `per_day` | per day | pro Tag | za den | za dzień | ungeprüft |
+| `per_animal` | per animal | pro Stück Wild | za kus zvěře | za sztukę zwierzyny | ungeprüft |
+
 ## Konto und Anmeldung (M2)
 
 Werden in Web und iOS gleich verwendet. cs/pl **ungeprüft**.

@@ -49,8 +49,10 @@ Fotos von Revieren tragen oft GPS-Koordinaten in EXIF/XMP und würden damit die 
 - **Sichtbarkeit der Zeilen:** Fremde sehen nur verarbeitete Fotos sichtbarer Anzeigen, der Besitzer alle eigenen.
 - **Absenden und Freigabe** verlangen, dass alle Fotos verarbeitet sind (Guard, Plan M3 Commit 6).
 - **Limits:** 8 Fotos je Anzeige; 100 neue Fotos je Konto in 24 h, auch nach Löschen (`private.photo_creations`, `RV002`).
-- **Alt-Text:** optional je Foto (max 200 Zeichen), Fallback der Titel der Anzeige.
-- **Aufräumen:** Beim Entfernen eines Fotos oder Entwurfs löscht der Client erst die Dateien, dann die Zeile. Der Job in M9 löscht Eingangsdateien älter als 24 h und Dateien ohne Zeile (ADR 008).
+- **Alt-Text:** optional je Foto (max 200 Zeichen), Fallback der Titel der Anzeige, bei mehreren Fotos „Titel, Foto n von m“.
+- **Aufräumen:** Beim Entfernen eines Fotos oder Entwurfs löscht der Client erst die Dateien, dann die Zeile (die Storage-Policy verlangt eine bearbeitbare Anzeige). Beim Entwurf nur, wenn er beim Lesen noch `draft` ist (QA M3 F6). Der Job in M9 löscht Eingangsdateien älter als 24 h und Dateien ohne Zeile (ADR 008).
+- **CORS:** Die Function antwortet mit `Access-Control-Allow-Origin: *` statt nur `SITE_URL` (Abweichung von Plan M3 7). Aufrufe tragen ein Bearer-Token und keine Cookies; ein fremder Origin kann ohne das Token des Nutzers nichts auslösen, und mit dem Token könnte er die Function ohnehin direkt aufrufen. iOS sendet keinen Origin. Eine Einschränkung brächte keinen Schutz, erschwerte aber Preview-Deployments (QA M3 F8).
+- **Client-Grenzen vor dem Dekodieren:** Originale über 40 MB oder 50 MP lehnt der Client ab, bevor er sie dekodiert (sonst friert der Tab ein); die Abmessungen kommen aus dem Bildkopf.
 
 ## Alternativen
 - **Metadaten im Client entfernen:** umgehbar.

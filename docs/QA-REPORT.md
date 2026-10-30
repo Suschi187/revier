@@ -909,3 +909,20 @@ M3 ist **mit Auflagen abnahmereif**. Die beiden Akzeptanzkriterien sind erfüllt
 - Vor M4: **F2** beheben (Pflichtfeld-Parität, betrifft auch iOS), **F3** beheben, **F1** entscheiden (beheben oder CHANGELOG korrigieren, vor M5 unbedingt klären), **F4** (Aufräumen in `listings.spec.ts`).
 - Mit dem nächsten Doku-Commit: **F8** (SPEC v0.5, Glossar-Attribute), **F9** (cs-Begriff an die Muttersprachler).
 - Bei Gelegenheit: F5, F6, F7, F10.
+
+### Nachtrag: Status der Funde (2026-10-30)
+
+| Fund | Status | Commit |
+|---|---|---|
+| F1 ohne JavaScript | behoben (blockierendes Rendern, QA-E2E ohne `test.fail`) | `4aa3d69` |
+| F2 Leerraum, Codepoints | behoben (`private.trim_all`, Zod in Codepoints, TODO-Tests aktiv) | `a751b66`, `599b1cd` |
+| F3 Preis geht verloren | behoben (`price_conflict`, keine Vorauswahl) | `350d9c9` |
+| F4 E2E-Reste | behoben (`e2e/cleanup.ts`, Zählung eingegrenzt) | `43479d6` |
+| F5 Art/Richtung | behoben (gesperrt ab Einreichung) | `2924697` |
+| F6 Entwurf löschen | behoben (Dateien nur bei Status `draft`) | `609a593` |
+| F7 Barrierefreiheit/Fotos | behoben | `583c817` (Optionsname in `350d9c9`) |
+| F8 Doku | behoben (SPEC v0.5, Glossar, ADR 011, CHANGELOG) | Doku-Commit |
+| F9 Wildart | cs-Begriff laut Produkt korrekt; Cache als Cloud-Checklistenpunkt | Doku-Commit |
+| F10 Testlücken | behoben (Vitest `listing-errors`, E2E Tageslimit, SKIPPED-Schlüssel, ADR 013 Branching) | `1b94e35` |
+
+Testlauf danach: pgTAP 424, Vitest 153, API 111, E2E 19; `supabase test db` nach E2E ohne Reset grün; Lint, Typecheck, DB-Lint und Build grün.

@@ -2,6 +2,37 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M3: QA-Funde F1–F10 – 2026-10-30
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M3 – Abnahme“.
+
+### Geändert
+- **F1 Ohne JavaScript:** Konto, „Meine Anzeigen“, „Neu“ und „Bearbeiten“ rendern blockierend (`export const instant = false`, keine Suspense-Grenze um den Inhalt). Vorher kam der Inhalt gestreamt in `<div hidden>` und erschien nur mit JS. Die Fotoauswahl ist ohne JS gesperrt, `<noscript>` nennt den Grund. **Regel für M5:** Öffentliche Seiten dürfen ihren Hauptinhalt nicht hinter einer Suspense-Grenze streamen, die erst ein Skript einsetzt.
+- **F2 Leerraum:** neue Funktion `private.trim_all` (dieselben Zeichen wie `String.prototype.trim`) für Titel, Alt-Text, Textattribute, PLZ/Ort und die Pflichtlänge der Beschreibung (Migration `listing_whitespace`). Zod zählt Längen in Codepoints wie `char_length`. Neue gemeinsame Fälle in `listing_rules.json`, ADR 013 mit Zeichenliste (auch für iOS).
+- **F3 Preis:** Ohne gespeicherten Preis ist keine Option vorgewählt. Ein eingetragener Betrag ohne gewählte Option gilt als Betrag, bei „Keine Angabe“/„Auf Anfrage“ mit Betrag gibt es den Fehler `price_conflict`. Die Option heißt „Betrag angeben“.
+- **F4 Aufräumen:** `e2e/cleanup.ts` löscht Testkonten samt Dateien (`listings.spec.ts`, `qa-m3.spec.ts`); `08_storage` zählt nur Dateien der eigenen Testnutzer.
+- **F5 Art und Richtung:** In Prüfung, aktiv und pausiert stehen sie fest (gesperrt mit Hinweis). Für eine andere Art gibt man eine neue Anzeige auf.
+- **F6 Entwurf löschen:** Fotodateien werden nur entfernt, wenn die Anzeige beim Lesen noch ein Entwurf ist.
+- **F7 Barrierefreiheit/Fotos:** Hinweis auf übersprungene Fotos bleibt stehen; Ersatz-Alt-Text „Titel, Foto n von m“; Alt-Text-Felder nennen die Fotonummer; Originale über 40 MB oder 50 MP werden vor dem Dekodieren abgelehnt; kein `aria-invalid` auf `fieldset`.
+- **F8 Doku:** SPEC v0.5 (3.1 Fotospalten, `listing_places`, `postal_prefix`, PLZ-Tabellen; 3.2 Attribute und Pflichtangaben, `species_targeted[]` entfällt; 3.3 Versatz nach ADR 006 v2), Glossar mit Attributen, Auswahlwerten und Preiseinheiten, ADR 011 (CORS `*` begründet, Aufräumen, Client-Grenzen).
+- **F9 Wildart:** cs „Ostatní dravá zvěř“ ist laut Produkt korrekt und bleibt. Wildarten und Kreise sind im Web mit `cacheLife("days")` gecacht (siehe Cloud-Checkliste unten).
+- **F10 Tests:** Fehlerzuordnung der DB in `lib/listing-errors.ts` mit Vitest; E2E für die Meldung „Tageslimit erreicht“; Integrationstests überspringen ohne Supabase, statt abzubrechen; ADR 013 warnt vor `seed.sql` auf Preview-Branches.
+
+### Testen
+- `supabase db reset && supabase test db` (424)
+- `cd web && npm test` (153), `npm run test:integration` (111), `npm run test:e2e` (19)
+- danach ohne Reset noch einmal `supabase test db`: bleibt grün (F4)
+- manuell: Browser mit abgeschaltetem JavaScript, `/de/account/listings/new` → Assistent bis „Zur Prüfung absenden“
+
+### Cloud-Checkliste (neu)
+- Nach einer Migration mit Referenzdaten (Wildarten, Kreise, PLZ) den Web-Cache leeren bzw. neu deployen; sonst erscheinen Änderungen erst nach Tagen.
+- Vor Supabase Branching den Seed für Preview-Branches abschalten (ADR 013, Rate-Limit).
+
+### Bekannte Lücken
+- Dieselbe Leerraum-Regel fehlt noch für Profilnamen, gespeicherte Suchen, Chatnachrichten und Moderationsgründe (`btrim`); sie folgt mit M6/M7/M4.
+- `maxLength` im Browser zählt UTF-16-Einheiten: Titel aus vielen Emoji kürzt der Browser früher als die DB erlaubt (harmlos, strenger).
+- `/account/profile`, `/welcome`, `/login` und `/auth/confirm` (M2) streamen ihren Inhalt weiter und sind ohne JavaScript leer. Sie gehören nicht zu M3; Umstellung wie bei F1, sobald sie angefasst werden.
+
 ## Nachtrag M3: Dev-Server und Wildart – 2026-10-30
 
 ### Geändert
@@ -57,7 +88,7 @@ Manuell: `npm run dev`, anmelden, „Mein Konto“ → „Meine Anzeigen“ → 
 
 ### Akzeptanz
 - [x] Assistent für alle 5 Arten (E2E: Pacht vollständig mit Foto, die anderen 4 über die Pflichtfeld-Prüfung)
-- [x] Foto-Upload: Verkleinerung im Browser, höchstens 8 Fotos, Metadaten serverseitig entfernt (Deno-Tests, `photo-processing.test.ts`, E2E mit GPS-Fixture)
+- [x] Foto-Upload: Verkleinerung im Browser, höchstens 8 Fotos, Metadaten serverseitig entfernt (Deno-Tests, `photo-processing.test.ts`; über den ganzen Weg mit JPEG/GPS und WebP/EXIF in `qa-m3.spec.ts`, Spike-Auflage 5 damit erfüllt)
 - [x] Preisfeld mit Währung, Umrechnung in `price_minor` ohne Gleitkomma (Vitest, Grenzen wie in der DB)
 - [x] Entwurf wird nach jedem Schritt gespeichert; Absenden setzt `pending_review` (E2E, `listings.test.ts`)
 - [x] Anzeige erscheint in „Meine Anzeigen“ mit Status, ohne Aktion zum Freischalten (E2E)
@@ -76,7 +107,7 @@ Manuell: `npm run dev`, anmelden, „Mein Konto“ → „Meine Anzeigen“ → 
 - **Seite „Datenquellen“** mit ODbL-Download der PLZ-Tabelle folgt mit M5/M9. Die Namensnennung steht bereits am PLZ-Feld.
 - **Karte:** M3 nutzt nur den Kreis. Die Verfremdung des Punkts ist gebaut und getestet, eine Kartenauswahl gibt es noch nicht (SPEC 7.10).
 - **Märkte CH, CZ, PL:** Dort gibt es noch keine Kreise und PLZ, deshalb ist das Inserieren nur in DE und AT möglich.
-- **Ohne JavaScript:** Fotos lassen sich nur mit JavaScript hochladen. Alle anderen Schritte gehen ohne.
+- **Ohne JavaScript:** Fotos lassen sich nur mit JavaScript hochladen. Alle anderen Schritte gehen ohne (seit dem QA-Nachtrag tatsächlich, siehe dort F1).
 - **Pflichtangaben je Art:** Der Anwalt prüft sie noch (SPEC 7.2).
 
 ## M2 Auth und Profil (Web) – 2026-10-29
