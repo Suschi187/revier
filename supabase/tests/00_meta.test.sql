@@ -45,7 +45,7 @@ select is(
         order by 1),
   array['can_report', 'can_write_in', 'claim_listing_creation', 'has_accepted_current_legal', 'has_admin_role',
         'is_active_user', 'is_admin', 'is_blocked_with', 'is_conversation_participant', 'is_server', 'is_server_caller',
-        'listing_attributes_error', 'listing_resume_allowed', 'owns_editable_listing', 'setting_int']::text[],
+        'listing_attributes_error', 'listing_resume_allowed', 'owns_editable_listing', 'setting_int', 'trim_all']::text[],
   'Nur bewusst freigegebene Hilfsfunktionen in private sind ausführbar (Allowlist)'
 );
 

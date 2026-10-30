@@ -72,6 +72,30 @@
       "listing": { "kind": "helper", "direction": "wanted", "description": "   Kurze Beschreibung mit 29 Z   ", "area_hectares": null, "attributes": {} },
       "species": 0, "place": null,
       "expected": ["description.length"]
+    },
+    {
+      "name": "Beschreibung aus Zeilenumbrüchen zählt nicht",
+      "listing": { "kind": "helper", "direction": "wanted", "description": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": ["description.length"]
+    },
+    {
+      "name": "Beschreibung aus geschützten Leerzeichen zählt nicht",
+      "listing": { "kind": "helper", "direction": "wanted", "description": "                              ", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": ["description.length"]
+    },
+    {
+      "name": "Beschreibung aus Tabs, CRLF und ideografischem Leerzeichen zählt nicht",
+      "listing": { "kind": "helper", "direction": "wanted", "description": "\t\t\t\t\t\t\t\t\t\t\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n　　　　　　　　　　", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": ["description.length"]
+    },
+    {
+      "name": "30 Emoji reichen als Beschreibung (Codepoints wie char_length)",
+      "listing": { "kind": "helper", "direction": "wanted", "description": "🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌", "area_hectares": null, "attributes": {} },
+      "species": 0, "place": null,
+      "expected": []
     }
   ],
   "attributes": [
@@ -90,6 +114,9 @@
     { "kind": "trophy_hunt", "attributes": { "trophy_details": "   " }, "expected": "attributes.trophy_details" },
     { "kind": "trophy_hunt", "attributes": { "legal_ack": true, "trophy_details": "Rothirsch, mindestens 10 kg Geweih" }, "expected": null },
     { "kind": "helper", "attributes": { "tasks": ["Ansitzbau", "Ansitzbau"] }, "expected": "attributes.tasks" },
-    { "kind": "helper", "attributes": { "tasks": ["Ansitzbau", "Wildacker"], "experience_level": "Jungjäger" }, "expected": null }
+    { "kind": "helper", "attributes": { "tasks": ["Ansitzbau", "Wildacker"], "experience_level": "Jungjäger" }, "expected": null },
+    { "kind": "helper", "attributes": { "experience_level":  "\n\t " }, "expected": "attributes.experience_level" },
+    { "kind": "helper", "attributes": { "experience_level":  "🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌" }, "expected": null },
+    { "kind": "helper", "attributes": { "experience_level":  "🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌🦌" }, "expected": "attributes.experience_level" }
   ]
 }

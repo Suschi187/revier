@@ -17,7 +17,7 @@ import {
 } from "@/lib/services/listings";
 import { removePhoto, reorderPhotos, setAltText } from "@/lib/services/photos";
 import { getRegionCountry, listPostalCodes } from "@/lib/services/regions";
-import { ALT_TEXT_MAX, DESCRIPTION_MAX, LISTING_DIRECTIONS, LISTING_KINDS, POSTAL_CODE_FORMAT, titleSchema } from "@/lib/validation/listing";
+import { ALT_TEXT_MAX, charCount, DESCRIPTION_MAX, LISTING_DIRECTIONS, LISTING_KINDS, POSTAL_CODE_FORMAT, titleSchema } from "@/lib/validation/listing";
 import { parsePrice } from "@/lib/validation/price";
 import { Constants } from "@/lib/supabase/database.types";
 
@@ -82,7 +82,7 @@ export async function saveListingStep(form: FormData): Promise<void> {
     }
     case "details": {
       const description = text(form, "description");
-      if (description.length > DESCRIPTION_MAX) back(["description.length"]);
+      if (charCount(description) > DESCRIPTION_MAX) back(["description.length"]);
       const { attributes, error } = attributesFromForm(listing.kind, form);
       if (error) back([error]);
       let areaHectares: number | null = listing.areaHectares;
@@ -141,7 +141,7 @@ export async function changePhoto(form: FormData): Promise<void> {
   const op = text(form, "op");
   if (op === "alt") {
     const altText = text(form, "altText").trim();
-    result = altText.length > ALT_TEXT_MAX ? "failed" : await setAltText(photo.id, altText || null);
+    result = charCount(altText) > ALT_TEXT_MAX ? "failed" : await setAltText(photo.id, altText || null);
   } else if (op === "up" || op === "down") {
     const order = listing.photos.map((p) => p.id);
     const from = order.indexOf(photo.id);

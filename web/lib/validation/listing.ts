@@ -22,7 +22,11 @@ export const LEASE_TYPES = ["eigenjagd", "genossenschaft", "pachtnachfolge", "an
 export const REVIER_TYPES = ["hochwild", "niederwild", "feld", "wald", "berg", "wasser"] as const;
 export const PERMIT_SCOPES = ["selbststaendig", "begleitet"] as const;
 
-const text = (max: number) => z.string().refine((v) => v.trim().length >= 1 && v.trim().length <= max);
+/** Länge in Codepoints wie char_length() in Postgres (Emoji zählen einfach, QA M3 F2). */
+export const charCount = (value: string) => [...value].length;
+
+// trim() entfernt dieselben Zeichen wie private.trim_all in der DB (Migration listing_whitespace).
+const text = (max: number) => z.string().refine((v) => charCount(v.trim()) >= 1 && charCount(v.trim()) <= max);
 const int = (low: number, high: number) => z.number().int().min(low).max(high);
 const isoDate = z.string().refine((v) => {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
@@ -109,7 +113,7 @@ export function listingReadiness(input: ReadinessInput): string[] {
   const postalCode = input.place?.postalCode ?? null;
   const has = (key: string) => key in attrs;
 
-  if (input.description.trim().length < DESCRIPTION_MIN) codes.push("description.length");
+  if (charCount(input.description.trim()) < DESCRIPTION_MIN) codes.push("description.length");
   if (offer && !postalCode) codes.push("place.postal_code.required");
   if (offer && !input.place?.placeName) codes.push("place.place_name.required");
   if (postalCode) {
@@ -166,5 +170,10 @@ export const POSTAL_CODE_FORMAT: Record<Enums["country_code"], RegExp> = {
 export const titleSchema = z
   .string()
   .transform((v) => v.trim())
-  .pipe(z.string().min(TITLE_MIN, { error: "tooShort" }).max(TITLE_MAX, { error: "tooLong" }));
-export const descriptionSchema = z.string().max(DESCRIPTION_MAX, { error: "tooLong" });
+  .pipe(
+    z
+      .string()
+      .refine((v) => charCount(v) >= TITLE_MIN, { error: "tooShort" })
+      .refine((v) => charCount(v) <= TITLE_MAX, { error: "tooLong" }),
+  );
+export const descriptionSchema = z.string().refine((v) => charCount(v) <= DESCRIPTION_MAX, { error: "tooLong" });

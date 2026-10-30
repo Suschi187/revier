@@ -7,6 +7,7 @@ Plan M3 Abschnitte 2, 5 und 6: Pflichtfelder je Art (vom Nutzer freigegeben), Le
 
 ## Entscheidung
 - **Attribute je Art** (SPEC 3.2): nur bekannte Schlüssel mit gültigen Werten, geprüft bei jedem Schreiben, auch an Entwürfen (`private.listing_attributes_error`). `trophy_details` ist ein Attribut von `trophy_hunt`, `legal_ack` das Rechtshinweis-Häkchen.
+- **Text und Länge:** Leerraum am Rand zählt nie als Inhalt. Die DB kürzt mit `private.trim_all` genau die Zeichen, die `String.prototype.trim` (JavaScript) bzw. `trimmingCharacters(in: .whitespacesAndNewlines)` (Swift, deckt dieselben ab) entfernen, nicht nur U+0020 wie `btrim`. Längen zählen Codepoints (`char_length`; im Web `[...s].length`, in Swift `unicodeScalars.count`), nicht UTF-16-Einheiten oder Grapheme (QA M3 F2).
 - **Preis:** Betrag > 0 (sonst „auf Anfrage“), höchstens EUR/CHF 10⁹, CZK 2,5·10¹⁰, PLN 5·10⁹ Minor-Einheiten (Check `price_bounds`).
 - **Bereitschaft** (`private.listing_readiness`, Tabelle Plan M3 6):
   - Mindestfelder für alle: Beschreibung 30–5000 Zeichen; Titel, Kreis und Sprache erzwingt das Schema.
