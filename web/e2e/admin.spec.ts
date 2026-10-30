@@ -225,7 +225,10 @@ test("Warteschlange: Freigeben, Bearbeitung anfordern, Ablehnen mit Grund, geän
   const row = page.getByRole("row").filter({ hasText: "Bearbeitung angefordert" });
   await expect(row).toHaveCount(1);
   await expect(row.getByText("Admin Moderation")).toBeVisible();
-  await expect(row.getByText("contact_in_text")).toBeVisible();
+  // Schlüssel und Code übersetzt (QA M4 F6)
+  await expect(row.getByText("Grund-Vorlage")).toBeVisible();
+  await expect(row.getByText("Kontaktdaten im Text")).toBeVisible();
+  await expect(row.getByText("contact_in_text")).toHaveCount(0);
   await page.goto("/de/admin/audit?action=listing.active");
   await expect(page.getByRole("row").filter({ hasText: "Anzeige freigegeben" }).first()).toBeVisible();
   await expect(page.getByRole("row").filter({ hasText: "Anzeige abgelehnt" })).toHaveCount(0);
@@ -291,6 +294,8 @@ test("Admins ernennen und entziehen: exakte E-Mail, frischer Code (Step-up)", as
   const secret = await becomeAdmin(page, "Admin Verwaltung");
 
   await page.goto("/de/admin/admins");
+  // Regeln aus den Einstellungen statt fester Zahlen (QA M4 F6)
+  await expect(page.getByText("ändern Rollen aber erst nach 7 Tagen selbst. Höchstens 3 Rollenänderungen je Admin und 10 insgesamt")).toBeVisible();
   await page.getByLabel("Genaue E-Mail-Adresse des Kontos").fill(email.replace("@", "x@"));
   await page.getByRole("button", { name: "Konto suchen" }).click();
   await expect(page.getByText("Kein aktives, bestätigtes Konto")).toBeVisible();
@@ -316,7 +321,8 @@ test("Admins ernennen und entziehen: exakte E-Mail, frischer Code (Step-up)", as
 
   await nextTotpWindow();
   await entry.locator("summary").click();
-  await entry.getByLabel("Aktueller Code aus deiner Authenticator-App").fill(totp(secret));
+  // Eindeutiges Label je Admin (QA M4 F6)
+  await entry.getByLabel("Aktueller Code aus deiner Authenticator-App, um Kandidatin Kraus die Admin-Rolle zu entziehen").fill(totp(secret));
   await entry.getByRole("button", { name: "Für Kandidatin Kraus entziehen" }).click();
   await expect(page.getByText("Die Admin-Rolle ist entzogen.")).toBeVisible();
   await expect(page.getByRole("listitem").filter({ hasText: "Kandidatin Kraus" })).toHaveCount(0);

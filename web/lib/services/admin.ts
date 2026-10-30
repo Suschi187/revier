@@ -115,6 +115,15 @@ export async function candidateProfile(adminId: string, userId: string): Promise
   return data ? { displayName: data.display_name, memberSince: data.created_at } : null;
 }
 
+export type RoleRules = { waitingDays: number; limitPerAdmin: number; limitTotal: number };
+
+/** Regeln für Rollenänderungen aus den Einstellungen (QA M4 F6); null nur ohne Admin-Rechte. */
+export async function roleRules(): Promise<RoleRules | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.rpc("admin_role_rules").maybeSingle();
+  return data ? { waitingDays: data.waiting_days, limitPerAdmin: data.limit_per_admin, limitTotal: data.limit_total } : null;
+}
+
 export type RoleChangeResult =
   | { ok: true }
   | { ok: false; error: "code" | "stepUp" | "waiting" | "limit" | "lastAdmin" | "lookup" | "notFound" | "forbidden" | "failed"; until?: string };

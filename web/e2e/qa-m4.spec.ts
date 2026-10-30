@@ -166,6 +166,20 @@ test.describe("Admin-Zugang auf Umwegen", () => {
     await expect(page.getByRole("button", { name: "Zum Admin ernennen" })).toHaveCount(0);
   });
 
+  test("Übersicht zählt wie die Warteschlange ohne eigene Anzeigen (F6)", async ({ page }) => {
+    const me = await account(page.context(), "QA Admin Zähler", { admin: true, totp: true });
+    const service = admin();
+    const { data: region } = await service.from("regions").select("id").eq("code", "DE-14612").single();
+    await service.from("listings").insert({
+      owner_id: me.id, kind: "helper", direction: "wanted", title: "QA eigene Anzeige", content_language: "de", region_id: region!.id,
+      description: "Eigene Anzeige des Admins, mehr als dreißig Zeichen lang.", attributes: { tasks: ["Ansitz"] }, status: "pending_review",
+    });
+    const { count } = await service.from("listings").select("id", { count: "exact", head: true }).eq("status", "pending_review").neq("owner_id", me.id);
+    await page.goto("/de/admin");
+    const text = count === 0 ? "Keine Anzeigen zur Freigabe." : `${count} ${count === 1 ? "Anzeige" : "Anzeigen"} zur Freigabe.`;
+    await expect(page.getByText(text, { exact: true })).toBeVisible();
+  });
+
   test("Prüfansicht zeigt keine fremden Entwürfe (H6)", async ({ page }) => {
     await account(page.context(), "QA Admin H6", { admin: true, totp: true });
     const id = await pendingListing("QA geheimer Entwurf", "draft");
@@ -197,6 +211,8 @@ test.describe("Admin ohne JavaScript", () => {
     await page.getByLabel("Ablehnen").check();
     await page.getByRole("button", { name: "Entscheidung speichern" }).click();
     await expect(page.getByRole("alert")).toContainText("Bitte wähle einen Grund.");
+    // Fehler ist mit dem Feld verbunden (QA M4 F6)
+    await expect(page.getByLabel("Grund", { exact: true })).toHaveAccessibleDescription(/Bitte wähle einen Grund\./);
     await page.getByLabel("Ablehnen").check();
     await page.getByLabel("Grund", { exact: true }).selectOption("implausible");
     await page.getByRole("button", { name: "Entscheidung speichern" }).click();

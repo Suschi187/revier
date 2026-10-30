@@ -500,6 +500,19 @@
         "verification_verified": "Verification confirmed",
         "verification_rejected": "Verification rejected",
         "report_handled": "Report handled"
+      },
+      "detailKeys": {
+        "from": "Before",
+        "code": "Reason template",
+        "reason": "Free text",
+        "role": "Role",
+        "via": "Via",
+        "target_type": "Target type",
+        "user_id": "Account"
+      },
+      "via": {
+        "ui": "Admin area",
+        "sql": "SQL (runbook)"
       }
     },
     "admins": {
@@ -520,7 +533,8 @@
       "alreadyAdmin": "This account is already an admin.",
       "grant": "Appoint as admin",
       "code": "Current code from your authenticator app",
-      "rules": "New admins can review listings immediately, but can only change roles themselves after 7 days. At most 3 role changes per admin and 10 in total per 24 hours.",
+      "revokeCode": "Current code from your authenticator app to revoke the admin role from {name}",
+      "rules": "New admins can review listings immediately, but can only change roles themselves after {days, plural, one {# day} other {# days}}. At most {perAdmin, plural, one {# role change} other {# role changes}} per admin and {total} in total per 24 hours.",
       "notices": {
         "granted": "The account is now an admin. The new admin must set up two-factor authentication before acting.",
         "revoked": "The admin role has been revoked."
@@ -529,8 +543,8 @@
         "notFound": "No active, confirmed account with this exact email address.",
         "code": "The code is not correct or has expired.",
         "stepUp": "Please confirm again with a fresh code.",
-        "waiting": "You can only change roles from {date} (7 days after your own appointment).",
-        "waitingNoDate": "You can only change roles 7 days after your own appointment.",
+        "waiting": "You can only change roles from {date} ({days, plural, one {# day} other {# days}} after your own appointment).",
+        "waitingNoDate": "You can only change roles {days, plural, one {# day} other {# days}} after your own appointment.",
         "limit": "Too many role changes or searches in a short time. Please try again later.",
         "lastAdmin": "The last admin cannot be removed.",
         "lookup": "Please look up the account by email address first (valid for 1 hour).",

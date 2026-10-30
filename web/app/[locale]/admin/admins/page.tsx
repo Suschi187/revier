@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
-import { candidateProfile, listAdmins, requireAdmin } from "@/lib/services/admin";
+import { candidateProfile, listAdmins, requireAdmin, roleRules } from "@/lib/services/admin";
 import { changeRole, findAdminCandidate } from "./actions";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
@@ -29,10 +29,11 @@ export default async function AdminsPage({ searchParams }: Props) {
   const me = await requireAdmin(locale, `/${locale}/admin/admins`);
   const query = await searchParams;
   const candidateId = typeof query.candidate === "string" && UUID.test(query.candidate) ? query.candidate : null;
-  const [t, format, admins, candidate] = await Promise.all([
+  const [t, format, admins, rules, candidate] = await Promise.all([
     getTranslations("Admin.admins"),
     getFormatter(),
     listAdmins(),
+    roleRules(),
     candidateId ? candidateProfile(me.id, candidateId) : Promise.resolve(null),
   ]);
   const date = (value: string) => format.dateTime(new Date(value), { dateStyle: "medium" });
@@ -55,7 +56,11 @@ export default async function AdminsPage({ searchParams }: Props) {
       </Link>
       <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
-      <p className="mt-2 text-sm text-stone-700">{t("rules")}</p>
+      {rules && (
+        <p className="mt-2 text-sm text-stone-700">
+          {t("rules", { days: rules.waitingDays, perAdmin: rules.limitPerAdmin, total: rules.limitTotal })}
+        </p>
+      )}
       {notice && (
         <p role="status" className="mt-4 text-emerald-800">
           {t(`notices.${notice}`)}
@@ -63,7 +68,11 @@ export default async function AdminsPage({ searchParams }: Props) {
       )}
       {error && (
         <p role="alert" className="mt-4 rounded bg-red-50 p-3 text-red-800">
-          {error === "waiting" ? (until ? t("errors.waiting", { date: date(until) }) : t("errors.waitingNoDate")) : t(`errors.${error}`)}
+          {error === "waiting" && rules
+            ? until
+              ? t("errors.waiting", { date: date(until), days: rules.waitingDays })
+              : t("errors.waitingNoDate", { days: rules.waitingDays })
+            : t(`errors.${error === "waiting" ? "forbidden" : error}`)}
         </p>
       )}
 
@@ -88,7 +97,7 @@ export default async function AdminsPage({ searchParams }: Props) {
                   <form action={changeRole} className="mt-2 flex flex-col gap-2">
                     {hidden("revoke", entry.userId)}
                     <label htmlFor={`code-${entry.userId}`} className="text-sm font-medium">
-                      {t("code")}
+                      {t("revokeCode", { name })}
                     </label>
                     <input id={`code-${entry.userId}`} name="code" inputMode="numeric" autoComplete="one-time-code" required className={codeInput} />
                     <button type="submit" className="self-start rounded border border-red-700 px-3 py-1.5 text-red-800">

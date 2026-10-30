@@ -627,6 +627,11 @@ isOneToOne: false
               "country": Database["public"]['Enums']["country_code"],"direction": Database["public"]['Enums']["listing_direction"],"hint_count": number,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"listing_rejections": number,"owner_id": string,"owner_name": string,"owner_rejections": number,"region_id": string,"submitted_at": string,"title": string
             }[]
                            },
+"admin_role_rules":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "limit_per_admin": number,"limit_total": number,"waiting_days": number
+            }[]
+                           },
 "claim_photo_processing":
 { Args: { "p_photo_id": string,"p_user_id": string }; Returns: {
               "state": string,"storage_path": string,"thumb_path": string,"upload_path": string

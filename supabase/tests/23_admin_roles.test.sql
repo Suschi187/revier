@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(36);
+select plan(38);
 
 -- M4 Commit 4 (ADR 014, Review B2/A2/A9): Admins ernennen und entziehen.
 create function tests.state_of(statement text) returns text language plpgsql as $$
@@ -103,6 +103,9 @@ select is((select count(*)::int from audit_log where action like 'role.%') - :au
 -- Liste der Admins nur für Admins
 select tests.authenticate_as(:'cand_id');
 select is((select count(*)::int from admin_list_admins()), 0, 'Nutzer sieht keine Admin-Liste');
+select is((select count(*)::int from admin_role_rules()), 0, 'Nutzer sieht keine Regeln');
+select tests.authenticate_totp(:'old_id', 0);
+select is((select (waiting_days, limit_per_admin, limit_total)::text from admin_role_rules()), '(7,3,10)', 'Regeln aus den Einstellungen (QA M4 F6)');
 
 -- Kontosuchen: alte Zeilen fallen bei der nächsten Suche weg, Zeilen gehen mit dem Konto (QA M4 F5)
 select tests.as_postgres();

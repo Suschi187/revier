@@ -500,6 +500,19 @@
         "verification_verified": "Weryfikacja potwierdzona",
         "verification_rejected": "Weryfikacja odrzucona",
         "report_handled": "Zgłoszenie rozpatrzone"
+      },
+      "detailKeys": {
+        "from": "Wcześniej",
+        "code": "Szablon powodu",
+        "reason": "Tekst dowolny",
+        "role": "Rola",
+        "via": "Przez",
+        "target_type": "Typ celu",
+        "user_id": "Konto"
+      },
+      "via": {
+        "ui": "Panel administracyjny",
+        "sql": "SQL (runbook)"
       }
     },
     "admins": {
@@ -520,7 +533,8 @@
       "alreadyAdmin": "To konto jest już administratorem.",
       "grant": "Mianuj administratorem",
       "code": "Aktualny kod z aplikacji uwierzytelniającej",
-      "rules": "Nowi administratorzy od razu sprawdzają ogłoszenia, ale role mogą zmieniać sami dopiero po 7 dniach. Maksymalnie 3 zmiany ról na administratora i 10 łącznie w ciągu 24 godzin.",
+      "revokeCode": "Aktualny kod z aplikacji uwierzytelniającej, aby odebrać rolę administratora użytkownikowi {name}",
+      "rules": "Nowi administratorzy od razu sprawdzają ogłoszenia, ale role mogą zmieniać sami dopiero po {days, plural, one {# dniu} few {# dniach} many {# dniach} other {# dnia}}. Maksymalnie {perAdmin, plural, one {# zmiana roli} few {# zmiany ról} many {# zmian ról} other {# zmiany ról}} na administratora i {total} łącznie w ciągu 24 godzin.",
       "notices": {
         "granted": "Konto jest teraz administratorem. Przed pierwszą czynnością nowy administrator konfiguruje uwierzytelnianie dwuskładnikowe.",
         "revoked": "Rola administratora została odebrana."
@@ -529,8 +543,8 @@
         "notFound": "Brak aktywnego, potwierdzonego konta z dokładnie tym adresem e-mail.",
         "code": "Kod jest nieprawidłowy lub wygasł.",
         "stepUp": "Potwierdź ponownie nowym kodem.",
-        "waiting": "Role możesz zmieniać dopiero od {date} (7 dni po własnym mianowaniu).",
-        "waitingNoDate": "Role możesz zmieniać dopiero 7 dni po własnym mianowaniu.",
+        "waiting": "Role możesz zmieniać dopiero od {date} ({days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} po własnym mianowaniu).",
+        "waitingNoDate": "Role możesz zmieniać dopiero {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} po własnym mianowaniu.",
         "limit": "Zbyt wiele zmian ról lub wyszukiwań w krótkim czasie. Spróbuj ponownie później.",
         "lastAdmin": "Nie można usunąć ostatniego administratora.",
         "lookup": "Najpierw wyszukaj konto po adresie e-mail (ważne przez 1 godzinę).",

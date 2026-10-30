@@ -500,6 +500,19 @@
         "verification_verified": "Verifizierung bestätigt",
         "verification_rejected": "Verifizierung abgelehnt",
         "report_handled": "Meldung bearbeitet"
+      },
+      "detailKeys": {
+        "from": "Vorher",
+        "code": "Grund-Vorlage",
+        "reason": "Freitext",
+        "role": "Rolle",
+        "via": "Über",
+        "target_type": "Zieltyp",
+        "user_id": "Konto"
+      },
+      "via": {
+        "ui": "Admin-Bereich",
+        "sql": "SQL (Runbook)"
       }
     },
     "admins": {
@@ -520,7 +533,8 @@
       "alreadyAdmin": "Dieses Konto ist schon Admin.",
       "grant": "Zum Admin ernennen",
       "code": "Aktueller Code aus deiner Authenticator-App",
-      "rules": "Neue Admins prüfen sofort Anzeigen, ändern Rollen aber erst nach 7 Tagen selbst. Höchstens 3 Rollenänderungen je Admin und 10 insgesamt in 24 Stunden.",
+      "revokeCode": "Aktueller Code aus deiner Authenticator-App, um {name} die Admin-Rolle zu entziehen",
+      "rules": "Neue Admins prüfen sofort Anzeigen, ändern Rollen aber erst nach {days, plural, one {# Tag} other {# Tagen}} selbst. Höchstens {perAdmin, plural, one {# Rollenänderung} other {# Rollenänderungen}} je Admin und {total} insgesamt in 24 Stunden.",
       "notices": {
         "granted": "Das Konto ist jetzt Admin. Vor der ersten Aktion richtet der neue Admin die Zwei-Faktor-Authentifizierung ein.",
         "revoked": "Die Admin-Rolle ist entzogen."
@@ -529,8 +543,8 @@
         "notFound": "Kein aktives, bestätigtes Konto mit genau dieser E-Mail-Adresse.",
         "code": "Der Code stimmt nicht oder ist abgelaufen.",
         "stepUp": "Bitte bestätige noch einmal mit einem frischen Code.",
-        "waiting": "Rollen kannst du erst ab {date} ändern (7 Tage nach deiner eigenen Ernennung).",
-        "waitingNoDate": "Rollen kannst du erst 7 Tage nach deiner eigenen Ernennung ändern.",
+        "waiting": "Rollen kannst du erst ab {date} ändern ({days, plural, one {# Tag} other {# Tage}} nach deiner eigenen Ernennung).",
+        "waitingNoDate": "Rollen kannst du erst {days, plural, one {# Tag} other {# Tage}} nach deiner eigenen Ernennung ändern.",
         "limit": "Zu viele Rollenänderungen oder Suchen in kurzer Zeit. Bitte versuche es später noch einmal.",
         "lastAdmin": "Der letzte Admin kann nicht entfernt werden.",
         "lookup": "Bitte suche das Konto zuerst per E-Mail-Adresse (gültig 1 Stunde).",

@@ -93,7 +93,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
           <input type="hidden" name="id" value={listing.id} />
           <input type="hidden" name="version" value={review.version} />
           {error && (
-            <div role="alert" className="rounded bg-red-50 p-3 text-red-800">
+            <div id="r-error" role="alert" className="rounded bg-red-50 p-3 text-red-800">
               <p>{t(`errors.${error}`)}</p>
               {missing.length > 0 && (
                 <ul className="mt-1 list-disc pl-5">
@@ -104,7 +104,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               )}
             </div>
           )}
-          <fieldset className="flex flex-col gap-2">
+          <fieldset className="flex flex-col gap-2" aria-describedby={error ? "r-error" : undefined}>
             <legend className="font-medium">{t("decision")}</legend>
             {DECISIONS.map((decision) => (
               <label key={decision} className={radio}>
@@ -121,7 +121,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               id="r-code"
               name="code"
               defaultValue=""
-              aria-describedby="r-code-hint"
+              aria-describedby={error === "code" ? "r-code-hint r-error" : "r-code-hint"}
               aria-invalid={error === "code" || undefined}
               className="mt-1 w-full rounded border border-stone-400 px-3 py-2"
             >
@@ -145,7 +145,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               name="note"
               rows={4}
               maxLength={NOTE_MAX}
-              aria-describedby="r-note-hint"
+              aria-describedby={error === "note" ? "r-note-hint r-error" : "r-note-hint"}
               aria-invalid={error === "note" || undefined}
               className="mt-1 w-full rounded border border-stone-400 px-3 py-2"
             />

@@ -10,9 +10,14 @@ import { getContentHints, loadListing, type ContentHint, type OwnListing } from 
 
 type Enums = Database["public"]["Enums"];
 
-export async function countPendingListings(): Promise<number> {
+/** Anzeigen zur Freigabe ohne die eigenen, wie in der Warteschlange (QA M4 F6). */
+export async function countPendingListings(adminId: string): Promise<number> {
   const supabase = await createSupabaseServerClient();
-  const { count } = await supabase.from("listings").select("id", { count: "exact", head: true }).eq("status", "pending_review");
+  const { count } = await supabase
+    .from("listings")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "pending_review")
+    .neq("owner_id", adminId);
   return count ?? 0;
 }
 

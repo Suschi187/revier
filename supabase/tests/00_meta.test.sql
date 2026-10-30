@@ -33,6 +33,7 @@ select is(
           and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
         order by 1),
   array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_review_queue',
+        'admin_role_rules',
         'grant_admin', 'legal_status', 'listing_content_hints', 'moderate_listing', 'register_device',
         'reorder_listing_photos', 'revoke_admin', 'set_listing_location']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'

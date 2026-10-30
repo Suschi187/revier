@@ -28,10 +28,25 @@ export default async function AuditPage({ searchParams }: Props) {
     typeof query.before === "string" && typeof query.beforeId === "string" && !Number.isNaN(Date.parse(query.before)) && UUID.test(query.beforeId)
       ? { createdAt: query.before, id: query.beforeId }
       : null;
-  const [t, format, entries] = await Promise.all([getTranslations("Admin.audit"), getFormatter(), getAuditLog({ action, targetId, before })]);
+  const [t, tl, tm, format, entries] = await Promise.all([
+    getTranslations("Admin.audit"),
+    getTranslations("Listings"),
+    getTranslations("Moderation"),
+    getFormatter(),
+    getAuditLog({ action, targetId, before }),
+  ]);
   const label = (value: string) => {
     const key = `actions.${value.replace(".", "_")}`;
     return t.has(key) ? t(key) : value;
+  };
+  // Schlüssel und bekannte Codes in der Sprache des Admins (QA M4 F6); Freitext und Unbekanntes bleiben roh.
+  const detailKey = (key: string) => (t.has(`detailKeys.${key}`) ? t(`detailKeys.${key}`) : key);
+  const detailValue = (key: string, value: unknown) => {
+    if (typeof value !== "string") return JSON.stringify(value);
+    if (key === "from" && tl.has(`status.${value}`)) return tl(`status.${value}`);
+    if (key === "code" && tm.has(`reasons.${value}`)) return tm(`reasons.${value}`);
+    if (key === "via" && t.has(`via.${value}`)) return t(`via.${value}`);
+    return value;
   };
   const last = entries.at(-1);
   const filters = new URLSearchParams({ ...(action ? { action } : {}), ...(targetId ? { target: targetId } : {}) });
@@ -100,8 +115,8 @@ export default async function AuditPage({ searchParams }: Props) {
                         .filter(([, value]) => value !== null && value !== undefined)
                         .map(([key, value]) => (
                           <div key={key} className="contents">
-                            <dt className="font-medium">{key}</dt>
-                            <dd className="break-words">{typeof value === "string" ? value : JSON.stringify(value)}</dd>
+                            <dt className="font-medium">{detailKey(key)}</dt>
+                            <dd className="break-words">{detailValue(key, value)}</dd>
                           </div>
                         ))}
                     </dl>

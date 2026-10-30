@@ -500,6 +500,19 @@
         "verification_verified": "Ověření potvrzeno",
         "verification_rejected": "Ověření zamítnuto",
         "report_handled": "Hlášení vyřízeno"
+      },
+      "detailKeys": {
+        "from": "Předtím",
+        "code": "Šablona důvodu",
+        "reason": "Volný text",
+        "role": "Role",
+        "via": "Přes",
+        "target_type": "Typ cíle",
+        "user_id": "Účet"
+      },
+      "via": {
+        "ui": "Administrace",
+        "sql": "SQL (runbook)"
       }
     },
     "admins": {
@@ -520,7 +533,8 @@
       "alreadyAdmin": "Tento účet už je administrátorem.",
       "grant": "Jmenovat administrátorem",
       "code": "Aktuální kód z ověřovací aplikace",
-      "rules": "Noví administrátoři mohou ihned kontrolovat inzeráty, role ale sami mění až po 7 dnech. Nejvýše 3 změny rolí na administrátora a 10 celkem za 24 hodin.",
+      "revokeCode": "Aktuální kód z ověřovací aplikace pro odebrání role administrátora uživateli {name}",
+      "rules": "Noví administrátoři mohou ihned kontrolovat inzeráty, role ale sami mění až po {days, plural, one {# dni} few {# dnech} many {# dne} other {# dnech}}. Nejvýše {perAdmin, plural, one {# změna role} few {# změny rolí} many {# změny role} other {# změn rolí}} na administrátora a {total} celkem za 24 hodin.",
       "notices": {
         "granted": "Účet je nyní administrátorem. Před první akcí si nový administrátor nastaví dvoufázové ověření.",
         "revoked": "Role administrátora byla odebrána."
@@ -529,8 +543,8 @@
         "notFound": "Žádný aktivní potvrzený účet s přesně touto e-mailovou adresou.",
         "code": "Kód není správný nebo vypršel.",
         "stepUp": "Potvrďte to prosím znovu novým kódem.",
-        "waiting": "Role můžete měnit až od {date} (7 dní po vlastním jmenování).",
-        "waitingNoDate": "Role můžete měnit až 7 dní po vlastním jmenování.",
+        "waiting": "Role můžete měnit až od {date} ({days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování).",
+        "waitingNoDate": "Role můžete měnit až {days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování.",
         "limit": "Příliš mnoho změn rolí nebo vyhledávání v krátké době. Zkuste to prosím později.",
         "lastAdmin": "Posledního administrátora nelze odebrat.",
         "lookup": "Nejprve prosím vyhledejte účet podle e-mailové adresy (platí 1 hodinu).",

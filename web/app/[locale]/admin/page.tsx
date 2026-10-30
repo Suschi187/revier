@@ -17,8 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AdminPage() {
   const locale = (await getLocale()) as AppLocale;
-  await requireAdmin(locale, `/${locale}/admin`);
-  const [t, pending] = await Promise.all([getTranslations("Admin.overview"), countPendingListings()]);
+  const me = await requireAdmin(locale, `/${locale}/admin`);
+  const [t, pending] = await Promise.all([getTranslations("Admin.overview"), countPendingListings(me.id)]);
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <h1 className="text-3xl font-semibold">{t("title")}</h1>
