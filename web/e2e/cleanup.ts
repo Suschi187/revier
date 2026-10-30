@@ -47,7 +47,12 @@ export async function deleteTestUsers(emails: string[]): Promise<void> {
         if (paths.length) await client.storage.from(bucket).remove(paths);
       }
     }
-    await client.from("audit_log").delete().eq("target_id", id);
+    // Audit-Zeilen der Testkonten: Ziel ist das Konto oder eine seiner Anzeigen, oder es hat selbst gehandelt
+    // (Moderation in admin.spec.ts). Sonst kippen die globalen Zählungen in 07_trust_audit.
+    const { data: listings } = await client.from("listings").select("id").eq("owner_id", id);
+    const targets = [id, ...(listings ?? []).map((l) => l.id)];
+    await client.from("audit_log").delete().in("target_id", targets);
+    await client.from("audit_log").delete().eq("actor_id", id);
     await client.auth.admin.deleteUser(id);
     // Die Kaskade auf Rollen erzeugt per Trigger neue Audit-Zeilen (ADR 014); auch die entfernen.
     await client.from("audit_log").delete().eq("target_id", id);
