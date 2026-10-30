@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(31);
+select plan(36);
 
 -- M4 Commit 4 (ADR 014, Review B2/A2/A9): Admins ernennen und entziehen.
 create function tests.state_of(statement text) returns text language plpgsql as $$
@@ -103,6 +103,21 @@ select is((select count(*)::int from audit_log where action like 'role.%') - :au
 -- Liste der Admins nur für Admins
 select tests.authenticate_as(:'cand_id');
 select is((select count(*)::int from admin_list_admins()), 0, 'Nutzer sieht keine Admin-Liste');
+
+-- Kontosuchen: alte Zeilen fallen bei der nächsten Suche weg, Zeilen gehen mit dem Konto (QA M4 F5)
+select tests.as_postgres();
+alter table private.admin_lookups disable trigger admin_lookups_prune;
+insert into private.admin_lookups (actor_id, created_at) values (:'cand2_id', now() - interval '2 hours');
+alter table private.admin_lookups enable trigger admin_lookups_prune;
+select is((select count(*)::int from private.admin_lookups where actor_id = :'cand2_id'), 1, 'Alte Suche liegt vor');
+select tests.authenticate_totp(:'old_id', 0);
+select is((select count(*)::int from admin_find_user('neu@test.local')), 1, 'Weitere Suche');
+select tests.as_postgres();
+select is((select count(*)::int from private.admin_lookups where created_at < now() - interval '1 hour'), 0,
+  'Suchen älter als 1 Stunde sind entfernt');
+select ok((select count(*) from private.admin_lookups where actor_id = :'old_id') > 0, 'Suchen des Admins liegen vor');
+delete from auth.users where id = :'old_id';
+select is((select count(*)::int from private.admin_lookups where actor_id = :'old_id'), 0, 'Suchen gehen mit dem Konto');
 
 select * from finish();
 rollback;
