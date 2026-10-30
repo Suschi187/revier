@@ -426,7 +426,8 @@
       "metaTitle": "Admin-Bereich",
       "title": "Admin-Bereich",
       "pending": "{count, plural, =0 {Keine Anzeigen zur Freigabe.} one {# Anzeige zur Freigabe.} other {# Anzeigen zur Freigabe.}}",
-      "queueLink": "Zur Warteschlange"
+      "queueLink": "Zur Warteschlange",
+      "auditLink": "Audit-Log"
     },
     "queue": {
       "metaTitle": "Anzeigen zur Freigabe",
@@ -466,6 +467,37 @@
         "notReady": "Die Anzeige kann nicht freigegeben werden, weil Angaben fehlen oder ungültig sind:",
         "forbidden": "Über diese Anzeige kannst du nicht entscheiden.",
         "failed": "Die Entscheidung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
+      }
+    },
+    "audit": {
+      "metaTitle": "Audit-Log",
+      "title": "Audit-Log",
+      "back": "Zurück zum Admin-Bereich",
+      "filterAction": "Aktion",
+      "filterAll": "Alle Aktionen",
+      "filterTarget": "Ziel-ID",
+      "filter": "Filtern",
+      "time": "Zeit",
+      "action": "Aktion",
+      "actor": "Von",
+      "target": "Ziel",
+      "details": "Details",
+      "system": "System/SQL",
+      "empty": "Keine Einträge.",
+      "more": "Ältere Einträge",
+      "actions": {
+        "listing_active": "Anzeige freigegeben",
+        "listing_draft": "Bearbeitung angefordert",
+        "listing_rejected": "Anzeige abgelehnt",
+        "listing_removed": "Anzeige entfernt",
+        "role_granted": "Admin ernannt",
+        "role_revoked": "Admin-Rolle entzogen",
+        "user_looked_up": "Konto gesucht",
+        "profile_blocked": "Konto gesperrt",
+        "profile_unblocked": "Konto entsperrt",
+        "verification_verified": "Verifizierung bestätigt",
+        "verification_rejected": "Verifizierung abgelehnt",
+        "report_handled": "Meldung bearbeitet"
       }
     }
   },

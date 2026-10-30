@@ -426,7 +426,8 @@
       "metaTitle": "Admin area",
       "title": "Admin area",
       "pending": "{count, plural, =0 {No listings awaiting review.} one {# listing awaiting review.} other {# listings awaiting review.}}",
-      "queueLink": "Open the review queue"
+      "queueLink": "Open the review queue",
+      "auditLink": "Audit log"
     },
     "queue": {
       "metaTitle": "Review queue",
@@ -466,6 +467,37 @@
         "notReady": "The listing cannot be approved because information is missing or invalid:",
         "forbidden": "You cannot decide on this listing.",
         "failed": "The decision could not be saved. Please try again."
+      }
+    },
+    "audit": {
+      "metaTitle": "Audit log",
+      "title": "Audit log",
+      "back": "Back to the admin area",
+      "filterAction": "Action",
+      "filterAll": "All actions",
+      "filterTarget": "Target ID",
+      "filter": "Filter",
+      "time": "Time",
+      "action": "Action",
+      "actor": "By",
+      "target": "Target",
+      "details": "Details",
+      "system": "System/SQL",
+      "empty": "No entries.",
+      "more": "Older entries",
+      "actions": {
+        "listing_active": "Listing approved",
+        "listing_draft": "Changes requested",
+        "listing_rejected": "Listing rejected",
+        "listing_removed": "Listing removed",
+        "role_granted": "Admin appointed",
+        "role_revoked": "Admin role revoked",
+        "user_looked_up": "Account looked up",
+        "profile_blocked": "Account blocked",
+        "profile_unblocked": "Account unblocked",
+        "verification_verified": "Verification confirmed",
+        "verification_rejected": "Verification rejected",
+        "report_handled": "Report handled"
       }
     }
   },

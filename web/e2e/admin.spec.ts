@@ -44,7 +44,7 @@ async function signUp(page: Page, name: string): Promise<{ email: string; id: st
   return { email, id };
 }
 
-const ADMIN_PAGES = ["/de/admin", "/de/admin/mfa"];
+const ADMIN_PAGES = ["/de/admin", "/de/admin/mfa", "/de/admin/listings", "/de/admin/audit"];
 
 test("Anonym: Admin-Seiten leiten zur Anmeldung", async ({ page }) => {
   for (const path of ADMIN_PAGES) {
@@ -218,6 +218,16 @@ test("Warteschlange: Freigeben, Bearbeitung anfordern, Ablehnen mit Grund, geän
   for (const title of ["Freigabe E2E", "Zurückgeben E2E", "Geändert E2E (neu)"]) {
     await expect(page.getByRole("link", { name: title })).toHaveCount(0);
   }
+
+  // Audit-Log: Entscheidungen mit Akteur und Code, Filter nach Ziel
+  await page.goto(`/de/admin/audit?target=${returnId}`);
+  const row = page.getByRole("row").filter({ hasText: "Bearbeitung angefordert" });
+  await expect(row).toHaveCount(1);
+  await expect(row.getByText("Admin Moderation")).toBeVisible();
+  await expect(row.getByText("contact_in_text")).toBeVisible();
+  await page.goto("/de/admin/audit?action=listing.active");
+  await expect(page.getByRole("row").filter({ hasText: "Anzeige freigegeben" }).first()).toBeVisible();
+  await expect(page.getByRole("row").filter({ hasText: "Anzeige abgelehnt" })).toHaveCount(0);
 });
 
 test("Besitzer sieht den Grund in seiner Sprache und im Assistenten (Akzeptanz b)", async ({ page, browser }) => {

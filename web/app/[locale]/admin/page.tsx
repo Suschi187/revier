@@ -21,8 +21,11 @@ export default async function AdminPage() {
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <h1 className="text-3xl font-semibold">{t("title")}</h1>
       <p className="mt-4">{t("pending", { count: pending })}</p>
-      <Link href="/admin/listings" className="mt-2 inline-block underline">
+      <Link href="/admin/listings" className="mt-2 block underline">
         {t("queueLink")}
+      </Link>
+      <Link href="/admin/audit" className="mt-2 block underline">
+        {t("auditLink")}
       </Link>
     </main>
   );

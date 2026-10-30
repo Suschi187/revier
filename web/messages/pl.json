@@ -426,7 +426,8 @@
       "metaTitle": "Panel administracyjny",
       "title": "Panel administracyjny",
       "pending": "{count, plural, =0 {Brak ogłoszeń do zatwierdzenia.} one {# ogłoszenie do zatwierdzenia.} few {# ogłoszenia do zatwierdzenia.} other {# ogłoszeń do zatwierdzenia.}}",
-      "queueLink": "Otwórz kolejkę"
+      "queueLink": "Otwórz kolejkę",
+      "auditLink": "Dziennik audytu"
     },
     "queue": {
       "metaTitle": "Ogłoszenia do zatwierdzenia",
@@ -466,6 +467,37 @@
         "notReady": "Nie można zatwierdzić ogłoszenia, ponieważ brakuje danych lub są nieprawidłowe:",
         "forbidden": "Nie możesz podjąć decyzji w sprawie tego ogłoszenia.",
         "failed": "Nie udało się zapisać decyzji. Spróbuj ponownie."
+      }
+    },
+    "audit": {
+      "metaTitle": "Dziennik audytu",
+      "title": "Dziennik audytu",
+      "back": "Wróć do panelu administracyjnego",
+      "filterAction": "Akcja",
+      "filterAll": "Wszystkie akcje",
+      "filterTarget": "ID celu",
+      "filter": "Filtruj",
+      "time": "Czas",
+      "action": "Akcja",
+      "actor": "Kto",
+      "target": "Cel",
+      "details": "Szczegóły",
+      "system": "System/SQL",
+      "empty": "Brak wpisów.",
+      "more": "Starsze wpisy",
+      "actions": {
+        "listing_active": "Ogłoszenie zatwierdzone",
+        "listing_draft": "Poproszono o poprawki",
+        "listing_rejected": "Ogłoszenie odrzucone",
+        "listing_removed": "Ogłoszenie usunięte",
+        "role_granted": "Mianowano administratora",
+        "role_revoked": "Odebrano rolę administratora",
+        "user_looked_up": "Wyszukano konto",
+        "profile_blocked": "Konto zablokowane",
+        "profile_unblocked": "Konto odblokowane",
+        "verification_verified": "Weryfikacja potwierdzona",
+        "verification_rejected": "Weryfikacja odrzucona",
+        "report_handled": "Zgłoszenie rozpatrzone"
       }
     }
   },

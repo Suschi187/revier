@@ -426,7 +426,8 @@
       "metaTitle": "Administrace",
       "title": "Administrace",
       "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}",
-      "queueLink": "Otevřít frontu"
+      "queueLink": "Otevřít frontu",
+      "auditLink": "Protokol auditu"
     },
     "queue": {
       "metaTitle": "Inzeráty ke schválení",
@@ -466,6 +467,37 @@
         "notReady": "Inzerát nelze schválit, protože chybí nebo jsou neplatné některé údaje:",
         "forbidden": "O tomto inzerátu nemůžete rozhodnout.",
         "failed": "Rozhodnutí se nepodařilo uložit. Zkuste to prosím znovu."
+      }
+    },
+    "audit": {
+      "metaTitle": "Protokol auditu",
+      "title": "Protokol auditu",
+      "back": "Zpět do administrace",
+      "filterAction": "Akce",
+      "filterAll": "Všechny akce",
+      "filterTarget": "ID cíle",
+      "filter": "Filtrovat",
+      "time": "Čas",
+      "action": "Akce",
+      "actor": "Kdo",
+      "target": "Cíl",
+      "details": "Podrobnosti",
+      "system": "Systém/SQL",
+      "empty": "Žádné záznamy.",
+      "more": "Starší záznamy",
+      "actions": {
+        "listing_active": "Inzerát schválen",
+        "listing_draft": "Vyžádány úpravy",
+        "listing_rejected": "Inzerát zamítnut",
+        "listing_removed": "Inzerát odstraněn",
+        "role_granted": "Jmenován administrátor",
+        "role_revoked": "Odebrána role administrátora",
+        "user_looked_up": "Vyhledán účet",
+        "profile_blocked": "Účet zablokován",
+        "profile_unblocked": "Účet odblokován",
+        "verification_verified": "Ověření potvrzeno",
+        "verification_rejected": "Ověření zamítnuto",
+        "report_handled": "Hlášení vyřízeno"
       }
     }
   },
