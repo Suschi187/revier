@@ -29,7 +29,7 @@ en ist die Quellsprache. cs/pl-Begriffe sind **ungeprüft**, bis Muttersprachler
 
 ## Wildarten (`game_species`)
 
-Quelle: Migration `20261029100200_regions_species.sql`. cs/pl **ungeprüft**.
+Quelle: Migrationen `20261029100200_regions_species.sql` und `20261030090000_species_other_predators.sql`. cs/pl **ungeprüft**.
 
 | Code | en | de | cs | pl | Status |
 |------|----|----|----|----|--------|
@@ -47,6 +47,7 @@ Quelle: Migration `20261029100200_regions_species.sql`. cs/pl **ungeprüft**.
 | `partridge` | Grey partridge | Rebhuhn | Koroptev polní | Kuropatwa | ungeprüft |
 | `waterfowl` | Waterfowl | Wasserwild | Vodní pernatá zvěř | Ptactwo wodne | ungeprüft |
 | `small_game` | Other small game | Sonstiges Niederwild | Ostatní drobná zvěř | Inna drobna zwierzyna | ungeprüft |
+| `other_predators` | Other predators | Sonstiges Raubwild | Ostatní dravá zvěř | Inne drapieżniki | ungeprüft |
 
 ## Konto und Anmeldung (M2)
 

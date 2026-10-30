@@ -28,13 +28,13 @@ select results_eq(
 select is((select count(*)::int from regions where code ~ '^AT-9(0[1-9]|1[0-9]|2[0-3])$'), 0, 'Keine Wiener Gemeindebezirke');
 
 -- Wildarten
-select is((select count(*)::int from game_species), 14, '14 Wildarten');
+select is((select count(*)::int from game_species), 15, '15 Wildarten');
 
 -- Rechte: alle lesen, niemand über die API schreiben
 select tests.create_user('a@test.local') as a_id \gset
 select tests.as_anon();
 select is((select count(*)::int from regions), 520, 'anon liest alle Regionen');
-select is((select count(*)::int from game_species), 14, 'anon liest alle Wildarten');
+select is((select count(*)::int from game_species), 15, 'anon liest alle Wildarten');
 select throws_ok($$ insert into regions (code, country, level, slug, name_de, name_en, name_cs, name_pl, centroid)
   values ('DE-X', 'DE', 'state', 'x', 'x', 'x', 'x', 'x', 'SRID=4326;POINT(10 50)') $$, '42501', null, 'anon legt keine Regionen an');
 select tests.authenticate_as(:'a_id', 'aal2');

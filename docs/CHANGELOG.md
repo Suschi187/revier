@@ -2,6 +2,17 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M3: Dev-Server und Wildart – 2026-10-30
+
+### Geändert
+- **Web:** `allowedDevOrigins: ["127.0.0.1"]` in `next.config.ts`; vorher blieb `next dev` unter `127.0.0.1` in einer HMR-Schleife („Compiling“)
+- **Migration `species_other_predators`:** neue Wildart `other_predators` („Sonstiges Raubwild“, en/cs/pl im Glossar, cs/pl ungeprüft)
+
+### Testen
+- `supabase db reset && supabase test db` (Wildartenzahl jetzt 15)
+- Dev-Server neu starten (Wildarten sind einige Tage gecacht), dann Assistent → „Details“: „Sonstiges Raubwild“ steht in der Liste
+- `http://127.0.0.1:3000/de` lädt ohne Reload-Schleife
+
 ## M3 Anzeigen erstellen (Web) – 2026-10-30
 
 ### Geändert
