@@ -2,6 +2,29 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M4: QA-Funde F1–F6 – 2026-10-30
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M4 – Abnahme“.
+
+### Geändert
+- **F1 Pfade und Status:** Der Proxy entscheidet über die kanonische Form des Pfads (`canonicalPath`: vollständig dekodiert, Schrägstriche normalisiert). Geschützte Pfade in anderer Schreibweise (`/de/%61dmin`, `/de//admin`, `/de%2Fadmin`) leiten per 308 auf die kanonische Form, ungültige Kodierung gibt 400. Damit gelten Rollenprüfung, 403, Login-Redirect, Nonce-CSP und `X-Robots-Tag` auf jedem Weg. **Korrektur:** `export const instant = false` macht das Rendern nicht blockierend, es nimmt die Seite nur aus der Instant-Navigation-Prüfung. Den Status setzt allein der Proxy, die Prüfung in der Seite autorisiert nur (ADR 014 mit Quelle, Kommentare in allen Seiten). Das gilt auch für den Eintrag zu M3 F1 unten: Entscheidend war dort das Entfernen der Suspense-Grenzen.
+- **F2 TOTP:** Ein falscher Code bei der Ersteinrichtung behält Faktor, QR-Code und Schlüssel; die Meldung steht am Feld. Ohne JavaScript ist der Knopf gesperrt, `<noscript>` nennt den Grund (Secret gibt es nur einmal, Next rendert den Action-Zustand ohne JS nicht, Cookie/URL schließt Review B3 aus). Die Code-Eingabe für einen bestehenden Faktor geht weiter ohne JS.
+- **F3 Ernennen:** `grant_admin` verlangt eine eigene Kontosuche per E-Mail für dasselbe Konto in der letzten Stunde (`42501`, Hint `lookup_required`); `?candidate=<id>` allein zeigt kein Formular mehr (Migration `grant_requires_lookup`).
+- **F4 Prüfansicht:** Fremde Entwürfe ergeben 404, entschiedene Anzeigen zeigen nur Titel und Status. Version und Waffenbegriff-Hinweise gibt es für Admins nur bei `pending_review` (Migration `review_only_pending`).
+- **F5 Kontosuchen:** `private.admin_lookups` mit Fremdschlüssel auf `auth.users` (Kaskade) und Bereinigung älter als 1 Stunde bei jeder Suche (Migration `admin_lookups_cleanup`).
+- **F6 Oberfläche:** Übersicht zählt ohne eigene Anzeigen wie die Warteschlange; Karenz und Limits kommen aus `private.app_settings` (RPC `admin_role_rules`, Migration `admin_role_rules`); Audit-Details mit übersetzten Schlüsseln, Status, Grund-Vorlagen und Weg; Code-Felder zum Entziehen mit Namen im Label; Entscheidungsfehler per `aria-describedby` am Feld.
+- **Aufräumen:** `e2e/auth.spec.ts` löscht seine Testkonten.
+
+### Testen
+- `supabase db reset && supabase test db` (553), danach `npm run test:e2e` und ohne Reset noch einmal `supabase test db`: grün, keine `@test.local`-Konten übrig
+- `cd web && npm test` (178), `npm run test:integration` (117), `npm run test:e2e` (38, ohne `test.fail`)
+- Produktions-Build: `npm run build && npx next start -p 3456`, dann `QA_BASE_URL=http://localhost:3456 npx playwright test e2e/admin.spec.ts e2e/qa-m4.spec.ts` (19)
+- manuell: `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://localhost:3456/de/%61dmin` → `308 …/de/admin`
+
+### Bekannte Lücken
+- TOTP-Einrichtung braucht JavaScript (siehe F2, ADR 014).
+- Fällt die Rolle in den Millisekunden zwischen Proxy und Seite weg, sieht der Nutzer „Kein Zugriff“ mit `noindex`, aber Status 200 (keine Daten).
+
 ## M4 Admin-Bereich (Freigabe) – 2026-10-30
 
 Plan `docs/plans/M4-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 014.

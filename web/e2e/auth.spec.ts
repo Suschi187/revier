@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
+import { deleteTestUsers } from "./cleanup";
 import { latestMail, uniqueEmail } from "./mailpit";
+
+// Testkonten nach dem Lauf löschen, damit sie sich nicht ansammeln (Hinweis QA M4).
+const created: string[] = [];
+test.afterAll(() => deleteTestUsers(created));
 
 // Akzeptanz M2: Registrieren, ausloggen, wieder einloggen; Profil bearbeiten;
 // geschützte Seiten leiten auf Login um (SPEC 6).
@@ -43,6 +48,7 @@ async function completeWelcome(page: Page, name: string) {
 
 test("Registrieren per Link, Profil bearbeiten, ausloggen, per Code wieder einloggen", async ({ page, request }) => {
   const email = uniqueEmail("register");
+  created.push(email);
 
   // Geschützte Seite leitet auf Login um und merkt sich das Ziel.
   await page.goto("/de/account");
@@ -102,6 +108,7 @@ test("Registrieren per Link, Profil bearbeiten, ausloggen, per Code wieder einlo
 
 test("Registrieren per Code, wieder einloggen per Link", async ({ page }) => {
   const email = uniqueEmail("code");
+  created.push(email);
   await page.goto("/de/login");
   const signup = await requestMail(page, email);
   await page.getByLabel("Anmeldecode").fill(signup.code);
@@ -135,6 +142,7 @@ test("Verbrauchter oder ungültiger Link zeigt den Ausweg über den Code", async
 
 test("Fremde Rücksprungziele werden ignoriert", async ({ page }) => {
   const email = uniqueEmail("redirect");
+  created.push(email);
   await page.goto("/de/login?next=https://evil.example/");
   const signup = await requestMail(page, email);
   await page.getByLabel("Anmeldecode").fill(signup.code);
@@ -148,6 +156,7 @@ test("Fremde Rücksprungziele werden ignoriert", async ({ page }) => {
 // weil der alte Refresh-Token nach der Rotation nicht mehr gilt.
 test("Abgelaufene Session wird im Proxy erneuert, auch auf einem Redirect", async ({ page }) => {
   const email = uniqueEmail("refresh");
+  created.push(email);
   await page.goto("/de/login");
   const signup = await requestMail(page, email);
   await page.getByLabel("Anmeldecode").fill(signup.code);

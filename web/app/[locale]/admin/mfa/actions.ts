@@ -24,9 +24,9 @@ export async function startEnrollment(_previous: EnrollState, form: FormData): P
 
 type Checked = { target: string; ok: boolean };
 
+/** Nur nach requireAdminRole() in der Action aufrufen. */
 async function checkCode(form: FormData): Promise<Checked> {
   const locale = localeOf(form);
-  await requireAdminRole(locale, `/${locale}/admin/mfa`);
   const factorId = String(form.get("factorId") ?? "");
   const code = String(form.get("code") ?? "").replace(/\s/g, "");
   const next = safeNextPath(form.get("next"), locale);
@@ -37,8 +37,10 @@ async function checkCode(form: FormData): Promise<Checked> {
 
 /** Code für einen bestehenden Faktor prüfen; danach aal2 und weiter zum Ziel im Admin-Bereich. */
 export async function confirmTotp(form: FormData): Promise<void> {
+  const locale = localeOf(form);
+  await requireAdminRole(locale, `/${locale}/admin/mfa`);
   const { target, ok } = await checkCode(form);
-  if (!ok) redirect(`/${localeOf(form)}/admin/mfa?error=code&next=${encodeURIComponent(target)}`);
+  if (!ok) redirect(`/${locale}/admin/mfa?error=code&next=${encodeURIComponent(target)}`);
   redirect(target);
 }
 
@@ -46,6 +48,8 @@ export type ConfirmState = { error: "code" | null };
 
 /** Ersteinrichtung bestätigen: Bei falschem Code bleiben Faktor, QR-Code und Schlüssel stehen (QA M4 F2). */
 export async function confirmEnrollment(_previous: ConfirmState, form: FormData): Promise<ConfirmState> {
+  const locale = localeOf(form);
+  await requireAdminRole(locale, `/${locale}/admin/mfa`);
   const { target, ok } = await checkCode(form);
   if (!ok) return { error: "code" };
   redirect(target);
