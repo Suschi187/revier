@@ -265,8 +265,17 @@ export const resumeListing = (id: string) => setStatus(id, "active");
 /** Löscht einen Entwurf. Fotos zuerst aus dem Storage (ADR 011), dann die Zeile (cascade). */
 export async function deleteDraft(id: string): Promise<Result> {
   const supabase = await createSupabaseServerClient();
-  const { data: photos } = await supabase.from("listing_photos").select("storage_path, thumb_path").eq("listing_id", id);
-  const paths = (photos ?? []).flatMap((p) => [p.storage_path, p.thumb_path]).filter((p): p is string => Boolean(p));
+  // Dateien nur entfernen, wenn die Anzeige jetzt noch ein Entwurf ist (QA M3 F6): Bei veralteter Ansicht
+  // verlöre eine schon eingereichte Anzeige sonst ihre Bilder. Erst danach die Zeile, denn die Storage-Policy
+  // verlangt zum Löschen eine bearbeitbare Anzeige.
+  const { data: draft } = await supabase
+    .from("listings")
+    .select("listing_photos(storage_path, thumb_path)")
+    .eq("id", id)
+    .eq("status", "draft")
+    .maybeSingle();
+  if (!draft) return fail(null);
+  const paths = draft.listing_photos.flatMap((p) => [p.storage_path, p.thumb_path]).filter((p): p is string => Boolean(p));
   if (paths.length) await supabase.storage.from("listing-photos").remove(paths);
   const { data, error } = await supabase.from("listings").delete().eq("id", id).eq("status", "draft").select("id");
   if (error || !data?.length) return fail(error);

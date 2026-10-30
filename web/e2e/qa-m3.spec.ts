@@ -340,3 +340,35 @@ test("Grunddaten: Art und Richtung einer eingereichten Anzeige sind gesperrt", a
   const { data } = await admin().from("listings").select("kind, direction, title, status").eq("id", id).single();
   expect(data).toEqual({ kind: "helper", direction: "wanted", title: "Sperre geprüft", status: "pending_review" });
 });
+
+// QA M3 F6: „Entwurf löschen“ aus einer veralteten Ansicht lässt die Bilder einer inzwischen eingereichten
+// Anzeige stehen.
+test("Entwurf löschen aus veralteter Ansicht: eingereichte Anzeige behält ihre Fotos", async ({ page }) => {
+  test.skip(!local, "Lokale Supabase nötig");
+  test.setTimeout(90_000);
+  await signUp(page, "Löschen QA");
+  const id = await newHelperDraft(page, "Veraltete Ansicht");
+  await page.goto(`/de/account/listings/${id}/edit?step=photos`);
+  await page.waitForLoadState("networkidle");
+  await page.getByLabel("Fotos auswählen").setInputFiles({ name: "a.jpg", mimeType: "image/jpeg", buffer: Buffer.from(encode(quadrants(800, 600))) });
+  await expect(page.getByText("Foto 1 von 1", { exact: true })).toBeVisible({ timeout: 30_000 });
+
+  await page.goto("/de/account/listings");
+  const row = page.getByRole("listitem").filter({ hasText: "Veraltete Ansicht" });
+  await row.locator("summary").click();
+  // Inzwischen eingereicht (zweiter Tab, hier als Server-Pfad)
+  const client = admin();
+  const { error } = await client
+    .from("listings")
+    .update({ description: "Ich suche Hilfe beim Ansitzbau im Frühjahr.", attributes: { tasks: ["Ansitzbau"] }, status: "pending_review" })
+    .eq("id", id);
+  expect(error).toBeNull();
+
+  await row.getByRole("button", { name: "Endgültig löschen" }).click();
+  await expect(page).toHaveURL(/error=failed/);
+  const { data: photo } = await client.from("listing_photos").select("storage_path, thumb_path").eq("listing_id", id).single();
+  const folder = photo!.storage_path!.split("/").slice(0, 2).join("/");
+  const { data: files } = await client.storage.from("listing-photos").list(folder);
+  const names = (files ?? []).map((f) => `${folder}/${f.name}`);
+  expect(names).toEqual(expect.arrayContaining([photo!.storage_path, photo!.thumb_path]));
+});
