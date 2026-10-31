@@ -42,6 +42,11 @@ describe("URL-Parameter ↔ Filter", () => {
     expect(filters).toEqual({ v: 1, currency: "EUR", price_min: 90000, area_min: 50 });
   });
 
+  it("Wildarten aus Formular (mehrfach) und Link (kommagetrennt)", () => {
+    expect(filtersFromParams(new URLSearchParams("species=roe_deer&species=red_deer")).species).toEqual(["roe_deer", "red_deer"]);
+    expect(filtersFromParams({ species: ["roe_deer", "wild_boar"] }).species).toEqual(["roe_deer", "wild_boar"]);
+  });
+
   it("omit lässt Schlüssel weg (z. B. q für next)", () => {
     expect(paramsFromFilters({ v: 1, q: "Name", kind: "lease" }, ["q"]).toString()).toBe("kind=lease");
   });

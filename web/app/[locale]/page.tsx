@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Suspense } from "react";
 import { ListingList } from "@/components/public/ListingCard";
 import { publicAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
@@ -8,6 +7,11 @@ import { publicPath } from "@/lib/public/paths";
 import { cachedListings, cacheEpoch } from "@/lib/services/public-listings";
 import { regionNames } from "@/lib/services/regions";
 import { LISTING_KINDS } from "@/lib/validation/listing";
+
+// Ohne Suspense-Grenze: Gestreamte Inhalte setzt erst ein Inline-Skript ein, ohne JavaScript (und für
+// einfache Crawler) fehlten die Anzeigen sonst im HTML (QA M3 F1). `instant = false` erlaubt das Lesen
+// des Cache-Zählers außerhalb einer Grenze; den Status bestimmt es nicht.
+export const instant = false;
 
 const NEWEST = 8;
 // Länder mit Regionsdaten (ADR 007); die übrigen Märkte folgen mit ihren Kreisen.
@@ -94,9 +98,7 @@ export default async function HomePage() {
 
       <section aria-labelledby="home-newest" className="mt-10">
         <h2 id="home-newest" className="text-xl font-semibold">{t("newestHeading")}</h2>
-        <Suspense fallback={<p className="mt-4" aria-busy="true">{t("loading")}</p>}>
-          <Newest locale={locale} />
-        </Suspense>
+        <Newest locale={locale} />
         <p className="mt-4">
           <a href={searchPath} className="underline">{t("allListings")}</a>
         </p>

@@ -588,13 +588,56 @@
       "newestEmpty": "No listings published yet.",
       "newestError": "The listings could not be loaded. Please try again later.",
       "loading": "Loading listings …",
-      "allListings": "View all listings"
+      "allListings": "View all listings",
+      "crumb": "Home"
     },
     "card": {
       "photoAlt": "{title}, photo 1",
       "postalArea": "Postcode {prefix}…",
       "verified": "verified",
       "published": "published on {date}"
+    },
+    "search": {
+      "heading": "Search listings",
+      "metaTitle": "Search"
+    },
+    "list": {
+      "states": "By state or region",
+      "districts": "By district",
+      "results": "Results",
+      "count": "{count, plural, =0 {No listings} one {# listing} other {# listings}}",
+      "countCapped": "More than 1000 listings",
+      "empty": "No matching listings. Relax the filters or search in another region.",
+      "paging": "Pages",
+      "first": "Go to first page",
+      "next": "Next page",
+      "invalid": "The filters are invalid. Please check your input.",
+      "failed": "The listings could not be loaded. Please try again later.",
+      "metaDescription": "{title}: current offers and requests on Revier."
+    },
+    "filters": {
+      "heading": "Filters",
+      "q": "Search term",
+      "any": "All",
+      "region": "State or region",
+      "priceHint": "Prices are not converted: with a currency, only listings in that currency appear; listings without a price or “on request” are then left out.",
+      "min": "from",
+      "max": "to",
+      "period": "Period",
+      "periodHint": "Listings without a period are left out. For driven hunts, the date counts when that category is selected.",
+      "from": "from",
+      "to": "to",
+      "verifiedOnly": "Verified providers only",
+      "sort": "Sort order",
+      "sortHint": "Sorting by price requires a currency and a unit.",
+      "apply": "Apply filters",
+      "reset": "Reset filters",
+      "sorts": {
+        "newest": "Newest first",
+        "price_asc": "Price ascending",
+        "price_desc": "Price descending",
+        "relevance": "Relevance (with search term)"
+      }
     }
   }
 }

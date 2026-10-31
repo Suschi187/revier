@@ -588,13 +588,56 @@
       "newestEmpty": "Noch keine Anzeigen veröffentlicht.",
       "newestError": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
       "loading": "Anzeigen werden geladen …",
-      "allListings": "Alle Anzeigen ansehen"
+      "allListings": "Alle Anzeigen ansehen",
+      "crumb": "Start"
     },
     "card": {
       "photoAlt": "{title}, Foto 1",
       "postalArea": "PLZ {prefix}…",
       "verified": "verifiziert",
       "published": "veröffentlicht am {date}"
+    },
+    "search": {
+      "heading": "Anzeigen suchen",
+      "metaTitle": "Suche"
+    },
+    "list": {
+      "states": "Nach Bundesland bzw. Region",
+      "districts": "Nach Landkreis bzw. Bezirk",
+      "results": "Ergebnisse",
+      "count": "{count, plural, =0 {Keine Anzeigen} one {# Anzeige} other {# Anzeigen}}",
+      "countCapped": "Mehr als 1000 Anzeigen",
+      "empty": "Keine passenden Anzeigen. Lockere die Filter oder suche in einer anderen Region.",
+      "paging": "Seiten",
+      "first": "Zur ersten Seite",
+      "next": "Nächste Seite",
+      "invalid": "Die Filter sind ungültig. Bitte prüfe deine Eingaben.",
+      "failed": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
+      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Revier."
+    },
+    "filters": {
+      "heading": "Filter",
+      "q": "Suchbegriff",
+      "any": "Alle",
+      "region": "Bundesland bzw. Region",
+      "priceHint": "Preise werden nicht umgerechnet: Mit einer Währung erscheinen nur Anzeigen in dieser Währung, ohne Preis und „auf Anfrage“ fallen dann weg.",
+      "min": "von",
+      "max": "bis",
+      "period": "Zeitraum",
+      "periodHint": "Anzeigen ohne Zeitraum fallen weg. Bei Gesellschaftsjagden zählt der Termin, wenn die Art gewählt ist.",
+      "from": "von",
+      "to": "bis",
+      "verifiedOnly": "Nur verifizierte Anbieter",
+      "sort": "Sortierung",
+      "sortHint": "Nach Preis sortieren geht nur mit Währung und Einheit.",
+      "apply": "Filter anwenden",
+      "reset": "Filter zurücksetzen",
+      "sorts": {
+        "newest": "Neueste zuerst",
+        "price_asc": "Preis aufsteigend",
+        "price_desc": "Preis absteigend",
+        "relevance": "Relevanz (mit Suchbegriff)"
+      }
     }
   }
 }

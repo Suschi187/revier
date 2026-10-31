@@ -2,7 +2,7 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { canonicalPath, isAdminPath, isProtectedPath, localeFromPath } from "./lib/auth/paths";
-import { parsePath } from "./lib/public/paths";
+import { hasFilterQuery, parsePath } from "./lib/public/paths";
 import { regionFromSlugs } from "./lib/public/regions";
 import { STATUS_SECTIONS } from "./lib/public/sections";
 import { publicEnv } from "./lib/env";
@@ -50,6 +50,18 @@ function isMissing(pathname: string): boolean {
   return false;
 }
 
+/**
+ * Suche und Listen mit Query: `noindex, follow` auch als Header (ADR 015, Review H6). Für Googlebot stehen die
+ * Metadaten im gestreamten Body, der Header gilt verlässlich.
+ */
+function withListRobots(request: NextRequest, response: NextResponse): NextResponse {
+  const parsed = parsePath(request.nextUrl.pathname);
+  if (parsed.type === "public" && (parsed.page.route === "search" || (hasFilterQuery(parsed.page) && request.nextUrl.search))) {
+    response.headers.set("X-Robots-Tag", "noindex, follow");
+  }
+  return response;
+}
+
 /** Nonce-CSP für /admin (ADR 010/014): Next liest die Nonce aus dem CSP-Header des Requests. */
 function withAdminCsp(request: NextRequest, respond: () => NextResponse): NextResponse {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
@@ -86,7 +98,7 @@ export default async function proxy(request: NextRequest) {
 
   if (!hasAuthCookie(request)) {
     if (protectedPath) return loginRedirect(request);
-    return missing ? notFoundResponse(request) : intl(request);
+    return missing ? notFoundResponse(request) : withListRobots(request, intl(request));
   }
 
   const session = await refreshSession(request);
@@ -97,7 +109,7 @@ export default async function proxy(request: NextRequest) {
     if (!(await session.hasAdminRole())) return session.apply(forbiddenResponse(request));
     return withAdminCsp(request, () => session.apply(intl(request)));
   }
-  return session.apply(intl(request));
+  return session.apply(withListRobots(request, intl(request)));
 }
 
 export const config = {

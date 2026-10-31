@@ -588,13 +588,56 @@
       "newestEmpty": "Zatím nejsou zveřejněny žádné inzeráty.",
       "newestError": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
       "loading": "Načítání inzerátů …",
-      "allListings": "Zobrazit všechny inzeráty"
+      "allListings": "Zobrazit všechny inzeráty",
+      "crumb": "Úvod"
     },
     "card": {
       "photoAlt": "{title}, fotografie 1",
       "postalArea": "PSČ {prefix}…",
       "verified": "ověřený",
       "published": "zveřejněno {date}"
+    },
+    "search": {
+      "heading": "Hledat inzeráty",
+      "metaTitle": "Hledání"
+    },
+    "list": {
+      "states": "Podle spolkové země nebo kraje",
+      "districts": "Podle okresu",
+      "results": "Výsledky",
+      "count": "{count, plural, =0 {Žádné inzeráty} one {# inzerát} few {# inzeráty} other {# inzerátů}}",
+      "countCapped": "Více než 1000 inzerátů",
+      "empty": "Žádné odpovídající inzeráty. Uvolněte filtry nebo hledejte v jiném regionu.",
+      "paging": "Stránky",
+      "first": "Na první stránku",
+      "next": "Další stránka",
+      "invalid": "Filtry jsou neplatné. Zkontrolujte prosím zadání.",
+      "failed": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
+      "metaDescription": "{title}: aktuální nabídky a poptávky na Revier."
+    },
+    "filters": {
+      "heading": "Filtry",
+      "q": "Hledaný výraz",
+      "any": "Vše",
+      "region": "Spolková země nebo kraj",
+      "priceHint": "Ceny se nepřepočítávají: s měnou se zobrazí jen inzeráty v této měně, inzeráty bez ceny a „na dotaz“ pak vypadnou.",
+      "min": "od",
+      "max": "do",
+      "period": "Období",
+      "periodHint": "Inzeráty bez období vypadnou. U společných honů se počítá termín, pokud je zvolen tento druh.",
+      "from": "od",
+      "to": "do",
+      "verifiedOnly": "Jen ověření inzerenti",
+      "sort": "Řazení",
+      "sortHint": "Řazení podle ceny jen s měnou a jednotkou.",
+      "apply": "Použít filtry",
+      "reset": "Zrušit filtry",
+      "sorts": {
+        "newest": "Nejnovější",
+        "price_asc": "Cena vzestupně",
+        "price_desc": "Cena sestupně",
+        "relevance": "Relevance (s hledaným výrazem)"
+      }
     }
   }
 }

@@ -588,13 +588,56 @@
       "newestEmpty": "Nie opublikowano jeszcze żadnych ogłoszeń.",
       "newestError": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
       "loading": "Wczytywanie ogłoszeń …",
-      "allListings": "Zobacz wszystkie ogłoszenia"
+      "allListings": "Zobacz wszystkie ogłoszenia",
+      "crumb": "Start"
     },
     "card": {
       "photoAlt": "{title}, zdjęcie 1",
       "postalArea": "Kod {prefix}…",
       "verified": "zweryfikowany",
       "published": "opublikowano {date}"
+    },
+    "search": {
+      "heading": "Szukaj ogłoszeń",
+      "metaTitle": "Wyszukiwanie"
+    },
+    "list": {
+      "states": "Według kraju związkowego lub regionu",
+      "districts": "Według powiatu",
+      "results": "Wyniki",
+      "count": "{count, plural, =0 {Brak ogłoszeń} one {# ogłoszenie} few {# ogłoszenia} many {# ogłoszeń} other {# ogłoszenia}}",
+      "countCapped": "Ponad 1000 ogłoszeń",
+      "empty": "Brak pasujących ogłoszeń. Złagodź filtry lub szukaj w innym regionie.",
+      "paging": "Strony",
+      "first": "Do pierwszej strony",
+      "next": "Następna strona",
+      "invalid": "Filtry są nieprawidłowe. Sprawdź wprowadzone dane.",
+      "failed": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
+      "metaDescription": "{title}: aktualne oferty i poszukiwania w Revier."
+    },
+    "filters": {
+      "heading": "Filtry",
+      "q": "Szukana fraza",
+      "any": "Wszystkie",
+      "region": "Kraj związkowy lub region",
+      "priceHint": "Ceny nie są przeliczane: po wybraniu waluty widoczne są tylko ogłoszenia w tej walucie; ogłoszenia bez ceny i „do uzgodnienia” zostają pominięte.",
+      "min": "od",
+      "max": "do",
+      "period": "Okres",
+      "periodHint": "Ogłoszenia bez okresu zostają pominięte. Przy polowaniach zbiorowych liczy się termin, jeśli wybrano ten rodzaj.",
+      "from": "od",
+      "to": "do",
+      "verifiedOnly": "Tylko zweryfikowani ogłoszający",
+      "sort": "Sortowanie",
+      "sortHint": "Sortowanie według ceny tylko z walutą i jednostką.",
+      "apply": "Zastosuj filtry",
+      "reset": "Wyczyść filtry",
+      "sorts": {
+        "newest": "Najnowsze",
+        "price_asc": "Cena rosnąco",
+        "price_desc": "Cena malejąco",
+        "relevance": "Trafność (z frazą)"
+      }
     }
   }
 }

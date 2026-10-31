@@ -143,7 +143,10 @@ export function filtersFromParams(params: Params, fixed: Partial<Filters> = {}):
   for (const key of ["country", "region", "kind", "direction", "currency", "price_unit", "sort", "date_from", "date_to"] as const) {
     raw[key] = text(key);
   }
-  raw.species = text("species")?.split(",").filter(Boolean);
+  // Formular: ein Feld je Wildart (species=a&species=b); Links: kommagetrennt (species=a,b).
+  const speciesValues = params instanceof URLSearchParams ? params.getAll(PARAM_NAMES.species) : [params[PARAM_NAMES.species] ?? []].flat();
+  const speciesCodes = speciesValues.flatMap((v) => v.split(",")).filter(Boolean);
+  raw.species = speciesCodes.length ? speciesCodes : undefined;
   const pmin = number(text("price_min"));
   const pmax = number(text("price_max"));
   raw.price_min = pmin === undefined || !Number.isInteger(pmin) ? undefined : pmin * MINOR;
