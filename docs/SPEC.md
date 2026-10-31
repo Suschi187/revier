@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.6
+# SPEC – Revier (Arbeitstitel), MVP v0.7
 
+v0.7: M5 Öffentliche Seiten (ADR 015): `published_at`/`approved_at` (3.1), Sichtbarkeit über eine Definition und Zustand „nicht mehr verfügbar“ (3.4), Anbieterprofil ohne „dabei seit“ (4.3), Suche als RPC mit Filterformat v1, Rechtsfragen 7.2.
 v0.6: M4 Moderation (ADR 014): `reject_code` plus optionaler Freitext, `submitted_at`, Entscheidungen nur per RPC `moderate_listing` (Freigeben, Bearbeitung anfordern, Ablehnen), Admins per UI mit Step-up, Karenz und Limits (3.1, 3.4, 5).
 v0.5: Stand nach M3 (Plan M3 8, QA M3 F8): Fotospalten und Verarbeitung (3.1, ADR 011), `listing_places` und `postal_prefix` (3.1, 3.3, ADR 012), Attribute und Pflichtangaben je Art (3.2, ADR 013), Wildart `other_predators`.
 v0.4: Anmeldung passwortlos per Link und Code, AGB-Zustimmung je Version in `legal_acceptances` (3.1, 4.4, ADR 010); Cloud-Projekt erst nach 7.1/7.9/7.11.
@@ -77,6 +78,7 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 - `reject_reason` text null: optionaler Freitext zum Code (Pflicht bei `other`)
 - `submitted_at` timestamptz null (v0.6): letzter Wechsel nach `pending_review`, nur Server
 - `expires_at` timestamptz (Standard: 60 Tage nach Freigabe, `app_settings.listing_active_days`)
+- `published_at` timestamptz null (v0.7): erste Freigabe, nie zurückgesetzt (Sortierung „neueste“, neue Anzeige für Suchaufträge); `approved_at` (v0.7): letzte Freigabe. Beide nur Server, nicht im Inhalts-Hash
 - `attributes` jsonb (siehe 3.2), bei jedem Schreiben geprüft (`private.listing_attributes_error`)
 - `search_vector` tsvector (generiert aus Titel, Beschreibung)
 
@@ -152,6 +154,7 @@ Validierung in der DB bei jedem Schreiben (`private.listing_attributes_error`) u
 - `profiles`: öffentlich lesbar nur `display_name`, `account_type`, `verification_status`, `business_name`, `country` (über die View `public_profiles`); alles andere nur Besitzer/Admin. Öffentlich erscheinen nur Anbieter mit mindestens einer öffentlichen Anzeige, außerdem sehen Chatpartner einander. Der öffentliche Status zeigt nur „verifiziert“ oder nichts, `pending`/`rejected` sieht nur der Nutzer selbst (v0.3).
 - `reports`: Insert für eingeloggte Nutzer (nur sichtbare Ziele); Meldende lesen den Stand ihrer eigenen Meldungen (DSA), ohne den bearbeitenden Admin zu sehen; alles andere nur Admin.
 - Rolle `admin` über Custom Claim, nie über Client-Felder.
+- Öffentlich ist eine Anzeige genau dann, wenn `private.listing_is_public` zutrifft (aktiv, nicht abgelaufen, Besitzer aktiv); Policy, View, Such-RPCs und Sitemap nutzen dieselbe Definition (v0.7, ADR 015). Nach außen gibt es für einmal veröffentlichte, jetzt nicht öffentliche Anzeigen nur den Zustand „nicht mehr verfügbar“ (410), nie „entfernt“.
 
 ## 4. Screens
 
@@ -188,7 +191,8 @@ Die Web-App und die iOS-App bieten dieselben Funktionen mit plattformgerechter B
 ### 4.3 Gemeinsame Screens und Zustände
 - Filter (Land, Region, Art, Wildarten, Preis mit Währung, Fläche, Zeitraum, nur verifizierte Anbieter)
 - Suchauftrag speichern/bearbeiten
-- Öffentliches Anbieterprofil
+- Öffentliches Anbieterprofil (v0.7): Anzeigename bzw. Firmenname, Privat/Gewerbe, Badge „verifiziert“, Land, aktive Anzeigen; kein „dabei seit“. Profile von Privatpersonen sind `noindex`
+- Suche und Filter über die RPC `search_listings` mit Filterformat v1 (ADR 015), gleich für Web, Suchaufträge und iOS; Preisfilter nur in der gewählten Währung, keine Umrechnung
 - Verifizierung (Dokument fotografieren/hochladen, Status)
 - Melden-Dialog für Anzeigen, Nachrichten und Profile
 - **Zustände, die immer gebaut werden:** Laden, Leer, Fehler, Offline-Hinweis, abgelaufene/entfernte Anzeige
@@ -294,6 +298,8 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 ## 7. Offene Entscheidungen (bitte vor M1/M3 klären)
 1. **Name und Domain**, Bundle-ID, Entwickler-Account (Privatperson oder Firma). *Blockiert:* Sign in with Apple (Web ist eingebaut, aber ausgeschaltet) und das Supabase-Cloud-Projekt (ADR 002).
 2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform Außerdem: ODbL der PLZ-Daten aus OpenStreetMap, ob die Produktdatenbank als Sammlung (Collective Database) gilt und die Anzeigen nicht unter Share-Alike fallen (ADR 012).
+   - **Anbieterangaben gewerblicher Konten (DSA, v0.7):** Welche Angaben muss ein gewerblicher Anbieter nach DSA (Art. 30 Nachverfolgbarkeit, Art. 31) hinterlegen und öffentlich zeigen (Name, Anschrift, Kontakt, Register), und wie prüft die Plattform sie? Heute zeigt das Profil nur Firmenname, Land und das Badge.
+   - **Begründung von Entfernungen per E-Mail (DSA Art. 17, v0.7):** Reicht die Begründung im Konto, oder muss jede Entfernung, Ablehnung und Sperre zusätzlich per E-Mail begründet werden (Inhalt, Frist, Hinweis auf Rechtsbehelf)?
 3. **Retention:** *Technischer Default entschieden (v0.3, ADR 008), anwaltliche Prüfung offen.* Verifizierungsdokument 30 Tage nach Entscheidung löschen, bei Account-Löschung sofort; Metadaten bis zur Account-Löschung. Account-Löschung ist eine echte Löschung inkl. Chats; Audit- und Moderationsdaten bleiben pseudonymisiert. Alle Fristen konfigurierbar (`private.app_settings`). Rechtlich zu prüfen: Dauer für Jagdscheine, DSA-Fristen für Moderationsdaten, Beweissicherung, Nachrichten beim Gegenüber.
    - **Verlassene Entwürfe** (Entscheidung 2026-10-29, Umsetzung M9): Entwürfe samt Fotos werden nach 12 Monaten Inaktivität gelöscht, mit Hinweis an den Besitzer vorab. *Anwaltlich zu prüfen:* Frist, Form und Vorlauf des Hinweises.
 4. **Startregion:** *Entschieden (v0.3, ADR 007).* DE und AT vollständig (Länder und Kreise/Bezirke) aus amtlichen Quellen. CZ, PL, CH folgen vor dem jeweiligen Marktstart.

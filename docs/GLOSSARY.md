@@ -148,3 +148,29 @@ Werden in Web und iOS gleich verwendet. cs/pl **ungeprüft**.
 | privacy_policy | Privacy policy | Datenschutzerklärung | Zásady ochrany osobních údajů | Polityka prywatności | ungeprüft |
 | imprint | Legal notice | Impressum | Právní informace | Nota prawna | ungeprüft |
 | account_blocked | Blocked (account, by moderation) | gesperrt | zablokovaný | zablokowane | ungeprüft |
+
+## Öffentliche Seiten (M5)
+
+### URL-Wörter (ADR 015)
+Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen Redirects.
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| lease | hunting-lease | jagdpacht | pronajem-honitby | dzierzawa-obwodu | ungeprüft |
+| permit | hunting-permit | begehungsschein | povolenka-k-lovu | zezwolenie-na-polowanie | ungeprüft |
+| driven_hunt | driven-hunt | gesellschaftsjagd | spolecny-hon | polowanie-zbiorowe | ungeprüft |
+| trophy_hunt | trophy-hunt | trophaeenjagd | trofejovy-lov | polowanie-trofeowe | ungeprüft |
+| helper | hunting-helper | jagdhelfer | pomocnik-pri-lovu | pomocnik-mysliwego | ungeprüft |
+| search | search | suche | hledani | szukaj | ungeprüft |
+| listing | listing | anzeige | inzerat | ogloszenie | ungeprüft |
+| provider | provider | anbieter | inzerent | oglaszajacy | ungeprüft |
+
+### Begriffe
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| favorite | Saved | Merken / Favoriten | Uložit / Oblíbené | Zapisz / Ulubione | ungeprüft |
+| provider | Provider | Anbieter | Inzerent | Ogłaszający | ungeprüft |
+| verified | Verified | verifiziert | ověřený | zweryfikowany | ungeprüft |
+| gone | No longer available | nicht mehr verfügbar | již není k dispozici | już niedostępne | ungeprüft |
+| postal_area | Postcode area | PLZ-Bereich | Oblast PSČ | Obszar kodu pocztowego | ungeprüft |
