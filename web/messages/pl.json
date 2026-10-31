@@ -569,5 +569,13 @@
       "request_changes": "Poproś o poprawki",
       "reject": "Odrzuć"
     }
+  },
+  "Public": {
+    "gone": {
+      "metaTitle": "Już niedostępne",
+      "title": "Ta strona jest już niedostępna",
+      "text": "Ogłoszenie lub profil ogłaszającego nie jest już publiczny.",
+      "toSearch": "Przejdź do wyszukiwania"
+    }
   }
 }

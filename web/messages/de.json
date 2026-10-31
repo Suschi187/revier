@@ -569,5 +569,13 @@
       "request_changes": "Bearbeitung anfordern",
       "reject": "Ablehnen"
     }
+  },
+  "Public": {
+    "gone": {
+      "metaTitle": "Nicht mehr verfügbar",
+      "title": "Diese Seite ist nicht mehr verfügbar",
+      "text": "Die Anzeige oder das Anbieterprofil ist nicht mehr öffentlich.",
+      "toSearch": "Zur Suche"
+    }
   }
 }

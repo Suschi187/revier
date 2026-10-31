@@ -2,6 +2,9 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { canonicalPath, isAdminPath, isProtectedPath, localeFromPath } from "./lib/auth/paths";
+import { parsePath } from "./lib/public/paths";
+import { regionFromSlugs } from "./lib/public/regions";
+import { STATUS_SECTIONS } from "./lib/public/sections";
 import { publicEnv } from "./lib/env";
 import { buildCsp } from "./lib/security/csp";
 import { hasAuthCookie, refreshSession } from "./lib/supabase/proxy";
@@ -22,6 +25,29 @@ function forbiddenResponse(request: NextRequest): NextResponse {
   response.headers.set("X-Robots-Tag", "noindex");
   response.headers.set("Cache-Control", "private, no-store");
   return response;
+}
+
+/**
+ * 404 für Pfade, die keine Seite sind (ADR 015, Review B2): Unter cacheComponents gibt es kein dynamicParams,
+ * und nach dem Streaming-Start setzt notFound() keinen Status mehr. Die Seite `missing` rendert die 404.
+ */
+function notFoundResponse(request: NextRequest): NextResponse {
+  const url = new URL(`/${localeFromPath(request.nextUrl.pathname)}/missing`, request.url);
+  const response = NextResponse.rewrite(url, { status: 404 });
+  response.headers.set("X-Robots-Tag", "noindex");
+  return response;
+}
+
+/** Öffentliche Formen prüfen, ohne DB: unbekannte Wörter, Slugs und Formen sowie die Status-Seiten selbst. */
+function isMissing(pathname: string): boolean {
+  const parsed = parsePath(pathname);
+  if (parsed.type === "unknown") return true;
+  if (parsed.type === "static") return (STATUS_SECTIONS as readonly string[]).includes(pathname.split("/")[2]);
+  if (parsed.type !== "public") return false;
+  const page = parsed.page;
+  if (page.route === "state") return !regionFromSlugs(page.state);
+  if (page.route === "district") return !regionFromSlugs(page.state, page.district);
+  return false;
 }
 
 /** Nonce-CSP für /admin (ADR 010/014): Next liest die Nonce aus dem CSP-Header des Requests. */
@@ -50,19 +76,22 @@ export default async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const canonical = canonicalPath(pathname);
   if (canonical === null) return new NextResponse(null, { status: 400 });
-  // Geschützte Bereiche nur unter ihrer kanonischen Form ausliefern, sonst greifen die Prüfungen unten
-  // nicht (`/de/%61dmin` rendert dank next-intl `/de/admin`).
-  if (canonical !== pathname && isProtectedPath(canonical)) {
+  // Jeden Pfad nur unter seiner kanonischen Form ausliefern, sonst greifen die Prüfungen unten nicht
+  // (`/de/%61dmin` rendert dank next-intl `/de/admin`) und öffentliche Seiten bekämen doppelte URLs (ADR 015).
+  if (canonical !== pathname) {
     return NextResponse.redirect(new URL(canonical + search, request.url), 308);
   }
   const protectedPath = isProtectedPath(pathname);
+  const missing = isMissing(pathname);
 
   if (!hasAuthCookie(request)) {
-    return protectedPath ? loginRedirect(request) : intl(request);
+    if (protectedPath) return loginRedirect(request);
+    return missing ? notFoundResponse(request) : intl(request);
   }
 
   const session = await refreshSession(request);
   if (protectedPath && !session.userId) return session.apply(loginRedirect(request));
+  if (missing) return session.apply(notFoundResponse(request));
   // Admin: Rolle per RPC (nicht per Claim, ADR 014); aal2 prüft die Seite und leitet zu /admin/mfa.
   if (isAdminPath(pathname)) {
     if (!(await session.hasAdminRole())) return session.apply(forbiddenResponse(request));
@@ -75,7 +104,8 @@ export const config = {
   // Alles außer Next-Interna, API-Routen, öffentlichen Dateien unter /static/ und den
   // Metadaten-Dateien im Root. Jeder andere Pfad ohne Sprachpräfix wird umgeleitet
   // (z. B. /foo.png → /de/foo.png → 404), statt als ungültige Locale gerendert zu werden
-  // (QA M0 F6). Neue öffentliche Dateien gehören deshalb nach public/static/.
+  // (QA M0 F6). Neue öffentliche Dateien gehören deshalb nach public/static/. Sitemaps je Sprache liegen
+  // unter /sitemap/{id}.xml (ADR 015) und laufen ebenfalls nicht durch next-intl.
   matcher:
-    "/((?!_next/|_vercel/|api/|static/|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$|manifest\\.webmanifest$).*)",
+    "/((?!_next/|_vercel/|api/|static/|sitemap/|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$|manifest\\.webmanifest$).*)",
 };

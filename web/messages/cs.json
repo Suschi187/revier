@@ -569,5 +569,13 @@
       "request_changes": "Vyžádat úpravy",
       "reject": "Zamítnout"
     }
+  },
+  "Public": {
+    "gone": {
+      "metaTitle": "Již není k dispozici",
+      "title": "Tato stránka již není k dispozici",
+      "text": "Inzerát nebo profil inzerenta již není veřejný.",
+      "toSearch": "Přejít na hledání"
+    }
   }
 }

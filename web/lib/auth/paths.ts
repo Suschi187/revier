@@ -1,4 +1,7 @@
 import { routing, type AppLocale } from "@/i18n/routing";
+import { hasFilterQuery, parsePath, publicPath } from "@/lib/public/paths";
+import { regionFromSlugs } from "@/lib/public/regions";
+import { filtersFromParams, paramsFromFilters } from "@/lib/search/filters";
 
 // Interne, nicht indexierte Bereiche nach dem Sprachpräfix (ADR 010).
 // Nur diese sind gültige Rücksprungziele; die Liste wächst mit den Schritten (z. B. Inserieren in M3).
@@ -65,8 +68,26 @@ export function defaultNextPath(locale: AppLocale): string {
 }
 
 /**
- * Prüft ein Rücksprungziel (`next`). Erlaubt sind nur relative Pfade dieser App mit Sprachpräfix
- * aus der Allowlist; Query und Fragment fallen weg. Alles andere führt auf das Konto.
+ * Öffentliche Seite als Rücksprungziel (ADR 015, Review A9): nur in kanonischer Form, die der Parser selbst
+ * erzeugt. Filter-Query nur für Listen, neu aufgebaut aus den geprüften Filtern und ohne Suchtext (H10).
+ */
+function publicNextPath(rawPath: string, url: URL): string | null {
+  const parsed = parsePath(url.pathname);
+  if (parsed.type !== "public" || publicPath(parsed.page, parsed.locale) !== rawPath) return null;
+  const page = parsed.page;
+  if ((page.route === "state" && !regionFromSlugs(page.state)) || (page.route === "district" && !regionFromSlugs(page.state, page.district))) {
+    return null;
+  }
+  if (!hasFilterQuery(page)) return url.pathname;
+  const query = paramsFromFilters(filtersFromParams(url.searchParams), ["q"]).toString();
+  const path = query ? `${url.pathname}?${query}` : url.pathname;
+  return path.length <= MAX_LENGTH ? path : url.pathname;
+}
+
+/**
+ * Prüft ein Rücksprungziel (`next`). Erlaubt sind relative Pfade dieser App mit Sprachpräfix: geschützte
+ * Bereiche aus der Allowlist (ohne Query) und öffentliche Seiten über den Parser. Fragmente fallen weg.
+ * Alles andere führt auf das Konto.
  */
 export function safeNextPath(raw: unknown, locale: AppLocale): string {
   const fallback = defaultNextPath(locale);
@@ -80,7 +101,8 @@ export function safeNextPath(raw: unknown, locale: AppLocale): string {
     return fallback;
   }
   if (url.origin !== BASE) return fallback;
-  return NEXT_RE.test(url.pathname) ? url.pathname : fallback;
+  if (NEXT_RE.test(url.pathname)) return url.pathname;
+  return publicNextPath(raw.split(/[?#]/)[0], url) ?? fallback;
 }
 
 /**

@@ -569,5 +569,13 @@
       "request_changes": "Request changes",
       "reject": "Reject"
     }
+  },
+  "Public": {
+    "gone": {
+      "metaTitle": "No longer available",
+      "title": "This page is no longer available",
+      "text": "The listing or provider profile is no longer public.",
+      "toSearch": "Go to search"
+    }
   }
 }

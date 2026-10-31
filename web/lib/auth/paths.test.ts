@@ -43,6 +43,35 @@ describe("safeNextPath", () => {
   });
 });
 
+describe("safeNextPath für öffentliche Seiten (ADR 015, Review A9)", () => {
+  const id = "0f8fad5b-d9cb-469f-a165-70867728950e";
+  it.each([
+    [`/de/anzeige/${id}`, `/de/anzeige/${id}`],
+    ["/cs/pronajem-honitby/bayern/muenchen-stadt", "/cs/pronajem-honitby/bayern/muenchen-stadt"],
+    [`/pl/oglaszajacy/${id}`, `/pl/oglaszajacy/${id}`],
+    ["/de/suche?kind=lease&cur=EUR&pmax=5000&q=Name&evil=1", "/de/suche?kind=lease&cur=EUR&pmax=5000"],
+    ["/de/jagdpacht?country=DE#x", "/de/jagdpacht?country=DE"],
+    [`/de/anzeige/${id}?kind=lease`, `/de/anzeige/${id}`],
+  ])("erlaubt %s", (input, expected) => {
+    expect(safeNextPath(input, "de")).toBe(expected);
+  });
+
+  it.each([
+    "/en/anzeige/" + id,
+    "/de/anzeige/" + id.toUpperCase(),
+    "/de/jagdpacht/atlantis",
+    "/de/jagdpacht/bayern/kitzbuehel",
+    "/de//anzeige/" + id,
+    "/de/%2fanzeige",
+    "/de/anzeige/x/../../../evil",
+    `/de/x/../anzeige/${id}`,
+    "/de/suche?next=//evil.example",
+  ])("lehnt %s ab oder fällt zurück", (input) => {
+    const result = safeNextPath(input, "de");
+    expect(result === "/de/account" || result === "/de/suche").toBe(true);
+  });
+});
+
 describe("nextFromRedirectTo", () => {
   it("liest next aus der eigenen Bestätigungs-URL", () => {
     expect(nextFromRedirectTo(`${SITE}/de/auth/confirm?next=/de/account/profile`, SITE, "de")).toBe(
