@@ -34,8 +34,8 @@ select is(
         order by 1),
   array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_review_queue',
         'admin_role_rules',
-        'grant_admin', 'legal_status', 'listing_content_hints', 'moderate_listing', 'register_device',
-        'reorder_listing_photos', 'revoke_admin', 'set_listing_location']::text[],
+        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'moderate_listing', 'register_device',
+        'reorder_listing_photos', 'revoke_admin', 'search_listings', 'set_listing_location']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );
 
@@ -48,7 +48,8 @@ select is(
         order by 1),
   array['can_report', 'can_write_in', 'claim_listing_creation', 'has_accepted_current_legal', 'has_admin_role',
         'is_active_user', 'is_admin', 'is_blocked_with', 'is_conversation_participant', 'is_server', 'is_server_caller',
-        'listing_attributes_error', 'listing_resume_allowed', 'listing_review_version', 'owns_editable_listing', 'setting_int', 'trim_all']::text[],
+        'listing_attributes_error', 'listing_card', 'listing_is_public', 'listing_resume_allowed', 'listing_review_version', 'owns_editable_listing',
+        'search_filters_error', 'setting_int', 'trim_all']::text[],
   'Nur bewusst freigegebene Hilfsfunktionen in private sind ausführbar (Allowlist)'
 );
 

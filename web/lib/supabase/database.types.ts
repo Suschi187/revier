@@ -653,6 +653,11 @@ isOneToOne: false
               "category": string,"field": string,"language": Database["public"]['Enums']["language_code"],"term": string
             }[]
                            },
+"listing_region_counts":
+{ Args: { "p_kind"?: Database["public"]['Enums']["listing_kind"] }; Returns: {
+              "level": Database["public"]['Enums']["region_level"],"listings": number,"region_code": string
+            }[]
+                           },
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
                            },
@@ -664,6 +669,9 @@ isOneToOne: false
                            },
 "revoke_admin":
 { Args: { "p_user_id": string }; Returns: undefined
+                           },
+"search_listings":
+{ Args: { "p_cursor"?: string,"p_filters": Json,"p_limit"?: number }; Returns: Json
                            },
 "set_listing_location":
 { Args: { "p_listing_id": string,"p_place_name"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined
