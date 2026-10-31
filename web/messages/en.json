@@ -576,6 +576,25 @@
       "title": "This page is no longer available",
       "text": "The listing or provider profile is no longer public.",
       "toSearch": "Go to search"
+    },
+    "home": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "e.g. roe deer, high seat, Bavaria",
+      "searchButton": "Search",
+      "kindsHeading": "Categories",
+      "countriesHeading": "Countries",
+      "countrySoon": "{country} (coming soon)",
+      "newestHeading": "Latest listings",
+      "newestEmpty": "No listings published yet.",
+      "newestError": "The listings could not be loaded. Please try again later.",
+      "loading": "Loading listings …",
+      "allListings": "View all listings"
+    },
+    "card": {
+      "photoAlt": "{title}, photo 1",
+      "postalArea": "Postcode {prefix}…",
+      "verified": "verified",
+      "published": "published on {date}"
     }
   }
 }

@@ -576,6 +576,25 @@
       "title": "Tato stránka již není k dispozici",
       "text": "Inzerát nebo profil inzerenta již není veřejný.",
       "toSearch": "Přejít na hledání"
+    },
+    "home": {
+      "searchLabel": "Hledat",
+      "searchPlaceholder": "např. srnčí zvěř, posed, Bavorsko",
+      "searchButton": "Hledat",
+      "kindsHeading": "Kategorie",
+      "countriesHeading": "Země",
+      "countrySoon": "{country} (brzy)",
+      "newestHeading": "Nejnovější inzeráty",
+      "newestEmpty": "Zatím nejsou zveřejněny žádné inzeráty.",
+      "newestError": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
+      "loading": "Načítání inzerátů …",
+      "allListings": "Zobrazit všechny inzeráty"
+    },
+    "card": {
+      "photoAlt": "{title}, fotografie 1",
+      "postalArea": "PSČ {prefix}…",
+      "verified": "ověřený",
+      "published": "zveřejněno {date}"
     }
   }
 }

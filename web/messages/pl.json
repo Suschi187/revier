@@ -576,6 +576,25 @@
       "title": "Ta strona jest już niedostępna",
       "text": "Ogłoszenie lub profil ogłaszającego nie jest już publiczny.",
       "toSearch": "Przejdź do wyszukiwania"
+    },
+    "home": {
+      "searchLabel": "Szukaj",
+      "searchPlaceholder": "np. sarna, ambona, Bawaria",
+      "searchButton": "Szukaj",
+      "kindsHeading": "Kategorie",
+      "countriesHeading": "Kraje",
+      "countrySoon": "{country} (wkrótce)",
+      "newestHeading": "Najnowsze ogłoszenia",
+      "newestEmpty": "Nie opublikowano jeszcze żadnych ogłoszeń.",
+      "newestError": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
+      "loading": "Wczytywanie ogłoszeń …",
+      "allListings": "Zobacz wszystkie ogłoszenia"
+    },
+    "card": {
+      "photoAlt": "{title}, zdjęcie 1",
+      "postalArea": "Kod {prefix}…",
+      "verified": "zweryfikowany",
+      "published": "opublikowano {date}"
     }
   }
 }

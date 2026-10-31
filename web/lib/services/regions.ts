@@ -80,3 +80,16 @@ export async function listPostalCodes(regionId: string): Promise<PostalCodeOptio
     .map(([code, names]) => ({ code, places: names.sort() }))
     .sort((x, y) => x.code.localeCompare(y.code));
 }
+
+/** Namen aller Regionen (Bundesländer und Kreise) je Code in einer Sprache, für öffentliche Listen. */
+export async function regionNames(locale: AppLocale): Promise<Record<string, string>> {
+  "use cache";
+  cacheLife("days");
+  const { data } = await referenceClient().from("regions").select("code, name_de, name_en, name_cs, name_pl");
+  return Object.fromEntries((data ?? []).map((row) => [row.code, row[nameColumn(locale)]]));
+}
+
+/** Wildarten-Namen je Code in einer Sprache. */
+export async function speciesNames(locale: AppLocale): Promise<Record<string, string>> {
+  return Object.fromEntries((await listSpecies(locale)).map((s) => [s.code, s.name]));
+}

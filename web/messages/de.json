@@ -576,6 +576,25 @@
       "title": "Diese Seite ist nicht mehr verfügbar",
       "text": "Die Anzeige oder das Anbieterprofil ist nicht mehr öffentlich.",
       "toSearch": "Zur Suche"
+    },
+    "home": {
+      "searchLabel": "Suche",
+      "searchPlaceholder": "z. B. Rehwild, Hochsitz, Bayern",
+      "searchButton": "Suchen",
+      "kindsHeading": "Kategorien",
+      "countriesHeading": "Länder",
+      "countrySoon": "{country} (bald)",
+      "newestHeading": "Neueste Anzeigen",
+      "newestEmpty": "Noch keine Anzeigen veröffentlicht.",
+      "newestError": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
+      "loading": "Anzeigen werden geladen …",
+      "allListings": "Alle Anzeigen ansehen"
+    },
+    "card": {
+      "photoAlt": "{title}, Foto 1",
+      "postalArea": "PLZ {prefix}…",
+      "verified": "verifiziert",
+      "published": "veröffentlicht am {date}"
     }
   }
 }
