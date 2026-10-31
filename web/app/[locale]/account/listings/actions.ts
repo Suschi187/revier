@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { isAppLocale } from "@/lib/auth/paths";
 import { requireOnboardedUser } from "@/lib/services/gate";
+import { invalidatePublicListing } from "@/lib/services/public-cache";
 import { deleteDraft, pauseListing, resumeListing, withdrawListing, type ListingError } from "@/lib/services/listings";
 
 // Aktionen auf „Meine Anzeigen“ (Plan M3 7). Rechte und Übergänge prüft die DB; hier nur Anmeldung und
@@ -19,7 +20,7 @@ function errorParam(error: ListingError): string {
 export async function changeListing(form: FormData): Promise<void> {
   const rawLocale = String(form.get("locale") ?? "");
   const locale = isAppLocale(rawLocale) ? rawLocale : "de";
-  await requireOnboardedUser(locale, `/${locale}/account/listings`);
+  const user = await requireOnboardedUser(locale, `/${locale}/account/listings`);
 
   const id = String(form.get("id") ?? "");
   const action = String(form.get("action") ?? "");
@@ -48,5 +49,6 @@ export async function changeListing(form: FormData): Promise<void> {
     default:
       redirect(`${base}?error=failed`);
   }
+  if (result.ok) invalidatePublicListing(id, user.id);
   redirect(result.ok ? `${base}?notice=${notice}` : `${base}?error=${errorParam(result.error)}`);
 }

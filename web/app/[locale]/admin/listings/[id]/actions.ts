@@ -5,6 +5,7 @@ import { isAppLocale } from "@/lib/auth/paths";
 import { decisionSchema } from "@/lib/moderation";
 import { requireAdmin } from "@/lib/services/admin";
 import { decide } from "@/lib/services/moderation";
+import { invalidatePublicListing } from "@/lib/services/public-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const NOTICE = { approve: "approved", request_changes: "returned", reject: "rejected" } as const;
@@ -30,7 +31,10 @@ export async function decideListing(form: FormData): Promise<void> {
   }
   const { decision, version, code, note } = parsed.data;
   const result = await decide(id, decision, version, decision === "approve" ? null : code, decision === "approve" ? null : note);
-  if (result.ok) redirect(`/${locale}/admin/listings?notice=${NOTICE[decision]}`);
+  if (result.ok) {
+    invalidatePublicListing(id);
+    redirect(`/${locale}/admin/listings?notice=${NOTICE[decision]}`);
+  }
   if (result.error === "decided") redirect(`/${locale}/admin/listings?notice=decided`);
   const fields = result.fields?.length ? `&fields=${result.fields.join(",")}` : "";
   redirect(`${detail}?error=${result.error}${fields}#decision`);

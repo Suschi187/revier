@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { isAppLocale } from "@/lib/auth/paths";
 import { attributesFromForm, isWizardStep, nextStep, parseHectares, PRICE_UNITS, TYPE_LOCKED, type WizardStep } from "@/lib/listing-wizard";
 import { requireOnboardedUser } from "@/lib/services/gate";
+import { invalidatePublicListing } from "@/lib/services/public-cache";
 import {
   getOwnListing,
   setLocation,
@@ -40,7 +41,10 @@ export async function saveListingStep(form: FormData): Promise<void> {
   // Explizit `never`, damit TypeScript nach einem Rücksprung den Typ einengt.
   const back: (codes: string[]) => never = (codes) => redirect(`${path}?step=${step}&errors=${codes.join(",")}#error-summary`);
   const handle: (result: Result<unknown>, target?: WizardStep) => never = (result, target = nextStep(step)) => {
-    if (result.ok) redirect(`${path}?step=${target}&saved=1`);
+    if (result.ok) {
+      invalidatePublicListing(id, user.id);
+      redirect(`${path}?step=${target}&saved=1`);
+    }
     const error: ListingError = result.error;
     if (error.kind === "legal") redirect(`/${locale}/welcome?next=${encodeURIComponent(path)}`);
     if (error.kind === "fields") back(error.fields);
@@ -126,7 +130,10 @@ export async function saveListingStep(form: FormData): Promise<void> {
     }
     case "preview": {
       const result = await submitListing(id);
-      if (result.ok) redirect(`/${locale}/account/listings?notice=submitted`);
+      if (result.ok) {
+        invalidatePublicListing(id, user.id);
+        redirect(`/${locale}/account/listings?notice=submitted`);
+      }
       return handle(result, "preview");
     }
   }
@@ -162,5 +169,6 @@ export async function changePhoto(form: FormData): Promise<void> {
   } else if (op === "remove") {
     result = await removePhoto(listing.id, photo);
   }
+  if (result === "ok") invalidatePublicListing(listing.id, user.id);
   redirect(`${path}?step=photos&${result === "ok" ? `photoNotice=${op}` : "photoError=failed"}`);
 }

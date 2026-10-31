@@ -1,9 +1,8 @@
 import "server-only";
 import { cacheLife } from "next/cache";
-import { createClient } from "@supabase/supabase-js";
 import type { AppLocale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/database.types";
-import { publicEnv } from "@/lib/env";
+import { anonClient } from "@/lib/supabase/anon";
 
 // Öffentliche Referenzdaten (Regionen, Wildarten, PLZ): ohne Session lesbar und deshalb cachebar.
 // Kein Cookie-Client, damit "use cache" keine Request-Daten mitnimmt.
@@ -11,12 +10,7 @@ import { publicEnv } from "@/lib/env";
 type Enums = Database["public"]["Enums"];
 export type Country = Enums["country_code"];
 
-function referenceClient() {
-  const env = publicEnv;
-  return createClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-}
+const referenceClient = anonClient;
 
 const nameColumn = (locale: AppLocale) => `name_${locale}` as const;
 

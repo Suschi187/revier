@@ -27,6 +27,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Öffentliche Anzeigendaten (ADR 015, Review B3): höchstens 5 Minuten alt, über alle Instanzen. `expire`
+  // begrenzt auch das Ausliefern veralteter Einträge (stale-while-revalidate); das Preset `minutes` hätte 1 h.
+  cacheLife: {
+    publicListings: { stale: 60, revalidate: 60, expire: 300 },
+  },
   partialPrefetching: true,
   poweredByHeader: false,
   // Nur `next dev`: 127.0.0.1 ist wie localhost ein erlaubter Auth-Host (config.toml). Ohne den Eintrag
