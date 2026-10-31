@@ -34,8 +34,8 @@ select is(
         order by 1),
   array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_review_queue',
         'admin_role_rules',
-        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'moderate_listing', 'register_device',
-        'reorder_listing_photos', 'revoke_admin', 'search_listings', 'set_listing_location']::text[],
+        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'moderate_listing', 'provider_listings',
+        'public_cache_epoch', 'public_page_state', 'register_device', 'reorder_listing_photos', 'revoke_admin', 'search_listings', 'set_listing_location']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );
 

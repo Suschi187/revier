@@ -661,6 +661,15 @@ isOneToOne: false
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
                            },
+"provider_listings":
+{ Args: { "p_cursor"?: string,"p_limit"?: number,"p_owner": string }; Returns: Json
+                           },
+"public_cache_epoch":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"public_page_state":
+{ Args: { "p_id": string,"p_kind": string }; Returns: string
+                           },
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },
