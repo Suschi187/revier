@@ -12,9 +12,11 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export async function toggleFavorite(form: FormData): Promise<void> {
   const rawLocale = String(form.get("locale") ?? "");
   const locale = isAppLocale(rawLocale) ? rawLocale : "de";
-  // POST: Der Suchtext darf im Rücksprung bleiben (QA M5 F9), er landet nicht in Login-Link oder Auth-Logs.
-  const back = safeNextPath(String(form.get("back") ?? ""), locale, { keepSearchText: true });
-  await requireOnboardedUser(locale, back);
+  // POST: Der Suchtext darf im Rücksprung nach dem Merken bleiben (QA M5 F9). Führt die Prüfung zu Login oder
+  // Onboarding, geht das Ziel in deren URL, dort also ohne Suchtext (H10, QA M5 N2).
+  const rawBack = String(form.get("back") ?? "");
+  const back = safeNextPath(rawBack, locale, { keepSearchText: true });
+  await requireOnboardedUser(locale, safeNextPath(rawBack, locale));
   const id = String(form.get("id") ?? "");
   if (!UUID.test(id)) redirect(back);
   const result = form.get("op") === "remove" ? await removeFavorites([id]) : await addFavorite(id);
