@@ -1,6 +1,6 @@
 import { routing, type AppLocale } from "@/i18n/routing";
 import { LISTING_KINDS, type ListingKind } from "@/lib/validation/listing";
-import { KIND_WORDS, LEAF_SECTIONS, PAGE_WORDS, STATIC_SECTIONS } from "./sections";
+import { KIND_WORDS, PAGE_WORDS, STATIC_ROUTES, STATIC_SECTIONS } from "./sections";
 
 // Ein Parser für alle öffentlichen URLs (ADR 015, Review B2): Proxy, Seiten, Sprachumschalter, hreflang,
 // Sitemap und safeNextPath. Rein und ohne Referenzdaten, damit er auch im Browser läuft; ob ein Regions-Slug
@@ -40,6 +40,13 @@ function isLocale(value: string | undefined): value is AppLocale {
   return routing.locales.includes(value as AppLocale);
 }
 
+function isStaticRoute(section: (typeof STATIC_SECTIONS)[number], rest: string[]): boolean {
+  return STATIC_ROUTES[section].some((pattern) => {
+    const parts = pattern === "" ? [] : pattern.split("/");
+    return parts.length === rest.length && parts.every((part, i) => (part === ":id" ? UUID_RE.test(rest[i]) : part === rest[i]));
+  });
+}
+
 /** Zerlegt einen kanonischen Pfad (ohne Query). Ein abschließender Schrägstrich ist keine eigene Form. */
 export function parsePath(pathname: string): ParsedPath {
   const segments = pathname.split("/").slice(1);
@@ -49,7 +56,7 @@ export function parsePath(pathname: string): ParsedPath {
   if (segments.length === 1) return { type: "public", locale, page: { route: "home" } };
   if (!second) return { type: "unknown", locale };
   if ((STATIC_SECTIONS as readonly string[]).includes(second)) {
-    return rest.length > 0 && (LEAF_SECTIONS as readonly string[]).includes(second) ? { type: "unknown", locale } : { type: "static", locale };
+    return isStaticRoute(second as (typeof STATIC_SECTIONS)[number], rest) ? { type: "static", locale } : { type: "unknown", locale };
   }
   if (rest.some((segment) => !SLUG_RE.test(segment))) return { type: "unknown", locale };
 

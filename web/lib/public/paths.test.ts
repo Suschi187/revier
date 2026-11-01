@@ -6,7 +6,7 @@ import { PROTECTED_SECTIONS } from "@/lib/auth/paths";
 import { LISTING_KINDS } from "@/lib/validation/listing";
 import { parsePath, publicPath, publicPaths, type PublicRoute } from "./paths";
 import { allRegionRefs, regionByCode, regionFromSlugs } from "./regions";
-import { KIND_WORDS, LEAF_SECTIONS, PAGE_WORDS, STATIC_SECTIONS } from "./sections";
+import { KIND_WORDS, PAGE_WORDS, STATIC_ROUTES, STATIC_SECTIONS } from "./sections";
 
 const ID = "0f8fad5b-d9cb-469f-a165-70867728950e";
 const ROUTES: PublicRoute[] = [
@@ -67,14 +67,24 @@ describe("Pfad-Parser (ADR 015)", () => {
     expect([...STATIC_SECTIONS].sort()).toEqual(dirs);
   });
 
-  it("LEAF_SECTIONS sind genau die statischen Ordner ohne Unterordner; Unterpfade ergeben 404 (QA M5 F8)", () => {
+  it("STATIC_ROUTES entsprechen den page.tsx/route.ts unter app/[locale]; andere Unterpfade ergeben 404 (QA M5 F8, N3)", () => {
     const base = join(__dirname, "..", "..", "app", "[locale]");
-    const leaves = STATIC_SECTIONS.filter((name) => !readdirSync(join(base, name), { withFileTypes: true }).some((e) => e.isDirectory()));
-    expect([...LEAF_SECTIONS].sort()).toEqual([...leaves].sort());
-    expect(parsePath("/de/imprint/x").type).toBe("unknown");
-    expect(parsePath("/de/login/a/b").type).toBe("unknown");
-    expect(parsePath("/de/imprint").type).toBe("static");
-    expect(parsePath("/de/account/listings").type).toBe("static");
+    const routes = (dir: string, prefix: string[]): string[] =>
+      readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        if (entry.isDirectory()) return routes(join(dir, entry.name), [...prefix, entry.name.startsWith("[") ? ":id" : entry.name]);
+        return entry.name === "page.tsx" || entry.name === "route.ts" ? [prefix.join("/")] : [];
+      });
+    for (const section of STATIC_SECTIONS) {
+      expect([...STATIC_ROUTES[section]].sort(), section).toEqual(routes(join(base, section), []).sort());
+    }
+    const id = "0f8fad5b-d9cb-469f-a165-70867728950e";
+    for (const path of ["/de/imprint/x", "/de/login/a/b", "/de/auth", "/de/auth/x", "/de/auth/confirm/x", "/de/account/x",
+      "/de/account/listings/x/y", `/de/account/listings/${id}`, "/de/admin/x", `/de/account/listings/${id.toUpperCase()}/edit`]) {
+      expect(parsePath(path).type, path).toBe("unknown");
+    }
+    for (const path of ["/de/imprint", "/de/account", `/de/account/listings/${id}/edit`, "/de/auth/confirm", `/de/admin/listings/${id}`]) {
+      expect(parsePath(path).type, path).toBe("static");
+    }
   });
 
   it("URL-Wörter kollidieren nicht mit Seiten, Sprachen, geschützten Bereichen oder einander", () => {

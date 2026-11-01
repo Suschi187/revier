@@ -38,11 +38,22 @@ export const STATIC_SECTIONS = [
 ] as const;
 
 /**
- * Statische Bereiche ohne Unterseiten (QA M5 F8): Weitere Segmente sind 404. Unter cacheComponents setzt Next den
- * Status nach dem Streaming-Start nicht mehr, im Produktions-Build käme sonst 200. Ein Vitest gleicht mit dem
- * Dateisystem ab (Ordner ohne Unterordner).
+ * Gültige Pfade je statischem Bereich (QA M5 F8, N3), `:id` steht für eine UUID; "" ist der Bereich selbst. Alles
+ * andere ergibt 404 aus dem Proxy: Unter cacheComponents setzt Next den Status nach dem Streaming-Start nicht
+ * mehr, im Produktions-Build käme sonst 200 mit der 404-Seite. Ein Vitest gleicht mit den page.tsx/route.ts ab.
  */
-export const LEAF_SECTIONS = ["forbidden", "imprint", "login", "missing", "privacy", "terms", "welcome"] as const;
+export const STATIC_ROUTES: Record<(typeof STATIC_SECTIONS)[number], readonly string[]> = {
+  account: ["", "favorites", "listings", "listings/new", "listings/:id/edit", "profile"],
+  admin: ["", "admins", "audit", "listings", "listings/:id", "mfa"],
+  auth: ["apple", "callback", "confirm"],
+  forbidden: [""],
+  imprint: [""],
+  login: [""],
+  missing: [""],
+  privacy: [""],
+  terms: [""],
+  welcome: [""],
+};
 
 /** Ziel des Proxy-Rewrites für 404; direkt aufgerufen ergibt es ebenfalls 404. */
 export const STATUS_SECTIONS = ["missing"] as const;
