@@ -638,6 +638,19 @@
         "price_desc": "Preis absteigend",
         "relevance": "Relevanz (mit Suchbegriff)"
       }
+    },
+    "detail": {
+      "breadcrumb": "Brotkrumen",
+      "gallery": "Fotos",
+      "photoAlt": "{title}, Foto {n} von {m}",
+      "postalArea": "PLZ-Bereich {prefix}…",
+      "period": "Zeitraum",
+      "published": "Veröffentlicht",
+      "provider": "Anbieter",
+      "verified": "verifiziert",
+      "contactLogin": "Anbieter kontaktieren (Anmeldung nötig)",
+      "contactSoon": "Nachrichten an Anbieter folgen in Kürze.",
+      "ownListing": "Das ist deine Anzeige."
     }
   }
 }

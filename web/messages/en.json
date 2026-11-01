@@ -638,6 +638,19 @@
         "price_desc": "Price descending",
         "relevance": "Relevance (with search term)"
       }
+    },
+    "detail": {
+      "breadcrumb": "Breadcrumb",
+      "gallery": "Photos",
+      "photoAlt": "{title}, photo {n} of {m}",
+      "postalArea": "Postcode area {prefix}…",
+      "period": "Period",
+      "published": "Published",
+      "provider": "Provider",
+      "verified": "verified",
+      "contactLogin": "Contact provider (sign-in required)",
+      "contactSoon": "Messages to providers are coming soon.",
+      "ownListing": "This is your listing."
     }
   }
 }

@@ -638,6 +638,19 @@
         "price_desc": "Cena malejąco",
         "relevance": "Trafność (z frazą)"
       }
+    },
+    "detail": {
+      "breadcrumb": "Ścieżka nawigacji",
+      "gallery": "Zdjęcia",
+      "photoAlt": "{title}, zdjęcie {n} z {m}",
+      "postalArea": "Obszar kodu pocztowego {prefix}…",
+      "period": "Okres",
+      "published": "Opublikowano",
+      "provider": "Ogłaszający",
+      "verified": "zweryfikowany",
+      "contactLogin": "Skontaktuj się z ogłaszającym (wymagane logowanie)",
+      "contactSoon": "Wiadomości do ogłaszających będą dostępne wkrótce.",
+      "ownListing": "To jest twoje ogłoszenie."
     }
   }
 }

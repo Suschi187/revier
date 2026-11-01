@@ -638,6 +638,19 @@
         "price_desc": "Cena sestupně",
         "relevance": "Relevance (s hledaným výrazem)"
       }
+    },
+    "detail": {
+      "breadcrumb": "Drobečková navigace",
+      "gallery": "Fotografie",
+      "photoAlt": "{title}, fotografie {n} z {m}",
+      "postalArea": "Oblast PSČ {prefix}…",
+      "period": "Období",
+      "published": "Zveřejněno",
+      "provider": "Inzerent",
+      "verified": "ověřený",
+      "contactLogin": "Kontaktovat inzerenta (nutné přihlášení)",
+      "contactSoon": "Zprávy inzerentům budou brzy k dispozici.",
+      "ownListing": "Toto je váš inzerát."
     }
   }
 }

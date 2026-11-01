@@ -2,6 +2,8 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { canonicalPath, isAdminPath, isProtectedPath, localeFromPath } from "./lib/auth/paths";
+import { goneHtml } from "./lib/public/gone-page";
+import { fetchPageState, isDocumentRequest } from "./lib/public/page-state";
 import { hasFilterQuery, parsePath } from "./lib/public/paths";
 import { regionFromSlugs } from "./lib/public/regions";
 import { STATUS_SECTIONS } from "./lib/public/sections";
@@ -36,6 +38,34 @@ function notFoundResponse(request: NextRequest): NextResponse {
   const response = NextResponse.rewrite(url, { status: 404 });
   response.headers.set("X-Robots-Tag", "noindex");
   return response;
+}
+
+/** 410 für einmal öffentliche, jetzt nicht öffentliche Anzeigen und Anbieter (ADR 015, Zustand `gone`). */
+function goneResponse(request: NextRequest): NextResponse {
+  return new NextResponse(goneHtml(localeFromPath(request.nextUrl.pathname)), {
+    status: 410,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+      "X-Content-Type-Options": "nosniff",
+      "X-Robots-Tag": "noindex",
+      "Cache-Control": "private, no-store",
+    },
+  });
+}
+
+/**
+ * Status für Detail und Anbieter (ADR 015, Review A3): ungecacht per RPC, nur für Dokumentanfragen. Bei Fehler
+ * oder Timeout null: Die Seite prüft selbst mit dem Anon-Client.
+ */
+async function pageStatusResponse(request: NextRequest): Promise<NextResponse | null> {
+  const parsed = parsePath(request.nextUrl.pathname);
+  if (parsed.type !== "public" || (parsed.page.route !== "listing" && parsed.page.route !== "provider")) return null;
+  if (!isDocumentRequest(request.headers)) return null;
+  const state = await fetchPageState(parsed.page.route, parsed.page.id);
+  if (state === "gone") return goneResponse(request);
+  if (state === "missing") return notFoundResponse(request);
+  return null;
 }
 
 /** Öffentliche Formen prüfen, ohne DB: unbekannte Wörter, Slugs und Formen sowie die Status-Seiten selbst. */
@@ -98,12 +128,15 @@ export default async function proxy(request: NextRequest) {
 
   if (!hasAuthCookie(request)) {
     if (protectedPath) return loginRedirect(request);
-    return missing ? notFoundResponse(request) : withListRobots(request, intl(request));
+    if (missing) return notFoundResponse(request);
+    return (await pageStatusResponse(request)) ?? withListRobots(request, intl(request));
   }
 
   const session = await refreshSession(request);
   if (protectedPath && !session.userId) return session.apply(loginRedirect(request));
   if (missing) return session.apply(notFoundResponse(request));
+  const status = await pageStatusResponse(request);
+  if (status) return session.apply(status);
   // Admin: Rolle per RPC (nicht per Claim, ADR 014); aal2 prüft die Seite und leitet zu /admin/mfa.
   if (isAdminPath(pathname)) {
     if (!(await session.hasAdminRole())) return session.apply(forbiddenResponse(request));

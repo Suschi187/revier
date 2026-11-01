@@ -115,7 +115,8 @@ export async function ListingSummary({
   );
 }
 
-async function AttributeRow({ attribute, value }: { attribute: string; value: unknown }) {
+/** Eine Angabe aus `attributes` als dt/dd (auch für das öffentliche Detail). */
+export async function AttributeRow({ attribute, value }: { attribute: string; value: unknown }) {
   const t = await getTranslations("Listings");
   if (attribute === "legal_ack") return null;
   const shown = Array.isArray(value)

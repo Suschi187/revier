@@ -29,7 +29,6 @@ export const STATIC_SECTIONS = [
   "admin",
   "auth",
   "forbidden",
-  "gone",
   "imprint",
   "login",
   "missing",
@@ -38,5 +37,5 @@ export const STATIC_SECTIONS = [
   "welcome",
 ] as const;
 
-/** Ziele der Proxy-Rewrites (404/410); direkt aufgerufen ergeben sie 404. */
-export const STATUS_SECTIONS = ["missing", "gone"] as const;
+/** Ziel des Proxy-Rewrites für 404; direkt aufgerufen ergibt es ebenfalls 404. */
+export const STATUS_SECTIONS = ["missing"] as const;

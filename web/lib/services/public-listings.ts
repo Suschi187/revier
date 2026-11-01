@@ -129,6 +129,7 @@ export type PublicListing = {
   contentLanguage: Enums["language_code"];
   country: Enums["country_code"];
   regionId: string;
+  districtCode: string;
   postalPrefix: string | null;
   priceMinor: number | null;
   currency: Enums["currency_code"] | null;
@@ -177,7 +178,8 @@ export async function getPublicListing(id: string, epoch: number): Promise<Publi
   const { data: row } = await client.from("listings").select(LISTING_COLUMNS).eq("id", id).maybeSingle<ListingRow>();
   if (!row) return null;
   cacheTag(PUBLIC_TAGS.provider(row.owner_id));
-  const [species, photos, provider] = await Promise.all([
+  const [region, species, photos, provider] = await Promise.all([
+    client.from("regions").select("code").eq("id", row.region_id).single(),
     client.from("listing_species").select("species_code").eq("listing_id", id),
     client
       .from("listing_photos")
@@ -197,6 +199,7 @@ export async function getPublicListing(id: string, epoch: number): Promise<Publi
     contentLanguage: row.content_language,
     country: row.country,
     regionId: row.region_id,
+    districtCode: region.data?.code ?? "",
     postalPrefix: row.postal_prefix,
     priceMinor: row.price_minor,
     currency: row.currency,

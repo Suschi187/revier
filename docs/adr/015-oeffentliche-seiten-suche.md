@@ -95,7 +95,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
   - Entwürfe und nie freigegebene Anzeigen ergeben `null`, also kein Orakel.
 - Der Proxy setzt die Statuscodes für Dokumentanfragen. Prefetch- und RSC-Anfragen gehen ohne DB-Aufruf durch.
   - Pfad unbekannt (Parser): 404 ohne DB-Aufruf.
-  - Detail und Profil: Die RPC wird ungecacht mit Timeout von 800 ms aufgerufen. `gone` ergibt 410, `null` ergibt 404, beide per Rewrite auf eine statische, lokalisierte Seite mit `X-Robots-Tag: noindex`.
+  - Detail und Profil: Die RPC wird ungecacht mit Timeout von 800 ms aufgerufen. `null` ergibt 404 per Rewrite auf die Seite `missing` (sie ruft `notFound()`). `gone` ergibt 410 mit einer kleinen lokalisierten Seite, die der Proxy selbst ausliefert (`lib/public/gone-page.ts`, ohne Skripte, mit Links zu Suche, Impressum und Datenschutz). Grund: Next übernimmt den Status eines Rewrites nur, wenn die Seite ihn selbst setzt (`forbidden()`, `notFound()`); eine 410-Funktion gibt es nicht, eine umgeschriebene Seite käme mit 200 an. Beide mit `X-Robots-Tag: noindex`.
   - Bei einem Fehler geht die Anfrage an die Seite weiter (fail-open). Die Seite prüft selbst mit dem Anon-Client und zeigt dann einen Soft 404 mit `noindex`.
 - **Pausierte Anzeigen antworten mit 410.** Das ist bewusst so: Nach außen gibt es nur einen Zustand. Folge: Suchmaschinen entfernen die URL schnell aus dem Index. Nach dem Fortsetzen wird sie langsamer neu indexiert, denn eine 410-URL besucht ein Crawler seltener. Die Sitemap führt die Anzeige nach dem Fortsetzen wieder mit neuem `lastModified`, was die Neuaufnahme beschleunigt.
 
