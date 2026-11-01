@@ -18,18 +18,22 @@ Bericht: `docs/QA-REPORT.md`, Abschnitt „M5 – Abnahme“.
 - **F6:** Leere Kategorie- und Regionsseiten sind `noindex` ohne Canonical und hreflang.
 - **F7:** „Auf Anfrage“ hat nie eine Währung (Check `price_consistent` verschärft, Bestand bereinigt). Solche Anzeigen erscheinen nicht mehr im Währungsfilter.
 - **F8:** Unterpfade statischer Seiten ohne Unterseiten (`LEAF_SECTIONS`) ergeben 404 aus dem Proxy, auch im Produktions-Build. Ein Vitest gleicht die Liste mit dem Dateisystem ab.
-- **F9:** Der Rücksprung nach dem Merken behält den Suchtext (nur per POST). Der Login-Link enthält ihn nie.
+- **F9:** Der Rücksprung nach dem Merken behält den Suchtext (nur per POST). Login-Link und Umleitungen zu Login oder Onboarding enthalten ihn nie (mit N2).
 - **F10:** `SITE_INDEXABLE` wirkt zur Laufzeit: Der Proxy setzt `X-Robots-Tag`, `robots.txt` wird zur Anfrage erzeugt. Ein Build gilt damit für Stage und Prod.
 - **F11:** Der Cache-Zähler steht im Schlüssel der Sitemap. Entfernte Anzeigen und gelöschte Konten fallen sofort heraus, neue Anzeigen erscheinen nach bis zu 1 h.
+- **Nachprüfung N1–N3** (QA-REPORT „M5 – Nachprüfung“):
+  - **N1:** Der Proxy läuft auf allen Pfaden außer `_next/` und reicht Dateien, Sitemaps, `robots.txt` und APIs nur durch. Außerhalb von Prod trägt damit jede Antwort `X-Robots-Tag: noindex`, auch die 308 für den Schrägstrich am Ende (die entfernt der Proxy jetzt selbst).
+  - **N2:** Leitet „Merken“ zu Login oder Onboarding um (Sitzung abgelaufen, Zustimmung fehlt), steht der Suchtext nicht in der URL.
+  - **N3:** Gültige Unterpfade je statischem Bereich stehen in `STATIC_ROUTES` (Abgleich mit dem Dateisystem per Vitest). Unbekannte Pfade unter `account`, `admin` und `auth` ergeben auch im Produktions-Build 404.
 - **Hinweis aus dem Bericht:** Fällt die Abfrage des Cache-Zählers aus, gilt ein fester Schlüssel statt eines neuen je Anfrage.
 - **Proben:** Die TODO-Proben in pgTAP `28_qa_m5_abnahme` und die `test.fail` in `e2e/qa-m5.spec.ts` sind jetzt normale Tests. Neu ist pgTAP `29_qa_m5_fixes` (300 Favoriten, Entfernen nur der nicht verfügbaren, fremde Konten unberührt).
 
 ### Testen
-- `supabase db reset && supabase test db` (685), nach allen E2E-Läufen ohne Reset noch einmal grün, keine `@test.local`-Konten übrig
-- `cd web && npm test` (396), `npm run test:integration` (160), `npm run test:e2e` (79)
+- `supabase db reset && supabase test db` (713 mit den Proben der Nachprüfung), nach allen E2E-Läufen ohne Reset noch einmal grün, keine `@test.local`-Konten übrig
+- `cd web && npm test` (396), `npm run test:integration` (160), `npm run test:e2e` (92, ohne `test.fail`)
 - Produktions-Build:
-  - `npm run build && npx next start -p 3456`, dann `QA_BASE_URL=http://localhost:3456 npx playwright test e2e/qa-m5.spec.ts` (27)
-  - `curl -s -o /dev/null -w '%{http_code}' localhost:3456/de/imprint/x` gibt 404
+  - `npm run build && npx next start -p 3456`, dann `QA_BASE_URL=http://localhost:3456 npx playwright test e2e/qa-m5-nachpruefung.spec.ts e2e/qa-m5.spec.ts e2e/qa-m4.spec.ts e2e/public.spec.ts` (67)
+  - `curl -s -o /dev/null -w '%{http_code}' localhost:3456/de/imprint/x` und `/de/auth/x` geben 404, `curl -sI localhost:3456/sitemap/de.xml` trägt `X-Robots-Tag: noindex`
   - Mit `SITE_INDEXABLE=true npx next start` gestartet: `robots.txt` erlaubt alles, kein `X-Robots-Tag`
 
 ### Bekannte Lücken

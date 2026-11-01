@@ -19,4 +19,4 @@ Vier Sprachen (de, en, cs, pl), fünf Märkte, vier Währungen. SEO verlangt ein
 - Default-Locale ohne Präfix: schlechter für eine konsistente `hreflang`-Struktur.
 
 ## Folgen
-Kategorie- und Regionsslugs (M5): URL-Wörter je Sprache, Regions-Slugs sprachunabhängig, ein Pfad-Parser für Proxy, Seiten, Sprachumschalter, hreflang und Sitemap (ADR 015). Der Proxy-Matcher nimmt zusätzlich `sitemap/` aus (Sitemaps je Sprache).
+Kategorie- und Regionsslugs (M5): URL-Wörter je Sprache, Regions-Slugs sprachunabhängig, ein Pfad-Parser für Proxy, Seiten, Sprachumschalter, hreflang und Sitemap (ADR 015). Der Proxy läuft seit QA M5 N1 auf allen Pfaden außer `_next/` und reicht Sitemaps, `robots.txt`, `/api/`, `/static/` und Metadaten-Dateien ohne Sprachrouting durch.

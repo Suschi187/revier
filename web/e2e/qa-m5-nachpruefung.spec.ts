@@ -122,7 +122,7 @@ test.describe("QA M5 Nachprüfung: Favoriten und Rücksprung", () => {
     await bumpCache(seller);
   });
 
-  test.fail("F9 (N2): Merken mit abgelaufener Sitzung – Login-Link ohne Suchtext", async ({ page }) => {
+  test("F9 (N2): Merken mit abgelaufener Sitzung – Login-Link ohne Suchtext", async ({ page }) => {
     const fan = await owner(`QA5N Abgelaufen ${RUN}`);
     await signInAs(page.context(), fan);
     await page.goto(`/de/suche?q=${RUN}+Suchziel`);
@@ -133,7 +133,7 @@ test.describe("QA M5 Nachprüfung: Favoriten und Rücksprung", () => {
     expect(decodeURIComponent(page.url()), "Suchtext im Login-Link (H10)").not.toContain(RUN);
   });
 
-  test.fail("F9 (N2): Merken ohne aktuelle Zustimmung – Welcome-Link ohne Suchtext", async ({ page }) => {
+  test("F9 (N2): Merken ohne aktuelle Zustimmung – Welcome-Link ohne Suchtext", async ({ page }) => {
     const fan = await owner(`QA5N Ohne Zustimmung ${RUN}`);
     await signInAs(page.context(), fan, false);
     await page.goto(`/de/suche?q=${RUN}+Suchziel`);
@@ -232,7 +232,6 @@ test.describe("QA M5 Nachprüfung: Suche, Layout, SEO", () => {
   });
 
   test("F8 Rest: unbekannte Unterpfade von Bereichen mit Unterseiten (account, auth) ergeben 404", async ({ page }) => {
-    test.fail(!!process.env.QA_BASE_URL || !!process.env.CI, "F8 Rest: Produktions-Build liefert 200 (Soft 404), Dev 404");
     const fan = await owner(`QA5N Nicht-Leaf ${RUN}`);
     await signInAs(page.context(), fan);
     for (const url of ["/de/account/x", "/de/account/favorites/x", "/de/account/listings/x/y", "/de/auth/x", "/de/auth/confirm/x"]) {
@@ -265,7 +264,7 @@ test.describe("QA M5 Nachprüfung: Suche, Layout, SEO", () => {
     expect(forbidden.headers()["cache-control"]).toContain("no-store");
   });
 
-  test.fail("F10 (N1): X-Robots-Tag auch außerhalb des Proxy-Matchers (Sitemap, robots, Foto-Route, Schrägstrich-Redirect)", async ({ request }) => {
+  test("F10 (N1): X-Robots-Tag auch außerhalb des Proxy-Matchers (Sitemap, robots, Foto-Route, Schrägstrich-Redirect)", async ({ request }) => {
     for (const url of ["/sitemap/de.xml", "/robots.txt", "/api/photos/00000000-0000-0000-0000-000000000000/full", "/de/jagdpacht/"]) {
       const response = await request.get(url, { maxRedirects: 0 });
       expect(response.headers()["x-robots-tag"], `${url} (${response.status()})`).toContain("noindex");

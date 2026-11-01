@@ -31,7 +31,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
   - Ein Wort einer anderen Sprache, ein unbekannter Slug, überzählige Segmente und eine UUID in Großbuchstaben ergeben 404.
   - Eine nicht kanonische Kodierung ergibt 308 auf die kanonische Form.
 - Die Regions-Slugs kennt der Proxy aus einer generierten Datei (`web/lib/public/region-slugs.json`). Quelle sind dieselben Daten wie `regions_data.sql`, ein Test gleicht beides mit der DB ab. Kein DB-Aufruf je Kategorieseite.
-- Statische Ordner unter `app/[locale]` gehen vor. Ein Test liest sie aus dem Dateisystem und schließt Kollisionen mit Wörtern, Locales und `PROTECTED_SECTIONS` aus. Bereiche ohne Unterseiten (`LEAF_SECTIONS`: Impressum, Datenschutz, AGB, Login, Willkommen, 403/404) ergeben mit weiteren Segmenten 404 aus dem Proxy (QA M5 F8).
+- Statische Ordner unter `app/[locale]` gehen vor. Ein Test liest sie aus dem Dateisystem und schließt Kollisionen mit Wörtern, Locales und `PROTECTED_SECTIONS` aus. Gültige Unterpfade je Bereich stehen in `STATIC_ROUTES` (ein Vitest gleicht sie mit den `page.tsx`/`route.ts` ab); alle anderen ergeben 404 aus dem Proxy, auch unter `account`, `admin` und `auth` (QA M5 F8, N3).
 
 ### Such-RPC und Filterformat v1
 `public.search_listings(p_filters jsonb, p_cursor text default null, p_limit int default 20)`, `security invoker`, `stable`.
@@ -147,7 +147,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
   - `generateSitemaps`, eine Datei je Sprache unter `/sitemap/{id}.xml`. Der Proxy-Matcher nimmt `sitemap/` aus.
   - `robots.ts` nennt alle Dateien mit absoluter URL.
   - Die Sitemap wird zur Anfrage erzeugt, nicht beim Build.
-  - Außer in Prod (Server-Variable `SITE_INDEXABLE`) gilt `Disallow: /` und überall `X-Robots-Tag: noindex`. Ausgewertet zur Laufzeit im Proxy und in `robots.ts` (`connection()`), nicht beim Build: Ein Artefakt gilt für Stage und Prod (QA M5 F10).
+  - Außer in Prod (Server-Variable `SITE_INDEXABLE`) gilt `Disallow: /` und überall `X-Robots-Tag: noindex`. Ausgewertet zur Laufzeit im Proxy und in `robots.ts` (`connection()`), nicht beim Build: Ein Artefakt gilt für Stage und Prod (QA M5 F10). Der Proxy läuft dafür auf allen Pfaden außer `_next/`; Sitemaps, `robots.txt`, `/api/`, `/static/` und Metadaten-Dateien reicht er nur durch, den Schrägstrich am Ende entfernt er selbst per 308 (`skipTrailingSlashRedirect`, QA M5 N1).
 
 ### Rücksprung und Favoriten
 - `safeNextPath` erlaubt öffentliche Ziele über den Parser. Die kanonische Form muss dem Eingang gleichen.
@@ -158,7 +158,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
   - Höchstens 500 je Konto (Trigger mit Advisory-Lock, `23514` wie bei `saved_searches`).
   - Merken nur öffentlicher, fremder Anzeigen (Policy `favorites_insert_own`, QA M5 F4).
   - Lesen über die RPC `my_favorites` (Karten verfügbarer Anzeigen und Zahl der nicht verfügbaren in einer Abfrage), Entfernen über `remove_unavailable_favorites` (die DB bestimmt die Menge selbst). Grund: Eine ID-Liste in der URL scheitert ab etwa 220 IDs mit 414 (QA M5 F3).
-  - Rücksprung nach dem Merken (POST) behält den Suchtext, der Login-Link nie (QA M5 F9).
+  - Rücksprung nach dem Merken (POST) behält den Suchtext. Login-Link und Umleitungen zu Login oder Onboarding tragen ihn nie (QA M5 F9, N2).
   - Nicht mehr verfügbare Favoriten bleiben erhalten (die Anzeige kann zurückkommen), lassen sich aber gesammelt entfernen.
 
 ## Folgen
