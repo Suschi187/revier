@@ -4,6 +4,7 @@ import { ListingList } from "@/components/public/ListingCard";
 import { publicAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
 import { publicPath } from "@/lib/public/paths";
+import { favoriteContext } from "@/lib/services/favorites";
 import { cachedListings, cacheEpoch } from "@/lib/services/public-listings";
 import { regionNames } from "@/lib/services/regions";
 import { LISTING_KINDS } from "@/lib/validation/listing";
@@ -37,9 +38,13 @@ export async function generateMetadata(): Promise<Metadata> {
 async function Newest({ locale }: { locale: AppLocale }) {
   const t = await getTranslations("Public.home");
   const epoch = await cacheEpoch();
-  const [result, regions] = await Promise.all([cachedListings({ v: 1 }, NEWEST, epoch), regionNames(locale)]);
+  const [result, regions, favorites] = await Promise.all([
+    cachedListings({ v: 1 }, NEWEST, epoch),
+    regionNames(locale),
+    favoriteContext(publicPath({ route: "home" }, locale)),
+  ]);
   if (!result.ok) return <p className="mt-4" role="alert">{t("newestError")}</p>;
-  return <ListingList items={result.page.items} locale={locale} regions={regions} empty={t("newestEmpty")} />;
+  return <ListingList items={result.page.items} locale={locale} regions={regions} empty={t("newestEmpty")} favorites={favorites} />;
 }
 
 export default async function HomePage() {

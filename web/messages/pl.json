@@ -134,7 +134,8 @@
       "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
       "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
     },
-    "myListings": "Moje ogłoszenia"
+    "myListings": "Moje ogłoszenia",
+    "favorites": "Ulubione"
   },
   "Listings": {
     "kinds": {
@@ -662,5 +663,19 @@
       "next": "Następna strona",
       "metaDescription": "Ogłoszenia od {name} w Revier."
     }
+  },
+  "Favorites": {
+    "metaTitle": "Ulubione",
+    "title": "Ulubione",
+    "back": "Powrót do konta",
+    "save": "Zapisz",
+    "saved": "Zapisane",
+    "saveLabel": "Zapisz „{title}”",
+    "empty": "Nie zapisano jeszcze żadnych ogłoszeń.",
+    "unavailable": "{count, plural, one {# zapisane ogłoszenie jest już niedostępne} few {# zapisane ogłoszenia są już niedostępne} many {# zapisanych ogłoszeń jest już niedostępnych} other {# zapisanego ogłoszenia jest już niedostępne}}.",
+    "removeUnavailable": "Usuń niedostępne",
+    "removedNotice": "Niedostępne ulubione zostały usunięte.",
+    "failed": "Nie udało się. Spróbuj ponownie.",
+    "limit": "Możesz zapisać maksymalnie 500 ogłoszeń."
   }
 }

@@ -6,7 +6,9 @@ import { publicPath } from "@/lib/public/paths";
 import { regionByCode, regionFromSlugs } from "@/lib/public/regions";
 import { getSessionUser } from "@/lib/services/auth";
 import type { PublicListing } from "@/lib/services/public-listings";
+import { favoriteContext } from "@/lib/services/favorites";
 import { Breadcrumbs, type Crumb } from "./Breadcrumbs";
+import { FavoriteButton } from "./FavoriteButton";
 
 /**
  * Öffentliches Detail (SPEC 4.2, ADR 015): Galerie, Eckdaten, Anbieterbadge, Kontakt nur nach Login. Nie PLZ,
@@ -43,6 +45,7 @@ export async function ListingDetail({
       : []),
     { name: listing.title, href: publicPath({ route: "listing", id: listing.id }, locale) },
   ];
+  const favorites = await favoriteContext(publicPath({ route: "listing", id: listing.id }, locale));
   const provider = listing.provider;
   const providerName = provider?.account_type === "business" && provider.business_name ? provider.business_name : provider?.display_name;
 
@@ -53,6 +56,12 @@ export async function ListingDetail({
         {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)}
       </p>
       <h1 className="mt-1 text-3xl font-semibold break-words" lang={listing.contentLanguage}>{listing.title}</h1>
+      {favorites.userId !== listing.ownerId && (
+        <div className="mt-2">
+          <FavoriteButton listingId={listing.id} active={favorites.ids.has(listing.id)} signedIn={favorites.signedIn} back={favorites.back}
+            locale={locale} title={listing.title} />
+        </div>
+      )}
       <p className="mt-1">
         {district ? `${district.name}, ${district.stateName}` : null}
         {listing.postalPrefix && <> · {tp("postalArea", { prefix: listing.postalPrefix })}</>}

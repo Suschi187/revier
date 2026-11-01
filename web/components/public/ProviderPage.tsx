@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { AppLocale } from "@/i18n/routing";
 import { publicPath } from "@/lib/public/paths";
+import { favoriteContext } from "@/lib/services/favorites";
 import type { ListingPage, PublicProvider } from "@/lib/services/public-listings";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { ListingList } from "./ListingCard";
@@ -22,6 +23,7 @@ export async function ProviderPage({
   const [t, tProfile, tHome] = await Promise.all([getTranslations("Public.provider"), getTranslations("Profile"), getTranslations("Public.home")]);
   const path = publicPath({ route: "provider", id: provider.id }, locale);
   const name = providerName(provider);
+  const favorites = await favoriteContext(path);
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Breadcrumbs crumbs={[{ name: tHome("crumb"), href: publicPath({ route: "home" }, locale) }, { name, href: path }]} label={t("breadcrumb")} />
@@ -32,7 +34,7 @@ export async function ProviderPage({
       </p>
       <section aria-labelledby="provider-listings" className="mt-8">
         <h2 id="provider-listings" className="text-xl font-semibold">{t("listings")}</h2>
-        <ListingList items={listings.items} locale={locale} regions={regions} empty={t("empty")} />
+        <ListingList items={listings.items} locale={locale} regions={regions} empty={t("empty")} favorites={favorites} />
         {(listings.nextCursor || cursor) && (
           <nav aria-label={t("paging")} className="mt-6 flex gap-4">
             {cursor && <a href={path} className="underline">{t("first")}</a>}

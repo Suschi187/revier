@@ -134,7 +134,8 @@
       "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
       "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
     },
-    "myListings": "Moje inzeráty"
+    "myListings": "Moje inzeráty",
+    "favorites": "Oblíbené"
   },
   "Listings": {
     "kinds": {
@@ -662,5 +663,19 @@
       "next": "Další stránka",
       "metaDescription": "Inzeráty od {name} na Revier."
     }
+  },
+  "Favorites": {
+    "metaTitle": "Oblíbené",
+    "title": "Oblíbené",
+    "back": "Zpět na účet",
+    "save": "Uložit",
+    "saved": "Uloženo",
+    "saveLabel": "Uložit „{title}“",
+    "empty": "Zatím jste si neuložili žádné inzeráty.",
+    "unavailable": "{count, plural, one {# uložený inzerát již není k dispozici} few {# uložené inzeráty již nejsou k dispozici} other {# uložených inzerátů již není k dispozici}}.",
+    "removeUnavailable": "Odstranit nedostupné",
+    "removedNotice": "Nedostupné oblíbené inzeráty byly odstraněny.",
+    "failed": "Nepodařilo se. Zkuste to prosím znovu.",
+    "limit": "Uložit můžete nejvýše 500 inzerátů."
   }
 }

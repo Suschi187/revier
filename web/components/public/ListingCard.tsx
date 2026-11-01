@@ -2,10 +2,22 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import type { AppLocale } from "@/i18n/routing";
 import { photoUrl, priceText, thumbSize } from "@/lib/public/format";
 import { publicPath } from "@/lib/public/paths";
+import type { FavoriteContext } from "@/lib/services/favorites";
 import type { ListingCard as Card } from "@/lib/services/public-listings";
+import { FavoriteButton } from "./FavoriteButton";
 
 /** Ein Treffer in Listen (Start, Kategorie, Suche, Anbieter, Favoriten). Kein Kontakt, keine PLZ. */
-export async function ListingCard({ card, locale, regions }: { card: Card; locale: AppLocale; regions: Record<string, string> }) {
+export async function ListingCard({
+  card,
+  locale,
+  regions,
+  favorites,
+}: {
+  card: Card;
+  locale: AppLocale;
+  regions: Record<string, string>;
+  favorites?: FavoriteContext;
+}) {
   const [t, tp, format] = await Promise.all([getTranslations("Listings"), getTranslations("Public.card"), getFormatter()]);
   const href = publicPath({ route: "listing", id: card.id }, locale);
   const price = priceText(
@@ -51,19 +63,37 @@ export async function ListingCard({ card, locale, regions }: { card: Card; local
           {provider?.verified && <> · {tp("verified")}</>} ·{" "}
           {tp("published", { date: format.dateTime(new Date(card.published_at), { dateStyle: "medium", timeZone: "Europe/Berlin" }) })}
         </p>
+        {favorites && card.provider?.id !== favorites.userId && (
+          <div className="mt-2">
+            <FavoriteButton listingId={card.id} active={favorites.ids.has(card.id)} signedIn={favorites.signedIn} back={favorites.back}
+              locale={locale} title={card.title} />
+          </div>
+        )}
       </div>
     </article>
   );
 }
 
 /** Trefferliste mit Leerzustand. */
-export async function ListingList({ items, locale, regions, empty }: { items: Card[]; locale: AppLocale; regions: Record<string, string>; empty: string }) {
+export async function ListingList({
+  items,
+  locale,
+  regions,
+  empty,
+  favorites,
+}: {
+  items: Card[];
+  locale: AppLocale;
+  regions: Record<string, string>;
+  empty: string;
+  favorites?: FavoriteContext;
+}) {
   if (items.length === 0) return <p className="mt-4">{empty}</p>;
   return (
     <ul className="mt-4 grid gap-3">
       {items.map((card) => (
         <li key={card.id}>
-          <ListingCard card={card} locale={locale} regions={regions} />
+          <ListingCard card={card} locale={locale} regions={regions} favorites={favorites} />
         </li>
       ))}
     </ul>

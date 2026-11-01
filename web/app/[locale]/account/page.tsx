@@ -51,6 +51,9 @@ async function AccountContent() {
       <Link href="/account/listings" className="self-start underline">
         {t("myListings")}
       </Link>
+      <Link href="/account/favorites" className="self-start underline">
+        {t("favorites")}
+      </Link>
     </div>
   );
 }

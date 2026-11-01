@@ -134,7 +134,8 @@
       "failed": "Saving failed. Please try again.",
       "blocked": "Your account is blocked. You cannot change your profile."
     },
-    "myListings": "My listings"
+    "myListings": "My listings",
+    "favorites": "Saved listings"
   },
   "Listings": {
     "kinds": {
@@ -662,5 +663,19 @@
       "next": "Next page",
       "metaDescription": "Listings by {name} on Revier."
     }
+  },
+  "Favorites": {
+    "metaTitle": "Saved listings",
+    "title": "Saved listings",
+    "back": "Back to account",
+    "save": "Save",
+    "saved": "Saved",
+    "saveLabel": "Save “{title}”",
+    "empty": "You have not saved any listings yet.",
+    "unavailable": "{count, plural, one {# saved listing is} other {# saved listings are}} no longer available.",
+    "removeUnavailable": "Remove unavailable",
+    "removedNotice": "Unavailable saved listings were removed.",
+    "failed": "That did not work. Please try again.",
+    "limit": "You can save at most 500 listings."
   }
 }

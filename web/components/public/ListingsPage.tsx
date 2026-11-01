@@ -3,6 +3,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { publicPath, type PublicRoute } from "@/lib/public/paths";
 import { regionByCode } from "@/lib/public/regions";
 import { CURSOR_PARAM, filtersFromParams, paramsFromFilters, type Filters } from "@/lib/search/filters";
+import { favoriteContext } from "@/lib/services/favorites";
 import { cachedListings, cacheEpoch, regionCounts, searchListings, type SearchResult } from "@/lib/services/public-listings";
 import { listSpecies, regionNames } from "@/lib/services/regions";
 import { Breadcrumbs, type Crumb } from "./Breadcrumbs";
@@ -43,6 +44,8 @@ export async function ListingsPage({
   const rawCursor = searchParams[CURSOR_PARAM];
   const cursor = typeof rawCursor === "string" && rawCursor.length <= 200 ? rawCursor : null;
   const epoch = await cacheEpoch();
+  const currentPath = `${path}${hasQuery(searchParams) ? `?${paramsFromFilters(filtersFromParams(searchParams, fixed), Object.keys(fixed) as (keyof Filters)[])}` : ""}`;
+  const favorites = await favoriteContext(currentPath);
 
   const [result, names, species, counts]: [SearchResult, Record<string, string>, Awaited<ReturnType<typeof listSpecies>>, Awaited<ReturnType<typeof regionCounts>>] =
     await Promise.all([
@@ -104,7 +107,7 @@ export async function ListingsPage({
             <p className="mt-1" aria-live="polite">
               {result.page.totalCapped ? t("countCapped") : t("count", { count: result.page.total ?? result.page.items.length })}
             </p>
-            <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} />
+            <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} favorites={favorites} />
             {(nextHref || firstHref) && (
               <nav aria-label={t("paging")} className="mt-6 flex gap-4">
                 {firstHref && <a href={firstHref} className="underline">{t("first")}</a>}

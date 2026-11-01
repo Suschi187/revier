@@ -134,7 +134,8 @@
       "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal.",
       "blocked": "Dein Konto ist gesperrt. Du kannst dein Profil nicht ändern."
     },
-    "myListings": "Meine Anzeigen"
+    "myListings": "Meine Anzeigen",
+    "favorites": "Favoriten"
   },
   "Listings": {
     "kinds": {
@@ -662,5 +663,19 @@
       "next": "Nächste Seite",
       "metaDescription": "Anzeigen von {name} auf Revier."
     }
+  },
+  "Favorites": {
+    "metaTitle": "Favoriten",
+    "title": "Favoriten",
+    "back": "Zurück zum Konto",
+    "save": "Merken",
+    "saved": "Gemerkt",
+    "saveLabel": "„{title}“ merken",
+    "empty": "Du hast noch keine Anzeigen gemerkt.",
+    "unavailable": "{count, plural, one {# gemerkte Anzeige ist} other {# gemerkte Anzeigen sind}} nicht mehr verfügbar.",
+    "removeUnavailable": "Nicht mehr verfügbare entfernen",
+    "removedNotice": "Nicht mehr verfügbare Favoriten wurden entfernt.",
+    "failed": "Das hat nicht geklappt. Bitte erneut versuchen.",
+    "limit": "Du kannst höchstens 500 Anzeigen merken."
   }
 }
