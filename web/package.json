@@ -14,7 +14,8 @@
     "gen:types": "supabase --workdir .. gen types typescript --local --schema public > lib/supabase/database.types.ts",
     "test:e2e": "playwright test",
     "test:integration": "vitest run --config vitest.integration.config.mts",
-    "gen:reference": "node --env-file-if-exists=.env.local scripts/gen-reference-data.mjs"
+    "gen:reference": "node --env-file-if-exists=.env.local scripts/gen-reference-data.mjs",
+    "admin:local": "node scripts/admin-local.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

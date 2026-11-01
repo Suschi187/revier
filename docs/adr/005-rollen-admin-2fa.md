@@ -28,6 +28,7 @@ SPEC 3.4: Die Admin-Rolle kommt über einen Custom Claim, nie über Felder, die 
 1. Das Konto meldet sich normal an und schließt das Onboarding ab.
 2. Im SQL-Editor (Cloud: Studio, lokal: `supabase db query --local`): `insert into private.user_roles (user_id, role, created_at) values ('<user-id>', 'admin', now() - interval '7 days');` Das Zurückdatieren hebt die Karenz für den ersten Admin auf; der Trigger schreibt `role.granted` mit `via = sql` ins Audit-Log.
 3. Der Admin öffnet `/de/admin`, richtet TOTP ein und ist danach mit aal2 im Admin-Bereich.
+- Lokal erledigt Schritt 2 das Skript `cd web && npm run admin:local -- <e-mail>` (nur `supabase db query --local`, zurückdatiert; `--remove` entzieht die Rolle). Mails der lokalen Anmeldung landen in Mailpit unter http://127.0.0.1:54324 (höchstens 2 je Stunde, `email_sent` in `config.toml`). Adressen auf `@test.local` löschen die E2E-Tests beim Aufräumen.
 
 ### Runbook: Admin-Konto kompromittiert
 1. Rolle per SQL entziehen: `delete from private.user_roles where user_id = '<user-id>';` (auch der letzte Admin; danach per Runbook einen neuen anlegen).
