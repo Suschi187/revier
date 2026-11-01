@@ -57,10 +57,7 @@ export async function listMetadata(page: ListPage, locale: AppLocale, withQuery:
   }
   const counts = await regionCounts(page.kind, await cacheEpoch());
   const empty = context.regionCode ? !counts.some((c) => c.code === context.regionCode) : counts.length === 0;
-  return {
-    title: context.title,
-    description,
-    alternates: publicAlternates(locale, page),
-    ...(empty ? { robots: { index: false, follow: true } } : {}),
-  };
+  // Leer: noindex ohne Canonical und hreflang (hreflang nur zwischen indexierbaren Seiten, QA M5 F6).
+  if (empty) return { title: context.title, description, robots: { index: false, follow: true } };
+  return { title: context.title, description, alternates: publicAlternates(locale, page) };
 }

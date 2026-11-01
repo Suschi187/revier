@@ -116,7 +116,7 @@ export async function ListingsPage({
             )}
           </>
         ) : (
-          <p className="mt-2" role="alert">{t(result.error === "invalid" ? "invalid" : "failed")}</p>
+          <p className="mt-2" role="alert">{t(result.error === "invalid" ? (result.key === "q" ? "queryTooLong" : "invalid") : "failed")}</p>
         )}
       </section>
     </main>

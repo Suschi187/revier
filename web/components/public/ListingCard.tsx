@@ -30,7 +30,7 @@ export async function ListingCard({
   const providerName = provider?.account_type === "business" && provider.business_name ? provider.business_name : provider?.display_name;
 
   return (
-    <article className="flex gap-4 rounded border border-stone-300 p-3">
+    <article className="flex min-w-0 gap-4 rounded border border-stone-300 p-3">
       {card.photo && size ? (
         // eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf), kein Optimizer
         <img
@@ -48,7 +48,7 @@ export async function ListingCard({
         <p className="text-sm text-stone-700">
           {t(`kinds.${card.kind}`)} · {t(`directions.${card.direction}`)}
         </p>
-        <h3 className="font-semibold break-words" lang={card.content_language}>
+        <h3 className="font-semibold [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>
           <a href={href} className="underline-offset-2 hover:underline focus-visible:underline">
             {card.title}
           </a>
@@ -58,7 +58,7 @@ export async function ListingCard({
           {card.postal_prefix && <> · {tp("postalArea", { prefix: card.postal_prefix })}</>}
         </p>
         {price && <p className="text-sm font-medium">{price}</p>}
-        <p className="mt-1 text-xs text-stone-700">
+        <p className="mt-1 text-xs text-stone-700 [overflow-wrap:anywhere]">
           {providerName}
           {provider?.verified && <> · {tp("verified")}</>} ·{" "}
           {tp("published", { date: format.dateTime(new Date(card.published_at), { dateStyle: "medium", timeZone: "Europe/Berlin" }) })}
@@ -90,9 +90,9 @@ export async function ListingList({
 }) {
   if (items.length === 0) return <p className="mt-4">{empty}</p>;
   return (
-    <ul className="mt-4 grid gap-3">
+    <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3">
       {items.map((card) => (
-        <li key={card.id}>
+        <li key={card.id} className="min-w-0">
           <ListingCard card={card} locale={locale} regions={regions} favorites={favorites} />
         </li>
       ))}

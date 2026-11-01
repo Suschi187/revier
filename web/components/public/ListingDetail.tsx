@@ -55,7 +55,7 @@ export async function ListingDetail({
       <p className="mt-4 text-sm text-stone-700">
         {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)}
       </p>
-      <h1 className="mt-1 text-3xl font-semibold break-words" lang={listing.contentLanguage}>{listing.title}</h1>
+      <h1 className="mt-1 text-3xl font-semibold [overflow-wrap:anywhere] hyphens-auto" lang={listing.contentLanguage}>{listing.title}</h1>
       {favorites.userId !== listing.ownerId && (
         <div className="mt-2">
           <FavoriteButton listingId={listing.id} active={favorites.ids.has(listing.id)} signedIn={favorites.signedIn} back={favorites.back}
@@ -87,7 +87,7 @@ export async function ListingDetail({
         </section>
       )}
 
-      <p className="mt-6 whitespace-pre-line break-words" lang={listing.contentLanguage}>{listing.description}</p>
+      <p className="mt-6 whitespace-pre-line [overflow-wrap:anywhere]" lang={listing.contentLanguage}>{listing.description}</p>
 
       <dl className="mt-6 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
         <dt className="font-medium">{t("fields.price")}</dt>
