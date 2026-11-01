@@ -661,6 +661,9 @@ isOneToOne: false
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
                            },
+"my_favorites":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
 "provider_listings":
 { Args: { "p_cursor"?: string,"p_limit"?: number,"p_owner": string }; Returns: Json
                            },
@@ -672,6 +675,9 @@ isOneToOne: false
                            },
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
+                           },
+"remove_unavailable_favorites":
+{ Args: Record<PropertyKey, never>; Returns: number
                            },
 "reorder_listing_photos":
 { Args: { "p_listing_id": string,"p_photo_ids": (string)[] }; Returns: undefined

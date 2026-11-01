@@ -1,9 +1,9 @@
 begin;
 \ir _helpers.psql
-select plan(35);
+select plan(36);
 
--- QA M5 (docs/QA-REPORT.md, Abschnitt „M5 – Abnahme“): ergänzende Proben zu ADR 015. Bekannte Fehler stehen als
--- TODO (pgTAP zählt sie, ohne rot zu werden) und werden grün gemeldet, sobald sie behoben sind.
+-- QA M5 (docs/QA-REPORT.md, Abschnitt „M5 – Abnahme“): ergänzende Proben zu ADR 015. Die Funde F1, F2, F4 und F7
+-- standen hier als TODO und sind seit der Migration qa_m5_fixes echte Prüfungen.
 -- - Ort und PLZ sind nie Suchkriterium und nie in der Rückgabe (SPEC 3.3)
 -- - Paging ohne Doppelte und Lücken bei gleichen Sortierschlüsseln (newest, price_asc, relevance)
 -- - Cursor-Manipulation (gefälschter Hash, Überlauf, Länge)
@@ -127,7 +127,6 @@ select is((select count(distinct x)::int from unnest(tests.qa5_all_pages(
   'price_desc mit gleichem Preis: alle fünf, keine Doppelten');
 -- Der Rang steht als float8-Text im Cursor; mit extra_float_digits = 0 (Supabase-Standard, auch über PostgREST)
 -- wird er auf 15 Stellen gerundet und ist nicht mehr verlustfrei. Die nächste Seite beginnt wieder beim selben Treffer.
-select todo('QA M5 F1: Relevanz-Cursor rundet den Rang, nächste Seite wiederholt Treffer (Endlosschleife)', 2);
 select is(tests.qa5_all_pages('{"v":1,"q":"Gleichstand Keiler","sort":"relevance"}', 2),
   tests.qa5_all_pages('{"v":1,"q":"Gleichstand Keiler","sort":"relevance"}', 50),
   'relevance mit gleichem Rang: seitenweise wie am Stück');
@@ -183,7 +182,6 @@ select throws_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'
   'Fremder Entwurf ist nicht merkbar (kein Orakel)');
 select lives_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'pub'), 'Öffentliche Anzeige merkbar');
 select tests.authenticate_as(:'p1');
-select todo('QA M5 F4: eigene Anzeige ist per API merkbar (nur die Oberfläche blendet den Button aus)', 2);
 select throws_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'pub'), '42501', null, 'Eigene öffentliche Anzeige nicht merkbar');
 select throws_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'l_draft'), '42501', null, 'Eigener Entwurf nicht merkbar');
 
@@ -192,7 +190,6 @@ select throws_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'
 -- ---------------------------------------------------------------------------
 select tests.as_anon();
 select is(tests.qa5_hint('{"v":1,"q":"Rotwild Schwarzwild Bayern Rosenheim Pacht"}'), null, 'Fünf Wörter: gültig');
-select todo('QA M5 F2: sechs Wörter überschreiten numnode 32', 1);
 select is(tests.qa5_hint('{"v":1,"q":"Begehungsschein Rotwild Schwarzwild Bayern Landkreis Rosenheim"}'), null, 'Sechs Wörter: gültig');
 
 -- ---------------------------------------------------------------------------
@@ -200,10 +197,10 @@ select is(tests.qa5_hint('{"v":1,"q":"Begehungsschein Rotwild Schwarzwild Bayern
 -- in der Oberfläche sagt das Gegenteil). Das Web speichert currency = null, iOS (I3) ist offen.
 -- ---------------------------------------------------------------------------
 select tests.as_postgres();
-insert into listings (owner_id, kind, direction, title, content_language, region_id, status, expires_at, currency, price_unit)
-values (:'b1', 'helper', 'offer', 'QA5 Auf Anfrage mit Währung', 'de', :'muc', 'active', now() + interval '30 days', 'CHF', 'on_request');
+select throws_ok(format($$ insert into listings (owner_id, kind, direction, title, content_language, region_id, status, expires_at, currency, price_unit)
+  values (%L, 'helper', 'offer', 'QA5 Auf Anfrage mit Währung', 'de', %L, 'active', now() + interval '30 days', 'CHF', 'on_request') $$, :'b1', :'muc'),
+  '23514', null, 'F7 behoben: „auf Anfrage“ mit Währung verletzt price_consistent');
 select tests.as_anon();
-select todo('QA M5 F7: on_request mit currency erscheint im Währungsfilter', 1);
 select is(jsonb_array_length(search_listings('{"v":1,"q":"Anfrage","currency":"CHF"}') -> 'items'), 0,
   '„Auf Anfrage“ fällt beim Währungsfilter heraus (priceHint)');
 
