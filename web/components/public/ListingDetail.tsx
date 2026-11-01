@@ -51,7 +51,7 @@ export async function ListingDetail({
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Breadcrumbs crumbs={crumbs} label={tp("breadcrumb")} />
+      <Breadcrumbs crumbs={crumbs} />
       <p className="mt-4 text-sm text-stone-700">
         {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)}
       </p>

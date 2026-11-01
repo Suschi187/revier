@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { JsonLd } from "@/components/public/JsonLd";
 import { ListingList } from "@/components/public/ListingCard";
 import { publicAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
+import { absoluteUrl } from "@/lib/public/json-ld";
 import { publicPath } from "@/lib/public/paths";
 import { favoriteContext } from "@/lib/services/favorites";
 import { cachedListings, cacheEpoch } from "@/lib/services/public-listings";
@@ -59,6 +61,20 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: (await getTranslations("Metadata"))("siteName"),
+          url: absoluteUrl(publicPath({ route: "home" }, locale)),
+          inLanguage: locale,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${absoluteUrl(searchPath)}?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        }}
+      />
       <h1 className="text-3xl font-semibold">{th("title")}</h1>
       <p className="mt-4 text-lg">{th("intro")}</p>
 

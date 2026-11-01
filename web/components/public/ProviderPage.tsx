@@ -26,7 +26,7 @@ export async function ProviderPage({
   const favorites = await favoriteContext(path);
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Breadcrumbs crumbs={[{ name: tHome("crumb"), href: publicPath({ route: "home" }, locale) }, { name, href: path }]} label={t("breadcrumb")} />
+      <Breadcrumbs crumbs={[{ name: tHome("crumb"), href: publicPath({ route: "home" }, locale) }, { name, href: path }]} />
       <h1 className="mt-2 text-3xl font-semibold break-words">{name}</h1>
       <p className="mt-1">
         {tProfile(`accountTypes.${provider.account_type}`)}
