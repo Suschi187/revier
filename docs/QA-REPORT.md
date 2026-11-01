@@ -1092,3 +1092,190 @@ M4 ist **mit Auflagen abnahmereif**. Alle drei Akzeptanzkriterien sind auf den k
 - Vor M5: **F1** beheben. M5 bringt öffentliche Seiten mit denselben Render-Mustern, und `noindex`/Status für nicht freigegebene Anzeigen hängen dort an derselben Mechanik. ADR 014 und CHANGELOG korrigieren.
 - Bald: **F2** (beheben oder als Lücke im CHANGELOG führen), **F3**.
 - Bei Gelegenheit bzw. mit M9: F4, F5, F6.
+
+## M5 – Abnahme 2026-11-01
+
+Geprüfter Stand: `e81f912` (main, Arbeitsbaum sauber). Geprüft wurden die M5-Commits `95da5e2` bis `e81f912` (14 Commits laut Plan 11). Umgebung: macOS, Node 24.22.1, Next.js 16.4 (`cacheComponents`), Supabase CLI 2.122.0 (lokal), Chromium headless (Playwright). Produktions-Build per `npm run build && npx next start -p 3456`.
+Grundlage: SPEC v0.7 (3.3, 3.4, 4.2, 4.3, 6 M5, 8), Plan M5 mit Architekt-Review (10: B1–B3, A1–A15, H1–H10) und „Eingearbeitet“ (11, Nutzer-Ergänzungen), ADR 015, CHANGELOG „M5“, CLAUDE.md. iOS (I2) ist laut Plan nicht Teil von M5 (Lücke im CHANGELOG vermerkt).
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase db reset && supabase test db` | grün, 28 Dateien, **641** Tests. Mit der neuen QA-Datei 29 Dateien und **676** Tests, davon 6 TODO (F1, F2, F4, F7). |
+| `supabase test db` ohne Reset direkt nach allen E2E-Läufen | grün (676). Keine `@test.local`-Konten übrig. |
+| `npm run lint`, `npm run typecheck` | grün, auch mit den neuen QA-Dateien |
+| `npm test` (Vitest) | **345/345**; mit `lib/qa-m5.test.ts` **394/394** |
+| `npm run test:integration` | **160/160** |
+| `npm run test:e2e` (Dev-Server) | **52/52**; mit `qa-m5.spec.ts` **79/79** (davon 7 erwartete Fehlschläge per `test.fail`: F1, F2, F3, F4, F5, F6, F9) |
+| `qa-m5.spec.ts` gegen den Produktions-Build (`QA_BASE_URL=http://localhost:3456`) | **27/27** (davon 8 erwartete Fehlschläge: zusätzlich F8, das nur im Produktions-Build auftritt) |
+| `public.spec.ts` gegen den Produktions-Build (eigene Playwright-Konfiguration mit `baseURL` 3456) | Status, hreflang, Detail, Anbieter, ohne JS, 410 und „Sofortige Wirkung“ (3 Fälle): **9/9**. „Akzeptanz c“ scheitert dort an der Sitemap-Erwartung, weil die Sitemap des laufenden Servers bis zu 1 h gecacht ist (F11). Die Tests mit Login setzen das Cookie fest für Port 3000 und laufen nur gegen den Dev-Server. |
+| `npm run build` | grün, ohne Warnungen. Öffentliche Seiten sind ◐ (Partial Prerender), Startseite, Konto und Admin ƒ, `robots.txt` ○ (statisch, siehe F10). |
+| Cache-Messung im Produktions-Build | Pausierte Anzeige (normale Änderung): Detail sofort 410, aus Start- und Kategorieseite nach **≈ 65 s** verschwunden (Profil `publicListings`, `revalidate` 60). Entfernen, Sperren, Löschen: sofort (E2E). |
+
+### Ergebnis je Akzeptanzkriterium
+
+| # | Kriterium (SPEC 6 M5, Plan 0, Plan 11) | Ergebnis | Nachweis |
+|---|---|---|---|
+| a | Filtern nach Land/Region/Art/Preis liefert korrekte Ergebnisse | **erfüllt** | pgTAP `26` (jeder Filter einzeln und kombiniert, Bundesland schließt Kreise ein, Preis nur in der Währung), Integration mit gemeinsamer Fixture, E2E „Akzeptanz a“. QA: Pfadwerte gehen vor Query, ungültige Werte fallen weg (Vitest). Einschränkungen: Suchtext ab sechs Wörtern ergibt „Filter ungültig“ (F2); „auf Anfrage“ mit Währung (nur über API/iOS möglich) erscheint im Währungsfilter (F7). |
+| b | Preise in Originalwährung mit passender Locale | **erfüllt** | E2E „Akzeptanz b“ (de/en/cs/pl × EUR/CZK gegen `Intl` derselben Laufzeit). QA ergänzt die volle Matrix 4 Locales × EUR/CHF/CZK/PLN, ganze Beträge und Cent-Beträge, Einheit im selben Text (Vitest). Keine Umrechnung, auch nicht im Filter. |
+| c | Nicht freigegebene Anzeigen sind weder abrufbar noch indexierbar | **erfüllt** | Entwurf, Prüfung, abgelehnt: 404 mit `X-Robots-Tag: noindex`, auch für den eingeloggten Besitzer; nicht in Sitemap, Suche, Such-RPC (anon, Besitzer, Admin aal2, `service_role`), Regionszähler, Anbieterliste; Foto-Route 404. QA: RSC-Anfrage (`RSC: 1`, ohne Statusprüfung im Proxy) liefert keinen Inhalt; `listing_places` für anon und Fremde nicht lesbar. Dev und Produktions-Build. |
+| – | Nutzer-Ergänzung: Entfernen, Sperren, Konto-Löschung wirken sofort | **erfüllt** | E2E „Sofortige Wirkung“ (Kategorie, Start, Detail, Foto) auf Dev und Produktion. QA ergänzt: Anbieterseite 410, Textsuche (ungecacht), Favoriten zählen die Anzeige sofort als „nicht mehr verfügbar“. Ausnahme Sitemap (F11, laut ADR bewusst `hours`). |
+| – | Nutzer-Ergänzung: normale Änderungen nach höchstens 5 min | **erfüllt** | gemessen ≈ 65 s im Produktions-Build; Detail und Profil sofort über den Proxy |
+| – | Umfang M5: Startseite, Kategorie-/Regionsseiten, Volltext, Filter, Detail, Favoriten, Meta-Tags, hreflang, Sitemap, strukturierte Daten | **erfüllt mit Funden** | Volltext F1/F2, Favoriten F3/F4/F9, hreflang F6, Sitemap F10/F11, Layout F5 |
+
+### Architekt-Auflagen (Plan 10)
+
+| Auflage | Status | Bemerkung |
+|---|---|---|
+| B1 Sichtbarkeit nicht nur über RLS | **erfüllt** | `private.listing_is_public` in Policy, `public_profiles`, allen RPCs, Regionszähler; die Sitemap liest als anon dieselbe Menge (QA-pgTAP: Tabellenzugriff = Suche). Unverarbeitete Fotos sind nie Thumbnail. |
+| B2 Ein Pfad-Parser | **erfüllt** | Proxy, Seiten, Sprachumschalter (auch ohne JS im HTML), hreflang, Sitemap, `safeNextPath`. Großschreibung → 404, nicht kanonische Kodierung und abschließender Schrägstrich → 308, Fremdsprachwort, überzählige Segmente, Kreis aus anderem Bundesland → 404. Kollisionstest liest `app/[locale]` aus dem Dateisystem. Slugs aus `reference-data.json` mit Integrationsabgleich. Rest: Unterpfade statischer Seiten (F8). |
+| B3 Cache-Lebensdauer als Garantie | **erfüllt** | Profil `publicListings` 60/60/300, Tags per `updateTag` in Moderation, Absenden, Zurückziehen, Pausieren, Fortsetzen, Löschen, Bearbeiten, Fotoaktionen; kein Personenbezug in `use cache` (QA-E2E: anonyme Seiten nach Login in anderem Kontext ohne Session-Inhalt, Dokumente `private, no-store`). Zusätzlich Cache-Zähler (Nutzer-Ergänzung). |
+| A1 Such-Vertrag | **teilweise** | `v: 1`, unbekannte Schlüssel, Region passt zum Land, Preis-Sortierung mit Währung und Einheit, Standard `newest`, `id` als letzter Schlüssel, Grenzen, Fehlertabelle: erfüllt. Cursor an Filter und Sortierung gebunden, Typ- und Längenprüfung erfüllt (QA: gefälschter Hash, Überlauf, keine UUID → 22023). **Nicht erfüllt:** „Rang als float8-Text verlustfrei“ – unter `extra_float_digits = 0` (Supabase-Standard) wird der Rang gerundet, das Relevanz-Paging wiederholt Treffer (F1). |
+| A2 Missbrauch der Such-RPC | **teilweise** | Zählung bis 1001, `event_date` nur mit `kind`, kein `use cache` für freie Filter, Messung mit 10.000 Anzeigen, Cloud-Checkliste (Timeout anon lokal 3 s, Rate-Limit). Die Grenze `numnode ≤ 32` gilt für den verknüpften tsquery aus drei Konfigurationen und trifft schon normale Suchtexte mit sechs Wörtern (F2). |
+| A3 Statusprüfung im Proxy | **erfüllt** | nur Dokumentanfragen, Parser vor DB, ungecacht, 800 ms, fail-open, 404/410 mit `noindex`, Session über `session.apply`. 410 kommt als eigene HTML-Seite des Proxys (begründet in ADR 015). |
+| A4 Nur ein Zustand `gone` | **erfüllt** | auch für gesperrte und als gelöscht markierte Besitzer (QA-pgTAP), Text „nicht mehr verfügbar“, kein „entfernt“ |
+| A5 Foto-Route | **erfüllt** | UUID und Variante vor DB, `processed_at`, gestreamt, `image/jpeg`, `nosniff`, `inline`, `Content-Length`; 200 `public, no-cache` + ETag/304 (Nutzer-Ergänzung statt `max-age=300`), 404 `public, max-age=60`, 5xx `no-store`; keine Storage-Pfade im HTML (QA geprüft auf Detail, Listen, Profil, Sitemap); Open Graph absolut auf `full`. |
+| A6 `published_at`/`approved_at` | **erfüllt** | pgTAP `25` |
+| A7 Kategorie-/Regionsseiten | **teilweise** | Aggregat-RPC, Links nur auf Regionen mit Anzeigen, Query-Seiten `noindex, follow` ohne Canonical/hreflang, Titel ohne Kasus („Pronájem honitby – Bavorsko“). **Abweichung:** leere Seiten sind `noindex`, tragen aber Canonical und hreflang (F6). |
+| A8 Sitemap und robots | **teilweise** | `/sitemap/{locale}.xml` außerhalb von next-intl, zur Anfrage erzeugt, absolute URLs mit `alternates`, ohne Suche/Konto/Admin/private Profile/Unveröffentlichtes (QA). **Abweichung:** `SITE_INDEXABLE` wirkt nur zur Build-Zeit (F10). |
+| A9 `safeNextPath` und Merken | **erfüllt** | QA-Vitest mit 15 Umgehungsversuchen (`//`, `/\`, `%2f`, Punktsegmente, `@`, Tab, Großschreibung, Fremdsprachwort, unbekannter Slug, verschachteltes `next`, absolute URL): alle auf das Konto oder ein bereinigtes Ziel derselben Origin. Kein Merken per GET nach dem Login (QA-E2E mit Bestätigungslink). Nebenbefund F9 (q im Login-Link). |
+| A10 Favoriten | **teilweise** | Limit mit Advisory-Lock und `23514`, `aria-pressed`, feste Breite, auf der eigenen Anzeige weder Merken noch Kontakt (Oberfläche). **Fehler:** „nicht mehr verfügbare entfernen“ löscht ab etwa 220 Favoriten alle (F3); die eigene Anzeige lässt sich per POST merken (F4). |
+| A11 Öffentliche Service-Schicht | **erfüllt** | Anon-Client, feste Spalten, Test `public-boundary`, Beschreibung als Text ohne Autolinks (QA: `https://…` im Text bleibt Text) |
+| A12 Barrierefreiheit | **teilweise** | `fieldset`/`legend`, `aria-describedby`, `aria-live`, Galerie-Links mit Fokus, „verifiziert“ als Text, Brotkrumen-`nav` mit `aria-current`, Umschalter mit `lang`/`hrefLang`, 410-Seite mit H1 und Link; axe ohne schwere Verstöße auf Start, Kategorie, Kreis, Suche mit Filtern, Detail (de/en/pl), Anbieter, Favoriten, 410. **Nicht umgesetzt:** „Weitere laden“ mit Fokus auf den ersten neuen Treffer – es gibt Seitenlinks mit vollem Seitenwechsel, die Live-Region wirkt dabei nicht. Überbreite bei langen Wörtern (F5). |
+| A13 Preisformat | **teilweise** | nur serverseitig; Projekt-Tests decken die Matrix nur teilweise ab (Vitest 3 Fälle, E2E EUR/CZK). QA-Vitest ergänzt 16 Kombinationen, alle korrekt. |
+| A14 Commit-Reihenfolge | **erfüllt** | 14 Commits wie in Plan 11 |
+| A15 Doku | **erfüllt** | ADR 015, ADR 003 (Matcher, Slugs), SPEC v0.7, Glossar (URL-Wörter, cs/pl ungeprüft markiert), CHANGELOG mit Lücken und Messung. Inhaltliche Abweichungen: F10 („Server-Variable“), A1 („verlustfrei“, F1). |
+
+Hinweise H1–H10: H1, H3 (x-default bleibt `de`), H4, H5, H7 dokumentiert bzw. bewusst offen. H2 in ADR 015 „Folgen“. H6 umgesetzt (`X-Robots-Tag` für Suche, Query-Listen, 404/410; private Profile und leere Seiten nur per Meta). H8 nicht umgesetzt (optional). H9 umgesetzt (Text, kein Link). H10 teilweise (F9).
+
+### Definition of Done (CLAUDE.md)
+
+| Punkt | Ergebnis |
+|---|---|
+| Build ohne Warnungen, Lint und Typecheck grün | erfüllt |
+| Tests grün | erfüllt, auch `supabase test db` nach E2E ohne Reset |
+| Neue Texte in 4 Sprachen | erfüllt. `Public` (73 Schlüssel), `Favorites` (12), `LocaleSwitcher`: in allen 4 Dateien vollständig, keine Werte unverändert aus en (außer den Sprachnamen). Auf Start, Kategorie, Kreis, Suche, Detail, Anbieter und 410 in de/en/cs/pl keine rohen Schlüssel, `lang` stimmt, 360 px ohne Überbreite mit üblichen Titeln (QA-E2E). Glossar abgestimmt, cs/pl ungeprüft markiert. |
+| Lücke Web/iOS im CHANGELOG | erfüllt (I2) |
+| RLS für neue Tabellen, getestet | erfüllt: `private.public_cache_epoch` mit RLS, ohne API-Rechte (Schema `private`), Zugriff nur über die Definer-Funktion; neue RPCs in der Meta-Allowlist |
+| CHANGELOG mit Testanleitung | erfüllt. Die Anleitung funktioniert; das Beispiel `/de/jagdpacht/bayern/rosenheim` aus Plan/ADR gibt es nicht (Slugs `rosenheim-landkreis`, `rosenheim-stadt`). |
+
+### Sicherheitsprüfung (eigene Proben)
+
+| Probe | Ergebnis |
+|---|---|
+| Unveröffentlichte Anzeigen über Seite, Such-RPC (anon, Besitzer, fremder Nutzer, Admin aal2, `service_role`), Sitemap, Foto-Route, JSON-LD, Open Graph, RSC-Anfrage | kein Leck |
+| PLZ, Ortsname, Storage-Pfad in Detail (de/pl), Suche, Kreisseite, Start, Anbieter, Sitemap, Such-RPC | nicht enthalten; nur „PLZ-Bereich 80…“. Ort und PLZ sind auch kein Suchkriterium (QA-pgTAP). |
+| Orakel `public_page_state` / `provider_listings` | nie veröffentlicht → `null`, auch für den Besitzer; einmal öffentlich → `gone` ohne Grund; Anbieter ohne je öffentliche Anzeige → 404; `favorites`-Insert auf fremde Entwürfe → `42501` |
+| UGC-XSS: Titel `</script><script>alert()</script> & <img onerror>`, U+2028, Beschreibung mit Skript und URL, Firmenname mit `<b>` | keine Ausführung (Detail de/en, Suche, Anbieter), JSON-LD parsebar und wortgleich, `<title>` und `og:*` escaped, keine Autolinks |
+| Open Redirect über `safeNextPath` mit öffentlichen Pfaden | 15 Umgehungsversuche abgewiesen (QA-Vitest) |
+| Cursor-Manipulation | gefälschter Hash (md5 der Filter ist berechenbar) mit ungültigem Schlüssel, Zahlenüberlauf, ohne UUID, > 200 Zeichen → `22023`; gültiger gefälschter Cursor verschiebt nur die Seite |
+| Teure Filter | Filter ≤ 4 KB, `species` ≤ 20, tsquery ≤ 32 Knoten, Zählung ≤ 1001, Limit ≤ 50, `statement_timeout` anon 3 s lokal |
+| Cache-Leck | anonym gerenderte Start-, Kategorie-, Kreis-, Detail-, Anbieter- und Suchseite nach Login und Merken in einem anderen Kontext ohne Name, „Abmelden“ oder `aria-pressed="true"` |
+| Merken per GET, Prefetch | nicht möglich; nach Login kein Favorit ohne POST |
+| Manipulierter POST „Merken“ | fremde Entwürfe abgewiesen; eigene Anzeige wird gespeichert (F4) |
+| Statuscodes (Dev und Produktion) | siehe E2E „Statuscodes“; zusätzlich `/DE/…` → 307 (next-intl), `/de/anzeige/..%2f..%2fadmin` → 308 auf `/admin`, `/de/anzeige/<id>%00` → 308, `/sitemap.xml` 404 (kein Index, robots nennt die vier Dateien) |
+
+### Gefundene Fehler
+
+#### F1 – hoch – Relevanz-Paging wiederholt Treffer endlos (Rang im Cursor gerundet)
+`search_listings` legt den Sortierschlüssel bei `sort = relevance` als `ts_rank(...)::float8::text` in den Cursor. Supabase setzt `extra_float_digits = 0` (lokal für alle Sitzungen, auch über PostgREST). Damit wird der float8-Wert auf 15 Stellen gerundet (`0.454819530248642` statt `0.45481953024864197`), A1 („seit PG 12 verlustfrei“) gilt nur für `extra_float_digits ≥ 1`. Ist der gerundete Wert größer als der echte Rang, erfüllt der letzte Treffer der Seite die Bedingung `(rank, id) < (k, i)` wieder, und die nächste Seite beginnt mit ihm. Bei gleichen Rängen (gleiche Texte, Vorlagen, Duplikate) liefert jede Folgeseite dieselben Treffer. „Nächste Seite“ kommt nie weiter. Der Vertrag gilt unverändert für iOS (I2) und M8.
+Reproduktion:
+1. Drei aktive Anzeigen mit gleichem Titel und Text anlegen, als anon `search_listings('{"v":1,"q":"Gleichstand Keiler","sort":"relevance"}', null, 1)` aufrufen, dann mit dem `next_cursor` erneut: dieselbe ID, beliebig oft.
+2. Web: `/de/suche?q=<Text>&sort=relevance` mit mehr als 20 Treffern, „Nächste Seite“ → dieselben 20 Treffer.
+3. pgTAP `28_qa_m5_abnahme` (2 TODO), E2E `qa-m5.spec.ts -g "Relevanz"` (`test.fail`).
+
+Vorschlag: In beiden Such-RPCs `set extra_float_digits = 3` als Funktionsattribut (`alter function … set extra_float_digits = 3`), oder den Rang exakt kodieren (z. B. `float4send` als Hex), oder einen ganzzahligen Schlüssel wie `round(rank * 1e6)::bigint` in Sortierung und Cursor verwenden. Test mit gleichen Rängen und mit einem Rang, der beim Runden aufrundet.
+
+#### F2 – mittel – Suchtexte ab sechs Wörtern ergeben „Die Filter sind ungültig“
+Die Grenze `numnode ≤ 32` (Review A2) prüft den mit ODER verknüpften tsquery aus drei Konfigurationen. Jedes Wort zählt bis zu dreimal plus die Operatoren. Fünf Wörter ergeben etwa 29 Knoten, sechs schon 35 („Begehungsschein Rotwild Schwarzwild Bayern Landkreis Rosenheim“), ein natürlicher Satz mit sieben Wörtern 39. Die RPC antwortet mit `22023` (`hint = q`), die Seite zeigt „Die Filter sind ungültig. Bitte prüfe deine Eingaben.“ und keine Treffer. Zod im Web kennt die Grenze nicht, der Nutzer kann den Fehler nicht zuordnen. Das Feld erlaubt 200 Zeichen.
+Reproduktion: `/de/suche?q=Begehungsschein+Rotwild+Schwarzwild+Bayern+Landkreis+Rosenheim` → Alert, 0 Treffer. pgTAP `28` (TODO), E2E `-g "sechs Wörtern"` (`test.fail`).
+Vorschlag: Die Grenze je Konfiguration prüfen (z. B. ≤ 32 je tsquery, also ≤ 100 gesamt) oder die Anzahl der Wörter begrenzen (z. B. 16) und das in Zod und der Fixture gleich festhalten. Bei Überschreitung im Web einen eigenen Text („Suchbegriff zu lang“) statt „Filter ungültig“.
+
+#### F3 – hoch – Ab etwa 220 Favoriten gelten alle als „nicht mehr verfügbar“, „Entfernen“ löscht alle
+`favoritesOverview` prüft die Verfügbarkeit mit `anonClient().from("listings").select("id").in("id", ids)`. Das wird ein GET mit allen IDs im Query-String. Ab etwa 220 IDs (≈ 8 KB) antwortet das API-Gateway mit **414 URI Too Long** (lokal geprüft: 200 IDs → 200, 250 → 414). Der Fehler wird nicht ausgewertet, `visible` ist `null`, also gilt jede gemerkte Anzeige als nicht verfügbar. Die Seite zeigt keine Favoriten, sondern „230 gemerkte Anzeigen sind nicht mehr verfügbar“. Der Button „Nicht mehr verfügbare entfernen“ bestimmt die Menge neu, mit demselben Fehler, und löscht **alle** Favoriten, auch die verfügbaren. Das Limit erlaubt 500. Daneben lädt die Seite jede verfügbare Anzeige einzeln (`getPublicListing` mit vier Abfragen und Profil), bei 500 Favoriten also über 2.000 Abfragen pro Aufruf.
+Reproduktion:
+1. Für ein Konto 230 Favoriten auf öffentliche Anzeigen anlegen (z. B. per `service_role`).
+2. `/de/account/favorites` öffnen → keine Liste, Hinweis „230 … nicht mehr verfügbar“.
+3. „Nicht mehr verfügbare entfernen“ → `select count(*) from favorites where user_id = …` ergibt 0.
+4. E2E `qa-m5.spec.ts -g "230 Favoriten"` (`test.fail`).
+
+Vorschlag: Fehler der Verfügbarkeitsabfrage nie als „nicht verfügbar“ werten (bei Fehler nichts entfernen und den Fehlerzustand zeigen). Die Abfrage per RPC mit `uuid[]` im POST-Body oder in Blöcken zu 100 IDs; besser eine RPC `my_favorites(p_cursor)`, die Favoriten mit `listing_card` und einem Flag `available` in einer Abfrage liefert und blättert. `removeUnavailableFavorites` serverseitig in einer Anweisung (`delete … where not listing_is_public(...)`).
+
+#### F4 – niedrig – Die eigene Anzeige lässt sich per POST merken
+Die Oberfläche blendet „Merken“ auf eigenen Anzeigen aus (A10). Die Policy `favorites_insert_own` prüft aber nur, ob der Nutzer die Anzeige lesen kann; das trifft für eigene Anzeigen immer zu, auch für Entwürfe. Ein manipuliertes Formular (Server Action ohne JavaScript, `id` umgeschrieben) speichert die eigene Anzeige. Eigene Entwürfe erscheinen danach auf der Favoritenseite als „nicht mehr verfügbar“. Ein Leck entsteht nicht.
+Reproduktion: als Inserent eine fremde Anzeige öffnen, im Formular „Merken“ das Feld `id` auf die eigene Anzeige setzen, absenden → Zeile in `favorites`. pgTAP `28` (2 TODO), E2E `-g "Eigene Anzeige lässt sich"` (`test.fail`).
+Vorschlag: In der Policy zusätzlich `l.owner_id <> auth.uid()` (bzw. `listing_is_public(...)` und nicht eigene), und `addFavorite` meldet das als `failed`.
+
+#### F5 – mittel – Listenkarten laufen bei langen Wörtern über 360 px hinaus
+Ein Titel mit einem gewöhnlichen deutschen Kompositum (z. B. „Rehwildbestandsregulierung“, 26 Zeichen) macht Start-, Kategorie-, Such- und Anbieterseite bei 360 px etwa 400 px breit. Die Karte steht in einem Grid (`ul.grid`), dessen Element die min-content-Breite des längsten Worts annimmt. `break-words` (`overflow-wrap: break-word`) verkleinert diese nicht, `min-w-0` sitzt nur am inneren Flex-Element. Das Detail bricht korrekt um. CLAUDE.md verlangt „Responsive ab 360 px“; Lange Firmennamen in der Anbieterzeile sind ebenso betroffen.
+Reproduktion: Anzeige „QA5 Hochwildrevier Rehwildbestandsregulierung“ freigeben, `/de` bei 360 px Breite → `document.documentElement.scrollWidth` 403. E2E `-g "langem deutschem Kompositum"` (`test.fail`).
+Vorschlag: `min-w-0` auch am `li` bzw. `grid-cols-1`/`minmax(0,1fr)` am `ul`, und `[overflow-wrap:anywhere]` oder `hyphens-auto` (mit `lang`) an Titel und Anbieterzeile. E2E mit einem langen Kompositum in allen vier Sprachen.
+
+#### F6 – niedrig – Leere Kategorie- und Regionsseiten sind `noindex`, haben aber Canonical und hreflang
+`listMetadata` setzt `alternates` immer und bei leeren Seiten zusätzlich `robots: noindex, follow`. Review A7: „hreflang nur zwischen indexierbaren Seiten“, keine widersprüchlichen Signale. Betroffen sind rund 5 Arten × 500 Kreise × 4 Sprachen, sobald ein Crawler sie über Links erreicht (Links gibt es nur auf befüllte Regionen, die Seiten sind aber direkt abrufbar und tauchen über externe Links oder alte Sitemaps auf).
+Reproduktion: `/de/gesellschaftsjagd/wien` (leer) → `<meta name="robots" content="noindex, follow">` und 6 `link rel="canonical|alternate"`. E2E `-g "Leere Regionsseite"` (`test.fail`).
+Vorschlag: Bei leerer Seite `alternates` weglassen. Optional `X-Robots-Tag` auch für leere Seiten (H6).
+
+#### F7 – niedrig – „Auf Anfrage“ mit Währung erscheint im Währungsfilter
+Der Check `price_consistent` erlaubt `currency` bei `price_unit = 'on_request'`. Der Währungsfilter vergleicht nur `currency`, eine solche Anzeige erscheint also bei „CHF“, obwohl der Hinweis neben dem Filter sagt, „ohne Preis und ‚auf Anfrage‘ fallen dann weg“. Das Web speichert `currency = null`; iOS (I3) und direkte API-Aufrufe können die Kombination schreiben.
+Reproduktion: Anzeige mit `price_unit = 'on_request', currency = 'CHF'` aktiv setzen, `search_listings('{"v":1,"currency":"CHF"}')` → enthalten. pgTAP `28` (TODO).
+Vorschlag: Check verschärfen (`on_request` ⇒ `currency is null`, Bestand bereinigen) oder im Filter `price_minor is not null` verlangen, sobald `currency` gesetzt ist; ADR-Tabelle ergänzen.
+
+#### F8 – niedrig – Unbekannte Unterpfade statischer Seiten liefern im Produktions-Build 200 (Soft 404)
+`/de/imprint/x`, `/de/login/x`, `/de/privacy/a/b`, `/de/forbidden/x` ergeben im Produktions-Build **200** mit `noindex`-Meta und der 404-Seite im Stream; im Dev-Server 404. Der Parser liefert für statische Bereiche `static` und überlässt den Rest Next, das unter `cacheComponents` den Status nicht mehr setzt (gleiche Mechanik wie QA M4 F1). Für die öffentlichen Formen aus ADR 015 gilt der 404 korrekt.
+Reproduktion: `curl -s -o /dev/null -w '%{http_code}' http://localhost:3456/de/imprint/x` → 200. E2E `-g "Unterpfade statischer Seiten"` (`test.fail` nur mit `QA_BASE_URL`/CI).
+Vorschlag: Im Proxy für statische Bereiche ohne Unterseiten (`imprint`, `privacy`, `terms`, `login`, `forbidden`, `missing`) überzählige Segmente wie unbekannte Formen behandeln (404 per Rewrite auf `missing`), gepflegt in `sections.ts` mit dem bestehenden Dateisystem-Test.
+
+#### F9 – niedrig – Merken in der Textsuche verliert den Suchtext; der Login-Link trägt ihn im `next`
+`ListingsPage` gibt den aktuellen Pfad inklusive `q` als `back` an die Merken-Schaltfläche. `toggleFavorite` schickt ihn durch `safeNextPath`, das `q` absichtlich entfernt (H10). Nach dem Merken landet der Nutzer auf `/de/suche` ohne Suchtext und mit einer anderen Trefferliste. Ohne Login steht `q` im Link `/de/login?next=/de/suche?q=…` und damit in Browser-Verlauf, Referer und Zugriffslogs (H10: „q nicht in next“); serverseitig wird es zwar entfernt, bevor es in `redirect_to` geht.
+Reproduktion: eingeloggt `/de/suche?q=<Text>` → bei einem Treffer „Merken“ → URL `/de/suche`. E2E `-g "Merken in der Textsuche"` (`test.fail`) und `-g "Merken-Link in der Textsuche"` (dokumentiert den Login-Link).
+Vorschlag: `back` für den Login-Link ohne `q` bauen (wie `safeNextPath`); für die Server Action einen eigenen, nur serverseitig geprüften Rücksprung zulassen, der `q` behält (die Action läuft per POST, `q` landet nicht in Auth-Logs), oder nach dem Merken mit `Referer`-freiem Redirect auf den vollständigen, neu serialisierten Pfad.
+
+#### F10 – mittel – `SITE_INDEXABLE` wirkt nur zur Build-Zeit
+ADR 015 und Review A8 verlangen eine „Server-Variable der Umgebung“. Tatsächlich wird sie beim Build ausgewertet: `X-Robots-Tag: noindex` kommt aus `headers()` in `next.config.ts` (beim Build in das Routes-Manifest geschrieben), und `robots.txt` ist statisch vorgerendert (○ im Build). Ein Build ohne die Variable, gestartet mit `SITE_INDEXABLE=true`, liefert weiter `Disallow: /` und `X-Robots-Tag: noindex`. Umgekehrt bliebe ein mit `true` gebautes Artefakt auf Stage indexierbar. Wird ein Artefakt von Stage nach Prod befördert oder die Variable nur zur Laufzeit gesetzt, ist Prod komplett `noindex` oder Stage indexierbar. CHANGELOG und `.env.example` nennen das nicht.
+Reproduktion: `npm run build` (ohne Variable), `SITE_INDEXABLE=true npx next start -p 3457`, `curl localhost:3457/robots.txt` → `Disallow: /`; `curl -I localhost:3457/de` → `X-Robots-Tag: noindex`.
+Vorschlag: Entweder dokumentieren („Build-Variable, je Umgebung eigener Build“) und in der Cloud-Checkliste verankern, oder zur Laufzeit auswerten: `robots.ts` mit `await connection()` dynamisch machen und den Header im Proxy setzen (der läuft je Anfrage). Test im CI gegen einen Build mit und ohne Variable.
+
+#### F11 – niedrig – Sitemap bis zu etwa einer Stunde veraltet, E2E „Akzeptanz c“ hängt davon ab
+Die Sitemap nutzt das Profil `hours` ohne Cache-Zähler (bewusst, ADR 015). Folgen: Neue Anzeigen fehlen bis zu 1 h, entfernte Anzeigen und Anbieter-URLs gesperrter oder gelöschter Konten (mit `user_id`) stehen bis zu 1 h (ohne Zugriffe bis 1 Tag) darin. Die URLs selbst antworten sofort mit 404/410, ein Leck ist das nicht. `public.spec.ts` „Akzeptanz c“ erwartet die eben angelegte Anzeige in der Sitemap und scheitert gegen jeden Server, dessen Sitemap schon einmal abgerufen wurde (lokal gegen den Produktions-Build reproduziert). In der CI mit frischem Server ist der Test grün.
+Reproduktion: `/sitemap/de.xml` abrufen, Anzeige freigeben, erneut abrufen → fehlt.
+Vorschlag: Den Cache-Zähler auch in den Sitemap-Schlüssel nehmen (eine Abfrage je Sitemap-Aufruf, kostet nichts) und im CHANGELOG die Verzögerung für neue Anzeigen nennen; den E2E auf „nicht enthalten“ für Unveröffentlichtes beschränken oder vorher den Zähler erhöhen.
+
+### Hinweise (keine M5-Fehler)
+- `cacheEpoch()` nutzt bei einem Fehler `-Date.now()` als Schlüssel. Im Dev-Server erscheint dadurch beim Vorrendern von `/[locale]/[section]/[a]` „Next.js encountered the unstable value `Date.now()` while prerendering“. Fällt die DB aus, entsteht je Anfrage ein neuer Cache-Eintrag. Besser: bei Fehler ungecacht lesen statt einen Zufallsschlüssel zu verwenden.
+- Jede öffentliche Seite enthält alle Übersetzungen der App im RSC-Payload (`NextIntlClientProvider` ohne Auswahl, auch Admin-Texte); das Detail-HTML ist rund 93 KB groß. Für Core Web Vitals (SPEC 8) nur die Namespaces der Client-Komponenten übergeben.
+- Prefetch- und RSC-Anfragen umgehen die Statusprüfung (A3, gewollt). Über den Sprachumschalter (`next/link`) kann eine eben pausierte Anzeige deshalb bis zu 5 min per Client-Navigation erscheinen; entfernte nicht (Cache-Zähler).
+- Die 410-Seite hat keinen Sprachumschalter und keinen Footer (eigene HTML des Proxys); Links zu Suche, Impressum und Datenschutz sind vorhanden.
+- Private Anbieterprofile und leere Listen setzen `noindex` nur per Meta, nicht per `X-Robots-Tag` (H6 nennt nur Suche und Status ≠ 200).
+- Die Anmeldung per Mail-Code ließ sich lokal nicht wiederholt testen (`email_sent = 2` je Stunde in `config.toml`); der Rücksprung wurde über den Bestätigungslink mit `redirect_to … next` geprüft.
+
+### Nicht prüfbar
+- Cloud: Statement-Timeout und Rate-Limits, CDN-Verhalten der Foto-Route, Mehr-Instanz-Betrieb (der Cache-Zähler ist lokal mit einer Instanz geprüft).
+- Google-Verhalten (Rich Results, Soft 404, hreflang-Auswahl).
+- iOS (I2), Gleichstand der Filter Web/iOS: Es gibt noch keine App. Der Vertrag (`search_listings`, Fixture) ist vorbereitet; F1, F2 und F7 betreffen iOS ebenso.
+- Muttersprachliche Prüfung cs/pl (URL-Wörter und Texte im Glossar als ungeprüft markiert).
+
+### Neue Tests
+- `supabase/tests/28_qa_m5_abnahme.test.sql` (35, davon 6 TODO). Transaktion mit Rollback.
+  - Ort und PLZ kein Suchkriterium und nicht in der Rückgabe, `listing_places` für anon und Fremde nicht lesbar
+  - Paging bei gleichen Schlüsseln für `newest`, `price_asc`, `price_desc` (bestehen) und `relevance` (TODO F1)
+  - Cursor: gefälschter Hash, Überlauf, ohne UUID, zu lang, Zukunft
+  - Sitemap-Quelle = Suche (anon), `gone` für gesperrte und gelöschte Besitzer, Regionszähler, Admin aal2
+  - Favoriten: fremder Entwurf abgewiesen, eigene Anzeige (TODO F4)
+  - Suchtext mit fünf (besteht) und sechs Wörtern (TODO F2), „auf Anfrage“ mit Währung (TODO F7)
+- `web/lib/qa-m5.test.ts` (49, Vitest): `safeNextPath` mit 15 Umgehungsversuchen, Parser-Rundweg und Fixpunkt von `canonicalPath`, Filter aus feindlichem Query-String, Preis-Minor-Einheiten, JSON-LD mit UGC, Preis-Matrix 4 × 4.
+- `web/e2e/qa-m5.spec.ts` (27). Konten per `service_role` in Node, Löschung in `afterAll`. Gegen den Produktions-Build lauffähig (`QA_BASE_URL`). Bekannte Fehler als `test.fail`.
+  - Datenschutz und UGC: PLZ/Ort/Storage-Pfade, XSS in Titel, Beschreibung und Firmenname, Open Graph absolut
+  - Cache: anonyme Seiten ohne Session-Inhalt; Sperren sofort auch für Anbieterseite, Textsuche und Favoriten
+  - Favoriten: eigene Anzeige (F4), 230 Favoriten (F3), Merken in der Textsuche (F9), eigene Anzeige ohne Merken/Kontakt
+  - Paging mit gleichen Schlüsseln (newest, Preis; Relevanz F1), sechs Wörter (F2)
+  - Statuscodes inkl. 308 für kodierte Pfade, Schrägstrich und `//`, RSC ohne Leck; Unterpfade statischer Seiten (F8)
+  - hreflang/Canonical in vier Sprachen, leere Regionsseite (F6), robots und Sitemaps außerhalb von Prod
+  - ohne JavaScript: Sprachumschalter mit Query, Filterformular; 360 px, Schlüssel und `lang` in vier Sprachen; langes Kompositum (F5); axe auf Kreis, Suche mit Filtern, Detail en/pl, 410; Rücksprung nach dem Login
+
+### Empfehlung
+M5 ist **mit Auflagen abnahmereif**. Die drei Akzeptanzkriterien und die Nutzer-Ergänzung „sofortige Wirkung“ sind auf Dev und im Produktions-Build erfüllt. Sichtbarkeit, Standortschutz, Statuscodes, XSS-Schutz, Rücksprungziele und Cache-Trennung halten allen Proben stand.
+- Vor M6/I2: **F3** (Datenverlust bei Favoriten) und **F1** (Relevanz-Paging, Vertrag für iOS und M8) beheben.
+- Bald: **F2**, **F5**, **F10** (vor dem ersten Prod-Deployment entscheiden und dokumentieren).
+- Bei Gelegenheit: F4, F6, F7, F8, F9, F11.
