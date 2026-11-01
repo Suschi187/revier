@@ -6,7 +6,7 @@ import { PROTECTED_SECTIONS } from "@/lib/auth/paths";
 import { LISTING_KINDS } from "@/lib/validation/listing";
 import { parsePath, publicPath, publicPaths, type PublicRoute } from "./paths";
 import { allRegionRefs, regionByCode, regionFromSlugs } from "./regions";
-import { KIND_WORDS, PAGE_WORDS, STATIC_SECTIONS } from "./sections";
+import { KIND_WORDS, LEAF_SECTIONS, PAGE_WORDS, STATIC_SECTIONS } from "./sections";
 
 const ID = "0f8fad5b-d9cb-469f-a165-70867728950e";
 const ROUTES: PublicRoute[] = [
@@ -65,6 +65,16 @@ describe("Pfad-Parser (ADR 015)", () => {
       .map((entry) => entry.name)
       .sort();
     expect([...STATIC_SECTIONS].sort()).toEqual(dirs);
+  });
+
+  it("LEAF_SECTIONS sind genau die statischen Ordner ohne Unterordner; Unterpfade ergeben 404 (QA M5 F8)", () => {
+    const base = join(__dirname, "..", "..", "app", "[locale]");
+    const leaves = STATIC_SECTIONS.filter((name) => !readdirSync(join(base, name), { withFileTypes: true }).some((e) => e.isDirectory()));
+    expect([...LEAF_SECTIONS].sort()).toEqual([...leaves].sort());
+    expect(parsePath("/de/imprint/x").type).toBe("unknown");
+    expect(parsePath("/de/login/a/b").type).toBe("unknown");
+    expect(parsePath("/de/imprint").type).toBe("static");
+    expect(parsePath("/de/account/listings").type).toBe("static");
   });
 
   it("URL-Wörter kollidieren nicht mit Seiten, Sprachen, geschützten Bereichen oder einander", () => {

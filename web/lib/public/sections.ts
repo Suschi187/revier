@@ -37,5 +37,12 @@ export const STATIC_SECTIONS = [
   "welcome",
 ] as const;
 
+/**
+ * Statische Bereiche ohne Unterseiten (QA M5 F8): Weitere Segmente sind 404. Unter cacheComponents setzt Next den
+ * Status nach dem Streaming-Start nicht mehr, im Produktions-Build käme sonst 200. Ein Vitest gleicht mit dem
+ * Dateisystem ab (Ordner ohne Unterordner).
+ */
+export const LEAF_SECTIONS = ["forbidden", "imprint", "login", "missing", "privacy", "terms", "welcome"] as const;
+
 /** Ziel des Proxy-Rewrites für 404; direkt aufgerufen ergibt es ebenfalls 404. */
 export const STATUS_SECTIONS = ["missing"] as const;

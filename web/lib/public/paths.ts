@@ -1,6 +1,6 @@
 import { routing, type AppLocale } from "@/i18n/routing";
 import { LISTING_KINDS, type ListingKind } from "@/lib/validation/listing";
-import { KIND_WORDS, PAGE_WORDS, STATIC_SECTIONS } from "./sections";
+import { KIND_WORDS, LEAF_SECTIONS, PAGE_WORDS, STATIC_SECTIONS } from "./sections";
 
 // Ein Parser für alle öffentlichen URLs (ADR 015, Review B2): Proxy, Seiten, Sprachumschalter, hreflang,
 // Sitemap und safeNextPath. Rein und ohne Referenzdaten, damit er auch im Browser läuft; ob ein Regions-Slug
@@ -48,7 +48,9 @@ export function parsePath(pathname: string): ParsedPath {
   const locale = first;
   if (segments.length === 1) return { type: "public", locale, page: { route: "home" } };
   if (!second) return { type: "unknown", locale };
-  if ((STATIC_SECTIONS as readonly string[]).includes(second)) return { type: "static", locale };
+  if ((STATIC_SECTIONS as readonly string[]).includes(second)) {
+    return rest.length > 0 && (LEAF_SECTIONS as readonly string[]).includes(second) ? { type: "unknown", locale } : { type: "static", locale };
+  }
   if (rest.some((segment) => !SLUG_RE.test(segment))) return { type: "unknown", locale };
 
   const kind = kindFromWord(second, locale);
