@@ -1,6 +1,6 @@
 # ADR 015: Öffentliche Seiten und Suche
 
-Status: angenommen (M5, Plan `docs/plans/M5-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-10-31)
+Status: angenommen und umgesetzt (M5, Plan `docs/plans/M5-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-10-31; Umsetzung 2026-11-01, CHANGELOG M5)
 
 ## Kontext
 SPEC 4.2/6 M5: Startseite, Kategorie- und Regionsseiten, Volltextsuche mit Filtern, Anzeigen-Detail, Anbieterprofil, Favoriten, SEO. Nicht freigegebene Anzeigen sind weder abrufbar noch indexierbar. Die Suche gilt später unverändert für Suchaufträge (M8) und iOS (I2). Nutzer-Entscheidungen 2026-10-31: URL-Wörter je Sprache, Regionsseiten für Bundesland und Kreis, Anbieterprofil in M5, sofortige Wirkung von Entfernen, Sperren und Löschen.

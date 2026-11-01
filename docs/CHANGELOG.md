@@ -2,6 +2,78 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M5 Öffentliche Seiten, Suche, Detail (Web) – 2026-11-01
+
+Plan `docs/plans/M5-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 015, SPEC v0.7.
+
+### Geändert
+- **Migrationen:**
+  - `publication_fields`: `published_at` (erste Freigabe, nie zurückgesetzt) und `approved_at` (jede Freigabe), Trigger auf allen Pfaden, Check „aktiv nur mit published_at“, Backfill, nicht im Inhalts-Hash. Bundesland-Slugs global eindeutig, Kreis-Slugs je Bundesland. Favoriten höchstens 500 je Konto (Advisory-Lock, `23514`).
+  - `search_listings`: eine Sichtbarkeitsdefinition `private.listing_is_public` für Policy, `public_profiles` und alle RPCs (Review B1). `search_listings` mit Filterformat v1, Fehler `22023` mit dem Schlüssel als `hint`, Keyset-Cursor an Filter und Sortierung gebunden, Gesamtzahl bis 1000. `listing_region_counts` für Regionslinks.
+  - `public_page_state`: Zustand `public`, `gone` oder `null` (nie „entfernt“), `provider_listings`. Cache-Zähler `public_cache_epoch`, den Trigger bei Entfernen, Sperren und Konto-Löschung auf allen Pfaden erhöhen.
+- **Web:**
+  - Pfad-Parser `lib/public/paths.ts` mit URL-Wörtern je Sprache. Ihn nutzen Proxy, Seiten, Sprachumschalter, hreflang, Sitemap und `safeNextPath`. Regions-Slugs kommen aus `lib/public/reference-data.json` (`npm run gen:reference`, Abgleich per Integrationstest).
+  - Proxy:
+    - 308 auf die kanonische Form für alle Pfade, 404 für unbekannte Formen.
+    - Für Detail und Anbieter ungecacht 404 bzw. 410, nur bei Dokumentanfragen, fail-open. Die 410-Seite liefert der Proxy selbst, weil Next den Status eines Rewrites sonst nicht übernimmt.
+    - `X-Robots-Tag: noindex, follow` für Suche und Listen mit Query.
+  - Seiten:
+    - Startseite (Suchfeld, Kategorien, Länder, neueste Anzeigen)
+    - Kategorie, Bundesland, Kreis und Suche mit allen Filtern aus SPEC 4.3 als GET-Formular
+    - Anzeigen-Detail (Galerie, Eckdaten, Anbieterbadge, Kontakt nur nach Login)
+    - Anbieterprofil (Privatpersonen `noindex`)
+    - Favoriten (`/account/favorites`)
+    - Alle ohne Suspense, damit sie ohne JavaScript vollständig im HTML stehen.
+  - Öffentliche Daten nur über den Anon-Client mit festen Spalten (Test `public-boundary`). Cache-Profil `publicListings` (5 min), Tags in den Actions, Cache-Zähler in jedem Cache-Schlüssel.
+  - Foto-Route `/api/photos/{id}/{thumb|full}`: Der Bucket bleibt privat, jeder Abruf prüft die Sichtbarkeit (`no-cache` + ETag, 304).
+  - Merken nur per POST, ohne Login zum Login mit Rücksprung; nicht mehr verfügbare Favoriten lassen sich gesammelt entfernen.
+  - SEO: Canonical und hreflang mit übersetzten Pfaden; JSON-LD `BreadcrumbList` und auf der Startseite `WebSite`, maskiert über `jsonLdString`. Sitemaps je Sprache unter `/sitemap/{locale}.xml`, zur Anfrage erzeugt. `robots.txt` und `X-Robots-Tag: noindex` außer Prod (`SITE_INDEXABLE=true`).
+- **Neue Abhängigkeit (nur dev):** `@axe-core/playwright` 4.14.0, für die automatische WCAG-Prüfung laut Review A12.
+- **Doku:** ADR 015, ADR 003 (Slugs, Matcher), SPEC v0.7 (`published_at`/`approved_at`, Sichtbarkeit, Anbieterprofil, zwei Rechtsfragen in 7.2), Glossar (URL-Wörter, Begriffe).
+- **Tests:**
+  - pgTAP `25_publication_fields`, `26_search_listings` (dieselbe Menge für anon, Besitzer, Admin, gesperrten Besitzer und `service_role`), `27_public_page_state`
+  - Integration `search.test.ts` (Filter-Fixture gegen die RPC) und `reference-data.test.ts`
+  - Vitest für Parser, Filter (gleiche Fixture wie die DB), `safeNextPath`, JSON-LD, robots und 410-Seite
+  - E2E `public.spec.ts`
+
+### Testen
+- `supabase db reset && supabase test db` (641), danach E2E und ohne Reset noch einmal `supabase test db`: grün, keine `@test.local`-Konten übrig
+- `cd web && npm test` (345), `npm run test:integration` (160), `npm run test:e2e` (52)
+- Manuell:
+  1. Eine Anzeige freigeben (M4). Danach erscheint sie unter `/de`, `/de/jagdpacht` und `/de/jagdpacht/bayern/…` und in der Suche.
+  2. `curl -I /de/anzeige/<id>` gibt 200. Nach `update listings set status='paused'` gibt es 410. Ein Entwurf gibt 404.
+  3. Sprachumschalter auf `/de/jagdpacht/bayern` führt zu `/en/hunting-lease/bayern`.
+  4. `/sitemap/de.xml` und `/robots.txt` lesen (lokal `Disallow: /`).
+
+### Messung (Review A2)
+10.000 synthetische Anzeigen (200 Konten), als anon, lokal, Transaktion mit Rollback:
+
+| Fall | Laufzeit `search_listings` |
+|---|---|
+| neueste | 39 ms |
+| Art und Land | 140 ms |
+| Bundesland | 38 ms |
+| Volltext | 86 ms |
+| Preis mit Währung | 47 ms |
+| Wildart | 158 ms |
+
+Die Hauptabfrage nutzt `listings_published_idx` (1–2 ms). Den Rest kosten die Gesamtzahl bis 1001 Zeilen (mit `is_active_user` je Zeile) und die Karten. Das liegt unter 1 s (SPEC 8). Bei mehr Daten zuerst die Zählung prüfen.
+
+### Akzeptanz (SPEC 6 M5)
+- [x] Filtern nach Land, Region, Art und Preis liefert korrekte Ergebnisse (pgTAP `26`, E2E „Akzeptanz a“)
+- [x] Preise in Originalwährung mit passender Locale, ohne Umrechnung (E2E „Akzeptanz b“ gegen `Intl` derselben Laufzeit, de/en/cs/pl × EUR/CZK)
+- [x] Nicht freigegebene Anzeigen sind weder abrufbar (404, auch für den eingeloggten Besitzer) noch indexierbar (`noindex`, nicht in Sitemap und Suche), E2E „Akzeptanz c“
+- [x] Nutzer-Ergänzung: Entfernen, Sperren und Konto-Löschung wirken sofort in Listen, Detail und Fotos (E2E „Sofortige Wirkung“), normale Änderungen nach höchstens 5 Minuten
+
+### Bekannte Lücken
+- **iOS (I2):** nutzt `search_listings`, `provider_listings` und `public_page_state` unverändert und lädt Fotos über die Storage-API mit Anon-Key; noch nicht umgesetzt.
+- Karte (M6), Kontakt per Chat (M7; der Button weist bis dahin darauf hin), Suchaufträge (M8, übernehmen Filter v1), Melden (M9), statische Seiten „Über uns“, „So funktioniert es“, FAQ, Richtlinien (M9/M10).
+- Neue und bearbeitete Anzeigen erscheinen in gecachten Listen nach bis zu 5 Minuten (ADR 015). Auf mehreren Instanzen beschleunigen die Tags nur die eigene; die Garantie geben Cache-Dauer und Cache-Zähler.
+- Pausierte Anzeigen antworten mit 410 und werden nach dem Fortsetzen langsamer neu indexiert (ADR 015).
+- Volltext ohne Zerlegung von Komposita und ohne Diakritika-Faltung für cs/pl (ADR 015).
+- URL-Wörter in cs/pl sind ungeprüft (Glossar). Rechtsfragen zu Anbieterangaben (DSA) und Begründung per E-Mail stehen in SPEC 7.2.
+- Cloud-Checkliste (M10): Statement-Timeout für `anon`, Rate-Limit oder WAF für Suche und Foto-Route, `SITE_INDEXABLE=true` nur in Prod.
+
 ## Nachtrag M4: QA-Funde F1–F6 – 2026-10-30
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M4 – Abnahme“.
