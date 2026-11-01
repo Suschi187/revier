@@ -18,25 +18,33 @@ if (!email || !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
 
 const repoRoot = path.resolve(import.meta.dirname, "..", "..");
 
-function query(sql) {
-  const out = execFileSync("supabase", ["db", "query", "--local", sql], {
+/**
+ * `-o json` erzwingt JSON: Ohne die Option gibt die CLI im Terminal eine Tabelle aus (nur in Agent-Umgebungen
+ * JSON). Die Ausgabe ist ein Array oder ein Objekt mit `rows`; insert und delete geben nichts aus.
+ */
+function query(sql, { expectRows = false } = {}) {
+  const out = execFileSync("supabase", ["db", "query", "--local", "-o", "json", sql], {
     cwd: repoRoot,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
     timeout: 30_000,
   });
-  // Nur Abfragen liefern JSON; insert und delete geben nichts aus.
-  const start = out.indexOf("{");
-  return start < 0 ? [] : (JSON.parse(out.slice(start)).rows ?? []);
+  const start = out.search(/[[{]/);
+  if (start < 0) {
+    if (expectRows) throw new Error(`Unerwartete Ausgabe der Supabase-CLI:\n${out}`);
+    return [];
+  }
+  const parsed = JSON.parse(out.slice(start));
+  return Array.isArray(parsed) ? parsed : (parsed.rows ?? []);
 }
 
 let rows;
 try {
   rows = query(`select u.id::text as id, (r.user_id is not null) as admin
                 from auth.users u left join private.user_roles r on r.user_id = u.id and r.role = 'admin'
-                where lower(u.email) = '${email}'`);
+                where lower(u.email) = '${email}'`, { expectRows: true });
 } catch (error) {
-  console.error("Lokale Supabase nicht erreichbar. Im Repo-Root `supabase start` ausführen.");
+  console.error("Abfrage fehlgeschlagen. Läuft die lokale Supabase (`supabase start` im Repo-Root)?");
   console.error(String(error.stderr ?? error.message).trim());
   process.exit(1);
 }
