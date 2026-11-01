@@ -346,7 +346,10 @@
       "price_tooLarge": "Der Betrag ist zu groß.",
       "price_conflict": "Du hast einen Betrag eingetragen. Wähle „Betrag angeben“ oder leere das Feld „Betrag“.",
       "dates": "Das Ende liegt vor dem Beginn.",
-      "form": "Bitte prüfe deine Angaben."
+      "form": "Bitte prüfe deine Angaben.",
+      "place_point_small_district": "In diesem Kreis ist kein Kartenpunkt möglich: Er ist so klein, dass der Punkt die Lage zu genau verraten würde. Die Karte zeigt den Kreismittelpunkt.",
+      "place_point_too_far": "Der Punkt liegt nicht im gewählten Landkreis.",
+      "place_point_invalid": "Der Punkt ist ungültig. Bitte erneut auf der Karte setzen."
     },
     "preview": {
       "privateBadge": "nur für dich und die Moderation",

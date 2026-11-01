@@ -42,6 +42,7 @@ const KNOWN_CODES = new Set([
   "attributes.spots_available", "attributes.tasks", "species", "photos.unprocessed", "attributes.unknown",
   "title", "district", "postal_format", "area_invalid", "dates", "price_required", "price_invalid", "price_negative",
   "price_tooManyDecimals", "price_zero", "price_tooLarge", "price_conflict",
+  "place.point.small_district", "place.point.too_far", "place.point.invalid",
 ]);
 
 /** Feldcode als Schlüssel für die Message-Dateien (next-intl verschachtelt an Punkten). */
@@ -66,6 +67,7 @@ export function fieldIdOf(code: string): string {
   if (code === "district") return "f-district";
   if (code.startsWith("place.postal_code") || code === "postal_format") return "f-postal";
   if (code === "place.place_name.required") return "f-place";
+  if (code.startsWith("place.point.")) return "f-point";
   if (code === "description.length") return "f-description";
   if (code === "area_hectares" || code === "area_invalid") return "f-area";
   if (code === "species") return "f-species";

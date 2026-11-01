@@ -19,22 +19,22 @@ select tests.create_user('ml-owner@test.local') as o \gset
 select tests.create_user('ml-blocked@test.local') as b \gset
 select tests.create_user('ml-admin@test.local') as adm \gset
 select tests.make_admin(:'adm');
-select id as dd from regions where code = 'DE-14612' \gset
+select id as dd from regions where code = 'DE-14628' \gset
 select id as muc from regions where code = 'DE-09162' \gset
 select id as kb from regions where code = 'AT-704' \gset
 
 insert into listings (owner_id, kind, direction, title, content_language, region_id, status, expires_at, price_minor, currency, price_unit) values
-  (:'o', 'lease', 'offer', 'ML Dresden', 'de', :'dd', 'active', now() + interval '30 days', 500000, 'EUR', 'per_year'),
+  (:'o', 'lease', 'offer', 'ML Pirna', 'de', :'dd', 'active', now() + interval '30 days', 500000, 'EUR', 'per_year'),
   (:'o', 'permit', 'offer', 'ML München', 'de', :'muc', 'active', now() + interval '30 days', null, null, null),
   (:'o', 'lease', 'wanted', 'ML Kitzbühel', 'de', :'kb', 'active', now() + interval '30 days', null, null, null),
   (:'o', 'lease', 'offer', 'ML Entwurf', 'de', :'dd', 'draft', null, null, null, null),
   (:'o', 'lease', 'offer', 'ML Abgelaufen', 'de', :'dd', 'active', now() - interval '1 day', null, null, null),
   (:'b', 'lease', 'offer', 'ML Gesperrt', 'de', :'dd', 'active', now() + interval '30 days', null, null, null);
 update profiles set is_blocked = true where user_id = :'b';
-select id as l_dd from listings where title = 'ML Dresden' \gset
+select id as l_dd from listings where title = 'ML Pirna' \gset
 
 \set wide '{"v":1,"bbox":[5.8,45.0,17.2,55.1]}'
-select array(select id from listings where title in ('ML Dresden', 'ML München', 'ML Kitzbühel') order by id) as public_ids \gset
+select array(select id from listings where title in ('ML Pirna', 'ML München', 'ML Kitzbühel') order by id) as public_ids \gset
 
 -- Dieselbe Menge für alle Rollen (B1 aus M5)
 select tests.as_anon();
@@ -74,7 +74,7 @@ select ok((select bool_and(e ->> 'approx' = 'district'
                   and (e ->> 'lat')::float8 = extensions.st_y(r.centroid::extensions.geometry))
            from jsonb_array_elements(map_listings(:'wide') -> 'points') e join regions r on r.code = e ->> 'district_code'),
   'Ohne Punkt: genau der Kreismittelpunkt, approx district');
-select is((select e -> 'approx' from jsonb_array_elements(search_listings('{"v":1,"q":"ML Dresden"}') -> 'items') e), '"district"'::jsonb,
+select is((select e -> 'approx' from jsonb_array_elements(search_listings('{"v":1,"q":"ML Pirna"}') -> 'items') e), '"district"'::jsonb,
   'Trefferkarte der Suche trägt approx und point');
 
 -- Limit 2000 und truncated

@@ -346,7 +346,10 @@
       "price_tooLarge": "The amount is too large.",
       "price_conflict": "You entered an amount. Choose “Enter an amount” or clear the amount field.",
       "dates": "The end lies before the start.",
-      "form": "Please check your entries."
+      "form": "Please check your entries.",
+      "place_point_small_district": "No map point is possible in this district: it is so small that the point would reveal the location too precisely. The map shows the district centre.",
+      "place_point_too_far": "The point is not in the selected district.",
+      "place_point_invalid": "The point is invalid. Please set it again on the map."
     },
     "preview": {
       "privateBadge": "only for you and the moderation team",

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { routing } from "@/i18n/routing";
 import { isAppLocale } from "@/lib/auth/paths";
 import { attributesFromForm, isWizardStep, nextStep, parseHectares, PRICE_UNITS, TYPE_LOCKED, type WizardStep } from "@/lib/listing-wizard";
+import { pointFromForm } from "@/lib/location-point";
 import { requireOnboardedUser } from "@/lib/services/gate";
 import { invalidatePublicListing } from "@/lib/services/public-cache";
 import {
@@ -85,7 +86,10 @@ export async function saveListingStep(form: FormData): Promise<void> {
         const codes = await listPostalCodes(regionId);
         if (!codes.some((c) => c.code === postalCode)) back(["place.postal_code.region_mismatch"]);
       }
-      return handle(await setLocation(id, regionId, postalCode, placeName));
+      // Punkt nur im POST-Body, Fehler nur als Feldcode in der URL, nie Koordinaten (ADR 016, A7).
+      const point = pointFromForm(form);
+      if (!point) back(["place.point.invalid"]);
+      return handle(await setLocation(id, regionId, postalCode, placeName, point));
     }
     case "details": {
       const description = text(form, "description");

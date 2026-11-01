@@ -692,7 +692,7 @@ isOneToOne: false
 { Args: { "p_cursor"?: string,"p_filters": Json,"p_limit"?: number }; Returns: Json
                            },
 "set_listing_location":
-{ Args: { "p_listing_id": string,"p_place_name"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined
+{ Args: { "p_lat"?: number,"p_listing_id": string,"p_lng"?: number,"p_place_name"?: string,"p_point"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined
                            }
           }
           Enums: {

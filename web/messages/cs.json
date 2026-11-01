@@ -346,7 +346,10 @@
       "price_tooLarge": "Částka je příliš vysoká.",
       "price_conflict": "Zadali jste částku. Zvolte „Uvést částku“ nebo pole „Částka“ vymažte.",
       "dates": "Konec je před začátkem.",
-      "form": "Zkontrolujte prosím své údaje."
+      "form": "Zkontrolujte prosím své údaje.",
+      "place_point_small_district": "V tomto okrese není bod na mapě možný: je tak malý, že by bod prozradil polohu příliš přesně. Mapa zobrazuje střed okresu.",
+      "place_point_too_far": "Bod neleží ve zvoleném okrese.",
+      "place_point_invalid": "Bod je neplatný. Nastavte ho prosím znovu na mapě."
     },
     "preview": {
       "privateBadge": "jen pro vás a moderaci",

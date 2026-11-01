@@ -203,13 +203,24 @@ export async function updateListing(id: string, patch: ListingPatch): Promise<Re
 }
 
 /** Kreis und Ort in einem Schritt (RPC, ADR 012). */
-export async function setLocation(id: string, regionId: string, postalCode: string | null, placeName: string | null): Promise<Result> {
+/** Punkt im Schritt „Ort“ (ADR 016, Review B3): nur nach einer Aktion des Nutzers setzen oder entfernen. */
+export type PointInput = { mode: "keep" } | { mode: "clear" } | { mode: "set"; lat: number; lng: number };
+
+export async function setLocation(
+  id: string,
+  regionId: string,
+  postalCode: string | null,
+  placeName: string | null,
+  point: PointInput = { mode: "keep" },
+): Promise<Result> {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.rpc("set_listing_location", {
     p_listing_id: id,
     p_region_id: regionId,
     p_postal_code: postalCode ?? undefined,
     p_place_name: placeName ?? undefined,
+    p_point: point.mode,
+    ...(point.mode === "set" ? { p_lat: point.lat, p_lng: point.lng } : {}),
   });
   if (error) return fail(error);
   return { ok: true, value: undefined };

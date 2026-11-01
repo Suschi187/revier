@@ -9,10 +9,10 @@ set constraints all immediate;
 select tests.create_user('mp-owner@test.local') as o \gset
 select tests.create_user('mp-admin@test.local') as adm \gset
 select tests.make_admin(:'adm');
-select id as dd, centroid::extensions.geometry as dd_c from regions where code = 'DE-14612' \gset
+select id as dd, centroid::extensions.geometry as dd_c from regions where code = 'DE-14628' \gset
 select id as muc, centroid::extensions.geometry as muc_c from regions where code = 'DE-09162' \gset
--- Eingabepunkt 2 km nördlich vom Mittelpunkt Dresdens
-select extensions.st_project(centroid, 2000, 0)::extensions.geometry as raw from regions where code = 'DE-14612' \gset
+-- Eingabepunkt 2 km nördlich vom Mittelpunkt des Kreises Sächsische Schweiz-Osterzgebirge (Dresden selbst ist unter 400 km²)
+select extensions.st_project(centroid, 2000, 0)::extensions.geometry as raw from regions where code = 'DE-14628' \gset
 
 -- Fläche je Region
 select is((select count(*)::int from regions where area_km2 is null or area_km2 <= 0), 0, 'Alle Regionen haben eine Fläche');
@@ -73,14 +73,14 @@ select is(private.search_filters_error('{"v":1,"bbox":[13,51,"14",52]}'), 'bbox'
 
 -- Suche mit bbox: map_point im Rechteck, ohne Punkt der Kreismittelpunkt
 insert into listings (owner_id, kind, direction, title, content_language, region_id, status, expires_at) values
-  (:'o', 'helper', 'wanted', 'Bereich Dresden', 'de', :'dd', 'active', now() + interval '30 days'),
+  (:'o', 'helper', 'wanted', 'Bereich Pirna', 'de', :'dd', 'active', now() + interval '30 days'),
   (:'o', 'helper', 'wanted', 'Bereich München', 'de', :'muc', 'active', now() + interval '30 days');
 select tests.as_anon();
 select is(array(select e ->> 'title' from jsonb_array_elements(search_listings(
     jsonb_build_object('v', 1, 'bbox', jsonb_build_array(
       extensions.st_x(:'dd_c'::extensions.geometry) - 0.1, extensions.st_y(:'dd_c'::extensions.geometry) - 0.1,
       extensions.st_x(:'dd_c'::extensions.geometry) + 0.1, extensions.st_y(:'dd_c'::extensions.geometry) + 0.1))) -> 'items') e),
-  '{Bereich Dresden}'::text[], 'Suche mit bbox um Dresden findet nur Dresden');
+  '{Bereich Pirna}'::text[], 'Suche mit bbox um den Kreismittelpunkt findet nur diese Anzeige');
 select is(jsonb_array_length(search_listings('{"v":1,"bbox":[0,0,1,1]}') -> 'items'), 0, 'bbox ohne Anzeigen: leer');
 
 select * from finish();

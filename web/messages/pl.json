@@ -346,7 +346,10 @@
       "price_tooLarge": "Kwota jest zbyt wysoka.",
       "price_conflict": "Wpisano kwotę. Wybierz „Podaj kwotę” lub wyczyść pole „Kwota”.",
       "dates": "Koniec jest przed początkiem.",
-      "form": "Sprawdź wprowadzone dane."
+      "form": "Sprawdź wprowadzone dane.",
+      "place_point_small_district": "W tym powiecie punkt na mapie nie jest możliwy: jest tak mały, że punkt zdradziłby lokalizację zbyt dokładnie. Mapa pokazuje środek powiatu.",
+      "place_point_too_far": "Punkt nie leży w wybranym powiecie.",
+      "place_point_invalid": "Punkt jest nieprawidłowy. Ustaw go ponownie na mapie."
     },
     "preview": {
       "privateBadge": "tylko dla Ciebie i moderacji",

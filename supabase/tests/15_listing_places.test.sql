@@ -31,7 +31,7 @@ select ok(not has_table_privilege('authenticated', 'public.listing_places', 'del
 select ok(not has_column_privilege('authenticated', 'public.listings', 'postal_prefix', 'update')
   and not has_column_privilege('authenticated', 'public.listings', 'postal_prefix', 'insert'),
   'postal_prefix ist für Nutzer nicht schreibbar');
-select ok(not has_function_privilege('anon', 'public.set_listing_location(uuid, uuid, text, text)', 'execute'),
+select ok(not has_function_privilege('anon', 'public.set_listing_location(uuid, uuid, text, text, text, double precision, double precision)', 'execute'),
   'anon ruft set_listing_location nicht auf');
 
 -- Besitzer setzt Ort per RPC; der Server leitet das Präfix ab.

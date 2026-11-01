@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { fixture, SKIPPED } from "./context";
 import { anonClient, rest, serviceClient, userClient } from "./helpers";
 
@@ -39,9 +39,18 @@ describe.skipIf(!f)("Standort: Verfremdung über PostgREST", () => {
   const fx = f ?? SKIPPED;
   const { a, b, c } = fx.users;
   const created: string[] = [];
-  // Dresden (DE-14612), fern vom Centroid genug für eine eindeutige Zelle, nah genug für die Plausibilität.
+  // Punkte bei Dresden im Kreis Sächsische Schweiz-Osterzgebirge (DE-14628, 1654 km²): Dresden selbst liegt unter
+  // 400 km² und erlaubt keinen Punkt (ADR 016). Nah genug am Centroid für die Plausibilität (80 km).
   const p1: Point = { lon: 13.7012, lat: 51.0313 };
   const p2: Point = { lon: 13.7451, lat: 51.0572 };
+  let district = "";
+  let otherDistrict = "";
+
+  beforeAll(async () => {
+    const regions = await anonClient(fx).from("regions").select("id, code").in("code", ["DE-14628", "DE-14627"]);
+    district = regions.data?.find((r) => r.code === "DE-14628")?.id ?? "";
+    otherDistrict = regions.data?.find((r) => r.code === "DE-14627")?.id ?? "";
+  });
 
   afterAll(async () => {
     if (created.length) await serviceClient(fx).from("listings").delete().in("id", created);
@@ -50,7 +59,7 @@ describe.skipIf(!f)("Standort: Verfremdung über PostgREST", () => {
   async function insert(user: typeof a, point: Point | null, title: string) {
     const res = await userClient(fx, user)
       .from("listings")
-      .insert({ kind: "lease", direction: "offer", title, content_language: "de", region_id: fx.ids.district, display_location: point ? ewkt(point) : null })
+      .insert({ kind: "lease", direction: "offer", title, content_language: "de", region_id: district, display_location: point ? ewkt(point) : null })
       .select("id, display_location")
       .single<{ id: string; display_location: unknown }>();
     expect(res.error).toBeNull();
@@ -117,7 +126,7 @@ describe.skipIf(!f)("Standort: Verfremdung über PostgREST", () => {
   it("Unplausibler Punkt → 23514, Meldung ohne Koordinaten; andere Geometrien werden abgelehnt", async () => {
     const far = await userClient(fx, a)
       .from("listings")
-      .insert({ kind: "lease", direction: "offer", title: "QA weit weg", content_language: "de", region_id: fx.ids.district, display_location: "SRID=4326;POINT(11.123456 48.654321)" })
+      .insert({ kind: "lease", direction: "offer", title: "QA weit weg", content_language: "de", region_id: district, display_location: "SRID=4326;POINT(11.123456 48.654321)" })
       .select("id");
     expect(far.error?.code).toBe("23514");
     const text = JSON.stringify(far.error);
@@ -125,18 +134,27 @@ describe.skipIf(!f)("Standort: Verfremdung über PostgREST", () => {
 
     const line = await userClient(fx, a)
       .from("listings")
-      .insert({ kind: "lease", direction: "offer", title: "QA Linie", content_language: "de", region_id: fx.ids.district, display_location: "SRID=4326;LINESTRING(13.70 51.03, 13.71 51.04)" })
+      .insert({ kind: "lease", direction: "offer", title: "QA Linie", content_language: "de", region_id: district, display_location: "SRID=4326;LINESTRING(13.70 51.03, 13.71 51.04)" })
       .select("id");
     expect(line.error).not.toBeNull();
     expect(JSON.stringify(line.error)).not.toMatch(/13\.70|51\.03/);
   });
 
   it("Kreiswechsel mit zurückgeschicktem gelesenem Punkt entfernt den Punkt (keine zweite Stichprobe)", async () => {
-    const { data: other } = await anonClient(fx).from("regions").select("id").eq("code", "DE-14628").single<{ id: string }>();
     const row = await insert(a, p1, "QA Kreiswechsel");
-    const res = await userClient(fx, a).from("listings").update({ region_id: other!.id, display_location: row.display_location }).eq("id", row.id);
+    const res = await userClient(fx, a).from("listings").update({ region_id: otherDistrict, display_location: row.display_location }).eq("id", row.id);
     expect(res.error).toBeNull();
     expect(await read(row.id)).toBeNull();
+  });
+
+  it("Kreis unter 400 km² (Dresden): kein Punkt, Feldcode ohne Koordinaten (ADR 016)", async () => {
+    const res = await userClient(fx, a)
+      .from("listings")
+      .insert({ kind: "lease", direction: "offer", title: "QA kleiner Kreis", content_language: "de", region_id: fx.ids.district, display_location: ewkt(p1) })
+      .select("id");
+    expect(res.error?.code).toBe("23514");
+    expect(res.error?.hint).toBe('{"fields":["place.point.small_district"]}');
+    expect(JSON.stringify(res.error)).not.toMatch(/13\.70|51\.03/);
   });
 
   it("Ableitung und Secret sind über die API nicht erreichbar", async () => {
