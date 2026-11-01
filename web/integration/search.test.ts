@@ -71,3 +71,38 @@ describe.skipIf(!f)("Suche, Zustand und Anbieter über PostgREST", () => {
     expect(typeof data).toBe("number");
   });
 });
+
+describe.skipIf(!f)("Karte: map_listings wie die Suche (ADR 016)", () => {
+  const fx = f ?? SKIPPED;
+  const WIDE = [5.8, 45.0, 17.2, 55.1];
+
+  it.each(fixtures.cases.filter((c) => c.error === null && !("sort" in c.filters)))("$name: gleiche Anzeigen", async (c) => {
+    const anon = anonClient(fx);
+    const filters = { ...c.filters, bbox: (c.filters as { bbox?: number[] }).bbox ?? WIDE };
+    const map = await anon.rpc("map_listings", { p_filters: filters });
+    expect(map.error).toBeNull();
+    const mapIds = (map.data as { points: { id: string }[] }).points.map((p) => p.id).sort();
+    const searchIds: string[] = [];
+    let cursor: string | undefined;
+    do {
+      const page = await anon.rpc("search_listings", { p_filters: filters, p_cursor: cursor, p_limit: 50 });
+      expect(page.error).toBeNull();
+      const data = page.data as { items: { id: string }[]; next_cursor: string | null };
+      searchIds.push(...data.items.map((i) => i.id));
+      cursor = data.next_cursor ?? undefined;
+    } while (cursor);
+    expect(mapIds).toEqual(searchIds.sort());
+  });
+
+  it("Kartenpunkte ohne owner_id, PLZ und Präfix; bbox ist Pflicht", async () => {
+    const anon = anonClient(fx);
+    const { data } = await anon.rpc("map_listings", { p_filters: { v: 1, bbox: WIDE } });
+    for (const point of (data as { points: Record<string, unknown>[] }).points) {
+      expect(Object.keys(point).sort()).toEqual(
+        ["approx", "currency", "direction", "district_code", "id", "kind", "lat", "lng", "price_minor", "price_unit", "title"],
+      );
+    }
+    const missing = await anon.rpc("map_listings", { p_filters: { v: 1 } });
+    expect(missing.error?.hint).toBe("bbox");
+  });
+});

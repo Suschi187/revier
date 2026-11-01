@@ -52,6 +52,9 @@ const cardSchema = z.object({
   end_date: z.string().nullable(),
   event_date: z.string().nullable(),
   published_at: z.string(),
+  /** Verfremdeter Punkt oder Kreismittelpunkt (ADR 016), genau wie gespeichert. */
+  point: z.object({ lng: z.number(), lat: z.number() }),
+  approx: z.enum(["point", "district"]),
   photo: z
     .object({ id: z.uuid(), width: z.number().int().nullable(), height: z.number().int().nullable(), alt_text: z.string().nullable() })
     .nullable(),

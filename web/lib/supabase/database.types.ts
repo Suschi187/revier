@@ -658,6 +658,9 @@ isOneToOne: false
               "level": Database["public"]['Enums']["region_level"],"listings": number,"region_code": string
             }[]
                            },
+"map_listings":
+{ Args: { "p_filters": Json }; Returns: Json
+                           },
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
                            },
