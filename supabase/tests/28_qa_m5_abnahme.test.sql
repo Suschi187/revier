@@ -8,7 +8,7 @@ select plan(36);
 -- - Paging ohne Doppelte und Lücken bei gleichen Sortierschlüsseln (newest, price_asc, relevance)
 -- - Cursor-Manipulation (gefälschter Hash, Überlauf, Länge)
 -- - Sichtbarkeit: Sitemap-Quelle (anon auf listings) = Suche; Zustand gone für gesperrte und gelöschte Besitzer
--- - Favoriten: fremde Entwürfe nicht merkbar; eigene Anzeige merkbar (F4)
+-- - Favoriten: fremde Entwürfe und eigene Anzeigen nicht merkbar (F4)
 -- - Relevanz-Paging (F1), Such-Text mit sechs Wörtern (F2), „auf Anfrage“ mit Währung (F7)
 set constraints all immediate;
 
@@ -126,7 +126,7 @@ select is((select count(distinct x)::int from unnest(tests.qa5_all_pages(
   '{"v":1,"q":"Gleichstand Keiler","currency":"PLN","price_unit":"per_animal","sort":"price_desc"}', 1)) x), 5,
   'price_desc mit gleichem Preis: alle fünf, keine Doppelten');
 -- Der Rang steht als float8-Text im Cursor; mit extra_float_digits = 0 (Supabase-Standard, auch über PostgREST)
--- wird er auf 15 Stellen gerundet und ist nicht mehr verlustfrei. Die nächste Seite beginnt wieder beim selben Treffer.
+-- würde er gerundet, und die nächste Seite begänne wieder beim selben Treffer (F1, behoben per Funktionsattribut).
 select is(tests.qa5_all_pages('{"v":1,"q":"Gleichstand Keiler","sort":"relevance"}', 2),
   tests.qa5_all_pages('{"v":1,"q":"Gleichstand Keiler","sort":"relevance"}', 50),
   'relevance mit gleichem Rang: seitenweise wie am Stück');
@@ -186,15 +186,15 @@ select throws_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'
 select throws_ok(format($$ insert into favorites (listing_id) values (%L) $$, :'l_draft'), '42501', null, 'Eigener Entwurf nicht merkbar');
 
 -- ---------------------------------------------------------------------------
--- Suchtext: ein natürlicher Suchtext mit sechs Wörtern ergibt 22023 (numnode über drei Konfigurationen > 32)
+-- Suchtext: sechs Wörter überschritten früher numnode 32 des verknüpften tsquery (F2, Grenze jetzt je Sprachfassung)
 -- ---------------------------------------------------------------------------
 select tests.as_anon();
 select is(tests.qa5_hint('{"v":1,"q":"Rotwild Schwarzwild Bayern Rosenheim Pacht"}'), null, 'Fünf Wörter: gültig');
 select is(tests.qa5_hint('{"v":1,"q":"Begehungsschein Rotwild Schwarzwild Bayern Landkreis Rosenheim"}'), null, 'Sechs Wörter: gültig');
 
 -- ---------------------------------------------------------------------------
--- „auf Anfrage“ mit Währung: die DB erlaubt currency bei on_request; der Währungsfilter zeigt sie dann (Hinweis
--- in der Oberfläche sagt das Gegenteil). Das Web speichert currency = null, iOS (I3) ist offen.
+-- „auf Anfrage“ mit Währung erschien früher im Währungsfilter (F7); der Check price_consistent verbietet die
+-- Kombination jetzt, auch für iOS (I3) und direkte API-Aufrufe.
 -- ---------------------------------------------------------------------------
 select tests.as_postgres();
 select throws_ok(format($$ insert into listings (owner_id, kind, direction, title, content_language, region_id, status, expires_at, currency, price_unit)

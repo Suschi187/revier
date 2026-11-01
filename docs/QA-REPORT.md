@@ -1279,3 +1279,73 @@ M5 ist **mit Auflagen abnahmereif**. Die drei Akzeptanzkriterien und die Nutzer-
 - Vor M6/I2: **F3** (Datenverlust bei Favoriten) und **F1** (Relevanz-Paging, Vertrag für iOS und M8) beheben.
 - Bald: **F2**, **F5**, **F10** (vor dem ersten Prod-Deployment entscheiden und dokumentieren).
 - Bei Gelegenheit: F4, F6, F7, F8, F9, F11.
+
+## M5 – Nachprüfung 2026-11-01
+
+Geprüfter Stand: `1413241` (main, Arbeitsbaum sauber), Fixes `b5a47d6..1413241` (Migration `20261101100000_qa_m5_fixes`, CHANGELOG „Nachtrag M5: QA-Funde F1–F11“, ADR 015). Geprüft wurde auf dem Dev-Server und im Produktions-Build (`npm run build && npx next start -p 3456`, E2E mit `QA_BASE_URL`). Für F10 lief ein Build ohne `SITE_INDEXABLE` zweimal: auf 3456 ohne Variable und auf 3457 mit `SITE_INDEXABLE=true`.
+
+### Status je Fund
+
+| Fund | Status | Beleg |
+|---|---|---|
+| F1 Relevanz-Paging | **behoben** | `search_listings` hat `proconfig` `extra_float_digits=3`. QA-pgTAP `30`: 37 Anzeigen mit verschiedenen Rängen plus Gleichständen, Sitzung auf `extra_float_digits = 0`. Mit Limit 1 kommen alle 37 ohne Doppelte, mit Limit 3 in derselben Reihenfolge wie am Stück. Das Attribut wirkt nicht über die Funktion hinaus in die Sitzung. **Gegenprobe** mit `alter function … reset extra_float_digits`: 100 Seiten, 2 verschiedene IDs, der alte Fehler wäre also erkannt worden. E2E „Relevanz“ grün auf Dev und Produktion (über PostgREST). |
+| F2 Sechs Wörter | **behoben** | Die Grenze gilt je Sprachfassung. Ein Satz mit 12 Wörtern ist gültig, ebenso 16 Wörter, Phrase und Ausschluss. 17 Wörter (auch mit `or`) und über 200 Zeichen ergeben weiter `22023`/`q`. Web: eigener Hinweis „Der Suchbegriff ist zu lang.“ in de/en/cs/pl als `role="alert"` (E2E). |
+| F3 Favoriten ab ~220 | **behoben** | RPCs `my_favorites` und `remove_unavailable_favorites` (Invoker, nur `authenticated`, Allowlist in `00_meta`). E2E mit 232 Favoriten, davon 2 pausiert: 230 Karten, Hinweis „2 … nicht mehr verfügbar“. „Entfernen“ lässt 230 stehen, danach kein Button mehr. pgTAP: gesperrter Besitzer zählt als nicht verfügbar, keine Titel oder Ortsnamen nicht verfügbarer Anzeigen in der Antwort, fremde Favoriten unberührt, anon → `42501`. Bei Fehler der RPC zeigt die Seite `loadFailed` und keinen Entfernen-Button (Code geprüft). |
+| F4 Eigene Anzeige merken | **behoben** | Policy verlangt `owner_id <> auth.uid()` und `listing_is_public`. Eigene öffentliche Anzeige und eigener Entwurf → `42501`, pausierte fremde → `42501` (kein Orakel). E2E mit manipuliertem POST: keine Zeile. Es gibt keine UPDATE-Policy auf `favorites`, über die sich `listing_id` umschreiben ließe. |
+| F5 360 px | **behoben** | E2E 360 px ohne Überbreite auf Anbieter- (Firmenname „Forstbetriebsgemeinschaftsgesellschaft“), Kategorie-, Such- und Startseite in de/en/cs/pl, Titel „Rehwildbestandsregulierungsmaßnahmen“. Dev und Produktion. |
+| F6 Leere Seiten | **behoben** | `/de/gesellschaftsjagd/wien`: `noindex`, ohne Canonical und `alternate`. Gegenprobe: befüllte Kategorieseite in vier Sprachen mit Canonical, 5 `alternate` und ohne `noindex`. |
+| F7 „Auf Anfrage“ mit Währung | **behoben** | Insert und Update mit `on_request` und Währung → `23514`, ohne Währung erlaubt. Das Web-Formular speichert `currency: null` (Bearbeiten-Action), deshalb keine Regression. |
+| F8 Unterpfade statischer Seiten | **teilweise** | Leaf-Bereiche behoben: `/de/imprint/x`, `/de/login/x`, `/de/privacy/a/b`, `/de/forbidden/x`, `/de/terms/x`, `/de/missing/x`, `/en/imprint/x`, `/pl/terms/a/b` geben im Produktions-Build 404 mit `noindex`. `/de/welcome/x` leitet ohne Login auf den Login um (kein Orakel) und ergibt mit Login 404. **Offen:** Bereiche mit Unterseiten, siehe N3. |
+| F9 Suchtext beim Merken | **teilweise** | Behoben: Der Rücksprung nach erfolgreichem Merken behält `q` (E2E). Der Login-Link der Merken-Schaltfläche enthält `q` nicht mehr. Manipulierte `back`-Werte (`//evil…`, `next=https://…`, CRLF) bleiben auf derselben Origin. **Offen:** Leitet die Action selbst auf Login oder Welcome um, steht `q` wieder in der URL, siehe N2. |
+| F10 `SITE_INDEXABLE` | **behoben** | Dasselbe Artefakt auf 3456 (ohne Variable): `robots.txt` mit `Disallow: /`, `X-Robots-Tag: noindex` auf 200, 307, 308, 403, 404, 410. Auf 3457 (`SITE_INDEXABLE=true`): `Allow: /` mit vier Sitemaps, kein `X-Robots-Tag` auf `/de` und `/de/jagdpacht`. Suche weiter `noindex, follow`, 404 weiter `noindex`. `robots.txt` ist im Build jetzt ƒ. Die 410-Seite behält ihre CSP, 403 `no-store`, Admin behält die Nonce-CSP (`qa-m4.spec.ts` gegen Produktion grün). Rest: N1. |
+| F11 Sitemap | **behoben** | Nach Entfernen fehlt die Anzeige sofort in `/sitemap/de.xml` und `/sitemap/pl.xml`, ohne weiteren Anstoß (E2E, Dev und Produktion). `public.spec.ts` „Akzeptanz c“ läuft jetzt auch gegen einen Produktionsserver, dessen Sitemap schon abgerufen wurde. Neue Anzeigen erscheinen weiter erst nach bis zu 1 h, das steht so in ADR und CHANGELOG. |
+
+Hinweis `cacheEpoch()`: Statt `-Date.now()` wird jetzt `-1` verwendet. Damit entsteht bei DB-Ausfall kein Cache-Eintrag je Anfrage mehr. Während des Ausfalls können Listen aus einem früheren Ausfall bis zu 5 min alt sein. Das ist vertretbar, weil die Statusprüfung im Proxy dann ohnehin fail-open arbeitet.
+
+### Neue Funde
+
+#### N1 – niedrig – `X-Robots-Tag: noindex` fehlt außerhalb von Prod auf Pfaden außerhalb des Proxy-Matchers
+Mit F10 wurde der Header aus `next.config.ts` (galt für alle Pfade außer Admin) in den Proxy verlegt. Der Matcher schließt `api/`, `sitemap/`, `static/`, `_next/`, `robots.txt` und `favicon.ico` aus. Next leitet den abschließenden Schrägstrich außerdem per 308 um, bevor der Proxy läuft. Auf Stage tragen deshalb Foto-Route, Sitemaps, `robots.txt` und dieser 308 kein `noindex` mehr. ADR 015 sagt „überall `X-Robots-Tag: noindex`“. Auswirkung gering, weil `Disallow: /` das Crawlen auf Stage verhindert. Fotos von Stage könnten aber über externe Links als URL ohne Inhalt in den Index geraten.
+Reproduktion: Build ohne Variable, `npx next start -p 3456`, `curl -sI localhost:3456/sitemap/de.xml`, `…/robots.txt`, `…/api/photos/<uuid>/full`, `…/de/jagdpacht/` → kein `X-Robots-Tag`. Vor `bdc7621` war er gesetzt. E2E `qa-m5-nachpruefung.spec.ts -g "N1"` (`test.fail`).
+Vorschlag: Den Header für diese Pfade zusätzlich in Route-Handlern bzw. `robots.ts`/Sitemap setzen, dort zur Laufzeit möglich. Oder ADR anpassen: „alle Seiten, nicht Dateien“.
+
+#### N2 – niedrig – Suchtext doch im Login- bzw. Welcome-Link, wenn die Merken-Action umleitet (F9-Rest, H10)
+`toggleFavorite` bildet `back` jetzt mit `keepSearchText: true` und übergibt genau diesen Wert an `requireOnboardedUser(locale, back)`. Ist die Sitzung abgelaufen oder fehlt die Zustimmung zu neuen Rechtstexten, leitet die Action auf `/de/login?next=/de/suche?q=…` bzw. `/de/welcome?next=/de/suche?q=…` um. Der Suchtext steht dann wieder in Verlauf, Referer und Zugriffslogs. Login und Welcome entfernen `q` später über `safeNextPath`, es landet also nicht in `redirect_to`. Der CHANGELOG-Satz „Der Login-Link enthält ihn nie“ stimmt deshalb nicht.
+Reproduktion:
+1. Einloggen, `/de/suche?q=<Text>` öffnen, alle Cookies löschen, bei einem Treffer „Merken“ → URL `/de/login?next=/de/suche?q=<Text>`.
+2. Mit einem Konto ohne aktuelle Zustimmung: `/de/suche?q=<Text>` → „Merken“ → `/de/welcome?next=/de/suche?q=<Text>`.
+3. E2E `qa-m5-nachpruefung.spec.ts -g "N2"` (2 × `test.fail`).
+Vorschlag: `requireOnboardedUser(locale, safeNextPath(raw, locale))` (ohne `q`) und erst für den abschließenden `redirect` nach dem Merken die Variante mit `q` verwenden.
+
+#### N3 – niedrig – Unbekannte Unterpfade von Bereichen mit Unterseiten bleiben im Produktions-Build Soft 404 (F8-Rest)
+`LEAF_SECTIONS` deckt nur Bereiche ohne Unterordner ab. Für `account` und `auth` bleibt der alte Mechanismus: Im Produktions-Build kommt 200 mit der 404-Seite im Stream und Meta-`noindex`, im Dev-Server 404. Betroffen sind `/de/auth`, `/de/auth/x`, `/de/auth/confirm/x` (auch ohne Login) sowie mit Login `/de/account/x`, `/de/account/favorites/x` und `/de/account/listings/x/y`. In Prod (`SITE_INDEXABLE=true`) trägt `/de/auth/x` keinen `X-Robots-Tag`, nur das Meta-Tag. Für Crawler erreichbar ist nur `/de/auth…`, `account` leitet ohne Login um.
+Reproduktion: `curl -s -o /dev/null -w '%{http_code}' localhost:3456/de/auth/x` → 200 (Dev: 404). E2E `qa-m5-nachpruefung.spec.ts -g "F8 Rest"` (`test.fail` nur mit `QA_BASE_URL`/CI).
+Vorschlag: Im Proxy die bekannten Unterseiten-Formen je Bereich zulassen (z. B. aus dem Dateisystem-Test erzeugte Muster `account/listings/[id]/edit`) und alles andere wie unbekannte Formen behandeln (Rewrite auf `missing`, 404). Mindestens für `auth` (ohne Seite unter `/de/auth` selbst) analog zu `LEAF_SECTIONS`.
+
+### Umstellung der Proben (Prüfung)
+- `28_qa_m5_abnahme`: Nur die `todo(...)`-Zeilen sind entfernt, die Assertions sind unverändert. F7 prüft jetzt zusätzlich per `throws_ok` die Verletzung des Checks (Plan 35 → 36). Die Suche nach CHF ergibt 0 damit trivial, der Fall ist aber über den Check abgedeckt. Drei Abschnittskommentare beschrieben noch den alten Fehler und sind in diesem Commit angepasst.
+- `qa-m5.spec.ts`: `test.fail` → `test` ohne Änderung der Erwartungen. Bei F8 entfällt die bedingte Markierung. Der Login-Link-Test (F9) prüft jetzt `not.toContain(q)` und `next=/de/suche`, das ist die Erwartung aus H10. Der F3-Test klickt „Entfernen“ nur, wenn der Button erscheint. Mit dem Fix erscheint er bei 230 verfügbaren nicht, deshalb deckt die neue QA-Probe mit 2 pausierten Favoriten das Entfernen im Browser ab.
+- `public.spec.ts` „Akzeptanz c“: Vor dem Sitemap-Abruf wird der Cache-Zähler erhöht, dann wird die neue Anzeige erwartet. Die Assertions sind gleich geblieben. Der Test beschreibt jetzt das dokumentierte Verhalten (neue Anzeigen erst mit Zähler oder nach 1 h).
+- `29_qa_m5_fixes` (8): sinnvoll, ergänzt durch QA-pgTAP `30` um anon-Rechte, Datenschutz der Antwort und gesperrte Besitzer.
+- Ergebnis: keine abgeschwächten Assertions.
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase db reset && supabase test db` | grün, 30 Dateien, **685** (ohne QA-Datei 30). Mit `30_qa_m5_nachpruefung` (28) 31 Dateien, **713**, keine TODO. |
+| `supabase test db` ohne Reset nach allen E2E-Läufen | grün (713), keine `@test.local`-Konten übrig |
+| `npm run lint`, `npm run typecheck` | grün, auch mit den neuen QA-Dateien |
+| `npm test` (Vitest) | **396/396** |
+| `npm run test:integration` | **160/160** |
+| `npm run test:e2e` (Dev) | **92/92** (79 bestehende plus 13 aus `qa-m5-nachpruefung.spec.ts`, davon 3 erwartete Fehlschläge: N1, 2 × N2) |
+| Produktions-Build (3456), `QA_BASE_URL` | `qa-m5.spec.ts` und `qa-m4.spec.ts` **40/40**, `qa-m5-nachpruefung.spec.ts` **13/13** (4 erwartete Fehlschläge: N1, 2 × N2, F8-Rest), `public.spec.ts` mit eigener Konfiguration **14/14** (inkl. „Akzeptanz c“) |
+| `npm run build` | grün, ohne Warnungen, `robots.txt` ƒ |
+| F10: ein Artefakt, zwei Starts | 3456 ohne Variable: `Disallow`, `noindex`. 3457 mit `true`: `Allow` plus Sitemaps, kein Header auf Seiten mit Status 200. |
+
+### Neue Tests
+- `supabase/tests/30_qa_m5_nachpruefung.test.sql` (28, Transaktion mit Rollback): F1 bei `extra_float_digits = 0` mit 37 verschiedenen Rängen und kein Leck in die Sitzung. F2: Grenzen 16/17 Wörter, OR, Phrase, 200 Zeichen. F3: anon-Rechte, nur eigene Favoriten, keine Titel oder Orte nicht verfügbarer Anzeigen, gesperrter Besitzer. F4: pausierte fremde Anzeige. F7: Update.
+- `web/e2e/qa-m5-nachpruefung.spec.ts` (13, Konten per `service_role`, Löschung in `afterAll`, lauffähig mit `QA_BASE_URL`): N2 (2), manipulierter `back`, gemischte Favoriten mit Entfernen, F2 in vier Sprachen, F8 Leaf ohne und mit Login, F8-Rest (N3), `X-Robots-Tag` auf allen Statusarten, N1, F5 in vier Sprachen, F6 Gegenprobe, F11 sofort.
+
+### Gesamturteil
+F1, F2, F3, F4, F5, F6, F7, F10 und F11 sind behoben. Die beiden Funde mit Priorität hoch (F1, F3) sind auf Dev und im Produktions-Build belegt, F1 mit Gegenprobe. F8 und F9 sind teilweise behoben, die Reste stehen als N2 und N3 oben. N1 ist eine kleine Lücke, die durch den F10-Fix entstanden ist. Die Fixes brechen keine bisherigen Tests und schwächen keine Sicherheitseigenschaft: RLS auf `favorites` ist strenger, die RPCs laufen als Invoker nur für `authenticated`, das Funktionsattribut wirkt nur innerhalb der Funktion, die Admin-CSP bleibt erhalten, und Rücksprünge bleiben auf derselben Origin. **M5 ist abnahmereif.** N1–N3 (alle niedrig) können bei Gelegenheit behoben werden, N2 am einfachsten zusammen mit dem nächsten Favoriten-Thema.
