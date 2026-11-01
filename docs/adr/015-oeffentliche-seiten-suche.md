@@ -31,7 +31,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
   - Ein Wort einer anderen Sprache, ein unbekannter Slug, überzählige Segmente und eine UUID in Großbuchstaben ergeben 404.
   - Eine nicht kanonische Kodierung ergibt 308 auf die kanonische Form.
 - Die Regions-Slugs kennt der Proxy aus einer generierten Datei (`web/lib/public/region-slugs.json`). Quelle sind dieselben Daten wie `regions_data.sql`, ein Test gleicht beides mit der DB ab. Kein DB-Aufruf je Kategorieseite.
-- Statische Ordner unter `app/[locale]` gehen vor. Ein Test liest sie aus dem Dateisystem und schließt Kollisionen mit Wörtern, Locales und `PROTECTED_SECTIONS` aus.
+- Statische Ordner unter `app/[locale]` gehen vor. Ein Test liest sie aus dem Dateisystem und schließt Kollisionen mit Wörtern, Locales und `PROTECTED_SECTIONS` aus. Bereiche ohne Unterseiten (`LEAF_SECTIONS`: Impressum, Datenschutz, AGB, Login, Willkommen, 403/404) ergeben mit weiteren Segmenten 404 aus dem Proxy (QA M5 F8).
 
 ### Such-RPC und Filterformat v1
 `public.search_listings(p_filters jsonb, p_cursor text default null, p_limit int default 20)`, `security invoker`, `stable`.
@@ -42,7 +42,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
 - Grenzen:
   - JSON höchstens 4 KB
   - `species` höchstens 20 bekannte Codes ohne Doppelte
-  - `q` 1–200 Zeichen, getrimmt, NFC, tsquery höchstens 32 Knoten
+  - `q` 1–200 Zeichen, getrimmt, NFC, tsquery höchstens 32 Knoten je Sprachfassung (german, english, simple; QA M5 F2). Das Web zeigt dann „Suchbegriff zu lang“.
   - Zahlen ab 0 mit Obergrenze, `min ≤ max`, `date_from ≤ date_to`
   - `p_limit` 1–50
 
@@ -54,7 +54,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
 | `kind`, `direction` | Art, Angebot/Gesuch | – |
 | `species[]` | mindestens eine Wildart trifft | fällt heraus |
 | `currency` | Pflicht bei `price_*` und Preis-Sortierung | – |
-| `price_min`, `price_max` | kleinste Einheit, nur Anzeigen in `currency`; keine Umrechnung | fällt heraus (auch „auf Anfrage“) |
+| `price_min`, `price_max` | kleinste Einheit, nur Anzeigen in `currency`; keine Umrechnung | fällt heraus (auch „auf Anfrage“; „auf Anfrage“ hat nie eine Währung, Check `price_consistent`, QA M5 F7) |
 | `price_unit` | Preiseinheit; Pflicht bei Preis-Sortierung | – |
 | `area_min`, `area_max` | Hektar | fällt heraus |
 | `date_from`, `date_to` | Überschneidung mit `start_date`/`end_date`, offene Enden zählen als offen; `event_date` nur mit `kind = driven_hunt` | ohne jedes Datum: fällt heraus |
@@ -62,7 +62,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
 | `sort` | `newest` (Standard, auch mit `q`), `price_asc`, `price_desc`, `relevance` (nur mit `q`); letzter Schlüssel immer `id` | – |
 
 **Cursor**
-- Opak, base64. Er enthält Sortierung, Hash der Filter und die Schlüssel (Rang als `float8`-Text) und ist höchstens 200 Zeichen lang.
+- Opak, base64. Er enthält Sortierung, Hash der Filter und die Schlüssel (Rang als `float8`-Text) und ist höchstens 200 Zeichen lang. Die RPC läuft mit `extra_float_digits = 3`, sonst rundet Supabase (Standard 0) den Rang, und das Relevanz-Paging wiederholt Treffer (QA M5 F1).
 - Passt der Cursor nicht zu Sortierung oder Filtern, gibt es einen Fehler.
 
 **Rückgabe**
@@ -103,7 +103,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
 - Öffentliche Daten kommen nur über den Anon-Client ohne Cookies, mit festen Spaltenlisten (keine `listing_places`, kein `select('*')`). Die Module importieren `lib/supabase/server` nicht, ein Test prüft das.
 - Profil `publicListings` (`stale` 60, `revalidate` 60, `expire` 300). Es gilt für Start, Kategorie- und Regionsseiten ohne Query, Detail, Profil und Zähler.
   - Die Suche mit `q` oder freien Filtern wird nicht gecacht.
-  - Die Sitemap nutzt das Profil `hours`.
+  - Die Sitemap nutzt das Profil `hours` mit dem Cache-Zähler im Schlüssel: Neue Anzeigen erscheinen nach bis zu 1 h, Entfernte, Gesperrte und Gelöschte fallen sofort heraus (QA M5 F11).
 - Tags `listings`, `listing:{id}` und `provider:{id}` per `updateTag` in allen Server Actions, die Status oder Inhalt ändern. Das beschleunigt nur die eigene Instanz.
 - Für normale Änderungen (Bearbeiten, Pausieren, Ablauf, Fotos aus dem Browser, iOS) gilt deshalb: Listen sind höchstens 5 Minuten alt.
 - **Sofortige Wirkung bei Entfernen, Sperren und Löschen (Nutzer-Entscheidung 2026-10-31).**
@@ -147,7 +147,7 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
   - `generateSitemaps`, eine Datei je Sprache unter `/sitemap/{id}.xml`. Der Proxy-Matcher nimmt `sitemap/` aus.
   - `robots.ts` nennt alle Dateien mit absoluter URL.
   - Die Sitemap wird zur Anfrage erzeugt, nicht beim Build.
-  - Außer in Prod (Server-Variable `SITE_INDEXABLE`) gilt `Disallow: /` und überall `X-Robots-Tag: noindex`.
+  - Außer in Prod (Server-Variable `SITE_INDEXABLE`) gilt `Disallow: /` und überall `X-Robots-Tag: noindex`. Ausgewertet zur Laufzeit im Proxy und in `robots.ts` (`connection()`), nicht beim Build: Ein Artefakt gilt für Stage und Prod (QA M5 F10).
 
 ### Rücksprung und Favoriten
 - `safeNextPath` erlaubt öffentliche Ziele über den Parser. Die kanonische Form muss dem Eingang gleichen.
@@ -156,6 +156,9 @@ Rahmen aus Next 16 mit `cacheComponents` (Belege unter `web/node_modules/next/di
 - Merken nur per POST (Server Action), nie per GET-Parameter nach dem Login.
 - Favoriten:
   - Höchstens 500 je Konto (Trigger mit Advisory-Lock, `23514` wie bei `saved_searches`).
+  - Merken nur öffentlicher, fremder Anzeigen (Policy `favorites_insert_own`, QA M5 F4).
+  - Lesen über die RPC `my_favorites` (Karten verfügbarer Anzeigen und Zahl der nicht verfügbaren in einer Abfrage), Entfernen über `remove_unavailable_favorites` (die DB bestimmt die Menge selbst). Grund: Eine ID-Liste in der URL scheitert ab etwa 220 IDs mit 414 (QA M5 F3).
+  - Rücksprung nach dem Merken (POST) behält den Suchtext, der Login-Link nie (QA M5 F9).
   - Nicht mehr verfügbare Favoriten bleiben erhalten (die Anzeige kann zurückkommen), lassen sich aber gesammelt entfernen.
 
 ## Folgen

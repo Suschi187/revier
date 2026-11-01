@@ -13,7 +13,7 @@ import { uniqueEmail } from "./mailpit";
 // - SEO-Signale (leere Seiten, Statuscodes, robots/Sitemap außerhalb von Prod)
 // - ohne JavaScript, 360 px in vier Sprachen, axe auf weiteren Seiten, Login-Rücksprung über den Bestätigungslink
 // - sofortige Wirkung beim Sperren auch auf Anbieterseite, Suche mit Text und Favoriten
-// Bekannte Fehler stehen als test.fail (Playwright meldet sie, sobald sie behoben sind). Testdaten legt der
+// Die Funde F1–F11 standen hier als test.fail und sind seit den Fixes (2026-11-01) normale Tests. Testdaten legt der
 // Testcode mit service_role an (nur Node) und löscht die Konten in afterAll. Gegen den Produktions-Build:
 // QA_BASE_URL=http://localhost:3456 npx playwright test e2e/qa-m5.spec.ts
 
@@ -228,7 +228,7 @@ test.describe("QA M5: Datenschutz, UGC und Cache", () => {
     await anon.close();
   });
 
-  test.fail("Eigene Anzeige lässt sich per Server Action nicht merken (A10, F4)", async ({ browser }) => {
+  test("Eigene Anzeige lässt sich per Server Action nicht merken (A10, F4)", async ({ browser }) => {
     // Ohne JavaScript, damit das Formular so abgeschickt wird, wie es im DOM steht (manipulierter POST)
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
@@ -253,7 +253,7 @@ test.describe("QA M5: Datenschutz, UGC und Cache", () => {
     await expect(page.locator('main a[href*="/login"]')).toHaveCount(0);
   });
 
-  test.fail("Merken in der Textsuche führt zurück zur selben Suche (F9: q fällt weg)", async ({ page }) => {
+  test("Merken in der Textsuche führt zurück zur selben Suche (F9: q fällt weg)", async ({ page }) => {
     const fan = await owner(`QA5 Sucher ${RUN}`);
     await signInAs(page.context(), fan);
     await page.goto(`/de/suche?q=${RUN}+Ort`);
@@ -265,11 +265,11 @@ test.describe("QA M5: Datenschutz, UGC und Cache", () => {
     expect(page.url(), "Rücksprung auf dieselbe Suche").toBe(before);
   });
 
-  test("Ohne Login: Merken-Link in der Textsuche trägt den Suchtext im next-Parameter (H10, F9)", async ({ page }) => {
+  test("Ohne Login: Merken-Link in der Textsuche trägt den Suchtext nicht im next-Parameter (H10, F9)", async ({ page }) => {
     await page.goto(`/de/suche?q=${RUN}+Ort`);
     const href = await page.locator("main article").getByRole("link", { name: /merken/ }).getAttribute("href");
-    // Dokumentiert den Ist-Stand: safeNextPath entfernt q erst serverseitig, die Login-URL selbst enthält ihn.
-    expect(decodeURIComponent(href!)).toContain(`q=${RUN}`);
+    expect(decodeURIComponent(href!)).not.toContain(RUN);
+    expect(decodeURIComponent(href!)).toContain("next=/de/suche");
   });
 
   test("Sperren wirkt sofort auch auf Anbieterseite, Textsuche und Favoriten", async ({ page, request }) => {
@@ -333,12 +333,12 @@ test.describe("QA M5: Paging, Suchtext und viele Favoriten", () => {
     expect(new Set(seen).size).toBe(60);
   });
 
-  test.fail("Relevanz: nächste Seite ohne Doppelte (F1, Rang im Cursor gerundet)", async ({ page }) => {
+  test("Relevanz: nächste Seite ohne Doppelte (F1, Rang im Cursor gerundet)", async ({ page }) => {
     const seen = await walk(page, `/de/suche?q=${TIE}&sort=relevance`, 3);
     expect(new Set(seen).size).toBe(60);
   });
 
-  test.fail("Suchtext mit sechs Wörtern ergibt Treffer statt „Filter ungültig“ (F2)", async ({ page }) => {
+  test("Suchtext mit sechs Wörtern ergibt Treffer statt „Filter ungültig“ (F2)", async ({ page }) => {
     await page.goto(`/de/suche?q=${encodeURIComponent(`${TIE} Keiler Beschreibung lang genug Test`)}`);
     await expect(page.getByText("Die Filter sind ungültig.")).toHaveCount(0);
     expect((await cardIds(page)).length).toBeGreaterThan(0);
@@ -349,7 +349,7 @@ test.describe("QA M5: Paging, Suchtext und viele Favoriten", () => {
     expect((await cardIds(page)).length).toBe(20);
   });
 
-  test.fail("230 Favoriten: Seite zeigt sie, „nicht mehr verfügbar entfernen“ löscht keine verfügbaren (F3)", async ({ page }) => {
+  test("230 Favoriten: Seite zeigt sie, „nicht mehr verfügbar entfernen“ löscht keine verfügbaren (F3)", async ({ page }) => {
     const { error } = await admin().from("favorites").insert(tieIds.map((id) => ({ user_id: fan.id, listing_id: id })));
     expect(error).toBeNull();
     await signInAs(page.context(), fan);
@@ -421,7 +421,6 @@ test.describe("QA M5: SEO und Statuscodes", () => {
   });
 
   test("Unbekannte Unterpfade statischer Seiten ergeben 404 (F8, nur im Produktions-Build 200)", async ({ request }) => {
-    test.fail(!!process.env.QA_BASE_URL || !!process.env.CI, "F8: Produktions-Build liefert 200 (Soft 404)");
     for (const url of ["/de/imprint/x", "/de/login/x", "/de/privacy/a/b"]) {
       expect((await request.get(url)).status(), url).toBe(404);
     }
@@ -439,7 +438,7 @@ test.describe("QA M5: SEO und Statuscodes", () => {
     }
   });
 
-  test.fail("Leere Regionsseite: noindex ohne Canonical und hreflang (A7, F6)", async ({ page }) => {
+  test("Leere Regionsseite: noindex ohne Canonical und hreflang (A7, F6)", async ({ page }) => {
     const { data } = await anonClient().rpc("listing_region_counts", { p_kind: "driven_hunt" });
     expect((data ?? []).some((r: { region_code: string }) => r.region_code === "AT-9")).toBe(false);
     await page.goto("/de/gesellschaftsjagd/wien");
@@ -520,7 +519,7 @@ test.describe("QA M5: Ohne JavaScript, Sprachen, 360 px, axe", () => {
     });
   }
 
-  test.fail("360 px: Listenkarte mit langem deutschem Kompositum ohne Überbreite (F5)", async ({ page }) => {
+  test("360 px: Listenkarte mit langem deutschem Kompositum ohne Überbreite (F5)", async ({ page }) => {
     // „Rehwildbestandsregulierung“ (26 Zeichen): break-words senkt die min-content-Breite des Grid-Elements nicht
     const [longId] = await listings([await base(firm, `QA5 ${RUN} Rehwildbestandsregulierung`)]);
     await bumpCache(firm);

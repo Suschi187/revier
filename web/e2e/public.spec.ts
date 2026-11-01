@@ -184,6 +184,9 @@ test.describe("Öffentliche Seiten (M5)", () => {
       expect(response.status(), id).toBe(404);
       expect(response.headers()["x-robots-tag"]).toContain("noindex");
     }
+    // Neue Anzeigen erscheinen in der Sitemap nach bis zu 1 h; eine Entfernung erhöht den Cache-Zähler (QA M5 F11).
+    const bump = await listing({ owner: private_, title: T("Sitemap-Zähler") });
+    await admin().from("listings").update({ status: "removed" }).eq("id", bump);
     const sitemap = await (await request.get("/sitemap/de.xml")).text();
     expect(sitemap).toContain(ids.muc);
     for (const id of [ids.draft, ids.review, ids.rejected]) expect(sitemap).not.toContain(id);

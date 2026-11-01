@@ -2,6 +2,40 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M5: QA-Funde F1–F11 – 2026-11-01
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M5 – Abnahme“.
+
+### Geändert
+- **F1 Relevanz-Paging:** `search_listings` läuft mit `extra_float_digits = 3`. Der Rang steht verlustfrei im Cursor, die nächste Seite wiederholt keine Treffer mehr.
+- **F2 Suchtext:** Die Grenze von 32 Knoten gilt je Sprachfassung, nicht für den verknüpften tsquery. Sechs und mehr Wörter funktionieren. Ist der Text trotzdem zu lang, zeigt das Web „Suchbegriff zu lang“ statt „Filter ungültig“.
+- **F3 Favoriten:**
+  - Neue RPCs `my_favorites` (Karten und Zahl der nicht verfügbaren in einer Abfrage) und `remove_unavailable_favorites` (die DB bestimmt die Menge selbst).
+  - Keine ID-Liste mehr in der URL (414 ab etwa 220 IDs) und kein N+1.
+  - Schlägt das Laden fehl, gilt nichts als „nicht verfügbar“, und es wird nichts entfernt.
+- **F4:** Die Policy `favorites_insert_own` lässt nur öffentliche, fremde Anzeigen zu. Vorhandene Favoriten auf eigene Anzeigen werden entfernt.
+- **F5 360 px:** Listenkarten dürfen im Grid schrumpfen (`minmax(0,1fr)`, `min-w-0`). Lange Wörter in Titel, Anbieterzeile und Überschriften brechen um (`overflow-wrap: anywhere`, Silbentrennung per `lang`).
+- **F6:** Leere Kategorie- und Regionsseiten sind `noindex` ohne Canonical und hreflang.
+- **F7:** „Auf Anfrage“ hat nie eine Währung (Check `price_consistent` verschärft, Bestand bereinigt). Solche Anzeigen erscheinen nicht mehr im Währungsfilter.
+- **F8:** Unterpfade statischer Seiten ohne Unterseiten (`LEAF_SECTIONS`) ergeben 404 aus dem Proxy, auch im Produktions-Build. Ein Vitest gleicht die Liste mit dem Dateisystem ab.
+- **F9:** Der Rücksprung nach dem Merken behält den Suchtext (nur per POST). Der Login-Link enthält ihn nie.
+- **F10:** `SITE_INDEXABLE` wirkt zur Laufzeit: Der Proxy setzt `X-Robots-Tag`, `robots.txt` wird zur Anfrage erzeugt. Ein Build gilt damit für Stage und Prod.
+- **F11:** Der Cache-Zähler steht im Schlüssel der Sitemap. Entfernte Anzeigen und gelöschte Konten fallen sofort heraus, neue Anzeigen erscheinen nach bis zu 1 h.
+- **Hinweis aus dem Bericht:** Fällt die Abfrage des Cache-Zählers aus, gilt ein fester Schlüssel statt eines neuen je Anfrage.
+- **Proben:** Die TODO-Proben in pgTAP `28_qa_m5_abnahme` und die `test.fail` in `e2e/qa-m5.spec.ts` sind jetzt normale Tests. Neu ist pgTAP `29_qa_m5_fixes` (300 Favoriten, Entfernen nur der nicht verfügbaren, fremde Konten unberührt).
+
+### Testen
+- `supabase db reset && supabase test db` (685), nach allen E2E-Läufen ohne Reset noch einmal grün, keine `@test.local`-Konten übrig
+- `cd web && npm test` (396), `npm run test:integration` (160), `npm run test:e2e` (79)
+- Produktions-Build:
+  - `npm run build && npx next start -p 3456`, dann `QA_BASE_URL=http://localhost:3456 npx playwright test e2e/qa-m5.spec.ts` (27)
+  - `curl -s -o /dev/null -w '%{http_code}' localhost:3456/de/imprint/x` gibt 404
+  - Mit `SITE_INDEXABLE=true npx next start` gestartet: `robots.txt` erlaubt alles, kein `X-Robots-Tag`
+
+### Bekannte Lücken
+- Review A12: „Weitere laden“ mit Fokus auf den ersten neuen Treffer gibt es nicht, die Listen blättern über Seitenlinks (ohne JavaScript bedienbar).
+- Die übrigen Hinweise des Berichts bleiben offen, unter anderem die Übersetzungen aller Namespaces im RSC-Payload (Performance, M10) und die 410-Seite ohne Sprachumschalter.
+
 ## M5 Öffentliche Seiten, Suche, Detail (Web) – 2026-11-01
 
 Plan `docs/plans/M5-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 015, SPEC v0.7.
