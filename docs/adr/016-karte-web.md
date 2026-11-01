@@ -106,7 +106,30 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - **Logs (M10):** Zugriffslogs auf die Kartendatei ohne IP oder mit höchstens 7 Tagen Aufbewahrung. Die Byte-Bereiche verraten die betrachtete Kachel und damit das Revier, in der Größenordnung des Versatzes.
 
 ## Zahlen
-Werden mit Commit 2 aus `regions.area_km2` eingetragen: Zahl der Kreise unter 400 km² je Land, die zehn kleinsten Kreise, Größe des Kartenausschnitts.
+Flächen aus `regions.area_km2` (VG250 und Statistik Austria, Stand 01.01.2026, EPSG:3035):
+
+| | unter 400 km² | Kreise gesamt |
+|---|---|---|
+| DE | 110 | 401 |
+| AT | 20 | 94 |
+| zusammen | 130 (26 %) | 495 |
+
+Ring der möglichen wahren Lage: etwa 86 km² (2,29–5,71 km). In den zehn kleinsten Kreisen ist der ganze Kreis kleiner als der Ring. Ring ∩ Kreis ist dort höchstens die Kreisfläche, also weniger als die Hälfte des Rings, bei Rust nur ein Viertel:
+
+| Kreis | km² |
+|---|---|
+| AT-102 Rust (Stadt) | 20,0 |
+| AT-402 Stadt Steyr | 26,6 |
+| DE-09662 Schweinfurt (Stadt) | 35,7 |
+| DE-09163 Rosenheim (Stadt) | 37,0 |
+| DE-09762 Kaufbeuren | 40,4 |
+| DE-09565 Schwabach | 40,8 |
+| AT-101 Eisenstadt (Stadt) | 42,9 |
+| DE-07318 Speyer | 42,9 |
+| DE-07311 Frankenthal (Pfalz) | 43,8 |
+| DE-06413 Offenbach am Main | 45,3 |
+
+Bei 400 km² ist der Kreis etwa fünfmal so groß wie der Ring. Ein Punkt nahe der Grenze verengt weiter, aber nicht mehr auf einen Bruchteil des Kreises. Die Größe des Kartenausschnitts DE+AT trägt Commit 5 ein.
 
 ## Folgen
 - iOS (I3, I4) nutzt `map_listings` und `set_listing_location` mit `p_point` unverändert. MapKit braucht keine Kacheln von uns. Die Hinweise zu mehreren Punkten und zu gestapelten Anzeigen gelten dort ebenso.

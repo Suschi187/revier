@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(5);
+select plan(7);
 
 -- Jede Tabelle in public hat RLS (CLAUDE.md: keine Tabelle ohne Policy).
 select is(
@@ -50,9 +50,20 @@ select is(
   array['can_report', 'can_write_in', 'claim_listing_creation', 'has_accepted_current_legal', 'has_admin_role',
         'is_active_user', 'is_admin', 'is_blocked_with', 'is_conversation_participant', 'is_server', 'is_server_caller',
         'listing_attributes_error', 'listing_card', 'listing_is_public', 'listing_resume_allowed', 'listing_review_version', 'owns_editable_listing',
-        'search_filters_error', 'setting_int', 'trim_all']::text[],
+        'search_conditions', 'search_filters_error', 'setting_int', 'trim_all']::text[],
   'Nur bewusst freigegebene Hilfsfunktionen in private sind ausführbar (Allowlist)'
 );
+
+-- Kartenpunkt (ADR 016, Review B2): Der Trigger, der map_point setzt, läuft nach der Verfremdung (BEFORE-Trigger
+-- alphabetisch), und keine andere Funktion schreibt die Spalte.
+select is(
+  (select max(tgname) from pg_trigger where tgrelid = 'public.listings'::regclass and not tgisinternal
+     and tgtype & 2 = 2),
+  'listings_zzz_map_point', 'listings_zzz_map_point ist der letzte BEFORE-Trigger auf listings');
+select is(
+  array(select p.proname::text from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+        where n.nspname in ('public', 'private') and p.prosrc ~ 'map_point\s*:=|set\s+map_point' order by 1),
+  array['listings_map_point']::text[], 'Nur listings_map_point schreibt map_point');
 
 select * from finish();
 rollback;

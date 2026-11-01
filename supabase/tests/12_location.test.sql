@@ -139,8 +139,8 @@ select is((
 select is(array(
   select table_schema || '.' || table_name || '.' || column_name from information_schema.columns
   where udt_name in ('geography', 'geometry') and table_schema not in ('extensions', 'tiger', 'topology') and table_schema not like 'pg_temp%'
-  order by 1), array['public.listings.display_location', 'public.regions.centroid'],
-  'Es gibt keine weiteren Geo-Spalten, in denen der Punkt landen könnte');
+  order by 1), array['public.listings.display_location', 'public.listings.map_point', 'public.regions.centroid'],
+  'Es gibt keine weiteren Geo-Spalten, in denen der Punkt landen könnte (map_point leitet der letzte Trigger ab, ADR 016)');
 
 -- 7. Unplausibler Punkt
 select tests.authenticate_as(:'a_id');

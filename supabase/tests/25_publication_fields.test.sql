@@ -71,8 +71,8 @@ select results_eq(
 select is((select count(*)::int from (select slug from regions where level = 'state' group by slug having count(*) > 1) x),
   0, 'Bundesland-Slugs sind über alle Länder eindeutig');
 select throws_ok(
-  $$ insert into regions (country, level, code, slug, name_de, name_en, name_cs, name_pl, centroid)
-     select 'AT', 'state', 'AT-X', slug, 'x', 'x', 'x', 'x', centroid from regions where code = 'DE-BY' $$,
+  $$ insert into regions (country, level, code, slug, name_de, name_en, name_cs, name_pl, centroid, area_km2)
+     select 'AT', 'state', 'AT-X', slug, 'x', 'x', 'x', 'x', centroid, 1 from regions where code = 'DE-BY' $$,
   '23505', null, 'Doppelter Bundesland-Slug in einem anderen Land scheitert');
 
 -- Favoriten-Limit (500, Code 23514 mit Hint)

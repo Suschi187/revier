@@ -28,6 +28,8 @@ export type Filters = {
   date_to?: string;
   verified_only?: boolean;
   sort?: (typeof SORTS)[number];
+  /** [west, süd, ost, nord] in Grad (ADR 016). */
+  bbox?: [number, number, number, number];
 };
 
 /** trim() entfernt dieselben Zeichen wie private.trim_all in der DB (ADR 013, listing_whitespace). */
@@ -65,12 +67,15 @@ const KEY_SCHEMAS = {
   date_to: isoDate,
   verified_only: z.boolean(),
   sort: z.enum(SORTS),
+  bbox: z
+    .tuple([z.number(), z.number(), z.number(), z.number()])
+    .refine(([w, s, e, n]) => w >= -180 && e <= 180 && s >= -90 && n <= 90 && w < e && s < n && e - w <= 30 && n - s <= 30),
 } as const;
 
 const KEYS = Object.keys(KEY_SCHEMAS) as (keyof typeof KEY_SCHEMAS)[];
 // Reihenfolge der Prüfung wie in der DB: zuerst unbekannte Schlüssel (alphabetisch), dann v, dann je Schlüssel.
 const CHECK_ORDER: (keyof typeof KEY_SCHEMAS)[] = ["q", "country", "kind", "direction", "currency", "price_unit", "sort", "region",
-  "species", "price_min", "price_max", "area_min", "area_max", "date_from", "date_to", "verified_only"];
+  "species", "price_min", "price_max", "area_min", "area_max", "date_from", "date_to", "verified_only", "bbox"];
 
 /** Erster fehlerhafter Schlüssel wie der hint der DB (22023), sonst null. */
 export function filtersError(input: unknown): string | null {
@@ -117,6 +122,7 @@ export const PARAM_NAMES = {
   date_to: "to",
   verified_only: "verified",
   sort: "sort",
+  bbox: "bbox",
 } as const satisfies Record<Exclude<keyof Filters, "v">, string>;
 
 export const CURSOR_PARAM = "cursor";
@@ -133,6 +139,29 @@ function get(params: Params, name: string): string | undefined {
 function number(value: string | undefined): number | undefined {
   if (value === undefined || !/^\d+(\.\d+)?$/.test(value)) return undefined;
   return Number(value);
+}
+
+/** Ansicht der Listenseite (kein Filter): `view=map` zeigt die Karte (ADR 016). */
+export const VIEW_PARAM = "view";
+
+/**
+ * Bereich aus `w,s,e,n`, kanonisch auf 4 Nachkommastellen nach außen gerundet (ADR 016, Review A3): Westen und Süden
+ * ab, Osten und Norden auf. So entstehen keine beliebig vielen Filter (Cursor-Hash, URL-Länge).
+ */
+export function canonicalBbox(values: number[]): [number, number, number, number] | undefined {
+  if (values.length !== 4 || values.some((v) => !Number.isFinite(v))) return undefined;
+  // Erst auf 6 Stellen runden: 48.1234 * 1e4 ergibt 481233.99999…, ein kanonischer Wert bliebe sonst nicht stabil.
+  const scaled = (v: number) => Number((v * 1e4).toFixed(6));
+  const down = (v: number) => Math.floor(scaled(v)) / 1e4;
+  const up = (v: number) => Math.ceil(scaled(v)) / 1e4;
+  return [down(values[0]), down(values[1]), up(values[2]), up(values[3])];
+}
+
+function parseBbox(value: string | undefined): [number, number, number, number] | undefined {
+  if (!value || value.length > 80) return undefined;
+  const parts = value.split(",");
+  if (parts.length !== 4 || parts.some((p) => !/^-?\d{1,3}(\.\d+)?$/.test(p))) return undefined;
+  return canonicalBbox(parts.map(Number));
 }
 
 /** Filter aus dem Query-String; `fixed` (Art, Region aus dem Pfad) geht vor. */
@@ -154,6 +183,7 @@ export function filtersFromParams(params: Params, fixed: Partial<Filters> = {}):
   raw.area_min = number(text("area_min"));
   raw.area_max = number(text("area_max"));
   raw.verified_only = text("verified_only") === "1" ? true : undefined;
+  raw.bbox = parseBbox(text("bbox"));
   Object.assign(raw, fixed);
 
   // Einzeln prüfen, Ungültiges entfernen; dann Abhängigkeiten, bis nichts mehr fehlt.
@@ -186,6 +216,7 @@ export function paramsFromFilters(filters: Filters, omit: (keyof Filters)[] = []
     if (key === "price_min" || key === "price_max") params.set(name, String(Math.floor((value as number) / MINOR)));
     else if (key === "species") params.set(name, (value as string[]).join(","));
     else if (key === "verified_only") params.set(name, "1");
+    else if (key === "bbox") params.set(name, (value as number[]).join(","));
     else params.set(name, String(value));
   }
   return params;

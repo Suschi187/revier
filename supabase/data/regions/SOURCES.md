@@ -6,7 +6,7 @@ Siehe docs/adr/007-regionendaten.md.
 
 ## Deutschland
 - **Datensatz:** BKG, Verwaltungsgebiete 1:250 000 (VG250), Ebenen, Stand 01.01.2026
-- **Datei:** `vg250_01-01.utm32s.gpkg.ebenen.zip`, MD5 `0534985f15355c591feacedd3a2b1d5d`
+- **Datei:** `vg250_01-01.utm32s.gpkg.ebenen.zip`, MD5 `0534985f15355c591feacedd3a2b1d5d` (Punkte, 2026-10-29). Für die Flächen (2026-11-01) neu geladen: MD5 `912ebecfc58bade695cf31271f4e0e85`, gleicher Stand 01.01.2026 (`dokumentation/aktualitaet.txt`), alle 401 Schlüssel gleich
 - **URL:** https://daten.gdz.bkg.bund.de/produkte/vg/vg250_ebenen_0101/aktuell/
 - **Verwendet:** `vg250_lan` (16 Länder) und `vg250_krs` (401 Kreise und kreisfreie Städte), jeweils `GF = 4`
 - **Lizenz:** Datenlizenz Deutschland – Namensnennung – Version 2.0 (dl-de/by-2-0), siehe `dokumentation/nutzungsbedingungen_vg250.pdf` im Archiv
@@ -23,6 +23,9 @@ Siehe docs/adr/007-regionendaten.md.
 ## Namen
 - Kreise und Bezirke tragen in allen Sprachen ihren amtlichen deutschen Namen. Bei gleichnamigen deutschen Kreisen kommt ein Zusatz dazu, „(Stadt)“ bzw. „(Landkreis)“.
 - Ländernamen in en/cs/pl sind Exonyme, eingetragen in `generate.py`. Sie sind **ungeprüft** (SPEC 7.6).
+
+## Flächen (ADR 016)
+Erzeugt mit `generate.py --areas-out` am 2026-11-01 (EPSG:3035, km², 1 Nachkommastelle): `supabase/migrations/20261102100100_regions_area_data.sql`. Die Migration bricht ab, wenn eine Region ohne Fläche bleibt.
 
 ## Neu erzeugen
 ```sh

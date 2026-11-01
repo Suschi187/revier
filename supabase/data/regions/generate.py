@@ -99,6 +99,57 @@ def compute_points(rows):
     return {code: (float(x), float(y)) for code, x, y in (line.split("\t") for line in out.splitlines() if line)}
 
 
+def compute_areas(rows):
+    """rows: (code, geometry-SQL) → {code: km²} in EPSG:3035 (flächentreu, wie das Raster der Verfremdung)."""
+    sql = ["create temp table g (code text, geom extensions.geometry);"]
+    sql += [f"insert into g values ({sql_literal(code)}, {expr});" for code, expr in rows]
+    sql.append(
+        "select code, round((extensions.st_area(extensions.st_transform(extensions.st_union(geom), 3035)) / 1e6)::numeric, 1)"
+        " from g group by code order by code;"
+    )
+    out = subprocess.run(PSQL, input="\n".join(sql), capture_output=True, text=True, check=True).stdout
+    return {code: float(area) for code, area in (line.split("\t") for line in out.splitlines() if line)}
+
+
+def geometry_rows(de_path: str, at_path: str):
+    """Alle Gebiete als (code, geometry-SQL): Länder und Kreise in DE und AT, wie in build()."""
+    srs, de_states, de_districts = read_de(de_path)
+    geom = lambda blob: f"extensions.st_geomfromwkb(decode('{gpkg_wkb(blob).hex()}', 'hex'), {srs})"
+    rows = [(DE_STATES[ags][0], geom(blob)) for ags, blob in de_states]
+    rows += [(f"DE-{ags}", geom(blob)) for ags, _, _, blob in de_districts]
+    at = json.load(open(at_path, encoding="utf-8"))
+    at_srid = int(re.search(r"EPSG::?(\d+)", at["crs"]["properties"]["name"]).group(1))
+    at_features = [f for f in at["features"] if not re.fullmatch(r"9(0[1-9]|1\d|2[0-3])", f["properties"]["g_id"])]
+    at_geom = lambda f: f"extensions.st_setsrid(extensions.st_geomfromgeojson({sql_literal(json.dumps(f['geometry']))}), {at_srid})"
+    rows += [(AT_STATES[f["properties"]["g_id"][0]][0], at_geom(f)) for f in at_features]
+    rows += [(f"AT-{f['properties']['g_id']}", at_geom(f)) for f in at_features]
+    return rows
+
+
+def render_areas(areas) -> str:
+    """Migration mit den Flächen (ADR 016): nur Zahlen, keine Geometrie."""
+    values = ",\n".join(f"  ({sql_literal(code)}, {area})" for code, area in sorted(areas.items()))
+    return "\n".join([
+        "-- GENERIERT von supabase/data/regions/generate.py --areas-out, nicht von Hand ändern.",
+        "-- Quellen und Lizenzen: supabase/data/regions/SOURCES.md. Fläche in km² (EPSG:3035), 1 Nachkommastelle.",
+        "",
+        "update public.regions r set area_km2 = v.area_km2",
+        "from (values",
+        values,
+        ") as v (code, area_km2)",
+        "where r.code = v.code;",
+        "",
+        "do $$",
+        "begin",
+        "  if exists (select 1 from public.regions where area_km2 is null) then",
+        "    raise exception 'Regionen ohne Fläche: Quelle passt nicht zu den Regionen';",
+        "  end if;",
+        "end;",
+        "$$;",
+        "",
+    ])
+
+
 def build(de_path: str, at_path: str):
     regions = []  # dicts mit code, country, level, parent, slug, names, point
 
@@ -183,8 +234,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--de", required=True)
     parser.add_argument("--at", required=True)
-    parser.add_argument("--out", required=True)
+    parser.add_argument("--out")
+    parser.add_argument("--areas-out", help="nur Flächen als Update-Migration schreiben (ADR 016)")
     args = parser.parse_args()
+    if args.areas_out:
+        areas = compute_areas(geometry_rows(args.de, args.at))
+        with open(args.areas_out, "w", encoding="utf-8") as f:
+            f.write(render_areas(areas))
+        print(f"{args.areas_out}: {len(areas)} Flächen")
+        return
+    if not args.out:
+        parser.error("--out oder --areas-out angeben")
     regions = build(args.de, args.at)
     with open(args.out, "w", encoding="utf-8") as f:
         f.write(render(regions, args.de, args.at))

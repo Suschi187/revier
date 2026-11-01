@@ -47,6 +47,16 @@ describe("URL-Parameter ↔ Filter", () => {
     expect(filtersFromParams({ species: ["roe_deer", "wild_boar"] }).species).toEqual(["roe_deer", "wild_boar"]);
   });
 
+  it("Bereich: kanonisch auf 4 Stellen nach außen gerundet, Roundtrip, Ungültiges fällt weg", () => {
+    expect(filtersFromParams(new URLSearchParams({ bbox: "11.123456,48.123456,11.876543,48.876543" })).bbox).toEqual([11.1234, 48.1234, 11.8766, 48.8766]);
+    const params = paramsFromFilters({ v: 1, bbox: [11.1234, 48.1234, 11.8766, 48.8766] });
+    expect(params.get("bbox")).toBe("11.1234,48.1234,11.8766,48.8766");
+    expect(filtersFromParams(params).bbox).toEqual([11.1234, 48.1234, 11.8766, 48.8766]);
+    for (const bad of ["1,2,3", "a,b,c,d", "13,51,12,52", "5,47,40,55", "1e3,1,2,3"]) {
+      expect(filtersFromParams(new URLSearchParams({ bbox: bad })).bbox, bad).toBeUndefined();
+    }
+  });
+
   it("omit lässt Schlüssel weg (z. B. q für next)", () => {
     expect(paramsFromFilters({ v: 1, q: "Name", kind: "lease" }, ["q"]).toString()).toBe("kind=lease");
   });
