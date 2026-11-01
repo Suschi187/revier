@@ -126,7 +126,7 @@ export default async function proxy(request: NextRequest) {
 }
 
 /** Dateien, Metadaten-Routen und APIs: kein Sprachrouting, nur der Header oben (QA M5 N1). */
-const PASS_THROUGH = /^\/(?:api|static|sitemap)\/|^\/(?:favicon\.ico|robots\.txt|sitemap\.xml|manifest\.webmanifest)$/;
+const PASS_THROUGH = /^\/(?:api|static|sitemap|tiles)\/|^\/(?:favicon\.ico|robots\.txt|sitemap\.xml|manifest\.webmanifest)$/;
 
 async function handle(request: NextRequest): Promise<NextResponse> {
   if (PASS_THROUGH.test(request.nextUrl.pathname)) return NextResponse.next();

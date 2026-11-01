@@ -19,6 +19,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Generiert mit `npm run gen:types`.
     "lib/supabase/database.types.ts",
+    // Kopie des MapLibre-Workers aus node_modules (scripts/map-worker.mjs).
+    "public/static/map/maplibre-*/**",
+    ".cache/**",
   ]),
 ]);
 

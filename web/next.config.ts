@@ -51,6 +51,8 @@ const nextConfig: NextConfig = {
       { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)).*)", headers: securityHeaders },
       // `:path*` deckt auch /:locale/admin selbst ab.
       { source: "/:locale/admin/:path*", headers: securityHeaders.filter((h) => h.key !== "Content-Security-Policy") },
+      // Kartenstil, Schriften und Worker sind versioniert (ADR 016, Review A9); public/ liefert sonst max-age=0.
+      { source: "/static/map/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
       // Token im Query-String nie per Referer weitergeben (ADR 010).
       { source: "/:locale/auth/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
     ];

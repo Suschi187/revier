@@ -45,3 +45,8 @@ next-env.d.ts
 /test-results/
 /playwright-report/
 /blob-report/
+
+# Kartendateien und Werkzeuge (ADR 016), nie ins Repo
+/.cache
+# MapLibre-Worker, kopiert vor dev/build aus node_modules (scripts/map-worker.mjs)
+/public/static/map/maplibre-*/

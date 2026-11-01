@@ -19,6 +19,9 @@ export function buildCsp({ supabaseUrl, dev, https, nonce }: CspOptions): string
     ["img-src", ["'self'", "data:", "blob:", supabase.origin]],
     ["font-src", ["'self'"]],
     ["connect-src", ["'self'", supabase.origin, supabaseWs]],
+    // Karten-Worker als eigene Datei unter /static/map/ (ADR 016, Review A2), kein blob:. In der Admin-CSP verwirft
+    // 'strict-dynamic' 'self'; dort gibt es keine Karte.
+    ["worker-src", ["'self'"]],
     ["frame-ancestors", ["'none'"]],
     ["frame-src", ["'none'"]],
     ["object-src", ["'none'"]],

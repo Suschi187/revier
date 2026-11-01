@@ -27,6 +27,12 @@ describe("buildCsp", () => {
     expect(dev).not.toContain("upgrade-insecure-requests");
   });
 
+  it("Worker nur von der eigenen Origin, nie blob: (Karte, ADR 016)", () => {
+    expect(directive(prod, "worker-src")).toBe("worker-src 'self'");
+    expect(directive(prod, "script-src")).not.toContain("blob:");
+    expect(directive(prod, "worker-src")).not.toContain("blob:");
+  });
+
   it("mit Nonce (nur /admin): keine Inline-Skripte ohne Nonce, strict-dynamic", () => {
     const admin = buildCsp({ supabaseUrl: "https://abc.supabase.co", dev: false, https: true, nonce: "abc123" });
     expect(directive(admin, "script-src")).toBe("script-src 'nonce-abc123' 'strict-dynamic'");

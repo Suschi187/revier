@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -25,5 +26,17 @@ describe("Öffentliche Service-Schicht", () => {
   it("Cache-Profil publicListings verfällt nach höchstens 5 Minuten", () => {
     const config = readFileSync(join(ROOT, "next.config.ts"), "utf8");
     expect(config).toMatch(/publicListings:\s*\{\s*stale:\s*60,\s*revalidate:\s*60,\s*expire:\s*300\s*\}/);
+  });
+});
+
+describe("Kartencode nur dort, wo eine Karte ist (ADR 016, Review A9)", () => {
+  it("maplibre-gl und pmtiles werden nur in components/map importiert", () => {
+    const hits = execSync(`grep -rlE "from \\"(maplibre-gl|pmtiles)\\"|import\\\\(\\"(maplibre-gl|pmtiles)\\"\\\\)" app components lib || true`, {
+      cwd: ROOT,
+      encoding: "utf8",
+    })
+      .split("\n")
+      .filter(Boolean);
+    expect(hits.every((file) => file.startsWith("components/map/") || file === "lib/map/assets.ts")).toBe(true);
   });
 });

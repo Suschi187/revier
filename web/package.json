@@ -15,13 +15,20 @@
     "test:e2e": "playwright test",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "gen:reference": "node --env-file-if-exists=.env.local scripts/gen-reference-data.mjs",
-    "admin:local": "node scripts/admin-local.mjs"
+    "admin:local": "node scripts/admin-local.mjs",
+    "map:download": "node scripts/map-download.mjs",
+    "map:style": "node scripts/map-style.mjs",
+    "map:worker": "node scripts/map-worker.mjs",
+    "predev": "node scripts/map-worker.mjs",
+    "prebuild": "node scripts/map-worker.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
+    "maplibre-gl": "6.15.0",
     "next": "16.4.1",
     "next-intl": "^4.14.9",
+    "pmtiles": "4.5.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "server-only": "^0.0.1",
@@ -30,6 +37,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@playwright/test": "^1.64.1",
+    "@protomaps/basemaps": "5.7.2",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^24.19.2",
     "@types/react": "^19",
