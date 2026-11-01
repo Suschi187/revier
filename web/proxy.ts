@@ -125,12 +125,20 @@ export default async function proxy(request: NextRequest) {
   return response;
 }
 
+/** Dateien, Metadaten-Routen und APIs: kein Sprachrouting, nur der Header oben (QA M5 N1). */
+const PASS_THROUGH = /^\/(?:api|static|sitemap)\/|^\/(?:favicon\.ico|robots\.txt|sitemap\.xml|manifest\.webmanifest)$/;
+
 async function handle(request: NextRequest): Promise<NextResponse> {
+  if (PASS_THROUGH.test(request.nextUrl.pathname)) return NextResponse.next();
   const { pathname, search } = request.nextUrl;
   const canonical = canonicalPath(pathname);
   if (canonical === null) return new NextResponse(null, { status: 400 });
   // Jeden Pfad nur unter seiner kanonischen Form ausliefern, sonst greifen die Prüfungen unten nicht
   // (`/de/%61dmin` rendert dank next-intl `/de/admin`) und öffentliche Seiten bekämen doppelte URLs (ADR 015).
+  // Schrägstrich am Ende: selbst umleiten (skipTrailingSlashRedirect), damit auch diese 308 den Header bekommt.
+  if (canonical.length > 1 && canonical.endsWith("/")) {
+    return NextResponse.redirect(new URL(canonical.replace(/\/+$/, "") + search, request.url), 308);
+  }
   if (canonical !== pathname) {
     return NextResponse.redirect(new URL(canonical + search, request.url), 308);
   }
@@ -157,11 +165,9 @@ async function handle(request: NextRequest): Promise<NextResponse> {
 }
 
 export const config = {
-  // Alles außer Next-Interna, API-Routen, öffentlichen Dateien unter /static/ und den
-  // Metadaten-Dateien im Root. Jeder andere Pfad ohne Sprachpräfix wird umgeleitet
-  // (z. B. /foo.png → /de/foo.png → 404), statt als ungültige Locale gerendert zu werden
-  // (QA M0 F6). Neue öffentliche Dateien gehören deshalb nach public/static/. Sitemaps je Sprache liegen
-  // unter /sitemap/{id}.xml (ADR 015) und laufen ebenfalls nicht durch next-intl.
-  matcher:
-    "/((?!_next/|_vercel/|api/|static/|sitemap/|favicon\\.ico$|robots\\.txt$|sitemap\\.xml$|manifest\\.webmanifest$).*)",
+  // Alle Pfade außer Next-Interna (QA M5 N1): Dateien, Sitemaps, robots.txt und APIs laufen nur durch, damit der
+  // Header `X-Robots-Tag` außerhalb von Prod überall greift. Jeder andere Pfad ohne Sprachpräfix wird umgeleitet
+  // (z. B. /foo.png → /de/foo.png → 404), statt als ungültige Locale gerendert zu werden (QA M0 F6). Neue öffentliche
+  // Dateien gehören deshalb nach public/static/.
+  matcher: "/((?!_next/|_vercel/).*)",
 };

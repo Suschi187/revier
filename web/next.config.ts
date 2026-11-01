@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
   },
   partialPrefetching: true,
   poweredByHeader: false,
+  // Den Schrägstrich am Ende entfernt der Proxy selbst (308), damit dort auch X-Robots-Tag greift (QA M5 N1).
+  skipTrailingSlashRedirect: true,
   // Nur `next dev`: 127.0.0.1 ist wie localhost ein erlaubter Auth-Host (config.toml). Ohne den Eintrag
   // lehnt Next die HMR-Verbindung ab, und der Browser versucht sie endlos neu („Compiling“).
   allowedDevOrigins: ["127.0.0.1"],
