@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.7
+# SPEC – Revier (Arbeitstitel), MVP v0.8
 
+v0.8: M6 Karte (ADR 016): Kacheln selbst gehostet (7.10 entschieden), `map_point` und `regions.area_km2` (3.1), keine Punktwahl in Kreisen unter 400 km² (3.3), Karte in M9 (Consent, Datenschutz), ODbL der Basiskarte in 7.2.
 v0.7: M5 Öffentliche Seiten (ADR 015): `published_at`/`approved_at` (3.1), Sichtbarkeit über eine Definition und Zustand „nicht mehr verfügbar“ (3.4), Anbieterprofil ohne „dabei seit“ (4.3), Suche als RPC mit Filterformat v1, Rechtsfragen 7.2.
 v0.6: M4 Moderation (ADR 014): `reject_code` plus optionaler Freitext, `submitted_at`, Entscheidungen nur per RPC `moderate_listing` (Freigeben, Bearbeitung anfordern, Ablehnen), Admins per UI mit Step-up, Karenz und Limits (3.1, 3.4, 5).
 v0.5: Stand nach M3 (Plan M3 8, QA M3 F8): Fotospalten und Verarbeitung (3.1, ADR 011), `listing_places` und `postal_prefix` (3.1, 3.3, ADR 012), Attribute und Pflichtangaben je Art (3.2, ADR 013), Wildart `other_predators`.
@@ -58,6 +59,7 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 **regions**
 - `country`, `level` enum (`state | district`), `parent_id` null, `code` text (state: ISO 3166-2, z. B. `DE-BY`; district: amtlicher Schlüssel mit Länderpräfix, z. B. `DE-09162`), `slug` text, `name_de`, `name_en`, `name_cs`, `name_pl`, `centroid` geography(point); unique (`country`, `level`, `code`)
 - Anzeigen sind nur in Ländern möglich, für die `district`-Daten vorliegen (zunächst DE, AT).
+- `area_km2` (v0.8): Fläche aus den amtlichen Quellen (ADR 007), als Zahl ohne Polygon; steuert die Punktwahl (3.3)
 - Befüllt mit Bundesländern/Kantonen/Kraje/Woiwodschaften und Landkreisen/Bezirken.
 
 **listings**
@@ -69,6 +71,7 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 - `content_language` enum: `de | en | cs | pl`
 - `country`, `region_id` fk regions (Landkreis-Ebene)
 - `display_location` geography(point) – verfremdet, siehe 3.3
+- `map_point` geometry(point) (v0.8): `display_location` oder Mittelpunkt des Kreises, nur vom Trigger gesetzt, für Karte und Bereichssuche (ADR 016)
 - `postal_prefix` text null – die ersten beiden Ziffern der PLZ, einzige öffentliche Ortsangabe außer dem Kreis (v0.5, nur vom Server gesetzt)
 - `price_minor` bigint null, `currency` enum: `EUR | CHF | CZK | PLN`, `price_unit` enum: `total | per_year | per_hectare_year | per_day | per_animal | on_request`
 - `area_hectares` numeric null
@@ -140,7 +143,7 @@ Validierung in der DB bei jedem Schreiben (`private.listing_attributes_error`) u
 
 ### 3.3 Standortschutz
 - Nutzer wählt den Landkreis (Pflicht) und optional einen Punkt auf der Karte.
-- Gespeichert wird in `display_location` ein **verfremdeter Punkt** (v0.5, ADR 006 v2): Der Eingabepunkt rastet auf die Mitte seiner 1-km-Zelle ein und wird um einen festen Vektor von 3–5 km verschoben, der je Besitzer und Kreis gleich bleibt (HMAC mit Secret). So mittelt sich der Versatz auch über viele Anzeigen nicht heraus. Den Punkt setzt nur der Besitzer; er liegt höchstens 80 km vom Kreismittelpunkt. Ohne Punkt zeigen Clients den Kreismittelpunkt (Web in M3 ohne Karte).
+- Gespeichert wird in `display_location` ein **verfremdeter Punkt** (v0.5, ADR 006 v2): Der Eingabepunkt rastet auf die Mitte seiner 1-km-Zelle ein und wird um einen festen Vektor von 3–5 km verschoben, der je Besitzer und Kreis gleich bleibt (HMAC mit Secret). So mittelt sich der Versatz auch über viele Anzeigen nicht heraus. Den Punkt setzt nur der Besitzer; er liegt höchstens 80 km vom Kreismittelpunkt. Ohne Punkt zeigen Clients den Kreismittelpunkt. In Kreisen unter 400 km² (`app_settings.listing_location_min_district_km2`) ist kein Punkt erlaubt, weil die Kreisgrenze den Ring sonst stark eingrenzt; setzt ein Besitzer im selben Kreis einen weiteren Punkt in einer anderen Zelle, weist der Client darauf hin (v0.8, ADR 016). Der gespeicherte Punkt wird nie als Eingabe zurückgeschickt.
 - Exakte Koordinaten werden nicht gespeichert. Die genaue Lage teilen Anbieter selbst im Chat.
 - Ort mit PLZ (ADR 012): Angebote brauchen PLZ und Ortsnamen, die PLZ muss zum Kreis passen; bei Gesuchen (gesuchtes Gebiet) reicht der Kreis. Volle PLZ und Ort sind nie öffentlich und nie Such- oder Filterkriterium, öffentlich erscheinen nur die ersten beiden Ziffern.
 
@@ -257,6 +260,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 
 **M9 Vertrauen und Compliance (Web)**
 - Verifizierung (Upload, Admin-Entscheidung, Badge), Melden von Anzeigen/Profilen, Meldungs-Warteschlange im Admin, Account-Löschung (inkl. Daten und Storage), Datenexport, Cookie-Consent, Rechtstext-Platzhalter
+- Karte (v0.8, ADR 016): Der Consent-Banner führt die selbst gehostete Karte als technisch notwendigen eigenen Dienst; die Datenschutzerklärung nennt sie und einen möglichen Cache Storage. Wechselt der Kachelanbieter zu einem eigenen Verantwortlichen oder außerhalb der EU, lädt die Karte erst nach Einwilligung.
 - *Akzeptanz:* Gelöschter Account verschwindet aus allen Tabellen/Buckets (bis auf gesetzlich nötige Reste, siehe Abschnitt 7); ohne Einwilligung laufen keine nicht notwendigen Cookies
 
 **M10 Web-Release**
@@ -297,7 +301,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 
 ## 7. Offene Entscheidungen (bitte vor M1/M3 klären)
 1. **Name und Domain**, Bundle-ID, Entwickler-Account (Privatperson oder Firma). *Blockiert:* Sign in with Apple (Web ist eingebaut, aber ausgeschaltet) und das Supabase-Cloud-Projekt (ADR 002).
-2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform Außerdem: ODbL der PLZ-Daten aus OpenStreetMap, ob die Produktdatenbank als Sammlung (Collective Database) gilt und die Anzeigen nicht unter Share-Alike fallen (ADR 012).
+2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform Außerdem: ODbL der PLZ-Daten aus OpenStreetMap, ob die Produktdatenbank als Sammlung (Collective Database) gilt und die Anzeigen nicht unter Share-Alike fallen (ADR 012). Ebenso die Basiskarte aus OpenStreetMap (ODbL), die als Datei öffentlich abrufbar ist (ADR 016).
    - **Anbieterangaben gewerblicher Konten (DSA, v0.7):** Welche Angaben muss ein gewerblicher Anbieter nach DSA (Art. 30 Nachverfolgbarkeit, Art. 31) hinterlegen und öffentlich zeigen (Name, Anschrift, Kontakt, Register), und wie prüft die Plattform sie? Heute zeigt das Profil nur Firmenname, Land und das Badge.
    - **Begründung von Entfernungen per E-Mail (DSA Art. 17, v0.7):** Reicht die Begründung im Konto, oder muss jede Entfernung, Ablehnung und Sperre zusätzlich per E-Mail begründet werden (Inhalt, Frist, Hinweis auf Rechtsbehelf)?
 3. **Retention:** *Technischer Default entschieden (v0.3, ADR 008), anwaltliche Prüfung offen.* Verifizierungsdokument 30 Tage nach Entscheidung löschen, bei Account-Löschung sofort; Metadaten bis zur Account-Löschung. Account-Löschung ist eine echte Löschung inkl. Chats; Audit- und Moderationsdaten bleiben pseudonymisiert. Alle Fristen konfigurierbar (`private.app_settings`). Rechtlich zu prüfen: Dauer für Jagdscheine, DSA-Fristen für Moderationsdaten, Beweissicherung, Nachrichten beim Gegenüber.
@@ -308,7 +312,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 7. **Moderationsprozess:** Wer prüft wie schnell? (Ziel: Freigabe < 24 h)
 8. **Kontaktdaten im Chat:** Telefonnummern/Mails sperren oder zulassen?
 9. **Hosting Web-App:** Anbieter mit EU-Region wählen (z. B. Vercel mit EU-Funktionen oder ein EU-Hoster); Auftragsverarbeitungsvertrag klären
-10. **Kartenanbieter Web:** Kachel-Anbieter mit DSGVO-konformer Einbindung wählen (ADR)
+10. **Kartenanbieter Web:** *Entschieden (v0.8, ADR 016):* Vektorkacheln (PMTiles, Protomaps-Basemap aus OpenStreetMap) von der eigenen Origin, kein Dritter; Produktions-Hosting (EU, AVV, Logs ohne IP oder höchstens 7 Tage) in M10.
 11. **E-Mail-Versand:** Anbieter mit EU-Hosting für Transaktionsmails (Bestätigung, Benachrichtigung)
 
 ## 8. Nicht-funktionale Anforderungen

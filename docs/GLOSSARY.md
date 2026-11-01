@@ -174,3 +174,13 @@ Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen
 | verified | Verified | verifiziert | ověřený | zweryfikowany | ungeprüft |
 | gone | No longer available | nicht mehr verfügbar | již není k dispozici | już niedostępne | ungeprüft |
 | postal_area | Postcode area | PLZ-Bereich | Oblast PSČ | Obszar kodu pocztowego | ungeprüft |
+
+## Karte (M6)
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| approximate_location | Approximate location | Ungefähre Lage | Přibližná poloha | Przybliżona lokalizacja | ungeprüft |
+| obfuscated_point | Shifted point | Verfremdeter Punkt | Posunutý bod | Przesunięty punkt | ungeprüft |
+| search_this_area | Search this area | In diesem Bereich suchen | Hledat v této oblasti | Szukaj w tym obszarze | ungeprüft |
+| map_view | Map | Karte | Mapa | Mapa | ungeprüft |
+| list_view | List | Liste | Seznam | Lista | ungeprüft |

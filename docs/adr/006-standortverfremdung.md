@@ -49,3 +49,10 @@ SPEC 3.3: Exakte Revierkoordinaten werden nie gespeichert. Angezeigt wird ein ve
   - Der Guard sieht den Rohpunkt: Jedes Update mit `display_location` zählt als Inhaltsänderung und führt eine freigegebene Anzeige zurück in die Prüfung, auch bei gleichem Punkt.
 - Verworfen wurde der Schlüssel `(owner_id, Zelle)`: Ein Revier über mehrere Zellen bekäme unabhängige Versätze, deren Mittel sich dem Revier mit etwa 4 km/√n nähert (Review Plan M3, B0).
 - Tests: pgTAP `12_location` (Zelle, konstanter Versatz, Mittelwert, Streuung, kein Orakel, Speicherorte, Plausibilität, Kreiswechsel, Admin, Rechte, Fingerprint), `04_listings`.
+
+## Nachtrag M6 (ADR 016)
+- Mit M6 setzen Clients erstmals Punkte. Das Bedrohungsmodell mit Randeffekt, mehreren Zellen eines Besitzers und dem Restrisiko „zwei Schlüssel“ (Kreisgrenze, Kreiswechsel) steht in ADR 016.
+- Keine Punktwahl in Kreisen unter `listing_location_min_district_km2` (400 km²). Hinweis im Client ab dem zweiten Punkt eines Besitzers im Kreis.
+- Für Clients: Punkt nur über `set_listing_location` mit `p_point` (`keep | set | clear`). Der gespeicherte Punkt wird nie als Eingabe zurückgeschickt.
+- Logging-Checkliste: keine Koordinaten in App-Logs, URLs und Fehlern; Zugriffslogs auf die Kartendatei und `/api/map` ohne IP oder höchstens 7 Tage.
+
