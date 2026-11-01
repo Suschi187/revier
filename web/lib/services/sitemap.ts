@@ -7,20 +7,23 @@ import { publicPaths, type PublicRoute } from "@/lib/public/paths";
 import { regionByCode } from "@/lib/public/regions";
 import { anonClient } from "@/lib/supabase/anon";
 import { LISTING_KINDS } from "@/lib/validation/listing";
-import { PUBLIC_TAGS } from "./public-listings";
+import { cacheEpoch, PUBLIC_TAGS } from "./public-listings";
 
 // Sitemap je Sprache (ADR 015, Review A8): nur über den Anon-Client, also nie Unveröffentlichtes. Startseite,
 // Kategorien und Regionen mit Anzeigen, aktive Anzeigen, Profile gewerblicher Anbieter. Ohne Suche, Konto,
-// Admin, leere Seiten und Profile von Privatpersonen. Jede URL prüft beim Aufruf selbst, daher `hours`.
+// Admin, leere Seiten und Profile von Privatpersonen. Neue Anzeigen erscheinen nach bis zu 1 h (`hours`);
+// Entfernen, Sperren und Löschen wirken über den Cache-Zähler sofort.
 
 const MAX_URLS = 45_000;
 
 type Entry = { page: PublicRoute; lastModified?: string };
 
-async function entries(): Promise<Entry[]> {
+async function entries(epoch: number): Promise<Entry[]> {
   "use cache";
   cacheLife("hours");
   cacheTag(PUBLIC_TAGS.all);
+  // Cache-Zähler im Schlüssel (QA M5 F11): Entfernte Anzeigen und Konten fallen sofort heraus.
+  void epoch;
   const client = anonClient();
   const [listings, providers, ...counts] = await Promise.all([
     client.from("listings").select("id, approved_at").order("approved_at", { ascending: false }).limit(MAX_URLS),
@@ -46,7 +49,7 @@ async function entries(): Promise<Entry[]> {
 }
 
 export async function sitemapFor(locale: AppLocale): Promise<MetadataRoute.Sitemap> {
-  return (await entries()).map(({ page, lastModified }) => {
+  return (await entries(await cacheEpoch())).map(({ page, lastModified }) => {
     const paths = publicPaths(page);
     return {
       url: absoluteUrl(paths[locale]),

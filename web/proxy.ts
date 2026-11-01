@@ -6,6 +6,7 @@ import { goneHtml } from "./lib/public/gone-page";
 import { fetchPageState, isDocumentRequest } from "./lib/public/page-state";
 import { hasFilterQuery, parsePath } from "./lib/public/paths";
 import { regionFromSlugs } from "./lib/public/regions";
+import { siteIndexable } from "./lib/public/robots";
 import { STATUS_SECTIONS } from "./lib/public/sections";
 import { publicEnv } from "./lib/env";
 import { buildCsp } from "./lib/security/csp";
@@ -114,7 +115,17 @@ function withAdminCsp(request: NextRequest, respond: () => NextResponse): NextRe
 // Sprachrouting. Der Schutz hier ist nur optimistisch; autoritativ prüft jede Seite und Action selbst.
 // Status und CSP für geschützte Bereiche entscheidet nur der Proxy: Mit cacheComponents ist die Hülle
 // vorgerendert und der Status 200 gesendet, bevor die Seite forbidden() oder redirect() aufruft (QA M4 F1).
+/**
+ * Nur Prod ist indexierbar (ADR 015, Review A8). Zur Laufzeit gesetzt (QA M5 F10), nicht in next.config.ts: Die
+ * Header dort landen beim Build im Manifest, ein Artefakt würde sonst seine Build-Umgebung behalten.
+ */
 export default async function proxy(request: NextRequest) {
+  const response = await handle(request);
+  if (!siteIndexable()) response.headers.set("X-Robots-Tag", "noindex");
+  return response;
+}
+
+async function handle(request: NextRequest): Promise<NextResponse> {
   const { pathname, search } = request.nextUrl;
   const canonical = canonicalPath(pathname);
   if (canonical === null) return new NextResponse(null, { status: 400 });
