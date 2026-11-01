@@ -1,7 +1,6 @@
 import "server-only";
-import { anonClient } from "@/lib/supabase/anon";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { cacheEpoch, getPublicListing, type PublicListing } from "./public-listings";
+import { parseFavorites, type ListingCard } from "./public-listings";
 
 // Favoriten des angemeldeten Nutzers (ADR 015). RLS: nur eigene Zeilen, Merken nur sichtbarer Anzeigen,
 // höchstens 500 je Konto (23514 mit hint favorites_limit).
@@ -28,27 +27,26 @@ export async function removeFavorites(listingIds: string[]): Promise<FavoriteRes
   return error ? "failed" : "ok";
 }
 
-export type FavoritesOverview = { available: PublicListing[]; unavailableIds: string[] };
+export type FavoritesOverview = { items: ListingCard[]; unavailable: number };
 
 /**
- * Gemerkte Anzeigen, neueste Favoriten zuerst. Ob eine Anzeige öffentlich ist, entscheidet der Anon-Client;
- * nicht mehr verfügbare bleiben erhalten (die Anzeige kann zurückkommen), werden aber ohne Titel gezählt.
+ * Gemerkte Anzeigen in einer Abfrage (RPC `my_favorites`, QA M5 F3): Karten verfügbarer Anzeigen, neueste Favoriten
+ * zuerst, und die Zahl der nicht mehr verfügbaren (bleiben erhalten, die Anzeige kann zurückkommen). Ungecacht,
+ * damit eine eben pausierte Anzeige nicht als verfügbar zählt. null bei Fehler: dann nie etwas als „nicht
+ * verfügbar“ werten.
  */
-export async function favoritesOverview(): Promise<FavoritesOverview> {
+export async function favoritesOverview(): Promise<FavoritesOverview | null> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.from("favorites").select("listing_id").order("created_at", { ascending: false }).limit(1000);
-  const ids = (data ?? []).map((row) => row.listing_id);
-  if (ids.length === 0) return { available: [], unavailableIds: [] };
-  // Verfügbarkeit ungecacht (eine Abfrage als anon), die Inhalte dann aus dem Cache: Sonst zählte eine eben
-  // pausierte Anzeige bis zu 5 Minuten als verfügbar und ließe sich nicht als „nicht mehr verfügbar“ entfernen.
-  const { data: visible } = await anonClient().from("listings").select("id").in("id", ids);
-  const isPublic = new Set((visible ?? []).map((row) => row.id));
-  const epoch = await cacheEpoch();
-  const listings = await Promise.all(ids.filter((id) => isPublic.has(id)).map((id) => getPublicListing(id, epoch)));
-  return {
-    available: listings.filter((l): l is PublicListing => l !== null),
-    unavailableIds: ids.filter((id) => !isPublic.has(id)),
-  };
+  const { data, error } = await supabase.rpc("my_favorites");
+  if (error) return null;
+  return parseFavorites(data);
+}
+
+/** Entfernt nur, was jetzt nicht öffentlich ist, in einer Anweisung der DB. */
+export async function removeUnavailable(): Promise<FavoriteResult> {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("remove_unavailable_favorites");
+  return error ? "failed" : "ok";
 }
 
 export type FavoriteContext = { ids: Set<string>; signedIn: boolean; userId: string | null; back: string };

@@ -614,7 +614,8 @@
       "next": "Następna strona",
       "invalid": "Filtry są nieprawidłowe. Sprawdź wprowadzone dane.",
       "failed": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
-      "metaDescription": "{title}: aktualne oferty i poszukiwania w Revier."
+      "metaDescription": "{title}: aktualne oferty i poszukiwania w Revier.",
+      "queryTooLong": "Szukana fraza jest za długa. Użyj mniejszej liczby słów."
     },
     "filters": {
       "heading": "Filtry",
@@ -676,6 +677,7 @@
     "removeUnavailable": "Usuń niedostępne",
     "removedNotice": "Niedostępne ulubione zostały usunięte.",
     "failed": "Nie udało się. Spróbuj ponownie.",
-    "limit": "Możesz zapisać maksymalnie 500 ogłoszeń."
+    "limit": "Możesz zapisać maksymalnie 500 ogłoszeń.",
+    "loadFailed": "Nie udało się wczytać ulubionych. Spróbuj ponownie później."
   }
 }

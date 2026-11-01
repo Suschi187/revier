@@ -56,6 +56,12 @@ describe("safeNextPath für öffentliche Seiten (ADR 015, Review A9)", () => {
     expect(safeNextPath(input, "de")).toBe(expected);
   });
 
+  it("Server Actions behalten den Suchtext, sonst fällt er weg (QA M5 F9)", () => {
+    expect(safeNextPath("/de/suche?q=Rehwild&kind=lease", "de")).toBe("/de/suche?kind=lease");
+    expect(safeNextPath("/de/suche?q=Rehwild&kind=lease", "de", { keepSearchText: true })).toBe("/de/suche?q=Rehwild&kind=lease");
+    expect(safeNextPath("//evil.example?q=x", "de", { keepSearchText: true })).toBe("/de/account");
+  });
+
   it.each([
     "/en/anzeige/" + id,
     "/de/anzeige/" + id.toUpperCase(),

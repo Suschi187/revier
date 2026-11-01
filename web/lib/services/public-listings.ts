@@ -21,8 +21,8 @@ export const PUBLIC_TAGS = {
 /** Je Anfrage ungecacht: steigt bei Entfernen, Sperren und Konto-Löschung (Trigger in der DB). */
 export async function cacheEpoch(): Promise<number> {
   const { data, error } = await anonClient().rpc("public_cache_epoch");
-  // Ohne Zähler lieber nicht aus dem Cache lesen als veraltet: ein eindeutiger Schlüssel je Anfrage.
-  return error || typeof data !== "number" ? -Date.now() : data;
+  // Ohne Zähler ein fester Schlüssel (QA M5 Hinweis): kein neuer Cache-Eintrag je Anfrage, höchstens 5 Minuten alt.
+  return error || typeof data !== "number" ? -1 : data;
 }
 
 const providerSchema = z.object({
@@ -65,6 +65,13 @@ const pageSchema = z.object({
   total: z.number().int().optional(),
   total_capped: z.boolean().optional(),
 });
+const favoritesSchema = z.object({ items: z.array(cardSchema), unavailable: z.number().int() });
+
+/** Antwort von `my_favorites` (gleiche Karten wie die Suche). */
+export function parseFavorites(data: unknown): { items: ListingCard[]; unavailable: number } | null {
+  const parsed = favoritesSchema.safeParse(data);
+  return parsed.success ? parsed.data : null;
+}
 export type ListingPage = { items: ListingCard[]; nextCursor: string | null; total: number | null; totalCapped: boolean };
 
 export type SearchResult = { ok: true; page: ListingPage } | { ok: false; error: "invalid" | "failed"; key?: string };

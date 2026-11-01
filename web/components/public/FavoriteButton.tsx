@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { toggleFavorite } from "@/app/[locale]/account/favorites/actions";
 import type { AppLocale } from "@/i18n/routing";
+import { safeNextPath } from "@/lib/auth/paths";
 
 /**
  * Merken (ADR 015, Review A10): mit Login ein POST-Formular mit `aria-pressed`, ohne Login ein Link zum Login mit
@@ -25,7 +26,8 @@ export async function FavoriteButton({
   const className = "inline-flex min-w-28 justify-center rounded border border-stone-500 px-3 py-1 text-sm";
   if (!signedIn) {
     return (
-      <a href={`/${locale}/login?next=${encodeURIComponent(back)}`} className={className} aria-label={t("saveLabel", { title })}>
+      // Ohne Suchtext im Login-Link (H10, QA M5 F9).
+      <a href={`/${locale}/login?next=${encodeURIComponent(safeNextPath(back, locale))}`} className={className} aria-label={t("saveLabel", { title })}>
         {t("save")}
       </a>
     );

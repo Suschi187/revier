@@ -614,7 +614,8 @@
       "next": "Nächste Seite",
       "invalid": "Die Filter sind ungültig. Bitte prüfe deine Eingaben.",
       "failed": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
-      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Revier."
+      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Revier.",
+      "queryTooLong": "Der Suchbegriff ist zu lang. Bitte verwende weniger Wörter."
     },
     "filters": {
       "heading": "Filter",
@@ -676,6 +677,7 @@
     "removeUnavailable": "Nicht mehr verfügbare entfernen",
     "removedNotice": "Nicht mehr verfügbare Favoriten wurden entfernt.",
     "failed": "Das hat nicht geklappt. Bitte erneut versuchen.",
-    "limit": "Du kannst höchstens 500 Anzeigen merken."
+    "limit": "Du kannst höchstens 500 Anzeigen merken.",
+    "loadFailed": "Deine Favoriten konnten nicht geladen werden. Bitte später erneut versuchen."
   }
 }

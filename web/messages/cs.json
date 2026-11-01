@@ -614,7 +614,8 @@
       "next": "Další stránka",
       "invalid": "Filtry jsou neplatné. Zkontrolujte prosím zadání.",
       "failed": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
-      "metaDescription": "{title}: aktuální nabídky a poptávky na Revier."
+      "metaDescription": "{title}: aktuální nabídky a poptávky na Revier.",
+      "queryTooLong": "Hledaný výraz je příliš dlouhý. Použijte prosím méně slov."
     },
     "filters": {
       "heading": "Filtry",
@@ -676,6 +677,7 @@
     "removeUnavailable": "Odstranit nedostupné",
     "removedNotice": "Nedostupné oblíbené inzeráty byly odstraněny.",
     "failed": "Nepodařilo se. Zkuste to prosím znovu.",
-    "limit": "Uložit můžete nejvýše 500 inzerátů."
+    "limit": "Uložit můžete nejvýše 500 inzerátů.",
+    "loadFailed": "Vaše oblíbené inzeráty se nepodařilo načíst. Zkuste to prosím později."
   }
 }
