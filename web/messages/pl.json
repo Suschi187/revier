@@ -651,6 +651,16 @@
       "contactLogin": "Skontaktuj się z ogłaszającym (wymagane logowanie)",
       "contactSoon": "Wiadomości do ogłaszających będą dostępne wkrótce.",
       "ownListing": "To jest twoje ogłoszenie."
+    },
+    "provider": {
+      "breadcrumb": "Ścieżka nawigacji",
+      "verified": "zweryfikowany",
+      "listings": "Aktywne ogłoszenia",
+      "empty": "Obecnie brak aktywnych ogłoszeń.",
+      "paging": "Strony",
+      "first": "Do pierwszej strony",
+      "next": "Następna strona",
+      "metaDescription": "Ogłoszenia od {name} w Revier."
     }
   }
 }

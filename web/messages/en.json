@@ -651,6 +651,16 @@
       "contactLogin": "Contact provider (sign-in required)",
       "contactSoon": "Messages to providers are coming soon.",
       "ownListing": "This is your listing."
+    },
+    "provider": {
+      "breadcrumb": "Breadcrumb",
+      "verified": "verified",
+      "listings": "Active listings",
+      "empty": "No active listings at the moment.",
+      "paging": "Pages",
+      "first": "Go to first page",
+      "next": "Next page",
+      "metaDescription": "Listings by {name} on Revier."
     }
   }
 }

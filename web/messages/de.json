@@ -651,6 +651,16 @@
       "contactLogin": "Anbieter kontaktieren (Anmeldung nötig)",
       "contactSoon": "Nachrichten an Anbieter folgen in Kürze.",
       "ownListing": "Das ist deine Anzeige."
+    },
+    "provider": {
+      "breadcrumb": "Brotkrumen",
+      "verified": "verifiziert",
+      "listings": "Aktive Anzeigen",
+      "empty": "Derzeit keine aktiven Anzeigen.",
+      "paging": "Seiten",
+      "first": "Zur ersten Seite",
+      "next": "Nächste Seite",
+      "metaDescription": "Anzeigen von {name} auf Revier."
     }
   }
 }

@@ -651,6 +651,16 @@
       "contactLogin": "Kontaktovat inzerenta (nutné přihlášení)",
       "contactSoon": "Zprávy inzerentům budou brzy k dispozici.",
       "ownListing": "Toto je váš inzerát."
+    },
+    "provider": {
+      "breadcrumb": "Drobečková navigace",
+      "verified": "ověřený",
+      "listings": "Aktivní inzeráty",
+      "empty": "Momentálně žádné aktivní inzeráty.",
+      "paging": "Stránky",
+      "first": "Na první stránku",
+      "next": "Další stránka",
+      "metaDescription": "Inzeráty od {name} na Revier."
     }
   }
 }
