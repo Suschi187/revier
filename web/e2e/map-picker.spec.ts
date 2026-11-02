@@ -122,3 +122,22 @@ test.describe("Punktwahl im Assistenten (M6)", () => {
     await expect(page.getByRole("button", { name: "Punkt in der Kartenmitte setzen" })).toHaveCount(0);
   });
 });
+
+test.describe("Punktwahl: Barrierefreiheit (M6)", () => {
+  test.skip(!local, "Lokale Supabase nötig");
+
+  test("axe ohne schwere Verstöße im Schritt Ort mit Karte", async ({ page }) => {
+    const { default: AxeBuilder } = await import("@axe-core/playwright");
+    const service = admin();
+    const email = uniqueEmail("m6-axe");
+    created.push(email);
+    const { data } = await service.auth.admin.createUser({ email, email_confirm: true });
+    const region = (await service.from("regions").select("id").eq("code", "DE-14628").single()).data!.id;
+    const row = await service.from("listings").insert({ owner_id: data.user!.id, kind: "helper", direction: "wanted", title: "Axe Ort", content_language: "de", region_id: region }).select("id").single();
+    await signIn(page.context(), email);
+    await page.goto(`/de/account/listings/${row.data!.id}/edit?step=location`);
+    await expect(page.getByRole("button", { name: "Punkt in der Kartenmitte setzen" })).toBeEnabled({ timeout: 20_000 });
+    const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).exclude(".maplibregl-canvas").analyze();
+    expect(result.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+  });
+});

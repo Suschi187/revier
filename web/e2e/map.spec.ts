@@ -190,3 +190,25 @@ test.describe("Karte (M6)", () => {
     await context.close();
   });
 });
+
+test.describe("Karte: Barrierefreiheit und Browser-Speicher (M6)", () => {
+  test.skip(!local, "Lokale Supabase nötig");
+
+  test("axe ohne schwere Verstöße auf Liste mit Karte und Detail mit Karte", async ({ page }) => {
+    const { default: AxeBuilder } = await import("@axe-core/playwright");
+    for (const url of ["/de/jagdhelfer?view=map", "/de/suche?view=map"]) {
+      await page.goto(url);
+      await expect(page.getByRole("button", { name: "In diesem Bereich suchen" })).toBeVisible();
+      const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).exclude(".maplibregl-canvas").analyze();
+      const serious = result.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+      expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), url).toEqual([]);
+    }
+  });
+
+  test("Kacheln landen nicht im Cache Storage des Browsers (ADR 016, Review A12)", async ({ page }) => {
+    await page.goto("/de/jagdhelfer?view=map");
+    await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 20_000 });
+    await page.waitForTimeout(2000);
+    expect(await page.evaluate(async () => (await caches.keys()).length)).toBe(0);
+  });
+});

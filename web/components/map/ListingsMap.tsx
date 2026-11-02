@@ -72,6 +72,7 @@ export function ListingsMap({
   const router = useRouter();
   const api = useRef<MapApi | null>(null);
   const markers = useRef<Marker[]>([]);
+  const signature = useRef("");
   const popup = useRef<Popup | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "failed" | "truncated">("loading");
   const [shown, setShown] = useState(0);
@@ -120,7 +121,10 @@ export function ListingsMap({
       .addTo(current.map);
     const done = () => {
       instance.remove();
-      trigger.focus();
+      // Der Marker kann inzwischen neu gezeichnet sein: über die Koordinate wiederfinden.
+      const key = coordinates.join(",");
+      const current = document.querySelector<HTMLButtonElement>(`.map-marker[data-key="${key}"]`);
+      (current ?? trigger).focus();
     };
     close.addEventListener("click", done);
     box.addEventListener("keydown", (event) => {
@@ -134,8 +138,6 @@ export function ListingsMap({
     const current = api.current;
     if (!current) return;
     const { map, maplibre } = current;
-    for (const marker of markers.current) marker.remove();
-    markers.current = [];
     // Cluster und Stapel als HTML-Buttons (Review A8): fokussierbar, per Tastatur und im Test bedienbar.
     type Rendered = Stack & { properties: { cluster?: boolean; cluster_id?: number; total?: number } };
     const seen = new Map<string, Rendered>();
@@ -143,11 +145,18 @@ export function ListingsMap({
       const key = feature.properties.cluster ? `c${feature.properties.cluster_id}` : feature.geometry.coordinates.join(",");
       if (!seen.has(key)) seen.set(key, feature);
     }
+    // Nur neu zeichnen, wenn sich die Punkte geändert haben: sonst verliert ein fokussierter Marker den Fokus.
+    const next = [...seen.keys()].sort().join("|");
+    if (next === signature.current) return;
+    signature.current = next;
+    for (const marker of markers.current) marker.remove();
+    markers.current = [];
     if (seen.size > MAX_MARKERS) return;
     for (const feature of seen.values()) {
       const coordinates = feature.geometry.coordinates;
       const button = document.createElement("button");
       button.type = "button";
+      button.dataset.key = coordinates.join(",");
       if (feature.properties.cluster) {
         const total = feature.properties.total ?? 0;
         button.className = "map-marker map-cluster";

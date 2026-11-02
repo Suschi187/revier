@@ -1,6 +1,6 @@
 # ADR 016: Karte im Web
 
-Status: angenommen (M6, Plan `docs/plans/M6-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-11-01)
+Status: angenommen und umgesetzt (M6, Plan `docs/plans/M6-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-11-01; Umsetzung 2026-11-02, CHANGELOG M6)
 
 ## Kontext
 SPEC 6 M6: MapLibre mit Clustern, Bereichssuche, verfremdete Punkte. Akzeptanz: Die Karte zeigt nur verfremdete Positionen, ein Klick öffnet das Detail.
@@ -92,7 +92,7 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - **Bundle:** MapLibre nur per `dynamic(…, { ssr: false })`. In Listen erst mit `view=map` geladen, am Detail erst auf Klick oder bei Sicht. Ein Test prüft, dass Seiten ohne Karte kein MapLibre laden.
 - **Barrierefreiheit:**
   - Punktwahl per Fadenkreuz in der Kartenmitte und Button.
-  - Einzelpunkte als HTML-Marker-Buttons.
+  - Einzelpunkte und Cluster als HTML-Marker-Buttons (Cluster zoomen beim Klick hinein). Gleiche Koordinaten werden vor dem Clustern gebündelt, sonst bliebe ein Stapel ein Cluster, der nie aufgeht.
   - Gleiche Koordinaten öffnen eine Kurzkarte mit allen Anzeigen an dieser Stelle.
   - Fokusführung, `aria-live`, `prefers-reduced-motion`.
   - Die Trefferliste bleibt die vollständige Alternative.
@@ -102,7 +102,7 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - **Attribution:** immer sichtbar, „© OpenStreetMap-Mitwirkende“ (ODbL, Link) und „Protomaps“. Die Seite „Datenquellen“ (M9) nennt den Build.
 - **Lizenzfragen:** Die ODbL-Frage geht an den Anwalt (SPEC 7.2). Die Lizenzen aller neuen Pakete inklusive transitiver Abhängigkeiten stehen im CHANGELOG.
 - **Einwilligung:** Maßstab ist „kein eigener Verantwortlicher“. Eigene Auslieferung oder ein Auftragsverarbeiter in der EU mit AVV braucht keine Einwilligung. Ein Anbieter, der als eigener Verantwortlicher handelt oder außerhalb der EU verarbeitet, braucht eine Einwilligung (Laden erst nach Zustimmung oder Klick). Das berücksichtigt M9.
-- **Datenschutzerklärung:** Sie nennt die Karte und einen möglichen Cache Storage des Browsers (Ergebnis der Prüfung hier nachgetragen).
+- **Datenschutzerklärung:** Sie nennt die Karte. Geprüft (E2E): Über das pmtiles-Protokoll legt MapLibre keine Kacheln im Cache Storage des Browsers ab, es gibt also keinen Browser-Speicher zu nennen.
 - **Logs (M10):** Zugriffslogs auf die Kartendatei ohne IP oder mit höchstens 7 Tagen Aufbewahrung. Die Byte-Bereiche verraten die betrachtete Kachel und damit das Revier, in der Größenordnung des Versatzes.
 
 ## Zahlen

@@ -260,7 +260,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 
 **M9 Vertrauen und Compliance (Web)**
 - Verifizierung (Upload, Admin-Entscheidung, Badge), Melden von Anzeigen/Profilen, Meldungs-Warteschlange im Admin, Account-Löschung (inkl. Daten und Storage), Datenexport, Cookie-Consent, Rechtstext-Platzhalter
-- Karte (v0.8, ADR 016): Der Consent-Banner führt die selbst gehostete Karte als technisch notwendigen eigenen Dienst; die Datenschutzerklärung nennt sie und einen möglichen Cache Storage. Wechselt der Kachelanbieter zu einem eigenen Verantwortlichen oder außerhalb der EU, lädt die Karte erst nach Einwilligung.
+- Karte (v0.8, ADR 016): Der Consent-Banner führt die selbst gehostete Karte als technisch notwendigen eigenen Dienst; die Datenschutzerklärung nennt sie (Kacheln landen nicht im Cache Storage des Browsers, geprüft in M6). Wechselt der Kachelanbieter zu einem eigenen Verantwortlichen oder außerhalb der EU, lädt die Karte erst nach Einwilligung.
 - *Akzeptanz:* Gelöschter Account verschwindet aus allen Tabellen/Buckets (bis auf gesetzlich nötige Reste, siehe Abschnitt 7); ohne Einwilligung laufen keine nicht notwendigen Cookies
 
 **M10 Web-Release**

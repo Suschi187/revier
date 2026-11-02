@@ -2,6 +2,84 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M6 Karte (Web) – 2026-11-02
+
+Plan `docs/plans/M6-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 016, SPEC v0.8.
+
+### Geändert
+- **Migrationen:**
+  - `regions_area`, `regions_area_data` (generiert mit `generate.py --areas-out`): Fläche je Region aus VG250 und Statistik Austria, ohne Polygone.
+  - `map_point`: Kartenpunkt `map_point` (verfremdeter Punkt oder Kreismittelpunkt), gesetzt vom letzten BEFORE-Trigger nach der Verfremdung, mit Teil-Index. `bbox` im Filterformat v1. Gemeinsame Bedingungsfunktion `private.search_conditions` für Suche und Karte.
+  - `map_listings`: Karten-RPC (höchstens 2000 Punkte, ohne `owner_id`, PLZ und Präfix), `point` und `approx` in den Trefferkarten, Cache-Zähler beim Entfernen eines Punkts.
+  - `set_listing_location_point`: Punkt über `set_listing_location` mit `p_point` (`keep | set | clear`), kein Punkt in Kreisen unter 400 km². Fehler als Feldcodes (`place.point.small_district`, `place.point.too_far`), nie mit Koordinaten.
+  - `region_geo`: Mittelpunkt und Fläche je Region für den Startausschnitt.
+- **Web:**
+  - Kartengrund: MapLibre mit selbst gehosteten Kacheln (PMTiles von der eigenen Origin, `/tiles/<name>`), Stil je Sprache ohne fremde URLs und ohne Sprites. Schriften (Noto, OFL) und Worker als eigene Datei, CSP mit `worker-src 'self'`. Attribution immer sichtbar.
+  - Listen: Umschalter Liste/Karte (`view=map`) und „In diesem Bereich suchen“ (`bbox=`). Cluster und Einzelpunkte sind Buttons, gleiche Koordinaten öffnen eine Kurzkarte mit allen Anzeigen dort. `GET /api/map` liefert GeoJSON, ohne Cache und ohne CORS.
+  - Detail: Abschnitt „Lage“ mit Hinweis zur Verfremdung, kleine Karte erst auf Klick.
+  - Assistent, Schritt „Ort“: optionale Punktwahl per Klick oder Fadenkreuz und Button (Tastatur). Der gespeicherte Punkt erscheint nur als „So erscheint die Lage öffentlich“, nie als Eingabe. Hinweise bei weiteren Punkten im Kreis und zum Kreiswechsel. In Kreisen unter 400 km² keine Punktwahl.
+  - Skripte: `map:download` (Kartenausschnitt mit pmtiles-CLI, fester Version und SHA-256), `map:style`, `map:worker` (vor `dev` und `build`).
+- **Neue Abhängigkeiten**, alle BSD-3-Clause mit fester Version:
+  - `maplibre-gl` 6.15.0: Karte, wie die SPEC verlangt.
+  - `pmtiles` 4.5.0: Kacheln aus einer Datei per Range-Request.
+  - `@protomaps/basemaps` 5.7.2: nur devDependency, erzeugt den Stil.
+
+  Transitive Lizenzen der drei Pakete (28 insgesamt): BSD-3-Clause 5, ISC 8, BSD-2-Clause 2, MIT 13. Nichts außer MIT, BSD und ISC.
+- **Doku:** ADR 016 mit Bedrohungsmodell und Zahlen, ADR 006 (Nachtrag), ADR 003, SPEC v0.8 (7.10 entschieden, Karte in M9, ODbL in 7.2), Glossar „Karte“, `web/scripts/MAP-SOURCES.md`, `supabase/data/regions/SOURCES.md` (Flächen).
+- **Tests:**
+  - pgTAP `31_map_point`, `32_map_listings`, `33_set_location_point`, Meta-Test zur Trigger-Reihenfolge.
+  - Integration: Karte und Suche liefern für jede gültige Fixture dieselben Anzeigen; kleiner Kreis über die API.
+  - Vitest: Range, Bereich, Punkt aus dem Formular, keine Koordinaten in Logs und URLs, Stil, Schriften, Worker, CSP.
+  - E2E `map-smoke`, `map` und `map-picker`.
+
+### Testen
+- Einmalig `cd web && npm run map:download -- --fixture` (7 MB) und für die Entwicklung `npm run map:download` (1,2 GB). Der Dev-Server findet die Dateien in `web/.cache/map/` selbst.
+- `supabase db reset && supabase test db` (767), `cd web && npm test` (442), `npm run test:integration` (176), `npm run test:e2e`
+- Manuell:
+  1. `/de/jagdpacht?view=map` öffnen, Cluster anklicken, Punkt anklicken, zum Detail.
+  2. Ausschnitt verschieben, „In diesem Bereich suchen“ wählen.
+  3. Im Assistenten (Schritt „Ort“, Kreis über 400 km²) einen Punkt setzen und speichern. Der öffentliche Marker liegt 3–5 km daneben.
+
+### Messung
+- `map_listings` mit 10.000 synthetischen Anzeigen, als anon, lokal, Transaktion mit Rollback:
+
+  | Fall | Laufzeit |
+  |---|---|
+  | DE+AT (2000, gekappt) | 472 ms |
+  | Bayern | 114 ms |
+  | kleiner Ausschnitt (40 Punkte) | 218 ms |
+  | mit Volltext | 288 ms |
+
+  Die Bereichsabfrage selbst nutzt `listings_map_point_idx` (0,04 ms). Den Rest kostet die Sichtbarkeitsprüfung je Zeile (`listing_is_public`). Das liegt unter 1 s, bei mehr Daten zuerst diese Prüfung angehen (z. B. mit einem Join statt Funktionsaufruf je Zeile).
+- **Bundle:** Die Karte lädt nur, wenn sie geöffnet wird. Start, Liste ohne Karte und Detail vor dem Klick laden kein MapLibre (E2E). Mit Karte, gzip:
+
+  | Teil | Größe |
+  |---|---|
+  | MapLibre | 293 KB |
+  | pmtiles und Kartenkomponenten | etwa 38 KB |
+  | CSS | 10 KB |
+  | Worker | 147 KB |
+  | Stil | 3 KB |
+
+  LCP und INP auf einem Mittelklasse-Telefon misst M10.
+- **Cache Storage:** Über das pmtiles-Protokoll legt MapLibre keine Kacheln im Cache Storage des Browsers ab (E2E prüft `caches.keys()`). Die Datenschutzerklärung (M9) nennt die Karte, aber keinen Browser-Speicher.
+
+### Akzeptanz (SPEC 6 M6)
+- [x] Die Karte zeigt nur verfremdete Positionen: Kartendaten gleich `display_location` bzw. Kreismittelpunkt, der Eingabepunkt in keiner Antwort (pgTAP `31`, E2E „Akzeptanz a“)
+- [x] Klick öffnet das Detail, auch bei gestapelten Anzeigen (E2E „Akzeptanz b“)
+
+### Bekannte Lücken
+- **iOS (I3, I4):** nutzt `map_listings` und `set_listing_location` mit `p_point` unverändert (MapKit, keine Kacheln von uns); noch nicht umgesetzt.
+- **Produktions-Hosting** der Kartendatei (M10):
+  - EU-Objektspeicher oder CDN mit Range und stabilem ETag
+  - AVV
+  - Logs ohne IP oder höchstens 7 Tage
+  - Rate-Limit bzw. WAF für `/tiles/` und `/api/map`
+  - `MAP_TILES_FILE` setzen
+- Über 2000 Anzeigen im Ausschnitt: Hinweis „hineinzoomen“ statt Zählung je Rasterzelle (Review H1, spätestens bei 1000 Anzeigen nachziehen).
+- Startausschnitt aus Mittelpunkt und Fläche, nicht aus den echten Grenzen (Review H3).
+- In der CI laufen die Kartentests nicht (E2E nur lokal; sie brauchen die Fixture-Kacheln).
+
 ## Nachtrag M5: QA-Funde F1–F11 – 2026-11-01
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M5 – Abnahme“.
