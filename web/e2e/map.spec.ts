@@ -151,6 +151,36 @@ test.describe("Karte (M6)", () => {
     expect(errors.filter((e) => /CSP|Refused/.test(e))).toEqual([]);
   });
 
+  test("Detail: Karte erst auf Klick, Marker auf dem gespeicherten Punkt, Hinweis zur Verfremdung", async ({ page }) => {
+    await page.goto(`/de/anzeige/${ids.point}`);
+    await expect(page.getByText(/Der Punkt auf der Karte ist 3–5 km verschoben/)).toBeVisible();
+    await expect(page.locator(".maplibregl-canvas")).toHaveCount(0);
+    await page.getByRole("button", { name: "Karte anzeigen" }).click();
+    await expect(page.getByRole("img", { name: "Ungefähre Lage (3–5 km verschoben)" })).toBeVisible({ timeout: 20_000 });
+    await page.goto(`/de/anzeige/${ids.a}`);
+    await expect(page.getByText(/Lage im Landkreis Sächsische Schweiz-Osterzgebirge, ohne genauen Punkt/)).toBeVisible();
+    // Keine Koordinaten in JSON-LD oder Meta-Tags (Review A7)
+    const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("");
+    expect(ld).not.toMatch(/GeoCoordinates|latitude|longitude|"geo"/);
+    await expect(page.locator('meta[name="geo.position"], meta[name="ICBM"]')).toHaveCount(0);
+  });
+
+  test("Bundle: Seiten ohne Karte laden kein MapLibre (Review A9)", async ({ page }) => {
+    const scripts: string[] = [];
+    page.on("response", async (response) => {
+      if (response.request().resourceType() === "script") scripts.push(await response.text().catch(() => ""));
+    });
+    const hasMapLibre = () => scripts.some((code) => code.includes("MapLibre GL JS"));
+    for (const url of ["/de", "/de/jagdhelfer", `/de/anzeige/${ids.point}`]) {
+      scripts.length = 0;
+      await page.goto(url);
+      await page.waitForLoadState("networkidle");
+      expect(hasMapLibre(), url).toBe(false);
+    }
+    await page.getByRole("button", { name: "Karte anzeigen" }).click();
+    await expect.poll(hasMapLibre, { timeout: 20_000 }).toBe(true);
+  });
+
   test("Ohne JavaScript: Liste vollständig, Hinweis zur Karte", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();

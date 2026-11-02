@@ -1,5 +1,7 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AttributeRow } from "@/components/listings/ListingSummary";
+import { DetailMap } from "@/components/map/DetailMap";
+import { tilesUrl } from "@/lib/map/tiles";
 import type { AppLocale } from "@/i18n/routing";
 import { photoUrl, priceText, thumbSize } from "@/lib/public/format";
 import { publicPath } from "@/lib/public/paths";
@@ -31,6 +33,7 @@ export async function ListingDetail({
     getTranslations("Profile"),
     getFormatter(),
   ]);
+  const tm = await getTranslations("Map");
   const district = districtRef(listing.districtCode, regions);
   const price = priceText(listing, locale, (key) => t(key as never)) ?? t("preview.noPrice");
   const date = (value: string) => format.dateTime(new Date(`${value}T00:00:00Z`), { dateStyle: "medium", timeZone: "UTC" });
@@ -116,6 +119,33 @@ export async function ListingDetail({
         <dt className="font-medium">{tp("published")}</dt>
         <dd>{format.dateTime(new Date(listing.publishedAt), { dateStyle: "medium", timeZone: "Europe/Berlin" })}</dd>
       </dl>
+
+      <section aria-labelledby="location-heading" className="mt-8">
+        <h2 id="location-heading" className="text-lg font-semibold">{tm("locationHeading")}</h2>
+        <p className="mt-1">
+          {listing.approx === "point" ? tm("detailPoint") : tm("detailDistrict", { district: district?.name ?? "" })}
+        </p>
+        {listing.point && (
+          <>
+            <noscript>
+              <p className="mt-2 text-sm">{tm("noscriptDetail")}</p>
+            </noscript>
+            <DetailMap
+              tilesUrl={tilesUrl()}
+              locale={locale}
+              point={listing.point}
+              approx={listing.approx}
+              texts={{
+                show: tm("showMap"),
+                label: tm("detailLabel"),
+                attribution: tm.raw("attribution") as string,
+                failed: tm("failed"),
+                marker: listing.approx === "point" ? tm("approxPoint") : tm("approxDistrict"),
+              }}
+            />
+          </>
+        )}
+      </section>
 
       <section aria-labelledby="provider-heading" className="mt-8 rounded border border-stone-300 p-4">
         <h2 id="provider-heading" className="text-lg font-semibold">{tp("provider")}</h2>

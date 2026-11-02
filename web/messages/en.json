@@ -704,6 +704,12 @@
     "areaRemove": "Remove area",
     "approxPoint": "Approximate location (shifted by 3–5 km)",
     "approxDistrict": "Location within the district, no exact point",
-    "cluster": "{count} listings, zoom in"
+    "cluster": "{count} listings, zoom in",
+    "locationHeading": "Location",
+    "detailPoint": "Approximate location: the point on the map is shifted by 3–5 km. The provider shares the exact location in the chat.",
+    "detailDistrict": "Location within the district {district}, without an exact point. The provider shares the exact location in the chat.",
+    "showMap": "Show map",
+    "detailLabel": "Map with the approximate location",
+    "noscriptDetail": "The map needs JavaScript."
   }
 }

@@ -704,6 +704,12 @@
     "areaRemove": "Usuń obszar",
     "approxPoint": "Przybliżona lokalizacja (przesunięta o 3–5 km)",
     "approxDistrict": "Lokalizacja w powiecie, bez dokładnego punktu",
-    "cluster": "{count} ogłoszeń, przybliż"
+    "cluster": "{count} ogłoszeń, przybliż",
+    "locationHeading": "Lokalizacja",
+    "detailPoint": "Przybliżona lokalizacja: punkt na mapie jest przesunięty o 3–5 km. Dokładną lokalizację ogłaszający podaje na czacie.",
+    "detailDistrict": "Lokalizacja w powiecie {district}, bez dokładnego punktu. Dokładną lokalizację ogłaszający podaje na czacie.",
+    "showMap": "Pokaż mapę",
+    "detailLabel": "Mapa z przybliżoną lokalizacją",
+    "noscriptDetail": "Mapa wymaga JavaScriptu."
   }
 }

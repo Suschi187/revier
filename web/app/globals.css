@@ -40,6 +40,10 @@ body {
   height: 2.25rem;
   background: #3f5f2a;
 }
+.map-district {
+  border-radius: 0.25rem;
+  background: #57534e;
+}
 .map-marker:focus-visible {
   outline: 3px solid #1c1917;
   outline-offset: 2px;

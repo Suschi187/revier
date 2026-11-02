@@ -704,6 +704,12 @@
     "areaRemove": "Bereich entfernen",
     "approxPoint": "Ungefähre Lage (3–5 km verschoben)",
     "approxDistrict": "Lage im Landkreis, kein genauer Punkt",
-    "cluster": "{count} Anzeigen, hineinzoomen"
+    "cluster": "{count} Anzeigen, hineinzoomen",
+    "locationHeading": "Lage",
+    "detailPoint": "Ungefähre Lage: Der Punkt auf der Karte ist 3–5 km verschoben. Die genaue Lage teilt der Anbieter im Chat.",
+    "detailDistrict": "Lage im Landkreis {district}, ohne genauen Punkt. Die genaue Lage teilt der Anbieter im Chat.",
+    "showMap": "Karte anzeigen",
+    "detailLabel": "Karte mit der ungefähren Lage",
+    "noscriptDetail": "Die Karte braucht JavaScript."
   }
 }

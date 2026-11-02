@@ -4,6 +4,8 @@ import { z } from "zod";
 import { anonClient } from "@/lib/supabase/anon";
 import { Constants, type Database } from "@/lib/supabase/database.types";
 import type { Filters } from "@/lib/search/filters";
+import { parsePoint, type LngLat } from "@/lib/map/geo";
+import { regionGeo } from "./regions";
 
 // Öffentliche Daten (ADR 015): nur Anon-Client ohne Cookies, feste Spaltenlisten, nie PLZ und Ort und vor
 // M6 kein Kartenpunkt. Gecacht mit dem Profil `publicListings` (höchstens 5 Minuten alt); der
@@ -126,7 +128,7 @@ export async function regionCounts(kind: Enums["listing_kind"] | null, epoch: nu
 
 const LISTING_COLUMNS =
   "id, kind, direction, title, description, content_language, country, region_id, postal_prefix, price_minor, currency, price_unit, " +
-  "area_hectares, start_date, end_date, attributes, published_at, approved_at, owner_id";
+  "area_hectares, start_date, end_date, attributes, published_at, approved_at, owner_id, map_point";
 
 export type PublicPhoto = { id: string; width: number | null; height: number | null; altText: string | null };
 
@@ -140,6 +142,9 @@ export type PublicListing = {
   country: Enums["country_code"];
   regionId: string;
   districtCode: string;
+  /** Verfremdeter Punkt oder Kreismittelpunkt (ADR 016); approx sagt, welches von beiden. */
+  point: LngLat | null;
+  approx: "point" | "district";
   postalPrefix: string | null;
   priceMinor: number | null;
   currency: Enums["currency_code"] | null;
@@ -176,6 +181,7 @@ type ListingRow = {
   published_at: string;
   approved_at: string | null;
   owner_id: string;
+  map_point: unknown;
 };
 
 /** Öffentliche Anzeige oder null (nicht öffentlich oder unbekannt; den Status setzt der Proxy). */
@@ -200,6 +206,10 @@ export async function getPublicListing(id: string, epoch: number): Promise<Publi
       .order("sort_order"),
     getProvider(row.owner_id, epoch),
   ]);
+  // Ohne eigenen Punkt liegt map_point genau auf dem Kreismittelpunkt (Trigger, ADR 016).
+  const point = parsePoint(row.map_point);
+  const centre = region.data?.code ? (await regionGeo())[region.data.code] : undefined;
+  const approx: "point" | "district" = point && centre && point.lng === centre.lng && point.lat === centre.lat ? "district" : "point";
   return {
     id: row.id,
     kind: row.kind,
@@ -210,6 +220,8 @@ export async function getPublicListing(id: string, epoch: number): Promise<Publi
     country: row.country,
     regionId: row.region_id,
     districtCode: region.data?.code ?? "",
+    point,
+    approx,
     postalPrefix: row.postal_prefix,
     priceMinor: row.price_minor,
     currency: row.currency,

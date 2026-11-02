@@ -704,6 +704,12 @@
     "areaRemove": "Odstranit oblast",
     "approxPoint": "Přibližná poloha (posunuto o 3–5 km)",
     "approxDistrict": "Poloha v okrese, bez přesného bodu",
-    "cluster": "{count} inzerátů, přiblížit"
+    "cluster": "{count} inzerátů, přiblížit",
+    "locationHeading": "Poloha",
+    "detailPoint": "Přibližná poloha: bod na mapě je posunut o 3–5 km. Přesnou polohu sdělí inzerent v chatu.",
+    "detailDistrict": "Poloha v okrese {district}, bez přesného bodu. Přesnou polohu sdělí inzerent v chatu.",
+    "showMap": "Zobrazit mapu",
+    "detailLabel": "Mapa s přibližnou polohou",
+    "noscriptDetail": "Mapa potřebuje JavaScript."
   }
 }
