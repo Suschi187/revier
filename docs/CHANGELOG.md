@@ -78,7 +78,7 @@ Plan `docs/plans/M6-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 016, S
   - `MAP_TILES_FILE` setzen
 - Über 2000 Anzeigen im Ausschnitt: Hinweis „hineinzoomen“ statt Zählung je Rasterzelle (Review H1, spätestens bei 1000 Anzeigen nachziehen).
 - Startausschnitt aus Mittelpunkt und Fläche, nicht aus den echten Grenzen (Review H3).
-- In der CI laufen die Kartentests nicht (E2E nur lokal; sie brauchen die Fixture-Kacheln).
+- In der CI laufen alle Kartentests gegen den Produktions-Build mit Software-WebGL, aber ohne Kartendatei (neutraler Grund). Nur der Test der Kachel-Route wird dort übersprungen; er läuft lokal mit der Fixture.
 
 ## Nachtrag M5: QA-Funde F1–F11 – 2026-11-01
 
