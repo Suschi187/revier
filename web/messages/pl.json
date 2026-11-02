@@ -710,6 +710,21 @@
     "detailDistrict": "Lokalizacja w powiecie {district}, bez dokładnego punktu. Dokładną lokalizację ogłaszający podaje na czacie.",
     "showMap": "Pokaż mapę",
     "detailLabel": "Mapa z przybliżoną lokalizacją",
-    "noscriptDetail": "Mapa wymaga JavaScriptu."
+    "noscriptDetail": "Mapa wymaga JavaScriptu.",
+    "picker": {
+      "legend": "Punkt na mapie (opcjonalnie)",
+      "hint": "Zapisywany jest tylko przesunięty punkt, 3–5 km od wybranego. Przesunięcie jest takie samo dla wszystkich twoich ogłoszeń w tym powiecie. Wystarczy dokładność do kilkuset metrów.",
+      "otherPoints": "Masz już w tym powiecie ogłoszenie z punktem w innym miejscu. Kilka punktów w jednym powiecie pokazuje, jak twoje obwody leżą względem siebie. Razem z granicą powiatu może to zawęzić lokalizację.",
+      "districtChange": "Jeśli zmienisz powiat, punkt zostanie usunięty. Zapisane kopie starych stron mogą nadal pokazywać poprzedni punkt.",
+      "noscript": "Punkt można ustawić tylko z JavaScriptem. Bez punktu mapa pokazuje środek powiatu.",
+      "label": "Mapa do wyboru punktu",
+      "setCentre": "Ustaw punkt w środku mapy",
+      "remove": "Usuń punkt",
+      "discard": "Odrzuć wybór",
+      "chosen": "Punkt wybrany. Zostanie zastosowany przy zapisie.",
+      "removed": "Punkt zostanie usunięty przy zapisie.",
+      "publicMarker": "Jak lokalizacja wyświetla się publicznie (przesunięta)",
+      "chosenMarker": "Wybrany punkt, jeszcze niezapisany"
+    }
   }
 }

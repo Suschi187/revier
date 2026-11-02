@@ -710,6 +710,21 @@
     "detailDistrict": "Lage im Landkreis {district}, ohne genauen Punkt. Die genaue Lage teilt der Anbieter im Chat.",
     "showMap": "Karte anzeigen",
     "detailLabel": "Karte mit der ungefähren Lage",
-    "noscriptDetail": "Die Karte braucht JavaScript."
+    "noscriptDetail": "Die Karte braucht JavaScript.",
+    "picker": {
+      "legend": "Punkt auf der Karte (optional)",
+      "hint": "Gespeichert wird nur ein verfremdeter Punkt, 3–5 km vom gewählten entfernt. Er bleibt für alle deine Anzeigen in diesem Kreis gleich verschoben. Auf wenige hundert Meter genau reicht.",
+      "otherPoints": "Du hast in diesem Kreis schon eine Anzeige mit Punkt an anderer Stelle. Mehrere Punkte in einem Kreis zeigen, wie deine Reviere zueinander liegen. Zusammen mit der Kreisgrenze kann das die Lage eingrenzen.",
+      "districtChange": "Wechselst du den Kreis, wird der Punkt entfernt. Gespeicherte Kopien alter Seiten können den bisherigen Punkt noch zeigen.",
+      "noscript": "Den Punkt kannst du nur mit JavaScript setzen. Ohne Punkt zeigt die Karte den Kreismittelpunkt.",
+      "label": "Karte zur Wahl des Punkts",
+      "setCentre": "Punkt in der Kartenmitte setzen",
+      "remove": "Punkt entfernen",
+      "discard": "Auswahl verwerfen",
+      "chosen": "Punkt gewählt. Er wird beim Speichern übernommen.",
+      "removed": "Punkt wird beim Speichern entfernt.",
+      "publicMarker": "So erscheint die Lage öffentlich (verfremdet)",
+      "chosenMarker": "Gewählter Punkt, noch nicht gespeichert"
+    }
   }
 }

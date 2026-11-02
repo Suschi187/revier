@@ -15,3 +15,9 @@ export function boundsAround(lng: number, lat: number, areaKm2: number): Bounds 
   const dLng = halfKm / (111.32 * Math.cos((lat * Math.PI) / 180));
   return [lng - dLng, lat - dLat, lng + dLng, lat + dLat];
 }
+
+/**
+ * Kein Kartenpunkt in Kreisen unter dieser Fläche (ADR 016, Review B1 a). Maßgeblich ist die DB
+ * (`app_settings.listing_location_min_district_km2`, Fehler place.point.small_district); hier nur zum Ausblenden.
+ */
+export const MIN_POINT_DISTRICT_KM2 = 400;

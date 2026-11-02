@@ -710,6 +710,21 @@
     "detailDistrict": "Location within the district {district}, without an exact point. The provider shares the exact location in the chat.",
     "showMap": "Show map",
     "detailLabel": "Map with the approximate location",
-    "noscriptDetail": "The map needs JavaScript."
+    "noscriptDetail": "The map needs JavaScript.",
+    "picker": {
+      "legend": "Point on the map (optional)",
+      "hint": "Only a shifted point is stored, 3–5 km away from the one you choose. The shift stays the same for all your listings in this district. Accuracy of a few hundred metres is enough.",
+      "otherPoints": "You already have a listing with a point elsewhere in this district. Several points in one district show how your hunting grounds relate to each other. Together with the district boundary, this can narrow down the location.",
+      "districtChange": "If you change the district, the point is removed. Saved copies of old pages may still show the previous point.",
+      "noscript": "You can only set the point with JavaScript. Without a point the map shows the district centre.",
+      "label": "Map for choosing the point",
+      "setCentre": "Set point at map centre",
+      "remove": "Remove point",
+      "discard": "Discard selection",
+      "chosen": "Point chosen. It is applied when you save.",
+      "removed": "The point will be removed when you save.",
+      "publicMarker": "How the location appears publicly (shifted)",
+      "chosenMarker": "Chosen point, not saved yet"
+    }
   }
 }

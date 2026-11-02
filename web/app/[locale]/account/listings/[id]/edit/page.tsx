@@ -13,9 +13,11 @@ import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { DEFAULT_CURRENCY, isWizardStep, parseErrorCodes, TYPE_LOCKED, type WizardStep } from "@/lib/listing-wizard";
 import { requireOnboardedUser } from "@/lib/services/gate";
-import { getContentHints, getOwnListing } from "@/lib/services/listings";
+import { getContentHints, getOwnListing, pointContext } from "@/lib/services/listings";
 import { thumbnailUrls } from "@/lib/services/photos";
-import { LISTING_COUNTRIES, listPostalCodes, listRegions, listSpecies } from "@/lib/services/regions";
+import { LISTING_COUNTRIES, listPostalCodes, listRegions, listSpecies, regionGeo } from "@/lib/services/regions";
+import { boundsAround, MIN_POINT_DISTRICT_KM2 } from "@/lib/map/bounds";
+import { tilesUrl } from "@/lib/map/tiles";
 import { listingReadiness } from "@/lib/validation/listing";
 import { changePhoto, saveListingStep } from "./actions";
 
@@ -86,16 +88,17 @@ async function EditListing({ params, searchParams }: Props) {
           {t("errors.failed")}
         </p>
       )}
-      <Step step={step} locale={locale} listing={listing} errors={errors} country={query.country} />
+      <Step step={step} locale={locale} listing={listing} errors={errors} country={query.country} userId={user.id} />
     </>
   );
 }
 
-async function Step({ step, locale, listing, errors, country }: {
+async function Step({ step, locale, listing, errors, country, userId }: {
   step: WizardStep;
   locale: AppLocale;
   listing: NonNullable<Awaited<ReturnType<typeof getOwnListing>>>;
   errors: string[];
+  userId: string;
   country: string | string[] | undefined;
 }) {
   switch (step) {
@@ -112,7 +115,15 @@ async function Step({ step, locale, listing, errors, country }: {
       );
     case "location": {
       const chosen = LISTING_COUNTRIES.find((c) => c === country) ?? LISTING_COUNTRIES.find((c) => c === listing.country) ?? "DE";
-      const [regions, postalCodes] = await Promise.all([listRegions(chosen, locale), chosen === listing.country ? listPostalCodes(listing.regionId) : []]);
+      const sameCountry = chosen === listing.country;
+      const [regions, postalCodes, geo, points] = await Promise.all([
+        listRegions(chosen, locale),
+        sameCountry ? listPostalCodes(listing.regionId) : [],
+        regionGeo(),
+        sameCountry ? pointContext(userId, listing.id, listing.regionId) : null,
+      ]);
+      const districtCode = regions.districts.find((d) => d.id === listing.regionId)?.code;
+      const districtGeo = sameCountry && districtCode ? geo[districtCode] : undefined;
       return (
         <>
           <CountrySwitch country={chosen} countries={LISTING_COUNTRIES} hidden={{ step: "location" }} />
@@ -124,6 +135,17 @@ async function Step({ step, locale, listing, errors, country }: {
             regions={regions}
             regionId={chosen === listing.country ? listing.regionId : null}
             postalCodes={postalCodes}
+            point={
+              districtGeo && points
+                ? {
+                    tilesUrl: tilesUrl(),
+                    bounds: boundsAround(districtGeo.lng, districtGeo.lat, districtGeo.areaKm2),
+                    small: districtGeo.areaKm2 < MIN_POINT_DISTRICT_KM2,
+                    publicPoint: points.publicPoint,
+                    otherPoints: points.otherPoints,
+                  }
+                : null
+            }
             place={listing.place}
             errors={errors}
           />

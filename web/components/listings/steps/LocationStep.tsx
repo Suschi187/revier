@@ -5,6 +5,8 @@ import type { PostalCodeOption, Region } from "@/lib/services/regions";
 import type { ListingDirection } from "@/lib/validation/listing";
 import { buttonClass, describedBy, FieldError, inputClass, labelClass } from "../WizardChrome";
 import { DistrictSelect } from "./BasicsStep";
+import { PointPicker } from "@/components/map/PointPicker";
+import type { Bounds } from "@/lib/map/bounds";
 
 /**
  * Kreis, PLZ und Ort (ADR 012). Vorschläge kommen aus allen PLZ des gewählten Kreises, auf einmal geladen
@@ -19,6 +21,7 @@ export async function LocationStep({
   regionId,
   postalCodes,
   place,
+  point,
   errors,
 }: {
   locale: AppLocale;
@@ -29,9 +32,11 @@ export async function LocationStep({
   regionId: string | null;
   postalCodes: PostalCodeOption[];
   place: { postalCode: string | null; placeName: string | null } | null;
+  /** Punktwahl (ADR 016); null ohne Kreis bzw. in einem anderen Land. */
+  point: { tilesUrl: string | null; bounds: Bounds; small: boolean; publicPoint: { lng: number; lat: number } | null; otherPoints: number } | null;
   errors: string[];
 }) {
-  const t = await getTranslations("Listings");
+  const [t, tm] = await Promise.all([getTranslations("Listings"), getTranslations("Map.picker")]);
   const offer = direction === "offer";
   const placeNames = [...new Set(postalCodes.flatMap((p) => p.places))].sort((a, b) => a.localeCompare(b, locale));
   const mismatch = errors.some((c) => c === "place.postal_code.region_mismatch" || c === "place.postal_code.unknown");
@@ -110,6 +115,43 @@ export async function LocationStep({
         </datalist>
         <FieldError codes={errors} fieldId="f-place" />
       </div>
+
+      {point && (
+        <fieldset className="flex flex-col gap-2" aria-describedby="f-point-hint">
+          <legend className={labelClass}>{tm("legend")}</legend>
+          <p id="f-point-hint" className="rounded bg-stone-100 p-3 text-sm">{tm("hint")}</p>
+          {point.small ? (
+            <p className="text-sm">{t("fieldErrors.place_point_small_district")}</p>
+          ) : (
+            <>
+              {point.otherPoints > 0 && <p className="rounded border border-amber-600 bg-amber-50 p-3 text-sm">{tm("otherPoints")}</p>}
+              <p className="text-sm text-stone-700">{tm("districtChange")}</p>
+              <noscript>
+                <p className="text-sm">{tm("noscript")}</p>
+              </noscript>
+              <PointPicker
+                tilesUrl={point.tilesUrl}
+                locale={locale}
+                bounds={point.bounds}
+                publicPoint={point.publicPoint}
+                texts={{
+                  label: tm("label"),
+                  attribution: (await getTranslations("Map")).raw("attribution") as string,
+                  failed: (await getTranslations("Map"))("failed"),
+                  setCentre: tm("setCentre"),
+                  remove: tm("remove"),
+                  discard: tm("discard"),
+                  chosen: tm("chosen"),
+                  removed: tm("removed"),
+                  publicMarker: tm("publicMarker"),
+                  chosenMarker: tm("chosenMarker"),
+                }}
+              />
+              <FieldError codes={errors} fieldId="f-point" />
+            </>
+          )}
+        </fieldset>
+      )}
 
       <button type="submit" className={buttonClass}>
         {t("wizard.save")}

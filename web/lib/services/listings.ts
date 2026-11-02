@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 import { toError, type DbError, type ListingError } from "@/lib/listing-errors";
 import { asRejectCode, type RejectCode } from "@/lib/moderation";
+import { parsePoint } from "@/lib/map/geo";
 import type { Attributes, ListingDirection, ListingKind } from "@/lib/validation/listing";
 
 // Anzeigen des angemeldeten Nutzers (Plan M3 7, ADR 013). Rechte und Regeln liegen in der DB (RLS, Guard,
@@ -285,4 +286,26 @@ export async function getContentHints(id: string): Promise<ContentHint[]> {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.rpc("listing_content_hints", { p_listing_id: id });
   return (data ?? []) as ContentHint[];
+}
+
+export type PointContext = {
+  /** Gespeicherter, verfremdeter Punkt dieser Anzeige (nur zur Anzeige, nie als Eingabe zurückschicken, ADR 016). */
+  publicPoint: { lng: number; lat: number } | null;
+  /** Eigene andere Anzeigen im selben Kreis mit Punkt an anderer Stelle (Hinweis, Review B1 b). */
+  otherPoints: number;
+};
+
+/** Punkte der eigenen Anzeigen im Kreis für die Punktwahl (ADR 016). */
+export async function pointContext(userId: string, listingId: string, regionId: string): Promise<PointContext> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("listings")
+    .select("id, map_point")
+    .eq("owner_id", userId)
+    .eq("region_id", regionId)
+    .not("display_location", "is", null);
+  const rows = (data ?? []).map((row) => ({ id: row.id, point: parsePoint(row.map_point) }));
+  const own = rows.find((row) => row.id === listingId)?.point ?? null;
+  const others = rows.filter((row) => row.id !== listingId && row.point && !(own && row.point.lng === own.lng && row.point.lat === own.lat));
+  return { publicPoint: own, otherPoints: others.length };
 }

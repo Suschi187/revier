@@ -44,6 +44,10 @@ body {
   border-radius: 0.25rem;
   background: #57534e;
 }
+.map-chosen {
+  background: #1d4ed8;
+  border-style: dashed;
+}
 .map-marker:focus-visible {
   outline: 3px solid #1c1917;
   outline-offset: 2px;

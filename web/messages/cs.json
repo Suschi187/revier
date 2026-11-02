@@ -710,6 +710,21 @@
     "detailDistrict": "Poloha v okrese {district}, bez přesného bodu. Přesnou polohu sdělí inzerent v chatu.",
     "showMap": "Zobrazit mapu",
     "detailLabel": "Mapa s přibližnou polohou",
-    "noscriptDetail": "Mapa potřebuje JavaScript."
+    "noscriptDetail": "Mapa potřebuje JavaScript.",
+    "picker": {
+      "legend": "Bod na mapě (nepovinné)",
+      "hint": "Uloží se jen posunutý bod, 3–5 km od zvoleného. Posun zůstává stejný pro všechny vaše inzeráty v tomto okrese. Stačí přesnost na několik set metrů.",
+      "otherPoints": "V tomto okrese už máte inzerát s bodem na jiném místě. Více bodů v jednom okrese ukazuje, jak vaše honitby leží vůči sobě. Spolu s hranicí okresu to může polohu zúžit.",
+      "districtChange": "Změníte-li okres, bod se odstraní. Uložené kopie starých stránek mohou stále ukazovat předchozí bod.",
+      "noscript": "Bod lze nastavit jen s JavaScriptem. Bez bodu mapa ukazuje střed okresu.",
+      "label": "Mapa pro výběr bodu",
+      "setCentre": "Nastavit bod ve středu mapy",
+      "remove": "Odstranit bod",
+      "discard": "Zrušit výběr",
+      "chosen": "Bod vybrán. Použije se při uložení.",
+      "removed": "Bod bude při uložení odstraněn.",
+      "publicMarker": "Jak se poloha zobrazí veřejně (posunutá)",
+      "chosenMarker": "Vybraný bod, zatím neuložený"
+    }
   }
 }
