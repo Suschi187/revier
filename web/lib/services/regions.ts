@@ -93,3 +93,13 @@ export async function regionNames(locale: AppLocale): Promise<Record<string, str
 export async function speciesNames(locale: AppLocale): Promise<Record<string, string>> {
   return Object.fromEntries((await listSpecies(locale)).map((s) => [s.code, s.name]));
 }
+
+export type RegionGeo = { lng: number; lat: number; areaKm2: number };
+
+/** Mittelpunkt und Fläche je Region (öffentliche Referenzdaten) für den Startausschnitt der Karte (ADR 016). */
+export async function regionGeo(): Promise<Record<string, RegionGeo>> {
+  "use cache";
+  cacheLife("days");
+  const { data } = await referenceClient().rpc("region_geo");
+  return Object.fromEntries((data ?? []).map((row) => [row.code, { lng: row.lng, lat: row.lat, areaKm2: Number(row.area_km2) }]));
+}

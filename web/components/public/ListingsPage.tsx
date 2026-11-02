@@ -1,11 +1,14 @@
 import { getTranslations } from "next-intl/server";
+import { ListingsMap } from "@/components/map/ListingsMap";
+import { boundsAround, DEFAULT_BOUNDS, type Bounds } from "@/lib/map/bounds";
+import { tilesUrl } from "@/lib/map/tiles";
 import type { AppLocale } from "@/i18n/routing";
 import { publicPath, type PublicRoute } from "@/lib/public/paths";
 import { regionByCode } from "@/lib/public/regions";
-import { CURSOR_PARAM, filtersFromParams, paramsFromFilters, type Filters } from "@/lib/search/filters";
+import { CURSOR_PARAM, filtersFromParams, paramsFromFilters, VIEW_PARAM, type Filters } from "@/lib/search/filters";
 import { favoriteContext } from "@/lib/services/favorites";
 import { cachedListings, cacheEpoch, regionCounts, searchListings, type SearchResult } from "@/lib/services/public-listings";
-import { listSpecies, regionNames } from "@/lib/services/regions";
+import { listSpecies, regionGeo, regionNames } from "@/lib/services/regions";
 import { Breadcrumbs, type Crumb } from "./Breadcrumbs";
 import { FilterForm } from "./FilterForm";
 import { ListingList } from "./ListingCard";
@@ -76,9 +79,24 @@ export async function ListingsPage({
       : [];
 
   const fixedKeys = Object.keys(fixed) as (keyof Filters)[];
+  // Ansicht Karte (ADR 016): kein Filter, bleibt aber in Paging, Formular und Bereichssuche erhalten.
+  const mapView = searchParams[VIEW_PARAM] === "map";
   const query = paramsFromFilters(filters, fixedKeys);
+  if (mapView) query.set(VIEW_PARAM, "map");
   const nextHref = result.ok && result.page.nextCursor ? `${path}?${new URLSearchParams([...query, [CURSOR_PARAM, result.page.nextCursor]])}` : null;
   const firstHref = cursor ? `${path}${query.size ? `?${query}` : ""}` : null;
+  const listQuery = paramsFromFilters(filters, fixedKeys);
+  const listHref = `${path}${listQuery.size ? `?${listQuery}` : ""}`;
+  const mapHref = `${path}?${new URLSearchParams([...listQuery, [VIEW_PARAM, "map"]])}`;
+  const withoutArea = paramsFromFilters(filters, [...fixedKeys, "bbox"]);
+  if (mapView) withoutArea.set(VIEW_PARAM, "map");
+  const tm = await getTranslations("Map");
+  let mapBounds: Bounds = DEFAULT_BOUNDS;
+  if (mapView) {
+    const regionCode = filters.region;
+    const geo = regionCode ? (await regionGeo())[regionCode] : undefined;
+    mapBounds = filters.bbox ?? (geo ? boundsAround(geo.lng, geo.lat, geo.areaKm2) : DEFAULT_BOUNDS);
+  }
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
@@ -98,7 +116,46 @@ export async function ListingsPage({
         </nav>
       )}
 
-      <FilterForm action={path} filters={filters} fixed={fixedKeys} locale={locale} species={species} regionNames={names} />
+      <nav aria-label={tm("viewLabel")} className="mt-6 flex gap-4">
+        <a href={listHref} aria-current={mapView ? undefined : "page"} className={mapView ? "underline" : "font-semibold"}>{tm("viewList")}</a>
+        <a href={mapHref} aria-current={mapView ? "page" : undefined} className={mapView ? "font-semibold" : "underline"}>{tm("viewMap")}</a>
+      </nav>
+      {mapView && (
+        <>
+          <noscript>
+            <p className="mt-4 rounded border border-stone-300 p-3">{tm("noscript")}</p>
+          </noscript>
+          <ListingsMap
+            tilesUrl={tilesUrl()}
+            locale={locale}
+            bounds={mapBounds}
+            query={paramsFromFilters(filters, ["bbox"]).toString()}
+            path={path}
+            texts={{
+              label: tm("label"),
+              attribution: tm.raw("attribution") as string,
+              failed: tm("failed"),
+              loading: tm("loading"),
+              loadFailed: tm("loadFailed"),
+              retry: tm("retry"),
+              truncated: tm("truncated"),
+              searchArea: tm("searchArea"),
+              searchAreaHint: tm("searchAreaHint"),
+              stack: tm.raw("stack") as string,
+              cluster: tm.raw("cluster") as string,
+              close: tm("close"),
+              count: tm.raw("count") as string,
+            }}
+          />
+        </>
+      )}
+      {filters.bbox && (
+        <p className="mt-3 text-sm">
+          {tm("areaActive")} <a href={`${path}${withoutArea.size ? `?${withoutArea}` : ""}`} className="underline">{tm("areaRemove")}</a>
+        </p>
+      )}
+
+      <FilterForm action={path} filters={filters} fixed={fixedKeys} locale={locale} species={species} regionNames={names} keep={mapView ? { [VIEW_PARAM]: "map" } : {}} />
 
       <section aria-labelledby="results-heading" className="mt-8">
         <h2 id="results-heading" className="text-xl font-semibold">{t("results")}</h2>

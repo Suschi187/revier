@@ -12,6 +12,7 @@ const PUBLIC_MODULES = [
   "lib/services/public-listings.ts",
   "lib/services/regions.ts",
   "app/api/photos/[id]/[variant]/route.ts",
+  "app/api/map/route.ts",
 ];
 
 describe("Öffentliche Service-Schicht", () => {

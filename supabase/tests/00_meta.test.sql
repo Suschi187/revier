@@ -35,7 +35,7 @@ select is(
   array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_review_queue',
         'admin_role_rules',
         'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'moderate_listing', 'my_favorites', 'provider_listings',
-        'public_cache_epoch', 'public_page_state', 'register_device', 'remove_unavailable_favorites', 'reorder_listing_photos',
+        'public_cache_epoch', 'public_page_state', 'region_geo', 'register_device', 'remove_unavailable_favorites', 'reorder_listing_photos',
         'revoke_admin', 'search_listings', 'set_listing_location']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );

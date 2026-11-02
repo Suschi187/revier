@@ -129,7 +129,7 @@ Ring der möglichen wahren Lage: etwa 86 km² (2,29–5,71 km). In den zehn klei
 | DE-07311 Frankenthal (Pfalz) | 43,8 |
 | DE-06413 Offenbach am Main | 45,3 |
 
-Bei 400 km² ist der Kreis etwa fünfmal so groß wie der Ring. Ein Punkt nahe der Grenze verengt weiter, aber nicht mehr auf einen Bruchteil des Kreises. Die Größe des Kartenausschnitts DE+AT trägt Commit 5 ein.
+Bei 400 km² ist der Kreis etwa fünfmal so groß wie der Ring. Ein Punkt nahe der Grenze verengt weiter, aber nicht mehr auf einen Bruchteil des Kreises. Kartenausschnitt DE+AT (Protomaps-Build 20261101, Zoom 0–12): 1,2 GB; Testausschnitt bis Zoom 7: 7,3 MB (Prüfsummen in `web/scripts/MAP-SOURCES.md`). Für M10: eine Datei dieser Größe je Build im Objektspeicher, abgerufen nur in Byte-Bereichen.
 
 ## Folgen
 - iOS (I3, I4) nutzt `map_listings` und `set_listing_location` mit `p_point` unverändert. MapKit braucht keine Kacheln von uns. Die Hinweise zu mehreren Punkten und zu gestapelten Anzeigen gelten dort ebenso.

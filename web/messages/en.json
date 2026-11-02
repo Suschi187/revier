@@ -682,5 +682,28 @@
     "failed": "That did not work. Please try again.",
     "limit": "You can save at most 500 listings.",
     "loadFailed": "Your saved listings could not be loaded. Please try again later."
+  },
+  "Map": {
+    "viewLabel": "View",
+    "viewList": "List",
+    "viewMap": "Map",
+    "label": "Map of listings",
+    "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap contributors</a> · Protomaps",
+    "failed": "The map cannot be shown in this browser (WebGL is missing). The list below shows all listings.",
+    "noscript": "The map needs JavaScript. The list below shows all listings.",
+    "loading": "Loading listings …",
+    "loadFailed": "The listings for the map could not be loaded.",
+    "retry": "Try again",
+    "truncated": "Too many listings for this view. Please zoom in.",
+    "searchArea": "Search this area",
+    "searchAreaHint": "Listings without their own point count with the centre of their district.",
+    "stack": "{count} listings at this spot",
+    "close": "Close",
+    "count": "{count} listings on the map",
+    "areaActive": "Filtered by map area.",
+    "areaRemove": "Remove area",
+    "approxPoint": "Approximate location (shifted by 3–5 km)",
+    "approxDistrict": "Location within the district, no exact point",
+    "cluster": "{count} listings, zoom in"
   }
 }

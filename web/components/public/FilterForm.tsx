@@ -20,6 +20,7 @@ export async function FilterForm({
   locale,
   species,
   regionNames,
+  keep = {},
 }: {
   action: string;
   filters: Filters;
@@ -27,6 +28,8 @@ export async function FilterForm({
   locale: AppLocale;
   species: Species[];
   regionNames: Record<string, string>;
+  /** Werte, die das Formular unverändert mitschickt (Ansicht, ADR 016). */
+  keep?: Record<string, string>;
 }) {
   const [t, tl, tc] = await Promise.all([getTranslations("Public.filters"), getTranslations("Listings"), getTranslations("Profile.countries")]);
   const states = allRegionRefs()
@@ -40,6 +43,9 @@ export async function FilterForm({
   return (
     <form action={action} method="get" className="mt-6 grid gap-4 rounded border border-stone-300 p-4" aria-labelledby="filters-heading">
       <h2 id="filters-heading" className="text-lg font-semibold">{t("heading")}</h2>
+      {Object.entries(keep).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
+      {/* Bereich aus der Karte bleibt beim Filtern erhalten (ADR 016). */}
+      {filters.bbox && <input type="hidden" name={PARAM_NAMES.bbox} value={filters.bbox.join(",")} />}
       <div>
         <label htmlFor="f-q" className="block font-medium">{t("q")}</label>
         <input id="f-q" name={PARAM_NAMES.q} type="search" maxLength={200} defaultValue={filters.q ?? ""} className={input} />

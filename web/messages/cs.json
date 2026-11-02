@@ -682,5 +682,28 @@
     "failed": "Nepodařilo se. Zkuste to prosím znovu.",
     "limit": "Uložit můžete nejvýše 500 inzerátů.",
     "loadFailed": "Vaše oblíbené inzeráty se nepodařilo načíst. Zkuste to prosím později."
+  },
+  "Map": {
+    "viewLabel": "Zobrazení",
+    "viewList": "Seznam",
+    "viewMap": "Mapa",
+    "label": "Mapa inzerátů",
+    "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© přispěvatelé OpenStreetMap</a> · Protomaps",
+    "failed": "Mapu nelze v tomto prohlížeči zobrazit (chybí WebGL). Seznam níže ukazuje všechny inzeráty.",
+    "noscript": "Mapa potřebuje JavaScript. Seznam níže ukazuje všechny inzeráty.",
+    "loading": "Načítání inzerátů …",
+    "loadFailed": "Inzeráty pro mapu se nepodařilo načíst.",
+    "retry": "Zkusit znovu",
+    "truncated": "Pro tento výřez je příliš mnoho inzerátů. Přibližte prosím mapu.",
+    "searchArea": "Hledat v této oblasti",
+    "searchAreaHint": "Inzeráty bez vlastního bodu se počítají se středem svého okresu.",
+    "stack": "{count} inzerátů na tomto místě",
+    "close": "Zavřít",
+    "count": "{count} inzerátů na mapě",
+    "areaActive": "Filtrováno podle oblasti mapy.",
+    "areaRemove": "Odstranit oblast",
+    "approxPoint": "Přibližná poloha (posunuto o 3–5 km)",
+    "approxDistrict": "Poloha v okrese, bez přesného bodu",
+    "cluster": "{count} inzerátů, přiblížit"
   }
 }

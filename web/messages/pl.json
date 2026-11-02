@@ -682,5 +682,28 @@
     "failed": "Nie udało się. Spróbuj ponownie.",
     "limit": "Możesz zapisać maksymalnie 500 ogłoszeń.",
     "loadFailed": "Nie udało się wczytać ulubionych. Spróbuj ponownie później."
+  },
+  "Map": {
+    "viewLabel": "Widok",
+    "viewList": "Lista",
+    "viewMap": "Mapa",
+    "label": "Mapa ogłoszeń",
+    "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© współtwórcy OpenStreetMap</a> · Protomaps",
+    "failed": "Mapy nie można wyświetlić w tej przeglądarce (brak WebGL). Lista poniżej pokazuje wszystkie ogłoszenia.",
+    "noscript": "Mapa wymaga JavaScriptu. Lista poniżej pokazuje wszystkie ogłoszenia.",
+    "loading": "Wczytywanie ogłoszeń …",
+    "loadFailed": "Nie udało się wczytać ogłoszeń dla mapy.",
+    "retry": "Spróbuj ponownie",
+    "truncated": "Za dużo ogłoszeń dla tego widoku. Przybliż mapę.",
+    "searchArea": "Szukaj w tym obszarze",
+    "searchAreaHint": "Ogłoszenia bez własnego punktu liczą się ze środkiem swojego powiatu.",
+    "stack": "{count} ogłoszeń w tym miejscu",
+    "close": "Zamknij",
+    "count": "{count} ogłoszeń na mapie",
+    "areaActive": "Filtrowane według obszaru mapy.",
+    "areaRemove": "Usuń obszar",
+    "approxPoint": "Przybliżona lokalizacja (przesunięta o 3–5 km)",
+    "approxDistrict": "Lokalizacja w powiecie, bez dokładnego punktu",
+    "cluster": "{count} ogłoszeń, przybliż"
   }
 }

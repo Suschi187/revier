@@ -676,6 +676,11 @@ isOneToOne: false
 "public_page_state":
 { Args: { "p_id": string,"p_kind": string }; Returns: string
                            },
+"region_geo":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "area_km2": number,"code": string,"lat": number,"lng": number
+            }[]
+                           },
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },

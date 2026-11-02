@@ -682,5 +682,28 @@
     "failed": "Das hat nicht geklappt. Bitte erneut versuchen.",
     "limit": "Du kannst höchstens 500 Anzeigen merken.",
     "loadFailed": "Deine Favoriten konnten nicht geladen werden. Bitte später erneut versuchen."
+  },
+  "Map": {
+    "viewLabel": "Ansicht",
+    "viewList": "Liste",
+    "viewMap": "Karte",
+    "label": "Karte der Anzeigen",
+    "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© OpenStreetMap-Mitwirkende</a> · Protomaps",
+    "failed": "Die Karte kann in diesem Browser nicht angezeigt werden (WebGL fehlt). Die Liste unten zeigt alle Anzeigen.",
+    "noscript": "Die Karte braucht JavaScript. Die Liste unten zeigt alle Anzeigen.",
+    "loading": "Anzeigen werden geladen …",
+    "loadFailed": "Die Anzeigen für die Karte konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "truncated": "Zu viele Anzeigen für diesen Ausschnitt. Bitte hineinzoomen.",
+    "searchArea": "In diesem Bereich suchen",
+    "searchAreaHint": "Anzeigen ohne eigenen Punkt zählen mit dem Mittelpunkt ihres Kreises.",
+    "stack": "{count} Anzeigen an dieser Stelle",
+    "close": "Schließen",
+    "count": "{count} Anzeigen auf der Karte",
+    "areaActive": "Gefiltert nach Kartenbereich.",
+    "areaRemove": "Bereich entfernen",
+    "approxPoint": "Ungefähre Lage (3–5 km verschoben)",
+    "approxDistrict": "Lage im Landkreis, kein genauer Punkt",
+    "cluster": "{count} Anzeigen, hineinzoomen"
   }
 }

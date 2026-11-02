@@ -269,3 +269,34 @@ async function runProviderListings(id: string, cursor: string | null): Promise<L
   const { data, error } = await anonClient().rpc("provider_listings", { p_owner: id, p_cursor: cursor ?? undefined, p_limit: 20 });
   return error ? null : toPage(data);
 }
+
+// ---------------------------------------------------------------------------
+// Karte (ADR 016): Punkte im Bereich, ungecacht (Review A6), mit Zeitlimit (A5).
+// ---------------------------------------------------------------------------
+
+const mapPointSchema = z.object({
+  id: z.uuid(),
+  lng: z.number(),
+  lat: z.number(),
+  kind: z.enum(E.listing_kind),
+  direction: z.enum(E.listing_direction),
+  title: z.string(),
+  price_minor: z.number().int().nullable(),
+  currency: z.enum(E.currency_code).nullable(),
+  price_unit: z.enum(E.price_unit).nullable(),
+  district_code: z.string(),
+  approx: z.enum(["point", "district"]),
+});
+export type MapPoint = z.infer<typeof mapPointSchema>;
+const mapSchema = z.object({ points: z.array(mapPointSchema), truncated: z.boolean() });
+
+export type MapResult = { ok: true; points: MapPoint[]; truncated: boolean } | { ok: false; error: "invalid" | "failed"; key?: string };
+
+const MAP_TIMEOUT_MS = 2000;
+
+export async function mapPoints(filters: Filters): Promise<MapResult> {
+  const { data, error } = await anonClient().rpc("map_listings", { p_filters: filters }).abortSignal(AbortSignal.timeout(MAP_TIMEOUT_MS));
+  if (error) return error.code === "22023" ? { ok: false, error: "invalid", key: error.hint ?? undefined } : { ok: false, error: "failed" };
+  const parsed = mapSchema.safeParse(data);
+  return parsed.success ? { ok: true, ...parsed.data } : { ok: false, error: "failed" };
+}

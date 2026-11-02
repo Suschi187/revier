@@ -22,3 +22,46 @@ body {
   color: var(--foreground);
   font-family: ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Karte (ADR 016): Einzelpunkte als Buttons (Tastatur, Review A8), Kurzkarte mit echten Links. */
+.map-marker {
+  min-width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: #7a2e0e;
+  color: #fff;
+  font: 600 0.75rem/1 system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.4);
+}
+.map-cluster {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  background: #3f5f2a;
+}
+.map-marker:focus-visible {
+  outline: 3px solid #1c1917;
+  outline-offset: 2px;
+}
+.map-popup ul {
+  display: grid;
+  gap: 0.5rem;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+.map-popup a {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.map-popup p {
+  font-size: 0.8rem;
+  color: #44403c;
+}
+.map-popup button {
+  margin-top: 0.5rem;
+  text-decoration: underline;
+}
+.maplibregl-ctrl-attrib a {
+  text-decoration: underline;
+}
