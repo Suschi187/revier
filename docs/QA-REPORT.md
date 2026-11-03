@@ -1349,3 +1349,134 @@ Vorschlag: Im Proxy die bekannten Unterseiten-Formen je Bereich zulassen (z. B. 
 
 ### Gesamturteil
 F1, F2, F3, F4, F5, F6, F7, F10 und F11 sind behoben. Die beiden Funde mit Priorität hoch (F1, F3) sind auf Dev und im Produktions-Build belegt, F1 mit Gegenprobe. F8 und F9 sind teilweise behoben, die Reste stehen als N2 und N3 oben. N1 ist eine kleine Lücke, die durch den F10-Fix entstanden ist. Die Fixes brechen keine bisherigen Tests und schwächen keine Sicherheitseigenschaft: RLS auf `favorites` ist strenger, die RPCs laufen als Invoker nur für `authenticated`, das Funktionsattribut wirkt nur innerhalb der Funktion, die Admin-CSP bleibt erhalten, und Rücksprünge bleiben auf derselben Origin. **M5 ist abnahmereif.** N1–N3 (alle niedrig) können bei Gelegenheit behoben werden, N2 am einfachsten zusammen mit dem nächsten Favoriten-Thema.
+
+## M6 – Abnahme 2026-11-04
+
+Geprüfter Stand: `54f6441` (main, Arbeitsbaum sauber). Geprüft wurden die M6-Commits `0efb886` bis `54f6441` (10 Commits). Umgebung: macOS, Node 24, Next.js 16.4 (`cacheComponents`), Supabase CLI 2.122.0 lokal mit PostGIS, Chromium headless mit SwiftShader. Produktions-Build per `npm run build && npx next start -p 3456` in drei Varianten: ohne Kartenvariablen, nur `MAP_TILES_FILE`, mit `MAP_TILES_DIR=.cache/map` und `MAP_TILES_FILE=basemap-20261101.pmtiles`.
+Grundlage: SPEC v0.8 (3.1, 3.3, 6 M6/M9, 7.10), Plan M6 mit Architekt-Review (10: B1–B3, A1–A12, H1–H9) und „Eingearbeitet“ (11), ADR 016, ADR 006 (Nachtrag M6), ADR 015, CHANGELOG „M6“, CLAUDE.md. iOS (I3/I4) ist laut Plan nicht Teil von M6 (Lücke im CHANGELOG vermerkt). `supabase db reset` lief in dieser Prüfung nicht (vom Berechtigungssystem abgelehnt); alle Migrationen waren laut `supabase migration list --local` angewendet.
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase test db` (ohne Reset) | grün, 34 Dateien, **767**. Mit `34_qa_m6_abnahme` 35 Dateien, **795**, davon 4 TODO (F4, F5, F6). |
+| `supabase test db` ohne Reset nach allen E2E-Läufen | grün (795), keine `@test.local`-Konten übrig |
+| `npm run lint`, `npm run typecheck` | grün, auch mit den QA-Dateien |
+| `npm test` (Vitest) | **442/442**; mit `lib/qa-m6.test.ts` **469** (468 grün, 1 erwarteter Fehlschlag F2) |
+| `npm run test:integration` | **177/177** (CHANGELOG nennt 176). Ohne Docker im `PATH` werden alle still übersprungen; mit `INTEGRATION_REQUIRED=1` gelaufen. |
+| `npm run test:e2e` (Dev, bestehende Specs) | **108/108** |
+| `qa-m6.spec.ts` (Dev, mit Server-Log `QA_DEV_LOG`) | **23/23**, davon 3 erwartete Fehlschläge (F1, F2, F3) |
+| Produktions-Build ohne Kartenvariablen: `qa-m6`, `map`, `map-smoke` | **35** (33 grün inkl. 3 erwartete Fehlschläge, 2 übersprungen: Kachel-Route) |
+| Produktions-Build nur `MAP_TILES_FILE` | Kachel-Route und vier Sprachen **5/5**: `/tiles/…` 404 (kein CDN davor), Punkte auf neutralem Grund, keine Fehlermeldung, keine Fehlerschleife (< 10 Anfragen in 4 s) |
+| Produktions-Build mit `MAP_TILES_DIR` + `MAP_TILES_FILE`: `qa-m6`, `map`, `map-smoke` | **35/35** (3 erwartete Fehlschläge), Kachel-Route inklusive |
+| `npm run build` | grün, ohne Warnungen; `/api/map` und `/tiles/[name]` ƒ |
+
+### Ergebnis je Akzeptanzkriterium
+
+| # | Kriterium (SPEC 6 M6) | Ergebnis | Nachweis |
+|---|---|---|---|
+| a | Die Karte zeigt nur verfremdete Positionen | **erfüllt** | pgTAP `31`, E2E „Akzeptanz a“. QA: Punktwahl über die Oberfläche (Fadenkreuz nach Verschieben per Tastatur), danach ist der Eingabepunkt (5 und 6 Nachkommastellen, gerundet und abgeschnitten) in keiner Antwort (HTML, RSC, Server-Action-Antwort, `/api/map`), keiner URL (auch `Location`), keiner Spalte von `listings`, `listing_places`, `audit_log` und keinem Server-Log (Dev und Produktion). Gespeicherter Punkt 2,2–5,8 km vom Eingabepunkt. Kartendaten = `map_point` bzw. Kreismittelpunkt (bis auf die 15. Stelle, F4). |
+| b | Ein Klick öffnet das Detail | **erfüllt** | E2E „Akzeptanz b“ (Einzelpunkt, gestapelte Kurzkarte). QA: per Tastatur (Cluster mit Enter, Marker mit Enter, Link in der Kurzkarte fokussiert, „Schließen“ gibt den Fokus zurück). |
+| – | Umfang: Cluster, Bereichssuche, Detail-Karte, Punktwahl | **erfüllt mit Funden** | Bereichssuche: Liste korrekt, Karte lädt nicht nach (F1), über 30° still verworfen (F2); Lokalisierung der Steuerelemente (F3) |
+| – | Nutzer-Ergänzung M5: Entfernen, Sperren, Punkt entfernen wirken sofort | **erfüllt** | QA-E2E auf Dev und Produktion: nach gewärmten Caches sofort weg aus `/api/map`, Suche und Kreisseite, Detail 410; entfernter Punkt sofort als Kreismittelpunkt in Karte und „Lage im Landkreis …“ am Detail |
+
+### Architekt-Auflagen (Plan 10)
+
+| Auflage | Status | Bemerkung |
+|---|---|---|
+| B1 Bedrohungsmodell, kleine Kreise | **erfüllt** | ADR 016 mit Ring, Randeffekt, mehreren Zellen, „zwei Schlüssel“, Zahlen. Regel unter 400 km² greift auf allen Wegen (QA-pgTAP): RPC, direktes PostgREST-Update, Insert mit Punkt, Kreiswechsel mit Punkt (direkt und RPC), Kreiswechsel mit zurückgeschicktem Punkt (Punkt fällt weg). Hinweis bei weiterem Punkt im Kreis und beim Kreiswechsel vorhanden. Anmerkungen zum Modell unten (Hinweise). |
+| B2 `map_point` sieht nie den Eingabepunkt | **erfüllt** | Trigger-Reihenfolge `listings_guard` < `listings_zz_blur_location` < `listings_zz_moderation_fields` < `listings_zz_publication_fields` < `listings_zzz_map_point` (geprüft in `pg_trigger`). Der Guard sieht den Rohpunkt, speichert ihn aber nicht. Besitzer ohne Schreibrecht auf `map_point` (42501), `service_role`-Schreibversuch überschrieben, `service_role` und Admin setzen keinen Punkt (42501), alle Zeilen `map_point = coalesce(display_location, Kreismittelpunkt)`. |
+| B3 `p_point` keep/set/clear, nie vorbelegt | **teilweise** | Alte Signatur entfernt, anon ohne EXECUTE, NaN/±Infinity → 22023, fremde Konten und Admin 42501, entfernte Anzeige 42501, Legal-Gate RV001 (pgTAP `33`). QA: Formular sendet `keep`, nie `lat`/`lng` als Vorbelegung; unverändertes Speichern einer **aktiven** Anzeige lässt Status, `display_location` und `map_point` unverändert (mit und ohne JavaScript); ein zurückgeschickter öffentlicher Punkt wird erneut 3–5 km verschoben (Begründung des Verbots bestätigt). **Abweichungen:** `set` ohne Koordinaten entfernt den Punkt still (F5); „Ausgabe genau wie gespeichert“ gilt nicht für `map_listings`/`listing_card` (F4). |
+| A1 Kacheln, eigene Origin | **erfüllt** | `MAP_TILES_FILE` zur Laufzeit, Route nur mit `MAP_TILES_DIR` (Prod) bzw. Cache (Dev), Namensmuster, 206/416/HEAD, Suffix-Bereiche, ETag, kein `Content-Encoding` trotz `Accept-Encoding`, Traversal (`..%2F` 400, `..%252F`, `.env.local`, `%00`, Großschreibung 404), POST 405, kein CORS. Hinweise: 416 mit `immutable`, Vollabruf ohne Range (H-Liste). |
+| A2 CSP und Worker | **erfüllt** | Seiten-CSP `worker-src 'self'`, kein `blob:` in `worker-src`/`script-src`, `connect-src` ohne Kachel-Origin; Worker als `.mjs` mit JavaScript-MIME und `immutable`; keine CSP-Verletzungen und keine fremden Hosts in de/en/cs/pl (Dev, Produktion mit und ohne Kacheln). Die Admin-CSP enthält aus demselben Builder ebenfalls `worker-src 'self'` (harmlos). |
+| A3 `bbox` im Filter v1 | **teilweise** | Prüfung in DB und Zod, kanonische Rundung (idempotent, nach außen, negative Werte), URL-Rundweg, Rand eingeschlossen, Kreismittelpunkt-Semantik in Karte und Suche (QA-pgTAP), mehr als 4 Stellen in der DB gültig, `view=map` mit `noindex`. **Abweichungen:** gekappter Ausschnitt ergibt 30,0001° (F2); Unterlauf `1e-400` ergibt 22003 statt 22023 (F6). |
+| A4 `map_listings` | **erfüllt** | gemeinsame `private.search_conditions`, gleiche Menge für alle Rollen und Fixture-Filter (pgTAP `32`, Integration), Limit 2000/`truncated`, ohne `owner_id`, PLZ, Ort. Messung im CHANGELOG. |
+| A5 `/api/map` | **erfüllt** | 400 `{error, key}` für fehlende/ungültige `bbox` (auch Exponent, Text, Überlänge), `private, no-store`, `application/geo+json`, `nosniff`, kein `Access-Control-Allow-Origin` (auch mit fremdem `Origin`), POST 405, Timeout 2 s, Texte in der Sprache aus `lang`. |
+| A6 Cache, sofortige Wirkung | **erfüllt** | siehe oben; Zähler steigt beim Entfernen des Punkts. Folge für Moderatoren siehe F7. |
+| A7 Keine Koordinaten in Logs, URLs, Metadaten | **erfüllt** | QA-E2E (Server-Log von Dev und `next start`), JSON-LD, `<head>`, Sitemap ohne Koordinaten; kein `console.*` im Web-Code; Fehler nur als Feldcodes. |
+| A8 Barrierefreiheit | **teilweise** | Fadenkreuz und Button, `aria-live`, Marker und Cluster als Buttons, Kurzkarte mit Fokus und Esc/Schließen, Tab-Reihenfolge Karte → Marker → Bereichssuche → Liste (QA), `jumpTo` und `fadeDuration 0` bei reduzierter Bewegung (Code), axe ohne schwere Verstöße. **Abweichung:** Zoom-Buttons und Attribution-Umschalter haben englische Namen (F3). Ab 300 Markern zeichnet die Karte nichts (Code, H-Liste). |
+| A9 Bundle | **erfüllt** | E2E „Bundle“ auch gegen den Produktions-Build grün; `/static/map/` mit `immutable`. |
+| A10 Lizenzen, Attribution | **erfüllt** | Attribution ausgeklappt mit OpenStreetMap-Link und Protomaps auf Liste und Detail bei 360 px in vier Sprachen innerhalb der Breite; OFL neben den Schriften; keine 404 für Glyphen in cs/pl. Lizenzliste im CHANGELOG. |
+| A11 Testbarkeit | **erfüllt** | ohne Kartendatei lauffähig (Produktion ohne Variablen), WebGL-Smoke, Fixture-Kacheln; keine Testhilfen im Bundle (kein `window.__map`). |
+| A12 Consent, Datenschutz | **erfüllt** | SPEC M9 und ADR 016 formuliert, Cache Storage leer (E2E). |
+
+Hinweise H1–H9: H1, H3 als Lücke im CHANGELOG. H2 nicht entschieden (Titel und Preis je Punkt). H4 umgesetzt (maxZoom 13, Hinweistext). H5 umgesetzt (anderes Symbol, Text). H6 umgesetzt (Stil je Sprache). H7 geprüft. H8 im CHANGELOG. H9 eingehalten.
+
+### Definition of Done (CLAUDE.md)
+
+| Punkt | Ergebnis |
+|---|---|
+| Build ohne Warnungen, Lint und Typecheck grün | erfüllt |
+| Tests grün | erfüllt, auch `supabase test db` nach E2E ohne Reset |
+| Neue Texte in 4 Sprachen | erfüllt für die App-Texte (`Map`, 40 Schlüssel, gleiche Platzhalter, keine Werte aus en übernommen; Feldcodes `place.point.*`). **Nicht erfüllt** für die Texte der MapLibre-Steuerelemente (F3). Glossar „Karte“, cs/pl ungeprüft markiert. |
+| Lücke Web/iOS im CHANGELOG | erfüllt (I3, I4) |
+| RLS für neue Tabellen | keine neuen Tabellen; neue Spalte `map_point` nur lesbar wie `display_location`, neue RPCs in der Meta-Allowlist |
+| CHANGELOG mit Testanleitung | erfüllt; Zahl der Integrationstests weicht ab (176 statt 177) |
+
+### Gefundene Fehler
+
+#### F1 – hoch – Die Karte lädt nach Verschieben, Zoomen und „In diesem Bereich suchen“ keine Punkte nach
+`ListingsMap` ruft `/api/map` nur einmal in `onReady` für den Startausschnitt auf. Danach löst weder `moveend` noch ein neuer Filter einen Abruf aus. „In diesem Bereich suchen“ navigiert per `router.push`; die Komponente bleibt gemountet, `query` enthält `bbox` nicht und ändert sich daher nicht. Folgen: Wer aus dem Startausschnitt herauszoomt oder verschiebt, sieht dort keine Punkte, auch nachdem die Liste den neuen Bereich zeigt. Der Hinweis „Bitte hineinzoomen“ bei `truncated` ist wirkungslos, weil Hineinzoomen nichts nachlädt. Auf Bundesland-Seiten reicht der Startausschnitt (Quadrat aus Fläche) nicht immer bis an die Landesgrenze; Punkte am Rand erscheinen nie. Liste und Karte zeigen nach der Bereichssuche verschiedene Mengen.
+Reproduktion:
+1. Anzeigen in Sachsen und im Landkreis München, `/de/suche?view=map&q=<Text>&bbox=13,50.5,14.8,51.4`.
+2. Dreimal „Zoom out“, „In diesem Bereich suchen“ → die Liste enthält die Münchner Anzeige, die Karte zeigt sie nicht, kein weiterer Abruf von `/api/map`.
+3. E2E `qa-m6.spec.ts -g "F1"` (`test.fail`, Dev und Produktion).
+Vorschlag: Bei `moveend` (entprellt, z. B. 300 ms) und bei Änderung der Suchparameter neu laden, laufende Abrufe per `AbortController` abbrechen. Den Kartenstatus („N Anzeigen“, „hineinzoomen“) aus dem letzten Abruf zeigen. E2E: nach dem Verschieben ein neuer Abruf, Marker im neuen Bereich.
+
+#### F2 – mittel – Bereichssuche aus einem Ausschnitt über 30° wird still verworfen
+`currentBbox` kappt größere Ausschnitte auf 30° um die Mitte und rundet danach mit `canonicalBbox` nach außen. Liegt die Mitte nicht auf dem 4-Stellen-Raster, ist das Ergebnis 30,0001° breit. Zod lehnt es ab, `filtersFromParams` lässt `bbox` fallen. Die URL trägt `bbox=…`, die Liste ist aber ungefiltert und der Hinweis „Gefiltert nach Kartenbereich“ fehlt. Auf Desktop reichen drei Klicks auf „Zoom out“ aus dem Startausschnitt DE+AT. Ein späterer Kartenabruf (nach F1) bekäme 400 und zeigte „konnte nicht geladen werden“.
+Reproduktion: `/de/suche?view=map`, dreimal „Zoom out“, „In diesem Bereich suchen“ → URL mit `bbox`, kein Hinweis. E2E `-g "F2"` (`test.fail`), Vitest `qa-m6.test.ts` (`it.fails`).
+Vorschlag: Erst runden, dann kappen (z. B. auf 29,9998° um die gerundete Mitte), oder die Grenze in Zod und DB um eine Rundungseinheit tolerieren. Vitest mit beliebigen Mittelpunkten.
+
+#### F3 – mittel – Steuerelemente der Karte nicht übersetzt
+`MapCanvas` übergibt MapLibre kein `locale`. Zoom-Buttons („Zoom in“, „Zoom out“) und der Attribution-Umschalter tragen englische `aria-label`/`title` auf de-, cs- und pl-Seiten. Screenreader lesen sie in der falschen Sprache (A8, CLAUDE.md „nie Strings hartcodieren“ sinngemäß, DoD „alle Texte in 4 Sprachen“).
+Reproduktion: `/de/suche?view=map` → `.maplibregl-ctrl-zoom-in` hat `aria-label="Zoom in"`. E2E `-g "F3"` (`test.fail`).
+Vorschlag: `locale` aus dem Namespace `Map` an `new maplibre.Map({ locale: { "NavigationControl.ZoomIn": …, "NavigationControl.ZoomOut": …, "AttributionControl.ToggleAttribution": …, "Map.Title": … } })` übergeben; E2E über die Namen in vier Sprachen.
+
+#### F4 – niedrig – `map_listings` und `listing_card` geben den Punkt auf 15 Stellen gerundet aus
+`jsonb_build_object('lng', st_x(map_point), …)` wandelt float8 mit der Sitzungseinstellung `extra_float_digits = 0` (Supabase-Standard, vgl. QA M5 F1) um. `/api/map`, Suche, Favoriten und Anbieter liefern deshalb z. B. `13.9990389689637`, gespeichert ist `13.999038968963697`; das Detail liest EWKB und zeigt den exakten Wert. ADR 016 und Review B3 verlangen „überall genau der gespeicherte Wert“. Die Abweichung liegt unter einem Millimeter, bricht aber den Vertrag für iOS (Vergleich gelesener mit gespeicherten Punkten) und lässt Karte und Detail auseinanderlaufen.
+Reproduktion: pgTAP `34_qa_m6_abnahme` (TODO „bitgenau“); E2E `/api/map` gegen `map_point` vergleicht deshalb nur auf 10 Stellen.
+Vorschlag: `set extra_float_digits = 3` als Attribut von `map_listings`, `search_listings` (schon gesetzt), `my_favorites`, `provider_listings` bzw. von `private.listing_card`, oder die Werte als `st_asgeojson`-Text mit voller Genauigkeit liefern. Test unter `extra_float_digits = 0`.
+
+#### F5 – niedrig – `set` ohne Koordinaten entfernt den Punkt still
+`set_listing_location(…, 'set', null, 13.95)` (oder beide `null`) besteht die Prüfung, weil `null between …` `null` ergibt und `if not null` nicht greift. `st_makepoint` liefert `null`, der Punkt wird entfernt. B3 verlangt bei `set` endliche Werte, sonst 22023. Das Web sendet das nie (Zod), iOS (I4) und direkte API-Aufrufe können es.
+Reproduktion: pgTAP `34` (2 TODO).
+Vorschlag: `if p_point = 'set' and (p_lat is null or p_lng is null or not (…))` → 22023 `point`.
+
+#### F6 – niedrig – Unterlauf in `bbox` ergibt 22003 statt 22023
+`{"bbox":[1e-400,45,10,50]}` besteht `search_filters_error` (numeric), der Cast nach float8 in `search_conditions` scheitert mit 22003. `/api/map` antwortet für solche Filter mit 502 statt 400, Such-RPC und Suchaufträge (M8) mit einem unerwarteten Fehlercode. Über die Web-URL nicht erreichbar (Regex ohne Exponent).
+Reproduktion: pgTAP `34` (TODO).
+Vorschlag: in `search_filters_error` zusätzlich `(v ->> i)::float8` in einem Ausnahmeblock prüfen oder Beträge unter 1e-9 auf 0 setzen; Fall in die Fixture.
+
+#### F7 – niedrig – Entfernt ein Moderator den Punkt, geht die Anzeige in die Prüfung, ohne Audit
+Der Guard wertet die Ausnahme „Moderator entfernt den Punkt“ als Inhaltsänderung: Eine aktive Anzeige wird `pending_review`, `submitted_at` neu gesetzt, als hätte der Besitzer sie eingereicht. Es entsteht kein Audit-Eintrag (der Audit-Trigger läuft nur bei `update of status`). Der Besitzer erfährt nichts. ADR 014/016 beschreiben nur das Entfernen des Punkts. Eine Admin-Oberfläche dafür gibt es nicht, der Weg ist nur per API erreichbar.
+Reproduktion: Admin mit aal2 `update listings set display_location = null where id = <aktive fremde Anzeige>` → Status `pending_review`, `audit_log` leer für die Anzeige.
+Vorschlag: Entscheiden und dokumentieren. Empfehlung: Bei dieser Ausnahme den Status unverändert lassen (die Anzeige bleibt mit Kreismittelpunkt öffentlich) und eine Audit-Zeile `listing.point_removed` schreiben; mit M9 (Meldungen) eine Aktion im Admin anbieten.
+
+### Hinweise (keine Fehler)
+- Bedrohungsmodell plausibel. Ergänzungen für ADR 016: (1) Die Distanz ist gleichverteilt in 3–5 km, die Dichte je Fläche also innen höher (∝ 1/r); der Ring ist nicht gleich wahrscheinlich. (2) Das Restrisiko „Anbieter teilt die Lage im Chat → Empfänger kennt den Versatz und alle Zellen des Besitzers im Kreis“ steht in ADR 006, nicht in ADR 016; der Detailtext verweist gerade auf den Chat. Ein Hinweis beim Teilen im Chat (M7) wäre sinnvoll. (3) ADR 006 „außer exakt gleich (dann ändert sich nichts)“ ist praktisch nicht erreichbar, weil geography-Gleichheit bitgenau ist und Clients gerundete Werte lesen (F4).
+- `/tiles/…`: 416 trägt `public, max-age=31536000, immutable` (dokumentiert in `qa-m6.spec.ts`); ein CDN könnte Fehlerantworten cachen. Ohne `Range` streamt die Route die ganze Datei (1,2 GB) – für M10 (WAF, Bandbreite) festhalten. `If-None-Match` wird ignoriert (immer 206/200).
+- Schriften unter `/static/map/fonts/…` sind `immutable`, aber ohne Version im Pfad; bei einem Wechsel der Glyphen bleiben alte bis zu einem Jahr im Cache.
+- Ab 300 Kartenelementen im Ausschnitt entfernt `renderMarkers` alle Marker, der Layer ist unsichtbar: Die Karte ist dann leer, ohne Hinweis (A8 sah „nur Layer“ vor). Mit heutigen Datenmengen nicht erreichbar.
+- Mit `bbox` in der URL zeigt die Karte wegen `padding: 24` einen größeren Ausschnitt als die Liste filtert; Zahl auf der Karte und Trefferzahl können abweichen.
+- `regionGeo()` cacht bei einem DB-Fehler ein leeres Ergebnis für „days“; dann zeigt das Detail für Anzeigen ohne Punkt „3–5 km verschoben“ statt „Lage im Landkreis“ und die Karte startet bei DE+AT.
+- „Lage im Landkreis {district}“ gilt auch für österreichische Bezirke und kreisfreie Städte (Wortwahl mit dem Glossar abstimmen).
+- Server-Logs von `next dev` enthalten `GET /api/map?bbox=…` (Interesse des Besuchers, keine Revierlage; wie in ADR 006 Logging-Checkliste vorgesehen).
+
+### Nicht prüfbar
+- Produktions-Hosting der Kartendatei, CDN, Logs, Rate-Limit (M10).
+- LCP/INP auf einem Mittelklasse-Telefon (M10).
+- iOS (I3/I4), Gleichstand Web/iOS der Kartenfilter: noch keine App; F4–F6 betreffen den Vertrag für iOS.
+- Muttersprachliche Prüfung cs/pl.
+- `supabase db reset` (nicht ausgeführt, siehe oben).
+
+### Neue Tests
+- `supabase/tests/34_qa_m6_abnahme.test.sql` (28, davon 4 TODO): kleine Kreise auf allen Schreibwegen, Kreiswechsel mit zurückgeschicktem Punkt, Schreibrechte auf `map_point`/`display_location` (Besitzer, `service_role`, Admin), Konsistenz aller Zeilen, ±Infinity, `set` ohne Koordinaten (F5), erneutes Verschieben eines zurückgeschickten Punkts, `bbox`-Ränder, Kreismittelpunkt-Semantik in Karte und Suche, mehr als 4 Stellen, Unterlauf (F6), bitgenaue Ausgabe (F4).
+- `web/lib/qa-m6.test.ts` (27, 1 `it.fails`): kanonische Rundung, URL-Rundweg, 9 ungültige URL-Werte, 30°-Grenze, F2, Punkt aus dem Formular (keep/clear/8 ungültige), Range-Grenzfälle, CSP, `Map`-Texte in vier Sprachen.
+- `web/e2e/qa-m6.spec.ts` (23, 3 `test.fail`; mit `QA_BASE_URL`, `QA_TILES`, `QA_DEV_LOG` gegen den Produktions-Build lauffähig): Eingabepunkt nirgends (Antworten, URLs, DB, Log), unverändertes Speichern aktiv (mit und ohne JS), Detail ohne Koordinaten in Meta/JSON-LD/Sitemap, Bereichssuche nach Herauszoomen, F1, F2, F3, Tastatur, `/api/map`-Vertrag, sofortige Wirkung, Kachel-Route je Startvariante, CSP und Worker, je Sprache fremde Hosts/404/CSP und 360 px mit Attribution, Detail ohne JS.
+
+### Empfehlung
+M6 ist **mit Auflagen abnahmereif**. Beide Akzeptanzkriterien sind auf Dev und im Produktions-Build erfüllt. Der Standortschutz hält allen Proben stand: Der Eingabepunkt erscheint nirgends, die Regel für kleine Kreise lässt sich nicht umgehen, `map_point` ist nur vom Trigger schreibbar, und Entfernen, Sperren sowie Punkt entfernen wirken sofort.
+- Vor I3/M8: **F1** (Karte lädt nicht nach), **F4** und **F5** (Vertrag für iOS).
+- Bald: **F2**, **F3**.
+- Bei Gelegenheit: F6, F7 (Entscheidung zusammen mit M9).
