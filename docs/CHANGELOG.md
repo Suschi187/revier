@@ -2,6 +2,33 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M6: QA-Funde F1–F7 – 2026-11-04
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M6 – Abnahme“.
+
+### Geändert
+- **F1 Nachladen:** Die Karte lädt die Punkte nach jedem Verschieben und Zoomen neu (300 ms entprellt) und bei neuen Filtern. Ältere Abrufe werden abgebrochen. Liste und Karte zeigen nach „In diesem Bereich suchen“ dieselbe Menge.
+- **F2 Bereich über 30°:** `viewBbox` rundet erst nach außen und kappt dann auf dem 4-Stellen-Raster auf 30° um die Mitte. Dabei aufgefallen: Zod verwarf gültige Bereiche, deren Differenz in Gleitkomma knapp über 30 lag (89.403 − 59.403). Die Grenze hat jetzt eine Toleranz von 1e-9 wie die exakte Rechnung der DB; der Fall steht in der gemeinsamen Fixture.
+- **F3 Steuerelemente:** Zoom-Buttons, Attribution, Marker und Popup von MapLibre sind in de/en/cs/pl beschriftet (`Map.controls`).
+- **F4 Genauigkeit:** `map_listings`, `my_favorites` und `provider_listings` laufen mit `extra_float_digits = 3`. Punkte kommen bitgenau wie gespeichert (wichtig für iOS).
+- **F5:** `set_listing_location(…, 'set')` ohne `p_lat` oder `p_lng` ergibt `22023 point`, statt den Punkt still zu entfernen.
+- **F6:** Beträge in `bbox`, die float8 nicht darstellt (`1e-400`), ergeben `22023 bbox` statt `22003`; `/api/map` antwortet 400 statt 502.
+- **F7:** Entfernt ein Moderator den Punkt einer fremden Anzeige, bleibt der Status (aktiv bleibt aktiv, mit Kreismittelpunkt). Audit-Eintrag `listing.point_removed`. Admin-Aktion und Benachrichtigung kommen mit M9.
+- **Hinweise aus dem Bericht:** Kein Marker-Layer mehr ohne Hinweis ab 300 Elementen („Bitte hineinzoomen“). `416` der Kachel-Route mit `no-store` statt `immutable`. ADR 016 ergänzt: Dichte im Ring, Lage im Chat geteilt (Hinweis für M7), gleicher Punkt, Hint-Format der Regel für kleine Kreise.
+- **Proben:** TODOs in pgTAP `34_qa_m6_abnahme` und `test.fail`/`it.fails` in `e2e/qa-m6.spec.ts` und `lib/qa-m6.test.ts` sind normale Tests; `/api/map` wird bitgenau verglichen. Neu: F7 (Status, Audit, kein Eintrag beim Besitzer), Zufallstest für `viewBbox`.
+
+### Testen
+- `supabase db reset && supabase test db` (798)
+- `npm test`, `npm run test:integration`, `npm run test:e2e` (Karte: `e2e/map*.spec.ts`, `e2e/qa-m6.spec.ts`)
+- Von Hand: `/de/suche?view=map`, verschieben und zoomen → Zahl der Anzeigen auf der Karte ändert sich; weit herauszoomen, „In diesem Bereich suchen“ → „Gefiltert nach Kartenbereich.“
+
+### Offen (nicht in diesem Nachtrag)
+- Schriften unter `/static/map/fonts/` ohne Version im Pfad (bei einem Wechsel der Glyphen mitziehen).
+- Ausschnitt der Karte mit `bbox` in der URL ist wegen des Rands größer als der Filter.
+- `regionGeo()` cacht bei einem DB-Fehler ein leeres Ergebnis.
+- Kachel-Route ohne `Range` streamt die ganze Datei (M10, mit WAF und Bandbreite).
+- Wortwahl „Lage im Landkreis“ für österreichische Bezirke und kreisfreie Städte mit dem Glossar abstimmen.
+
 ## M6 Karte (Web) – 2026-11-02
 
 Plan `docs/plans/M6-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 016, SPEC v0.8.

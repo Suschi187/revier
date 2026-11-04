@@ -1,10 +1,10 @@
 begin;
 \ir _helpers.psql
-select plan(28);
+select plan(31);
 
 -- QA M6 (Abnahme, docs/QA-REPORT.md „M6 – Abnahme“): Standortschutz an allen Schreibwegen (RPC, direktes
 -- PostgREST-Update, Insert, service_role, Admin), Regel kleine Kreise inklusive Umgehungsversuchen, p_point-Vertrag,
--- bbox-Grenzen und Kreismittelpunkt-Semantik, Ausgabe genau wie gespeichert. Bekannte Fehler als TODO (F4–F6).
+-- bbox-Grenzen und Kreismittelpunkt-Semantik, Ausgabe genau wie gespeichert. F4–F7 behoben (Migration 20261104100000).
 set constraints all immediate;
 
 create function tests.qa6_err(statement text) returns text language plpgsql as $$
@@ -78,7 +78,6 @@ select tests.authenticate_as(:'o');
 select display_location::text as stored from listings where id = :'l' \gset
 select is(tests.qa6_err(format($$ select set_listing_location(%L, %L, null, null, 'set', 'Infinity', 13.95) $$, :'l', :'big')), '22023 point', 'set mit Infinity: 22023');
 select is(tests.qa6_err(format($$ select set_listing_location(%L, %L, null, null, 'set', 50.95, '-Infinity') $$, :'l', :'big')), '22023 point', 'set mit -Infinity: 22023');
-select todo('F5: set ohne Koordinaten entfernt den Punkt still', 2);
 select is(tests.qa6_err(format($$ select set_listing_location(%L, %L, null, null, 'set', null, 13.95) $$, :'l', :'big')), '22023 point', 'set ohne lat: 22023');
 select is((select display_location::text from listings where id = :'l'), :'stored', 'set ohne lat lässt den Punkt stehen');
 -- Zurückgeschickter Punkt verschiebt erneut (deshalb nie vorbelegen, B3)
@@ -111,7 +110,6 @@ select ok(not :'lc'::uuid = any (tests.qa6_ids(jsonb_build_object('v', 1, 'bbox'
 select ok(not :'lc'::uuid = any (tests.qa6_sids(jsonb_build_object('v', 1, 'bbox', jsonb_build_array(:'cx'::float8 + 0.02, :'cy'::float8 - 0.2, :'cx'::float8 + 0.4, :'cy'::float8 + 0.2)))),
   'dasselbe in der Suche');
 select is(private.search_filters_error('{"v":1,"bbox":[13.123456789,50.1,14.987654321,51.2]}'), null, 'Mehr als 4 Nachkommastellen: gültig (iOS frei)');
-select todo('F6: Unterlauf in bbox ergibt 22003 statt 22023', 1);
 select is(tests.qa6_err($$ select map_listings('{"v":1,"bbox":[1e-400,45,10,50]}') $$), '22023 bbox', 'bbox 1e-400: 22023');
 
 -- 5. Ausgabe genau wie gespeichert (ADR 016 „ohne eigene Rundung“), auch unter extra_float_digits = 0 (Supabase)
@@ -119,12 +117,30 @@ select tests.as_postgres();
 update listings set status = 'active', expires_at = now() + interval '30 days' where id = :'l';
 set local extra_float_digits = 0;
 select tests.as_anon();
-select todo('F4: map_listings und listing_card runden auf 15 Stellen', 1);
 select is((select (e ->> 'lng')::float8 = (select extensions.st_x(map_point) from public.listings where id = :'l')
                  and (e ->> 'lat')::float8 = (select extensions.st_y(map_point) from public.listings where id = :'l')
            from jsonb_array_elements(map_listings('{"v":1,"bbox":[13,50.5,14.8,51.4]}') -> 'points') e
            where (e ->> 'id')::uuid = :'l'), true,
   'Kartenpunkt bitgenau wie map_point');
+
+-- 6. Moderator entfernt den Punkt: Status bleibt, Audit-Eintrag (QA M6 F7)
+reset extra_float_digits;
+select tests.as_postgres();
+select tests.authenticate_as(:'adm', 'aal2');
+update listings set display_location = null where id = :'l';
+select tests.as_postgres();
+select is((select status::text from listings where id = :'l'), 'active', 'F7: aktive Anzeige bleibt aktiv, wenn die Moderation den Punkt entfernt');
+select is((select count(*)::int from audit_log where target_id = :'l' and action = 'listing.point_removed' and actor_id = :'adm'), 1,
+  'F7: Audit-Eintrag listing.point_removed mit dem Moderator');
+-- Der Besitzer selbst erzeugt keinen Eintrag (Kreiswechsel und eigenes Entfernen sind kein Moderationsvorgang).
+select tests.authenticate_as(:'o');
+insert into listings (kind, direction, title, content_language, region_id) values ('helper', 'wanted', 'QA6 eigen', 'de', :'big')
+returning id as lo \gset
+select set_listing_location(:'lo', :'big', null, null, 'set', 50.95, 13.95);
+select set_listing_location(:'lo', :'big', null, null, 'clear');
+select tests.as_postgres();
+select is((select count(*)::int from audit_log where target_id = :'lo' and action = 'listing.point_removed'), 0,
+  'F7: eigenes Entfernen ohne Audit-Eintrag');
 
 select * from finish();
 rollback;

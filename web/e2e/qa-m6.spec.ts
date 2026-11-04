@@ -13,11 +13,12 @@ import { publicPath } from "../lib/public/paths";
 // /api/map-Vertrag, Kachel-Route, Glyphen und fremde Hosts in vier Sprachen, 360 px, Tastatur, ohne JavaScript.
 // Konten per service_role in Node, Löschung in afterAll. Gegen den Produktions-Build mit QA_BASE_URL; QA_TILES sagt,
 // wie der Server gestartet ist ("dev" | "none" | "file-only" | "dir"), QA_DEV_LOG zeigt auf das Server-Log.
-// Bekannte Fehler als test.fail (F-Nummern aus docs/QA-REPORT.md, Abschnitt „M6 – Abnahme“).
+// F1–F7 aus docs/QA-REPORT.md (Abschnitt „M6 – Abnahme“) sind behoben; die Proben laufen als normale Tests.
 
 const BASE = process.env.QA_BASE_URL ?? "http://localhost:3000";
 if (process.env.QA_BASE_URL) test.use({ baseURL: process.env.QA_BASE_URL });
-const TILES = process.env.QA_TILES ?? (process.env.QA_BASE_URL ? "none" : "dev");
+// In der CI läuft der Produktions-Build ohne Kartenvariablen (playwright.config.ts), also wie "none".
+const TILES = process.env.QA_TILES ?? (process.env.QA_BASE_URL || process.env.CI ? "none" : "dev");
 const LOCALES = ["de", "en", "cs", "pl"] as const;
 
 const created: string[] = [];
@@ -282,12 +283,12 @@ test.describe("QA M6", () => {
   test("F3 (behoben): Steuerelemente der Karte sind in der Seitensprache beschriftet", async ({ page }) => {
     await page.goto(`/de/suche?view=map&q=${encodeURIComponent(RUN)}`);
     await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 20_000 });
-    await expect(page.getByRole("button", { name: "Vergrößern" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Verkleinern" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Zoom in" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Vergrößern", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Verkleinern", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Zoom in", exact: true })).toHaveCount(0);
     for (const [locale, path, zoomIn] of [["en", "search", "Zoom in"], ["cs", "hledani", "Přiblížit"], ["pl", "szukaj", "Przybliż"]]) {
       await page.goto(`/${locale}/${path}?view=map`);
-      await expect(page.getByRole("button", { name: zoomIn })).toBeVisible({ timeout: 20_000 });
+      await expect(page.getByRole("button", { name: zoomIn, exact: true })).toBeVisible({ timeout: 20_000 });
     }
   });
 
@@ -350,10 +351,10 @@ test.describe("QA M6", () => {
     for (const key of ["Sachsen Punkt", "Muenchen Punkt", "Mitte"]) {
       const row = await service.from("listings").select("map_point").eq("id", ids[key]).single();
       const p = parsePoint(row.data!.map_point)!;
-      // Bis auf die 15. Stelle (F4: map_listings rundet unter extra_float_digits = 0)
+      // Bitgenau wie gespeichert (F4 behoben: extra_float_digits = 3 in map_listings)
       const [lng, lat] = byTitle.get(T(key))!.geometry.coordinates;
-      expect(lng, key).toBeCloseTo(p.lng, 10);
-      expect(lat, key).toBeCloseTo(p.lat, 10);
+      expect(lng, key).toBe(p.lng);
+      expect(lat, key).toBe(p.lat);
     }
     expect(byTitle.get(T("Mitte"))!.geometry.coordinates).toEqual([bigCentre.lng, bigCentre.lat]);
     expect(byTitle.get(T("Mitte"))!.properties.kind).toBe("Pomocník při lovu");
@@ -454,11 +455,11 @@ test.describe("QA M6", () => {
     expect((await request.post(fixture)).status()).toBe(405);
   });
 
-  test("Hinweis: 416 trägt Cache-Control immutable", async ({ request }) => {
+  test("416 wird nicht gecacht", async ({ request }) => {
     test.skip(TILES === "none" || TILES === "file-only", "Ohne Kachel-Route");
     const r = await request.get("/tiles/basemap-fixture.pmtiles", { headers: { Range: "bytes=0-1,5-9" } });
-    // Dokumentiert den Ist-Zustand (H in QA-REPORT): ein Fehler-Status mit einem Jahr Cache
-    expect(r.headers()["cache-control"]).toBe("public, max-age=31536000, immutable");
+    expect(r.status()).toBe(416);
+    expect(r.headers()["cache-control"]).toBe("no-store");
   });
 
   test("CSP der Kartenseite: worker-src 'self', kein blob: für Skripte und Worker", async ({ request }) => {

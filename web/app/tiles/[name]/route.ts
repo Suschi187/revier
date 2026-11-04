@@ -37,7 +37,8 @@ function serve(request: Request, name: string, withBody: boolean): Response {
   };
   const range = parseRange(request.headers.get("range"), size);
   if (range.kind === "unsatisfiable") {
-    return new Response(null, { status: 416, headers: { ...headers, "Content-Range": `bytes */${size}` } });
+    // Fehlerantworten nicht ein Jahr lang cachen lassen (QA M6, Hinweis zu 416).
+    return new Response(null, { status: 416, headers: { ...headers, "Cache-Control": "no-store", "Content-Range": `bytes */${size}` } });
   }
   const [start, end, status] = range.kind === "partial" ? [range.start, range.end, 206] : [0, size - 1, 200];
   const body = withBody ? (Readable.toWeb(createReadStream(file, { start, end })) as ReadableStream) : null;

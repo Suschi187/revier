@@ -20,12 +20,13 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - Die wahre Lage rastet auf eine 1-km-Zelle (EPSG:3035) ein. Der öffentliche Punkt liegt 3–5 km davon entfernt, in einer Richtung, die je Besitzer und Kreis fest ist.
 - Ohne weiteres Wissen liegt die wahre Lage auf einem Ring von 3–5 km um den Punkt, etwa 50 km².
 - Mit der Unschärfe der Zelle (halbe Diagonale ≈ 0,71 km) sind es 2,29–5,71 km, etwa 86 km².
+- Der Ring ist nicht gleich wahrscheinlich (Nachtrag QA M6): Die Distanz ist in 3–5 km gleichverteilt, die Dichte je Fläche fällt also mit 1/r. Innen ist die Lage wahrscheinlicher als außen. Die 50 km² sind deshalb eine obere Schätzung der wirksamen Fläche.
 
 **Randeffekt**
 - Der Kreis ist öffentlich. Nur der Teil des Rings im Kreis kommt in Frage.
 - Bei kleinen Kreisen und bei Punkten nahe der Kreisgrenze ist das ein Bruchteil des Rings.
 - Liegt der Punkt außerhalb des Kreises, zeigt das zusätzlich die Richtung des Versatzes.
-- Gegenmaßnahme: In Kreisen unter `listing_location_min_district_km2` (400 km², `app_settings`) ist kein Punkt erlaubt (`23514`, `hint = location.point.small_district`). Die Karte zeigt dort den Kreismittelpunkt.
+- Gegenmaßnahme: In Kreisen unter `listing_location_min_district_km2` (400 km², `app_settings`) ist kein Punkt erlaubt (`23514`, `hint = {"fields":["place.point.small_district"]}`). Die Karte zeigt dort den Kreismittelpunkt.
 - Die Fläche steht als Skalar `regions.area_km2` aus denselben amtlichen Quellen wie die Regionen (ADR 007), ohne Polygone. Die betroffenen Kreise und die zehn kleinsten mit Ring ∩ Kreis stehen unten unter „Zahlen“ (aus Commit 2).
 
 **Mehrere Zellen eines Besitzers**
@@ -37,6 +38,14 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - Ein Revier an der Kreisgrenze mit Anzeigen in beiden Kreisen, oder ein Kreiswechsel, dessen alter Punkt in Caches oder Archiven steht, ergibt zwei Ringe.
 - Diese schneiden sich in zwei Linsen von wenigen km².
 - Das ist dokumentiert (auch in ADR 006). Der Assistent nennt es beim Kreiswechsel kurz.
+
+**Lage im Chat geteilt (Restrisiko, Nachtrag QA M6)**
+- Teilt ein Anbieter die genaue Lage im Chat (das Detail verweist darauf), kennt der Empfänger den Versatz V des Besitzers in diesem Kreis.
+- Damit lassen sich alle anderen Punkte desselben Besitzers im Kreis auf ihre 1-km-Zelle zurückrechnen.
+- Steht in ADR 006. Für M7 (Chat): beim Teilen einer Lage ein kurzer Hinweis darauf.
+
+**Gleicher Punkt (Nachtrag QA M6)**
+- ADR 006 „außer exakt gleich (dann ändert sich nichts)“ ist praktisch nicht erreichbar: geography-Gleichheit ist bitgenau, und das Formular schickt den gespeicherten Punkt nie zurück (B3). Ein neues `set` verschiebt deshalb immer neu.
 
 **PLZ-Präfix**
 - Die zwei Ziffern (ADR 012) verengen nur dort, wo eine Leitgebietsgrenze den Kreis teilt.
@@ -54,11 +63,12 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - RPC `set_listing_location(p_listing_id, p_region_id, p_postal_code, p_place_name, p_point text default 'keep', p_lat, p_lng)` mit `p_point` ∈ `keep | set | clear`.
   - Die alte Signatur wird entfernt, nicht überladen.
   - Kreis und Punkt stehen in einem UPDATE.
-  - `set` verlangt endliche Werte (−90..90, −180..180), sonst `22023`, `hint = point`.
+  - `set` verlangt beide Werte, endlich und im Bereich (−90..90, −180..180), sonst `22023`, `hint = point` (fehlende Werte seit QA M6 F5).
   - Fehler ohne Koordinaten.
 - Das Formular sendet `keep` als Vorgabe. `set` nur nach einer Aktion des Nutzers, `clear` nur über „Punkt entfernen“.
 - Der gespeicherte Punkt wird **nie** als Eingabe vorbelegt. Sonst verschiebt jedes Speichern ihn erneut um 3–5 km.
-- Ausgegeben wird überall genau der gespeicherte Wert, ohne eigene Rundung.
+- Ausgegeben wird überall genau der gespeicherte Wert, ohne eigene Rundung. Die RPCs mit Punkten (`search_listings`, `map_listings`, `my_favorites`, `provider_listings`) laufen dafür mit `extra_float_digits = 3` (QA M6 F4).
+- Entfernt ein Moderator den Punkt einer fremden Anzeige (einzige Inhaltsänderung, die die Moderation darf, ADR 014), bleibt der Status unverändert. Eine aktive Anzeige bleibt öffentlich und zeigt den Kreismittelpunkt. Die Aktion steht als `listing.point_removed` im Audit-Log (QA M6 F7). Eine Aktion im Admin und die Benachrichtigung des Besitzers kommen mit M9 (Meldungen).
 
 ### Filter `bbox` und Karten-RPC
 - `bbox: [west, south, east, north]` additiv im Filterformat v1 (ADR 015).
