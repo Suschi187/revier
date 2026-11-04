@@ -3,11 +3,12 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { pointFromForm } from "./location-point";
 import { canonicalBbox, filtersError, filtersFromParams, paramsFromFilters } from "./search/filters";
+import { viewBbox } from "./map/bounds";
 import { parseRange } from "./map/range";
 import { buildCsp } from "./security/csp";
 
 // QA M6 (Abnahme, docs/QA-REPORT.md „M6 – Abnahme“): bbox-Rundung und URL-Rundweg, Punkt aus dem Formular, Range,
-// CSP, Texte der Karte in vier Sprachen. Bekannte Fehler als it.fails (F2).
+// CSP, Texte der Karte in vier Sprachen. F2 behoben.
 
 const form = (entries: Record<string, string>) => {
   const data = new FormData();
@@ -43,11 +44,9 @@ describe("bbox (ADR 016, A3)", () => {
     expect(filtersError({ v: 1, bbox: [0.3, 40, 30.3, 50] })).toBeNull();
   });
 
-  // ListingsMap kappt größere Ausschnitte auf 30° um die Mitte und rundet danach nach außen.
-  it.fails("F2: auf 30° gekappter Ausschnitt bleibt nach der Rundung gültig", () => {
-    const clamp = (lo: number, hi: number) => (hi - lo <= 30 ? [lo, hi] : [(lo + hi) / 2 - 15, (lo + hi) / 2 + 15]);
-    const [w, e] = clamp(-10.123456, 33.456789);
-    const box = canonicalBbox([w, 40.98765, e, 60.1234])!;
+  // ListingsMap rundet erst nach außen und kappt danach auf 30° um die Mitte (behoben, QA M6 F2).
+  it("F2: auf 30° gekappter Ausschnitt bleibt nach der Rundung gültig", () => {
+    const box = viewBbox([-10.123456, 40.98765, 33.456789, 60.1234])!;
     expect(filtersError({ v: 1, bbox: box })).toBeNull();
   });
 });

@@ -725,6 +725,16 @@
       "removed": "Punkt wird beim Speichern entfernt.",
       "publicMarker": "So erscheint die Lage öffentlich (verfremdet)",
       "chosenMarker": "Gewählter Punkt, noch nicht gespeichert"
+    },
+    "controls": {
+      "zoomIn": "Vergrößern",
+      "zoomOut": "Verkleinern",
+      "resetBearing": "Nach Norden ausrichten",
+      "toggleAttribution": "Quellenangaben ein- oder ausblenden",
+      "mapFeedback": "Rückmeldung zur Karte",
+      "mapTitle": "Karte",
+      "marker": "Markierung auf der Karte",
+      "popupClose": "Schließen"
     }
   }
 }

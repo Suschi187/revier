@@ -369,6 +369,19 @@
       "error": null
     },
     {
+      "name": "Bereich genau 30° mit Gleitkomma-Rest (QA M6 F2)",
+      "filters": {
+        "v": 1,
+        "bbox": [
+          59.403,
+          -20.2805,
+          89.403,
+          9.7195
+        ]
+      },
+      "error": null
+    },
+    {
       "name": "Bereich zu breit",
       "filters": {
         "v": 1,

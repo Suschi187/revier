@@ -4,12 +4,13 @@ import type { GeoJSONSource, Marker, Popup } from "maplibre-gl";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { canonicalBbox } from "@/lib/search/filters";
+import { viewBbox } from "@/lib/map/bounds";
 import type { Bounds, MapApi } from "./MapCanvas";
 
 // Kartenansicht der Listen (ADR 016). MapLibre nur hier und nur bei Bedarf (Review A9). Cluster als Layer,
 // Einzelpunkte als HTML-Marker-Buttons (A8, fokussierbar); gleiche Koordinaten öffnen eine Kurzkarte mit allen
-// Anzeigen dort. „In diesem Bereich suchen“ setzt bbox in der URL, Liste und Karte filtern dann gleich.
+// Anzeigen dort. „In diesem Bereich suchen“ setzt bbox in der URL, Liste und Karte filtern dann gleich. Die Punkte
+// kommen für den sichtbaren Ausschnitt und werden nach jeder Bewegung neu geladen (QA M6 F1).
 
 const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-[28rem] w-full rounded bg-stone-100" /> });
 
@@ -52,6 +53,8 @@ function stacks(features: Feature[]): { type: "FeatureCollection"; features: (St
 }
 
 const MAX_MARKERS = 300;
+/** Wartezeit nach dem Ende einer Bewegung, bevor die Punkte neu geladen werden. */
+const RELOAD_DELAY_MS = 300;
 
 export function ListingsMap({
   tilesUrl,
@@ -74,7 +77,10 @@ export function ListingsMap({
   const markers = useRef<Marker[]>([]);
   const signature = useRef("");
   const popup = useRef<Popup | null>(null);
+  const request = useRef<AbortController | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "failed" | "truncated">("loading");
+  // Zu viele Elemente im Ausschnitt: keine Marker, aber ein Hinweis statt einer leeren Karte.
+  const [crowded, setCrowded] = useState(false);
   const [shown, setShown] = useState(0);
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -82,12 +88,8 @@ export function ListingsMap({
     const map = api.current?.map;
     if (!map) return undefined;
     const b = map.getBounds();
-    const box = [Math.max(b.getWest(), -180), Math.max(b.getSouth(), -90), Math.min(b.getEast(), 180), Math.min(b.getNorth(), 90)];
     // Höchstens 30° je Achse (Filterformat v1): größere Ausschnitte auf die Mitte begrenzen.
-    const clamp = (lo: number, hi: number) => (hi - lo <= 30 ? [lo, hi] : [(lo + hi) / 2 - 15, (lo + hi) / 2 + 15]);
-    const [w, e] = clamp(box[0], box[2]);
-    const [s, n] = clamp(box[1], box[3]);
-    return canonicalBbox([w, s, e, n]);
+    return viewBbox([b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]);
   }, []);
 
   const openPopup = useCallback((group: Item[], coordinates: [number, number], trigger: HTMLButtonElement) => {
@@ -151,6 +153,7 @@ export function ListingsMap({
     signature.current = next;
     for (const marker of markers.current) marker.remove();
     markers.current = [];
+    setCrowded(seen.size > MAX_MARKERS);
     if (seen.size > MAX_MARKERS) return;
     for (const feature of seen.values()) {
       const coordinates = feature.geometry.coordinates;
@@ -191,21 +194,33 @@ export function ListingsMap({
     const current = api.current;
     const bbox = currentBbox();
     if (!current || !bbox) return;
+    // Nur die Antwort zum letzten Ausschnitt zählt: ältere Abrufe abbrechen.
+    request.current?.abort();
+    const controller = new AbortController();
+    request.current = controller;
     setStatus("loading");
     try {
       const params = new URLSearchParams(query);
       params.set("bbox", bbox.join(","));
       params.set("lang", locale);
-      const response = await fetch(`/api/map?${params}`, { cache: "no-store" });
+      const response = await fetch(`/api/map?${params}`, { cache: "no-store", signal: controller.signal });
       if (!response.ok) throw new Error(String(response.status));
       const data = (await response.json()) as { features: Feature[]; truncated: boolean };
+      if (controller.signal.aborted) return;
       (current.map.getSource("listings") as GeoJSONSource | undefined)?.setData(stacks(data.features) as never);
       setShown(data.features.length);
       setStatus(data.truncated ? "truncated" : "ready");
     } catch {
-      setStatus("failed");
+      if (!controller.signal.aborted) setStatus("failed");
     }
   }, [currentBbox, locale, query]);
+
+  // Der moveend-Handler ruft immer die aktuelle Fassung von load (mit den aktuellen Filtern).
+  const reload = useRef<number | undefined>(undefined);
+  const loadRef = useRef(load);
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
 
   const onReady = useCallback(
     ({ map, maplibre }: MapApi) => {
@@ -225,14 +240,31 @@ export function ListingsMap({
       });
       map.on("moveend", schedule);
       map.on("idle", schedule);
+      // Nach Verschieben und Zoomen den neuen Ausschnitt laden (entprellt).
+      map.on("moveend", () => {
+        window.clearTimeout(reload.current);
+        reload.current = window.setTimeout(() => void loadRef.current(), RELOAD_DELAY_MS);
+      });
       void load();
     },
     [load, renderMarkers],
   );
 
+  // Neue Filter (gleicher Ausschnitt): neu laden. Beim ersten Rendern lädt onReady.
+  const firstQuery = useRef(true);
+  useEffect(() => {
+    if (firstQuery.current) {
+      firstQuery.current = false;
+      return;
+    }
+    void load();
+  }, [load]);
+
   useEffect(
     () => () => {
       popup.current?.remove();
+      request.current?.abort();
+      window.clearTimeout(reload.current);
     },
     [],
   );
@@ -257,8 +289,8 @@ export function ListingsMap({
       </div>
       <p className="mt-2 text-sm" aria-live="polite">
         {status === "loading" && texts.loading}
-        {status === "ready" && texts.count.replace("{count}", String(shown))}
-        {status === "truncated" && texts.truncated}
+        {status === "ready" && !crowded && texts.count.replace("{count}", String(shown))}
+        {(status === "truncated" || (status === "ready" && crowded)) && texts.truncated}
       </p>
       {status === "failed" && (
         <p role="alert" className="mt-2">

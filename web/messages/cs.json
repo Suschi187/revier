@@ -725,6 +725,16 @@
       "removed": "Bod bude při uložení odstraněn.",
       "publicMarker": "Jak se poloha zobrazí veřejně (posunutá)",
       "chosenMarker": "Vybraný bod, zatím neuložený"
+    },
+    "controls": {
+      "zoomIn": "Přiblížit",
+      "zoomOut": "Oddálit",
+      "resetBearing": "Natočit k severu",
+      "toggleAttribution": "Zobrazit nebo skrýt zdroje",
+      "mapFeedback": "Zpětná vazba k mapě",
+      "mapTitle": "Mapa",
+      "marker": "Značka na mapě",
+      "popupClose": "Zavřít"
     }
   }
 }

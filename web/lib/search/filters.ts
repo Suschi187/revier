@@ -69,7 +69,9 @@ const KEY_SCHEMAS = {
   sort: z.enum(SORTS),
   bbox: z
     .tuple([z.number(), z.number(), z.number(), z.number()])
-    .refine(([w, s, e, n]) => w >= -180 && e <= 180 && s >= -90 && n <= 90 && w < e && s < n && e - w <= 30 && n - s <= 30),
+    // Die DB rechnet mit numeric (exakt); die Differenz zweier Gleitkommazahlen liegt dagegen leicht über 30
+    // (89.403 - 59.403 = 30.000000000000007). Toleranz weit unter der kleinsten kanonischen Einheit (1e-4).
+    .refine(([w, s, e, n]) => w >= -180 && e <= 180 && s >= -90 && n <= 90 && w < e && s < n && e - w <= 30 + 1e-9 && n - s <= 30 + 1e-9),
 } as const;
 
 const KEYS = Object.keys(KEY_SCHEMAS) as (keyof typeof KEY_SCHEMAS)[];

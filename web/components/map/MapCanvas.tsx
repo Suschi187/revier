@@ -2,6 +2,7 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as MapLibreMap, MapOptions, StyleSpecification } from "maplibre-gl";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { MAP_STYLE_VERSION, MAP_WORKER_URL } from "@/lib/map/assets";
 
@@ -35,6 +36,18 @@ export default function MapCanvas({
   className?: string;
 }) {
   const container = useRef<HTMLDivElement>(null);
+  const tc = useTranslations("Map.controls");
+  // Beschriftungen der MapLibre-Steuerelemente in der Seitensprache (QA M6 F3); ohne sie wären sie englisch.
+  const controls: Record<string, string> = {
+    "NavigationControl.ZoomIn": tc("zoomIn"),
+    "NavigationControl.ZoomOut": tc("zoomOut"),
+    "NavigationControl.ResetBearing": tc("resetBearing"),
+    "AttributionControl.ToggleAttribution": tc("toggleAttribution"),
+    "AttributionControl.MapFeedback": tc("mapFeedback"),
+    "Map.Title": tc("mapTitle"),
+    "Marker.Title": tc("marker"),
+    "Popup.Close": tc("popupClose"),
+  };
   const [failed, setFailed] = useState(false);
   const ready = useRef(onReady);
   useEffect(() => {
@@ -70,6 +83,7 @@ export default function MapCanvas({
           dragRotate: false,
           pitchWithRotate: false,
           fadeDuration: reducedMotion ? 0 : 300,
+          locale: controls,
         };
         map = new maplibre.Map(options);
         map.touchZoomRotate.disableRotation();

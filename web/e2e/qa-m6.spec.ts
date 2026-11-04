@@ -255,8 +255,7 @@ test.describe("QA M6", () => {
     await expect.poll(() => listedTitles(page), { timeout: 15_000 }).toContain(T("Muenchen Punkt"));
   });
 
-  test("F1: Karte lädt nach Verschieben, Zoomen und „In diesem Bereich suchen“ keine Punkte nach", async ({ page }) => {
-    test.fail(true, "F1: /api/map nur einmal beim Start");
+  test("F1 (behoben): Karte lädt nach Verschieben, Zoomen und „In diesem Bereich suchen“ Punkte nach", async ({ page }) => {
     const calls: string[] = [];
     page.on("request", (request) => {
       if (request.url().includes("/api/map")) calls.push(request.url());
@@ -271,8 +270,7 @@ test.describe("QA M6", () => {
     await expect(page.getByRole("button", { name: new RegExp(`^${T("Muenchen Punkt")}`) })).toHaveCount(1);
   });
 
-  test("F2: Bereichssuche mit einem Ausschnitt über 30° wird still verworfen", async ({ page }) => {
-    test.fail(true, "F2: Kappung auf 30° plus Rundung nach außen ergibt 30,0001°");
+  test("F2 (behoben): Bereichssuche mit einem Ausschnitt über 30° bleibt als Filter erhalten", async ({ page }) => {
     await page.goto(`/de/suche?view=map&q=${encodeURIComponent(RUN)}`);
     await expect(page.getByText(/Anzeigen auf der Karte/)).toBeVisible({ timeout: 20_000 });
     await zoomOut(page, 3);
@@ -281,12 +279,16 @@ test.describe("QA M6", () => {
     await expect(page.getByText("Gefiltert nach Kartenbereich.")).toBeVisible({ timeout: 10_000 });
   });
 
-  test("F3: Steuerelemente der Karte sind nicht übersetzt (Zoom-Buttons englisch)", async ({ page }) => {
-    test.fail(true, "F3: MapLibre ohne locale");
+  test("F3 (behoben): Steuerelemente der Karte sind in der Seitensprache beschriftet", async ({ page }) => {
     await page.goto(`/de/suche?view=map&q=${encodeURIComponent(RUN)}`);
     await expect(page.locator(".maplibregl-canvas")).toBeVisible({ timeout: 20_000 });
-    await expect(page.locator(".maplibregl-ctrl-zoom-in")).toBeVisible();
-    expect(await page.locator(".maplibregl-ctrl-zoom-in").getAttribute("aria-label")).not.toBe("Zoom in");
+    await expect(page.getByRole("button", { name: "Vergrößern" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Verkleinern" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Zoom in" })).toHaveCount(0);
+    for (const [locale, path, zoomIn] of [["en", "search", "Zoom in"], ["cs", "hledani", "Přiblížit"], ["pl", "szukaj", "Przybliż"]]) {
+      await page.goto(`/${locale}/${path}?view=map`);
+      await expect(page.getByRole("button", { name: zoomIn })).toBeVisible({ timeout: 20_000 });
+    }
   });
 
   test("Tastatur: Karte → Marker → Steuerelemente → Liste; Kurzkarte mit Schließen-Button gibt den Fokus zurück", async ({ page }) => {

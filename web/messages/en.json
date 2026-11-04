@@ -725,6 +725,16 @@
       "removed": "The point will be removed when you save.",
       "publicMarker": "How the location appears publicly (shifted)",
       "chosenMarker": "Chosen point, not saved yet"
+    },
+    "controls": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "resetBearing": "Reset bearing to north",
+      "toggleAttribution": "Show or hide attribution",
+      "mapFeedback": "Map feedback",
+      "mapTitle": "Map",
+      "marker": "Map marker",
+      "popupClose": "Close"
     }
   }
 }

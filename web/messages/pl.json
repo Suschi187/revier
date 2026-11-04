@@ -725,6 +725,16 @@
       "removed": "Punkt zostanie usunięty przy zapisie.",
       "publicMarker": "Jak lokalizacja wyświetla się publicznie (przesunięta)",
       "chosenMarker": "Wybrany punkt, jeszcze niezapisany"
+    },
+    "controls": {
+      "zoomIn": "Przybliż",
+      "zoomOut": "Oddal",
+      "resetBearing": "Obróć na północ",
+      "toggleAttribution": "Pokaż lub ukryj źródła",
+      "mapFeedback": "Uwagi do mapy",
+      "mapTitle": "Mapa",
+      "marker": "Znacznik na mapie",
+      "popupClose": "Zamknij"
     }
   }
 }
