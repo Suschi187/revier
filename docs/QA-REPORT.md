@@ -1480,3 +1480,80 @@ M6 ist **mit Auflagen abnahmereif**. Beide Akzeptanzkriterien sind auf Dev und i
 - Vor I3/M8: **F1** (Karte lädt nicht nach), **F4** und **F5** (Vertrag für iOS).
 - Bald: **F2**, **F3**.
 - Bei Gelegenheit: F6, F7 (Entscheidung zusammen mit M9).
+
+## M6 – Nachprüfung 2026-11-04
+
+Geprüfter Stand: `b40993c` (main, Arbeitsbaum sauber), Fixes `3f435bb` (F1–F3) und `b40993c` (F4–F7). Datenbank vom Nutzer frisch per `supabase db reset` aufgesetzt (von QA nicht selbst ausgeführt), alle 48 Migrationen laut `supabase migration list --local` angewendet. Umgebung wie in der Abnahme (Node 24, Supabase CLI 2.122.0, Chromium headless mit SwiftShader). Produktions-Build per `npm run build && npx next start -p 3456` in zwei Varianten: mit `MAP_TILES_DIR=.cache/map` + `MAP_TILES_FILE=basemap-20261101.pmtiles` (QA_TILES=dir) und ohne Kartenvariablen (QA_TILES=none, wie CI).
+
+### Prüfläufe
+
+| Prüfung | Ergebnis |
+|---|---|
+| `supabase test db` (nach Reset) | grün, 35 Dateien, **798** (wie im CHANGELOG) |
+| `supabase test db` mit `35_qa_m6_nachpruefung` | grün, 36 Dateien, **828**, davon 1 TODO (N2) |
+| `supabase test db` ohne Reset nach allen E2E-Läufen | grün (**828**), keine `@test.local`-Konten und keine QA7-Anzeigen übrig |
+| `npm run lint`, `npm run typecheck` | grün, auch mit den neuen QA-Dateien |
+| `npm test` (Vitest) | **473/473**; mit `lib/qa-m6-nachpruefung.test.ts` **481** (479 grün, 2 erwartete Fehlschläge: N1, N3) |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | **179/179** |
+| `npm run test:e2e` (Dev, alle Specs inkl. neuer) | **139/139** (108 bestehende, 23 `qa-m6`, 8 `qa-m6-nachpruefung` mit 1 erwartetem Fehlschlag N4) |
+| `npm run build` | grün, ohne Warnungen; `/api/map` und `/tiles/[name]` ƒ |
+| Produktion mit Kacheln: `qa-m6`, `qa-m6-nachpruefung`, `map`, `map-smoke` | **43/43** (1 erwarteter Fehlschlag N4), Kachel-Route und 416 inklusive |
+| Produktion ohne Kartenvariablen: dieselben Specs | **42** grün (1 erwarteter Fehlschlag N4), 1 übersprungen (416, ohne Kachel-Route) |
+
+### Ergebnis je Fund
+
+| Fund | Ergebnis | Nachweis |
+|---|---|---|
+| F1 (hoch) Karte lädt nicht nach | **behoben** | Reproduktion aus dem Bericht (Sachsen-Ausschnitt, dreimal „Zoom out“, „In diesem Bereich suchen“): Münchner Anzeige in Liste und Karte, neuer Abruf (E2E `qa-m6 -g F1`, Dev und Produktion). Regressionen geprüft (`qa-m6-nachpruefung`, Antworten per `page.route`): nach dem ersten Abruf **keine Schleife** (4 s Ruhe, genau 1 Abruf, `setData` löst kein `moveend` aus); ein Zoom = 1 Abruf, vier schnelle Zooms = 1–2 Abrufe (Entprellung); Kurzkarte öffnen = **kein** Abruf, Fokus bleibt im Dialog, Esc gibt ihn an den Marker zurück; Neuladen mit gleichen Daten (Größenänderung) lässt den Fokus am Marker; **Rennen**: eine um 3 s verzögerte ältere Antwort wird abgebrochen (`requestfailed`) und überschreibt die neuere nicht (Marker „Neu“, Zahl 1, keine Fehlermeldung); Cluster-Klick = genau 1 Abruf. Datumsgrenze: nach 25 × Pfeil rechts über 180° hinaus nur gültige Abrufe (200), der abgefragte Bereich liegt im sichtbaren Längenbereich (MapLibre hält die Mitte in ±180°). |
+| F2 (mittel) Bereich über 30° verworfen | **behoben** | Reproduktion „dreimal Zoom out, In diesem Bereich suchen“ ergibt Filter mit Hinweis (E2E `-g F2`). Vitest: Weltränder (ganze Welt, Pole, Ränder bei ±180°, Kopien teilweise außerhalb) und 5000 Zufallsausschnitte bis 120° Breite ergeben immer einen gültigen Filter ≤ 30°. Ein Ausschnitt ganz in einer Weltkopie (`[190,40,220,60]`) ergäbe w > e; laut E2E nicht erreichbar, als Test dokumentiert. Zod/DB: Fixture-Fall 59.403…89.403 auf beiden Seiten gültig, 30,0001° auf beiden ungültig; Abweichung knapp über 30° siehe **N1**. |
+| F3 (mittel) Steuerelemente englisch | **behoben** | E2E mit exakten Namen in de/en/cs/pl. Vitest: alle 8 Schlüssel `Map.controls` in vier Sprachen, nicht leer, de/cs/pl nicht aus en übernommen; MapCanvas übergibt alle Schlüssel der verwendeten Steuerelemente (Navigation, Attribution; Schlüssel gegen `maplibre-gl` 6.15.0 abgeglichen). |
+| F4 (niedrig) 15 Stellen | **behoben** | `extra_float_digits=3` an `map_listings`, `my_favorites`, `provider_listings` (dazu schon `search_listings`); pgTAP 34 und 35 unter `extra_float_digits = 0`: Karte, Favoriten, Anbieter bitgenau; `/api/map` bitgenau (E2E). Nebenwirkungen: Cursor von `provider_listings` enthält nur `timestamptz`-Text und `uuid` (nicht betroffen), Paging mit Limit 1 + Cursor vollständig und ohne Dopplung; `region_geo()` ohne Attribut, aber alle 520 Kreismittelpunkte sind bei 15 Stellen exakt (Vergleich im Detail bleibt richtig). |
+| F5 (niedrig) `set` ohne Koordinaten | **behoben** | pgTAP: ohne lat, ohne lng, ohne beide → `22023 point`, Punkt bleibt; NaN/±Infinity weiter 22023. |
+| F6 (niedrig) Unterlauf 22003 | **behoben** | pgTAP: `1e-400` in `map_listings`, `-1e-400` in `search_listings` → `22023 bbox`; Grenze: `1e-310` (subnormal) abgelehnt, `1e-300` und `-0` gültig. |
+| F7 (niedrig) Moderator-Punktentfernung | **behoben, mit Folgefund N2/N3** | pgTAP 35 mit über `moderate_listing` freigegebenen Anzeigen: aktiv bleibt aktiv, pausiert bleibt pausiert, eingereicht bleibt eingereicht, `submitted_at` unverändert, genau ein Audit `listing.point_removed` mit Moderator und Status. Die Ausnahme erlaubt nichts anderes: Punkt entfernen **plus** Titel, Kreiswechsel, Statuswechsel oder `reject_code` → 42501; danach Anzeige unverändert. Admin mit aal1: Punkt bleibt, kein Audit. Entfernte Anzeige: 42501. Besitzerpfad unverändert (eigenes Entfernen an aktiver Anzeige → Prüfung, kein Audit), Legal-Gate für Besitzer weiter RV001. Serverpfad (`service_role`): Status bleibt, kein Audit. |
+| Hinweis 416 | **behoben** | `Cache-Control: no-store` bei 416 (E2E Dev und Produktion mit Kacheln). |
+| Hinweis > 300 Marker | **behoben** | 1200 Rasterpunkte bei Zoom 13 (ohne Cluster): Hinweis „Zu viele Anzeigen … Bitte hineinzoomen.“, keine Marker, keine Zahl (E2E, Dev und Produktion). |
+| Admin-CSP, Meta-Allowlist | **unverändert** | Kein Diff in `web/lib/security`, Proxy, `next.config.ts`, `00_meta` seit `54f6441`; `00_meta` grün (keine neue öffentliche RPC, neue Trigger-Funktion ohne EXECUTE für API-Rollen); CSP-E2E grün. |
+
+### Neue Funde
+
+#### N1 – niedrig – Zod lässt 30° + 1e-9 zu, die DB nicht
+Die Toleranz aus F2 (`e - w <= 30 + 1e-9`) macht Zod großzügiger als `private.search_filters_error` (numeric, exakt). `filtersError({v:1,bbox:[0,0,30.0000000005,10]})` ergibt `null`, die DB `bbox`. Über die Web-URL nicht erreichbar (`parseBbox` rundet kanonisch auf 4 Stellen), aber der Vertrag „gleichlautend mit der DB, gemeinsame Fixture“ gilt nicht mehr für JSON-Filter (z. B. Suchaufträge in M8).
+Reproduktion: Vitest `qa-m6-nachpruefung.test.ts` „N1“ (`it.fails`), pgTAP 35 „DB: 30,0000000005° ist zu breit“.
+Vorschlag: in Zod in ganzen 1e-4-Einheiten bzw. mit `Math.round((e - w) * 1e9) <= 30e9` vergleichen oder die Toleranz auch in der DB; Fall in die gemeinsame Fixture.
+
+#### N2 – niedrig – Nach Punktentfernung durch die Moderation führt Fortsetzen in die Prüfung
+`listing_content_hash` enthält `display_location`. Entfernt die Moderation den Punkt, passt der Freigabe-Hash nicht mehr: Pausiert der Besitzer (oder ist die Anzeige schon pausiert) und setzt fort, wird sie `pending_review`, obwohl er nichts geändert hat. Widerspricht der Absicht von F7 („Status bleibt“), der Besitzer erfährt den Grund nicht.
+Reproduktion: freigegebene Anzeige mit Punkt, Besitzer pausiert, Admin (aal2) `update listings set display_location = null`, Besitzer `update listings set status = 'active'` → `pending_review`. pgTAP 35 (TODO).
+Vorschlag: entscheiden; z. B. den Freigabe-Hash bei der Moderator-Ausnahme neu berechnen (Trigger im Serverpfad) oder `display_location` beim Vergleich ausnehmen, wenn er `null` ist und die Freigabe einen Punkt hatte. In ADR 016 festhalten.
+
+#### N3 – niedrig – Audit-Aktion `listing.point_removed` im Admin nicht filterbar und nicht übersetzt
+`AUDIT_ACTIONS` (`web/lib/services/audit.ts`) kennt die neue Aktion nicht, die Auswahl im Audit-Log bietet sie nicht an; `Admin.audit.actions.listing_point_removed` fehlt in allen vier Sprachen, die Tabelle zeigt den rohen Schlüssel. Detail `status` ohne übersetzten Schlüssel, Wert roh (`active`).
+Reproduktion: Moderator entfernt einen Punkt, `/de/admin/audit` → Zeile „listing.point_removed“, Filter ohne diese Aktion. Vitest „N3“ (`it.fails`).
+Vorschlag: Aktion in `AUDIT_ACTIONS`, Texte in de/en/cs/pl, `status` wie `from` über `status.*` übersetzen.
+
+#### N4 – mittel – Cluster per Tastatur: Fokus fällt nach dem Aufklappen auf `body`
+Enter auf einem Cluster zoomt hinein; danach werden die Marker neu gezeichnet, der Cluster-Button existiert nicht mehr, der Fokus liegt auf `body`. Der nächste Tab beginnt am Seitenanfang. Nicht durch F1 entstanden (der Cluster verschwindet beim Aufklappen immer), in der Abnahme übersehen: Der damalige Tastatur-Test setzte den Fokus selbst neu. A8 (Tastaturbedienung) ist damit nur eingeschränkt erfüllt.
+Reproduktion: `/de/suche?view=map&bbox=13,50.5,14.8,51.4` mit mehreren nahen Punkten, Tab bis zum Cluster, Enter, 2 s warten → `document.activeElement` = `body`. E2E `qa-m6-nachpruefung -g N4` (`test.fail`, Dev und Produktion).
+Vorschlag: nach dem Neuzeichnen den Fokus auf den ersten Marker bzw. Cluster an oder nahe der aufgeklappten Koordinate setzen (wie bei der Kurzkarte über `data-key`), ersatzweise auf die Kartenfläche; E2E ohne manuelles Neufokussieren.
+
+### Hinweise (keine Fehler)
+- Jeder Abruf setzt den Status auf „Anzeigen werden geladen …“ in einer `aria-live`-Region; Screenreader hören nach jedem Verschieben zwei Ansagen. Ggf. nur das Ergebnis ansagen.
+- Ist der Ausschnitt breiter als 30°, lädt die Karte nur die Mitte; der Rand bleibt ohne Punkte und ohne Hinweis (bekannt aus dem 30°-Format, ggf. Hinweis „hineinzoomen“).
+- Jede Bewegung lädt neu, auch wenn sich der gerundete Bereich nicht ändert (z. B. Größenänderung); harmlos.
+- CHANGELOG „Nachtrag M6“: „Liste und Karte zeigen nach ‚In diesem Bereich suchen‘ dieselbe Menge“ gilt nur, solange der Ausschnitt nicht größer ist als der Filter (Rand, siehe „Offen“).
+
+### Nicht prüfbar
+- iOS (I3/I4) und Gleichstand Web/iOS: noch keine App. F4/F5 sind als Vertrag für iOS auf der DB-Seite erfüllt.
+- Produktions-Hosting, CDN-Verhalten bei 416 (M10).
+- `supabase db reset` durch QA (vom Nutzer ausgeführt).
+
+### Neue Tests
+- `supabase/tests/35_qa_m6_nachpruefung.test.sql` (30, 1 TODO N2): F7 an aktiv/pausiert/eingereicht mit echter Freigabe, Kombinationen mit Inhalt/Kreis/Status/Grund, aal1, entfernt, Besitzer, Legal-Gate, `service_role`; F5 ohne lng/beide/NaN; F6 Grenzen; Zod/DB 30°; F4 für Favoriten und Anbieter mit Paging.
+- `web/lib/qa-m6-nachpruefung.test.ts` (8, 2 `it.fails` N1, N3): viewBbox an Welträndern und zufällig, Weltkopie dokumentiert, 30°-Gleichstand, `Map.controls` in vier Sprachen, Audit-Aktion im Admin.
+- `web/e2e/qa-m6-nachpruefung.spec.ts` (8, 1 `test.fail` N4; ohne Testkonten, `/api/map` per `page.route`): keine Schleife, Entprellung, Kurzkarte, Fokus nach Neuladen, Rennen, Cluster-Fokus, > 300 Elemente, Datumsgrenze.
+
+### Empfehlung
+F1–F7 und die beiden Hinweise (416, > 300 Marker) sind **behoben**. Beim Nachladen gibt es keine Regression: keine Schleife, keine überzähligen Abrufe, kein Rennen, Fokus an Marker und Kurzkarte bleibt erhalten. Die Guard-Änderung F7 ist eng: Sie erlaubt dem Moderator nur das Entfernen des Punkts. M6 ist **abnahmereif**.
+- Vor I3/M8: **N1** (Filtervertrag für JSON-Filter), **N4** (Tastatur, A8).
+- Zusammen mit M9: **N2**, **N3**.
