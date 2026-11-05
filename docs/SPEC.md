@@ -1,5 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.8
+# SPEC – Revier (Arbeitstitel), MVP v0.9
 
+v0.9: M7 Chat (ADR 017): Kontaktdaten im Chat erlaubt mit Hinweis (7.8 entschieden), Schreibwege nur per RPC, `messages.recipient_id`, `profiles.notify_chat_email`, Benachrichtigung mit Drosselung, Sicherung gemeldeter Nachrichten (3.1, 3.4).
 v0.8: M6 Karte (ADR 016): Kacheln selbst gehostet (7.10 entschieden), `map_point` und `regions.area_km2` (3.1), keine Punktwahl in Kreisen unter 400 km² (3.3), Karte in M9 (Consent, Datenschutz), ODbL der Basiskarte in 7.2.
 v0.7: M5 Öffentliche Seiten (ADR 015): `published_at`/`approved_at` (3.1), Sichtbarkeit über eine Definition und Zustand „nicht mehr verfügbar“ (3.4), Anbieterprofil ohne „dabei seit“ (4.3), Suche als RPC mit Filterformat v1, Rechtsfragen 7.2.
 v0.6: M4 Moderation (ADR 014): `reject_code` plus optionaler Freitext, `submitted_at`, Entscheidungen nur per RPC `moderate_listing` (Freigeben, Bearbeitung anfordern, Ablehnen), Admins per UI mit Step-up, Karenz und Limits (3.1, 3.4, 5).
@@ -111,7 +112,12 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 - `listing_id` (nullable: wird beim Löschen der Anzeige leer, der Chat bleibt), `owner_id` (aus der Anzeige), `interested_id`, `last_message_at`, unique (`listing_id`, `interested_id`)
 
 **messages**
-- `conversation_id`, `sender_id`, `body` text (max 2000), `read_at`
+- `conversation_id`, `sender_id`, `recipient_id` (v0.9, vom Server aus der Unterhaltung), `body` text (1–2000 Zeichen nach dem Trimmen, ohne Steuer- und Bidi-Zeichen), `read_at` (nur `null → now()`)
+- Schreiben nur über die RPCs `start_conversation`, `send_message`, `mark_conversation_read` (v0.9, ADR 017); Rate-Limits `RV002` (neue Unterhaltungen, Nachrichten, ohne Antwort)
+
+**chat_notifications** (v0.9, privat) – `conversation_id`, `recipient_id`, `channel` (`email` | `push`), `last_sent_at`, `attempts`; Mail nur zu Nachrichten seit der letzten Mail, ohne Nachrichtentext; Abmeldung über `profiles.notify_chat_email`
+
+**reported_message_snapshots** (v0.9, privat) – Kopie einer gemeldeten Nachricht (`body`, `sender_id`, `created_at`, `conversation_id`) für die Moderation, Frist wie bearbeitete Meldungen
 
 **blocks** – `blocker_id`, `blocked_id` (unique)
 
@@ -152,7 +158,7 @@ Validierung in der DB bei jedem Schreiben (`private.listing_attributes_error`) u
   - Besitzer: `draft → pending_review`, `pending_review → draft`, `active → paused`, `paused → active` (Fortsetzen ohne erneute Prüfung, nur solange `expires_at` nicht abgelaufen ist).
   - Jede Inhaltsänderung an einer `active`- oder `paused`-Anzeige setzt sie auf `pending_review`.
   - Nur Admin: `pending_review → active | rejected`, `* → removed`. `expires_at`, `reject_reason`, `owner_id` setzt nur der Server.
-- `messages`/`conversations`: nur Teilnehmer; gesperrte (blockierte) Paare dürfen nicht schreiben.
+- `messages`/`conversations`: nur Teilnehmer lesen; Schreiben nur per RPC (v0.9); gesperrte (blockierte) Paare sowie gesperrte oder gelöschte Konten auf einer der beiden Seiten dürfen nicht schreiben. Eine neue Unterhaltung nur zu öffentlichen, fremden Anzeigen; bestehende Unterhaltungen bleiben beschreibbar, wenn die Anzeige nicht mehr öffentlich ist.
 - `verifications` und Dokument-Bucket: nur Besitzer (Insert/Read eigene) und Admin.
 - `profiles`: öffentlich lesbar nur `display_name`, `account_type`, `verification_status`, `business_name`, `country` (über die View `public_profiles`); alles andere nur Besitzer/Admin. Öffentlich erscheinen nur Anbieter mit mindestens einer öffentlichen Anzeige, außerdem sehen Chatpartner einander. Der öffentliche Status zeigt nur „verifiziert“ oder nichts, `pending`/`rejected` sieht nur der Nutzer selbst (v0.3).
 - `reports`: Insert für eingeloggte Nutzer (nur sichtbare Ziele); Meldende lesen den Stand ihrer eigenen Meldungen (DSA), ohne den bearbeitenden Admin zu sehen; alles andere nur Admin.
@@ -310,7 +316,7 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 5. **Verifizierungspflicht:** Muss jeder Anbieter verifiziert sein, oder nur für Pachtanzeigen?
 6. **Glossar:** Jagdfachbegriffe in cs/pl durch Muttersprachler prüfen lassen (`docs/GLOSSARY.md`)
 7. **Moderationsprozess:** Wer prüft wie schnell? (Ziel: Freigabe < 24 h)
-8. **Kontaktdaten im Chat:** Telefonnummern/Mails sperren oder zulassen?
+8. **Kontaktdaten im Chat:** *Entschieden (v0.9, ADR 017):* erlaubt; enthält eine Nachricht Telefonnummer, E-Mail-Adresse, Bankverbindung oder Koordinaten, zeigt der Chat vor dem Senden einen Sicherheitshinweis.
 9. **Hosting Web-App:** Anbieter mit EU-Region wählen (z. B. Vercel mit EU-Funktionen oder ein EU-Hoster); Auftragsverarbeitungsvertrag klären
 10. **Kartenanbieter Web:** *Entschieden (v0.8, ADR 016):* Vektorkacheln (PMTiles, Protomaps-Basemap aus OpenStreetMap) von der eigenen Origin, kein Dritter; Produktions-Hosting (EU, AVV, Logs ohne IP oder höchstens 7 Tage) in M10.
 11. **E-Mail-Versand:** Anbieter mit EU-Hosting für Transaktionsmails (Bestätigung, Benachrichtigung)

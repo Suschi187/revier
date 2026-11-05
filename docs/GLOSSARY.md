@@ -184,3 +184,16 @@ Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen
 | search_this_area | Search this area | In diesem Bereich suchen | Hledat v této oblasti | Szukaj w tym obszarze | ungeprüft |
 | map_view | Map | Karte | Mapa | Mapa | ungeprüft |
 | list_view | List | Liste | Seznam | Lista | ungeprüft |
+
+## Chat (M7)
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| messages | Messages | Nachrichten | Zprávy | Wiadomości | ungeprüft |
+| conversation | Conversation | Unterhaltung | Konverzace | Rozmowa | ungeprüft |
+| message | Message | Nachricht | Zpráva | Wiadomość | ungeprüft |
+| contact_provider | Send message | Nachricht schreiben | Napsat zprávu | Napisz wiadomość | ungeprüft |
+| unread | Unread | Ungelesen | Nepřečtené | Nieprzeczytane | ungeprüft |
+| block | Block | Blockieren | Zablokovat | Zablokuj | ungeprüft |
+| unblock | Unblock | Blockierung aufheben | Odblokovat | Odblokuj | ungeprüft |
+| report | Report | Melden | Nahlásit | Zgłoś | ungeprüft |

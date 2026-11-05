@@ -2,6 +2,17 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M7 Chat (Web) – in Arbeit
+
+Plan `docs/plans/M7-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 017, SPEC v0.9.
+
+### Bekannte Lücken
+- **iOS:** Chat und Push folgen in I5, auf denselben RPCs, Kanälen und Fixtures (ADR 017).
+- Meldungs-Warteschlange und Einsicht gesicherter Nachrichten im Admin: M9.
+- Abmelden per Klick aus der Mail (RFC 8058): M8–M10. Bis dahin in den Profileinstellungen.
+- Mail-Anbieter für die Cloud (HTTP-API, EU): M10. Lokal und in der CI über Mailpit.
+- Spam-Erkennung über gleiche Texte: M9/M10.
+
 ## Werkzeuge: Supabase-CLI v3 – 2026-11-05
 
 ### Geändert
