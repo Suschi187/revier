@@ -10,6 +10,12 @@ const eslintConfig = defineConfig([
     // eslint-disable-Kommentar, z. B. escaptes JSON-LD (M5).
     rules: { "react/no-danger": "error" },
   },
+  {
+    // Chat (ADR 017, Review A12): fremder Freitext angemeldeter Nutzer. Hier keine Ausnahmen per Kommentar.
+    files: ["components/chat/**", "app/\\[locale\\]/account/messages/**", "lib/chat/**"],
+    linterOptions: { noInlineConfig: true },
+    rules: { "react/no-danger": "error" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

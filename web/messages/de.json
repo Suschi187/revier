@@ -656,8 +656,8 @@
       "provider": "Anbieter",
       "verified": "verifiziert",
       "contactLogin": "Anbieter kontaktieren (Anmeldung nötig)",
-      "contactSoon": "Nachrichten an Anbieter folgen in Kürze.",
-      "ownListing": "Das ist deine Anzeige."
+      "ownListing": "Das ist deine Anzeige.",
+      "contact": "Nachricht schreiben"
     },
     "provider": {
       "breadcrumb": "Brotkrumen",
@@ -737,6 +737,58 @@
       "mapTitle": "Karte",
       "marker": "Markierung auf der Karte",
       "popupClose": "Schließen"
+    }
+  },
+  "Chat": {
+    "metaTitle": "Nachrichten",
+    "title": "Nachrichten",
+    "back": "Zurück zum Konto",
+    "empty": "Noch keine Unterhaltungen. Schreibe einem Anbieter aus einer Anzeige heraus.",
+    "loadFailed": "Die Unterhaltungen konnten nicht geladen werden.",
+    "more": "Ältere Unterhaltungen",
+    "listingUnavailable": "Anzeige nicht mehr verfügbar",
+    "listingDeleted": "Anzeige gelöscht",
+    "accountUnavailable": "Konto nicht mehr verfügbar",
+    "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
+    "you": "Du:",
+    "roleOwner": "Zu deiner Anzeige",
+    "nav": "Nachrichten",
+    "navUnread": "Nachrichten, {count} ungelesen",
+    "conversation": {
+      "metaTitle": "Unterhaltung",
+      "backToList": "Alle Nachrichten",
+      "notFound": "Diese Unterhaltung gibt es nicht, oder sie gehört nicht zu deinem Konto.",
+      "older": "Ältere Nachrichten laden",
+      "read": "Gelesen",
+      "sent": "Gesendet",
+      "messagesLabel": "Nachrichten dieser Unterhaltung",
+      "listingLink": "Zur Anzeige"
+    },
+    "composer": {
+      "label": "Deine Nachricht",
+      "send": "Senden",
+      "sending": "Wird gesendet …",
+      "count": "{count} von {max} Zeichen",
+      "shortcut": "Strg+Enter oder Cmd+Enter sendet die Nachricht."
+    },
+    "errors": {
+      "body": "Die Nachricht ist leer, zu lang oder enthält unzulässige Zeichen.",
+      "legal": "Bitte stimme zuerst den aktuellen Nutzungsbedingungen zu.",
+      "rate": "Du hast in kurzer Zeit viele Nachrichten geschrieben. Bitte versuche es später erneut.",
+      "rateUnanswered": "Bitte warte auf eine Antwort, bevor du weitere Nachrichten schreibst.",
+      "rateConversations": "Du hast heute schon viele Unterhaltungen begonnen. Bitte versuche es später erneut.",
+      "unavailable": "In dieser Unterhaltung kann nicht mehr geschrieben werden.",
+      "failed": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es erneut."
+    },
+    "blockedByMe": "Du hast diese Person blockiert.",
+    "cannotWrite": "In dieser Unterhaltung kann nicht mehr geschrieben werden.",
+    "safety": "Sicherheitshinweis: Zahle nie im Voraus an Personen, die du nicht kennst, und gib keine Passwörter oder Bankzugänge weiter. Melde verdächtige Nachrichten.",
+    "new": {
+      "metaTitle": "Nachricht schreiben",
+      "title": "Nachricht zu dieser Anzeige",
+      "intro": "Deine erste Nachricht geht an den Anbieter. Kontaktdaten tauscht ihr nur hier im Chat aus.",
+      "ownListing": "Das ist deine eigene Anzeige.",
+      "unavailable": "Zu dieser Anzeige kannst du keine Nachricht schreiben."
     }
   }
 }

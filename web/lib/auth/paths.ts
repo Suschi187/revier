@@ -32,6 +32,18 @@ export function isProtectedPath(pathname: string): boolean {
 }
 
 const ADMIN_RE = new RegExp(`^/(${LOCALE_GROUP})/admin(/|$)`);
+const CHAT_RE = new RegExp(`^/(${LOCALE_GROUP})/account/(messages|blocked)(/|$)`);
+const NEW_CHAT_RE = new RegExp(`^/(${LOCALE_GROUP})/account/messages/new/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$`);
+
+/** Chat-Routen (ADR 017, Review A12): erste angemeldete Fläche mit fremdem Freitext, daher Nonce-CSP wie /admin. */
+export function isChatPath(pathname: string): boolean {
+  return CHAT_RE.test(pathname);
+}
+
+/** Anzeigen-ID aus „Nachricht schreiben“ (`/account/messages/new/<id>`), für den Status im Proxy (Review A3). */
+export function newChatListingId(pathname: string): string | null {
+  return NEW_CHAT_RE.exec(pathname)?.[2] ?? null;
+}
 
 /** Admin-Bereich (ADR 014): Proxy prüft die Rolle, setzt die Nonce-CSP und antwortet sonst mit 403. */
 export function isAdminPath(pathname: string): boolean {

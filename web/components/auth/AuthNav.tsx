@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { signOut } from "@/app/[locale]/auth/actions";
 import { Link } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/services/auth";
+import { unreadCount } from "@/lib/services/chat";
 
 // Liest die Session und steht deshalb im Layout hinter einer Suspense-Grenze.
 export async function AuthNav() {
@@ -15,8 +16,15 @@ export async function AuthNav() {
     );
   }
 
+  // Zähler serverseitig (Review A13): kein Realtime außerhalb des Chats. Fehler → ohne Zahl.
+  const [unread, tc] = await Promise.all([unreadCount(), getTranslations("Chat")]);
+
   return (
     <div className="flex items-center gap-4">
+      <Link href="/account/messages" prefetch={false} className="underline" aria-label={unread ? tc("navUnread", { count: unread }) : undefined}>
+        {tc("nav")}
+        {unread ? <span className="ml-1 rounded bg-stone-900 px-1.5 text-sm text-white no-underline" aria-hidden="true">{unread}</span> : null}
+      </Link>
       {user.adminHint && (
         <Link href="/admin" className="underline">
           {t("admin")}

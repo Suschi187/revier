@@ -656,8 +656,8 @@
       "provider": "Ogłaszający",
       "verified": "zweryfikowany",
       "contactLogin": "Skontaktuj się z ogłaszającym (wymagane logowanie)",
-      "contactSoon": "Wiadomości do ogłaszających będą dostępne wkrótce.",
-      "ownListing": "To jest twoje ogłoszenie."
+      "ownListing": "To jest twoje ogłoszenie.",
+      "contact": "Napisz wiadomość"
     },
     "provider": {
       "breadcrumb": "Ścieżka nawigacji",
@@ -737,6 +737,58 @@
       "mapTitle": "Mapa",
       "marker": "Znacznik na mapie",
       "popupClose": "Zamknij"
+    }
+  },
+  "Chat": {
+    "metaTitle": "Wiadomości",
+    "title": "Wiadomości",
+    "back": "Powrót do konta",
+    "empty": "Nie masz jeszcze rozmów. Napisz do oferującego bezpośrednio z ogłoszenia.",
+    "loadFailed": "Nie udało się wczytać rozmów.",
+    "more": "Starsze rozmowy",
+    "listingUnavailable": "Ogłoszenie nie jest już dostępne",
+    "listingDeleted": "Ogłoszenie usunięte",
+    "accountUnavailable": "Konto nie jest już dostępne",
+    "unread": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}",
+    "you": "Ty:",
+    "roleOwner": "Dotyczy Twojego ogłoszenia",
+    "nav": "Wiadomości",
+    "navUnread": "Wiadomości, nieprzeczytane: {count}",
+    "conversation": {
+      "metaTitle": "Rozmowa",
+      "backToList": "Wszystkie wiadomości",
+      "notFound": "Ta rozmowa nie istnieje lub nie należy do Twojego konta.",
+      "older": "Wczytaj starsze wiadomości",
+      "read": "Przeczytano",
+      "sent": "Wysłano",
+      "messagesLabel": "Wiadomości w tej rozmowie",
+      "listingLink": "Zobacz ogłoszenie"
+    },
+    "composer": {
+      "label": "Twoja wiadomość",
+      "send": "Wyślij",
+      "sending": "Wysyłanie …",
+      "count": "{count} z {max} znaków",
+      "shortcut": "Ctrl+Enter lub Cmd+Enter wysyła wiadomość."
+    },
+    "errors": {
+      "body": "Wiadomość jest pusta, za długa lub zawiera niedozwolone znaki.",
+      "legal": "Najpierw zaakceptuj aktualny regulamin.",
+      "rate": "Napisałeś(-aś) wiele wiadomości w krótkim czasie. Spróbuj ponownie później.",
+      "rateUnanswered": "Poczekaj na odpowiedź, zanim wyślesz kolejne wiadomości.",
+      "rateConversations": "Rozpocząłeś(-ęłaś) dziś już wiele rozmów. Spróbuj ponownie później.",
+      "unavailable": "W tej rozmowie nie można już pisać.",
+      "failed": "Nie udało się wysłać wiadomości. Spróbuj ponownie."
+    },
+    "blockedByMe": "Zablokowałeś(-aś) tę osobę.",
+    "cannotWrite": "W tej rozmowie nie można już pisać.",
+    "safety": "Wskazówka bezpieczeństwa: nigdy nie płać z góry osobom, których nie znasz, i nie podawaj haseł ani danych do bankowości. Zgłaszaj podejrzane wiadomości.",
+    "new": {
+      "metaTitle": "Napisz wiadomość",
+      "title": "Wiadomość do tego ogłoszenia",
+      "intro": "Twoja pierwsza wiadomość trafi do oferującego. Dane kontaktowe wymieniacie tylko tutaj na czacie.",
+      "ownListing": "To jest Twoje ogłoszenie.",
+      "unavailable": "Nie możesz napisać wiadomości do tego ogłoszenia."
     }
   }
 }

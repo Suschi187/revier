@@ -228,7 +228,8 @@ test.describe("Öffentliche Seiten (M5)", () => {
   test("Detail: kein Kontakt ohne Login, keine PLZ, Fotos über die eigene Route, JSON-LD maskiert", async ({ page, request }) => {
     await page.goto(`/de/anzeige/${ids.muc}`);
     const main = page.locator("main");
-    await expect(main.getByRole("link", { name: /Anbieter kontaktieren/ })).toHaveAttribute("href", new RegExp(`/de/login\\?next=%2Fde%2Fanzeige%2F${ids.muc}`));
+    // Ab M7 ein fester Link auf „Nachricht schreiben“; ohne Login leitet der Proxy zum Login (ADR 017).
+    await expect(main.getByRole("link", { name: /Anbieter kontaktieren/ })).toHaveAttribute("href", `/de/account/messages/new/${ids.muc}`);
     await expect(main.getByRole("link", { name: "M5 Privat" })).toHaveAttribute("href", `/de/anbieter/${private_.id}`);
     const img = main.locator("img").first();
     await expect(img).toHaveAttribute("src", `/api/photos/${ids.photo}/thumb`);

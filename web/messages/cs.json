@@ -656,8 +656,8 @@
       "provider": "Inzerent",
       "verified": "ověřený",
       "contactLogin": "Kontaktovat inzerenta (nutné přihlášení)",
-      "contactSoon": "Zprávy inzerentům budou brzy k dispozici.",
-      "ownListing": "Toto je váš inzerát."
+      "ownListing": "Toto je váš inzerát.",
+      "contact": "Napsat zprávu"
     },
     "provider": {
       "breadcrumb": "Drobečková navigace",
@@ -737,6 +737,58 @@
       "mapTitle": "Mapa",
       "marker": "Značka na mapě",
       "popupClose": "Zavřít"
+    }
+  },
+  "Chat": {
+    "metaTitle": "Zprávy",
+    "title": "Zprávy",
+    "back": "Zpět na účet",
+    "empty": "Zatím žádné konverzace. Napište nabízejícímu přímo z inzerátu.",
+    "loadFailed": "Konverzace se nepodařilo načíst.",
+    "more": "Starší konverzace",
+    "listingUnavailable": "Inzerát již není k dispozici",
+    "listingDeleted": "Inzerát smazán",
+    "accountUnavailable": "Účet již není k dispozici",
+    "unread": "{count, plural, one {# nepřečtená zpráva} few {# nepřečtené zprávy} other {# nepřečtených zpráv}}",
+    "you": "Vy:",
+    "roleOwner": "K vašemu inzerátu",
+    "nav": "Zprávy",
+    "navUnread": "Zprávy, nepřečtené: {count}",
+    "conversation": {
+      "metaTitle": "Konverzace",
+      "backToList": "Všechny zprávy",
+      "notFound": "Tato konverzace neexistuje nebo nepatří k vašemu účtu.",
+      "older": "Načíst starší zprávy",
+      "read": "Přečteno",
+      "sent": "Odesláno",
+      "messagesLabel": "Zprávy v této konverzaci",
+      "listingLink": "Zobrazit inzerát"
+    },
+    "composer": {
+      "label": "Vaše zpráva",
+      "send": "Odeslat",
+      "sending": "Odesílá se …",
+      "count": "{count} z {max} znaků",
+      "shortcut": "Ctrl+Enter nebo Cmd+Enter zprávu odešle."
+    },
+    "errors": {
+      "body": "Zpráva je prázdná, příliš dlouhá nebo obsahuje nepovolené znaky.",
+      "legal": "Nejprve prosím odsouhlaste aktuální podmínky užívání.",
+      "rate": "V krátké době jste napsali mnoho zpráv. Zkuste to prosím později.",
+      "rateUnanswered": "Před dalšími zprávami prosím počkejte na odpověď.",
+      "rateConversations": "Dnes jste již zahájili mnoho konverzací. Zkuste to prosím později.",
+      "unavailable": "Do této konverzace již nelze psát.",
+      "failed": "Zprávu se nepodařilo odeslat. Zkuste to prosím znovu."
+    },
+    "blockedByMe": "Tuto osobu jste zablokovali.",
+    "cannotWrite": "Do této konverzace již nelze psát.",
+    "safety": "Bezpečnostní upozornění: nikdy neplaťte předem lidem, které neznáte, a nesdělujte hesla ani přístupy do bankovnictví. Podezřelé zprávy nahlaste.",
+    "new": {
+      "metaTitle": "Napsat zprávu",
+      "title": "Zpráva k tomuto inzerátu",
+      "intro": "Vaše první zpráva půjde nabízejícímu. Kontaktní údaje si vyměňujete jen zde v chatu.",
+      "ownListing": "Toto je váš vlastní inzerát.",
+      "unavailable": "K tomuto inzerátu nemůžete napsat zprávu."
     }
   }
 }

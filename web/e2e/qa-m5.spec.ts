@@ -249,7 +249,8 @@ test.describe("QA M5: Datenschutz, UGC und Cache", () => {
     await expect(page.locator("main")).toContainText("Das ist deine Anzeige.");
     await expect(page.locator("main").getByRole("link", { name: /kontaktieren/ })).toHaveCount(0);
     await page.goto(`/de/anzeige/${ids.xss}`);
-    await expect(page.locator("main")).toContainText("Nachrichten an Anbieter folgen in Kürze.");
+    // Fremde Anzeige mit Login: ab M7 „Nachricht schreiben“ (ADR 017), nie ein Login-Link.
+    await expect(page.locator("main").getByRole("link", { name: "Nachricht schreiben" })).toHaveAttribute("href", `/de/account/messages/new/${ids.xss}`);
     await expect(page.locator('main a[href*="/login"]')).toHaveCount(0);
   });
 

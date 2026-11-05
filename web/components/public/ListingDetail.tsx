@@ -163,19 +163,20 @@ export async function ListingDetail({
   );
 }
 
-/** Kontakt (M7 Chat): ohne Login zum Login mit Rücksprung, mit Login ein Hinweis, beim Besitzer nichts. */
+/**
+ * Kontakt (M7, ADR 017): ein fester Link auf „Nachricht schreiben“. Ohne Login leitet der Proxy zum Login, der
+ * Rücksprung behält die Anzeigen-ID im Pfad (Review A2). Beim Besitzer nur ein Hinweis.
+ */
 async function Contact({ listing, locale }: { listing: PublicListing; locale: AppLocale }) {
   const [tp, user] = await Promise.all([getTranslations("Public.detail"), getSessionUser()]);
   if (user?.id === listing.ownerId) return <p className="mt-3 text-sm">{tp("ownListing")}</p>;
-  if (!user) {
-    const next = encodeURIComponent(publicPath({ route: "listing", id: listing.id }, locale));
-    return (
-      <p className="mt-3">
-        <a href={`/${locale}/login?next=${next}`} className="inline-block rounded bg-stone-900 px-4 py-2 text-white">{tp("contactLogin")}</a>
-      </p>
-    );
-  }
-  return <p className="mt-3 text-sm">{tp("contactSoon")}</p>;
+  return (
+    <p className="mt-3">
+      <a href={`/${locale}/account/messages/new/${listing.id}`} className="inline-block rounded bg-stone-900 px-4 py-2 text-white">
+        {user ? tp("contact") : tp("contactLogin")}
+      </a>
+    </p>
+  );
 }
 
 /** Kreis und Bundesland mit Namen und Slugs für Brotkrumen und Ortsangabe. */

@@ -1,7 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
-import { canonicalPath, isAdminPath, isProtectedPath, localeFromPath } from "./lib/auth/paths";
+import { canonicalPath, isAdminPath, isChatPath, isProtectedPath, localeFromPath, newChatListingId } from "./lib/auth/paths";
 import { goneHtml } from "./lib/public/gone-page";
 import { fetchPageState, isDocumentRequest } from "./lib/public/page-state";
 import { hasFilterQuery, parsePath } from "./lib/public/paths";
@@ -60,6 +60,14 @@ function goneResponse(request: NextRequest): NextResponse {
  * oder Timeout null: Die Seite prüft selbst mit dem Anon-Client.
  */
 async function pageStatusResponse(request: NextRequest): Promise<NextResponse | null> {
+  // „Nachricht schreiben“ nur zu öffentlichen Anzeigen (ADR 017, Review A3), Status wie das Detail.
+  const chatListing = newChatListingId(request.nextUrl.pathname);
+  if (chatListing && isDocumentRequest(request.headers)) {
+    const state = await fetchPageState("listing", chatListing);
+    if (state === "gone") return goneResponse(request);
+    if (state === "missing") return notFoundResponse(request);
+    return null;
+  }
   const parsed = parsePath(request.nextUrl.pathname);
   if (parsed.type !== "public" || (parsed.page.route !== "listing" && parsed.page.route !== "provider")) return null;
   if (!isDocumentRequest(request.headers)) return null;
@@ -93,8 +101,8 @@ function withListRobots(request: NextRequest, response: NextResponse): NextRespo
   return response;
 }
 
-/** Nonce-CSP für /admin (ADR 010/014): Next liest die Nonce aus dem CSP-Header des Requests. */
-function withAdminCsp(request: NextRequest, respond: () => NextResponse): NextResponse {
+/** Nonce-CSP für /admin (ADR 010/014) und den Chat (ADR 017): Next liest die Nonce aus dem CSP-Header des Requests. */
+function withNonceCsp(request: NextRequest, respond: () => NextResponse): NextResponse {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const csp = buildCsp({
     supabaseUrl: publicEnv.NEXT_PUBLIC_SUPABASE_URL,
@@ -159,8 +167,9 @@ async function handle(request: NextRequest): Promise<NextResponse> {
   // Admin: Rolle per RPC (nicht per Claim, ADR 014); aal2 prüft die Seite und leitet zu /admin/mfa.
   if (isAdminPath(pathname)) {
     if (!(await session.hasAdminRole())) return session.apply(forbiddenResponse(request));
-    return withAdminCsp(request, () => session.apply(intl(request)));
+    return withNonceCsp(request, () => session.apply(intl(request)));
   }
+  if (isChatPath(pathname)) return withNonceCsp(request, () => session.apply(intl(request)));
   return session.apply(withListRobots(request, intl(request)));
 }
 

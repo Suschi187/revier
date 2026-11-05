@@ -656,8 +656,8 @@
       "provider": "Provider",
       "verified": "verified",
       "contactLogin": "Contact provider (sign-in required)",
-      "contactSoon": "Messages to providers are coming soon.",
-      "ownListing": "This is your listing."
+      "ownListing": "This is your listing.",
+      "contact": "Write a message"
     },
     "provider": {
       "breadcrumb": "Breadcrumb",
@@ -737,6 +737,58 @@
       "mapTitle": "Map",
       "marker": "Map marker",
       "popupClose": "Close"
+    }
+  },
+  "Chat": {
+    "metaTitle": "Messages",
+    "title": "Messages",
+    "back": "Back to account",
+    "empty": "No conversations yet. Write to a provider from any listing.",
+    "loadFailed": "The conversations could not be loaded.",
+    "more": "Older conversations",
+    "listingUnavailable": "Listing no longer available",
+    "listingDeleted": "Listing deleted",
+    "accountUnavailable": "Account no longer available",
+    "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+    "you": "You:",
+    "roleOwner": "About your listing",
+    "nav": "Messages",
+    "navUnread": "Messages, {count} unread",
+    "conversation": {
+      "metaTitle": "Conversation",
+      "backToList": "All messages",
+      "notFound": "This conversation does not exist or does not belong to your account.",
+      "older": "Load older messages",
+      "read": "Read",
+      "sent": "Sent",
+      "messagesLabel": "Messages in this conversation",
+      "listingLink": "View listing"
+    },
+    "composer": {
+      "label": "Your message",
+      "send": "Send",
+      "sending": "Sending …",
+      "count": "{count} of {max} characters",
+      "shortcut": "Ctrl+Enter or Cmd+Enter sends the message."
+    },
+    "errors": {
+      "body": "The message is empty, too long or contains characters that are not allowed.",
+      "legal": "Please accept the current terms first.",
+      "rate": "You have sent many messages in a short time. Please try again later.",
+      "rateUnanswered": "Please wait for a reply before you send more messages.",
+      "rateConversations": "You have started many conversations today. Please try again later.",
+      "unavailable": "You can no longer write in this conversation.",
+      "failed": "The message could not be sent. Please try again."
+    },
+    "blockedByMe": "You have blocked this person.",
+    "cannotWrite": "You can no longer write in this conversation.",
+    "safety": "Safety note: never pay in advance to people you do not know, and do not share passwords or bank logins. Report suspicious messages.",
+    "new": {
+      "metaTitle": "Write a message",
+      "title": "Message about this listing",
+      "intro": "Your first message goes to the provider. Contact details are only exchanged here in the chat.",
+      "ownListing": "This is your own listing.",
+      "unavailable": "You cannot write a message about this listing."
     }
   }
 }
