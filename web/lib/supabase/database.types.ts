@@ -658,6 +658,9 @@ isOneToOne: false
 "complete_photo_processing":
 { Args: { "p_height": number,"p_photo_id": string,"p_width": number }; Returns: string
                            },
+"confirm_chat_notifications":
+{ Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
+                           },
 "conversation_info":
 { Args: { "p_conversation_id": string }; Returns: Json
                            },
