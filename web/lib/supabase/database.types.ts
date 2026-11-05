@@ -652,6 +652,12 @@ isOneToOne: false
 "complete_photo_processing":
 { Args: { "p_height": number,"p_photo_id": string,"p_width": number }; Returns: string
                            },
+"conversation_info":
+{ Args: { "p_conversation_id": string }; Returns: Json
+                           },
+"conversation_messages":
+{ Args: { "p_after_at"?: string,"p_after_id"?: string,"p_before_at"?: string,"p_before_id"?: string,"p_conversation_id": string,"p_limit"?: number }; Returns: Json
+                           },
 "grant_admin":
 { Args: { "p_user_id": string }; Returns: undefined
                            },
@@ -678,6 +684,9 @@ isOneToOne: false
                            },
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
+                           },
+"my_conversations":
+{ Args: { "p_cursor"?: string,"p_limit"?: number }; Returns: Json
                            },
 "my_favorites":
 { Args: Record<PropertyKey, never>; Returns: Json
@@ -719,6 +728,9 @@ isOneToOne: false
                            },
 "start_conversation":
 { Args: { "p_body": string,"p_listing_id": string }; Returns: string
+                           },
+"unread_count":
+{ Args: Record<PropertyKey, never>; Returns: number
                            }
           }
           Enums: {
