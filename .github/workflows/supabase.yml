@@ -25,7 +25,7 @@ jobs:
         with:
           version: 3.0.0
       # Auth und Storage legen eigene Schemas an, die Migrationen und Tests brauchen; der Rest bleibt aus.
-      - run: supabase start -x realtime,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
+      - run: supabase start -x imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
       - run: supabase db reset
       - run: supabase test db
       - name: "TypeScript-Typen sind aktuell (sonst: cd web && npm run gen:types)"

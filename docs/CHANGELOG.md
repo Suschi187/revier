@@ -13,6 +13,9 @@ Plan `docs/plans/M7-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 017, S
 - Mail-Anbieter für die Cloud (HTTP-API, EU): M10. Lokal und in der CI über Mailpit.
 - Spam-Erkennung über gleiche Texte: M9/M10.
 
+### Cloud-Checkliste (neu)
+- Realtime: „nur private Kanäle“ (öffentlichen Zugriff aus); Grenze gleichzeitiger Verbindungen prüfen (ADR 017).
+
 ## Werkzeuge: Supabase-CLI v3 – 2026-11-05
 
 ### Geändert

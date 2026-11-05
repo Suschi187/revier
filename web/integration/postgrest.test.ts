@@ -63,8 +63,9 @@ describe.skipIf(!f)("PostgREST: Embeddings auf fremde und private Daten", () => 
   it("Positivkontrolle: Teilnehmer lesen Unterhaltung und Nachricht über das Embedding", async () => {
     for (const user of [a, b]) {
       const response = await rest(fx, `listings?select=id,conversations(id,messages(body))&id=eq.${fx.ids.activeB}`, { token: user.token });
+      // Weitere Nachrichten schreibt chat-realtime.test.ts in dieselbe Unterhaltung (Reihenfolge der Dateien egal).
       expect(await json(response)).toEqual([
-        { id: fx.ids.activeB, conversations: [{ id: fx.ids.conversation, messages: [{ body: "Geheime Nachricht von A" }] }] },
+        { id: fx.ids.activeB, conversations: [{ id: fx.ids.conversation, messages: expect.arrayContaining([{ body: "Geheime Nachricht von A" }]) }] },
       ]);
     }
   });

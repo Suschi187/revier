@@ -86,7 +86,7 @@ jobs:
       - name: Supabase starten (mit Auth, Mailpit und Edge Runtime)
         working-directory: .
         # Edge Runtime läuft mit: API-Tests rufen process-listing-photo auf (ADR 011).
-        run: supabase start -x realtime,imgproxy,postgres-meta,studio,logflare,vector,supavisor
+        run: supabase start -x imgproxy,postgres-meta,studio,logflare,vector,supavisor
       - name: Öffentlichen lokalen Key übernehmen (nur der publishable Key)
         working-directory: .
         run: |
