@@ -205,7 +205,8 @@ test.describe("QA M7: Web-Proben", () => {
     await page.waitForTimeout(1500);
     let rsc = 0;
     page.on("request", (request) => {
-      if (request.headers()["rsc"] === "1" || request.url().includes("_rsc=")) rsc++;
+      // Ohne Prefetches (Produktions-Build lädt sie nach jedem Refresh neu; QA M7 Nachprüfung)
+      if ((request.headers()["rsc"] === "1" || request.url().includes("_rsc=")) && request.headers()["next-router-prefetch"] !== "1") rsc++;
     });
     await interested.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Schleifentest" });
     await expect(page.getByRole("log").getByText("Schleifentest")).toBeVisible({ timeout: 10_000 });

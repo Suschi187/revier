@@ -1673,3 +1673,69 @@ ADR 017 und CHANGELOG sagen „Melden und Blockieren … auch ohne Zustimmung un
 ### Empfehlung
 
 **Abnahme von M7 mit Auflage.** Beide Akzeptanzkriterien sind erfüllt. Datenbank, RLS, Realtime und Benachrichtigung hielten allen Angriffen stand: kein Orakel, kein Text in Kanal oder Mail, Rate-Limits auch bei parallelen Requests, kein Weg zu fremden Daten. F1 vor M9 (Account-Löschung und Meldungs-Warteschlange) oder spätestens vor der ersten neuen Version der Rechtstexte beheben, weil Blockieren eine App-Store- und DSA-Pflicht ist. F2–F5 können gesammelt nachgezogen werden, F5 vor I5.
+
+## M7 – Nachprüfung 2026-11-05
+
+Geprüfter Stand: `3c02d28` (main, lokal, nicht gepusht; Arbeitsbaum sauber), Korrekturen F1–F5. Migration `20261107100000_qa_m7_fixes` lokal angewendet (`supabase_migrations.schema_migrations`), kein `db reset` (Nutzerkonto in der DB). Umgebung wie in der Abnahme: macOS, Node 24, Supabase-CLI 3.0.0 lokal, Playwright gegen `next dev` (von Playwright gestartet, kein Dev-Server des Nutzers lief) und gegen den Produktions-Build (`npm run build`, `CI=1` → `npm run start`), Deno 2.1.4 per Docker wie in `.github/workflows/supabase.yml`, Mailpit.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (auch mit den neuen Proben) |
+| Vitest | 28 Dateien, **512/512** |
+| `supabase test db` | 43 Dateien, **1007** Tests. Fehlgeschlagen nur die erwarteten lokalen Fälle 07 (25, 27), 22 (32), 23 (21, 22, 25), die eine leere DB voraussetzen. `40_chat_notifications` (21, inkl. confirm), `41_qa_m7_abnahme` (57, **ohne TODO**, F4-Fall grün), neu `42_qa_m7_nachpruefung` (**16/16**) |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 19 Dateien, **231 bestanden, 1 erwartet fehlgeschlagen** (`it.fails` H2 der Abnahme); neu `qa-m7-nachpruefung.test.ts` 2/2 |
+| `npm run test:e2e` (Dev, alle Specs) | **199/199** im zweiten Lauf (7,9 min). Der erste Lauf brach durch den Ruhezustand des Rechners ab (`net::ERR_NETWORK_IO_SUSPENDED`, Testdauern bis 17 min): 129 bestanden, 6 fehlgeschlagen, 64 nicht gelaufen; die 6 einzeln wiederholt grün, danach der vollständige zweite Lauf grün |
+| Produktions-Build + `chat`, `chat-block`, `chat-realtime`, `chat-a11y`, `qa-m7`, `qa-m7-nachpruefung` | Build grün ohne Warnungen; **60/60** (nach Anpassung der Zähler in zwei Proben, siehe H3) |
+| Deno (Docker, `deno task check && deno lint && deno task test`) | `send-chat-notifications` 4/4, `process-listing-photo` 24/24 |
+| Function über Kong (Integration) | Echte Function mit `attempts = 2` vor dem Lauf: 1 Mail in Mailpit, danach `attempts = 0`, `last_sent_at` gesetzt; nächster Lauf ohne zweite Mail. Belegt, dass die laufende Function `confirm_chat_notifications` aufruft |
+
+Aufgeräumt: keine Konten auf `@test.local`, keine Unterhaltungen, keine Vault-URL (nur `chat_notifications_secret`, `listing_location_key`); `app_settings` wie vor der Prüfung (Schlüssel und Werte verglichen). Die Vault-URL wurde nicht gesetzt (Cron-Weg nicht erneut geprüft, die Function wurde direkt aufgerufen). Nutzerkonto unverändert.
+
+### Ergebnis je Fund
+
+| Fund | Ergebnis | Nachweis |
+|---|---|---|
+| F1 (mittel) Blockieren/Melden ohne Zustimmung | **behoben** | Reproduktion der Abnahme: `/de/account/messages/<id>` ohne Zustimmung → 200, Hinweis statt Eingabe, „Person blockieren“ wirkt; Melden per Direktlink → zurück mit `notice=reported` und Bestätigung; `/account/blocked` erreichbar (`qa-m7.spec.ts`, jetzt normale Tests). Regressionen (`qa-m7-nachpruefung.spec.ts`): Liste ohne Zustimmung 200 mit Einträgen. **Schreiben bleibt gesperrt:** Zustimmung entfällt bei offener Eingabe → Senden mit JS und ohne JS leitet auf `/de/welcome?next=/de/account/messages/<id>`, keine neue Nachricht in der DB; `send_message` und `start_conversation` per RPC → `RV001`. Hinweis-Link → Zustimmung → zurück in die Unterhaltung mit Eingabe. `new/<id>` mit bestehender Unterhaltung ohne Zustimmung → erst `welcome?next=…/new/<id>`, nach Zustimmung in die bestehende Unterhaltung. Gesperrt **und** ohne Zustimmung: „kann nicht mehr geschrieben werden“ statt eines (dort nutzlosen) Wegs zur Zustimmung, Blockieren geht. Hinweis in en/cs/pl übersetzt, Link mit Sprachpräfix und kodiertem `next`. Lesen ohne Zustimmung live (Realtime-Abo steht, neue Nachricht ohne Neuladen). Das Legal-Gate ist ohnehin nur die Zustimmung (`requireOnboardedUser` prüft kein weiteres Profil-Onboarding), es gibt also kein Konto „ohne Profil-Onboarding“, das anders behandelt würde. `sendMessageAction`/`startConversationAction` und `new/<id>` behalten `requireOnboardedUser` |
+| F2 (niedrig) Zähler bei Fokus | **behoben** | Reproduktion der Abnahme grün (`qa-m7.spec.ts` F2). Kein Sturm: 10 Rückkehren in 3 s → genau 1 Abruf; mit Playwright-Uhr nach 20 s kein, nach 31 s ein weiterer Abruf; 3 Tabs mit je 3 Rückkehren → je Tab genau 1 Abruf; unter `/account/messages` kein Abruf durch `UnreadRefresh`. Abgemeldet: kein Abruf (Komponente nur im angemeldeten Zweig von `AuthNav`), kein `sb-`-Cookie. Öffentliche Detailseite: Refresh-Antwort `private, no-cache, no-store`; anonymer Abruf danach ohne Nachrichten-Link und ohne Namen. Eingaben bleiben erhalten: Profil (`displayName`), Assistent neu (`title`), Bearbeiten Schritt Details (`description`) – Wert nach dem Refresh unverändert. Keine Seite außerhalb des Chats hat Seiteneffekte beim Rendern (Admin-Kontosuche nur per Action, `markRead` nur in der Chat-Ansicht) |
+| F3 (niedrig) WebSocket bleibt offen | **behoben** | Reproduktion der Abnahme (Abmelden → WebSocket schließt) grün. Wiederbetreten: Chat → öffentliche Seite (voller Seitenwechsel) → Browser-Zurück → `data-realtime="subscribed"`, Live-Nachricht kommt; Liste → Chat per Klick, Chat → „Alle Nachrichten“ → Chat: Abo jeweils wieder da, Live-Nachricht in Liste und Chat; 5 × schnelles Hin und Her ohne Warten → am Ende live, genau 1 offene WebSocket (dreimal wiederholt, stabil). Zwei Tabs: Tab A verlässt den Chat per Client-Navigation (WebSocket von A schließt), Tab B bleibt live. Produktions-Build ebenso |
+| F4 (niedrig) `attempts` nach Erfolg | **behoben** | pgTAP 41 (früher TODO) grün: dritter Versuch der neuen Mail nach zwei Fehlschlägen. pgTAP 42: kein `execute` für anon/authenticated, `service_role` ja; Definer mit `search_path=""`; authenticated und anon mit **richtigem** Geheimnis → `42501`; `service_role` mit `null`/leerem Geheimnis → `42501` (Integration: PostgREST ebenso, auch falsches Geheimnis). confirm ändert nur `attempts`, nicht `last_sent_at`/`previous_sent_at`; fremde IDs ohne Wirkung; nach confirm keine zweite Mail für dieselbe Nachricht; wiederholtes confirm und leere Liste → 0. Keine endlosen Wiederholungen: Nach drei Fehlschlägen kein vierter Versuch; ein verspätetes confirm danach öffnet die Mail nicht wieder. Zusammenspiel mit release: release zählt nach confirm wieder ab 0 (pgTAP 41). Function-Weg per Integration belegt (siehe Prüfläufe) |
+| F5 (niedrig) Doku ADR 017 | **behoben, mit Rest (N2)** | ADR stimmt mit dem Code: Ereignisvertrag (`message.read` mit `reader_id`, Trigger `chat_realtime.sql` Z. 72 f.; `id` von `realtime.send`), Lücke im Web per `router.refresh()` und `p_after_*` als iOS-Vertrag, Entwurf ohne JavaScript (gleichlautend mit dem Kommentar in `actions.ts`, CHANGELOG „Bekannte Lücken“), Zähler bei Fokus „höchstens alle 30 s“ (= `MIN_INTERVAL_MS`), WebSocket-Schließen, `confirm_chat_notifications`, Liste der Routen ohne Legal-Gate (= Code), NUL für iOS. Reste siehe N2 |
+
+### Neue Funde
+
+#### N1 – niedrig – Function ignoriert Fehler von `confirm_chat_notifications` und `release_chat_notifications`
+`supabase/functions/send-chat-notifications/index.ts` ruft beide RPCs mit `await admin.rpc(…)` auf, wertet `error` aber nicht aus und loggt nur `recipients/sent/failed`. Scheitert confirm (z. B. Function vor der Migration in der Cloud ausgerollt → `PGRST202`, oder ein DB-Fehler), kehrt F4 still zurück. Scheitert release, gehen Mails ohne Wiederholung verloren. Beides ist in den Logs nicht zu sehen. release ist seit M7 so, confirm übernimmt das Muster.
+- Reproduktion (Code): `index.ts` Z. 55–61; die Antwort lautet in jedem Fall `{"recipients":…,"sent":…,"failed":…}`. Lokal nachvollziehbar, wenn die Function gegen eine DB ohne `20261107100000` läuft: Mail geht raus, `attempts` bleibt stehen, kein Logeintrag.
+- Vorschlag: `error` beider Aufrufe prüfen und nur als Zahl loggen (z. B. `confirm_failed: 1`, ohne IDs). In die Cloud-Checkliste: Migration vor der Function ausrollen.
+
+#### N2 – niedrig (Doku) – Nachtrag im CHANGELOG fehlt, zwei Aussagen nicht nachgezogen
+- Das CHANGELOG hat keinen Abschnitt „Nachtrag M7: QA-Funde F1–F5“ mit „was geändert, wie testen“, anders als nach M3–M6 (DoD). Neu ist nur eine Zeile unter „Bekannte Lücken“.
+- ADR 017 (Realtime, „Token“) sagt weiter „Beim Abmelden `removeAllChannels()`“. Der Code ruft das nicht auf, die WebSocket schließt über den Cleanup von `useChatLive`. Die Wirkung ist belegt, der Text beschreibt aber einen anderen Mechanismus.
+- SPEC 3 (`legal_acceptances`, Z. 133) sagt „Ohne Zustimmung zur aktuellen Version führt der Client ins Onboarding“. Die Ausnahme für Chat-Liste, Chat-Ansicht, Meldeseite und Blockierte (ADR 017, QA M7 F1) fehlt dort. Für I5 relevant: Die App muss dieselbe Ausnahme umsetzen.
+- Vorschlag: Nachtrag im CHANGELOG mit Testanleitung (Proben `qa-m7*`, pgTAP 40–42), ADR-Satz auf „ohne Kanäle `realtime.disconnect()` (Cleanup)“ ändern, SPEC-Satz um die Ausnahme ergänzen.
+
+### Hinweise (keine Fehler)
+
+- **H1:** Die Chat-Ansicht prüft `legal && !legal.accepted`. Liefert `legal_status` einen Fehler (`null`), erscheint die Eingabe. Senden führt dann über `requireOnboardedUser` zur Zustimmung, die DB lehnt mit `RV001` ab. Nur die Anzeige ist dann großzügig, nicht der Schreibweg.
+- **H2:** Entfällt die Zustimmung, während jemand tippt (neue Version der Rechtstexte), ersetzt der nächste Realtime-Refresh die Eingabe durch den Hinweis, und der Entwurf verschwindet vom Bildschirm. Das fiel beim Schreiben der Probe auf. Es ist selten und harmlos (nichts wird gesendet).
+- **H3:** Im Produktions-Build lädt Next.js nach jedem `router.refresh()` die Link-Prefetches neu (rund 12 Anfragen je Rückkehr bzw. je Realtime-Ereignis). Es sind statische Segmente mit `s-maxage`, geprüft ohne Personalisierung: Treffer wie „Abmelden“ stammen aus den next-intl-Messages, anonym identisch vorhanden. Die Probe der Abnahme „ein Ereignis ergibt wenige Abrufe“ zählte diese Prefetches mit und schlug deshalb nur im Produktions-Build fehl (13 statt ≤ 3). Sie zählt jetzt ohne `next-router-prefetch`. Kosten für M10 im Blick behalten, kein Fehler.
+- **H4:** `@supabase/realtime-js` 2.117 trennt ohne Kanäle ohnehin nach 2 × Heartbeat (≈ 50 s). F3 macht das sofort. Bei schnellem Wechsel zwischen Liste und Chat (gleiches Topic `user:<uuid>`) kann `client.channel()` den gerade verlassenden Kanal zurückgeben. Es funktioniert, weil `subscribe` erst nach `await setAuth()` läuft. Die Probe „Schnelles Hin und Her“ sichert das gegen Bibliotheks-Updates ab.
+- **H5:** Der Titel-Link im Chat ist ein `<a>` (voller Seitenwechsel). Das alte Dokument endet, Playwright meldet für dessen WebSocket kein `close`. Proben für Client-Navigation nutzen deshalb „Mein Konto“ bzw. „Alle Nachrichten“.
+
+### Nicht prüfbar
+
+- iOS (I5) und Gleichstand Web/iOS: noch keine App.
+- Cloud-Ausrollreihenfolge Migration/Function (N1), Realtime-Kontingent (M10).
+
+### Neue Tests
+
+- `supabase/tests/42_qa_m7_nachpruefung.test.sql` (16): Rechte und Definer von confirm, richtiges Geheimnis als authenticated/anon, `null`/leeres Geheimnis, Wirkung nur auf `attempts`, keine Wiederöffnung, Wiederholung, leere Liste, at-most-once nach drei Fehlschlägen, verspätetes confirm.
+- `web/integration/qa-m7-nachpruefung.test.ts` (2): confirm über PostgREST (anon, authenticated, `service_role` mit falschem und `null`-Geheimnis); echte Function: Erfolg nach zwei früheren Fehlschlägen setzt `attempts = 0`, genau eine Mail.
+- `web/e2e/qa-m7-nachpruefung.spec.ts` (20, kein `test.fail`): F1 (Senden ohne Zustimmung mit/ohne JS, RPC `RV001`, Hinweis-Link, Liste, `new/<id>`, gesperrt ohne Zustimmung, en/cs/pl, live lesen), F2 (Sturm, Uhr 30 s, drei Tabs, abgemeldet, Chat-Routen, Detail-Cache, Formulare), F3 (Zurück, Liste → Chat, „Alle Nachrichten“, schnelles Hin und Her, zwei Tabs).
+- `web/e2e/qa-m7.spec.ts`: Zähler der Realtime-Probe ohne Prefetches (H3).
+
+### Empfehlung
+
+F1–F4 sind **behoben**, F5 bis auf die Doku-Reste in N2. Die Lockerung aus F1 öffnet keinen Schreibweg ohne Zustimmung: UI, Action (mit und ohne JavaScript) und RPC sind gesperrt, `new/<id>` verlangt die Zustimmung weiter. Blockieren und Melden sind jetzt auch für gesperrte Konten ohne aktuelle Zustimmung erreichbar. F2 erzeugt keine Refresh-Stürme, personalisiert keine gecachten Seiten und verliert keine Eingaben. F3 baut das Abo bei jedem Wiederbetreten neu auf. Die **Auflage der Abnahme ist erfüllt, M7 ist abnahmereif.** N1 vor dem Cloud-Rollout der Function (M10) beheben, N2 vor I5.
