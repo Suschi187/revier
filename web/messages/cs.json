@@ -789,6 +789,64 @@
       "intro": "Vaše první zpráva půjde nabízejícímu. Kontaktní údaje si vyměňujete jen zde v chatu.",
       "ownListing": "Toto je váš vlastní inzerát.",
       "unavailable": "K tomuto inzerátu nemůžete napsat zprávu."
+    },
+    "menu": {
+      "label": "Akce",
+      "block": "Zablokovat tuto osobu",
+      "unblock": "Odblokovat",
+      "reportProfile": "Nahlásit profil",
+      "reportMessage": "Nahlásit zprávu"
+    },
+    "notices": {
+      "blocked": "Tuto osobu jste zablokovali. Už vám nemůže psát.",
+      "unblocked": "Blokování jste zrušili.",
+      "reported": "Děkujeme. Vaše hlášení dostala moderace.",
+      "failed": "Nepodařilo se. Zkuste to prosím znovu."
+    },
+    "report": {
+      "metaTitle": "Nahlásit",
+      "titleMessage": "Nahlásit zprávu",
+      "titleProfile": "Nahlásit profil",
+      "reason": "Důvod",
+      "note": "Poznámka (nepovinné)",
+      "noteHint": "Nejvýše 1000 znaků. Nezadávejte hesla ani bankovní údaje.",
+      "submit": "Odeslat hlášení",
+      "cancel": "Zpět do konverzace",
+      "quoted": "Nahlášená zpráva",
+      "reasons": {
+        "scam": "Podvod nebo platba předem",
+        "harassment": "Obtěžování nebo urážky",
+        "illegal": "Protiprávní obsah",
+        "weapons": "Nabídka zbraní nebo střeliva",
+        "other": "Jiný důvod"
+      },
+      "errors": {
+        "reason": "Vyberte prosím důvod.",
+        "limit": "Dnes jste již odeslali mnoho hlášení. Zkuste to prosím zítra.",
+        "failed": "Hlášení se nepodařilo odeslat. Zkuste to prosím znovu."
+      }
+    },
+    "blocked": {
+      "metaTitle": "Zablokované osoby",
+      "title": "Zablokované osoby",
+      "intro": "Zablokované osoby vám nemohou psát a vy nemůžete psát jim.",
+      "empty": "Nikoho jste nezablokovali.",
+      "unblock": "Odblokovat",
+      "unknown": "Účet již není k dispozici",
+      "since": "Zablokováno od {date}",
+      "link": "Zablokované osoby"
+    },
+    "hints": {
+      "contact": "Vaše zpráva obsahuje kontaktní údaje (telefon, e-mail nebo bankovní spojení). Sdílejte je jen tehdy, když druhé straně důvěřujete. Nikdy neplaťte předem.",
+      "location": "Vaše zpráva zřejmě obsahuje přesnou polohu. Kdo ji zná, může odvodit i přibližnou polohu vašich dalších inzerátů v tomto okrese."
+    },
+    "notifications": {
+      "title": "Upozornění",
+      "chatEmail": "E-mail při nových zprávách",
+      "hint": "Nejvýše jeden e-mail za 15 minut, bez textu zprávy. E-maily chodí na adresu, kterou používáte k přihlášení.",
+      "save": "Uložit nastavení",
+      "saved": "Nastavení upozornění bylo uloženo.",
+      "failed": "Nastavení se nepodařilo uložit. Zkuste to prosím znovu."
     }
   }
 }

@@ -33,10 +33,10 @@ select is(
           and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
         order by 1),
   array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_review_queue',
-        'admin_role_rules', 'conversation_info', 'conversation_messages',
-        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'mark_conversation_read', 'moderate_listing', 'my_conversations', 'my_favorites', 'provider_listings',
+        'admin_role_rules', 'block_in_conversation', 'conversation_info', 'conversation_messages',
+        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'mark_conversation_read', 'moderate_listing', 'my_blocks', 'my_conversations', 'my_favorites', 'provider_listings',
         'public_cache_epoch', 'public_page_state', 'region_geo', 'register_device', 'remove_unavailable_favorites', 'reorder_listing_photos',
-        'revoke_admin', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'unread_count']::text[],
+        'revoke_admin', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'unblock_in_conversation', 'unread_count']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );
 

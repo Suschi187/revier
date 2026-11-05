@@ -60,3 +60,16 @@ export async function updateOwnProfile(userId: string, input: ProfileInput): Pro
   await supabase.auth.updateUser({ data: { preferred_language: input.preferredLanguage } });
   return "ok";
 }
+
+/** E-Mail bei neuen Chat-Nachrichten (ADR 017); Abmeldung im Profil. null bei Fehler. */
+export async function getNotifyChatEmail(userId: string): Promise<boolean | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase.from("profiles").select("notify_chat_email").eq("user_id", userId).maybeSingle();
+  return data ? data.notify_chat_email : null;
+}
+
+export async function setNotifyChatEmail(userId: string, enabled: boolean): Promise<UpdateResult> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.from("profiles").update({ notify_chat_email: enabled }).eq("user_id", userId).select("user_id");
+  return error || !data || data.length === 0 ? "failed" : "ok";
+}

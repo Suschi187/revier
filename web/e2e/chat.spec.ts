@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { deleteTestUsers, local } from "./cleanup";
+import { admin, deleteTestUsers, local } from "./cleanup";
 import { createAccount, createPublicListing, signInAs, type TestAccount } from "./session";
 
 // M7 Chat (ADR 017): Kontakt aus dem Detail mit Login-Rücksprung, Senden mit und ohne JavaScript, Liste mit
@@ -147,5 +147,25 @@ test.describe("Chat (M7)", () => {
     await page.keyboard.press("Control+Enter");
     await expect(page.getByRole("log").getByText("Mit Nonce gesendet")).toBeVisible();
     expect(violations).toEqual([]);
+  });
+
+  // Die Profilseite streamt ihre Abschnitte per Suspense (seit M2) und braucht dafür JavaScript; Lücke im CHANGELOG.
+  test("Profil: E-Mail bei neuen Nachrichten abbestellen und wieder einschalten", async ({ browser }) => {
+    const context = await browser.newContext();
+    await signInAs(context, interested);
+    const page = await context.newPage();
+    await page.goto("/de/account/profile");
+    const box = page.getByLabel("E-Mail bei neuen Nachrichten");
+    await expect(box).toBeChecked();
+    await box.uncheck();
+    await page.getByRole("button", { name: "Einstellung speichern" }).click();
+    await expect(page.getByText("Deine Einstellung zu Benachrichtigungen ist gespeichert.")).toBeVisible();
+    await expect(page.getByLabel("E-Mail bei neuen Nachrichten")).not.toBeChecked();
+    const { data } = await admin().from("profiles").select("notify_chat_email").eq("user_id", interested.id).single();
+    expect(data?.notify_chat_email).toBe(false);
+    await page.getByLabel("E-Mail bei neuen Nachrichten").check();
+    await page.getByRole("button", { name: "Einstellung speichern" }).click();
+    await expect(page.getByLabel("E-Mail bei neuen Nachrichten")).toBeChecked();
+    await context.close();
   });
 });

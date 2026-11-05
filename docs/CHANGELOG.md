@@ -12,9 +12,18 @@ Plan `docs/plans/M7-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 017, S
 - Abmelden per Klick aus der Mail (RFC 8058): M8–M10. Bis dahin in den Profileinstellungen.
 - Mail-Anbieter für die Cloud (HTTP-API, EU): M10. Lokal und in der CI über Mailpit.
 - Spam-Erkennung über gleiche Texte: M9/M10.
+- Profilseite ohne JavaScript: Ihre Abschnitte (auch die neue Einstellung „E-Mail bei neuen Nachrichten“) erscheinen nur mit JavaScript, weil die Seite seit M2 per Suspense streamt. Für M10 (Barrierefreiheit) vorgemerkt.
 
 ### Cloud-Checkliste (neu)
 - Realtime: „nur private Kanäle“ (öffentlichen Zugriff aus); Grenze gleichzeitiger Verbindungen prüfen (ADR 017).
+- Chat-Mails: Vault-Secret `chat_notifications_url` auf `https://<projekt>.supabase.co/functions/v1/send-chat-notifications` setzen (ohne URL ruft der Job nichts auf). `chat_notifications_secret` legt die Migration an. Function-Secrets `MAIL_FROM` und `SITE_URL`; Versand ab M10 über den HTTP-Adapter eines EU-Anbieters (SMTP aus Edge Functions in der Cloud nicht möglich), Öffnungs- und Klick-Tracking aus.
+- pg_cron und pg_net aktiv (Migration `chat_notifications`); Job `chat-notifications` jede Minute.
+
+### Lokal von Hand: Chat-Mails
+- Ohne Weiteres verschickt lokal nichts automatisch (keine URL im Vault). Zum Ausprobieren einmalig:
+  `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/send-chat-notifications', 'chat_notifications_url')"`
+  Danach kommt etwa 2 Minuten nach einer ungelesenen Nachricht eine Mail in Mailpit (http://127.0.0.1:54324).
+- Wieder aus: `supabase db query "delete from vault.secrets where name = 'chat_notifications_url'"`
 
 ## Werkzeuge: Supabase-CLI v3 – 2026-11-05
 

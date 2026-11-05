@@ -3,7 +3,8 @@
 import { formValues, PROFILE_KEYS, type ProfileFormState } from "@/lib/forms";
 import { isAppLocale } from "@/lib/auth/paths";
 import { requireOnboardedUser } from "@/lib/services/gate";
-import { getOwnProfile, updateOwnProfile } from "@/lib/services/profile";
+import { redirect } from "next/navigation";
+import { getOwnProfile, setNotifyChatEmail, updateOwnProfile } from "@/lib/services/profile";
 import { fieldErrors, profileFromForm } from "@/lib/validation/profile";
 
 export async function saveProfile(_previous: ProfileFormState, form: FormData): Promise<ProfileFormState> {
@@ -22,4 +23,14 @@ export async function saveProfile(_previous: ProfileFormState, form: FormData): 
     return { status: "error", fieldErrors: {}, formError: "failed", values };
   }
   return { status: "saved", fieldErrors: {}, values };
+}
+
+/** E-Mail bei neuen Nachrichten an oder aus (ADR 017). Ohne JavaScript per Formular, Ergebnis als Hinweis-Code. */
+export async function saveNotifications(form: FormData): Promise<void> {
+  const rawLocale = String(form.get("locale") ?? "");
+  const locale = isAppLocale(rawLocale) ? rawLocale : "de";
+  const path = `/${locale}/account/profile`;
+  const user = await requireOnboardedUser(locale, path);
+  const result = await setNotifyChatEmail(user.id, form.get("notifyChatEmail") === "on");
+  redirect(`${path}?notice=${result === "ok" ? "notifications" : "notificationsFailed"}`);
 }

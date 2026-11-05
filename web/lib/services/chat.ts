@@ -128,3 +128,67 @@ export async function conversationForListing(listingId: string, userId: string):
   const { data } = await supabase.from("conversations").select("id").eq("listing_id", listingId).eq("interested_id", userId).maybeSingle();
   return data?.id ?? null;
 }
+
+// ---------------------------------------------------------------------------
+// Blockieren und Melden (ADR 017, Review A11, H7): ohne Legal-Gate, auch für gesperrte Konten.
+// ---------------------------------------------------------------------------
+
+export async function blockInConversation(conversationId: string): Promise<boolean> {
+  if (!UUID.safeParse(conversationId).success) return false;
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("block_in_conversation", { p_conversation_id: conversationId });
+  return !error;
+}
+
+export async function unblockInConversation(conversationId: string): Promise<boolean> {
+  if (!UUID.safeParse(conversationId).success) return false;
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.rpc("unblock_in_conversation", { p_conversation_id: conversationId });
+  return !error;
+}
+
+export async function unblockUser(blockedId: string): Promise<boolean> {
+  if (!UUID.safeParse(blockedId).success) return false;
+  const supabase = await createSupabaseServerClient();
+  // RLS (blocks_own): nur eigene Sperren.
+  const { error } = await supabase.from("blocks").delete().eq("blocked_id", blockedId);
+  return !error;
+}
+
+export type BlockedPerson = { id: string; name: string | null; since: string };
+
+export async function myBlocks(): Promise<BlockedPerson[] | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("my_blocks");
+  if (error) return null;
+  return (data ?? []).map((row) => ({ id: row.blocked_id, name: row.display_name, since: row.created_at }));
+}
+
+/** Gründe, die der Chat anbietet (ohne wrong_category: im Chat irreführend). */
+export const CHAT_REPORT_REASONS = ["scam", "harassment", "illegal", "weapons", "other"] as const;
+export type ChatReportReason = (typeof CHAT_REPORT_REASONS)[number];
+
+export type ReportResult = "ok" | "limit" | "failed";
+
+export async function reportFromChat(target: { type: "message" | "profile"; id: string }, reason: ChatReportReason, note: string): Promise<ReportResult> {
+  if (!UUID.safeParse(target.id).success) return "failed";
+  const supabase = await createSupabaseServerClient();
+  const trimmed = note.trim().slice(0, 1000);
+  const { error } = await supabase.from("reports").insert({ target_type: target.type, target_id: target.id, reason, note: trimmed || null });
+  if (!error) return "ok";
+  return error.code === "54000" ? "limit" : "failed";
+}
+
+/** Fremde Nachricht für die Meldeseite (RLS: nur Teilnehmer); null für eigene, fremde oder unbekannte. */
+export async function messageForReport(messageId: string, conversationId: string, userId: string): Promise<{ id: string; body: string } | null> {
+  if (!UUID.safeParse(messageId).success || !UUID.safeParse(conversationId).success) return null;
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("messages")
+    .select("id, body, sender_id")
+    .eq("id", messageId)
+    .eq("conversation_id", conversationId)
+    .neq("sender_id", userId)
+    .maybeSingle();
+  return data ? { id: data.id, body: data.body } : null;
+}

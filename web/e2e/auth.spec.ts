@@ -78,11 +78,11 @@ test("Registrieren per Link, Profil bearbeiten, ausloggen, per Code wieder einlo
   await page.getByLabel("Gewerblich").check();
   await page.getByLabel("Firmenname").fill("   ");
   await disableBrowserValidation(page, "Speichern");
-  await page.getByRole("button", { name: "Speichern" }).click();
+  await page.getByRole("button", { name: "Speichern", exact: true }).click();
   await expect(page.getByText("Bitte fülle dieses Feld aus.")).toBeVisible();
   await page.getByLabel("Firmenname").fill("Forstbetrieb Jäger");
   await page.getByLabel("Land").selectOption("AT");
-  await page.getByRole("button", { name: "Speichern" }).click();
+  await page.getByRole("button", { name: "Speichern", exact: true }).click();
   await expect(page.getByText("Dein Profil wurde gespeichert.")).toBeVisible();
   await page.getByRole("link", { name: "Zurück zu Mein Konto" }).click();
   await expect(page.getByText("Gewerblich (Forstbetrieb Jäger)")).toBeVisible();

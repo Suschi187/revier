@@ -61,6 +61,13 @@ export function localSql(sql: string): void {
   execFileSync("supabase", ["db", "query", sql], { cwd: REPO_ROOT, stdio: ["ignore", "ignore", "pipe"], timeout: 60_000 });
 }
 
+/** SQL mit Ergebnis gegen die lokale Datenbank (`-o json`, Zeilen unter `rows`). */
+export function localRows<T>(sql: string): T[] {
+  const out = execFileSync("supabase", ["db", "query", "-o", "json", sql], { cwd: REPO_ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], timeout: 60_000 });
+  const parsed = JSON.parse(out.slice(out.search(/[[{]/))) as T[] | { rows?: T[] };
+  return Array.isArray(parsed) ? parsed : (parsed.rows ?? []);
+}
+
 /** Admin-Rolle per SQL wie im Runbook, Ernennung `daysAgo` zurückdatiert (Karenz, ADR 014). */
 export function makeAdmin(userId: string, daysAgo = 30): void {
   if (!/^[0-9a-f-]{36}$/.test(userId)) throw new Error("user id");

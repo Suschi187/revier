@@ -58,7 +58,7 @@ select is((select read_at from messages where id = :'msg_o'), null, 'Eigene Nach
 
 -- Blockieren
 select tests.authenticate_as(:'o_id');
-insert into blocks (blocked_id) values (:'a_id');
+select block_in_conversation(:'conv');
 select throws_ok(format($$ select send_message(%L, 'Hallo?') $$, :'conv'), '42501', null,
   'Wer blockiert, schreibt auch nicht mehr');
 select tests.authenticate_as(:'a_id');

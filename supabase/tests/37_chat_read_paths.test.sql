@@ -79,7 +79,7 @@ select tests.authenticate_as(:'o');
 select is(conversation_info(:'cb') -> 'listing' ->> 'status', 'paused', 'Besitzer: Titel und Status');
 
 -- 5. Sperre und inaktives Gegenüber (A10)
-insert into blocks (blocked_id) values (:'j');
+select block_in_conversation(:'cj');
 select is(unread_count(), 2, 'Blockiertes Gegenüber zählt nicht mit');
 select is((conversation_info(:'cj') ->> 'blocked_by_me')::boolean, true, 'Eigene Sperre erkennbar');
 select is((conversation_info(:'cj') ->> 'can_write')::boolean, false, 'Gesperrt: kein Schreiben');

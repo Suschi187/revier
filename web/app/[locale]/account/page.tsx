@@ -27,7 +27,7 @@ export default async function AccountPage() {
 async function AccountContent() {
   const locale = (await getLocale()) as AppLocale;
   const user = await requireOnboardedUser(locale, `/${locale}/account`);
-  const [profile, t] = await Promise.all([getOwnProfile(user.id), getTranslations("Account")]);
+  const [profile, t, tc] = await Promise.all([getOwnProfile(user.id), getTranslations("Account"), getTranslations("Chat")]);
   if (!profile) throw new Error("Profil nicht verfügbar");
 
   return (
@@ -53,6 +53,12 @@ async function AccountContent() {
       </Link>
       <Link href="/account/favorites" className="self-start underline">
         {t("favorites")}
+      </Link>
+      <Link href="/account/messages" className="self-start underline">
+        {tc("title")}
+      </Link>
+      <Link href="/account/blocked" className="self-start underline">
+        {tc("blocked.link")}
       </Link>
     </div>
   );

@@ -415,14 +415,14 @@ isOneToOne: false
                   ]
                 },"profiles": {
                   Row: {
-                    "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"created_at": string,"deleted_at": string | null,"display_name": string,"id": string,"is_blocked": boolean,"preferred_language": Database["public"]['Enums']["language_code"],"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]
+                    "account_type": Database["public"]['Enums']["account_type"],"business_name": string | null,"country": Database["public"]['Enums']["country_code"],"created_at": string,"deleted_at": string | null,"display_name": string,"id": string,"is_blocked": boolean,"notify_chat_email": boolean,"preferred_language": Database["public"]['Enums']["language_code"],"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "account_type"?: Database["public"]['Enums']["account_type"],"business_name"?: string | null,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"deleted_at"?: string | null,"display_name": string,"id"?: string,"is_blocked"?: boolean,"preferred_language"?: Database["public"]['Enums']["language_code"],"user_id": string,"verification_status"?: Database["public"]['Enums']["verification_status"]
+                    "account_type"?: Database["public"]['Enums']["account_type"],"business_name"?: string | null,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"deleted_at"?: string | null,"display_name": string,"id"?: string,"is_blocked"?: boolean,"notify_chat_email"?: boolean,"preferred_language"?: Database["public"]['Enums']["language_code"],"user_id": string,"verification_status"?: Database["public"]['Enums']["verification_status"]
                   }
                   Update: {
-                    "account_type"?: Database["public"]['Enums']["account_type"],"business_name"?: string | null,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"deleted_at"?: string | null,"display_name"?: string,"id"?: string,"is_blocked"?: boolean,"preferred_language"?: Database["public"]['Enums']["language_code"],"user_id"?: string,"verification_status"?: Database["public"]['Enums']["verification_status"]
+                    "account_type"?: Database["public"]['Enums']["account_type"],"business_name"?: string | null,"country"?: Database["public"]['Enums']["country_code"],"created_at"?: string,"deleted_at"?: string | null,"display_name"?: string,"id"?: string,"is_blocked"?: boolean,"notify_chat_email"?: boolean,"preferred_language"?: Database["public"]['Enums']["language_code"],"user_id"?: string,"verification_status"?: Database["public"]['Enums']["verification_status"]
                   }
                   Relationships: [
                     
@@ -644,6 +644,12 @@ isOneToOne: false
               "limit_per_admin": number,"limit_total": number,"waiting_days": number
             }[]
                            },
+"block_in_conversation":
+{ Args: { "p_conversation_id": string }; Returns: undefined
+                           },
+"claim_chat_notifications":
+{ Args: { "p_limit"?: number,"p_secret": string }; Returns: Json
+                           },
 "claim_photo_processing":
 { Args: { "p_photo_id": string,"p_user_id": string }; Returns: {
               "state": string,"storage_path": string,"thumb_path": string,"upload_path": string
@@ -685,6 +691,11 @@ isOneToOne: false
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
                            },
+"my_blocks":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "blocked_id": string,"created_at": string,"display_name": string
+            }[]
+                           },
 "my_conversations":
 { Args: { "p_cursor"?: string,"p_limit"?: number }; Returns: Json
                            },
@@ -708,6 +719,9 @@ isOneToOne: false
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },
+"release_chat_notifications":
+{ Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
+                           },
 "remove_unavailable_favorites":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
@@ -728,6 +742,9 @@ isOneToOne: false
                            },
 "start_conversation":
 { Args: { "p_body": string,"p_listing_id": string }; Returns: string
+                           },
+"unblock_in_conversation":
+{ Args: { "p_conversation_id": string }; Returns: undefined
                            },
 "unread_count":
 { Args: Record<PropertyKey, never>; Returns: number

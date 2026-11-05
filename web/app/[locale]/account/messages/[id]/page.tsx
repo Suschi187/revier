@@ -8,10 +8,11 @@ import { counterpartName } from "@/lib/chat/names";
 import { publicPath } from "@/lib/public/paths";
 import { conversationInfo, conversationMessages, markRead } from "@/lib/services/chat";
 import { requireOnboardedUser } from "@/lib/services/gate";
-import { sendMessageAction } from "../actions";
+import { blockAction, sendMessageAction, unblockAction } from "../actions";
 
 // Chat-Ansicht (ADR 017). Fremde, unbekannte und ungültige IDs ergeben dieselbe Seite „nicht gefunden“ (noindex,
-// no-store aus dem Proxy, Review A3). Text nur als React-Text, keine Autolinks (Review A12).
+// no-store aus dem Proxy, Review A3). Text nur als React-Text, keine Autolinks (Review A12). Blockieren und Melden
+// als Formulare bzw. Links, ohne JavaScript bedienbar (<details> als Menü).
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,6 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+const NOTICES = ["blocked", "unblocked", "reported", "failed"] as const;
 
 const BEFORE = /^(\d{4}-\d{2}-\d{2}T[\d:.]+(?:Z|[+-]\d{2}:\d{2}))\|([0-9a-f-]{36})$/;
 
@@ -44,6 +47,7 @@ export default async function ConversationPage(props: Props) {
   if (!before) await markRead(id);
   const page = await conversationMessages(id, before ? { before: { at: before[1], id: before[2] } } : undefined);
   const name = counterpartName(info, t("accountUnavailable"));
+  const notice = NOTICES.find((code) => code === query.notice);
   const first = page?.items[0];
 
   return (
@@ -61,7 +65,27 @@ export default async function ConversationPage(props: Props) {
             <span>{t("listingUnavailable")}</span>
           )}
         </p>
+        <details className="mt-3">
+          <summary className="cursor-pointer underline">{t("menu.label")}</summary>
+          <div className="mt-2 flex flex-wrap gap-3">
+            {!info.blocked_by_me && (
+              <form action={blockAction}>
+                <input type="hidden" name="locale" value={locale} />
+                <input type="hidden" name="id" value={id} />
+                <button type="submit" className="rounded border border-stone-500 px-3 py-1">{t("menu.block")}</button>
+              </form>
+            )}
+            {info.counterpart.profile && (
+              <Link href={`/account/messages/${id}/report?profile=1`} prefetch={false} className="rounded border border-stone-500 px-3 py-1">
+                {t("menu.reportProfile")}
+              </Link>
+            )}
+          </div>
+        </details>
       </header>
+      {notice && (
+        <p className="mt-4" role={notice === "failed" ? "alert" : "status"}>{t(`notices.${notice}`)}</p>
+      )}
 
       <p className="mt-4 rounded border border-amber-700 bg-amber-50 p-3 text-sm">{t("safety")}</p>
 
@@ -87,15 +111,29 @@ export default async function ConversationPage(props: Props) {
               <time dateTime={message.created_at}>{format.dateTime(new Date(message.created_at), { dateStyle: "short", timeStyle: "short" })}</time>
               {message.mine && <> · {message.read_at ? t("conversation.read") : t("conversation.sent")}</>}
             </p>
+            {!message.mine && (
+              <Link href={`/account/messages/${id}/report?message=${message.id}`} prefetch={false} className="mt-1 inline-block text-xs underline">
+                {t("menu.reportMessage")}
+              </Link>
+            )}
           </li>
         ))}
       </ol>
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
 
       {info.can_write ? (
-        <Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} />
+        <Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} owner={info.role === "owner"} />
       ) : (
-        <p className="mt-6 rounded border border-stone-400 p-3" role="status">{info.blocked_by_me ? t("blockedByMe") : t("cannotWrite")}</p>
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-stone-400 p-3">
+          <p>{info.blocked_by_me ? t("blockedByMe") : t("cannotWrite")}</p>
+          {info.blocked_by_me && (
+            <form action={unblockAction}>
+              <input type="hidden" name="locale" value={locale} />
+              <input type="hidden" name="id" value={id} />
+              <button type="submit" className="underline">{t("menu.unblock")}</button>
+            </form>
+          )}
+        </div>
       )}
     </main>
   );

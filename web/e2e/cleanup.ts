@@ -52,6 +52,11 @@ export async function deleteTestUsers(emails: string[]): Promise<void> {
     const { data: listings } = await client.from("listings").select("id").eq("owner_id", id);
     const targets = [id, ...(listings ?? []).map((l) => l.id)];
     await client.from("audit_log").delete().in("target_id", targets);
+    // Meldungen der Testkonten und über sie (M7): Ziel ohne FK, sie überdauern sonst die Löschung; die gesicherten
+    // Kopien gemeldeter Nachrichten gehen per Kaskade mit.
+    const { data: messages } = await client.from("messages").select("id").eq("sender_id", id).limit(1000);
+    await client.from("reports").delete().in("target_id", [...targets, ...(messages ?? []).map((m) => m.id)]);
+    await client.from("reports").delete().eq("reporter_id", id);
     await client.from("audit_log").delete().eq("actor_id", id);
     await client.auth.admin.deleteUser(id);
     // Die Kaskade auf Rollen erzeugt per Trigger neue Audit-Zeilen (ADR 014); auch die entfernen.

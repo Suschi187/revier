@@ -789,6 +789,64 @@
       "intro": "Twoja pierwsza wiadomość trafi do oferującego. Dane kontaktowe wymieniacie tylko tutaj na czacie.",
       "ownListing": "To jest Twoje ogłoszenie.",
       "unavailable": "Nie możesz napisać wiadomości do tego ogłoszenia."
+    },
+    "menu": {
+      "label": "Działania",
+      "block": "Zablokuj tę osobę",
+      "unblock": "Odblokuj",
+      "reportProfile": "Zgłoś profil",
+      "reportMessage": "Zgłoś wiadomość"
+    },
+    "notices": {
+      "blocked": "Zablokowałeś(-aś) tę osobę. Nie może już do Ciebie pisać.",
+      "unblocked": "Blokada została zniesiona.",
+      "reported": "Dziękujemy. Twoje zgłoszenie trafiło do moderacji.",
+      "failed": "To się nie udało. Spróbuj ponownie."
+    },
+    "report": {
+      "metaTitle": "Zgłoś",
+      "titleMessage": "Zgłoś wiadomość",
+      "titleProfile": "Zgłoś profil",
+      "reason": "Powód",
+      "note": "Uwaga (opcjonalnie)",
+      "noteHint": "Maksymalnie 1000 znaków. Nie podawaj haseł ani danych bankowych.",
+      "submit": "Wyślij zgłoszenie",
+      "cancel": "Powrót do rozmowy",
+      "quoted": "Zgłaszana wiadomość",
+      "reasons": {
+        "scam": "Oszustwo lub przedpłata",
+        "harassment": "Nękanie lub obrażanie",
+        "illegal": "Treści niezgodne z prawem",
+        "weapons": "Oferta broni lub amunicji",
+        "other": "Inny powód"
+      },
+      "errors": {
+        "reason": "Wybierz powód.",
+        "limit": "Wysłałeś(-aś) dziś już wiele zgłoszeń. Spróbuj ponownie jutro.",
+        "failed": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
+      }
+    },
+    "blocked": {
+      "metaTitle": "Zablokowane osoby",
+      "title": "Zablokowane osoby",
+      "intro": "Zablokowane osoby nie mogą do Ciebie pisać, a Ty nie możesz pisać do nich.",
+      "empty": "Nikogo nie zablokowałeś(-aś).",
+      "unblock": "Odblokuj",
+      "unknown": "Konto nie jest już dostępne",
+      "since": "Zablokowano {date}",
+      "link": "Zablokowane osoby"
+    },
+    "hints": {
+      "contact": "Twoja wiadomość zawiera dane kontaktowe (telefon, e-mail lub konto bankowe). Udostępniaj je tylko, jeśli ufasz drugiej osobie. Nigdy nie płać z góry.",
+      "location": "Twoja wiadomość wydaje się zawierać dokładną lokalizację. Kto ją zna, może też ustalić przybliżoną lokalizację Twoich innych ogłoszeń w tym powiecie."
+    },
+    "notifications": {
+      "title": "Powiadomienia",
+      "chatEmail": "E-mail o nowych wiadomościach",
+      "hint": "Najwyżej jeden e-mail co 15 minut, bez treści wiadomości. E-maile trafiają na adres, którego używasz do logowania.",
+      "save": "Zapisz ustawienie",
+      "saved": "Ustawienia powiadomień zostały zapisane.",
+      "failed": "Nie udało się zapisać ustawienia. Spróbuj ponownie."
     }
   }
 }

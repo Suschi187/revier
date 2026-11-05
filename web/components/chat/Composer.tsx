@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useActionState, useRef, useState } from "react";
 import type { ComposerState } from "@/app/[locale]/account/messages/actions";
 import { errorParam, isErrorParam } from "@/lib/chat/errors";
+import { contactHints } from "@/lib/chat/contact-hints";
 import { bodyLength, MAX_BODY } from "@/lib/chat/rules";
 
 // Eingabe (ADR 017): funktioniert ohne JavaScript als Formular (PRG). Mit JavaScript: Zeichenzähler und
@@ -15,13 +16,17 @@ type Props = {
   locale: string;
   /** Fehlercode aus der URL nach einem Senden ohne JavaScript. */
   initialError?: string;
+  /** Besitzer der Anzeige: Hinweis, wenn die Nachricht eine genaue Lage enthält (ADR 016 „Lage im Chat geteilt“). */
+  owner?: boolean;
 };
 
-export function Composer({ action, id, locale, initialError }: Props) {
+export function Composer({ action, id, locale, initialError, owner = false }: Props) {
   const t = useTranslations("Chat");
   const [state, formAction, pending] = useActionState(action, { error: null, draft: "" });
   const shown = state.error ? errorParam(state.error) : isErrorParam(initialError) ? initialError : null;
-  const [length, setLength] = useState(bodyLength(state.draft));
+  const [text, setText] = useState(state.draft);
+  const length = bodyLength(text);
+  const hints = contactHints(text);
   const form = useRef<HTMLFormElement>(null);
 
   return (
@@ -39,7 +44,7 @@ export function Composer({ action, id, locale, initialError }: Props) {
         aria-invalid={shown === "body" || undefined}
         aria-describedby={shown ? "composer-error composer-count" : "composer-count"}
         className="w-full rounded border border-stone-400 px-2 py-1.5 whitespace-pre-wrap"
-        onChange={(event) => setLength(bodyLength(event.target.value))}
+        onChange={(event) => setText(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
             event.preventDefault();
@@ -56,6 +61,11 @@ export function Composer({ action, id, locale, initialError }: Props) {
         </button>
       </div>
       <p id="composer-shortcut" className="text-sm text-stone-700">{t("composer.shortcut")}</p>
+      {/* Nur Hinweise, Senden bleibt möglich (SPEC 7.8). Ohne JavaScript gilt der feste Sicherheitshinweis. */}
+      <div aria-live="polite" className="grid gap-2">
+        {hints.contact && <p className="rounded border border-amber-700 bg-amber-50 p-2 text-sm">{t("hints.contact")}</p>}
+        {owner && hints.location && <p className="rounded border border-amber-700 bg-amber-50 p-2 text-sm">{t("hints.location")}</p>}
+      </div>
       {shown && (
         <p id="composer-error" role="alert" className="text-red-800">
           {t(`errors.${shown}`)}

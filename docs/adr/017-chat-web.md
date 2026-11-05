@@ -103,6 +103,11 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - SMTP-Adapter für Mailpit lokal und in der CI.
   - Ein HTTP-Adapter eines EU-Anbieters folgt in M10, weil Supabase Edge Functions in der Cloud nicht auf Port 25 und 587 verbinden.
 - **Logs:** nur Zahlen, keine Adressen und keine Inhalte.
+- **Umsetzung (Commit 8):**
+  - **Geheimnis:** Die Migration erzeugt es zufällig im Vault (`chat_notifications_secret`), es steht nirgends sonst. Die Function liest es nicht aus der Umgebung, sondern reicht den Header an `claim_chat_notifications(p_secret)` weiter. Die RPC vergleicht über SHA-256 mit dem Vault. Damit gibt es kein zweites Exemplar in Function-Secrets.
+  - **URL:** `chat_notifications_url` im Vault setzen weder Migration noch Seed. Ohne URL macht der Job nichts, deshalb verschickt die CI und das lokale E2E keine unerwarteten Mails. Integrationstests rufen die Function direkt auf (H10).
+  - **SMTP:** eigener minimaler Client (`mailer.ts`, Deno.connect) statt einer Bibliothek, nur für Mailpit. Adressen ohne Zeilenumbrüche oder spitze Klammern, Text als Base64, Betreff fest je Sprache.
+  - **Zustand:** `previous_sent_at` für das Rücksetzen; nach 3 Fehlversuchen wird die Mail verworfen und der Zähler beginnt für spätere Nachrichten neu.
 - **Abmelden:** in den Profileinstellungen. Abmelden per Klick aus der Mail (RFC 8058) kommt mit M8 bis M10.
 
 ### Blockieren und Melden (Review A11, H1, H7)

@@ -410,8 +410,19 @@ deno_version = 2
 enabled = true
 verify_jwt = true
 
-# [edge_runtime.secrets]
-# secret_key = "env(SECRET_VALUE)"
+# Revier: Chat-Benachrichtigung (ADR 017). Aufruf von pg_cron ohne Nutzer-JWT; die Function prüft ein eigenes
+# Geheimnis aus dem Vault über die RPC claim_chat_notifications.
+[functions.send-chat-notifications]
+enabled = true
+verify_jwt = false
+
+# Nur lokal und in der CI, keine Geheimnisse: Mailpit im Docker-Netz (Host „inbucket“, SMTP 1025). In der Cloud
+# setzt die Checkliste die Werte per `supabase secrets set` (M10: HTTP-Adapter statt SMTP, ADR 017).
+[edge_runtime.secrets]
+SMTP_HOST = "inbucket"
+SMTP_PORT = "1025"
+MAIL_FROM = "noreply@revier.local"
+SITE_URL = "http://localhost:3000"
 
 [analytics]
 enabled = true

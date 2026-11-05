@@ -5,7 +5,18 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { isAppLocale } from "@/lib/auth/paths";
 import { errorParam } from "@/lib/chat/errors";
-import { sendMessage, startConversation, type ChatError } from "@/lib/services/chat";
+import {
+  blockInConversation,
+  CHAT_REPORT_REASONS,
+  reportFromChat,
+  sendMessage,
+  startConversation,
+  unblockInConversation,
+  unblockUser,
+  type ChatError,
+  type ChatReportReason,
+} from "@/lib/services/chat";
+import { requireSessionUser } from "@/lib/services/auth";
 import { requireOnboardedUser } from "@/lib/services/gate";
 
 // Senden (ADR 017): nur per POST, PRG nach Erfolg. Bei einem Fehler bleibt der Entwurf im Formularzustand
@@ -50,4 +61,52 @@ export async function startConversationAction(_state: ComposerState, form: FormD
   const result = await startConversation(id, body);
   if (!result.ok) return failure(path, result.error, body);
   redirect(`/${locale}/account/messages/${result.id}#latest`);
+}
+
+// Blockieren, Entsperren und Melden (ADR 017): nur angemeldet, ohne Legal-Gate (App Store, DSA). Ergebnis als
+// Hinweis-Code in der URL, nie Texte.
+
+function conversationPath(locale: string, id: string): string {
+  return UUID.test(id) ? `/${locale}/account/messages/${id}` : `/${locale}/account/messages`;
+}
+
+export async function blockAction(form: FormData): Promise<void> {
+  const { locale, id } = read(form);
+  const path = conversationPath(locale, id);
+  await requireSessionUser(locale, path);
+  const ok = await blockInConversation(id);
+  revalidatePath(path);
+  redirect(`${path}?notice=${ok ? "blocked" : "failed"}`);
+}
+
+export async function unblockAction(form: FormData): Promise<void> {
+  const { locale, id } = read(form);
+  const path = conversationPath(locale, id);
+  await requireSessionUser(locale, path);
+  const ok = await unblockInConversation(id);
+  revalidatePath(path);
+  redirect(`${path}?notice=${ok ? "unblocked" : "failed"}`);
+}
+
+export async function unblockUserAction(form: FormData): Promise<void> {
+  const { locale } = read(form);
+  const path = `/${locale}/account/blocked`;
+  await requireSessionUser(locale, path);
+  const ok = await unblockUser(String(form.get("blocked") ?? ""));
+  revalidatePath(path);
+  redirect(`${path}?notice=${ok ? "unblocked" : "failed"}`);
+}
+
+export async function reportAction(form: FormData): Promise<void> {
+  const { locale, id } = read(form);
+  const path = conversationPath(locale, id);
+  await requireSessionUser(locale, path);
+  const type = form.get("target") === "profile" ? "profile" : "message";
+  const targetId = String(form.get("targetId") ?? "");
+  const reason = String(form.get("reason") ?? "");
+  const back = `${path}/report?${type === "profile" ? "profile=1" : `message=${UUID.test(targetId) ? targetId : ""}`}`;
+  if (!(CHAT_REPORT_REASONS as readonly string[]).includes(reason)) redirect(`${back}&error=reason`);
+  const result = await reportFromChat({ type, id: targetId }, reason as ChatReportReason, String(form.get("note") ?? ""));
+  if (result !== "ok") redirect(`${back}&error=${result}`);
+  redirect(`${path}?notice=reported`);
 }

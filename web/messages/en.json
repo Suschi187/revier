@@ -789,6 +789,64 @@
       "intro": "Your first message goes to the provider. Contact details are only exchanged here in the chat.",
       "ownListing": "This is your own listing.",
       "unavailable": "You cannot write a message about this listing."
+    },
+    "menu": {
+      "label": "Actions",
+      "block": "Block this person",
+      "unblock": "Unblock",
+      "reportProfile": "Report profile",
+      "reportMessage": "Report message"
+    },
+    "notices": {
+      "blocked": "You have blocked this person. They can no longer write to you.",
+      "unblocked": "You have unblocked this person.",
+      "reported": "Thank you. Your report has been sent to the moderation team.",
+      "failed": "That did not work. Please try again."
+    },
+    "report": {
+      "metaTitle": "Report",
+      "titleMessage": "Report message",
+      "titleProfile": "Report profile",
+      "reason": "Reason",
+      "note": "Note (optional)",
+      "noteHint": "At most 1000 characters. Do not enter any passwords or bank details.",
+      "submit": "Send report",
+      "cancel": "Back to the conversation",
+      "quoted": "Reported message",
+      "reasons": {
+        "scam": "Fraud or advance payment scam",
+        "harassment": "Harassment or insults",
+        "illegal": "Illegal content",
+        "weapons": "Weapons or ammunition offered",
+        "other": "Other reason"
+      },
+      "errors": {
+        "reason": "Please choose a reason.",
+        "limit": "You have sent many reports today. Please try again tomorrow.",
+        "failed": "The report could not be sent. Please try again."
+      }
+    },
+    "blocked": {
+      "metaTitle": "Blocked people",
+      "title": "Blocked people",
+      "intro": "Blocked people cannot write to you, and you cannot write to them.",
+      "empty": "You have not blocked anyone.",
+      "unblock": "Unblock",
+      "unknown": "Account no longer available",
+      "since": "Blocked since {date}",
+      "link": "Blocked people"
+    },
+    "hints": {
+      "contact": "Your message contains contact details (phone, email or bank details). Only share them if you trust the other person. Never pay in advance.",
+      "location": "Your message seems to contain a precise location. Anyone who knows it can also work out the approximate location of your other listings in this district."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "chatEmail": "Email me about new messages",
+      "hint": "At most one email every 15 minutes, without the message text. Mails go to the address you use to sign in.",
+      "save": "Save setting",
+      "saved": "Your notification settings have been saved.",
+      "failed": "The setting could not be saved. Please try again."
     }
   }
 }

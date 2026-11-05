@@ -75,12 +75,12 @@
     },
     {
       "name": "Bidi RLO",
-      "body": "a‮b",
+      "body": "a\u202eb",
       "valid": false
     },
     {
       "name": "Bidi LRI",
-      "body": "a⁦b",
+      "body": "a\u2066b",
       "valid": false
     },
     {
@@ -93,6 +93,68 @@
       "body": "Jagdpacht Ždár, Łódź",
       "valid": true,
       "normalized": "Jagdpacht Ždár, Łódź"
+    }
+  ],
+  "hints": [
+    {
+      "text": "Ruf mich an: 0171 2345678",
+      "contact": true,
+      "location": false
+    },
+    {
+      "text": "+49 (30) 123-45-67",
+      "contact": true,
+      "location": false
+    },
+    {
+      "text": "Schreib an jaeger@example.de",
+      "contact": true,
+      "location": false
+    },
+    {
+      "text": "IBAN DE89 3704 0044 0532 0130 00",
+      "contact": true,
+      "location": false
+    },
+    {
+      "text": "Treffpunkt 50.9512, 13.9481",
+      "contact": false,
+      "location": true
+    },
+    {
+      "text": "51°03'12\"N 13°44'18\"E",
+      "contact": false,
+      "location": true
+    },
+    {
+      "text": "https://maps.app.goo.gl/abc123",
+      "contact": false,
+      "location": true
+    },
+    {
+      "text": "https://www.openstreetmap.org/#map=15/50.95/13.94",
+      "contact": false,
+      "location": true
+    },
+    {
+      "text": "Pacht 250 ha, 1.200 € im Jahr, ab 2027",
+      "contact": false,
+      "location": false
+    },
+    {
+      "text": "Termin am 12.04.2027 um 18:30",
+      "contact": false,
+      "location": false
+    },
+    {
+      "text": "PLZ 01067 Dresden",
+      "contact": false,
+      "location": false
+    },
+    {
+      "text": "Treffpunkt 50.9512, 13.9481, Handy 0171 2345678",
+      "contact": true,
+      "location": true
     }
   ]
 }

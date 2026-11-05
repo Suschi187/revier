@@ -789,6 +789,64 @@
       "intro": "Deine erste Nachricht geht an den Anbieter. Kontaktdaten tauscht ihr nur hier im Chat aus.",
       "ownListing": "Das ist deine eigene Anzeige.",
       "unavailable": "Zu dieser Anzeige kannst du keine Nachricht schreiben."
+    },
+    "menu": {
+      "label": "Aktionen",
+      "block": "Person blockieren",
+      "unblock": "Blockierung aufheben",
+      "reportProfile": "Profil melden",
+      "reportMessage": "Nachricht melden"
+    },
+    "notices": {
+      "blocked": "Du hast diese Person blockiert. Sie kann dir nicht mehr schreiben.",
+      "unblocked": "Du hast die Blockierung aufgehoben.",
+      "reported": "Danke. Deine Meldung ist bei der Moderation eingegangen.",
+      "failed": "Das hat nicht geklappt. Bitte versuche es erneut."
+    },
+    "report": {
+      "metaTitle": "Melden",
+      "titleMessage": "Nachricht melden",
+      "titleProfile": "Profil melden",
+      "reason": "Grund",
+      "note": "Hinweis (optional)",
+      "noteHint": "Höchstens 1000 Zeichen. Gib keine Passwörter oder Bankdaten ein.",
+      "submit": "Meldung senden",
+      "cancel": "Zurück zur Unterhaltung",
+      "quoted": "Gemeldete Nachricht",
+      "reasons": {
+        "scam": "Betrug oder Vorkasse-Masche",
+        "harassment": "Belästigung oder Beleidigung",
+        "illegal": "Rechtswidrige Inhalte",
+        "weapons": "Waffen oder Munition angeboten",
+        "other": "Anderer Grund"
+      },
+      "errors": {
+        "reason": "Bitte wähle einen Grund.",
+        "limit": "Du hast heute schon viele Meldungen gesendet. Bitte versuche es morgen erneut.",
+        "failed": "Die Meldung konnte nicht gesendet werden. Bitte versuche es erneut."
+      }
+    },
+    "blocked": {
+      "metaTitle": "Blockierte Personen",
+      "title": "Blockierte Personen",
+      "intro": "Blockierte Personen können dir nicht schreiben, und du kannst ihnen nicht schreiben.",
+      "empty": "Du hast niemanden blockiert.",
+      "unblock": "Blockierung aufheben",
+      "unknown": "Konto nicht mehr verfügbar",
+      "since": "Blockiert seit {date}",
+      "link": "Blockierte Personen"
+    },
+    "hints": {
+      "contact": "Deine Nachricht enthält Kontaktdaten (Telefon, E-Mail oder Bankverbindung). Teile sie nur, wenn du dem Gegenüber vertraust. Zahle nie im Voraus.",
+      "location": "Deine Nachricht scheint eine genaue Lage zu enthalten. Wer sie kennt, kann auch die ungefähre Lage deiner anderen Anzeigen in diesem Kreis ableiten."
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "chatEmail": "E-Mail bei neuen Nachrichten",
+      "hint": "Höchstens eine E-Mail alle 15 Minuten, ohne den Text der Nachricht. Die Mails gehen an die Adresse, mit der du dich anmeldest.",
+      "save": "Einstellung speichern",
+      "saved": "Deine Einstellung zu Benachrichtigungen ist gespeichert.",
+      "failed": "Die Einstellung konnte nicht gespeichert werden. Bitte versuche es erneut."
     }
   }
 }

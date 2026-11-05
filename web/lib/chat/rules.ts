@@ -11,7 +11,7 @@ export function normalizeBody(body: string): string {
 }
 
 // Steuerzeichen außer TAB und LF (C0, DEL, C1) und Bidi-Steuerzeichen. NUL kann die DB nicht speichern.
-const FORBIDDEN = /[\u0000-\u0008\u000B-\u001F\u007F-\u009F‪-‮⁦-⁩]/;
+const FORBIDDEN = /[\u0000-\u0008\u000B-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069]/;
 
 /** Länge in Codepoints wie char_length in Postgres (ein Emoji zählt eins). */
 export function bodyLength(body: string): number {
