@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:supabase": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env.local scripts/check-supabase.mjs",
-    "gen:types": "supabase --workdir .. gen types typescript --local --schema public > lib/supabase/database.types.ts",
+    "gen:types": "supabase --workdir .. gen types typescript --schema public > lib/supabase/database.types.ts",
     "test:e2e": "playwright test",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "gen:reference": "node --env-file-if-exists=.env.local scripts/gen-reference-data.mjs",

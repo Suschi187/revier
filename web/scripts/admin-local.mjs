@@ -1,7 +1,7 @@
 // Lokales Konto zum Admin machen (Runbook „erster Admin“, ADR 005), nur gegen die lokale Supabase:
 //   npm run admin:local -- ich@example.local          Rolle vergeben (zurückdatiert, ohne 7 Tage Karenz)
 //   npm run admin:local -- ich@example.local --remove  Rolle entziehen
-// Läuft über `supabase db query --local`, braucht keinen Schlüssel. Die 2FA richtet das Konto danach selbst
+// Läuft über `supabase db query` (CLI ab v3: ohne `--remote` immer lokal), braucht keinen Schlüssel. Die 2FA richtet das Konto danach selbst
 // unter /de/admin ein. Nie gegen die Cloud: dort gilt das Runbook im SQL-Editor.
 import { execFileSync } from "node:child_process";
 import path from "node:path";
@@ -18,12 +18,19 @@ if (!email || !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
 
 const repoRoot = path.resolve(import.meta.dirname, "..", "..");
 
+// Vor v3 hing das Ziel von `db query` an `--local`; ab v3 ist lokal der Standard. Ältere CLI ablehnen.
+const cliMajor = Number(execFileSync("supabase", ["--version"], { encoding: "utf8" }).trim().split(".")[0]);
+if (!(cliMajor >= 3)) {
+  console.error("Supabase-CLI ab Version 3 nötig (brew upgrade supabase).");
+  process.exit(1);
+}
+
 /**
  * `-o json` erzwingt JSON: Ohne die Option gibt die CLI im Terminal eine Tabelle aus (nur in Agent-Umgebungen
  * JSON). Die Ausgabe ist ein Array oder ein Objekt mit `rows`; insert und delete geben nichts aus.
  */
 function query(sql, { expectRows = false } = {}) {
-  const out = execFileSync("supabase", ["db", "query", "--local", "-o", "json", sql], {
+  const out = execFileSync("supabase", ["db", "query", "-o", "json", sql], {
     cwd: repoRoot,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],

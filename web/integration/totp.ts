@@ -4,7 +4,7 @@ import path from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 // Nur für Tests (Integration und E2E): TOTP nach RFC 6238 mit node:crypto statt eines Pakets (Plan M4 7),
-// MFA-Einrichtung per supabase-js und Rollen per `supabase db query --local` (nie gegen die Cloud).
+// MFA-Einrichtung per supabase-js und Rollen per `supabase db query` (CLI v3: ohne `--remote` immer lokal, nie gegen die Cloud).
 
 // Ohne import.meta, damit auch Playwright (CommonJS) die Datei laden kann; beide laufen in web/.
 const REPO_ROOT = path.resolve(process.cwd(), "..");
@@ -56,9 +56,9 @@ export async function stepUp(client: SupabaseClient, factorId: string, secret: s
   return verified.data.access_token;
 }
 
-/** SQL gegen die lokale Datenbank (Rollen setzen, Testdaten), nur `--local`. */
+/** SQL gegen die lokale Datenbank (Rollen setzen, Testdaten); CLI v3 zielt ohne `--remote` auf den lokalen Stack. */
 export function localSql(sql: string): void {
-  execFileSync("supabase", ["db", "query", "--local", sql], { cwd: REPO_ROOT, stdio: ["ignore", "ignore", "pipe"], timeout: 60_000 });
+  execFileSync("supabase", ["db", "query", sql], { cwd: REPO_ROOT, stdio: ["ignore", "ignore", "pipe"], timeout: 60_000 });
 }
 
 /** Admin-Rolle per SQL wie im Runbook, Ernennung `daysAgo` zurückdatiert (Karenz, ADR 014). */

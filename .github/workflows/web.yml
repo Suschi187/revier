@@ -82,7 +82,7 @@ jobs:
           cache-dependency-path: web/package-lock.json
       - uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
         with:
-          version: 2.122.0
+          version: 3.0.0
       - name: Supabase starten (mit Auth, Mailpit und Edge Runtime)
         working-directory: .
         # Edge Runtime läuft mit: API-Tests rufen process-listing-photo auf (ADR 011).

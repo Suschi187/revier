@@ -2,6 +2,18 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Werkzeuge: Supabase-CLI v3 – 2026-11-05
+
+### Geändert
+- Supabase-CLI 2.122.0 → 3.0.0, lokal (Homebrew) und in beiden CI-Workflows gepinnt.
+- v3 zielt ohne `--remote` immer auf den lokalen Stack. `--local` ist überflüssig (Warnung, fällt in v4 weg) und wurde aus `admin:local`, den Integrationstests, `gen:types` und der CI entfernt. `admin:local` bricht mit einer CLI unter v3 ab.
+- `config.toml`: `[auth.email] enabled = true` und `[auth.sms] enabled = false` statt des veralteten `enable_signup` (gleiche Wirkung). `[local_smtp]` und `project_id` waren schon gesetzt, die lokale Datenbank bleibt beim Wechsel erhalten.
+- Die JSON-Ausgaben von `db query` und `status` sind kompatibel; `status` nennt nur noch `MAILPIT_URL`.
+
+### Testen
+- `supabase stop && brew upgrade supabase && supabase start`, danach `supabase test db` und `supabase db lint -s public,private --level warning --fail-on warning`
+- `cd web && npm run gen:types` erzeugt keine Änderung; `npm run admin:local -- <e-mail>` wie bisher
+
 ## Nachtrag M6: QA-Funde F1–F7 – 2026-11-04
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M6 – Abnahme“.
