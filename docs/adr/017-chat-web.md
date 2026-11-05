@@ -72,7 +72,7 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
 - **Kein Inhalt** im Kanal. Nicht `realtime.broadcast_changes`, das die ganze Zeile samt Text überträgt und speichert.
 - **Policy auf `realtime.messages`:** nur SELECT mit `extension = 'broadcast' and realtime.topic() = 'user:' || auth.uid()`. Keine INSERT-Policy, also weder Client-Broadcast noch Presence.
 - **Cloud:** Realtime nur mit privaten Kanälen (Cloud-Checkliste).
-- **Token:** RLS gilt beim Join. Läuft das JWT ab, endet der Kanal, sofern der Client nicht erneuert (`@supabase/ssr`, `setAuth` bei `TOKEN_REFRESHED`). Ein Entzug wirkt spätestens mit dem nächsten Token. Das ist hinnehmbar, weil die Nutzlast keine Inhalte trägt. Beim Abmelden `removeAllChannels()`.
+- **Token:** RLS gilt beim Join. Läuft das JWT ab, endet der Kanal, sofern der Client nicht erneuert (`@supabase/ssr`, `setAuth` bei `TOKEN_REFRESHED`). Ein Entzug wirkt spätestens mit dem nächsten Token. Das ist hinnehmbar, weil die Nutzlast keine Inhalte trägt. Verlässt die Seite den Chat (auch beim Abmelden), entfernt sie den Kanal und schließt ohne weitere Kanäle die WebSocket (`realtime.disconnect()`, QA M7 F3/N2).
 - **Lücke:** Nach `SUBSCRIBED`, nach dem Wiederverbinden und bei `visibilitychange` lädt der Client nach. Vertrag (für I5): `conversation_messages(…, p_after_*)`. **Web (umgesetzt):** `router.refresh()`; der Server liefert die neuesten Nachrichten, markiert gelesen und aktualisiert den Zähler (QA M7 F5).
   - Er lädt mit einigen Sekunden Überlappung und entdoppelt nach `id`, weil `created_at` die Startzeit der Transaktion ist.
   - Zähler und Liste liest er neu, statt hochzuzählen.

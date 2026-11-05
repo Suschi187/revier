@@ -2,6 +2,26 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M7: QA-Funde F1–F5 – 2026-11-05
+
+Bericht: `docs/QA-REPORT.md`, Abschnitte „M7 – Abnahme“ und „M7 – Nachprüfung“.
+
+### Geändert
+- **F1:** Unterhaltungsliste und Chat-Ansicht verlangen nur die Anmeldung, nicht die aktuelle Zustimmung. Ohne Zustimmung zeigt die Chat-Ansicht statt der Eingabe den Weg zur Zustimmung; Lesen, Blockieren und Melden bleiben möglich, auch für gesperrte Konten. Schreiben verhindert weiter die DB (`RV001`).
+- **F2:** Der Zähler in der Navigation wird beim Zurückkehren in den Tab neu gelesen (erste Rückkehr sofort, dann höchstens alle 30 Sekunden; nicht im Chat, nicht abgemeldet).
+- **F3:** Verlässt die Seite den Chat, schließt sie ohne weitere Kanäle die WebSocket.
+- **F4:** `confirm_chat_notifications` setzt nach einem erfolgreichen Versand die Versuche auf 0; die Function meldet Erfolge zurück.
+- **F5, N2:** ADR 017, SPEC 3.1 (Ausnahme vom Onboarding für Chat-Seiten) und die Lücken hier ergänzt.
+- **N1:** Die Function loggt Fehler beim Zurückmelden (`release`/`confirm`) als Zahl.
+- **Proben:** `test.fail`/TODO der Abnahme sind normale Tests; neu `42_qa_m7_nachpruefung`, `qa-m7-nachpruefung` (Integration und E2E).
+
+### Testen
+- `supabase test db`, `cd web && npm test && INTEGRATION_REQUIRED=1 npm run test:integration && npm run test:e2e`
+- Von Hand: Konto mit Unterhaltung, Zustimmung entfernen (`delete from legal_acceptances where user_id = …`), Chat öffnen → Hinweis statt Eingabe, „Aktionen“ → Blockieren geht.
+
+### Cloud-Checkliste (neu)
+- Migrationen vor den Edge Functions ausrollen (sonst fehlt `confirm_chat_notifications`; die Function loggt das als `bookkeepingErrors`).
+
 ## M7 Chat (Web) – 2026-11-05
 
 Plan `docs/plans/M7-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 017, SPEC v0.9.

@@ -52,15 +52,19 @@ export async function handle(request: Request, mailer: Mailer | null, siteUrl: s
       failed.push(claim.recipient_id);
     }
   }
+  // Fehler beim Zurückmelden nur als Zahl loggen (QA M7 N1): etwa wenn die Function vor der Migration ausgerollt wurde.
+  let bookkeepingErrors = 0;
   if (failed.length) {
-    await admin.rpc("release_chat_notifications", { p_secret: secret, p_recipients: failed });
+    const { error: releaseError } = await admin.rpc("release_chat_notifications", { p_secret: secret, p_recipients: failed });
+    if (releaseError) bookkeepingErrors++;
   }
   // Erfolg setzt die Versuche zurück (QA M7 F4): Ein früherer Fehlschlag kürzt sonst die Versuche späterer Mails.
   if (delivered.length) {
-    await admin.rpc("confirm_chat_notifications", { p_secret: secret, p_recipients: delivered });
+    const { error: confirmError } = await admin.rpc("confirm_chat_notifications", { p_secret: secret, p_recipients: delivered });
+    if (confirmError) bookkeepingErrors++;
   }
   const sent = delivered.length;
-  log("done", { recipients: claims.length, sent, failed: failed.length });
+  log("done", { recipients: claims.length, sent, failed: failed.length, bookkeepingErrors });
   return Response.json({ recipients: claims.length, sent, failed: failed.length });
 }
 

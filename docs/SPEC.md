@@ -130,7 +130,7 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 
 **audit_log** – Admin-Aktionen (Freigabe, Ablehnung, Sperre, Verifizierung)
 
-**legal_acceptances** (v0.4) – `user_id`, `document` (`terms` | `privacy`), `version`, `source` (`web` | `ios`), `accepted_at`; schreibbar nur über die RPC `accept_legal`, die gegen die aktuellen Versionen prüft. Ohne Zustimmung zur aktuellen Version führt der Client ins Onboarding; ab M3/M7 prüfen auch Anzeigen- und Chat-Policies die Zustimmung (`private.has_accepted_current_legal()`), Meldungen bewusst nicht.
+**legal_acceptances** (v0.4) – `user_id`, `document` (`terms` | `privacy`), `version`, `source` (`web` | `ios`), `accepted_at`; schreibbar nur über die RPC `accept_legal`, die gegen die aktuellen Versionen prüft. Ohne Zustimmung zur aktuellen Version führt der Client ins Onboarding; ab M3/M7 prüfen auch Anzeigen- und Chat-Policies die Zustimmung (`private.has_accepted_current_legal()`), Meldungen bewusst nicht. Ausnahme (v0.9, ADR 017): Unterhaltungsliste, Chat-Ansicht, Melden und blockierte Personen bleiben ohne aktuelle Zustimmung erreichbar (Lesen, Blockieren, Melden; App Store, DSA), statt der Eingabe zeigt der Client den Weg zur Zustimmung. Gilt auch für iOS (I5).
 
 ### 3.2 `attributes` je Anzeigenart
 Validierung in der DB bei jedem Schreiben (`private.listing_attributes_error`) und gleichlautend im Client (Zod im Web, gemeinsame Fälle in `supabase/tests/fixtures/listing_rules.json`). Unbekannte Schlüssel sind Fehler. Verbindlich ist ADR 013; die endgültigen Pflichtangaben prüft der Anwalt (7.2).
