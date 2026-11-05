@@ -496,6 +496,7 @@
         "listing_draft": "Changes requested",
         "listing_rejected": "Listing rejected",
         "listing_removed": "Listing removed",
+        "listing_point_removed": "Map point removed",
         "role_granted": "Admin appointed",
         "role_revoked": "Admin role revoked",
         "user_looked_up": "Account looked up",
@@ -512,7 +513,8 @@
         "role": "Role",
         "via": "Via",
         "target_type": "Target type",
-        "user_id": "Account"
+        "user_id": "Account",
+        "status": "Status"
       },
       "via": {
         "ui": "Admin area",

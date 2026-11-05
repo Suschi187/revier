@@ -496,6 +496,7 @@
         "listing_draft": "Poproszono o poprawki",
         "listing_rejected": "Ogłoszenie odrzucone",
         "listing_removed": "Ogłoszenie usunięte",
+        "listing_point_removed": "Punkt na mapie usunięty",
         "role_granted": "Mianowano administratora",
         "role_revoked": "Odebrano rolę administratora",
         "user_looked_up": "Wyszukano konto",
@@ -512,7 +513,8 @@
         "role": "Rola",
         "via": "Przez",
         "target_type": "Typ celu",
-        "user_id": "Konto"
+        "user_id": "Konto",
+        "status": "Status"
       },
       "via": {
         "ui": "Panel administracyjny",

@@ -9,6 +9,7 @@ export const AUDIT_ACTIONS = [
   "listing.draft",
   "listing.rejected",
   "listing.removed",
+  "listing.point_removed",
   "role.granted",
   "role.revoked",
   "user.looked_up",

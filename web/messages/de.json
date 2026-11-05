@@ -496,6 +496,7 @@
         "listing_draft": "Bearbeitung angefordert",
         "listing_rejected": "Anzeige abgelehnt",
         "listing_removed": "Anzeige entfernt",
+        "listing_point_removed": "Kartenpunkt entfernt",
         "role_granted": "Admin ernannt",
         "role_revoked": "Admin-Rolle entzogen",
         "user_looked_up": "Konto gesucht",
@@ -512,7 +513,8 @@
         "role": "Rolle",
         "via": "Über",
         "target_type": "Zieltyp",
-        "user_id": "Konto"
+        "user_id": "Konto",
+        "status": "Status"
       },
       "via": {
         "ui": "Admin-Bereich",

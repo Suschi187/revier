@@ -120,8 +120,8 @@ test.describe("QA M6 Nachprüfung", () => {
     expect(aborted.length).toBeGreaterThanOrEqual(1);
   });
 
-  // N4: Der Cluster-Button verschwindet beim Aufklappen (neue Marker), der Fokus fällt auf body; nicht durch F1 entstanden.
-  test.fail("N4: Cluster per Enter: nach Hineinzoomen und Neuladen liegt der Fokus nicht auf body", async ({ page }) => {
+  // N4 (behoben): Der Cluster-Button verschwindet beim Aufklappen; der Fokus geht an den nächstgelegenen neuen Marker.
+  test("N4: Cluster per Enter: nach Hineinzoomen und Neuladen liegt der Fokus nicht auf body", async ({ page }) => {
     const near: Point[] = Array.from({ length: 6 }, (_, i) => ({
       id: `00000000-0000-4000-8000-0000000001${String(i).padStart(2, "0")}`, title: `QA7 Haufen ${i}`, lng: 13.9 + i * 0.01, lat: 50.95 + (i % 2) * 0.01,
     }));
@@ -138,6 +138,7 @@ test.describe("QA M6 Nachprüfung", () => {
     const focused = await page.evaluate(() => document.activeElement?.tagName.toLowerCase() ?? "");
     test.info().annotations.push({ type: "Fokus nach Cluster-Enter", description: focused });
     expect(focused).not.toBe("body");
+    await expect(page.locator(".map-marker:focus")).toHaveCount(1);
   });
 
   test("Mehr als 300 Elemente im Ausschnitt: Hinweis statt leerer Karte", async ({ page }) => {

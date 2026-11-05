@@ -42,6 +42,34 @@ const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
 const price = z.number().int().min(0).max(1_000_000_000_000);
 const area = z.number().min(0).max(10_000_000);
 
+const TEN = BigInt(10);
+
+/** Zahl als exakter Dezimalwert `int · 10^-scale`, so wie JSON.stringify sie sendet und die DB (numeric) sie liest. */
+function exactDecimal(value: number): { int: bigint; scale: number } {
+  const match = /^(-?)(\d+)(?:\.(\d+))?(?:e([+-]\d+))?$/.exec(String(value));
+  if (!match) throw new Error("not finite");
+  const fraction = match[3] ?? "";
+  let scale = fraction.length - Number(match[4] ?? 0);
+  let int = BigInt(match[1] + match[2] + fraction);
+  if (scale < 0) {
+    int *= TEN ** BigInt(-scale);
+    scale = 0;
+  }
+  return { int, scale };
+}
+
+/**
+ * `hi - lo <= 30` exakt wie in der DB (QA M6 F2, Nachprüfung N1): In Gleitkomma liegt 89.403 - 59.403 knapp über 30,
+ * eine Toleranz ließe dagegen 30,0000000005 durch, das die DB ablehnt.
+ */
+function spanAtMost30(lo: number, hi: number): boolean {
+  const a = exactDecimal(lo);
+  const b = exactDecimal(hi);
+  const scale = Math.max(a.scale, b.scale);
+  const at = (d: { int: bigint; scale: number }) => d.int * TEN ** BigInt(scale - d.scale);
+  return at(b) - at(a) <= BigInt(30) * TEN ** BigInt(scale);
+}
+
 const KEY_SCHEMAS = {
   v: z.literal(1),
   q: z.string().refine((value) => {
@@ -69,9 +97,7 @@ const KEY_SCHEMAS = {
   sort: z.enum(SORTS),
   bbox: z
     .tuple([z.number(), z.number(), z.number(), z.number()])
-    // Die DB rechnet mit numeric (exakt); die Differenz zweier Gleitkommazahlen liegt dagegen leicht über 30
-    // (89.403 - 59.403 = 30.000000000000007). Toleranz weit unter der kleinsten kanonischen Einheit (1e-4).
-    .refine(([w, s, e, n]) => w >= -180 && e <= 180 && s >= -90 && n <= 90 && w < e && s < n && e - w <= 30 + 1e-9 && n - s <= 30 + 1e-9),
+    .refine(([w, s, e, n]) => w >= -180 && e <= 180 && s >= -90 && n <= 90 && w < e && s < n && spanAtMost30(w, e) && spanAtMost30(s, n)),
 } as const;
 
 const KEYS = Object.keys(KEY_SCHEMAS) as (keyof typeof KEY_SCHEMAS)[];

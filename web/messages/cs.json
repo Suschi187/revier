@@ -496,6 +496,7 @@
         "listing_draft": "Vyžádány úpravy",
         "listing_rejected": "Inzerát zamítnut",
         "listing_removed": "Inzerát odstraněn",
+        "listing_point_removed": "Bod na mapě odstraněn",
         "role_granted": "Jmenován administrátor",
         "role_revoked": "Odebrána role administrátora",
         "user_looked_up": "Vyhledán účet",
@@ -512,7 +513,8 @@
         "role": "Role",
         "via": "Přes",
         "target_type": "Typ cíle",
-        "user_id": "Účet"
+        "user_id": "Účet",
+        "status": "Stav"
       },
       "via": {
         "ui": "Administrace",

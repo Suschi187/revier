@@ -17,8 +17,14 @@ Bericht: `docs/QA-REPORT.md`, Abschnitt „M6 – Abnahme“.
 - **Hinweise aus dem Bericht:** Kein Marker-Layer mehr ohne Hinweis ab 300 Elementen („Bitte hineinzoomen“). `416` der Kachel-Route mit `no-store` statt `immutable`. ADR 016 ergänzt: Dichte im Ring, Lage im Chat geteilt (Hinweis für M7), gleicher Punkt, Hint-Format der Regel für kleine Kreise.
 - **Proben:** TODOs in pgTAP `34_qa_m6_abnahme` und `test.fail`/`it.fails` in `e2e/qa-m6.spec.ts` und `lib/qa-m6.test.ts` sind normale Tests; `/api/map` wird bitgenau verglichen. Neu: F7 (Status, Audit, kein Eintrag beim Besitzer), Zufallstest für `viewBbox`.
 
+- **Nachprüfung N1–N4** (QA-REPORT „M6 – Nachprüfung“):
+  - **N1:** Zod prüft die 30°-Grenze exakt dezimal wie die DB (statt Toleranz 1e-9). Zwei neue Fälle in der gemeinsamen Fixture (knapp über 30°, Exponentschreibweise).
+  - **N2:** Entfernt die Moderation den Punkt einer aktiven oder pausierten Anzeige, gilt die Freigabe ohne Punkt weiter. Fortsetzen nach einer Pause führt nicht mehr in die Prüfung.
+  - **N3:** `listing.point_removed` ist im Admin-Audit-Log filterbar und in vier Sprachen benannt, der Status im Detail übersetzt.
+  - **N4:** Verschwindet beim Neuzeichnen ein fokussierter Marker oder Cluster (zum Beispiel nach Enter auf einem Cluster), geht der Fokus an den nächstgelegenen neuen Marker, ohne Marker an die Kartenfläche.
+
 ### Testen
-- `supabase db reset && supabase test db` (798)
+- `supabase db reset && supabase test db` (828 mit der Nachprüfung)
 - `npm test`, `npm run test:integration`, `npm run test:e2e` (Karte: `e2e/map*.spec.ts`, `e2e/qa-m6.spec.ts`)
 - Von Hand: `/de/suche?view=map`, verschieben und zoomen → Zahl der Anzeigen auf der Karte ändert sich; weit herauszoomen, „In diesem Bereich suchen“ → „Gefiltert nach Kartenbereich.“
 

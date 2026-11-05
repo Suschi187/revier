@@ -382,6 +382,32 @@
       "error": null
     },
     {
+      "name": "Bereich knapp über 30° (QA M6 N1)",
+      "filters": {
+        "v": 1,
+        "bbox": [
+          0,
+          0,
+          30.0000000005,
+          10
+        ]
+      },
+      "error": "bbox"
+    },
+    {
+      "name": "Bereich mit kleinen Werten in Exponentschreibweise",
+      "filters": {
+        "v": 1,
+        "bbox": [
+          1e-07,
+          -30,
+          30.0000001,
+          0
+        ]
+      },
+      "error": null
+    },
+    {
       "name": "Bereich zu breit",
       "filters": {
         "v": 1,

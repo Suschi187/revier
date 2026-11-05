@@ -43,7 +43,7 @@ export default async function AuditPage({ searchParams }: Props) {
   const detailKey = (key: string) => (t.has(`detailKeys.${key}`) ? t(`detailKeys.${key}`) : key);
   const detailValue = (key: string, value: unknown) => {
     if (typeof value !== "string") return JSON.stringify(value);
-    if (key === "from" && tl.has(`status.${value}`)) return tl(`status.${value}`);
+    if ((key === "from" || key === "status") && tl.has(`status.${value}`)) return tl(`status.${value}`);
     if (key === "code" && tm.has(`reasons.${value}`)) return tm(`reasons.${value}`);
     if (key === "via" && t.has(`via.${value}`)) return t(`via.${value}`);
     return value;

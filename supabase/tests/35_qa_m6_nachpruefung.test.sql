@@ -83,7 +83,6 @@ select is((select status::text from listings where id = :'lp'), 'paused', 'F7: p
 select tests.authenticate_as(:'o');
 update listings set status = 'active' where id = :'lp';
 select tests.as_postgres();
-select todo('N2: Punktentfernung durch die Moderation macht den Freigabe-Hash ungültig, Fortsetzen geht in die Prüfung', 1);
 select is((select status::text from listings where id = :'lp'), 'active', 'Besitzer setzt nach Punktentfernung fort: wieder aktiv');
 
 select submitted_at as lq_sub from listings where id = :'lq' \gset

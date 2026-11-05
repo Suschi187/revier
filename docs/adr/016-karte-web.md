@@ -68,7 +68,7 @@ Grundtatsache: `anon` und `authenticated` lesen die ganze Tabelle `listings`. De
 - Das Formular sendet `keep` als Vorgabe. `set` nur nach einer Aktion des Nutzers, `clear` nur über „Punkt entfernen“.
 - Der gespeicherte Punkt wird **nie** als Eingabe vorbelegt. Sonst verschiebt jedes Speichern ihn erneut um 3–5 km.
 - Ausgegeben wird überall genau der gespeicherte Wert, ohne eigene Rundung. Die RPCs mit Punkten (`search_listings`, `map_listings`, `my_favorites`, `provider_listings`) laufen dafür mit `extra_float_digits = 3` (QA M6 F4).
-- Entfernt ein Moderator den Punkt einer fremden Anzeige (einzige Inhaltsänderung, die die Moderation darf, ADR 014), bleibt der Status unverändert. Eine aktive Anzeige bleibt öffentlich und zeigt den Kreismittelpunkt. Die Aktion steht als `listing.point_removed` im Audit-Log (QA M6 F7). Eine Aktion im Admin und die Benachrichtigung des Besitzers kommen mit M9 (Meldungen).
+- Entfernt ein Moderator den Punkt einer fremden Anzeige (einzige Inhaltsänderung, die die Moderation darf, ADR 014), bleibt der Status unverändert. Eine aktive Anzeige bleibt öffentlich und zeigt den Kreismittelpunkt. Die Aktion steht als `listing.point_removed` im Audit-Log (QA M6 F7). Der Freigabe-Stand gilt danach ohne Punkt weiter: Bei aktiven und pausierten Anzeigen setzt der Trigger den Freigabe-Hash neu, damit „Fortsetzen“ nicht in die Prüfung führt (Nachprüfung N2). Eine Aktion im Admin und die Benachrichtigung des Besitzers kommen mit M9 (Meldungen).
 
 ### Filter `bbox` und Karten-RPC
 - `bbox: [west, south, east, north]` additiv im Filterformat v1 (ADR 015).

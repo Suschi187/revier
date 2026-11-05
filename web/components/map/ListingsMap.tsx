@@ -151,10 +151,18 @@ export function ListingsMap({
     const next = [...seen.keys()].sort().join("|");
     if (next === signature.current) return;
     signature.current = next;
+    // Hat ein Marker oder Cluster den Fokus, geht er nach dem Neuzeichnen an den nächstgelegenen neuen Marker
+    // (QA M6 N4): Ein aufgeklappter Cluster verschwindet, der Fokus fiele sonst auf body.
+    const focused = document.activeElement instanceof HTMLElement && document.activeElement.classList.contains("map-marker")
+      ? document.activeElement.dataset.key?.split(",").map(Number)
+      : undefined;
     for (const marker of markers.current) marker.remove();
     markers.current = [];
     setCrowded(seen.size > MAX_MARKERS);
-    if (seen.size > MAX_MARKERS) return;
+    if (seen.size > MAX_MARKERS) {
+      if (focused) map.getCanvas().focus();
+      return;
+    }
     for (const feature of seen.values()) {
       const coordinates = feature.geometry.coordinates;
       const button = document.createElement("button");
@@ -187,6 +195,13 @@ export function ListingsMap({
         });
       }
       markers.current.push(new maplibre.Marker({ element: button }).setLngLat(coordinates).addTo(map));
+    }
+    if (focused) {
+      const [lng, lat] = focused;
+      const distance = (m: Marker) => Math.hypot(m.getLngLat().lng - lng, m.getLngLat().lat - lat);
+      const nearest = markers.current.reduce<Marker | undefined>((best, m) => (!best || distance(m) < distance(best) ? m : best), undefined);
+      // Ohne Marker (zu viele Elemente) auf die Kartenfläche, damit die Tab-Reihenfolge erhalten bleibt.
+      (nearest?.getElement() ?? map.getCanvas()).focus();
     }
   }, [openPopup, reducedMotion, texts.cluster, texts.stack]);
 

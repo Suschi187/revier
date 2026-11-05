@@ -56,8 +56,8 @@ describe("Zod/DB-Gleichstand der 30°-Grenze", () => {
     expect(filtersError({ v: 1, bbox: [0, 0, 30.0001, 10] })).toBe("bbox");
   });
 
-  // N1: Die DB (numeric, exakt) lehnt 30,0000000005° ab (pgTAP 35), Zod lässt es wegen der Toleranz 1e-9 durch.
-  it.fails("N1: Breite knapp über 30° (unter 30 + 1e-9) wie die DB abgelehnt", () => {
+  // N1 (behoben): Zod rechnet exakt dezimal wie die DB (numeric).
+  it("N1: Breite knapp über 30° (unter 30 + 1e-9) wie die DB abgelehnt", () => {
     expect(filtersError({ v: 1, bbox: [0, 0, 30.0000000005, 10] })).toBe("bbox");
   });
 });
@@ -86,9 +86,8 @@ describe("F3: Texte der MapLibre-Steuerelemente", () => {
 });
 
 describe("F7: Audit-Aktion im Admin", () => {
-  // N3: Der neue Audit-Eintrag listing.point_removed fehlt in AUDIT_ACTIONS (Filter im Admin) und hat keinen
-  // übersetzten Namen; das Audit-Log zeigt den rohen Schlüssel.
-  it.fails("N3: listing.point_removed ist im Admin filterbar und in vier Sprachen benannt", () => {
+  // N3 (behoben): listing.point_removed in AUDIT_ACTIONS (Filter im Admin) und mit Namen in vier Sprachen.
+  it("N3: listing.point_removed ist im Admin filterbar und in vier Sprachen benannt", () => {
     const audit = readFileSync(join(__dirname, "services", "audit.ts"), "utf8");
     expect(audit).toContain('"listing.point_removed"');
     for (const locale of ["en", "de", "cs", "pl"]) {
