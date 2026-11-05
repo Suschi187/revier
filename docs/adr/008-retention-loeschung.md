@@ -38,6 +38,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `conversations.owner_id`/`interested_id → profiles` | cascade |
 | `messages.conversation_id → conversations` | cascade |
 | `messages.sender_id → profiles` | cascade |
+| `messages.recipient_id → profiles` (M7, ADR 017) | cascade |
 | `blocks.blocker_id`/`blocked_id → profiles` | cascade |
 | `reports.reporter_id`, `reports.handled_by → profiles` | set null |
 | `verifications.user_id → profiles` | cascade |

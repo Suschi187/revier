@@ -82,7 +82,7 @@ select tests.as_anon();
 select is((select verification_status::text from public_profiles where display_name = 'Bernd'), 'verified', 'Verifiziert ist öffentlich sichtbar');
 
 select tests.authenticate_as(:'a_id');
-insert into conversations (listing_id) values (:'listing_b');
+select start_conversation(:'listing_b', 'Hallo');
 select tests.authenticate_as(:'b_id');
 select set_eq($$ select display_name from public_profiles $$, array['Bernd', 'Anna M.'], 'Anbieter sieht den Namen seines Chatpartners');
 select tests.authenticate_as(:'admin_id');

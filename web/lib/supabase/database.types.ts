@@ -311,14 +311,14 @@ isOneToOne: false
                   ]
                 },"messages": {
                   Row: {
-                    "body": string,"conversation_id": string,"created_at": string,"id": string,"read_at": string | null,"sender_id": string
+                    "body": string,"conversation_id": string,"created_at": string,"id": string,"read_at": string | null,"recipient_id": string,"sender_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "body": string,"conversation_id": string,"created_at"?: string,"id"?: string,"read_at"?: string | null,"sender_id"?: string
+                    "body": string,"conversation_id": string,"created_at"?: string,"id"?: string,"read_at"?: string | null,"recipient_id": string,"sender_id"?: string
                   }
                   Update: {
-                    "body"?: string,"conversation_id"?: string,"created_at"?: string,"id"?: string,"read_at"?: string | null,"sender_id"?: string
+                    "body"?: string,"conversation_id"?: string,"created_at"?: string,"id"?: string,"read_at"?: string | null,"recipient_id"?: string,"sender_id"?: string
                   }
                   Relationships: [
                     {
@@ -327,6 +327,18 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "conversations"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "messages_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "messages_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
     },{
       foreignKeyName: "messages_sender_id_fkey"
       columns: ["sender_id"]
@@ -661,6 +673,9 @@ isOneToOne: false
 "map_listings":
 { Args: { "p_filters": Json }; Returns: Json
                            },
+"mark_conversation_read":
+{ Args: { "p_conversation_id": string }; Returns: number
+                           },
 "moderate_listing":
 { Args: { "p_code"?: string,"p_decision": string,"p_expected_version": string,"p_listing_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["listing_status"]
                            },
@@ -696,8 +711,14 @@ isOneToOne: false
 "search_listings":
 { Args: { "p_cursor"?: string,"p_filters": Json,"p_limit"?: number }; Returns: Json
                            },
+"send_message":
+{ Args: { "p_body": string,"p_conversation_id": string }; Returns: string
+                           },
 "set_listing_location":
 { Args: { "p_lat"?: number,"p_listing_id": string,"p_lng"?: number,"p_place_name"?: string,"p_point"?: string,"p_postal_code"?: string,"p_region_id": string }; Returns: undefined
+                           },
+"start_conversation":
+{ Args: { "p_body": string,"p_listing_id": string }; Returns: string
                            }
           }
           Enums: {

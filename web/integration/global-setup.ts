@@ -100,13 +100,13 @@ export default async function setup(project: TestProject) {
       "Anzeige B freigeben",
     );
 
-    // A schreibt B
+    // A schreibt B (ab M7 nur per RPC, ADR 017)
     const conversation = must(
-      await a.client.from("conversations").insert({ listing_id: activeB }).select("id").single<{ id: string }>(),
+      await a.client.rpc("start_conversation", { p_listing_id: activeB, p_body: "Geheime Nachricht von A" }),
       "Unterhaltung",
-    ).id;
+    ) as string;
     const message = must(
-      await a.client.from("messages").insert({ conversation_id: conversation, body: "Geheime Nachricht von A" }).select("id").single<{ id: string }>(),
+      await a.client.from("messages").select("id").eq("conversation_id", conversation).single<{ id: string }>(),
       "Nachricht",
     ).id;
 
