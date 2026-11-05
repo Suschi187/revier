@@ -65,16 +65,18 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
 - **Kanal:** ein privater Broadcast-Kanal je Nutzer, `user:<uuid>`.
 - **Senden:** Ein AFTER-Trigger (definer) sendet per `realtime.send(…, private => true)` an beide Teilnehmer, mit den Ereignissen:
   - `message.new`: `conversation_id`, `message_id`, `sender_id`, `created_at`
-  - `message.read`: `conversation_id`, `read_up_to`
+  - `message.read`: `conversation_id`, `reader_id`, `read_up_to`
+  - Jede Nutzlast trägt zusätzlich `id` (von `realtime.send` vergeben, eindeutig je Ereignis; zum Entdoppeln).
+  - Dieser Ereignisvertrag gilt auch für iOS (I5).
   - `unread.changed`
 - **Kein Inhalt** im Kanal. Nicht `realtime.broadcast_changes`, das die ganze Zeile samt Text überträgt und speichert.
 - **Policy auf `realtime.messages`:** nur SELECT mit `extension = 'broadcast' and realtime.topic() = 'user:' || auth.uid()`. Keine INSERT-Policy, also weder Client-Broadcast noch Presence.
 - **Cloud:** Realtime nur mit privaten Kanälen (Cloud-Checkliste).
 - **Token:** RLS gilt beim Join. Läuft das JWT ab, endet der Kanal, sofern der Client nicht erneuert (`@supabase/ssr`, `setAuth` bei `TOKEN_REFRESHED`). Ein Entzug wirkt spätestens mit dem nächsten Token. Das ist hinnehmbar, weil die Nutzlast keine Inhalte trägt. Beim Abmelden `removeAllChannels()`.
-- **Lücke:** Nach `SUBSCRIBED`, nach dem Wiederverbinden und bei `visibilitychange` lädt der Client über `conversation_messages(…, p_after_*)` nach.
+- **Lücke:** Nach `SUBSCRIBED`, nach dem Wiederverbinden und bei `visibilitychange` lädt der Client nach. Vertrag (für I5): `conversation_messages(…, p_after_*)`. **Web (umgesetzt):** `router.refresh()`; der Server liefert die neuesten Nachrichten, markiert gelesen und aktualisiert den Zähler (QA M7 F5).
   - Er lädt mit einigen Sekunden Überlappung und entdoppelt nach `id`, weil `created_at` die Startzeit der Transaktion ist.
   - Zähler und Liste liest er neu, statt hochzuzählen.
-- **Nur unter `/account/messages*`:** Anderswo rendert der Server den Zähler in der Navigation und liest ihn bei Fokus neu. So gibt es keine WebSocket je Tab auf jeder Seite.
+- **Nur unter `/account/messages*`:** Anderswo rendert der Server den Zähler in der Navigation und liest ihn bei Fokus neu (höchstens alle 30 s, QA M7 F2). So gibt es keine WebSocket je Tab auf jeder Seite. Ohne Kanäle schließt der Client die WebSocket (QA M7 F3).
 - **`realtime.messages` speichert nur IDs** und wird vom Dienst nach wenigen Tagen gelöscht (Datenschutzerklärung M9).
 - **Realtime in der CI:** Beide Workflows starten Realtime. Eine Probe belegt, dass `start` und `db reset` die Policies frisch anlegen. Falls die Reihenfolge nicht hält, wird die Migration idempotent mit Existenzprüfung.
 
@@ -103,6 +105,7 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - SMTP-Adapter für Mailpit lokal und in der CI.
   - Ein HTTP-Adapter eines EU-Anbieters folgt in M10, weil Supabase Edge Functions in der Cloud nicht auf Port 25 und 587 verbinden.
 - **Logs:** nur Zahlen, keine Adressen und keine Inhalte.
+- **Erfolg:** `confirm_chat_notifications` setzt nach einem erfolgreichen Versand `attempts` auf 0, damit ein früherer Fehlschlag die Versuche späterer Mails nicht kürzt (QA M7 F4).
 - **Umsetzung (Commit 8):**
   - **Geheimnis:** Die Migration erzeugt es zufällig im Vault (`chat_notifications_secret`), es steht nirgends sonst. Die Function liest es nicht aus der Umgebung, sondern reicht den Header an `claim_chat_notifications(p_secret)` weiter. Die RPC vergleicht über SHA-256 mit dem Vault. Damit gibt es kein zweites Exemplar in Function-Secrets.
   - **URL:** `chat_notifications_url` im Vault setzen weder Migration noch Seed. Ohne URL macht der Job nichts, deshalb verschickt die CI und das lokale E2E keine unerwarteten Mails. Integrationstests rufen die Function direkt auf (H10).
@@ -120,7 +123,7 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - Gemeldet werden kann nur eine fremde Nachricht in der eigenen Unterhaltung.
   - Ein Trigger (definer) sichert eine Kopie (`body`, `sender_id`, `created_at`, `conversation_id`) in `private.reported_message_snapshots`. Die Tabelle hat keine API-Rechte und ist in M9 nur für Admins mit aal2 lesbar.
   - Frist wie bearbeitete Meldungen (`handled_reports_months`, ADR 008). So bleiben Beweise, auch wenn der Absender sein Konto löscht.
-- Melden und Blockieren bleiben ohne Legal-Gate und funktionieren auch für gesperrte Konten (App Store, DSA).
+- Melden und Blockieren bleiben ohne Legal-Gate und funktionieren auch für gesperrte Konten (App Store, DSA). Deshalb verlangen Unterhaltungsliste, Chat-Ansicht, Meldeseite und die Liste blockierter Personen nur die Anmeldung, nicht die aktuelle Zustimmung; ohne Zustimmung zeigt die Chat-Ansicht statt der Eingabe den Weg zur Zustimmung (QA M7 F1).
 - Admins lesen Chats nicht pauschal.
 
 ### Web (Review A2, A3, A12)
@@ -133,7 +136,7 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - `new/:id` nutzt im Proxy `public_page_state` (404 bzw. 410 wie das Detail).
   - Fremde, nicht vorhandene und ungültige Unterhaltungs-IDs ergeben dieselbe Seite „nicht gefunden“ mit `noindex` und `private, no-store`.
 - **Detail:** „Nachricht schreiben“ ist ein statischer Link. Die gecachte öffentliche Seite bleibt unpersonalisiert.
-- **Ohne JavaScript:** Senden per Formular, PRG, der Entwurf bleibt im Formular und nie in einer URL. Kein Kontakthinweis vor dem Senden, dafür der feste Hinweis.
+- **Ohne JavaScript:** Senden per Formular, PRG. Bei einem Fehler leitet die Action mit dem Fehlercode in der URL um (nie mit dem Text); der Entwurf geht dabei verloren. Grund: Ein zurückgegebener Formularzustand scheitert ohne JavaScript an einem Fehler in Next.js 16.4 (Cookies beim erneuten Rendern nach der Action). Mit JavaScript bleibt der Entwurf im Formular. Kein Kontakthinweis vor dem Senden, dafür der feste Hinweis (QA M7 F5).
 - **CSP:** Die Chat-Routen (`/account/messages*`, `/account/blocked`) bekommen die Nonce-CSP wie `/admin`. Sie rendern ohnehin dynamisch, und dort gibt es keine Karte.
   - Begründung: Session-Cookies sind nicht `httpOnly` (ADR 010), und der Chat ist die erste angemeldete Fläche mit fremdem Freitext.
   - Zusätzlich verbietet eine ESLint-Regel `dangerouslySetInnerHTML` in `components/chat`, und E2E prüft mit XSS-Texten.
@@ -142,6 +145,7 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - Vor dem Senden bei Telefonnummer, E-Mail, IBAN, Koordinaten oder Kartenlinks. Der Hinweis zur Lage für Besitzer verweist auf ADR 016 „Lage im Chat geteilt“.
 
 ## Folgen
+- iOS (I5): NUL im Text ergibt über PostgREST `22P05` statt `22023 body` (die DB kann NUL nicht speichern). Die App lehnt NUL vorher ab oder bildet `22P05` wie `body` ab (QA M7 H1).
 - iOS (I5) nutzt dieselben RPCs, Fixtures, Kanäle und Ereignisse. Push nutzt `chat_notifications` mit `channel = 'push'`.
 - M9: Meldungs-Warteschlange mit den gesicherten Kopien, Datenexport (Unterhaltungen, Nachrichten, `read_at`, Sperren, Mail-Einstellung), Account-Löschung räumt Benachrichtigungen und Kopien nach Frist.
 - M10: Mail-Anbieter (EU, AVV, Tracking aus), Realtime nur privat, Grenze gleichzeitiger Verbindungen, Abmelden per Klick.

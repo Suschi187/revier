@@ -847,6 +847,8 @@
       "save": "Einstellung speichern",
       "saved": "Deine Einstellung zu Benachrichtigungen ist gespeichert.",
       "failed": "Die Einstellung konnte nicht gespeichert werden. Bitte versuche es erneut."
-    }
+    },
+    "legalRequired": "Um zu schreiben, stimme bitte zuerst den aktuellen Nutzungsbedingungen zu. Blockieren und Melden bleiben möglich.",
+    "legalLink": "Zu den Nutzungsbedingungen"
   }
 }

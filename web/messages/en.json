@@ -847,6 +847,8 @@
       "save": "Save setting",
       "saved": "Your notification settings have been saved.",
       "failed": "The setting could not be saved. Please try again."
-    }
+    },
+    "legalRequired": "To write, please first accept the current terms of use. Blocking and reporting remain possible.",
+    "legalLink": "Go to the terms"
   }
 }

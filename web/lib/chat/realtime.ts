@@ -71,7 +71,11 @@ export function useChatLive({ userId, conversationId }: Options): LiveState {
       cancelled = true;
       window.clearTimeout(timer.current);
       document.removeEventListener("visibilitychange", onVisible);
-      void client.removeChannel(channel);
+      // Ohne weitere Kanäle auch die WebSocket schließen (QA M7 F3): sonst bleibt sie nach dem Verlassen des Chats
+      // oder dem Abmelden offen und belegt Verbindungskontingent.
+      void client.removeChannel(channel).then(() => {
+        if (client.getChannels().length === 0) void client.realtime.disconnect();
+      });
     };
   }, [conversationId, router, userId]);
 

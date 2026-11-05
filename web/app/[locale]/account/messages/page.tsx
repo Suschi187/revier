@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { counterpartName } from "@/lib/chat/names";
 import { listConversations } from "@/lib/services/chat";
-import { requireOnboardedUser } from "@/lib/services/gate";
+import { requireSessionUser } from "@/lib/services/auth";
 
 // Unterhaltungsliste (ADR 017). Ohne Suspense, damit sie ohne JavaScript sichtbar ist; Nonce-CSP aus dem Proxy.
 export const instant = false;
@@ -19,7 +19,8 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
 
 export default async function MessagesPage(props: Props) {
   const locale = (await getLocale()) as AppLocale;
-  const user = await requireOnboardedUser(locale, `/${locale}/account/messages`);
+  // Nur angemeldet, ohne Zustimmungs-Pflicht: Blockieren und Melden müssen immer erreichbar sein (QA M7 F1).
+  const user = await requireSessionUser(locale, `/${locale}/account/messages`);
   const query = await props.searchParams;
   const cursor = typeof query.cursor === "string" && query.cursor.length <= 200 ? query.cursor : undefined;
   const [t, format, page] = await Promise.all([getTranslations("Chat"), getFormatter(), listConversations(cursor)]);

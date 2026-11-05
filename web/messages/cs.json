@@ -847,6 +847,8 @@
       "save": "Uložit nastavení",
       "saved": "Nastavení upozornění bylo uloženo.",
       "failed": "Nastavení se nepodařilo uložit. Zkuste to prosím znovu."
-    }
+    },
+    "legalRequired": "Abyste mohli psát, odsouhlaste nejprve aktuální podmínky užívání. Blokování a nahlášení zůstávají možné.",
+    "legalLink": "K podmínkám užívání"
   }
 }

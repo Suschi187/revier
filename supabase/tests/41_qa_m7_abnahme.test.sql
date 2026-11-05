@@ -244,6 +244,8 @@ select tests.qa7_pass(3);
 select tests.qa7_claimed(claim_chat_notifications(:'secret'), :'i');
 select release_chat_notifications(:'secret', array[:'i'::uuid]);
 select tests.qa7_claimed(claim_chat_notifications(:'secret'), :'i');
+-- Erfolg: die Function meldet ihn zurück (F4 behoben, confirm_chat_notifications)
+select confirm_chat_notifications(:'secret', array[:'i'::uuid]);
 -- Fenster 2: neue Nachricht, zwei Fehlschläge – der dritte Versuch muss noch kommen
 select tests.qa7_pass(20);
 select tests.authenticate_as(:'o');
@@ -254,7 +256,6 @@ select tests.qa7_claimed(claim_chat_notifications(:'secret'), :'i');
 select release_chat_notifications(:'secret', array[:'i'::uuid]);
 select tests.qa7_claimed(claim_chat_notifications(:'secret'), :'i');
 select release_chat_notifications(:'secret', array[:'i'::uuid]);
-select todo('F4: attempts wird nach Erfolg nicht zurückgesetzt', 1);
 select is(tests.qa7_claimed(claim_chat_notifications(:'secret'), :'i'), 1, 'Dritter Versuch der neuen Mail nach zwei Fehlschlägen');
 
 -- ---------------------------------------------------------------------------

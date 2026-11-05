@@ -847,6 +847,8 @@
       "save": "Zapisz ustawienie",
       "saved": "Ustawienia powiadomień zostały zapisane.",
       "failed": "Nie udało się zapisać ustawienia. Spróbuj ponownie."
-    }
+    },
+    "legalRequired": "Aby pisać, zaakceptuj najpierw aktualny regulamin. Blokowanie i zgłaszanie pozostają możliwe.",
+    "legalLink": "Przejdź do regulaminu"
   }
 }

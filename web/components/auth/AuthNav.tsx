@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { signOut } from "@/app/[locale]/auth/actions";
 import { Link } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/services/auth";
+import { UnreadRefresh } from "@/components/chat/UnreadRefresh";
 import { unreadCount } from "@/lib/services/chat";
 
 // Liest die Session und steht deshalb im Layout hinter einer Suspense-Grenze.
@@ -21,6 +22,7 @@ export async function AuthNav() {
 
   return (
     <div className="flex items-center gap-4">
+      <UnreadRefresh />
       <Link href="/account/messages" prefetch={false} className="underline" aria-label={unread ? tc("navUnread", { count: unread }) : undefined}>
         {tc("nav")}
         {unread ? <span className="ml-1 rounded bg-stone-900 px-1.5 text-sm text-white no-underline" aria-hidden="true">{unread}</span> : null}

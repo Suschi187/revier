@@ -7,7 +7,8 @@ import type { AppLocale } from "@/i18n/routing";
 import { counterpartName } from "@/lib/chat/names";
 import { publicPath } from "@/lib/public/paths";
 import { conversationInfo, conversationMessages, markRead } from "@/lib/services/chat";
-import { requireOnboardedUser } from "@/lib/services/gate";
+import { requireSessionUser } from "@/lib/services/auth";
+import { getLegalStatus } from "@/lib/services/legal";
 import { blockAction, sendMessageAction, unblockAction } from "../actions";
 
 // Chat-Ansicht (ADR 017). Fremde, unbekannte und ungültige IDs ergeben dieselbe Seite „nicht gefunden“ (noindex,
@@ -29,8 +30,13 @@ const BEFORE = /^(\d{4}-\d{2}-\d{2}T[\d:.]+(?:Z|[+-]\d{2}:\d{2}))\|([0-9a-f-]{36
 export default async function ConversationPage(props: Props) {
   const locale = (await getLocale()) as AppLocale;
   const { id } = await props.params;
-  const user = await requireOnboardedUser(locale, `/${locale}/account/messages/${id}`);
-  const [t, format, info, query] = await Promise.all([getTranslations("Chat"), getFormatter(), conversationInfo(id), props.searchParams]);
+  // Nur angemeldet (QA M7 F1): Blockieren und Melden auch ohne aktuelle Zustimmung und für gesperrte Konten (ADR 017,
+  // App Store, DSA). Schreiben verhindert ohne Zustimmung die DB (RV001); die Seite zeigt dann den Weg zur Zustimmung.
+  const path = `/${locale}/account/messages/${id}`;
+  const user = await requireSessionUser(locale, path);
+  const [t, format, info, query, legal] = await Promise.all([
+    getTranslations("Chat"), getFormatter(), conversationInfo(id), props.searchParams, getLegalStatus(),
+  ]);
 
   if (!info) {
     return (
@@ -124,7 +130,12 @@ export default async function ConversationPage(props: Props) {
       </div>
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
 
-      {info.can_write ? (
+      {info.can_write && legal && !legal.accepted ? (
+        <p className="mt-6 rounded border border-stone-400 p-3" role="status">
+          {t("legalRequired")}{" "}
+          <a href={`/${locale}/welcome?next=${encodeURIComponent(path)}`} className="underline">{t("legalLink")}</a>
+        </p>
+      ) : info.can_write ? (
         <Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} owner={info.role === "owner"} />
       ) : (
         <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-stone-400 p-3">

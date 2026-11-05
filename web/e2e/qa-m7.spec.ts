@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { admin, deleteTestUsers, local } from "./cleanup";
 import { createAccount, createPublicListing, signInAs, type TestAccount } from "./session";
 
-// QA M7 Abnahme (docs/QA-REPORT.md „M7 – Abnahme“): Proben über die Web-App. Bekannte Fehler als test.fail mit
+// QA M7 Abnahme (docs/QA-REPORT.md „M7 – Abnahme“): Proben über die Web-App. F1–F3 behoben (normale Tests); bekannte Fehler sonst als test.fail mit
 // Fund-Nummer. Konten auf @test.local, am Ende gelöscht.
 
 const created: string[] = [];
@@ -290,7 +290,7 @@ test.describe("QA M7: Web-Proben", () => {
     await context.close();
   });
 
-  test.fail("F2: Zähler außerhalb des Chats wird beim Fokus neu gelesen (A13)", async ({ browser }) => {
+  test("F2 (behoben): Zähler außerhalb des Chats wird beim Fokus neu gelesen (A13)", async ({ browser }) => {
     const context = await browser.newContext();
     await signInAs(context, interested);
     const page = await context.newPage();
@@ -326,7 +326,7 @@ test.describe("QA M7: Web-Proben", () => {
     }
   });
 
-  test.fail("F1: Ohne aktuelle Zustimmung: Unterhaltung öffnen und blockieren (ADR 017: ohne Legal-Gate)", async ({ page }) => {
+  test("F1 (behoben): Ohne aktuelle Zustimmung: Unterhaltung öffnen und blockieren (ADR 017: ohne Legal-Gate)", async ({ page }) => {
     // Neue Version der Rechtstexte simuliert: Zustimmungen dieses Testkontos entfernen
     const backup = (await admin().from("legal_acceptances").select("*").eq("user_id", owner.id)).data ?? [];
     await admin().from("legal_acceptances").delete().eq("user_id", owner.id);
@@ -349,16 +349,18 @@ test.describe("QA M7: Web-Proben", () => {
     await admin().from("legal_acceptances").delete().eq("user_id", owner.id);
     try {
       await signInAs(page.context(), owner);
-      // Ist-Verhalten zu F1: Die Unterhaltung (mit „Blockieren“) führt ohne Zustimmung zum Onboarding
+      // F1 behoben: Die Unterhaltung bleibt erreichbar, statt der Eingabe der Weg zur Zustimmung
       await page.goto(`/de/account/messages/${evilConversation}`);
-      await expect(page).toHaveURL(/\/de\/welcome\?next=/);
+      expect(new URL(page.url()).pathname).toBe(`/de/account/messages/${evilConversation}`);
+      await expect(page.getByText(/stimme bitte zuerst den aktuellen Nutzungsbedingungen zu/)).toBeVisible();
+      await expect(page.getByLabel("Deine Nachricht")).toHaveCount(0);
       await page.goto(`/de/account/messages/${evilConversation}/report?message=${evilMessage}`);
       expect(new URL(page.url()).pathname).toBe(`/de/account/messages/${evilConversation}/report`);
       await page.locator('input[name="reason"]').first().check();
       await page.getByRole("button", { name: "Meldung senden" }).click();
-      // Nach dem Melden leitet die Action auf die Unterhaltung, die ohne Zustimmung zum Onboarding führt (die
-      // Bestätigung „Danke …“ erscheint dann nicht, siehe F1)
-      await expect(page).toHaveURL(/\/de\/welcome\?next=/);
+      // F1 behoben: zurück in die Unterhaltung mit Bestätigung
+      await expect(page).toHaveURL(/notice=reported/);
+      await expect(page.getByText("Danke. Deine Meldung ist bei der Moderation eingegangen.")).toBeVisible();
       await expect.poll(async () => (await admin().from("reports").select("id", { count: "exact", head: true }).eq("target_id", evilMessage)).count).toBe(1);
       await page.goto("/de/account/blocked");
       expect(new URL(page.url()).pathname).toBe("/de/account/blocked");
@@ -400,7 +402,7 @@ test.describe("QA M7: Web-Proben", () => {
     await context.close();
   });
 
-  test.fail("F3: Nach Abmelden oder Verlassen des Chats bleibt die WebSocket offen (A13, ADR 017 removeAllChannels)", async ({ browser }) => {
+  test("F3 (behoben): Nach Abmelden oder Verlassen des Chats schließt die WebSocket (A13)", async ({ browser }) => {
     // Abmelden widerruft die Sitzung: eigenes Konto, damit die übrigen Proben angemeldet bleiben.
     const leaver = await createAccount("qa7w-leave", "Lea Abmeldung", created);
     const own = (await leaver.client.rpc("start_conversation", { p_listing_id: listing, p_body: "Abmeldetest" })).data as string;

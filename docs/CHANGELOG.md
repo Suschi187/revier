@@ -34,6 +34,7 @@ Plan `docs/plans/M7-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 017, S
 - Abmelden per Klick aus der Mail (RFC 8058): M8–M10. Bis dahin in den Profileinstellungen.
 - Mail-Anbieter für die Cloud (HTTP-API, EU): M10. Lokal und in der CI über Mailpit.
 - Spam-Erkennung über gleiche Texte: M9/M10.
+- Ohne JavaScript geht beim Senden ein Entwurf verloren, wenn die Nachricht ungültig ist oder ein Limit greift (Fehlercode in der URL, nie der Text; Next.js 16.4, ADR 017).
 - Profilseite ohne JavaScript: Ihre Abschnitte (auch die neue Einstellung „E-Mail bei neuen Nachrichten“) erscheinen nur mit JavaScript, weil die Seite seit M2 per Suspense streamt. Für M10 (Barrierefreiheit) vorgemerkt.
 
 ### Cloud-Checkliste (neu)

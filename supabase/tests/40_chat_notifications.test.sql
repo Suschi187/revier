@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(19);
+select plan(21);
 
 -- M7 Benachrichtigung (ADR 017, Review B2, A6): fällig nach 2 Minuten, nur Nachrichten seit der letzten Mail,
 -- je Empfänger höchstens eine Mail in 15 Minuten, Rücksetzen nach Fehler (höchstens 3 Versuche), Ausnahmen.
@@ -99,6 +99,12 @@ select release_chat_notifications(:'secret', array[:'o'::uuid]);
 select tests.claimed(claim_chat_notifications(:'secret'), :'o');
 select release_chat_notifications(:'secret', array[:'o'::uuid]);
 select is(tests.claimed(claim_chat_notifications(:'secret'), :'o'), 0, 'Nach dem 3. Fehlschlag aufgegeben (at-most-once)');
+
+-- 5b. Erfolg setzt die Versuche zurück (QA M7 F4); confirm nur mit Geheimnis
+select throws_ok(format($$ select confirm_chat_notifications('falsch', array[%L::uuid]) $$, :'o'), '42501', null, 'confirm ohne Geheimnis: 42501');
+update private.chat_notifications set attempts = 2 where recipient_id = :'o';
+select confirm_chat_notifications(:'secret', array[:'o'::uuid]);
+select is((select max(attempts) from private.chat_notifications where recipient_id = :'o'), 0, 'confirm setzt attempts auf 0');
 
 -- 6. Ausnahmen: gelesen, abgemeldet, Sperre, gesperrter Absender
 select tests.authenticate_as(:'o');

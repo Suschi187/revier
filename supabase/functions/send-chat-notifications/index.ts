@@ -1,6 +1,7 @@
 // Edge Function send-chat-notifications (ADR 017, Review B2, A6, A7): von pg_cron jede Minute per pg_net aufgerufen.
 // Prüft das Geheimnis im Header über die RPC (claim_chat_notifications vergleicht es mit dem Vault), holt fällige
-// Empfänger, versendet je Empfänger eine Mail und gibt bei einem erkannten Fehler den Claim frei.
+// Empfänger, versendet je Empfänger eine Mail, gibt bei einem erkannten Fehler den Claim frei und meldet Erfolge
+// zurück (confirm_chat_notifications setzt die Versuche auf 0).
 // verify_jwt = false: Der Aufruf kommt aus der Datenbank ohne Nutzer-JWT. Nur POST.
 // Logs nur Zahlen: keine Adressen, keine Namen, keine Titel, kein Nachrichtentext.
 import { createClient } from "@supabase/supabase-js";
@@ -39,14 +40,14 @@ export async function handle(request: Request, mailer: Mailer | null, siteUrl: s
   }
   const claims = (data ?? []) as Claim[];
   const failed: string[] = [];
-  let sent = 0;
+  const delivered: string[] = [];
   for (const claim of claims) {
     if (!claim.email || !claim.conversations?.length) continue;
     const lang = language(claim.language);
     const mail = composeMail(lang, siteUrl, claim.conversations);
     try {
       await mailer.send({ to: claim.email, ...mail });
-      sent++;
+      delivered.push(claim.recipient_id);
     } catch {
       failed.push(claim.recipient_id);
     }
@@ -54,6 +55,11 @@ export async function handle(request: Request, mailer: Mailer | null, siteUrl: s
   if (failed.length) {
     await admin.rpc("release_chat_notifications", { p_secret: secret, p_recipients: failed });
   }
+  // Erfolg setzt die Versuche zurück (QA M7 F4): Ein früherer Fehlschlag kürzt sonst die Versuche späterer Mails.
+  if (delivered.length) {
+    await admin.rpc("confirm_chat_notifications", { p_secret: secret, p_recipients: delivered });
+  }
+  const sent = delivered.length;
   log("done", { recipients: claims.length, sent, failed: failed.length });
   return Response.json({ recipients: claims.length, sent, failed: failed.length });
 }
