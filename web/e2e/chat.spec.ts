@@ -105,7 +105,7 @@ test.describe("Chat (M7)", () => {
     await page.getByLabel("Deine Nachricht").fill(payload);
     await page.getByRole("button", { name: "Senden" }).click();
     await expect(page.getByRole("log").getByText(payload)).toBeVisible();
-    await expect(page.locator('ol[role="log"] img')).toHaveCount(0);
+    await expect(page.locator('[role="log"] img')).toHaveCount(0);
     expect(dialogs).toEqual([]);
   });
 

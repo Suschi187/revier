@@ -99,7 +99,9 @@ export default async function ConversationPage(props: Props) {
         </Link>
       )}
 
-      <ol role="log" aria-label={t("conversation.messagesLabel")} className="mt-4 grid gap-3">
+      {/* Log-Rolle am Container: auf der Liste selbst nähme sie den Einträgen die Listen-Semantik (axe listitem). */}
+      <div role="log" aria-label={t("conversation.messagesLabel")} className="mt-4">
+      <ol className="grid grid-cols-[minmax(0,1fr)] gap-3">
         {(page?.items ?? []).map((message, index, all) => (
           <li
             key={message.id}
@@ -119,6 +121,7 @@ export default async function ConversationPage(props: Props) {
           </li>
         ))}
       </ol>
+      </div>
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
 
       {info.can_write ? (

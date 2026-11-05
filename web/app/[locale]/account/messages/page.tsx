@@ -32,7 +32,7 @@ export default async function MessagesPage(props: Props) {
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
       {page && page.items.length === 0 && <p className="mt-4">{t("empty")}</p>}
       {page && page.items.length > 0 && (
-        <ul className="mt-6 grid gap-3">
+        <ul className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-3">
           {page.items.map((item) => (
             <li key={item.id}>
               <Link

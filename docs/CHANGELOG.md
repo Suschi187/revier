@@ -2,9 +2,31 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
-## M7 Chat (Web) – in Arbeit
+## M7 Chat (Web) – 2026-11-05
 
 Plan `docs/plans/M7-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 017, SPEC v0.9.
+
+### Geändert
+- **Schreibwege nur per RPC:** `start_conversation`, `send_message`, `mark_conversation_read` (Definer, feste Prüfreihenfolge: angemeldet, aktiv, `RV001`, `22023 body`, `RV002`, dann `42501`). Keine Unterhaltung ohne Nachricht. `recipient_id` vom Server, `read_at` nur `null → now()`.
+- **Textregeln:** getrimmt, CRLF → LF, keine Steuer- und Bidi-Zeichen, 1–2000 Zeichen; Zod gleich der DB (Fixture `chat_rules.json`).
+- **Rate-Limits (`RV002` mit `scope`):** 10 neue Unterhaltungen je 24 h (neue Konten 3), 30 Nachrichten je 10 min (15), 5 ohne Antwort.
+- **Lesen per RPC:** Liste mit Keyset, Kopf, Nachrichten vor und nach einer Grenze, Ungelesen-Zähler; Gegenüber mit Rückfall, wenn gesperrt oder gelöscht.
+- **Realtime:** privater Broadcast-Kanal `user:<uuid>` ohne Inhalte; nur unter `/account/messages`. Die Seite lädt bei Ereignissen ihren Serverstand neu (keine Lücke), im verborgenen Tab erst beim Sichtbarwerden.
+- **Web:** „Nachricht schreiben“ aus dem Detail (Login-Rücksprung mit der Anzeigen-ID im Pfad), Unterhaltungsliste, Chat-Ansicht, Zähler in der Navigation, Senden mit und ohne JavaScript, Nonce-CSP für die Chat-Routen, Sicherheitshinweise.
+- **Blockieren und Melden:** aus der Unterhaltung, auch ohne Zustimmung und für gesperrte Konten; Liste blockierter Personen; Melden fremder Nachrichten und des Profils, mit privater Kopie gemeldeter Nachrichten.
+- **Hinweise vor dem Senden (SPEC 7.8):** Kontaktdaten für alle, genaue Lage nur für den Besitzer; Senden bleibt möglich.
+- **E-Mail-Benachrichtigung:** pg_cron und Edge Function `send-chat-notifications`, nur Nachrichten seit der letzten Mail, je Empfänger höchstens alle 15 Minuten, kein Nachrichtentext, Sprache des Empfängers, Abmeldung im Profil.
+
+### Testen
+- `supabase db reset && supabase test db` (pgTAP 06, 36–40 für den Chat)
+- `cd web && npm test` (Textregeln, Kontakthinweise), `INTEGRATION_REQUIRED=1 npm run test:integration` (RPCs, Realtime mit zwei Clients, Textregeln gegen die RPC, Mail über Mailpit)
+- `npm run test:e2e` (`chat.spec.ts`, `chat-realtime.spec.ts` = Akzeptanz a, `chat-block.spec.ts` = Akzeptanz b, `chat-a11y.spec.ts`)
+- Edge Function: `deno task check && deno lint && deno task test` in `supabase/functions/send-chat-notifications` (wie in der CI per Docker)
+- Von Hand: zwei Browser (einer privat), zwei Konten. Konto A öffnet eine Anzeige von B und schreibt; B sieht die Nachricht ohne Neuladen, der Zähler steigt. B blockiert A im Menü „Aktionen“; A kann nicht mehr schreiben.
+
+### Akzeptanz (SPEC 6 M7)
+- a) Zwei Browser-Sitzungen tauschen Nachrichten in Echtzeit: erfüllt (`chat-realtime.spec.ts`, in beide Richtungen, mit „Gelesen“).
+- b) Ein blockierter Nutzer kann nicht mehr schreiben: erfüllt (`chat-block.spec.ts`, in beide Richtungen, auch per API; pgTAP 06/36).
 
 ### Bekannte Lücken
 - **iOS:** Chat und Push folgen in I5, auf denselben RPCs, Kanälen und Fixtures (ADR 017).

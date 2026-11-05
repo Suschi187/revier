@@ -1,6 +1,6 @@
 # ADR 017: Chat im Web
 
-Status: angenommen (M7, Plan `docs/plans/M7-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-11-05)
+Status: angenommen und umgesetzt (M7, Plan `docs/plans/M7-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-11-05; Umsetzung 2026-11-05, CHANGELOG M7)
 
 ## Kontext
 SPEC 6 M7: Unterhaltung pro Anzeige, Realtime, Ungelesen-Zähler, E-Mail-Benachrichtigung mit Drosselung, Blockieren und Melden im Chat.
