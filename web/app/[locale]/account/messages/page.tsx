@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import { ChatLive } from "@/components/chat/ChatLive";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { counterpartName } from "@/lib/chat/names";
@@ -18,13 +19,14 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
 
 export default async function MessagesPage(props: Props) {
   const locale = (await getLocale()) as AppLocale;
-  await requireOnboardedUser(locale, `/${locale}/account/messages`);
+  const user = await requireOnboardedUser(locale, `/${locale}/account/messages`);
   const query = await props.searchParams;
   const cursor = typeof query.cursor === "string" && query.cursor.length <= 200 ? query.cursor : undefined;
   const [t, format, page] = await Promise.all([getTranslations("Chat"), getFormatter(), listConversations(cursor)]);
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <ChatLive userId={user.id} />
       <Link href="/account" className="underline">{t("back")}</Link>
       <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}

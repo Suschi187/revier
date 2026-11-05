@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import { ChatLive } from "@/components/chat/ChatLive";
 import { Composer } from "@/components/chat/Composer";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -25,7 +26,7 @@ const BEFORE = /^(\d{4}-\d{2}-\d{2}T[\d:.]+(?:Z|[+-]\d{2}:\d{2}))\|([0-9a-f-]{36
 export default async function ConversationPage(props: Props) {
   const locale = (await getLocale()) as AppLocale;
   const { id } = await props.params;
-  await requireOnboardedUser(locale, `/${locale}/account/messages/${id}`);
+  const user = await requireOnboardedUser(locale, `/${locale}/account/messages/${id}`);
   const [t, format, info, query] = await Promise.all([getTranslations("Chat"), getFormatter(), conversationInfo(id), props.searchParams]);
 
   if (!info) {
@@ -47,6 +48,7 @@ export default async function ConversationPage(props: Props) {
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <ChatLive userId={user.id} conversationId={id} />
       <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
       <header className="mt-4">
         <h1 className="text-3xl font-semibold [overflow-wrap:anywhere]">{name}</h1>
