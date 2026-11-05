@@ -1557,3 +1557,119 @@ Vorschlag: nach dem Neuzeichnen den Fokus auf den ersten Marker bzw. Cluster an 
 F1–F7 und die beiden Hinweise (416, > 300 Marker) sind **behoben**. Beim Nachladen gibt es keine Regression: keine Schleife, keine überzähligen Abrufe, kein Rennen, Fokus an Marker und Kurzkarte bleibt erhalten. Die Guard-Änderung F7 ist eng: Sie erlaubt dem Moderator nur das Entfernen des Punkts. M6 ist **abnahmereif**.
 - Vor I3/M8: **N1** (Filtervertrag für JSON-Filter), **N4** (Tastatur, A8).
 - Zusammen mit M9: **N2**, **N3**.
+
+## M7 – Abnahme 2026-11-05
+
+Geprüfter Stand: `c0d750f` (main, Arbeitsbaum sauber). Grundlagen: SPEC v0.9 (3.1, 3.4, 6 M7, 7.3/7.8/7.11), Plan M7 mit Architekt-Review (10/11), ADR 017 (verbindlich), ADR 008/013/014/015/016, CHANGELOG „M7 Chat (Web)“, CLAUDE.md. Umgebung: macOS, Node 24, Supabase-CLI v3 lokal (ohne `db reset`, das Nutzerkonto blieb unberührt), Playwright gegen `next dev` (von Playwright gestartet, kein Dev-Server lief vorher), Mailpit.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| CI `web` für `c0d750f` (Run 42027748898) | grün: check, secret-guard, e2e (Integration 204/204, Playwright 158 bestanden, 2 übersprungen) |
+| CI `supabase` (letzter Lauf mit DB-Änderung, `d68631a`, Run 42027206619) | grün: pgTAP 41 Dateien, 947 Tests, PASS; Deno check/lint/test für beide Functions. `c0d750f` ändert nichts unter `supabase/` |
+| `npm run lint`, `npm run typecheck` | grün (auch mit den neuen Proben) |
+| Vitest | 28 Dateien, 512/512 |
+| pgTAP lokal (mit Probe 41) | 42 Dateien, 989 Tests; fehlgeschlagen nur die erwarteten lokalen Fälle 07 (25, 27), 22 (32), 23 (21, 22, 25), die eine leere DB voraussetzen. Probe `41_qa_m7_abnahme`: 57 Tests, davon 1 TODO (F4) |
+| Integration lokal (mit Probe) | 18 Dateien, 229 bestanden, 1 erwartet fehlgeschlagen (`it.fails`, Hinweis H2); Probe `qa-m7.test.ts`: 25 + 1 |
+| Playwright lokal: `chat`, `chat-block`, `chat-realtime`, `chat-a11y`, `qa-m7` | 40/40 bestanden, davon 3 `test.fail` (F1, F2, F3) als erwartet fehlgeschlagen; Probe `qa-m7.spec.ts`: 19 Tests |
+| Ganzer Weg Cron → pg_net → Kong → Function → Mailpit | Vault-URL `http://kong:8000/functions/v1/send-chat-notifications` kurz gesetzt (14:07), Testpaar per SQL, Nachricht 5 min zurückdatiert. Lauf 13:08 UTC: `{"recipients":1,"sent":1}`, Mail auf Polnisch (Sprache des Empfängers), Betreff fest, kein Nachrichtentext, `Auto-Submitted`, Links auf `/pl/account/messages/<id>` und Profil. Lauf 13:09: `recipients 0`, keine zweite Mail. URL danach gelöscht, Testkonten gelöscht |
+
+Aufgeräumt: keine Konten auf `@test.local`, keine Unterhaltungen, keine Vault-URL; Chat-Grenzen in `app_settings` wieder auf den Seed-Werten.
+
+### Ergebnis je Akzeptanzkriterium
+
+| # | Kriterium | Ergebnis | Nachweis |
+|---|---|---|---|
+| a | Zwei Browser-Sitzungen tauschen Nachrichten in Echtzeit | **erfüllt** | `chat-realtime.spec.ts` (beide Richtungen, „Gelesen“, Liste und Zähler ohne Neuladen, verborgener Tab). Probe: ein Ereignis ergibt höchstens 3 RSC-Abrufe und keine Schleife; nach einer erzwungenen Trennung (routeWebSocket, Wiederverbinden blockiert, in der Lücke gesendet) erscheint die verpasste Nachricht nach dem erneuten `SUBSCRIBED` ohne Neuladen; ein einmal gescheiterter Abruf erholt sich. Realtime-Angriffe ohne Erfolg (siehe Sicherheit) |
+| b | Ein blockierter Nutzer kann nicht mehr schreiben | **erfüllt** | `chat-block.spec.ts`, pgTAP 06/36/39. Probe: Die blockierte Person kann die Sperre weder per `unblock_in_conversation` noch per `DELETE` auf `blocks` aufheben, schreibt weder per `send_message` noch per `start_conversation` (bestehende und neue Anzeige des Blockierenden), sieht keine Zeile in `blocks` und ein leeres `my_blocks()`. Blockieren und Aufheben auch ohne JavaScript und nur mit der Tastatur |
+
+### Status der Architekt-Auflagen
+
+| Auflage | Status | Bemerkung |
+|---|---|---|
+| B1 Definer-RPCs, feste Prüfreihenfolge, `is_server_caller` | erfüllt | Reihenfolge geprüft: gesperrt ohne Zustimmung → `42501` vor `RV001`; Text null → `22023 body`; Rate-Limit vor der Teilnahme mit gleichem `retry_after` für fremde und unbekannte IDs (kein Orakel) |
+| B2 Drosselung, Claim/Release | erfüllt mit Fund | Nur neue Nachrichten, 15 min je Empfänger, Abmeldung (auch ohne frühere Mail, also nicht von der Grenze verdeckt), gesperrte und gelöschte Empfänger, Titel nur öffentlich/Besitzer, Claim ohne Text. F4: `attempts` wird nach Erfolg nicht zurückgesetzt |
+| B3 Realtime in der CI | erfüllt | Beide Workflows starten Realtime; pgTAP 38 und Integration laufen in der CI |
+| A1 nur `send_message`, keine direkten Grants | erfüllt | INSERT/UPDATE/DELETE auf `messages`, INSERT/UPDATE/Upsert auf `conversations`, INSERT auf `blocks` scheitern (pgTAP und PostgREST) |
+| A2 Rücksprung über `new/<id>` | erfüllt | Login-`next` behält den Pfad (307), auch über `/welcome?next=…` zurück in die Eingabe |
+| A3 404/410, gleiche „nicht gefunden“-Seite | erfüllt | 410 mit `noindex`/`no-store` für einmal öffentliche Anzeigen, 404 für unbekannte, Großbuchstaben-IDs, `new` ohne ID und unbekannte Unterpfade. Fremd = unbekannt (gleiche Seite, `no-store`); ungültige IDs ergeben 404 vom Proxy (syntaktisch, kein Orakel) |
+| A4 Realtime-Vertrag | erfüllt | Kein Text im Kanal; Nutzlast nur IDs (dazu `id` von `realtime.send`, `reader_id` bei `message.read`, siehe F5). Keine Presence, kein Client-Broadcast (privat abgelehnt), öffentliche Kanäle gleichen Topics, anon und REST-Broadcast (`202`, verworfen) erreichen den privaten Kanal nicht; Topic exakt verglichen |
+| A5 Lücke nach dem Wiederverbinden | erfüllt, anders umgesetzt | Statt `conversation_messages(p_after_*)` lädt die Seite per `router.refresh()` neu. Funktional belegt (Probe), ADR nicht angepasst (F5) |
+| A6 Cron/pg_net/Geheimnis | erfüllt | Ohne URL kein Aufruf (pgTAP über `net.http_request_queue`), mit URL genau ein POST mit Header. Function: GET/PUT 405, ohne, falsches oder Nutzer-JWT 401 ohne Details; `claim`/`release` nur `service_role` und nur mit Geheimnis |
+| A7 Mailer, keine Injektion | erfüllt | CRLF und `Bcc:` im Anzeigenamen landen nur im Text (Base64), keine Bcc, ein Empfänger, ein Betreff; HTML im Titel bleibt Text, keine HTML-Mail |
+| A8 Rate-Limits mit `scope`, Sperre je Nutzer | erfüllt | Parallel: 10 gleichzeitige Nachrichten bei Grenze 3 ohne Antwort ergeben genau 3, 9 gleichzeitige neue Unterhaltungen bei Grenze 4 ergeben genau 4; alle übrigen `RV002` mit passendem `scope` |
+| A9 Textregeln Zod = DB | erfüllt mit Hinweis | 15 weitere Fälle gleich (U+2028/2029, ZWSP, U+180E, BOM, U+001C, LRM/RLM, ALM, VT/FF außen, ZWJ-Emoji 2000/2005 Codepoints, NBSP innen). Abweichungen nur in Randfällen (H1, H2) |
+| A10 Zustand des Gegenübers | erfüllt | pgTAP 36/37 und Probe |
+| A11 Kopie gemeldeter Nachrichten | erfüllt | Kopie mit Text, Absender, Unterhaltung; überdauert die Löschung von Absender (pgTAP 39) und Melder (`reporter_id → null`); keine Rechte für anon, authenticated und service_role. Melden nur fremder Nachrichten der eigenen Unterhaltung, fremde = unbekannt |
+| A12 XSS, Nonce-CSP | erfüllt | Nonce-CSP, `noindex` und `private, no-store` auf allen Chat-Routen inkl. Melden und „nicht gefunden“. XSS in Anzeigename, Anzeigentitel, Nachricht und Meldenotiz bleibt Text auf Liste, Chat, Melden, Neu und Blockiert; `error`/`notice` aus der URL werden nicht gespiegelt |
+| A13 Realtime nur im Chat | teilweise | Öffentliche Seiten öffnen keine WebSocket. Fehlt: Zähler bei Fokus neu lesen (F2); die WebSocket bleibt nach Abmelden/Verlassen des Chats offen (F3) |
+| A14 Doku, Schema-Vertrag | erfüllt mit Fund | SPEC v0.9 3.1, ADR 008, Meta-Allowlist, Typen, Spaltengrant. ADR 017 bei zwei Abweichungen nicht nachgezogen (F5) |
+| H1–H13 | erfüllt bzw. wie vereinbart offen | H1 Sperre auf „Kontakt beginnen“ erkennbar, aber mit gleichem Fehlertext wie ein Entwurf; H4/H11/H12 offen laut CHANGELOG; H8 „Gelesen“ als Text, Zähler-`aria-label` „Nachrichten, 1 ungelesen“ geprüft; H9 Text nie in URLs (auch der Fehlerpfad ohne JavaScript) |
+
+### Definition of Done
+
+| Punkt | Ergebnis |
+|---|---|
+| Lint, Typecheck, Build | erfüllt (CI baut den Produktions-Build) |
+| Tests grün | erfüllt (CI; lokal nur die bekannten Fälle einer nicht leeren DB) |
+| Texte in 4 Sprachen | erfüllt: `Chat` hat in de/en/cs/pl je 84 Schlüssel, keine Lücke, Pluralformen für cs/pl vollständig; Mailtexte in 4 Sprachen (Deno-Test, Mail auf Polnisch geprüft); Begriffe wie im Glossar (cs/pl ungeprüft markiert) |
+| Web/iOS-Lücke | im CHANGELOG vermerkt (I5) |
+| RLS für neue Tabellen | erfüllt (`private.chat_notifications`, `private.reported_message_snapshots`: RLS an, keine Policy, keine Grants) |
+| CHANGELOG mit Testanleitung | erfüllt; die Anleitung „Lokal von Hand: Chat-Mails“ wurde nachvollzogen und funktioniert |
+| UGC-Pflichten | Melden und Blockieren vorhanden; ohne aktuelle Zustimmung ist Blockieren im Web nicht erreichbar (F1) |
+
+### Funde
+
+**F1 – mittel: Blockieren ohne aktuelle Zustimmung nicht erreichbar.**
+ADR 017 und CHANGELOG sagen „Melden und Blockieren … auch ohne Zustimmung und für gesperrte Konten“. Die RPCs erlauben das, aber der einzige Weg zum Blockieren ist die Chat-Ansicht, und die ruft `requireOnboardedUser` auf.
+- Reproduktion: Konto mit Unterhaltung, Zustimmungen entfernen (simuliert eine neue Version der Rechtstexte), `/de/account/messages/<id>` öffnen → 307 auf `/de/welcome?next=…`. Kein „Person blockieren“.
+- Melden per Direktlink (`…/<id>/report?message=…`) geht und speichert die Meldung, danach leitet die Action auf die Unterhaltung und damit ebenfalls zum Onboarding. Die Bestätigung erscheint nicht.
+- Verschärfung: Ein gesperrtes Konto kann einer neuen Version nicht zustimmen (Onboarding meldet „Dein Konto ist gesperrt“). Nach einem Update der Rechtstexte erreicht es den Chat also gar nicht mehr.
+- Proben: `e2e/qa-m7.spec.ts` „F1“ (`test.fail`) und „Ohne aktuelle Zustimmung: Melden per Direktlink …“.
+- Vorschlag: Chat-Ansicht (und Liste) nur mit `requireSessionUser`. Dort ohne Zustimmung den Hinweis plus Link zum Onboarding statt der Eingabe zeigen. Das Schreiben verhindert ohnehin `RV001`.
+
+**F2 – niedrig: Zähler außerhalb des Chats wird nicht bei Fokus neu gelesen (A13, ADR 017 „liest ihn bei Fokus neu“).**
+- Reproduktion: angemeldet auf `/de` stehen, Gegenüber schreibt, Tab fokussieren bzw. `visibilitychange` → `aria-label` bleibt beim alten Stand bis zur nächsten Navigation.
+- Probe: `test.fail` „F2“.
+- Vorschlag: kleine Client-Komponente, die bei `visibilitychange`/`focus` `router.refresh()` auslöst (gedrosselt), oder die Abweichung in ADR 017 festhalten.
+
+**F3 – niedrig: WebSocket bleibt nach Abmelden und nach dem Verlassen des Chats offen (A13, ADR 017 „Beim Abmelden `removeAllChannels()`“).**
+- Der Kanal wird verlassen (`phx_leave` belegt).
+- Die Verbindung des Browser-Clients bleibt aber mit Heartbeats offen, auch nach dem Abmelden auf öffentlichen Seiten. Das kostet Verbindungskontingent (Grenze gleichzeitiger Verbindungen, M10).
+- Reproduktion: Chat öffnen, „Abmelden“ → die WebSocket zu `/realtime/v1/websocket` schließt nicht (40 s beobachtet).
+- Probe: `test.fail` „F3“.
+- Vorschlag: im Cleanup von `useChatLive` nach `removeChannel` `client.realtime.disconnect()` aufrufen, wenn keine Kanäle mehr bestehen; beim Abmelden zusätzlich `removeAllChannels()`.
+
+**F4 – niedrig: `attempts` wird nach erfolgreichem Versand nicht zurückgesetzt.**
+- `claim_chat_notifications` setzt nur `last_sent_at`/`previous_sent_at`, `release` zählt hoch und setzt erst nach dem 3. Fehlschlag auf 0. Ein früherer Fehlschlag kürzt daher die drei Versuche einer späteren Mail.
+- Reproduktion (pgTAP 41, TODO): Fenster 1 mit Fehlschlag und Erfolg, Fenster 2 mit neuer Nachricht und zwei Fehlschlägen → kein dritter Versuch (`have 0, want 1`).
+- Vorschlag: im Claim `attempts = 0` setzen, wenn `last_sent_at` vor dem Claim älter als das Release-Fenster ist (also eine neue Mail beginnt), oder `attempts` beim Claim mit sichern und erst beim Release erhöhen.
+
+**F5 – niedrig (Doku): ADR 017 beschreibt zwei umgesetzte Abweichungen nicht.**
+- (1) Ohne JavaScript geht der Entwurf bei einem Fehler verloren: Redirect mit Code statt Formularzustand, wegen Next.js 16.4. Das steht nur im Kommentar in `actions.ts`, ADR Zeile 136 sagt noch „der Entwurf bleibt im Formular“, das CHANGELOG nennt die Lücke nicht.
+- (2) Die Lücke nach dem Wiederverbinden schließt `router.refresh()` statt `conversation_messages(p_after_*)` (ADR Zeile 74). Für iOS (I5) bleibt der ADR-Weg der Vertrag.
+- Dazu: `message.read` trägt zusätzlich `reader_id`, und `realtime.send` fügt `id` hinzu. Beides ist harmlos, gehört aber in den Ereignisvertrag für iOS.
+- Vorschlag: ADR 017 und CHANGELOG „Bekannte Lücken“ ergänzen.
+
+### Hinweise
+
+- **H1 (iOS):** NUL im Text ergibt über PostgREST `22P05` („unsupported Unicode escape sequence“) statt `22023 body`. Das Web lehnt vorher per Zod ab. I5 sollte NUL selbst ablehnen oder `22P05` wie `body` abbilden; der Fall gehört in `chat_rules.json`.
+- **H2:** Zod begrenzt vor der Prüfung auf 8000 UTF-16-Einheiten. Mehr als 8000 Leerzeichen außen plus ein Zeichen lehnt Zod ab, die DB nimmt den Text an (`it.fails` in `qa-m7.test.ts`). Ohne praktische Folge, nur der Vollständigkeit halber.
+- **H3:** `profiles.display_name` lässt Steuer- und Bidi-Zeichen zu (nur `btrim`-Länge). Die Mail bereinigt sie, im Chat-Kopf und in der Liste kann ein RLO aber Namen optisch verdrehen. Vorschlag: dieselbe Zeichenregel wie für Nachrichten (seit M2 offen).
+- **H4:** Klartext-Mails enthalten den Anzeigenamen. Ein Name mit URL wird in Mailprogrammen klickbar (Phishing-Fläche). Für M10 erwägen: Namen kürzen bzw. URLs im Namen ablehnen.
+- **H5:** Die erste Server-Darstellung der Unterhaltung markiert immer als gelesen, auch wenn sie in einem Hintergrund-Tab geöffnet wird (z. B. Mittelklick aus der Mail). Die Realtime-Regel „verborgener Tab markiert nicht“ gilt nur für spätere Ereignisse.
+- **H6:** Der SMTP-Client hat kein eigenes Timeout. Ein hängender Server hält die Function bis zum `pg_net`-Timeout (20 s), und die beanspruchten Mails sind verloren (at-most-once, so gewollt). Für den HTTP-Adapter in M10 ein Timeout vorsehen.
+- **H7:** Die Detailseite ist beim „Nachricht schreiben“-Link personalisiert (Text „Nachricht schreiben“ bzw. „Anbieter kontaktieren (Anmeldung nötig)“, beim Besitzer „Das ist deine Anzeige.“). Das kommt aus M5, und `href` bleibt statisch. Geprüft: Der anonyme Abruf danach zeigt weder Namen, Zähler noch den Besitzerhinweis und setzt kein Cookie.
+- **H8:** In Chromium trennt `context.setOffline` bestehende WebSockets nicht. Tests für das Wiederverbinden brauchen `page.routeWebSocket` (so in der Probe).
+- **H9:** Lokal antwortet der REST-Broadcast an private Kanäle mit `202` und verwirft die Nachricht. In der Cloud „nur private Kanäle“ setzen, wie in der Checkliste vermerkt.
+
+### Proben (neu)
+
+- `supabase/tests/41_qa_m7_abnahme.test.sql` (57 Tests, 1 TODO F4): Eingaben und Prüfreihenfolge, Orakel mit vollem Fehlertext über alle Chat-RPCs, Rate-Limit vor der Teilnahme, direkte Schreibwege, Entsperren durch die blockierte Person, `realtime.messages` (Presence, Client-Insert, Topic-Schreibweise, anon, Nutzlast-Schlüssel), Melden und Kopie, Benachrichtigung (Abmeldung, gesperrt, gelöscht, Titel, Release, F4), Cron/pg_net.
+- `web/integration/qa-m7.test.ts` (25 + 1 `it.fails`): Realtime-Angriffe (öffentlicher Kanal, anon, Client-Broadcast, REST-Broadcast, Presence), Orakel per PostgREST, Embeddings, Upsert, parallele Rate-Limits (setzt Grenzen kurz und stellt sie wieder her), Edge Function (Methoden, Geheimnis, Header-Injektion), weitere Textregeln.
+- `web/e2e/qa-m7.spec.ts` (19, davon 3 `test.fail` F1–F3): Header, Proxy-Status, Detail-Cache, XSS, ohne JavaScript, Tastatur, Realtime (Schleife, Wiederverbinden, gescheiterter Abruf, Abmelden), gesperrtes Konto, ohne Zustimmung, Onboarding-Rücksprung.
+
+### Empfehlung
+
+**Abnahme von M7 mit Auflage.** Beide Akzeptanzkriterien sind erfüllt. Datenbank, RLS, Realtime und Benachrichtigung hielten allen Angriffen stand: kein Orakel, kein Text in Kanal oder Mail, Rate-Limits auch bei parallelen Requests, kein Weg zu fremden Daten. F1 vor M9 (Account-Löschung und Meldungs-Warteschlange) oder spätestens vor der ersten neuen Version der Rechtstexte beheben, weil Blockieren eine App-Store- und DSA-Pflicht ist. F2–F5 können gesammelt nachgezogen werden, F5 vor I5.
