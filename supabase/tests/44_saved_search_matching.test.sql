@@ -319,7 +319,7 @@ $$;
 
 -- Allowlist (A5)
 select is((select array_agg(k order by k) from jsonb_object_keys(tests.mail('m8m-ok@test.local')) k),
-  array['claim_id', 'email', 'items', 'language', 'searches'], 'Antwort je Empfänger: genau diese Schlüssel');
+  array['claim_id', 'email', 'items', 'language', 'searches', 'unsubscribe_token'], 'Antwort je Empfänger: genau diese Schlüssel');
 select is((select array_agg(distinct k order by k) from tests.claims c, jsonb_array_elements(c.e -> 'items') i, jsonb_object_keys(i) k),
   array['currency', 'direction', 'district_code', 'district_name', 'kind', 'listing_id', 'price_minor', 'price_unit',
         'state_code', 'state_name', 'title'],

@@ -650,6 +650,9 @@ isOneToOne: false
 "claim_chat_notifications":
 { Args: { "p_limit"?: number,"p_secret": string }; Returns: Json
                            },
+"claim_moderation_notifications":
+{ Args: { "p_limit"?: number,"p_secret": string }; Returns: Json
+                           },
 "claim_photo_processing":
 { Args: { "p_photo_id": string,"p_user_id": string }; Returns: {
               "state": string,"storage_path": string,"thumb_path": string,"upload_path": string
@@ -663,6 +666,9 @@ isOneToOne: false
                            },
 "confirm_chat_notifications":
 { Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
+                           },
+"confirm_moderation_notifications":
+{ Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
                            },
 "confirm_search_notifications":
 { Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
@@ -771,6 +777,9 @@ isOneToOne: false
 "release_chat_notifications":
 { Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
                            },
+"release_moderation_notifications":
+{ Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
+                           },
 "release_search_notifications":
 { Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
                            },
@@ -820,6 +829,9 @@ isOneToOne: false
                            },
 "unread_count":
 { Args: Record<PropertyKey, never>; Returns: number
+                           },
+"unsubscribe":
+{ Args: { "p_token": string }; Returns: undefined
                            }
           }
           Enums: {

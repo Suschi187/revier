@@ -36,7 +36,8 @@ select is(
         'admin_role_rules', 'block_in_conversation', 'conversation_info', 'conversation_messages', 'extend_saved_search',
         'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'mark_conversation_read', 'moderate_listing', 'my_blocks', 'my_conversations', 'my_favorites', 'pause_saved_search', 'provider_listings',
         'public_cache_epoch', 'public_page_state', 'region_geo', 'register_device', 'remove_unavailable_favorites', 'reorder_listing_photos',
-        'resume_saved_search', 'revoke_admin', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'unblock_in_conversation', 'unread_count']::text[],
+        'resume_saved_search', 'revoke_admin', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'unblock_in_conversation', 'unread_count',
+        'unsubscribe']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );
 
