@@ -34,6 +34,7 @@ export const STATIC_SECTIONS = [
   "missing",
   "privacy",
   "terms",
+  "unsubscribe",
   "welcome",
 ] as const;
 
@@ -52,6 +53,7 @@ export const STATIC_ROUTES: Record<(typeof STATIC_SECTIONS)[number], readonly st
   missing: [""],
   privacy: [""],
   terms: [""],
+  unsubscribe: [""],
   welcome: [""],
 };
 

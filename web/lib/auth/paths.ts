@@ -45,6 +45,13 @@ export function newChatListingId(pathname: string): string | null {
   return NEW_CHAT_RE.exec(pathname)?.[2] ?? null;
 }
 
+const UNSUBSCRIBE_RE = new RegExp(`^/(${LOCALE_GROUP})/unsubscribe$`);
+
+/** Abbestell-Seite (ADR 018, Review A6): Token in der Query, daher noindex, no-referrer und no-store als Header. */
+export function isUnsubscribePath(pathname: string): boolean {
+  return UNSUBSCRIBE_RE.test(pathname);
+}
+
 /** Admin-Bereich (ADR 014): Proxy prüft die Rolle, setzt die Nonce-CSP und antwortet sonst mit 403. */
 export function isAdminPath(pathname: string): boolean {
   return ADMIN_RE.test(pathname);

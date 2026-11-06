@@ -945,5 +945,16 @@
       "loadFailed": "Deine Suchaufträge konnten nicht geladen werden. Bitte später erneut versuchen.",
       "invalidFilters": "Die Filter dieses Suchauftrags sind nicht mehr gültig. Bitte speichere die Suche neu."
     }
+  },
+  "Unsubscribe": {
+    "metaTitle": "Abbestellen",
+    "title": "E-Mails abbestellen",
+    "intro": "Bestätige, um die E-Mails zu diesem Link abzubestellen: bei Suchaufträgen die Suchaufträge aus dieser E-Mail, beim Chat die E-Mails zu neuen Nachrichten.",
+    "submit": "Abbestellen",
+    "missing": "Dieser Link ist unvollständig. Bitte öffne den Link aus der E-Mail erneut.",
+    "done": "Erledigt. Wenn der Link gültig war, bekommst du diese E-Mails nicht mehr.",
+    "settings": "Deine E-Mail-Einstellungen kannst du jederzeit im Konto ändern:",
+    "searches": "Suchaufträge",
+    "profile": "Chat-E-Mails im Profil"
   }
 }

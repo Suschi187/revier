@@ -31,6 +31,10 @@ describe("Mail-Links = Web-Routen", () => {
     expect(parsePath(path)).toEqual({ type: "public", locale, page: { route: "listing", id: links.listing_id } });
   });
 
+  it("Abbestell-Seite und Konto-Seite der Suchaufträge sind Web-Routen (M8)", () => {
+    expect(links.static_paths).toEqual(expect.arrayContaining(["account/searches", "unsubscribe"]));
+  });
+
   it.each(links.static_paths)("statische Seite %s in allen Sprachen", (pattern) => {
     for (const locale of ["en", "de", "cs", "pl"] as const) {
       const path = `/${locale}/${pattern.replace(":id", links.listing_id)}`;
@@ -38,8 +42,8 @@ describe("Mail-Links = Web-Routen", () => {
     }
   });
 
-  // Kommen mit M8 Commit 6 (account/searches) und Commit 7 (unsubscribe); dann nach static_paths verschieben.
-  it.each(links.pending_static_paths)("vorgemerkt: %s ist noch keine Web-Route", (pattern) => {
+  // In Mails verlinkt, im Web noch nicht vorhanden (seit M8 Commit 7 leer); kommen sie ins Web, nach static_paths verschieben.
+  it.each(links.pending_static_paths as string[])("vorgemerkt: %s ist noch keine Web-Route", (pattern) => {
     expect(parsePath(`/de/${pattern}`).type).toBe("unknown");
   });
 });

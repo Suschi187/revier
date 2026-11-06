@@ -945,5 +945,16 @@
       "loadFailed": "Nie udało się wczytać zapisanych wyszukiwań. Spróbuj ponownie później.",
       "invalidFilters": "Filtry tego zapisanego wyszukiwania nie są już ważne. Zapisz wyszukiwanie ponownie."
     }
+  },
+  "Unsubscribe": {
+    "metaTitle": "Wypisz się",
+    "title": "Wypisz się z e-maili",
+    "intro": "Potwierdź, aby wypisać się z e-maili, do których należy ten link: przy zapisanych wyszukiwaniach z wyszukiwań z tego e-maila, przy czacie z e-maili o nowych wiadomościach.",
+    "submit": "Wypisz się",
+    "missing": "Ten link jest niekompletny. Otwórz ponownie link z e-maila.",
+    "done": "Gotowe. Jeśli link był ważny, nie będziesz już dostawać tych e-maili.",
+    "settings": "Ustawienia e-maili możesz w każdej chwili zmienić na swoim koncie:",
+    "searches": "Zapisane wyszukiwania",
+    "profile": "E-maile z czatu w profilu"
   }
 }

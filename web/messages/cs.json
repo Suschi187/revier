@@ -945,5 +945,16 @@
       "loadFailed": "Vaše uložená hledání se nepodařilo načíst. Zkuste to prosím později.",
       "invalidFilters": "Filtry tohoto uloženého hledání již nejsou platné. Uložte prosím hledání znovu."
     }
+  },
+  "Unsubscribe": {
+    "metaTitle": "Odhlásit odběr",
+    "title": "Odhlásit odběr e-mailů",
+    "intro": "Potvrďte odhlášení e-mailů, ke kterým patří tento odkaz: u uložených hledání hledání z tohoto e-mailu, u chatu e-maily o nových zprávách.",
+    "submit": "Odhlásit odběr",
+    "missing": "Tento odkaz je neúplný. Otevřete prosím znovu odkaz z e-mailu.",
+    "done": "Hotovo. Pokud byl odkaz platný, tyto e-maily už nebudete dostávat.",
+    "settings": "Nastavení e-mailů můžete kdykoli změnit ve svém účtu:",
+    "searches": "Uložená hledání",
+    "profile": "E-maily z chatu v profilu"
   }
 }

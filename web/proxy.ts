@@ -1,7 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
-import { canonicalPath, isAdminPath, isChatPath, isProtectedPath, localeFromPath, newChatListingId } from "./lib/auth/paths";
+import { canonicalPath, isAdminPath, isChatPath, isProtectedPath, isUnsubscribePath, localeFromPath, newChatListingId } from "./lib/auth/paths";
 import { goneHtml } from "./lib/public/gone-page";
 import { fetchPageState, isDocumentRequest } from "./lib/public/page-state";
 import { hasFilterQuery, parsePath } from "./lib/public/paths";
@@ -130,6 +130,12 @@ function withNonceCsp(request: NextRequest, respond: () => NextResponse): NextRe
 export default async function proxy(request: NextRequest) {
   const response = await handle(request);
   if (!siteIndexable()) response.headers.set("X-Robots-Tag", "noindex");
+  // Abbestell-Seite (ADR 018, Review A6): Token in der Query nie per Referer weitergeben, nie cachen oder indexieren.
+  if (isUnsubscribePath(request.nextUrl.pathname)) {
+    response.headers.set("X-Robots-Tag", "noindex");
+    response.headers.set("Referrer-Policy", "no-referrer");
+    response.headers.set("Cache-Control", "private, no-store");
+  }
   return response;
 }
 

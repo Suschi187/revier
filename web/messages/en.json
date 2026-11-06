@@ -945,5 +945,16 @@
       "loadFailed": "Your saved searches could not be loaded. Please try again later.",
       "invalidFilters": "The filters of this saved search are no longer valid. Please save the search again."
     }
+  },
+  "Unsubscribe": {
+    "metaTitle": "Unsubscribe",
+    "title": "Unsubscribe from emails",
+    "intro": "Confirm to stop the emails this link belongs to: for saved searches, the searches in that email; for the chat, the emails about new messages.",
+    "submit": "Unsubscribe",
+    "missing": "This link is incomplete. Please open the link from the email again.",
+    "done": "Done. If the link was valid, you will no longer receive these emails.",
+    "settings": "You can change your email settings at any time in your account:",
+    "searches": "Saved searches",
+    "profile": "Chat emails in your profile"
   }
 }
