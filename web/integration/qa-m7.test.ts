@@ -247,7 +247,9 @@ describe.skipIf(!f)("QA M7: Edge Function send-chat-notifications", () => {
     const none = await fetch(endpoint(), { method: "POST" });
     expect(none.status).toBe(401);
     expect(await none.json()).toEqual({ error: "unauthorized" });
-    const wrong = await fetch(endpoint(), { method: "POST", headers: { "x-chat-notify-secret": `${secret.slice(0, -1)}0` } });
+    // Letztes Zeichen sicher ändern (endet das Geheimnis auf „0“, war „…0“ kein falsches Geheimnis)
+    const wrongSecret = `${secret.slice(0, -1)}${secret.endsWith("0") ? "1" : "0"}`;
+    const wrong = await fetch(endpoint(), { method: "POST", headers: { "x-chat-notify-secret": wrongSecret } });
     expect(wrong.status).toBe(401);
     // Mit Bearer-Token eines Nutzers statt Geheimnis ebenso 401 (verify_jwt = false, das JWT zählt nicht)
     const user = await fetch(endpoint(), { method: "POST", headers: { Authorization: `Bearer ${fx.users.a.token}` } });
