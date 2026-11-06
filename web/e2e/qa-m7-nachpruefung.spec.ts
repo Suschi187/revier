@@ -68,7 +68,7 @@ test.describe("QA M7 Nachprüfung", () => {
     await page.goto(`/de/account/messages/${conversation}`);
     await expect(page.getByLabel("Deine Nachricht")).toBeVisible();
     // Erst nach dem Abo und dessen Refresh die Zustimmung entfernen: Ein späterer Refresh zeigte sonst schon den Hinweis
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(500);
     const before = await messageCount(conversation);
@@ -182,7 +182,7 @@ test.describe("QA M7 Nachprüfung", () => {
     await signInAs(page.context(), interested);
     await withoutConsent(interested, async () => {
       await page.goto(`/de/account/messages/${conversation}`);
-      await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+      await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
       await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Live ohne Zustimmung" });
       await expect(page.getByRole("log").getByText("Live ohne Zustimmung")).toBeVisible({ timeout: 10_000 });
     });
@@ -254,7 +254,7 @@ test.describe("QA M7 Nachprüfung", () => {
   test("F2: Unter /account/messages kein Abruf durch UnreadRefresh", async ({ page }) => {
     await signInAs(page.context(), interested);
     await page.goto("/de/account/messages");
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(500);
     const rsc = countRsc(page);
@@ -328,7 +328,7 @@ test.describe("QA M7 Nachprüfung", () => {
     await signInAs(page.context(), interested);
     const ws = trackSockets(page);
     await page.goto(`/de/account/messages/${conversation}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.getByRole("link", { name: "Nachprüfung Pacht" }).click();
     await expect(page).toHaveURL(new RegExp(`/de/anzeige/${listing}`));
     // Der Titel-Link ist ein voller Seitenwechsel: Das alte Dokument endet (Playwright meldet dafür kein close), die
@@ -338,7 +338,7 @@ test.describe("QA M7 Nachprüfung", () => {
     expect(ws.total()).toBe(opened);
     await page.goBack();
     await expect(page).toHaveURL(new RegExp(`/de/account/messages/${conversation}`));
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Nach dem Zurück" });
     await expect(page.getByRole("log").getByText("Nach dem Zurück")).toBeVisible({ timeout: 10_000 });
   });
@@ -347,10 +347,10 @@ test.describe("QA M7 Nachprüfung", () => {
     await signInAs(page.context(), interested);
     const ws = trackSockets(page);
     await page.goto("/de/account/messages");
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.getByRole("link", { name: /Otto Nachprüfung/ }).click();
     await expect(page).toHaveURL(new RegExp(`/de/account/messages/${conversation}`));
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Nach Klick aus der Liste" });
     await expect(page.getByRole("log").getByText("Nach Klick aus der Liste")).toBeVisible({ timeout: 10_000 });
     expect(ws.open()).toBeLessThanOrEqual(1);
@@ -359,14 +359,14 @@ test.describe("QA M7 Nachprüfung", () => {
   test("F3: Unterhaltung → „Alle Nachrichten“ → Unterhaltung: Abo jeweils wieder da", async ({ page }) => {
     await signInAs(page.context(), interested);
     await page.goto(`/de/account/messages/${conversation}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.getByRole("link", { name: "Alle Nachrichten" }).click();
     await expect(page).toHaveURL(/\/de\/account\/messages$/);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "In der Liste live" });
     await expect(page.getByText("In der Liste live")).toBeVisible({ timeout: 10_000 });
     await page.getByRole("link", { name: /Otto Nachprüfung/ }).click();
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Wieder im Chat live" });
     await expect(page.getByRole("log").getByText("Wieder im Chat live")).toBeVisible({ timeout: 10_000 });
   });
@@ -381,7 +381,7 @@ test.describe("QA M7 Nachprüfung", () => {
       await page.getByRole("link", { name: /Otto Nachprüfung/ }).click();
       await expect(page).toHaveURL(new RegExp(`/de/account/messages/${conversation}`));
     }
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Nach dem Hin und Her" });
     await expect(page.getByRole("log").getByText("Nach dem Hin und Her")).toBeVisible({ timeout: 10_000 });
     await expect.poll(ws.open, { timeout: 5_000 }).toBe(1);
@@ -394,7 +394,7 @@ test.describe("QA M7 Nachprüfung", () => {
     const wsA = trackSockets(a);
     for (const page of [a, b]) {
       await page.goto(`/de/account/messages/${conversation}`);
-      await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+      await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     }
     // Client-Navigation aus dem Chat (Link „Alle Nachrichten“ wäre wieder Chat): Konto-Seite über die Kopfzeile
     await a.getByRole("link", { name: "Mein Konto", exact: true }).click();

@@ -201,7 +201,7 @@ test.describe("QA M7: Web-Proben", () => {
     await signInAs(context, owner);
     const page = await context.newPage();
     await page.goto(`/de/account/messages/${conversation}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.waitForTimeout(1500);
     let rsc = 0;
     page.on("request", (request) => {
@@ -234,12 +234,12 @@ test.describe("QA M7: Web-Proben", () => {
       if (!blocked) ws.connectToServer();
     });
     await page.goto(`/de/account/messages/${conversation}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     let loads = 0;
     page.on("load", () => loads++);
     blocked = true;
     for (const c of open.splice(0)) await c.close();
-    await expect(page.locator('[data-realtime="offline"]')).toBeAttached({ timeout: 30_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="offline"]')).toBeAttached({ timeout: 30_000 });
     // Ein Abruf direkt nach dem Abbruch kann noch laufen; erst danach in der Lücke senden.
     await page.waitForTimeout(3000);
     await interested.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Während der Trennung gesendet" });
@@ -258,7 +258,7 @@ test.describe("QA M7: Web-Proben", () => {
     await signInAs(context, owner);
     const page = await context.newPage();
     await page.goto(`/de/account/messages/${conversation}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.waitForTimeout(1500);
     // Genau einen RSC-Abruf scheitern lassen (kurzer Netzfehler, 502 vom Proxy o. Ä.)
     let failed = 0;
@@ -396,7 +396,7 @@ test.describe("QA M7: Web-Proben", () => {
       ws.on("framesent", (frame) => frames.push(String(frame.payload)));
     });
     await page.goto(`/de/account/messages/${own}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.getByRole("button", { name: "Abmelden" }).click();
     await expect(page).toHaveURL(/\/de$/);
     await expect.poll(() => frames.some((f) => f.includes("phx_leave") && f.includes(`user:${leaver.id}`)), { timeout: 10_000 }).toBe(true);
@@ -418,7 +418,7 @@ test.describe("QA M7: Web-Proben", () => {
       ws.on("close", () => (entry.closed = true));
     });
     await page.goto(`/de/account/messages/${own}`);
-    await expect(page.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await page.getByRole("button", { name: "Abmelden" }).click();
     await expect(page).toHaveURL(/\/de$/);
     await expect.poll(() => sockets.length > 0 && sockets.every((s) => s.closed), { timeout: 40_000 }).toBe(true);

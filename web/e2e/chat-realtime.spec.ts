@@ -33,8 +33,8 @@ test.describe("Chat in Echtzeit (M7, Akzeptanz a)", () => {
     const interestedPage = await interestedContext.newPage();
     await ownerPage.goto(`/de/account/messages/${conversation}`);
     await interestedPage.goto(`/de/account/messages/${conversation}`);
-    await expect(ownerPage.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
-    await expect(interestedPage.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(ownerPage.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(interestedPage.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     let ownerLoads = 0;
     ownerPage.on("load", () => ownerLoads++);
 
@@ -60,7 +60,7 @@ test.describe("Chat in Echtzeit (M7, Akzeptanz a)", () => {
     await signInAs(ownerContext, owner);
     const ownerPage = await ownerContext.newPage();
     await ownerPage.goto("/de/account/messages");
-    await expect(ownerPage.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(ownerPage.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     await expect(ownerPage.getByRole("link", { name: /Paul Pächter, 1 ungelesene/ })).toHaveCount(0);
 
     const { error } = await interested.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Noch eine Frage zur Fläche" });
@@ -76,7 +76,7 @@ test.describe("Chat in Echtzeit (M7, Akzeptanz a)", () => {
     await signInAs(ownerContext, owner);
     const ownerPage = await ownerContext.newPage();
     await ownerPage.goto(`/de/account/messages/${conversation}`);
-    await expect(ownerPage.locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
+    await expect(ownerPage.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     // Den Abruf nach dem Abo abwarten, dann verbergen
     await ownerPage.waitForLoadState("networkidle");
     await ownerPage.evaluate(() => {
