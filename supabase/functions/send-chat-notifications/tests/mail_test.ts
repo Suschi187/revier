@@ -38,7 +38,8 @@ Deno.test("Mailtext: Abbestellen über die Bestätigungsseite, nicht über die P
 
 Deno.test("Links der Chat-Mail sind Web-Routen (Fixture)", () => {
   for (const path of ["account/profile", "account/messages/:id"]) assert(fixture.static_paths.includes(path), path);
-  assert(fixture.pending_static_paths.includes("unsubscribe") || fixture.static_paths.includes("unsubscribe"), "unsubscribe");
+  // Seit M8 Commit 7 eine Web-Route; pending_static_paths ist leer (als JSON-Import vom Typ never[]).
+  assert(fixture.static_paths.includes("unsubscribe"), "unsubscribe");
 });
 
 Deno.test("Texte in vier Sprachen vollständig", () => {
