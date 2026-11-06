@@ -1739,3 +1739,118 @@ Aufgeräumt: keine Konten auf `@test.local`, keine Unterhaltungen, keine Vault-U
 ### Empfehlung
 
 F1–F4 sind **behoben**, F5 bis auf die Doku-Reste in N2. Die Lockerung aus F1 öffnet keinen Schreibweg ohne Zustimmung: UI, Action (mit und ohne JavaScript) und RPC sind gesperrt, `new/<id>` verlangt die Zustimmung weiter. Blockieren und Melden sind jetzt auch für gesperrte Konten ohne aktuelle Zustimmung erreichbar. F2 erzeugt keine Refresh-Stürme, personalisiert keine gecachten Seiten und verliert keine Eingaben. F3 baut das Abo bei jedem Wiederbetreten neu auf. Die **Auflage der Abnahme ist erfüllt, M7 ist abnahmereif.** N1 vor dem Cloud-Rollout der Function (M10) beheben, N2 vor I5.
+
+## M8 – Abnahme 2026-11-06
+
+Geprüfter Stand: `910d2a9` (main, Arbeitsbaum sauber bis auf die neuen Proben). Grundlagen: SPEC v0.10 (3.1, 6 M8), Plan M8 mit Architekt-Review (10, 11: B1–B4, A1–A14, H1–H8), ADR 018 (dazu Nachträge ADR 008/014/017), CHANGELOG „M8 Suchaufträge (Web)“, CLAUDE.md, Commits `00440fa`…`910d2a9` seit `bd5f911`. Umgebung: macOS, Node 24, Supabase-CLI lokal (alle Migrationen angewendet, kein `db reset`, Nutzerdaten unberührt), Edge Runtime bedient `send-search-notifications`, Deno 2.1.4 per Docker (Digest wie CI), Playwright gegen `next dev` (selbst gestartet, Port 3000 war frei), Produktions-Build zusätzlich mit `next start -p 3100`, Mailpit.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (mit den Proben) |
+| Vitest | 33 Dateien, **647/647** |
+| `supabase test db` | 47 Dateien, **1281** Tests. Fehlgeschlagen nur die erwarteten lokalen Fälle 07 (25, 27), 22 (32), 23 (21, 22, 25). Neu `46_qa_m8_abnahme`: 57 Tests, davon **1 TODO (F1)** |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 21 Dateien, **251 bestanden, 1 erwartet fehlgeschlagen** (`it.fails` H2 aus M7). Web-Server lief, also auch der One-Click-Zweig von `saved-searches.test.ts`. Neu `qa-m8.test.ts`: 6/6 |
+| `npm run test:e2e` (Dev, alle Specs) | **223 bestanden** (10,2 min), davon 1 `test.fail` (F2). Neu `qa-m8.spec.ts`: 9 |
+| Deno (Docker, wie `.github/workflows/supabase.yml`) | `process-listing-photo` 24/24, `send-chat-notifications` 4/4, `send-search-notifications` mit `_shared/mail` 23/23; `deno task check`, `deno lint` (auch `../_shared/mail`) grün |
+| `supabase db lint -s public,private --level warning --fail-on warning` | keine Befunde; `database.types.ts` aktuell (`gen types` ohne Diff) |
+| Produktions-Build | grün; Header geprüft (siehe A6, F2) |
+| Ganzer Weg Cron → pg_net → Kong → Function → Mailpit | Vault-URL kurz gesetzt (22:56–23:01 UTC). Auftrag (Empfänger cs), danach Anzeige über den Server-Pfad: Treffer `due_at` = Freigabe + 120 s, Mail nach 163 s, Betreff tschechisch, `List-Unsubscribe` = POST-URL, `List-Unsubscribe-Post`, `Auto-Submitted`, Text nur Titel, Region, Link `/cs/inzerat/<id>`, Verwalten, Abbestellseite. Zwei weitere Läufe: keine zweite Mail. URL danach gelöscht |
+
+Aufgeräumt: keine Konten auf `@test.local`, alle M8-Tabellen leer, keine `search_notifications_url` im Vault, `app_settings` auf den Werten vor der Prüfung. Die Anzeige „Jagdpacht“ und die beiden Konten des Nutzers sind unverändert.
+
+### Akzeptanz (SPEC 6 M8)
+
+| Kriterium | Ergebnis | Nachweis |
+|---|---|---|
+| Eine neue passende Anzeige löst genau eine E-Mail aus | **erfüllt** (technisch: höchstens eine, im Normalfall genau eine, ADR 018) | Integration `saved-searches.test.ts` (Freigabe durch zweiten Admin, erneute Prüfung, erneute Freigabe, zwei Aufträge gleichen und gemischten Takts, parallele Läufe, Release). Proben: 6 parallele Claims per PostgREST sind disjunkt und nennen jeden Empfänger höchstens einmal; nach dem Release aller Claims und 4 parallelen Function-Läufen bekommt jeder der 4 Empfänger genau 1 Mail, weitere Läufe nichts. Ein Release aus einem alten Lauf setzt den Zustand eines neueren nicht zurück. Cron-Weg wie oben |
+
+### Prüfmatrix Blocker und Auflagen
+
+| Punkt | Status | Fundstelle / Nachweis |
+|---|---|---|
+| B1 Entdopplung je (Empfänger, Anzeige) | erfüllt | `private.saved_search_deliveries` (PK `user_id, listing_id`), Claim in `20261108120000` (Insert `on conflict`, übrige `duplicate`); „sofort“ vor „täglich“. pgTAP 44, Integration, Probe 46 (Abschnitt 10) |
+| B2 Buchführung mit `claim_id` | erfüllt mit Fund **F1** | `search_notification_claims`, Zustand beim Claim, `for update skip locked`, Confirm/Release nur per `claim_id`, 3 Versuche. Probe: Release aus Lauf 1 nach Lauf 2 lässt `last_sent_at` von Lauf 2 stehen, Lauf 3 liefert nur die freigegebene Anzeige; Confirm/Release mit `null` und `{}` → 0. F1: Kalendertag der Tagesmail |
+| B3 Robustheit | erfüllt | Trigger `saved_searches_b_filters` (`search_filters_error` und Probelauf `search_conditions`), Ausnahmeblock je Filter in `process_search_match_queue` (`20261108110200`). Probe: Typfehler in `bbox` und `verified_only` werden gezählt (2), der Lauf geht weiter, unbekannte Art fällt im Vorfilter weg |
+| B4 RFC 8058 | erfüllt mit Fund **F2** | Header-URL = POST-URL (Integration, Cron-Mail), POST ohne Cookies 200 ohne Redirect mit `no-store`, gleicher Body für gültig/ungültig, Token aus Query vor Formular, `multipart/form-data`, GET 303 auf `/{lang}/unsubscribe` (Accept-Language). Probe: mit Sitzungs-Cookie und fremdem `Origin` ebenso kein `Set-Cookie`; 20 KB Body wird verworfen, der Token aus der Query gilt. Ziel nur die Aufträge der Mail (`target_ids`) |
+| A1 eine Wahrheit (`search_conditions`) | erfüllt | Abgleich hängt nur `l.id = any($5)` an, Werte per `USING`. pgTAP 44 (22 Filter) und Probe 46 mit 17 Randfällen gegen `search_listings` **als anon über alle Seiten**: Phrase und Ausschluss, `or`, NFD-Umlaut, nur `date_from`/nur `date_to`, Gesellschaftsjagd am Stichtag und am Folgetag, Preisgrenzen inklusiv, `per_day` in EUR gegen „auf Anfrage“ und CZK, Fläche genau, Bundesland, mehrere Wildarten, `verified_only: false`, Gesuche in AT, Kartenausschnitt mit dem Punkt auf der Kante (beide Ecken) und daneben. Alle gleich. Preis ohne Währung lässt sich nicht speichern (`22023 currency`), wie in der Suche |
+| A2 Trigger | erfüllt mit Hinweis H2 | `listings_search_match_insert/_update` mit `WHEN`, `listings_moderation_notify` (Definer, `after update of status`, `is_admin()` und nicht Besitzer). `moderate_listing` erzeugt genau einen Queue-Eintrag (pgTAP 44). Reiner SQL-Pfad ohne Admin-JWT erzeugt keine Moderations-Mail (CHANGELOG „Bekannte Lücken“) |
+| A3 erneute Prüfung beim Claim | erfüllt | Claim prüft Konto, bestätigte Adresse, Auftrag (pausiert, abgelaufen, E-Mail), Anzeige öffentlich und fremd, Sperre beidseitig (pgTAP 44) |
+| A4 Abgleich begrenzt | erfüllt | Budget `search_match_batch`, Vorfilter `kind/direction/country`, eine Ausführung je Filter, nicht öffentliche bis 24 h. Messung im CHANGELOG (nicht nachgemessen) |
+| A5 Allowlist | erfüllt | Schlüssel exakt (pgTAP 44/45). Probe: Claim ohne Schlüssel für Ort, PLZ, Kartenpunkt, Anbieter, Beschreibung, und weder Ortsname, PLZ noch Koordinate als Wert. Betreff fest je Sprache, keine Links außer Detail, Konto und Abbestellen |
+| A6 Abbestellseite und Logs | erfüllt mit Fund **F2** | Prod-Build: `/de/unsubscribe` mit `private, no-store`, `no-referrer`, `X-Robots-Tag: noindex`, Meta-`noindex` (die Lücke „im Prod-Build prüfen“ ist damit geschlossen). Probe: Token verlässt die Seite nur im Formular-POST (kein Prefetch, kein `Referer`, keine anderen Header), nur eigener Host; gleiche Seite für gültigen und ungültigen Token (kein DB-Orakel beim GET). Logs: Function nur Zähler (Edge-Logs ohne Adressen und Token), `next start` loggt keine Pfade, `next dev` loggt Token (bekannt) |
+| A7 Rechte am Suchauftrag | erfüllt, Doku-Rest **F3** | Grants exakt (insert `name, filters, cadence, notify_email`, update ohne `filters`), Guard über `is_server_caller`. Probe: selbst gesetztes Flag `revier.saved_search_rpc` öffnet keine Server-Spalte (42501) und umgeht `RV001` nicht; 10 parallele Inserts bei 20 Aufträgen → genau 25, 5 × `23514` mit Hinweis; pause/resume/extend mit fremder ID in jedem Zustand (fern, im Fenster, pausiert, abgelaufen, E-Mail aus) = unbekannte ID in Code, Text, Hinweis und Detail, auch ohne Zustimmung und gesperrt, auch über PostgREST; Update/Delete fremd = unbekannt (0 Zeilen) |
+| A8 Moderations-Mails | erfüllt | Ohne `List-Unsubscribe`, an gesperrte, nicht an gelöschte Besitzer, Grund als Label plus Freitext bereinigt, kein Admin (Name der Moderatorin nicht in der Mail, Integration), Platzhalter „[Vorläufiger Hinweis]“ mit Impressum, Freigabe ohne Begründung |
+| A9 Retention und Löschung | teilweise (**F3**, H3) | Cron-Jobs `search-notifications-retention`, `saved-searches-retention`. Probe: Token 89 Tage bleiben, 91 weg; Moderations-Mails 29 Tage nach Versand bleiben, 31 Tage und nie verarbeitete weg; Anzeige löschen entfernt Queue, Treffer, Entdopplung, Moderations-Mails; Konto löschen entfernt Treffer, Entdopplung, Claims, Zustand, Token. Nicht umgesetzt: Hinweis „M9-Datenexport nennt Suchaufträge samt Treffern“ |
+| A10 Vault, Header, `verify_jwt` | erfüllt | `search_notifications_secret` (64 hex), keine URL, kein JWT im Vault, `x-search-notify-secret`, `verify_jwt = false`, GET 405, falsches Geheimnis 401 |
+| A11 Testbarkeit | erfüllt | kein `p_now`, Zeit über Daten, Pflichtfälle in `saved-searches.test.ts`; One-Click in der CI über E2E |
+| A12 Bestandszeilen | erfüllt (Code) | `do`-Block in `20261108100000`; lokal keine Altzeilen, nicht nachstellbar |
+| A13 Links und Preise | erfüllt | Fixtures `mail_links`, `mail_labels`, `price_format` in Deno und Vitest; Probe: alle Links der Mail in de/en/cs/pl führen auf existierende Seiten (Detail 200, Konto 307 zum Login, Abbestellseite 200) |
+| A14 Doku | teilweise (**F3**) | ADR 018, SPEC 3.1 v0.10, ADR 017-Nachtrag, ADR 014 (`RV006`), CHANGELOG mit iOS-Lücke (I6) vorhanden; Fehlercodes nicht vollständig im ADR |
+| H1 Kartenausschnitt | umgesetzt | Hinweis im Formular, „Ergebnisse ansehen“ öffnet die Karte; Randfälle siehe A1, Hinweis H1 |
+| H2 Durchsatz am Morgen | offen | keine eigene Batch-Einstellung für `daily` (optional) |
+| H3 DKIM | in der Cloud-Checkliste | |
+| H4 Pausieren | umgesetzt | „Pausiert, läuft trotzdem am … ab“, Verlängern aus der Pause (pgTAP 43, E2E) |
+| H5 Glossar | umgesetzt | Begriffe in Glossar und Messages gleich, cs/pl „ungeprüft“ |
+| H6 Datenschutzerklärung | offen laut CHANGELOG (M9) | |
+| H7 Verzögerung „sofort“ | umgesetzt | 2 min, im Cron-Weg gemessen |
+| H8 getrennte Schritte | umgesetzt | ein Aufruf, zwei Schritte mit eigenen Zählern und Logs (`kind`), Fehler im Such-Claim hält Moderation nicht auf |
+
+### Definition of Done
+
+| Punkt | Ergebnis |
+|---|---|
+| Lint, Typecheck, Build | erfüllt (Dev und Produktions-Build) |
+| Tests grün | erfüllt (lokal nur die bekannten Fälle einer nicht leeren DB) |
+| Texte in 4 Sprachen | erfüllt: `SavedSearches` je 72, `Unsubscribe` je 9 Schlüssel, insgesamt 750 Schlüssel ohne Lücke; keine rohen Schlüssel oder Platzhalter auf Konto-, Abbestell- und Bestätigungsseite in en/cs/pl (Probe); Mailtexte in 4 Sprachen (Deno, Cron-Mail auf Tschechisch); cs/pl ungeprüft markiert |
+| Web/iOS-Lücke | im CHANGELOG vermerkt (I6: dieselben RPCs, Takt, Entdopplung) |
+| RLS für neue Tabellen | erfüllt: 7 neue Tabellen in `private` mit RLS, ohne Policy, ohne Rechte für anon, authenticated, service_role; keine Realtime-Publikation |
+| CHANGELOG mit Testanleitung | erfüllt; „Lokal von Hand: Suchauftrags-Mails“ nachvollzogen (ohne `stop/start`, die Function lief bereits) |
+| UGC-Pflichten | unverändert vorhanden; die Konto-Seite verlangt nur die Anmeldung (Pausieren, E-Mail aus, Löschen ohne Zustimmung) |
+
+### Funde
+
+**F1 – niedrig: `last_daily_on` wird vor der Entdopplung bestimmt.**
+`claim_search_notifications` (`20261108120000`) setzt `has_daily` vor dem Update auf `outcome = 'duplicate'`. Sind alle täglichen Treffer der Mail doppelt, enthält die Mail keinen täglichen Treffer, trotzdem gilt der Kalendertag als verbraucht (Tabellenkommentar: „Kalendertag der letzten Mail mit täglichen Treffern“).
+- Reproduktion (pgTAP 46, TODO Test 57): Sofort- und Tagesauftrag einer Person treffen Anzeige X; vor der Stunde geht X mit der Sofort-Mail. Ab der Stunde kommt eine neue Sofort-Anzeige Y, der tägliche Treffer zu X ist doppelt. Die Mail enthält nur Y, `last_daily_on` ist trotzdem heute (`have 2026-11-06, want NULL`).
+- Folge: Ein täglicher Treffer, der später am selben Tag fällig wird, geht erst am nächsten Tag. Keine verlorene oder doppelte Mail.
+- Vorschlag: `has_daily` nach dem Duplikat-Update berechnen (eine Zeile verschieben).
+
+**F2 – niedrig: `next.config.ts` überschreibt die Header der Abbestell-Route.**
+Die Route setzt `Referrer-Policy: no-referrer` und eine eigene CSP ohne Skripte und Formulare (`DONE_CSP`). `headers()` in `next.config.ts` (Quelle „alles außer /admin“) setzt auf `/api/unsubscribe` dagegen `Referrer-Policy: strict-origin-when-cross-origin` und die allgemeine CSP (`script-src 'self' 'unsafe-inline'`, `form-action 'self'`). Dev und Prod-Build verhalten sich gleich.
+- Reproduktion: `curl -s -D - -o /dev/null -X POST -H 'Content-Type: application/x-www-form-urlencoded' --data 'List-Unsubscribe=One-Click' 'http://localhost:3100/api/unsubscribe?t=<64 hex>'`; ebenso `GET` (303). Probe: `e2e/qa-m8.spec.ts` „F2“ (`test.fail`).
+- Folge: Öffnet ein Browser die Header-URL per POST, steht der Token in der Adresse der Bestätigung. Die Links dort (Konto, Impressum, Datenschutz) senden ihn als `Referer` an den eigenen Server, also in dessen Access-Logs. Fremde Hosts bekommen nur den Ursprung. Die Verteidigung in der Tiefe der eigenen CSP fehlt; die Seite enthält aber kein Skript, Ausgaben sind escaped.
+- Vorschlag: `/api/unsubscribe` aus der allgemeinen Quelle ausnehmen oder dahinter einen eigenen Eintrag mit `no-referrer` und `DONE_CSP` setzen. Die E2E-Probe prüft dann beide Header.
+
+**F3 – niedrig (Doku): Reste aus A7, A9, A14.**
+- ADR 018 nennt nur `RV001` und `RV006`. Es fehlen `42501` (fremd, unbekannt, Konto nicht aktiv, gleicher Text), `22023` mit `hint` (Filterschlüssel, `q` = Suchbegriff zu lang) und `23514` mit `hint {"reason":"saved_searches_limit"}`. A7 verlangt sie im ADR, iOS (I6) braucht die Abbildung.
+- A9: Der Satz „M9-Datenexport nennt Suchaufträge samt Treffern“ fehlt in ADR 008, ADR 018 und CHANGELOG.
+- CHANGELOG „Bekannte Lücken“: „Im Dev-Modus … `no-store` … Im Prod-Build prüfen“ ist geprüft (`private, no-store`) und kann entfallen.
+- Vorschlag: Fehlercode-Tabelle in ADR 018 ergänzen, Export-Hinweis in ADR 008 (M9), Lücke streichen.
+
+### Hinweise (keine Fehler)
+
+- **H1:** `&&` vergleicht float4-Boxen. Ein Punkt bis etwa 1e-6° außerhalb des Kartenausschnitts zählt als innen, in Suche, Karte und Abgleich gleich. Die Probe nutzt deshalb 0,001° als „daneben“.
+- **H2:** Moderations-Mails entstehen nur mit Admin-JWT (`is_admin()`). Der Pflichtfall „per SQL `removed`“ (A11) ist mit Admin-Claims abgedeckt. Ein Pfad als `service_role` oder Cron (M9) braucht eine eigene Bedingung; so im CHANGELOG.
+- **H3:** `purge_search_notifications` löscht jeden Queue-Eintrag nach 24 h, auch eine öffentliche, nur noch nicht abgeglichene Anzeige. ADR 018 sagt „unverarbeitbar nach 24 h“. Ein Rückstau von mehr als 24 h (über 72 000 Freigaben bei 50 je Minute) ist nicht realistisch.
+- **H4 (Cloud, M10):** Ohne Vault-URL schreibt der Trigger weiter Moderations-Mails, die Retention hält sie 30 Tage. Wird die URL in der Cloud erst später gesetzt, gehen im ersten Lauf alle Entscheidungen der letzten 30 Tage als Mail hinaus (die Suchauftrags-Warteschlange verfällt dagegen nach 24 h ohne Treffer). In die Cloud-Checkliste: URL mit dem ersten Deploy setzen oder alte Einträge vorher erledigen.
+- **H5:** Das Statement-Log der lokalen DB (`log_statement = ddl`) enthält eine Claim-Antwort mit Testadressen und einem Token, weil pgTAP 44 sie per psql-Variable in ein `create table … as` einsetzt. Nur Test-Logs, kein Produktionsweg.
+- **H6:** Antwortzeit von `unsubscribe` per PostgREST: Median 1,8 ms (gültig, erstmals) gegen 1,5 ms (ungültig). Kein verwertbares Orakel, zumal der Token 256 Bit hat.
+- **H7:** Ist die Tagesmail fällig, nimmt sie auch Sofort-Treffer innerhalb des 10-Minuten-Abstands mit. Das ergibt eine Mail statt zwei und ist so gewollt.
+
+### Nicht prüfbar
+
+- iOS (I6) und Gleichstand Web/iOS: noch keine App.
+- Cloud: DKIM-Signatur der List-Unsubscribe-Header, Access-Logs des Hosters, HTTP-Mailer, Verhalten echter Mail-Anbieter beim One-Click (M10).
+- Muttersprachliche Prüfung cs/pl (SPEC 7.6), Lastmessung A4 (nicht wiederholt), Migration von Altzeilen A12 (lokal keine).
+
+### Proben (neu)
+
+- `supabase/tests/46_qa_m8_abnahme.test.sql` (57, 1 TODO F1): RLS/Rechte der 7 Tabellen und der Spalten, Ausführungsrechte der RPCs, Definer mit `search_path`, Realtime, Vault; Orakel mit vollem Fehlertext über alle Zustände und Konten; RPC-Flag; Äquivalenz an 17 Randfällen als anon über alle Seiten; B3 mit Typfehlern; Allowlist ohne Ort/PLZ/Koordinaten; überlappende Läufe und Release; Löschen zwischen Claim und Confirm; Token (fremde Ziele, gesperrt, ohne Zustimmung, 89/91 Tage); Retention-Grenzen; Kaskaden; F1.
+- `web/integration/qa-m8.test.ts` (6): parallele Claims und Function-Läufe, Limit unter Nebenläufigkeit, Header-Injektion über den Auftragsnamen bis Mailpit (ein Empfänger, kein Bcc, keine Zusatz-Header), Orakel über PostgREST, Antwortzeit von `unsubscribe`, Links der Mail in vier Sprachen gegen den Web-Server.
+- `web/e2e/qa-m8.spec.ts` (9, 1 `test.fail` F2): Token-Abfluss auf der Abbestellseite, gleiche Seite für gültig/ungültig, One-Click mit Cookie und fremdem Origin, Konto-Seite ohne JavaScript (alle Aktionen), nur Tastatur (Speichern, Pausieren), axe und 360 px in en/cs/pl mit Zuständen und auf der Bestätigung.
+
+### Empfehlung
+
+**Abnahme von M8: ja, mit Auflagen.** Die Akzeptanz ist erfüllt: Neue Anzeigen lösen genau eine Mail aus, auch über den echten Cron-Weg, bei parallelen Claims und Läufen, nach Releases und überlappenden Läufen. Rechte, RLS und Orakel hielten allen Proben stand. Abgleich und Suche liefern auch an Randfällen dieselben Anzeigen. Mails enthalten weder Ort, PLZ, Koordinaten noch Kontaktdaten, Logs weder Adressen noch Token. One-Click nach RFC 8058 funktioniert ohne Cookies an der Header-URL. Auflagen: F2 vor dem Cloud-Rollout (M10) beheben, F1 und F3 gesammelt nachziehen, F3 (Fehlercodes) vor I6. H4 in die Cloud-Checkliste.
