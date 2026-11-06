@@ -25,6 +25,7 @@ SPEC 5/6 M4: Admins geben Anzeigen frei, lehnen sie mit Grund ab oder fordern ei
 | `RV003` | bereits entschieden (Status nicht mehr `pending_review`) |
 | `RV004` | Inhalt seit dem Lesen geändert (Version weicht ab) |
 | `RV005` | Step-up nötig (TOTP-Bestätigung älter als 10 Minuten) |
+| `RV006` | Suchauftrag noch nicht verlängerbar (`hint {"extend_from"}`, M8, ADR 018) |
 | `P0002` | Anzeige oder Konto nicht gefunden bzw. nicht sichtbar |
 | `42501` | keine Berechtigung (kein Admin, aal1, eigene Anzeige, Roh-UPDATE) |
 | `23514` | `listing_not_ready` mit Feldcodes (Freigabe) bzw. Regelverstoß (Code fehlt, letzter Admin) |

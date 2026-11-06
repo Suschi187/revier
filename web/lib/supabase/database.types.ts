@@ -531,14 +531,14 @@ isOneToOne: false
                   ]
                 },"saved_searches": {
                   Row: {
-                    "created_at": string,"filters": NonNullable<Json>,"id": string,"last_notified_at": string | null,"name": string,"notify_email": boolean,"notify_push": boolean,"user_id": string
+                    "cadence": Database["public"]['Enums']["saved_search_cadence"],"created_at": string,"expires_at": string,"filters": NonNullable<Json>,"id": string,"last_notified_at": string | null,"name": string,"notify_email": boolean,"notify_push": boolean,"paused_at": string | null,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"filters"?: NonNullable<Json>,"id"?: string,"last_notified_at"?: string | null,"name": string,"notify_email"?: boolean,"notify_push"?: boolean,"user_id"?: string
+                    "cadence"?: Database["public"]['Enums']["saved_search_cadence"],"created_at"?: string,"expires_at"?: string,"filters"?: NonNullable<Json>,"id"?: string,"last_notified_at"?: string | null,"name": string,"notify_email"?: boolean,"notify_push"?: boolean,"paused_at"?: string | null,"user_id"?: string
                   }
                   Update: {
-                    "created_at"?: string,"filters"?: NonNullable<Json>,"id"?: string,"last_notified_at"?: string | null,"name"?: string,"notify_email"?: boolean,"notify_push"?: boolean,"user_id"?: string
+                    "cadence"?: Database["public"]['Enums']["saved_search_cadence"],"created_at"?: string,"expires_at"?: string,"filters"?: NonNullable<Json>,"id"?: string,"last_notified_at"?: string | null,"name"?: string,"notify_email"?: boolean,"notify_push"?: boolean,"paused_at"?: string | null,"user_id"?: string
                   }
                   Relationships: [
                     {
@@ -667,6 +667,26 @@ isOneToOne: false
 "conversation_messages":
 { Args: { "p_after_at"?: string,"p_after_id"?: string,"p_before_at"?: string,"p_before_id"?: string,"p_conversation_id": string,"p_limit"?: number }; Returns: Json
                            },
+"extend_saved_search":
+{ Args: { "p_id": string }; Returns: {
+              "cadence": Database["public"]['Enums']["saved_search_cadence"],
+"created_at": string,
+"expires_at": string,
+"filters": NonNullable<Json>,
+"id": string,
+"last_notified_at": string | null,
+"name": string,
+"notify_email": boolean,
+"notify_push": boolean,
+"paused_at": string | null,
+"user_id": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "saved_searches"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "grant_admin":
 { Args: { "p_user_id": string }; Returns: undefined
                            },
@@ -705,6 +725,26 @@ isOneToOne: false
 "my_favorites":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
+"pause_saved_search":
+{ Args: { "p_id": string }; Returns: {
+              "cadence": Database["public"]['Enums']["saved_search_cadence"],
+"created_at": string,
+"expires_at": string,
+"filters": NonNullable<Json>,
+"id": string,
+"last_notified_at": string | null,
+"name": string,
+"notify_email": boolean,
+"notify_push": boolean,
+"paused_at": string | null,
+"user_id": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "saved_searches"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "provider_listings":
 { Args: { "p_cursor"?: string,"p_limit"?: number,"p_owner": string }; Returns: Json
                            },
@@ -731,6 +771,26 @@ isOneToOne: false
 "reorder_listing_photos":
 { Args: { "p_listing_id": string,"p_photo_ids": (string)[] }; Returns: undefined
                            },
+"resume_saved_search":
+{ Args: { "p_id": string }; Returns: {
+              "cadence": Database["public"]['Enums']["saved_search_cadence"],
+"created_at": string,
+"expires_at": string,
+"filters": NonNullable<Json>,
+"id": string,
+"last_notified_at": string | null,
+"name": string,
+"notify_email": boolean,
+"notify_push": boolean,
+"paused_at": string | null,
+"user_id": string
+            }
+                          SetofOptions: {
+        from: "*"
+        to: "saved_searches"
+        isOneToOne: true
+        isSetofReturn: false
+      } },
 "revoke_admin":
 { Args: { "p_user_id": string }; Returns: undefined
                            },
@@ -754,7 +814,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "account_type": "private"|"business","client_source": "web"|"ios","country_code": "DE"|"AT"|"CH"|"CZ"|"PL","currency_code": "EUR"|"CHF"|"CZK"|"PLN","device_platform": "ios","document_type": "jagdschein"|"jagdkarte"|"revierbescheinigung"|"gewerbe","language_code": "de"|"en"|"cs"|"pl","legal_document": "terms"|"privacy","listing_direction": "offer"|"wanted","listing_kind": "lease"|"permit"|"driven_hunt"|"trophy_hunt"|"helper","listing_status": "draft"|"pending_review"|"active"|"paused"|"expired"|"rejected"|"removed","price_unit": "total"|"per_year"|"per_hectare_year"|"per_day"|"per_animal"|"on_request","region_level": "state"|"district","report_reason": "scam"|"illegal"|"weapons"|"harassment"|"wrong_category"|"other","report_status": "open"|"handled","report_target": "listing"|"message"|"profile","verification_request_status": "pending"|"verified"|"rejected","verification_status": "none"|"pending"|"verified"|"rejected"
+            "account_type": "private"|"business","client_source": "web"|"ios","country_code": "DE"|"AT"|"CH"|"CZ"|"PL","currency_code": "EUR"|"CHF"|"CZK"|"PLN","device_platform": "ios","document_type": "jagdschein"|"jagdkarte"|"revierbescheinigung"|"gewerbe","language_code": "de"|"en"|"cs"|"pl","legal_document": "terms"|"privacy","listing_direction": "offer"|"wanted","listing_kind": "lease"|"permit"|"driven_hunt"|"trophy_hunt"|"helper","listing_status": "draft"|"pending_review"|"active"|"paused"|"expired"|"rejected"|"removed","price_unit": "total"|"per_year"|"per_hectare_year"|"per_day"|"per_animal"|"on_request","region_level": "state"|"district","report_reason": "scam"|"illegal"|"weapons"|"harassment"|"wrong_category"|"other","report_status": "open"|"handled","report_target": "listing"|"message"|"profile","saved_search_cadence": "instant"|"daily","verification_request_status": "pending"|"verified"|"rejected","verification_status": "none"|"pending"|"verified"|"rejected"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -870,7 +930,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "account_type": ["private", "business"],"client_source": ["web", "ios"],"country_code": ["DE", "AT", "CH", "CZ", "PL"],"currency_code": ["EUR", "CHF", "CZK", "PLN"],"device_platform": ["ios"],"document_type": ["jagdschein", "jagdkarte", "revierbescheinigung", "gewerbe"],"language_code": ["de", "en", "cs", "pl"],"legal_document": ["terms", "privacy"],"listing_direction": ["offer", "wanted"],"listing_kind": ["lease", "permit", "driven_hunt", "trophy_hunt", "helper"],"listing_status": ["draft", "pending_review", "active", "paused", "expired", "rejected", "removed"],"price_unit": ["total", "per_year", "per_hectare_year", "per_day", "per_animal", "on_request"],"region_level": ["state", "district"],"report_reason": ["scam", "illegal", "weapons", "harassment", "wrong_category", "other"],"report_status": ["open", "handled"],"report_target": ["listing", "message", "profile"],"verification_request_status": ["pending", "verified", "rejected"],"verification_status": ["none", "pending", "verified", "rejected"]
+            "account_type": ["private", "business"],"client_source": ["web", "ios"],"country_code": ["DE", "AT", "CH", "CZ", "PL"],"currency_code": ["EUR", "CHF", "CZK", "PLN"],"device_platform": ["ios"],"document_type": ["jagdschein", "jagdkarte", "revierbescheinigung", "gewerbe"],"language_code": ["de", "en", "cs", "pl"],"legal_document": ["terms", "privacy"],"listing_direction": ["offer", "wanted"],"listing_kind": ["lease", "permit", "driven_hunt", "trophy_hunt", "helper"],"listing_status": ["draft", "pending_review", "active", "paused", "expired", "rejected", "removed"],"price_unit": ["total", "per_year", "per_hectare_year", "per_day", "per_animal", "on_request"],"region_level": ["state", "district"],"report_reason": ["scam", "illegal", "weapons", "harassment", "wrong_category", "other"],"report_status": ["open", "handled"],"report_target": ["listing", "message", "profile"],"saved_search_cadence": ["instant", "daily"],"verification_request_status": ["pending", "verified", "rejected"],"verification_status": ["none", "pending", "verified", "rejected"]
           }
         }
 } as const

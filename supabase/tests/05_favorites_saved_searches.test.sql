@@ -33,10 +33,11 @@ select throws_ok($$ select * from favorites $$, '42501', null, 'anon liest keine
 
 -- Suchaufträge
 select tests.authenticate_as(:'a_id');
-insert into saved_searches (name, filters) values ('Pacht Bayern', '{"country": "DE", "kind": "lease"}');
+insert into saved_searches (name, filters) values ('Pacht Bayern', '{"v": 1, "country": "DE", "kind": "lease"}');
 select is((select count(*)::int from saved_searches), 1, 'A legt einen Suchauftrag an');
 select throws_ok($$ update saved_searches set last_notified_at = now() $$, '42501', null, 'last_notified_at setzt nur der Server');
-select throws_ok($$ insert into saved_searches (name, filters) values ('Liste', '[]') $$, '23514', null, 'filters muss ein Objekt sein');
+-- Seit M8 prüft der Filter-Trigger vor dem CHECK (22023 wie die Suche, 43_saved_searches_m8).
+select throws_ok($$ insert into saved_searches (name, filters) values ('Liste', '[]') $$, '22023', null, 'filters muss ein Objekt sein');
 
 select tests.authenticate_as(:'b_id');
 select is((select count(*)::int from saved_searches), 0, 'B sieht die Suchaufträge von A nicht');

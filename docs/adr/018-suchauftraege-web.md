@@ -34,10 +34,12 @@ Nutzer-Entscheidungen vom 2026-11-06:
   - update auf `name, cadence, notify_email`
   - Server-Spalten schützt ein Trigger über `private.is_server_caller()`.
 - **RPCs** (Definer): `pause_saved_search`, `resume_saved_search`, `extend_saved_search`.
-  - Verlängern geht im Fenster der letzten 14 Tage oder nach dem Ablauf und setzt `now() + 42 Tage`. Außerhalb des Fensters gibt es einen eigenen Fehlercode mit `hint {"extend_from": …}`.
+  - Verlängern geht im Fenster der letzten 14 Tage oder nach dem Ablauf und setzt `now() + 42 Tage`. Außerhalb des Fensters gibt es `RV006` mit `hint {"extend_from": "<ISO, UTC>"}`.
   - Fremde und nicht vorhandene IDs liefern denselben Fehler.
   - Anlegen, Fortsetzen und Verlängern verlangen ein aktives Konto und die aktuelle Zustimmung (`RV001`).
   - Pausieren, E-Mail aus, Löschen und Abbestellen gehen immer.
+- **E-Mail wieder einschalten** verlangt wie das Fortsetzen ein aktives Konto und `RV001`. Abschalten, Umbenennen, Takt und Löschen gehen immer.
+- Die RPCs setzen das transaktionslokale Flag `revier.saved_search_rpc` für den Schutz-Trigger (Muster `revier.moderation`) und geben die ganze Zeile zurück.
 - **Limit:** höchstens 25 je Konto, abgelaufene zählen mit. Gesichert mit einem Advisory-Lock je Nutzer.
 
 ### Abgleich
