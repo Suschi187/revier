@@ -2,6 +2,83 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M8 Suchaufträge (Web) – 2026-11-06
+
+Plan `docs/plans/M8-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 018, SPEC v0.10.
+
+### Geändert
+- **Suchauftrag:**
+  - Takt „sofort“ oder „täglich“, Laufzeit 6 Wochen.
+  - Pausieren, Fortsetzen und Verlängern per RPC; Verlängern nur in den letzten 14 Tagen oder nach dem Ablauf, sonst `RV006` mit `extend_from`. Pausieren hält die Laufzeit nicht an.
+  - Die Filter sind nach dem Anlegen fest. Ein Trigger prüft sie wie die Suche (auch einen zu langen Suchbegriff) und entfernt `sort`.
+  - Höchstens 25 je Konto mit Lock, abgelaufene zählen mit. Abgelaufene werden 30 Tage nach dem Ablauf gelöscht.
+- **Abgleich bei der ersten Freigabe:**
+  - Ein AFTER-Trigger reiht die Anzeige ein, wenn `published_at` erstmals gesetzt wird.
+  - Der Abgleich läuft über die bestehende `search_conditions`, je gleichem Filter einmal, mit Vorfilter. Ein fehlerhafter Auftrag wird übersprungen und gezählt.
+  - Kein Treffer bei eigener Anzeige oder Sperre, bei pausiertem oder abgelaufenem Auftrag, bei abgeschalteter E-Mail, oder wenn der Auftrag erst nach der Freigabe angelegt wurde.
+- **Genau eine Mail:**
+  - Entdoppelt wird je Empfänger und Anzeige; „sofort“ gewinnt vor „täglich“.
+  - Bei „sofort“ geht die Mail 2 Minuten nach der Freigabe, höchstens alle 10 Minuten. „Täglich“ geht ab 07:00 Uhr Europe/Berlin.
+  - Buchführung über `claim_id` (höchstens einmal, 3 Versuche). Beim Claim werden alle Bedingungen erneut geprüft.
+  - Mailinhalt nur über eine Liste erlaubter Felder (Titel, Kreis/Bundesland, Preis, Link), nie Koordinaten.
+- **Moderations-Mails:**
+  - Bei Freigabe, Änderungswunsch, Ablehnung und Entfernung durch einen Admin.
+  - Mit Grund, ohne Identität des Admins, als Dienstmail ohne Abbestellen. Der Hinweis auf den Kontaktweg ist als Platzhalter markiert.
+- **Abbestellen per Klick (RFC 8058)** für Suchauftrags- und Chat-Mails:
+  - Token aus 32 zufälligen Bytes, gespeichert nur als SHA-256, gültig 90 Tage.
+  - Header `List-Unsubscribe` auf `POST /api/unsubscribe` (ohne Cookies, immer 200) und `List-Unsubscribe-Post`.
+  - Der Link im Text führt auf die Bestätigungsseite `/{lang}/unsubscribe` (noindex, no-referrer, beim Aufruf kein DB-Zugriff).
+- **Edge Function** `send-search-notifications` mit Suchauftrags- und Moderations-Mails in getrennten Schritten. Der Mailer liegt jetzt unter `functions/_shared/mail/`, `SITE_URL` wird geprüft. URL-Wörter und Preisformat prüfen gemeinsame Fixtures in Deno und Vitest.
+- **Web:**
+  - „Suche speichern“ auf der Suchseite (Liste und Karte, mit Kartenausschnitt).
+  - Konto-Seite „Suchaufträge“: Takt, E-Mail, Pausieren und Fortsetzen, Verlängern, Umbenennen, Löschen in zwei Schritten, „Ergebnisse ansehen“.
+  - Funktioniert auch ohne JavaScript. Texte in 4 Sprachen.
+- **Nebenbei behoben:**
+  - Die M7-Probe „falsches Geheimnis“ schlug in etwa jedem 16. Lauf fehl.
+  - Die Chat-E2E-Tests sehen nach einem Seitenwechsel die versteckt gehaltene vorige Seite nicht mehr.
+
+### Testen
+- `supabase test db` (pgTAP 43 Suchauftrag, 44 Abgleich, 45 Moderations-Mails und Abbestellen; 05 angepasst)
+- Edge Functions wie in der CI per Docker: `deno task check && deno lint && deno task test` in `send-search-notifications` (dazu `deno lint ../_shared/mail`) und `send-chat-notifications`
+- `cd web && npm test && INTEGRATION_REQUIRED=1 npm run test:integration && npm run test:e2e`
+- Integration `saved-searches.test.ts`: Freigabe mit zweitem Admin, Function, Mailpit, genau eine Mail, erneute Prüfung, zwei Aufträge, täglicher Takt, parallele Läufe, Release, Pause, One-Click, Chat- und Moderations-Mails.
+- E2E `saved-searches.spec.ts`: Speichern (Liste, Karte, ohne JS), Konto-Seite, Verlängern, Limit, Abbestellseite, One-Click-POST ohne Cookies an die Header-URL, axe, 360 px in 4 Sprachen.
+- Lokal neu: Die neue Function bedient der Edge Runtime erst nach `supabase stop && supabase start`.
+
+### Akzeptanz (SPEC 6 M8)
+- Neue passende Anzeige löst genau eine E-Mail aus: erfüllt (Integration `saved-searches.test.ts`: genau eine Mail, keine weitere bei späteren Läufen, erneuter Prüfung und erneuter Freigabe, bei zwei Aufträgen desselben Nutzers und bei parallelen Läufen; pgTAP 44). Technisch höchstens eine, im Normalfall genau eine: Bricht der Versand nach dem Claim ab, geht die Mail verloren (ADR 018).
+
+### Messung (Review A4)
+- Lokal, 25 000 Aufträge (1000 Konten × 25) und 50 Anzeigen: 801 verschiedene Filter, rund 120 000 Treffer.
+- Abgleich 3,4–7,7 s, ohne Gruppierung waren es 14,6 s.
+- Claim für 50 Empfänger 1,4–1,9 s.
+- Beides liegt unter dem pg_net-Timeout von 20 s.
+
+### Bekannte Lücken
+- **iOS:** Suchaufträge und Push folgen in I6, auf denselben RPCs (`pause/resume/extend_saved_search`), mit demselben Takt und derselben Entdopplung. `notify_push` bleibt bis dahin ungenutzt.
+- Moderations-Mails entstehen nur bei Entscheidungen mit Admin-JWT. Ein späterer Pfad als service_role (zum Beispiel M9) braucht einen eigenen Auslöser.
+- Der Widerspruchs- und Beschwerdeweg (DSA Art. 20) fehlt noch, der Hinweis in der Mail ist ein Platzhalter (SPEC 7.2, M9).
+- Die Suchauftrags-Mail nennt Art und Richtung der Anzeige nicht, nur Titel, Region und Preis.
+- Der Sprachumschalter auf der Abbestellseite verliert den Token; die Seite bittet dann, den Link aus der Mail erneut zu öffnen.
+- Der Request-Logger von `next dev` schreibt Pfade samt Query, also auch Token. Das betrifft nur den Dev-Modus; die Logs des Hosters klärt M10.
+- Im Dev-Modus setzt Next `Cache-Control: no-store` statt `private, no-store` auf der Abbestellseite. Im Prod-Build prüfen.
+- Die Texte auf cs und pl, auch die Mailtexte, sind ungeprüft (SPEC 7.6).
+- Der Test zum täglichen Takt kann rund um Mitternacht (Europe/Berlin) am Tageswechsel wackeln.
+- In der CI läuft während der Integrationstests kein Web-Server; den One-Click-POST deckt dort das E2E ab.
+- Die Datenschutzerklärung (Platzhalter) nennt Suchaufträge, Benachrichtigungen und Abbestell-Token noch nicht (M9).
+
+### Cloud-Checkliste (neu)
+- **Deploy-Reihenfolge:** erst die Migrationen, dann die Functions. Die Chat-Function erwartet den `unsubscribe_token`.
+- **Vault:** `search_notifications_url` auf `https://<projekt>.supabase.co/functions/v1/send-search-notifications` setzen. Ohne URL ruft der Job nichts auf. `search_notifications_secret` legt die Migration an.
+- **Function-Secrets:** `SITE_URL` (`https://…`, ohne Pfad), sonst antworten beide Mail-Functions mit 503. Dazu `MAIL_FROM`.
+- **DKIM** muss `List-Unsubscribe` und `List-Unsubscribe-Post` signieren (Bulk-Sender-Regeln). Die Access-Logs des Hosters höchstens 7 Tage aufbewahren (Token in der Query).
+- **Cron-Jobs:** `search-notifications` jede Minute, `search-notifications-retention` und `saved-searches-retention` täglich.
+
+### Lokal von Hand: Suchauftrags-Mails
+- Einmalig: `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/send-search-notifications', 'search_notifications_url')"`
+- Dann eine Suche speichern und mit einem zweiten Admin-Konto eine passende Anzeige freigeben. Etwa 2 Minuten später liegt die Mail in Mailpit (http://127.0.0.1:54324). Die Moderations-Mail an den Besitzer kommt im selben Lauf.
+- Wieder aus: `supabase db query "delete from vault.secrets where name = 'search_notifications_url'"`
+
 ## Nachtrag M7: QA-Funde F1–F5 – 2026-11-05
 
 Bericht: `docs/QA-REPORT.md`, Abschnitte „M7 – Abnahme“ und „M7 – Nachprüfung“.

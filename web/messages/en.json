@@ -865,7 +865,7 @@
       "noFilters": "No filters: every new listing matches.",
       "mapAreaHint": "The map area is saved too: only listings in this area are reported, and “View results” opens the map.",
       "runtime": "A saved search runs for 6 weeks. In the last 14 days you can extend it in your account.",
-      "submit": "Save search",
+      "submit": "Create saved search",
       "saving": "Saving …",
       "signIn": "Sign in to save this search"
     },
