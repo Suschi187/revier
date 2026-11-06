@@ -655,11 +655,17 @@ isOneToOne: false
               "state": string,"storage_path": string,"thumb_path": string,"upload_path": string
             }[]
                            },
+"claim_search_notifications":
+{ Args: { "p_limit"?: number,"p_secret": string }; Returns: Json
+                           },
 "complete_photo_processing":
 { Args: { "p_height": number,"p_photo_id": string,"p_width": number }; Returns: string
                            },
 "confirm_chat_notifications":
 { Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
+                           },
+"confirm_search_notifications":
+{ Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
                            },
 "conversation_info":
 { Args: { "p_conversation_id": string }; Returns: Json
@@ -764,6 +770,9 @@ isOneToOne: false
                            },
 "release_chat_notifications":
 { Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
+                           },
+"release_search_notifications":
+{ Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
                            },
 "remove_unavailable_favorites":
 { Args: Record<PropertyKey, never>; Returns: number

@@ -44,7 +44,7 @@ select is(
         where key like 'saved_search%' or key = 'search_email_batch' order by key),
   array['saved_search_daily_hour=7', 'saved_search_days=42', 'saved_search_expired_keep_days=30',
         'saved_search_extend_window_days=14', 'saved_search_instant_delay_minutes=2',
-        'saved_search_instant_min_gap_minutes=10', 'search_email_batch=50'],
+        'saved_search_instant_min_gap_minutes=10', 'saved_search_timezone=Europe/Berlin', 'search_email_batch=50'],
   'Einstellungen für Suchaufträge');
 
 -- Exakte Grant-Menge (A7), auch Grants auf Tabellenebene schlagen hier durch.

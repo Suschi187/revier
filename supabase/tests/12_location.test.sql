@@ -174,13 +174,16 @@ select ok(not has_table_privilege('authenticated', 'vault.decrypted_secrets', 's
 select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
     where n.nspname not in ('vault', 'pg_catalog', 'information_schema') and p.prosrc ~* 'vault\.'
   union all select schemaname || '.' || viewname from pg_views where schemaname <> 'vault' and definition ~* 'vault\.' $$,
-  -- M7 (ADR 017): Benachrichtigung. secret_valid gibt nur true/false zurück, trigger ist für keine API-Rolle ausführbar;
-  -- beide lesen nur ihre eigenen Secrets (chat_notifications_url/_secret), nie listing_location_key (Probe unten).
-  array['private.chat_notifications_secret_valid', 'private.listings_blur_location', 'private.trigger_chat_notifications'],
-  'Nur Verfremdung und Chat-Benachrichtigung verwenden vault');
+  -- M7 (ADR 017) und M8 (ADR 018): Benachrichtigung. secret_valid gibt nur true/false zurück, trigger ist für keine
+  -- API-Rolle ausführbar; sie lesen nur ihre eigenen Secrets (chat_/search_notifications_url/_secret), nie
+  -- listing_location_key (Probe unten).
+  array['private.chat_notifications_secret_valid', 'private.listings_blur_location', 'private.search_notifications_secret_valid',
+        'private.trigger_chat_notifications', 'private.trigger_search_notifications'],
+  'Nur Verfremdung, Chat- und Suchauftrags-Benachrichtigung verwenden vault');
 select ok((select bool_and(p.prosrc !~ 'listing_location_key') from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-           where n.nspname = 'private' and p.proname in ('chat_notifications_secret_valid', 'trigger_chat_notifications')),
-  'Die Chat-Funktionen lesen den Verfremdungsschlüssel nicht');
+           where n.nspname = 'private' and p.proname in ('chat_notifications_secret_valid', 'trigger_chat_notifications',
+                                                         'search_notifications_secret_valid', 'trigger_search_notifications')),
+  'Die Benachrichtigungsfunktionen lesen den Verfremdungsschlüssel nicht');
 
 -- Falscher Fingerprint (Restore mit fremdem Secret): fail closed (B6)
 update private.app_settings set value = '"falsch"' where key = 'listing_location_key_fp';
