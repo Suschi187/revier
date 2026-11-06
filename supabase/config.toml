@@ -416,6 +416,12 @@ verify_jwt = true
 enabled = true
 verify_jwt = false
 
+# Revier: Suchauftrags- und Moderations-Mails (ADR 018). Aufruf von pg_cron ohne Nutzer-JWT; die Function prüft ein
+# eigenes Geheimnis (Header x-search-notify-secret) aus dem Vault über die Claim-RPCs.
+[functions.send-search-notifications]
+enabled = true
+verify_jwt = false
+
 # Nur lokal und in der CI, keine Geheimnisse: Mailpit im Docker-Netz (Host „inbucket“, SMTP 1025). In der Cloud
 # setzt die Checkliste die Werte per `supabase secrets set` (M10: HTTP-Adapter statt SMTP, ADR 017).
 [edge_runtime.secrets]

@@ -1,7 +1,9 @@
-// Mailtexte in vier Sprachen (ADR 017): Begriffe laut docs/GLOSSARY.md, Rückfall de. Bewusst ohne Nachrichtentext
-// (kann Kontaktdaten oder Lageangaben enthalten) und ohne Tracking. Nur Klartext.
+// Mailtexte in vier Sprachen (ADR 017, ADR 018): Begriffe laut docs/GLOSSARY.md, Rückfall de. Bewusst ohne
+// Nachrichtentext (kann Kontaktdaten oder Lageangaben enthalten) und ohne Tracking. Nur Klartext.
+import { unsubscribePageUrl } from "../_shared/mail/site.ts";
+import { clean, type Language } from "../_shared/mail/text.ts";
 
-export type Language = "de" | "en" | "cs" | "pl";
+export { language, type Language } from "../_shared/mail/text.ts";
 
 type Texts = {
   subject: string;
@@ -11,6 +13,7 @@ type Texts = {
   unknownSender: string;
   open: string;
   settings: string;
+  unsubscribe: string;
   footer: string;
 };
 
@@ -23,6 +26,7 @@ export const TEXTS: Record<Language, Texts> = {
     unknownSender: "Ein Konto, das nicht mehr verfügbar ist",
     open: "Zur Unterhaltung:",
     settings: "Benachrichtigungen per E-Mail kannst du in deinem Profil abbestellen:",
+    unsubscribe: "Nur die Benachrichtigungen zu Nachrichten abbestellen:",
     footer: "Diese Nachricht wurde automatisch versendet. Antworten auf diese E-Mail kommen nicht an.",
   },
   en: {
@@ -33,6 +37,7 @@ export const TEXTS: Record<Language, Texts> = {
     unknownSender: "An account that is no longer available",
     open: "Open the conversation:",
     settings: "You can turn off email notifications in your profile:",
+    unsubscribe: "Unsubscribe from message notifications only:",
     footer: "This message was sent automatically. Replies to this email are not delivered.",
   },
   cs: {
@@ -43,6 +48,7 @@ export const TEXTS: Record<Language, Texts> = {
     unknownSender: "Účet, který již není k dispozici",
     open: "Otevřít konverzaci:",
     settings: "Upozornění e-mailem můžete vypnout ve svém profilu:",
+    unsubscribe: "Odhlásit odběr pouze upozornění na zprávy:",
     footer: "Tato zpráva byla odeslána automaticky. Odpovědi na tento e-mail nebudou doručeny.",
   },
   pl: {
@@ -53,24 +59,20 @@ export const TEXTS: Record<Language, Texts> = {
     unknownSender: "Konto, które nie jest już dostępne",
     open: "Otwórz rozmowę:",
     settings: "Powiadomienia e-mail możesz wyłączyć w swoim profilu:",
+    unsubscribe: "Wypisz się tylko z powiadomień o wiadomościach:",
     footer: "Ta wiadomość została wysłana automatycznie. Odpowiedzi na tego e-maila nie są dostarczane.",
   },
 };
 
-export function language(value: unknown): Language {
-  return value === "en" || value === "cs" || value === "pl" ? value : "de";
-}
-
 export type Conversation = { conversation_id: string; sender_name: string | null; listing_title: string | null };
 
-/** Steuerzeichen aus Nutzerinhalten entfernen (Klartext-Mail, keine Header). */
-function clean(value: string): string {
-  // Steuerzeichen sind hier genau das Ziel der Regel (Zeilenumbrüche, Bidi), kein Versehen.
-  // deno-lint-ignore no-control-regex
-  return value.replace(/[\u0000-\u001F\u007F-\u009F\u202A-\u202E\u2066-\u2069]/g, " ").trim().slice(0, 120);
-}
-
-export function composeMail(lang: Language, siteUrl: string, conversations: Conversation[]): { subject: string; text: string } {
+/** Klartext mit Link auf die Bestätigungsseite fürs Abbestellen (B4); wirft bei ungültigem Token. */
+export function composeMail(
+  lang: Language,
+  siteUrl: string,
+  conversations: Conversation[],
+  token: string,
+): { subject: string; text: string } {
   const t = TEXTS[lang];
   const lines = [t.greeting, "", t.intro, ""];
   for (const c of conversations) {
@@ -78,6 +80,7 @@ export function composeMail(lang: Language, siteUrl: string, conversations: Conv
     lines.push(`- ${t.item(sender, c.listing_title ? clean(c.listing_title) : null)}`);
     lines.push(`  ${t.open} ${siteUrl}/${lang}/account/messages/${c.conversation_id}`);
   }
-  lines.push("", t.settings, `${siteUrl}/${lang}/account/profile`, "", t.footer);
+  lines.push("", t.settings, `${siteUrl}/${lang}/account/profile`, "", t.unsubscribe, unsubscribePageUrl(siteUrl, lang, token));
+  lines.push("", t.footer);
   return { subject: t.subject, text: lines.join("\n") };
 }

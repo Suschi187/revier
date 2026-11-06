@@ -1,0 +1,10 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.117.3"
+  },
+  "lock": { "frozen": true },
+  "tasks": {
+    "check": "deno check index.ts tests/*.ts ../_shared/mail/*.ts ../_shared/mail/tests/*.ts",
+    "test": "deno test --allow-net=127.0.0.1 tests/ ../_shared/mail/tests/"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "_comment": "Links in Mails (send-chat-notifications, send-search-notifications) = Routen im Web (ADR 018, Review A13). Deno prüft die Mailtexte, Vitest (web/lib/public/mail-links.test.ts) prüft publicPath/parsePath und STATIC_ROUTES. pending_static_paths kommen mit M8 Commit 6 (account/searches) und Commit 7 (unsubscribe) ins Web und wandern dann nach static_paths.",
+  "site": "https://revier.example",
+  "listing_id": "3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c",
+  "listing": [
+    { "lang": "en", "path": "/en/listing/3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c" },
+    { "lang": "de", "path": "/de/anzeige/3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c" },
+    { "lang": "cs", "path": "/cs/inzerat/3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c" },
+    { "lang": "pl", "path": "/pl/ogloszenie/3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c" }
+  ],
+  "static_paths": ["account/listings", "account/profile", "account/messages/:id", "imprint"],
+  "pending_static_paths": ["account/searches", "unsubscribe"],
+  "unsubscribe_post_path": "/api/unsubscribe"
+}

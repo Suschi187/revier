@@ -1,0 +1,81 @@
+{
+  "_comment": "Labels in Mails (send-search-notifications/texts.ts) = Web-Messages (ADR 018, Review A13): on_request = Listings.preview.onRequest, price_units = Listings.priceUnits, reject_reasons = Moderation.reasons (Codes laut Check listings.reject_code).",
+  "on_request": {
+    "en": "On request",
+    "de": "Auf Anfrage",
+    "cs": "Na dotaz",
+    "pl": "Na zapytanie"
+  },
+  "price_units": {
+    "en": {
+      "total": "total",
+      "per_year": "per year",
+      "per_hectare_year": "per hectare and year",
+      "per_day": "per day",
+      "per_animal": "per animal"
+    },
+    "de": {
+      "total": "gesamt",
+      "per_year": "pro Jahr",
+      "per_hectare_year": "pro Hektar und Jahr",
+      "per_day": "pro Tag",
+      "per_animal": "pro Stück Wild"
+    },
+    "cs": {
+      "total": "celkem",
+      "per_year": "za rok",
+      "per_hectare_year": "za hektar a rok",
+      "per_day": "za den",
+      "per_animal": "za kus zvěře"
+    },
+    "pl": {
+      "total": "łącznie",
+      "per_year": "za rok",
+      "per_hectare_year": "za hektar rocznie",
+      "per_day": "za dzień",
+      "per_animal": "za sztukę zwierzyny"
+    }
+  },
+  "reject_reasons": {
+    "en": {
+      "incomplete": "Information incomplete",
+      "wrong_category": "Wrong category",
+      "weapons": "Weapons or ammunition offered",
+      "prohibited_content": "Prohibited content",
+      "duplicate": "Duplicate listing",
+      "contact_in_text": "Contact details in the text",
+      "implausible": "Implausible information",
+      "other": "Other reason"
+    },
+    "de": {
+      "incomplete": "Angaben unvollständig",
+      "wrong_category": "Falsche Kategorie",
+      "weapons": "Waffen oder Munition angeboten",
+      "prohibited_content": "Unzulässige Inhalte",
+      "duplicate": "Doppelte Anzeige",
+      "contact_in_text": "Kontaktdaten im Text",
+      "implausible": "Unplausible Angaben",
+      "other": "Anderer Grund"
+    },
+    "cs": {
+      "incomplete": "Neúplné údaje",
+      "wrong_category": "Nesprávná kategorie",
+      "weapons": "Nabídka zbraní nebo střeliva",
+      "prohibited_content": "Nepovolený obsah",
+      "duplicate": "Duplicitní inzerát",
+      "contact_in_text": "Kontaktní údaje v textu",
+      "implausible": "Nevěrohodné údaje",
+      "other": "Jiný důvod"
+    },
+    "pl": {
+      "incomplete": "Niekompletne informacje",
+      "wrong_category": "Niewłaściwa kategoria",
+      "weapons": "Oferowanie broni lub amunicji",
+      "prohibited_content": "Niedozwolone treści",
+      "duplicate": "Zduplikowane ogłoszenie",
+      "contact_in_text": "Dane kontaktowe w treści",
+      "implausible": "Niewiarygodne informacje",
+      "other": "Inny powód"
+    }
+  }
+}
