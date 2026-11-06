@@ -1,4 +1,6 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.9
+# SPEC – Revier (Arbeitstitel), MVP v0.10
+
+v0.10: M8 Suchaufträge (ADR 018): Laufzeit 6 Wochen, Takt sofort/täglich, Pausieren/Verlängern, Abgleich bei erster Freigabe, genau eine Mail je Empfänger und Anzeige, Abbestellen per Klick (RFC 8058), Moderations-Mails (3.1).
 
 v0.9: M7 Chat (ADR 017): Kontaktdaten im Chat erlaubt mit Hinweis (7.8 entschieden), Schreibwege nur per RPC, `messages.recipient_id`, `profiles.notify_chat_email`, Benachrichtigung mit Drosselung, Sicherung gemeldeter Nachrichten (3.1, 3.4).
 v0.8: M6 Karte (ADR 016): Kacheln selbst gehostet (7.10 entschieden), `map_point` und `regions.area_km2` (3.1), keine Punktwahl in Kreisen unter 400 km² (3.3), Karte in M9 (Consent, Datenschutz), ODbL der Basiskarte in 7.2.
@@ -107,6 +109,9 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 
 **saved_searches**
 - `user_id`, `name`, `filters` jsonb, `notify_push` bool, `notify_email` bool (Web, M8), `last_notified_at` (nur Server); max. 25 je Konto
+- v0.10 (ADR 018): `cadence` (`instant | daily`), `paused_at`, `expires_at` (42 Tage, nur Server; Pausieren hält sie nicht an); Filter nach dem Anlegen fest, ohne `sort`; Pausieren, Fortsetzen, Verlängern nur per RPC
+
+**Suchauftrags-Benachrichtigung** (v0.10, privat) – `search_match_queue`, `saved_search_matches`, Entdopplung je Empfänger und Anzeige, Zustand je Empfänger mit `claim_id`; `moderation_notifications`; `unsubscribe_tokens` (nur SHA-256, Scope `saved_search_mail` | `chat`)
 
 **conversations**
 - `listing_id` (nullable: wird beim Löschen der Anzeige leer, der Chat bleibt), `owner_id` (aus der Anzeige), `interested_id`, `last_message_at`, unique (`listing_id`, `interested_id`)

@@ -111,7 +111,7 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - **URL:** `chat_notifications_url` im Vault setzen weder Migration noch Seed. Ohne URL macht der Job nichts, deshalb verschickt die CI und das lokale E2E keine unerwarteten Mails. Integrationstests rufen die Function direkt auf (H10).
   - **SMTP:** eigener minimaler Client (`mailer.ts`, Deno.connect) statt einer Bibliothek, nur für Mailpit. Adressen ohne Zeilenumbrüche oder spitze Klammern, Text als Base64, Betreff fest je Sprache.
   - **Zustand:** `previous_sent_at` für das Rücksetzen; nach 3 Fehlversuchen wird die Mail verworfen und der Zähler beginnt für spätere Nachrichten neu.
-- **Abmelden:** in den Profileinstellungen. Abmelden per Klick aus der Mail (RFC 8058) kommt mit M8 bis M10.
+- **Abmelden:** in den Profileinstellungen und per Klick aus der Mail (Nachtrag M8, ADR 018): `claim_chat_notifications` liefert je Empfänger zusätzlich einen Abbestell-Token (Scope `chat`), die Mail trägt `List-Unsubscribe` und `List-Unsubscribe-Post`.
 
 ### Blockieren und Melden (Review A11, H1, H7)
 - Blockieren und Entsperren erfolgen aus der Unterhaltung (`block_in_conversation`). `my_blocks()` liefert die Liste unter `/account/blocked`, mit Rückfallnamen, damit nichts über fremde Konten verrät, ob es sie gibt.

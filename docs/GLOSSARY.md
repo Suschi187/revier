@@ -197,3 +197,13 @@ Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen
 | block | Block | Blockieren | Zablokovat | Zablokuj | ungeprüft |
 | unblock | Unblock | Blockierung aufheben | Odblokovat | Odblokuj | ungeprüft |
 | report | Report | Melden | Nahlásit | Zgłoś | ungeprüft |
+
+## Suchaufträge (M8)
+
+| Code | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| `saved_search` | Saved search | Suchauftrag | Uložené hledání | Zapisane wyszukiwanie | ungeprüft |
+| `cadence_instant` | Right away | Sofort | Ihned | Od razu | ungeprüft |
+| `cadence_daily` | Daily | Täglich | Denně | Codziennie | ungeprüft |
+| `unsubscribe` | Unsubscribe | Abbestellen | Odhlásit odběr | Wypisz się | ungeprüft |
+| `extend` | Extend | Verlängern | Prodloužit | Przedłuż | ungeprüft |
