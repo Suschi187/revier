@@ -135,7 +135,8 @@
       "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
     },
     "myListings": "Moje ogłoszenia",
-    "favorites": "Ulubione"
+    "favorites": "Ulubione",
+    "savedSearches": "Zapisane wyszukiwania"
   },
   "Listings": {
     "kinds": {
@@ -850,5 +851,99 @@
     },
     "legalRequired": "Aby pisać, zaakceptuj najpierw aktualny regulamin. Blokowanie i zgłaszanie pozostają możliwe.",
     "legalLink": "Przejdź do regulaminu"
+  },
+  "SavedSearches": {
+    "quoted": "„{text}”",
+    "mapArea": "Wycinek mapy",
+    "allListings": "Wszystkie ogłoszenia",
+    "legalLink": "Zaakceptuj aktualne warunki",
+    "manageLink": "Zarządzaj zapisanymi wyszukiwaniami",
+    "save": {
+      "open": "Zapisz wyszukiwanie",
+      "intro": "Wyślemy ci e-mail, gdy zostaną zatwierdzone nowe ogłoszenia pasujące do tych filtrów.",
+      "summary": "Filtry tego wyszukiwania",
+      "noFilters": "Brak filtrów: pasuje każde nowe ogłoszenie.",
+      "mapAreaHint": "Wycinek mapy też zostanie zapisany: zgłaszane są tylko ogłoszenia z tego obszaru, a „Pokaż wyniki” otwiera mapę.",
+      "runtime": "Zapisane wyszukiwanie działa 6 tygodni. W ostatnich 14 dniach możesz je przedłużyć na swoim koncie.",
+      "submit": "Zapisz wyszukiwanie",
+      "saving": "Zapisywanie …",
+      "signIn": "Zaloguj się, aby zapisać to wyszukiwanie"
+    },
+    "fields": {
+      "name": "Nazwa",
+      "nameHint": "Od 1 do 100 znaków. Nazwę widzisz tylko ty.",
+      "cadence": "Częstotliwość e-maili",
+      "notifyEmail": "E-mail o nowych pasujących ogłoszeniach",
+      "email": "E-mail",
+      "lastNotified": "Ostatni e-mail"
+    },
+    "cadence": {
+      "instant": "Od razu",
+      "daily": "Codziennie"
+    },
+    "cadenceHint": {
+      "instant": "Kilka minut po zatwierdzeniu, kilka ogłoszeń w jednym e-mailu.",
+      "daily": "Jeden zbiorczy e-mail rano."
+    },
+    "email": {
+      "on": "Włączone",
+      "off": "Wyłączone"
+    },
+    "status": {
+      "active": "Aktywne, działa do {date}",
+      "expiring": "Wygasa {date}",
+      "paused": "Wstrzymane, mimo to wygasa {date}",
+      "pausedHint": "Wstrzymanie nie zatrzymuje czasu działania. Ogłoszenia zatwierdzone w czasie wstrzymania nie zostaną zgłoszone później.",
+      "expired": "Wygasło {date}. Zostanie usunięte {deleteDate}, jeśli go nie przedłużysz."
+    },
+    "actions": {
+      "results": "Pokaż wyniki",
+      "pause": "Wstrzymaj",
+      "resume": "Wznów",
+      "extend": "Przedłuż o 6 tygodni",
+      "extendFrom": "Możesz je przedłużyć od {date}.",
+      "emailOn": "Włącz e-mail",
+      "emailOff": "Wyłącz e-mail",
+      "toInstant": "Przełącz na od razu",
+      "toDaily": "Przełącz na codziennie",
+      "rename": "Zmień nazwę",
+      "renameSubmit": "Zapisz nazwę",
+      "delete": "Usuń",
+      "deleteConfirm": "Usunąć „{name}”? Tego nie można cofnąć.",
+      "deleteYes": "Usuń na stałe",
+      "cancel": "Anuluj"
+    },
+    "notices": {
+      "created": "Twoje wyszukiwanie zostało zapisane.",
+      "paused": "Zapisane wyszukiwanie jest wstrzymane.",
+      "resumed": "Zapisane wyszukiwanie znowu jest aktywne.",
+      "extended": "Zapisane wyszukiwanie działa teraz przez kolejne 6 tygodni.",
+      "emailOn": "E-maile są włączone.",
+      "emailOff": "E-maile są wyłączone.",
+      "cadence": "Częstotliwość e-maili została zmieniona.",
+      "renamed": "Nazwa została zapisana.",
+      "deleted": "Zapisane wyszukiwanie zostało usunięte."
+    },
+    "errors": {
+      "name": "Podaj nazwę o długości od 1 do 100 znaków.",
+      "invalid": "Tych filtrów nie można zapisać. Sprawdź je w wyszukiwarce.",
+      "queryTooLong": "Szukana fraza jest za długa, aby ją zapisać. Użyj mniejszej liczby słów.",
+      "limit": "Możesz mieć najwyżej 25 zapisanych wyszukiwań, wliczając wygasłe. Najpierw usuń jedno z nich.",
+      "legal": "Najpierw zaakceptuj aktualny regulamin i politykę prywatności.",
+      "extendNotYet": "Tego zapisanego wyszukiwania nie można jeszcze przedłużyć.",
+      "unavailable": "To niemożliwe: zapisane wyszukiwanie już nie istnieje albo twoje konto jest zablokowane.",
+      "failed": "Nie udało się. Spróbuj ponownie później."
+    },
+    "page": {
+      "metaTitle": "Zapisane wyszukiwania",
+      "title": "Zapisane wyszukiwania",
+      "back": "Powrót do konta",
+      "intro": "Dostaniesz e-mail, gdy zostanie zatwierdzone nowe ogłoszenie pasujące do jednego z twoich zapisanych wyszukiwań. Każde zapisane wyszukiwanie działa 6 tygodni.",
+      "empty": "Nie masz jeszcze zapisanych wyszukiwań.",
+      "toSearch": "Przejdź do wyszukiwarki i zapisz jedno",
+      "count": "Zapisane wyszukiwania: {count} z {max}",
+      "loadFailed": "Nie udało się wczytać zapisanych wyszukiwań. Spróbuj ponownie później.",
+      "invalidFilters": "Filtry tego zapisanego wyszukiwania nie są już ważne. Zapisz wyszukiwanie ponownie."
+    }
   }
 }

@@ -135,7 +135,8 @@
       "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
     },
     "myListings": "Moje inzeráty",
-    "favorites": "Oblíbené"
+    "favorites": "Oblíbené",
+    "savedSearches": "Uložená hledání"
   },
   "Listings": {
     "kinds": {
@@ -850,5 +851,99 @@
     },
     "legalRequired": "Abyste mohli psát, odsouhlaste nejprve aktuální podmínky užívání. Blokování a nahlášení zůstávají možné.",
     "legalLink": "K podmínkám užívání"
+  },
+  "SavedSearches": {
+    "quoted": "„{text}“",
+    "mapArea": "Výřez mapy",
+    "allListings": "Všechny inzeráty",
+    "legalLink": "Souhlasit s aktuálními podmínkami",
+    "manageLink": "Spravovat uložená hledání",
+    "save": {
+      "open": "Uložit hledání",
+      "intro": "Pošleme vám e-mail, jakmile budou schváleny nové inzeráty odpovídající těmto filtrům.",
+      "summary": "Filtry tohoto hledání",
+      "noFilters": "Žádné filtry: odpovídá každý nový inzerát.",
+      "mapAreaHint": "Uloží se i výřez mapy: hlásí se jen inzeráty v této oblasti a „Zobrazit výsledky“ otevře mapu.",
+      "runtime": "Uložené hledání běží 6 týdnů. V posledních 14 dnech je můžete prodloužit ve svém účtu.",
+      "submit": "Uložit hledání",
+      "saving": "Ukládá se …",
+      "signIn": "Přihlaste se a uložte toto hledání"
+    },
+    "fields": {
+      "name": "Název",
+      "nameHint": "1 až 100 znaků. Název vidíte jen vy.",
+      "cadence": "Četnost e-mailů",
+      "notifyEmail": "E-mail při nových odpovídajících inzerátech",
+      "email": "E-mail",
+      "lastNotified": "Poslední e-mail"
+    },
+    "cadence": {
+      "instant": "Ihned",
+      "daily": "Denně"
+    },
+    "cadenceHint": {
+      "instant": "Několik minut po schválení, více inzerátů v jednom e-mailu.",
+      "daily": "Jeden souhrnný e-mail ráno."
+    },
+    "email": {
+      "on": "Zapnuto",
+      "off": "Vypnuto"
+    },
+    "status": {
+      "active": "Aktivní, běží do {date}",
+      "expiring": "Vyprší {date}",
+      "paused": "Pozastaveno, přesto vyprší {date}",
+      "pausedHint": "Pozastavení nezastaví dobu běhu. Inzeráty schválené během pozastavení se dodatečně nehlásí.",
+      "expired": "Vypršelo {date}. Pokud je neprodloužíte, bude {deleteDate} smazáno."
+    },
+    "actions": {
+      "results": "Zobrazit výsledky",
+      "pause": "Pozastavit",
+      "resume": "Obnovit",
+      "extend": "Prodloužit o 6 týdnů",
+      "extendFrom": "Prodloužit je můžete od {date}.",
+      "emailOn": "Zapnout e-mail",
+      "emailOff": "Vypnout e-mail",
+      "toInstant": "Přepnout na ihned",
+      "toDaily": "Přepnout na denně",
+      "rename": "Přejmenovat",
+      "renameSubmit": "Uložit název",
+      "delete": "Smazat",
+      "deleteConfirm": "Smazat „{name}“? Tuto akci nelze vrátit.",
+      "deleteYes": "Trvale smazat",
+      "cancel": "Zrušit"
+    },
+    "notices": {
+      "created": "Vaše hledání bylo uloženo.",
+      "paused": "Uložené hledání je pozastaveno.",
+      "resumed": "Uložené hledání je opět aktivní.",
+      "extended": "Uložené hledání nyní poběží dalších 6 týdnů.",
+      "emailOn": "E-maily jsou zapnuté.",
+      "emailOff": "E-maily jsou vypnuté.",
+      "cadence": "Četnost e-mailů byla změněna.",
+      "renamed": "Název byl uložen.",
+      "deleted": "Uložené hledání bylo smazáno."
+    },
+    "errors": {
+      "name": "Zadejte prosím název o délce 1 až 100 znaků.",
+      "invalid": "Tyto filtry nelze uložit. Zkontrolujte je prosím ve vyhledávání.",
+      "queryTooLong": "Hledaný výraz je pro uložení příliš dlouhý. Použijte prosím méně slov.",
+      "limit": "Můžete mít nejvýše 25 uložených hledání včetně vypršelých. Nejprve prosím jedno smažte.",
+      "legal": "Nejprve prosím souhlaste s aktuálními podmínkami užívání a zásadami ochrany osobních údajů.",
+      "extendNotYet": "Toto uložené hledání zatím nelze prodloužit.",
+      "unavailable": "To není možné: uložené hledání již neexistuje nebo je váš účet zablokován.",
+      "failed": "Nepodařilo se. Zkuste to prosím později."
+    },
+    "page": {
+      "metaTitle": "Uložená hledání",
+      "title": "Uložená hledání",
+      "back": "Zpět na účet",
+      "intro": "Dostanete e-mail, když bude schválen nový inzerát odpovídající některému z vašich uložených hledání. Každé uložené hledání běží 6 týdnů.",
+      "empty": "Zatím nemáte žádná uložená hledání.",
+      "toSearch": "Přejít na vyhledávání a jedno uložit",
+      "count": "Uložená hledání: {count} z {max}",
+      "loadFailed": "Vaše uložená hledání se nepodařilo načíst. Zkuste to prosím později.",
+      "invalidFilters": "Filtry tohoto uloženého hledání již nejsou platné. Uložte prosím hledání znovu."
+    }
   }
 }

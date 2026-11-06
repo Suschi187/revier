@@ -135,7 +135,8 @@
       "blocked": "Your account is blocked. You cannot change your profile."
     },
     "myListings": "My listings",
-    "favorites": "Saved listings"
+    "favorites": "Saved listings",
+    "savedSearches": "Saved searches"
   },
   "Listings": {
     "kinds": {
@@ -850,5 +851,99 @@
     },
     "legalRequired": "To write, please first accept the current terms of use. Blocking and reporting remain possible.",
     "legalLink": "Go to the terms"
+  },
+  "SavedSearches": {
+    "quoted": "“{text}”",
+    "mapArea": "Map area",
+    "allListings": "All listings",
+    "legalLink": "Accept the current terms",
+    "manageLink": "Manage saved searches",
+    "save": {
+      "open": "Save search",
+      "intro": "We will email you when new listings matching these filters are approved.",
+      "summary": "Filters of this search",
+      "noFilters": "No filters: every new listing matches.",
+      "mapAreaHint": "The map area is saved too: only listings in this area are reported, and “View results” opens the map.",
+      "runtime": "A saved search runs for 6 weeks. In the last 14 days you can extend it in your account.",
+      "submit": "Save search",
+      "saving": "Saving …",
+      "signIn": "Sign in to save this search"
+    },
+    "fields": {
+      "name": "Name",
+      "nameHint": "1 to 100 characters. Only you can see the name.",
+      "cadence": "Email frequency",
+      "notifyEmail": "Email me about new matching listings",
+      "email": "Email",
+      "lastNotified": "Last email"
+    },
+    "cadence": {
+      "instant": "Right away",
+      "daily": "Daily"
+    },
+    "cadenceHint": {
+      "instant": "A few minutes after approval, several listings bundled in one email.",
+      "daily": "One summary email in the morning."
+    },
+    "email": {
+      "on": "On",
+      "off": "Off"
+    },
+    "status": {
+      "active": "Active, runs until {date}",
+      "expiring": "Expires on {date}",
+      "paused": "Paused, but still expires on {date}",
+      "pausedHint": "Pausing does not stop the runtime. Listings approved during the pause are not reported later.",
+      "expired": "Expired on {date}. It will be deleted on {deleteDate} unless you extend it."
+    },
+    "actions": {
+      "results": "View results",
+      "pause": "Pause",
+      "resume": "Resume",
+      "extend": "Extend by 6 weeks",
+      "extendFrom": "You can extend it from {date}.",
+      "emailOn": "Turn email on",
+      "emailOff": "Turn email off",
+      "toInstant": "Switch to right away",
+      "toDaily": "Switch to daily",
+      "rename": "Rename",
+      "renameSubmit": "Save name",
+      "delete": "Delete",
+      "deleteConfirm": "Delete “{name}”? This cannot be undone.",
+      "deleteYes": "Delete for good",
+      "cancel": "Cancel"
+    },
+    "notices": {
+      "created": "Your search has been saved.",
+      "paused": "The saved search is paused.",
+      "resumed": "The saved search is active again.",
+      "extended": "The saved search now runs for another 6 weeks.",
+      "emailOn": "Emails are turned on.",
+      "emailOff": "Emails are turned off.",
+      "cadence": "The email frequency has been changed.",
+      "renamed": "The name has been saved.",
+      "deleted": "The saved search has been deleted."
+    },
+    "errors": {
+      "name": "Please enter a name with 1 to 100 characters.",
+      "invalid": "These filters cannot be saved. Please check them in the search.",
+      "queryTooLong": "The search term is too long to save. Please use fewer words.",
+      "limit": "You can have at most 25 saved searches, expired ones included. Please delete one first.",
+      "legal": "Please accept the current terms of use and privacy policy first.",
+      "extendNotYet": "It is too early to extend this saved search.",
+      "unavailable": "This is not possible: the saved search no longer exists or your account is blocked.",
+      "failed": "That did not work. Please try again later."
+    },
+    "page": {
+      "metaTitle": "Saved searches",
+      "title": "Saved searches",
+      "back": "Back to my account",
+      "intro": "You get an email when a new listing matching one of your saved searches is approved. Each saved search runs for 6 weeks.",
+      "empty": "You have no saved searches yet.",
+      "toSearch": "Go to the search and save one",
+      "count": "{count} of {max} saved searches",
+      "loadFailed": "Your saved searches could not be loaded. Please try again later.",
+      "invalidFilters": "The filters of this saved search are no longer valid. Please save the search again."
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { ListingsMap } from "@/components/map/ListingsMap";
+import { SaveSearch } from "@/components/saved-searches/SaveSearch";
 import { boundsAround, DEFAULT_BOUNDS, type Bounds } from "@/lib/map/bounds";
 import { tilesUrl } from "@/lib/map/tiles";
 import type { AppLocale } from "@/i18n/routing";
@@ -153,6 +154,11 @@ export async function ListingsPage({
         <p className="mt-3 text-sm">
           {tm("areaActive")} <a href={`${path}${withoutArea.size ? `?${withoutArea}` : ""}`} className="underline">{tm("areaRemove")}</a>
         </p>
+      )}
+
+      {/* Suchauftrag aus der Suche, Liste und Karte (ADR 018, Plan M8 5). */}
+      {page.route === "search" && (
+        <SaveSearch locale={locale} filters={filters} mapView={mapView} signedIn={favorites.signedIn} back={currentPath} error={searchParams.error} />
       )}
 
       <FilterForm action={path} filters={filters} fixed={fixedKeys} locale={locale} species={species} regionNames={names} keep={mapView ? { [VIEW_PARAM]: "map" } : {}} />

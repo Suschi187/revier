@@ -135,7 +135,8 @@
       "blocked": "Dein Konto ist gesperrt. Du kannst dein Profil nicht ändern."
     },
     "myListings": "Meine Anzeigen",
-    "favorites": "Favoriten"
+    "favorites": "Favoriten",
+    "savedSearches": "Suchaufträge"
   },
   "Listings": {
     "kinds": {
@@ -850,5 +851,99 @@
     },
     "legalRequired": "Um zu schreiben, stimme bitte zuerst den aktuellen Nutzungsbedingungen zu. Blockieren und Melden bleiben möglich.",
     "legalLink": "Zu den Nutzungsbedingungen"
+  },
+  "SavedSearches": {
+    "quoted": "„{text}“",
+    "mapArea": "Kartenausschnitt",
+    "allListings": "Alle Anzeigen",
+    "legalLink": "Den aktuellen Bedingungen zustimmen",
+    "manageLink": "Suchaufträge verwalten",
+    "save": {
+      "open": "Suche speichern",
+      "intro": "Wir schicken dir eine E-Mail, sobald neue Anzeigen mit diesen Filtern freigegeben sind.",
+      "summary": "Filter dieses Suchauftrags",
+      "noFilters": "Keine Filter: Jede neue Anzeige passt.",
+      "mapAreaHint": "Der Kartenausschnitt wird mitgespeichert: Gemeldet werden nur Anzeigen in diesem Bereich, und „Ergebnisse ansehen“ öffnet die Karte.",
+      "runtime": "Ein Suchauftrag läuft 6 Wochen. In den letzten 14 Tagen kannst du ihn im Konto verlängern.",
+      "submit": "Suchauftrag speichern",
+      "saving": "Wird gespeichert …",
+      "signIn": "Anmelden, um diese Suche zu speichern"
+    },
+    "fields": {
+      "name": "Name",
+      "nameHint": "1 bis 100 Zeichen. Den Namen siehst nur du.",
+      "cadence": "Häufigkeit der E-Mails",
+      "notifyEmail": "E-Mail bei neuen passenden Anzeigen",
+      "email": "E-Mail",
+      "lastNotified": "Letzte E-Mail"
+    },
+    "cadence": {
+      "instant": "Sofort",
+      "daily": "Täglich"
+    },
+    "cadenceHint": {
+      "instant": "Wenige Minuten nach der Freigabe, mehrere Anzeigen gebündelt in einer E-Mail.",
+      "daily": "Eine Sammel-E-Mail am Morgen."
+    },
+    "email": {
+      "on": "An",
+      "off": "Aus"
+    },
+    "status": {
+      "active": "Aktiv, läuft bis {date}",
+      "expiring": "Läuft ab am {date}",
+      "paused": "Pausiert, läuft trotzdem am {date} ab",
+      "pausedHint": "Pausieren hält die Laufzeit nicht an. Anzeigen, die während der Pause freigegeben werden, werden nicht nachgemeldet.",
+      "expired": "Abgelaufen am {date}. Er wird am {deleteDate} gelöscht, wenn du ihn nicht verlängerst."
+    },
+    "actions": {
+      "results": "Ergebnisse ansehen",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen",
+      "extend": "Um 6 Wochen verlängern",
+      "extendFrom": "Verlängern kannst du ab {date}.",
+      "emailOn": "E-Mail einschalten",
+      "emailOff": "E-Mail ausschalten",
+      "toInstant": "Auf sofort umstellen",
+      "toDaily": "Auf täglich umstellen",
+      "rename": "Umbenennen",
+      "renameSubmit": "Namen speichern",
+      "delete": "Löschen",
+      "deleteConfirm": "„{name}“ löschen? Das lässt sich nicht rückgängig machen.",
+      "deleteYes": "Endgültig löschen",
+      "cancel": "Abbrechen"
+    },
+    "notices": {
+      "created": "Dein Suchauftrag ist gespeichert.",
+      "paused": "Der Suchauftrag ist pausiert.",
+      "resumed": "Der Suchauftrag ist wieder aktiv.",
+      "extended": "Der Suchauftrag läuft jetzt weitere 6 Wochen.",
+      "emailOn": "E-Mails sind eingeschaltet.",
+      "emailOff": "E-Mails sind ausgeschaltet.",
+      "cadence": "Die Häufigkeit der E-Mails ist geändert.",
+      "renamed": "Der Name ist gespeichert.",
+      "deleted": "Der Suchauftrag ist gelöscht."
+    },
+    "errors": {
+      "name": "Bitte gib einen Namen mit 1 bis 100 Zeichen ein.",
+      "invalid": "Diese Filter lassen sich nicht speichern. Bitte prüfe sie in der Suche.",
+      "queryTooLong": "Der Suchbegriff ist zu lang zum Speichern. Bitte verwende weniger Wörter.",
+      "limit": "Du kannst höchstens 25 Suchaufträge haben, abgelaufene zählen mit. Bitte lösche zuerst einen.",
+      "legal": "Bitte stimme zuerst den aktuellen Nutzungsbedingungen und der Datenschutzerklärung zu.",
+      "extendNotYet": "Dieser Suchauftrag lässt sich noch nicht verlängern.",
+      "unavailable": "Das geht nicht: Der Suchauftrag existiert nicht mehr oder dein Konto ist gesperrt.",
+      "failed": "Das hat nicht geklappt. Bitte später erneut versuchen."
+    },
+    "page": {
+      "metaTitle": "Suchaufträge",
+      "title": "Suchaufträge",
+      "back": "Zurück zum Konto",
+      "intro": "Du bekommst eine E-Mail, wenn eine neue Anzeige freigegeben wird, die zu einem deiner Suchaufträge passt. Jeder Suchauftrag läuft 6 Wochen.",
+      "empty": "Du hast noch keine Suchaufträge.",
+      "toSearch": "Zur Suche und einen speichern",
+      "count": "{count} von {max} Suchaufträgen",
+      "loadFailed": "Deine Suchaufträge konnten nicht geladen werden. Bitte später erneut versuchen.",
+      "invalidFilters": "Die Filter dieses Suchauftrags sind nicht mehr gültig. Bitte speichere die Suche neu."
+    }
   }
 }

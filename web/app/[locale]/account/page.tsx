@@ -54,6 +54,9 @@ async function AccountContent() {
       <Link href="/account/favorites" className="self-start underline">
         {t("favorites")}
       </Link>
+      <Link href="/account/searches" className="self-start underline">
+        {t("savedSearches")}
+      </Link>
       <Link href="/account/messages" className="self-start underline">
         {tc("title")}
       </Link>
