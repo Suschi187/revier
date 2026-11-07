@@ -121,7 +121,20 @@ Nutzer-Entscheidungen vom 2026-11-06:
 | Abbestell-Token | 90 Tage |
 | abgelaufene Aufträge | 30 Tage nach `expires_at` |
 
+### Fehlercodes (für Web und iOS)
+
+| Code | Wann | Hinweis |
+|---|---|---|
+| `42501` | nicht angemeldet, Konto nicht aktiv, fremder oder unbekannter Suchauftrag (pause/resume/extend), falsches Secret der Function | gleich für fremd und nicht vorhanden |
+| `RV001` | Anlegen, Fortsetzen, Verlängern oder E-Mail wieder an ohne aktuelle Zustimmung | wie ADR 013 |
+| `22023` | ungültiger Filter beim Anlegen | `hint` = erster fehlerhafter Schlüssel wie die Suche, `q` auch bei mehr als 32 Knoten |
+| `23514` | mehr als 25 Suchaufträge (abgelaufene zählen mit) | `hint {"reason":"saved_searches_limit"}` |
+| `RV006` | Verlängern vor dem Fenster | `hint {"extend_from":"<ISO, UTC>"}` |
+
+`unsubscribe` liefert nie einen Fehler (immer `void`).
+
 ## Folgen
 - iOS (I6) nutzt dieselben RPCs, denselben Takt und dieselbe Entdopplung für Push. `notify_push` bleibt bis dahin ungenutzt.
 - In der Cloud (M10) muss DKIM die beiden List-Unsubscribe-Header signieren. Ein Mail-Anbieter mit HTTP-API ist nötig.
 - Die Datenschutzerklärung (Platzhalter, M9) nennt Suchaufträge, Benachrichtigungen und Abbestell-Token.
+- Der Datenexport (M9) nennt Suchaufträge samt Treffern (Review A9).

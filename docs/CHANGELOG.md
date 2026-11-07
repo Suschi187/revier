@@ -2,6 +2,19 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M8: QA-Funde F1–F3 – 2026-11-07
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M8 – Abnahme“.
+
+### Geändert
+- **F1:** `claim_search_notifications` bestimmt erst nach der Entdopplung, ob eine Mail tägliche Treffer enthält. Eine Mail nur mit doppelten täglichen Treffern verbraucht den Kalendertag nicht mehr (Migration `20261109100000_qa_m8_fixes`).
+- **F2:** `next.config.ts` nimmt `/api/unsubscribe` von der allgemeinen Header-Regel aus. Die Route behält `Referrer-Policy: no-referrer` und ihre eigene CSP.
+- **F3:** ADR 018 nennt die Fehlercodes (für I6) und den Datenexport in M9. Die erledigte Lücke zum Cache-Header ist entfernt, die Cloud-Checkliste nennt den Rückstau der Moderations-Mails.
+- **Proben:** Der TODO in pgTAP 46 und `test.fail` „F2“ in `qa-m8.spec.ts` sind jetzt normale Tests.
+
+### Testen
+- `supabase test db` (46), `cd web && npx playwright test e2e/qa-m8.spec.ts`
+
 ## M8 Suchaufträge (Web) – 2026-11-06
 
 Plan `docs/plans/M8-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 018, SPEC v0.10.
@@ -61,7 +74,6 @@ Plan `docs/plans/M8-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 018, S
 - Die Suchauftrags-Mail nennt Art und Richtung der Anzeige nicht, nur Titel, Region und Preis.
 - Der Sprachumschalter auf der Abbestellseite verliert den Token; die Seite bittet dann, den Link aus der Mail erneut zu öffnen.
 - Der Request-Logger von `next dev` schreibt Pfade samt Query, also auch Token. Das betrifft nur den Dev-Modus; die Logs des Hosters klärt M10.
-- Im Dev-Modus setzt Next `Cache-Control: no-store` statt `private, no-store` auf der Abbestellseite. Im Prod-Build prüfen.
 - Die Texte auf cs und pl, auch die Mailtexte, sind ungeprüft (SPEC 7.6).
 - Der Test zum täglichen Takt kann rund um Mitternacht (Europe/Berlin) am Tageswechsel wackeln.
 - In der CI läuft während der Integrationstests kein Web-Server; den One-Click-POST deckt dort das E2E ab.
@@ -73,6 +85,7 @@ Plan `docs/plans/M8-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 018, S
 - **Function-Secrets:** `SITE_URL` (`https://…`, ohne Pfad), sonst antworten beide Mail-Functions mit 503. Dazu `MAIL_FROM`.
 - **DKIM** muss `List-Unsubscribe` und `List-Unsubscribe-Post` signieren (Bulk-Sender-Regeln). Die Access-Logs des Hosters höchstens 7 Tage aufbewahren (Token in der Query).
 - **Cron-Jobs:** `search-notifications` jede Minute, `search-notifications-retention` und `saved-searches-retention` täglich.
+- Wird `search_notifications_url` erst später gesetzt, gehen im ersten Lauf alle offenen Moderations-Mails der letzten 30 Tage auf einmal hinaus (QA M8 H4). Vor dem Setzen prüfen oder alte Einträge erledigen.
 
 ### Lokal von Hand: Suchauftrags-Mails
 - Einmalig: `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/send-search-notifications', 'search_notifications_url')"`

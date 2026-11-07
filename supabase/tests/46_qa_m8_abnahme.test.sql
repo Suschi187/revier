@@ -535,7 +535,7 @@ select claim_search_notifications(:'secret') as cd2 \gset
 select is(array(select i ->> 'listing_id' from jsonb_array_elements(tests.qrecipient(:'cd2'::jsonb, 'qa8-day@test.local') -> 'items') i),
   array[:'q_y'], 'Ab der Stunde: Mail nur mit der Sofort-Anzeige Y (X täglich ist doppelt)');
 select confirm_search_notifications(:'secret', array[tests.qrecipient(:'cd2'::jsonb, 'qa8-day@test.local') ->> 'claim_id']::uuid[]);
-select todo('QA M8 F1: last_daily_on wird vor der Entdopplung bestimmt', 1);
+-- QA M8 F1 (behoben in 20261109100000): last_daily_on erst nach der Entdopplung.
 select is((select last_daily_on from private.search_notification_state where user_id = :'qd'), null,
   'F1: Ohne täglichen Treffer in der Mail bleibt der Kalendertag frei');
 

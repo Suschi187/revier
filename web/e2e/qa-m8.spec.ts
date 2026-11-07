@@ -10,7 +10,7 @@ import { createAccount, signInAs, type TestAccount } from "./session";
 // - One-Click mit Sitzungs-Cookie und fremdem Origin: 200, kein Set-Cookie, kein Redirect.
 // - Konto-Seite ohne JavaScript (alle Aktionen) und nur mit der Tastatur (Speichern und Pausieren).
 // - axe in en/cs/pl mit Zuständen (pausiert, abgelaufen, Fehler) und auf der Bestätigung nach dem POST; 360 px.
-// - F2 (test.fail): Header der Route werden von next.config überschrieben.
+// - F2 (behoben): Header der Route wurden von next.config überschrieben.
 
 const created: string[] = [];
 test.afterAll(() => deleteTestUsers(created));
@@ -131,9 +131,9 @@ test.describe("QA M8", () => {
     await ctx.dispose();
   });
 
-  // F2 (niedrig): Die Route setzt Referrer-Policy no-referrer und eine eigene CSP ohne Skripte und Formulare (DONE_CSP),
-  // next.config.ts `headers()` überschreibt beide auf allen Pfaden außer /admin (Dev und Prod-Build gleich).
-  test.fail("F2: POST/GET /api/unsubscribe behalten Referrer-Policy no-referrer und die CSP der Bestätigung", async ({ request }) => {
+  // F2 (niedrig, behoben): Die Route setzt Referrer-Policy no-referrer und eine eigene CSP (DONE_CSP); next.config.ts nimmt
+  // /api/unsubscribe von der allgemeinen Header-Regel aus.
+  test("F2: POST/GET /api/unsubscribe behalten Referrer-Policy no-referrer und die CSP der Bestätigung", async ({ request }) => {
     const t = "0".repeat(64);
     const post = await request.post(`/api/unsubscribe?t=${t}`, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" }, data: "List-Unsubscribe=One-Click", maxRedirects: 0,
