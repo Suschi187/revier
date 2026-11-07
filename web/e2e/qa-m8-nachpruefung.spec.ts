@@ -9,7 +9,8 @@ import { expect, request as pwRequest, test, type APIRequestContext } from "@pla
 // Gegen den Produktions-Build: QA_BASE_URL=http://localhost:3100 QA_PROD=1 (dann auch HSTS).
 
 const BASE = process.env.QA_BASE_URL ?? "http://localhost:3000";
-const PROD = process.env.QA_PROD === "1";
+// In der CI läuft der Produktions-Build (playwright.config.ts), dann gehört HSTS dazu.
+const PROD = process.env.QA_PROD === "1" || (!process.env.QA_BASE_URL && !!process.env.CI);
 const T = "0".repeat(64);
 const DONE_CSP = "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 const FORM = { headers: { "Content-Type": "application/x-www-form-urlencoded" }, data: "List-Unsubscribe=One-Click", maxRedirects: 0 };
