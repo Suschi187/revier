@@ -1854,3 +1854,62 @@ Die Route setzt `Referrer-Policy: no-referrer` und eine eigene CSP ohne Skripte 
 ### Empfehlung
 
 **Abnahme von M8: ja, mit Auflagen.** Die Akzeptanz ist erfüllt: Neue Anzeigen lösen genau eine Mail aus, auch über den echten Cron-Weg, bei parallelen Claims und Läufen, nach Releases und überlappenden Läufen. Rechte, RLS und Orakel hielten allen Proben stand. Abgleich und Suche liefern auch an Randfällen dieselben Anzeigen. Mails enthalten weder Ort, PLZ, Koordinaten noch Kontaktdaten, Logs weder Adressen noch Token. One-Click nach RFC 8058 funktioniert ohne Cookies an der Header-URL. Auflagen: F2 vor dem Cloud-Rollout (M10) beheben, F1 und F3 gesammelt nachziehen, F3 (Fehlercodes) vor I6. H4 in die Cloud-Checkliste.
+
+## M8 – Nachprüfung 2026-11-07
+
+Geprüfter Stand: `d9b4605` (main, Arbeitsbaum sauber bis auf die neuen Proben), Korrekturen F1–F3. Migration `20261109100000_qa_m8_fixes` lokal angewendet (`schema_migrations`), kein `db reset`, kein stop/start. Umgebung wie in der Abnahme: macOS, Node 24, Supabase-CLI lokal, eigener `next dev` auf Port 3000 (Port war frei, danach beendet), Produktions-Build mit `next start -p 3100` (danach beendet; Exit 143 = SIGTERM), Mailpit.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (mit den neuen Proben) |
+| Vitest | 33 Dateien, **647/647** |
+| `supabase test db` | 48 Dateien, **1304** Tests. Fehlgeschlagen nur die erwarteten lokalen Fälle 07 (25, 27), 22 (32), 23 (21, 22, 25). 43–46 grün, 46 **ohne TODO** (F1-Fall Test 57 grün), neu `47_qa_m8_nachpruefung` **23/23** |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 21 Dateien, **251 bestanden, 1 erwartet fehlgeschlagen** (`it.fails` H2 aus M7); Web-Server lief (One-Click-Zweig dabei) |
+| `npm run test:e2e` (Dev, alle Specs) | **227 bestanden**, 1 erwartet fehlgeschlagen (`test.fail` N1), 1 fehlgeschlagen und 6 nicht gelaufen in `qa-m6-nachpruefung.spec.ts` (siehe H2). Der Rechner ging während des Laufs in den Ruhezustand (Testdauer 2,5 h). Die Datei danach dreimal einzeln: einmal derselbe Fehler, zweimal **8/8** |
+| Produktions-Build | grün, ohne Warnungen; `qa-m8-nachpruefung.spec.ts` gegen `:3100` mit `QA_PROD=1` (HSTS) **10/10** plus `test.fail` N1; Header zusätzlich per `curl` |
+
+Aufgeräumt: keine Konten auf `@test.local` (2 Konten des Nutzers unverändert), keine Treffer oder Claims, keine `*_notifications_url` im Vault, `app_settings` auf den Standardwerten (pgTAP läuft in einer Transaktion mit Rollback). Die Anzeige „Jagdpacht“ ist unberührt.
+
+### Ergebnis je Fund
+
+| Fund | Ergebnis | Nachweis |
+|---|---|---|
+| F1 (niedrig) `last_daily_on` vor der Entdopplung | **behoben** | Diff der Funktionsrümpfe gegen `20261108120000`: nur die Zuweisung `has_daily := …` wandert hinter das Update auf `duplicate` (plus Kommentar), sonst zeichengleich. Die DB-Fassung entspricht der Migration (md5 von `prosrc` gleich). Owner `postgres`, `security definer`, `search_path=""`, `execute` nur für `service_role` (ACL `{postgres=X,service_role=X}`), da `create or replace` die Rechte behält. pgTAP 46 Test 57 grün. Gegenrichtung (pgTAP 47): Eine Mail mit echtem täglichem Treffer setzt `set_daily` und den Kalendertag; ein zweiter täglicher Treffer am selben Tag wartet offen; Release gibt den Tag zurück, ein neuer Claim setzt ihn wieder; doppelter plus echter täglicher Treffer in einer Mail setzen den Tag; nach der F1-Mail (nur doppelte tägliche Treffer) geht ein neuer täglicher Treffer am selben Tag noch, danach ist der Tag verbraucht. Keine doppelte und keine verlorene Mail |
+| F2 (niedrig) Header von `/api/unsubscribe` | **behoben, mit Rest (N1)** | Dev und Prod: POST 200 mit genau einer CSP = `DONE_CSP` und genau einer `Referrer-Policy: no-referrer`, `no-store`, `noindex`, nosniff, `X-Frame-Options: DENY`, Permissions-Policy, im Prod HSTS, kein `Set-Cookie`. GET 303 mit `no-referrer`, ohne CSP (leere Antwort, siehe H1). Unverändert: `/de`, `/en/search`, `/de/unsubscribe` (CSP allgemein, `no-referrer` aus der Seite, Prod `private, no-store`), `/de/auth/*` (`no-referrer`), `/de/admin` (keine feste CSP, Nonce aus dem Proxy, übrige Header), `/api/map`, `/api/photos/…` (allgemeine Header). Der Matcher nimmt nur genau `/api/unsubscribe` aus: `/api/unsubscribex`, `/api/unsubscribe/x`, `/api/%75nsubscribe` bekommen die allgemeinen Header; `//api/unsubscribe` → 308. Rest: `/api/unsubscribe/` (N1) |
+| F3 (niedrig, Doku) | **behoben, mit Rest (N2)** | ADR 018 hat eine Fehlercode-Tabelle; Abgleich mit dem Code: `42501` (Guard, pause/resume/extend, Claim/Confirm/Release), `RV001` (Anlegen, `notify_email` false → true, resume, extend; pause ohne), `22023` mit `hint` = Schlüssel aus `search_filters_error` bzw. `q` aus `search_conditions` („Suchtext zu lang“), `23514` mit `{"reason":"saved_searches_limit"}`, `RV006` mit `extend_from` (ISO, UTC), `unsubscribe` ohne `raise`. Stimmt mit `web/lib/saved-searches/errors.ts` überein. Export-Hinweis (M9) in ADR 018 „Folgen“. Erledigte Lücke zum Cache-Header gestrichen (Prod: `private, no-store` bestätigt). H4 in der Cloud-Checkliste. CHANGELOG „Nachtrag M8“ mit Testanleitung vorhanden |
+
+### Neue Funde
+
+#### N1 – niedrig – `/api/unsubscribe/` mit Schrägstrich erreicht die Route, bekommt aber die allgemeine CSP
+Der Proxy reicht `/api/` unverändert durch, `skipTrailingSlashRedirect` ist an. Next bedient `/api/unsubscribe/` mit derselben Route (POST 200, GET 303 auf `/de/unsubscribe?t=…`). Die Ausnahme `api/unsubscribe$` und der Eintrag `source: "/api/unsubscribe"` greifen dort nicht. Die allgemeine CSP (`script-src 'self' 'unsafe-inline'`, `form-action 'self'`) ersetzt `DONE_CSP`. `Referrer-Policy` bleibt `no-referrer`, denn diesen Header setzt die Route selbst und die allgemeine Regel überschreibt ihn hier nicht. Dev und Prod verhalten sich gleich.
+- Reproduktion: `curl -s -D - -o /dev/null -X POST -H 'Content-Type: application/x-www-form-urlencoded' --data 'List-Unsubscribe=One-Click' 'http://localhost:3100/api/unsubscribe/?t=<64 hex>'` → `Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' …`. Probe: `e2e/qa-m8-nachpruefung.spec.ts` „N1“ (`test.fail`).
+- Folge: gering. Die Mail-Header und Links verwenden die URL ohne Schrägstrich. Es fehlt nur die zusätzliche Absicherung durch die strenge CSP. Die Seite enthält kein Skript, und `no-referrer` greift.
+- Vorschlag: In der Ausnahme `api/unsubscribe/?$` verwenden und `source: "/api/unsubscribe{/}?"` setzen. Alternativ leitet der Proxy `/api/unsubscribe/` per 308 weiter oder antwortet mit 404.
+
+#### N2 – niedrig (Doku) – Fehlercode-Tabelle in ADR 018 unvollständig für I6
+- `23514` kommt auch **ohne** `hint` vor, nämlich aus den Check-Constraints `saved_searches_name_check` (Name nach `btrim` 1–100 Zeichen) und `saved_searches_filters_check` (Objekt, höchstens 4096 Byte). Das Web bildet das auf `failed` ab (`errors.ts`, Test „23514 ohne hint“). Die Tabelle nennt `23514` nur für das Limit. Ein iOS-Client, der nur den Code auswertet, würde „Limit erreicht“ anzeigen.
+- `42501` kommt auch beim direkten Setzen von Server-Spalten vor („Diese Felder setzt nur der Server“, `paused_at`/`expires_at` ohne RPC) und bei einem Update von `filters`, für das kein Spaltenrecht besteht. Das ist für Clients kein Normalfall, gehört aber zur Abbildung.
+- Der Export-Hinweis steht nur in ADR 018, nicht in ADR 008 (Retention/Löschung, dort M9-Bezug). Der Vorschlag der Abnahme lautete ADR 008. In ADR 018 ist er ausreichend auffindbar, ein Verweis in ADR 008 wäre konsistent.
+- Vorschlag: In der Tabelle eine Zeile „`23514` ohne `hint`: Name oder Filtergröße, Client prüft vorher (Web: `failed`)“ ergänzen, `42501` um „Server-Spalten“ ergänzen und in ADR 008 einen Einzeiler mit Verweis einfügen.
+
+### Hinweise (keine Fehler)
+
+- **H1:** Die 303-Antwort von `GET /api/unsubscribe` hat seit F2 keine CSP mehr, weil der eigene Eintrag die CSP ausnimmt und die Route nur beim POST eine setzt. Die Antwort hat keinen Body, also ist das unkritisch. Basis-Header und `no-referrer` sind vorhanden.
+- **H2:** `qa-m6-nachpruefung.spec.ts` „Entprellung“ (Karte, Zoom-Klick) schlug im Gesamtlauf nach dem Ruhezustand fehl (`locator.click` Timeout) und danach einmal einzeln. Zwei weitere Einzelläufe waren grün (8/8). Die Probe hat keinen Bezug zu F1–F3. Die Header-Änderung betrifft nur `/api/unsubscribe`, `/de/suche` hat unveränderte Header. Wahrscheinlich ist der Test unter `next dev` zeitkritisch (Kompilieren, WebGL über SwiftShader). Für M10 im Blick behalten.
+- **H3:** Die Migration trägt das Datum 2026-11-09 und liegt damit nach dem heutigen Tag. Das passt zur bisherigen Reihenfolge (`20261108*`) und ist unkritisch.
+
+### Nicht prüfbar
+
+- iOS (I6) und Gleichstand Web/iOS: noch keine App.
+- Cloud: Verhalten des Hosters bei Schrägstrich-URLs (N1), DKIM, Access-Logs (M10).
+
+### Neue Tests
+
+- `supabase/tests/47_qa_m8_nachpruefung.test.sql` (23): Owner, Definer, `search_path`, Rechte und angewendete Fassung der neuen `claim_search_notifications`. Kalendertag in der Gegenrichtung zu F1: echter täglicher Treffer, zweiter am selben Tag, Release und erneuter Claim, doppelter neben echtem, neuer täglicher Treffer nach der F1-Mail.
+- `web/e2e/qa-m8-nachpruefung.spec.ts` (11, davon 1 `test.fail` N1): Header von POST und GET `/api/unsubscribe` (genau eine CSP und Referrer-Policy, Basis-Header, HSTS mit `QA_PROD=1`), unveränderte Header auf Seiten und anderen `/api`-Pfaden, Grenzen des Matchers, `/de/admin`. Gegen den Prod-Build: `QA_BASE_URL=http://localhost:3100 QA_PROD=1 npx playwright test e2e/qa-m8-nachpruefung.spec.ts`.
+
+### Empfehlung
+
+F1 ist **behoben** und ohne Nebenwirkung. Die Änderung verschiebt genau eine Zuweisung, Rechte und Definer sind unverändert, und die Gegenrichtung (echter täglicher Treffer verbraucht den Tag, Release gibt ihn zurück) hält. F2 ist für die Header-URL der Mails **behoben**, in Dev und im Produktions-Build. Die übrigen Seiten und `/api`-Pfade haben unveränderte Header, der Matcher nimmt nichts anderes aus. Offen bleibt nur die Schrägstrich-Variante (N1). F3 ist bis auf die Lücken in N2 erledigt. **Abnahme von M8: ja.** Die Auflagen der Abnahme sind erfüllt. N1 vor dem Cloud-Rollout (M10) nachziehen, N2 vor I6.

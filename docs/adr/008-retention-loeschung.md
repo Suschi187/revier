@@ -34,7 +34,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `private.listing_location_offsets.listing_id → listings` | cascade |
 | `favorites.user_id → profiles`, `favorites.listing_id → listings` | cascade |
 | `saved_searches.user_id → profiles` | cascade |
-| M8 (ADR 018): `private.saved_search_matches`, Entdopplung, Zustand, `moderation_notifications`, `unsubscribe_tokens`, `search_match_queue` → profiles/saved_searches/listings | cascade; Fristen in ADR 018 (Warteschlange 24 h, Treffer und Moderations-Mails 30 Tage, Token 90 Tage, abgelaufene Suchaufträge 30 Tage nach `expires_at`) |
+| M8 (ADR 018): `private.saved_search_matches`, Entdopplung, Zustand, `moderation_notifications`, `unsubscribe_tokens`, `search_match_queue` → profiles/saved_searches/listings | cascade; Fristen in ADR 018 (Warteschlange 24 h, Treffer und Moderations-Mails 30 Tage, Token 90 Tage, abgelaufene Suchaufträge 30 Tage nach `expires_at`); der Datenexport (M9) nennt Suchaufträge samt Treffern |
 | `conversations.listing_id → listings` | set null (Chats bleiben als Beweis, Entscheidung Review M1) |
 | `conversations.owner_id`/`interested_id → profiles` | cascade |
 | `messages.conversation_id → conversations` | cascade |

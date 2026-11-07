@@ -11,6 +11,9 @@ Bericht: `docs/QA-REPORT.md`, Abschnitt „M8 – Abnahme“.
 - **F2:** `next.config.ts` nimmt `/api/unsubscribe` von der allgemeinen Header-Regel aus. Die Route behält `Referrer-Policy: no-referrer` und ihre eigene CSP.
 - **F3:** ADR 018 nennt die Fehlercodes (für I6) und den Datenexport in M9. Die erledigte Lücke zum Cache-Header ist entfernt, die Cloud-Checkliste nennt den Rückstau der Moderations-Mails.
 - **Proben:** Der TODO in pgTAP 46 und `test.fail` „F2“ in `qa-m8.spec.ts` sind jetzt normale Tests.
+- **Nachprüfung N1:** Auch `/api/unsubscribe/` (mit Schrägstrich) behält die eigene CSP der Route.
+- **Nachprüfung N2:** ADR 018 nennt `23514` ohne `hint` (Name, Filtergröße) und weitere `42501`-Fälle; ADR 008 nennt den Datenexport der Suchaufträge.
+- **Proben der Nachprüfung:** pgTAP 47, `qa-m8-nachpruefung.spec.ts` (gegen Prod mit `QA_BASE_URL=… QA_PROD=1`).
 
 ### Testen
 - `supabase test db` (46), `cd web && npx playwright test e2e/qa-m8.spec.ts`

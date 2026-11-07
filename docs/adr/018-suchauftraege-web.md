@@ -125,10 +125,10 @@ Nutzer-Entscheidungen vom 2026-11-06:
 
 | Code | Wann | Hinweis |
 |---|---|---|
-| `42501` | nicht angemeldet, Konto nicht aktiv, fremder oder unbekannter Suchauftrag (pause/resume/extend), falsches Secret der Function | gleich für fremd und nicht vorhanden |
+| `42501` | nicht angemeldet, Konto nicht aktiv, fremder oder unbekannter Suchauftrag (pause/resume/extend), direktes Setzen von Server-Spalten oder Ändern von `filters`, falsches Secret der Function | gleich für fremd und nicht vorhanden |
 | `RV001` | Anlegen, Fortsetzen, Verlängern oder E-Mail wieder an ohne aktuelle Zustimmung | wie ADR 013 |
 | `22023` | ungültiger Filter beim Anlegen | `hint` = erster fehlerhafter Schlüssel wie die Suche, `q` auch bei mehr als 32 Knoten |
-| `23514` | mehr als 25 Suchaufträge (abgelaufene zählen mit) | `hint {"reason":"saved_searches_limit"}` |
+| `23514` | mit `hint {"reason":"saved_searches_limit"}`: mehr als 25 Suchaufträge (abgelaufene zählen mit); ohne `hint`: Name leer oder länger als 100 Zeichen, Filter größer als 4 KB | nur mit diesem `hint` „Limit erreicht“ anzeigen |
 | `RV006` | Verlängern vor dem Fenster | `hint {"extend_from":"<ISO, UTC>"}` |
 
 `unsubscribe` liefert nie einen Fehler (immer `void`).

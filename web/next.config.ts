@@ -48,15 +48,15 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       // /admin bekommt seine CSP mit Nonce aus dem Proxy (ADR 014); die übrigen Header gelten überall.
-      // /api/unsubscribe setzt CSP und Referrer-Policy selbst (ADR 018, QA M8 F2) und ist deshalb ausgenommen.
-      { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)|api/unsubscribe$).*)", headers: securityHeaders },
-      {
-        source: "/api/unsubscribe",
+      // /api/unsubscribe setzt CSP und Referrer-Policy selbst (ADR 018, QA M8 F2) und ist deshalb ausgenommen, auch mit Schrägstrich am Ende (QA M8 N1).
+      { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)|api/unsubscribe/?$).*)", headers: securityHeaders },
+      ...["/api/unsubscribe", "/api/unsubscribe/"].map((source) => ({
+        source,
         headers: [
           ...securityHeaders.filter((h) => h.key !== "Content-Security-Policy" && h.key !== "Referrer-Policy"),
           { key: "Referrer-Policy", value: "no-referrer" },
         ],
-      },
+      })),
       // `:path*` deckt auch /:locale/admin selbst ab.
       { source: "/:locale/admin/:path*", headers: securityHeaders.filter((h) => h.key !== "Content-Security-Policy") },
       // Kartenstil, Schriften und Worker sind versioniert (ADR 016, Review A9); public/ liefert sonst max-age=0.
