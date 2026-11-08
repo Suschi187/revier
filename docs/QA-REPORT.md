@@ -1913,3 +1913,5 @@ Der Proxy reicht `/api/` unverändert durch, `skipTrailingSlashRedirect` ist an.
 ### Empfehlung
 
 F1 ist **behoben** und ohne Nebenwirkung. Die Änderung verschiebt genau eine Zuweisung, Rechte und Definer sind unverändert, und die Gegenrichtung (echter täglicher Treffer verbraucht den Tag, Release gibt ihn zurück) hält. F2 ist für die Header-URL der Mails **behoben**, in Dev und im Produktions-Build. Die übrigen Seiten und `/api`-Pfade haben unveränderte Header, der Matcher nimmt nichts anderes aus. Offen bleibt nur die Schrägstrich-Variante (N1). F3 ist bis auf die Lücken in N2 erledigt. **Abnahme von M8: ja.** Die Auflagen der Abnahme sind erfüllt. N1 vor dem Cloud-Rollout (M10) nachziehen, N2 vor I6.
+
+**Freigabe:** M8 vom Nutzer am 2026-11-08 abgenommen.

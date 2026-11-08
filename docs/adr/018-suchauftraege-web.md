@@ -1,6 +1,6 @@
 # ADR 018: Suchaufträge und Benachrichtigungen im Web
 
-Status: angenommen (M8, Plan `docs/plans/M8-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-11-06)
+Status: angenommen und umgesetzt (M8, Plan `docs/plans/M8-plan.md` mit Architekt-Review, Freigabe durch den Nutzer 2026-11-06; Umsetzung und QA mit Nachprüfung 2026-11-06/07, Abnahme durch den Nutzer 2026-11-08, CHANGELOG M8)
 
 ## Kontext
 SPEC 6 M8: Filter speichern, serverseitiger Abgleich bei neuer Freigabe, E-Mail-Benachrichtigung.

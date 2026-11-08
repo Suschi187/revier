@@ -20,7 +20,7 @@ Bericht: `docs/QA-REPORT.md`, Abschnitt „M8 – Abnahme“.
 
 ## M8 Suchaufträge (Web) – 2026-11-06
 
-Plan `docs/plans/M8-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 018, SPEC v0.10.
+Plan `docs/plans/M8-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 018, SPEC v0.10. Abgenommen durch den Nutzer am 2026-11-08 (QA-Abnahme und Nachprüfung in `docs/QA-REPORT.md`).
 
 ### Geändert
 - **Suchauftrag:**
