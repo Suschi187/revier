@@ -1,6 +1,6 @@
 # ADR 008: Retention und Löschung
 
-Status: angenommen (M1, technischer Default). **Keine Rechtsberatung, anwaltliche Prüfung offen (SPEC 7.2/7.3).**
+Status: angenommen (M1, technischer Default; ergänzt in M9a, ADR 019). **Keine Rechtsberatung, anwaltliche Prüfung offen (SPEC 7.2/7.3).**
 
 ## Kontext
 DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Löschung und DSA-Pflichten für die Moderation müssen zusammenpassen.
@@ -16,9 +16,10 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
   - Der Löschantrag setzt `profiles.deleted_at`. Das Profil verschwindet sofort aus der öffentlichen Sicht.
   - Danach folgt die harte Löschung über `auth.admin.deleteUser`, und `on delete cascade` räumt die Daten ab.
   - Dateien in Storage löscht der Lösch-Job über die Storage-API.
+  - Ab M9a (ADR 019) gilt ein fester, idempotenter Ablauf mit frischer Anmeldung: `deleted_at` → Storage-Durchlauf 1 → prepare → `deleteUser` → `account_deletion_finalize` (Auth-Reste ohne FK, Realtime) → Storage-Durchlauf 2 → Ankerzeile entfernen. Die Allowlist der Reste steht in ADR 019; jede Tabelle mit Nutzerbezug ist unten eingeordnet (Wächter in `00_meta`).
 - Nie bestätigte Konten (Review M2, Architekt 7): Jeder kann für eine fremde Adresse ein unbestätigtes Konto samt Profil erzeugen. Ein Job löscht Konten mit `email_confirmed_at is null` nach `unconfirmed_account_days` (Startwert 7, Platzhalter, wird in M9 in `app_settings` angelegt) hart über `auth.admin.deleteUser`.
 - Audit- und Moderationsdaten bleiben pseudonymisiert: `audit_log.actor_id` und `reports.reporter_id`/`handled_by` werden NULL. Meldeziele werden ohne FK gespeichert (`target_type`, `target_id`).
-- Die Jobs (pg_cron, Edge Function für Storage) folgen in M9. M1 legt nur Schema, Spalten und Einstellungen an.
+- Die Jobs (pg_cron, Edge Function für Storage) folgen in M9: Löschung, nie bestätigte Konten, Foto-Eingang, Dateien ohne Zeile, Meldungen, Audit und Export-Zähler in M9a (ADR 019); Verifizierungsdokumente, verwaiste Anträge, verlassene Entwürfe und Beschwerden in M9b (ADR 020). M1 legt nur Schema, Spalten und Einstellungen an.
 
 ## Löschregeln je Fremdschlüssel
 
@@ -48,10 +49,14 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `devices.user_id → profiles` | cascade |
 | `legal_acceptances.user_id → profiles` | cascade (M2; Aufbewahrung des Zustimmungsnachweises nach Löschung rechtlich prüfen) |
 | `audit_log.actor_id → profiles` | set null |
+| M9a (ADR 019): `private.account_deletions` | kein FK (Anker überlebt `deleteUser`); entfernt im letzten Schritt der Löschung |
+| M9a (ADR 019): `private.data_exports.user_id → profiles` | cascade; 7 Tage |
+| M9b (ADR 020): `private.verification_attempts`, `private.account_notifications`, `appeals.user_id` → profiles | cascade; Fristen in ADR 020 |
+| `audit_log.target_id`, `reports.target_id`, `private.reported_message_snapshots.sender_id` | kein FK; einzige erlaubte Reste nach der Löschung (Allowlist ADR 019) |
 
 Löscht ein Besitzer nur eine Anzeige, bleiben die Chats für beide Seiten erhalten, angezeigt als „Anzeige gelöscht“. Gesperrte Nutzer können keine Anzeigen löschen, und Admins entfernen Anzeigen über den Status `removed` (auditiert) statt per DELETE.
 
-Bekannte Folge: Bei einer Account-Löschung verschwinden auch die Chats beim Gegenüber. Ob sie dort bleiben müssen oder dürfen, ist rechtlich zu prüfen.
+Bekannte Folge: Bei einer Account-Löschung verschwinden auch die Chats beim Gegenüber. Ob sie dort bleiben müssen oder dürfen, ist rechtlich zu prüfen. Ab M9a (ADR 019): Nie gemeldete Nachrichten verschwinden auch beim Gegenüber, gemeldete bleiben als Kopie bis zur Frist der Meldung.
 
 ## Rechtlich zu prüfen
 Speicherdauer der Jagdscheine, DSA Art. 16/17/20 (Begründungen, Beschwerdefrist von mindestens 6 Monaten), Beweissicherung bei Betrug, Nachrichten nach einer Löschung, Aufbewahrungspflichten (im MVP ohne Zahlungen voraussichtlich keine).
