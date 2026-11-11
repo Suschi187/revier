@@ -97,15 +97,211 @@
   "Legal": {
     "placeholder": "Platzhalter: Der endgültige Text wird vor dem Start von einem Anwalt geliefert.",
     "terms": {
-      "title": "Nutzungsbedingungen"
+      "title": "Nutzungsbedingungen",
+      "sections": [
+        {
+          "title": "Geltungsbereich",
+          "points": [
+            "Die Plattform vermittelt Jagdgelegenheiten: Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäen-/Gastjagden und Jagdhelfer/Mitjäger, jeweils als Angebot oder Gesuch.",
+            "Kein Verkauf von Waffen oder Munition."
+          ]
+        },
+        {
+          "title": "Konto",
+          "points": [
+            "Ein Konto je Person, mit wahren Angaben.",
+            "Die Nutzung setzt die Zustimmung zu den Nutzungsbedingungen und zur Datenschutzerklärung voraus."
+          ]
+        },
+        {
+          "title": "Anzeigen",
+          "points": [
+            "Anzeigen werden vor der Veröffentlichung geprüft.",
+            "Kontaktdaten gehören nicht in den Anzeigentext. Der Kontakt läuft nach der Anmeldung über den Chat.",
+            "Anzeigen laufen ab und lassen sich verlängern."
+          ]
+        },
+        {
+          "title": "Moderation",
+          "points": [
+            "Anzeigen können abgelehnt, zur Bearbeitung zurückgegeben oder entfernt werden. Du erhältst die Begründung.",
+            "Konten können bei schweren oder wiederholten Verstößen gesperrt werden.",
+            "Gegen Entscheidungen kannst du Beschwerde einlegen: Platzhalter."
+          ]
+        },
+        {
+          "title": "Melden",
+          "points": [
+            "Anzeigen, Profile und Nachrichten lassen sich melden. Die Richtlinien beschreiben, was nicht erlaubt ist."
+          ]
+        },
+        {
+          "title": "Ende der Nutzung",
+          "points": [
+            "Du kannst dein Konto jederzeit löschen."
+          ]
+        },
+        {
+          "title": "Haftung und Änderungen",
+          "points": [
+            "Platzhalter."
+          ]
+        }
+      ]
     },
     "privacy": {
-      "title": "Datenschutzerklärung"
+      "title": "Datenschutzerklärung",
+      "sections": [
+        {
+          "title": "Verantwortlicher und Kontakt",
+          "points": [
+            "Name und Anschrift des Betreibers: Platzhalter, siehe Impressum.",
+            "Kontakt für Fragen zum Datenschutz: Platzhalter."
+          ]
+        },
+        {
+          "title": "Konto und Anmeldung",
+          "points": [
+            "E-Mail-Adresse, Anmeldecodes und, falls genutzt, „Mit Apple anmelden“.",
+            "Ein Session-Cookie hält dich angemeldet (siehe Cookie-Einstellungen).",
+            "Nie bestätigte Konten werden nach 7 Tagen gelöscht."
+          ]
+        },
+        {
+          "title": "Profil und Anzeigen",
+          "points": [
+            "Anzeigename, Kontotyp, Firmenname, Land und Sprache.",
+            "Anzeigen mit Texten, Preisen, Wildarten und Fotos.",
+            "Fotos werden auf unserem Server neu kodiert. Dabei fallen Metadaten wie GPS-Koordinaten weg."
+          ]
+        },
+        {
+          "title": "Lage",
+          "points": [
+            "Öffentliche Seiten zeigen nur Region bzw. Landkreis oder einen bewusst verfremdeten Punkt.",
+            "Postleitzahl und exakte Lage eines Reviers sind nie öffentlich sichtbar."
+          ]
+        },
+        {
+          "title": "Nachrichten",
+          "points": [
+            "Nachrichten zwischen Nutzern werden für die Unterhaltung gespeichert und in Echtzeit zugestellt.",
+            "E-Mail-Benachrichtigungen über neue Nachrichten lassen sich abschalten.",
+            "Blockierte Personen können dir nicht schreiben."
+          ]
+        },
+        {
+          "title": "Suchaufträge",
+          "points": [
+            "Filter, Takt und Treffer deiner Suchaufträge. Sie laufen 6 Wochen, sofern du sie nicht verlängerst.",
+            "Jede E-Mail enthält einen Link zum Abbestellen per Klick, gültig 90 Tage."
+          ]
+        },
+        {
+          "title": "Karte",
+          "points": [
+            "Die Karte kommt von unserem eigenen Server. Es gehen keine Anfragen an fremde Kartenanbieter.",
+            "Die Karte speichert nichts in deinem Browser."
+          ]
+        },
+        {
+          "title": "Verifizierung",
+          "points": [
+            "Freiwillig: Ein hochgeladener Jagdschein oder ein ähnliches Dokument liegt privat und ist nur für dich und für Admins sichtbar.",
+            "Das Dokument wird 30 Tage nach der Entscheidung gelöscht."
+          ]
+        },
+        {
+          "title": "Meldungen und Moderation",
+          "points": [
+            "Meldungen, Moderationsentscheidungen und ihre Begründungen.",
+            "Kopien gemeldeter Nachrichten bleiben 12 Monate nach der Bearbeitung der Meldung.",
+            "Das Protokoll der Admin-Entscheidungen bleibt pseudonymisiert 24 Monate."
+          ]
+        },
+        {
+          "title": "Konto löschen",
+          "points": [
+            "Du kannst dein Konto jederzeit nach einer erneuten Anmeldung löschen.",
+            "Profil, Anzeigen, Fotos, Nachrichten, Suchaufträge und Dokumente werden sofort gelöscht.",
+            "Es bleiben nur pseudonymisierte Moderationsdaten und Meldungen zum Konto bis zu ihrer Frist."
+          ]
+        },
+        {
+          "title": "Datenexport",
+          "points": [
+            "Du kannst alle deine Daten im Konto als JSON-Datei herunterladen."
+          ]
+        },
+        {
+          "title": "Hosting und Auftragsverarbeiter",
+          "points": [
+            "Datenbank, Dateispeicher und Anmeldung: Supabase, Region EU (Frankfurt).",
+            "E-Mail-Versand: Anbieter wird noch benannt.",
+            "Backups und Logs bei Hoster und Mail-Anbieter bleiben bis zu deren Frist (wird noch benannt)."
+          ]
+        },
+        {
+          "title": "Deine Rechte",
+          "points": [
+            "Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Beschwerde bei einer Aufsichtsbehörde: Platzhalter."
+          ]
+        }
+      ]
     },
     "imprint": {
       "title": "Impressum"
     },
-    "footerLabel": "Rechtliches"
+    "footerLabel": "Rechtliches",
+    "outlineNote": "Diese Gliederung nennt, was die Plattform tatsächlich verarbeitet. Sie ist kein Rechtstext.",
+    "guidelines": {
+      "title": "Richtlinien",
+      "intro": "Diese Regeln gelten für alle Anzeigen, Profile und Nachrichten. Verstöße führen zur Ablehnung oder Entfernung und bei Wiederholung zur Sperre des Kontos.",
+      "sections": [
+        {
+          "title": "Nur Jagdgelegenheiten",
+          "points": [
+            "Jede Anzeige muss in eine der Kategorien passen.",
+            "Kein Verkauf, Kauf oder Tausch von Waffen, Munition oder Waffenteilen."
+          ]
+        },
+        {
+          "title": "Verbotene Inhalte",
+          "points": [
+            "Keine rechtswidrigen, diskriminierenden, bedrohenden oder sexuellen Inhalte.",
+            "Keine Angebote, die gegen das Jagdrecht verstoßen, zum Beispiel Jagd in der Schonzeit.",
+            "Keine von anderen Websites kopierten Texte und keine Fotos ohne eigene Rechte daran."
+          ]
+        },
+        {
+          "title": "Wahr und vollständig",
+          "points": [
+            "Angaben müssen vollständig und plausibel sein.",
+            "Keine doppelten Anzeigen für dieselbe Gelegenheit."
+          ]
+        },
+        {
+          "title": "Kontakt und Privatsphäre",
+          "points": [
+            "Keine Telefonnummern, E-Mail-Adressen oder Links im Anzeigentext. Der Kontakt läuft über den Chat.",
+            "Keine exakten Koordinaten von Revieren und keine personenbezogenen Daten anderer."
+          ]
+        },
+        {
+          "title": "Nachrichten",
+          "points": [
+            "Kein Spam, keine Belästigung, keine Betrugsversuche.",
+            "Du kannst Nachrichten melden und Personen blockieren."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Cookie-Einstellungen"
+    },
+    "sources": {
+      "title": "Datenquellen"
+    }
   },
   "Account": {
     "metaTitle": "Mein Konto",
@@ -956,5 +1152,95 @@
     "settings": "Deine E-Mail-Einstellungen kannst du jederzeit im Konto ändern:",
     "searches": "Suchaufträge",
     "profile": "Chat-E-Mails im Profil"
+  },
+  "Cookies": {
+    "intro": "Diese Seite listet jedes Cookie und jeden anderen Speicher, den die Website in deinem Browser nutzt.",
+    "onlyNecessary": "Derzeit nutzen wir nur Speicher, die für den Dienst unbedingt erforderlich sind. Deshalb fragen wir keine Einwilligung ab.",
+    "optionalPresent": "Einige Einträge unten sind optional und werden nur mit deiner Einwilligung genutzt.",
+    "tableCaption": "Cookies und Browser-Speicher",
+    "columns": {
+      "name": "Name",
+      "purpose": "Zweck",
+      "provider": "Anbieter",
+      "duration": "Dauer",
+      "kind": "Art",
+      "category": "Kategorie"
+    },
+    "categories": {
+      "necessary": "Unbedingt erforderlich",
+      "optional": "Optional"
+    },
+    "kinds": {
+      "cookie": "Cookie",
+      "localStorage": "Local Storage",
+      "sessionStorage": "Session Storage",
+      "indexedDB": "IndexedDB",
+      "cache": "Cache Storage",
+      "none": "Kein Speicher"
+    },
+    "entries": {
+      "session": {
+        "name": "Anmeldesitzung (sb-…-auth-token)",
+        "purpose": "Hält dich angemeldet. Wird erst bei der Anmeldung gesetzt.",
+        "provider": "Revier (eigener Dienst, betrieben bei Supabase in der EU)",
+        "duration": "Bis zu 400 Tage; beim Abmelden entfernt"
+      },
+      "pkce": {
+        "name": "Anmeldeprüfung (sb-…-code-verifier)",
+        "purpose": "Schützt eine Anmeldung vor Manipulation (Prüfwert je Anmeldevorgang und eine Liste offener Vorgänge).",
+        "provider": "Revier (eigener Dienst, betrieben bei Supabase in der EU)",
+        "duration": "Entfernt nach Abschluss der Anmeldung, spätestens beim Abmelden"
+      },
+      "map": {
+        "name": "Karte",
+        "purpose": "Zeigt Anzeigen auf einer Karte. Die Kartendaten kommen von unserem eigenen Server.",
+        "provider": "Revier (eigener Dienst)",
+        "duration": "Speichert nichts"
+      }
+    },
+    "noThirdParties": "Die Website lädt keine Inhalte von Dritten: keine Werbung, keine Analyse, keine fremden Schriften oder Karten."
+  },
+  "Sources": {
+    "title": "Datenquellen",
+    "intro": "Referenz- und Kartendaten, die Revier nutzt, mit ihren Lizenzen und Pflichtvermerken.",
+    "website": "Website",
+    "licenseLink": "Lizenz: {license}",
+    "items": {
+      "osm": {
+        "title": "OpenStreetMap",
+        "usage": "Kartendaten und die PLZ-Gebiete in Deutschland.",
+        "notice": "© OpenStreetMap-Mitwirkende",
+        "license": "ODbL 1.0"
+      },
+      "protomaps": {
+        "title": "Protomaps",
+        "usage": "Aufbereitung der Kartendaten und Kartenstil.",
+        "notice": "Protomaps",
+        "license": "BSD 3-Clause"
+      },
+      "bkg": {
+        "title": "Bundesamt für Kartographie und Geodäsie (BKG)",
+        "usage": "Landkreise und Gemeindenamen in Deutschland (VG250).",
+        "notice": "© GeoBasis-DE / BKG (2026)",
+        "license": "dl-de/by-2-0"
+      },
+      "statistikAustria": {
+        "title": "Statistik Austria",
+        "usage": "Bezirke, Gemeinden und Postleitzahlen in Österreich. Der Bezirk ist aus der Gemeindekennziffer abgeleitet.",
+        "notice": "Datenquelle: Statistik Austria",
+        "license": "CC BY 4.0"
+      },
+      "fonts": {
+        "title": "Noto Sans",
+        "usage": "Schrift der Kartenbeschriftung.",
+        "notice": "Noto Sans, SIL Open Font License 1.1",
+        "license": "OFL 1.1"
+      }
+    },
+    "postal": {
+      "title": "PLZ-Tabelle",
+      "text": "Die Zuordnung der Postleitzahlen zu Landkreisen und Ortsnamen ist eine aus OpenStreetMap abgeleitete Datenbank. Sie steht unter der Open Database License (ODbL 1.0) zur Verfügung und enthält zusätzlich Daten von BKG und Statistik Austria (Vermerke oben).",
+      "download": "PLZ-Tabelle herunterladen (CSV)"
+    }
   }
 }

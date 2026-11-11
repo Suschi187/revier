@@ -207,3 +207,13 @@ Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen
 | `cadence_daily` | Daily | Täglich | Denně | Codziennie | ungeprüft |
 | `unsubscribe` | Unsubscribe | Abbestellen | Odhlásit odběr | Wypisz się | ungeprüft |
 | `extend` | Extend | Verlängern | Prodloužit | Przedłuż | ungeprüft |
+
+## Konto und Datenschutz (M9a)
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| guidelines | Content guidelines | Richtlinien | Pravidla obsahu | Zasady treści | ungeprüft |
+| cookie_settings | Cookie settings | Cookie-Einstellungen | Nastavení cookies | Ustawienia plików cookie | ungeprüft |
+| data_sources | Data sources | Datenquellen | Zdroje dat | Źródła danych | ungeprüft |
+| strictly_necessary | Strictly necessary | Unbedingt erforderlich | Nezbytně nutné | Niezbędne | ungeprüft |
+| placeholder_legal | Placeholder | Platzhalter | Zástupný text | Tekst zastępczy | ungeprüft |

@@ -8,6 +8,8 @@ export const routing = defineRouting({
   // hreflang kommt ausschließlich aus den Metadaten (absolut über NEXT_PUBLIC_SITE_URL).
   // Der Link-Header der Middleware würde den Host aus der Anfrage übernehmen (QA M0 F1).
   alternateLinks: false,
+  // Kein Sprach-Cookie (ADR 021, QA M0 F7): Die Sprache steht immer in der URL, `/` wählt nach Accept-Language.
+  localeCookie: false,
 });
 
 export type AppLocale = (typeof routing.locales)[number];

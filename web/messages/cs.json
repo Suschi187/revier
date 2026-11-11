@@ -97,15 +97,211 @@
   "Legal": {
     "placeholder": "Zástupný text: konečné znění dodá před spuštěním advokát.",
     "terms": {
-      "title": "Podmínky použití"
+      "title": "Podmínky použití",
+      "sections": [
+        {
+          "title": "Rozsah",
+          "points": [
+            "Platforma zprostředkovává lovecké příležitosti: pronájem honitby, povolenky k lovu, společné hony, trofejové / hostovské lovy a pomocníky při lovu, vždy jako nabídku nebo poptávku.",
+            "Žádný prodej zbraní ani střeliva."
+          ]
+        },
+        {
+          "title": "Účet",
+          "points": [
+            "Jeden účet na osobu, s pravdivými údaji.",
+            "Používání vyžaduje souhlas s podmínkami použití a zásadami ochrany osobních údajů."
+          ]
+        },
+        {
+          "title": "Inzeráty",
+          "points": [
+            "Inzeráty se před zveřejněním kontrolují.",
+            "Kontaktní údaje nepatří do textu inzerátu. Kontakt probíhá po přihlášení přes chat.",
+            "Inzeráty vyprší a lze je prodloužit."
+          ]
+        },
+        {
+          "title": "Moderace",
+          "points": [
+            "Inzeráty mohou být zamítnuty, vráceny k úpravě nebo odstraněny. Obdržíte odůvodnění.",
+            "Účty mohou být při závažném nebo opakovaném porušení zablokovány.",
+            "Proti rozhodnutím se můžete odvolat: zástupný text."
+          ]
+        },
+        {
+          "title": "Nahlašování",
+          "points": [
+            "Inzeráty, profily a zprávy lze nahlásit. Co není povoleno, popisují pravidla obsahu."
+          ]
+        },
+        {
+          "title": "Ukončení používání",
+          "points": [
+            "Účet můžete kdykoli smazat."
+          ]
+        },
+        {
+          "title": "Odpovědnost a změny",
+          "points": [
+            "Zástupný text."
+          ]
+        }
+      ]
     },
     "privacy": {
-      "title": "Zásady ochrany osobních údajů"
+      "title": "Zásady ochrany osobních údajů",
+      "sections": [
+        {
+          "title": "Správce a kontakt",
+          "points": [
+            "Jméno a adresa provozovatele: zástupný text, viz Právní informace.",
+            "Kontakt pro dotazy k ochraně osobních údajů: zástupný text."
+          ]
+        },
+        {
+          "title": "Účet a přihlášení",
+          "points": [
+            "E-mailová adresa, přihlašovací kódy a případně „Přihlásit se přes Apple“.",
+            "Cookie relace vás udržuje přihlášené (viz Nastavení cookies).",
+            "Nikdy nepotvrzené účty se po 7 dnech smažou."
+          ]
+        },
+        {
+          "title": "Profil a inzeráty",
+          "points": [
+            "Zobrazované jméno, typ účtu, název firmy, země a jazyk.",
+            "Inzeráty s texty, cenami, druhy zvěře a fotografiemi.",
+            "Fotografie se na našem serveru znovu zakódují. Tím zmizí metadata, například souřadnice GPS."
+          ]
+        },
+        {
+          "title": "Poloha",
+          "points": [
+            "Veřejné stránky ukazují jen region či okres nebo záměrně posunutý bod.",
+            "PSČ a přesná poloha honitby nejsou nikdy veřejně viditelné."
+          ]
+        },
+        {
+          "title": "Zprávy",
+          "points": [
+            "Zprávy mezi uživateli se ukládají pro konverzaci a doručují se v reálném čase.",
+            "E-mailová upozornění na nové zprávy lze vypnout.",
+            "Zablokované osoby vám nemohou psát."
+          ]
+        },
+        {
+          "title": "Uložená hledání",
+          "points": [
+            "Filtry, četnost a výsledky vašich uložených hledání. Běží 6 týdnů, pokud je neprodloužíte.",
+            "Každý e-mail obsahuje odkaz pro odhlášení odběru jedním kliknutím, platný 90 dní."
+          ]
+        },
+        {
+          "title": "Mapa",
+          "points": [
+            "Mapa se načítá z našeho vlastního serveru. Žádné požadavky nejdou k cizím poskytovatelům map.",
+            "Mapa ve vašem prohlížeči nic neukládá."
+          ]
+        },
+        {
+          "title": "Ověření",
+          "points": [
+            "Dobrovolné: nahraný lovecký lístek nebo podobný doklad je uložen soukromě a vidíte ho jen vy a administrátoři.",
+            "Doklad se smaže 30 dní po rozhodnutí."
+          ]
+        },
+        {
+          "title": "Nahlášení a moderace",
+          "points": [
+            "Nahlášení, rozhodnutí moderace a jejich odůvodnění.",
+            "Kopie nahlášených zpráv zůstávají 12 měsíců po vyřízení nahlášení.",
+            "Záznam rozhodnutí administrátorů zůstává pseudonymizovaně 24 měsíců."
+          ]
+        },
+        {
+          "title": "Smazání účtu",
+          "points": [
+            "Účet můžete kdykoli smazat po opětovném přihlášení.",
+            "Profil, inzeráty, fotografie, zprávy, uložená hledání a doklady se smažou okamžitě.",
+            "Zůstanou jen pseudonymizované údaje moderace a nahlášení týkající se účtu, a to do uplynutí jejich lhůty."
+          ]
+        },
+        {
+          "title": "Export dat",
+          "points": [
+            "Všechna svá data si můžete v účtu stáhnout jako soubor JSON."
+          ]
+        },
+        {
+          "title": "Hosting a zpracovatelé",
+          "points": [
+            "Databáze, úložiště souborů a přihlášení: Supabase, region EU (Frankfurt).",
+            "Odesílání e-mailů: poskytovatel bude uveden.",
+            "Zálohy a logy u poskytovatele hostingu a e-mailů zůstávají do uplynutí jejich lhůt (budou uvedeny)."
+          ]
+        },
+        {
+          "title": "Vaše práva",
+          "points": [
+            "Přístup, oprava, výmaz, omezení, přenositelnost, námitka a stížnost u dozorového úřadu: zástupný text."
+          ]
+        }
+      ]
     },
     "imprint": {
       "title": "Právní informace"
     },
-    "footerLabel": "Právní informace"
+    "footerLabel": "Právní informace",
+    "outlineNote": "Tato osnova uvádí, co platforma skutečně zpracovává. Nejde o právní text.",
+    "guidelines": {
+      "title": "Pravidla obsahu",
+      "intro": "Tato pravidla platí pro všechny inzeráty, profily a zprávy. Porušení vede k zamítnutí nebo odstranění a při opakování k zablokování účtu.",
+      "sections": [
+        {
+          "title": "Jen lovecké příležitosti",
+          "points": [
+            "Každý inzerát musí odpovídat jedné z kategorií.",
+            "Žádný prodej, nákup ani výměna zbraní, střeliva nebo jejich částí."
+          ]
+        },
+        {
+          "title": "Zakázaný obsah",
+          "points": [
+            "Žádný protiprávní, diskriminační, výhružný ani sexuální obsah.",
+            "Žádné nabídky, které porušují myslivecké právo, například lov v době hájení.",
+            "Žádné texty zkopírované z jiných webů a žádné fotografie, ke kterým nemáte práva."
+          ]
+        },
+        {
+          "title": "Pravdivě a úplně",
+          "points": [
+            "Údaje musí být úplné a věrohodné.",
+            "Žádné duplicitní inzeráty na tutéž příležitost."
+          ]
+        },
+        {
+          "title": "Kontakt a soukromí",
+          "points": [
+            "Žádná telefonní čísla, e-mailové adresy ani odkazy v textu inzerátu. Kontakt probíhá přes chat.",
+            "Žádné přesné souřadnice honiteb a žádné osobní údaje jiných osob."
+          ]
+        },
+        {
+          "title": "Zprávy",
+          "points": [
+            "Žádný spam, obtěžování ani pokusy o podvod.",
+            "Zprávy můžete nahlásit a osoby zablokovat."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Nastavení cookies"
+    },
+    "sources": {
+      "title": "Zdroje dat"
+    }
   },
   "Account": {
     "metaTitle": "Můj účet",
@@ -956,5 +1152,95 @@
     "settings": "Nastavení e-mailů můžete kdykoli změnit ve svém účtu:",
     "searches": "Uložená hledání",
     "profile": "E-maily z chatu v profilu"
+  },
+  "Cookies": {
+    "intro": "Tato stránka uvádí každý soubor cookie a každé další úložiště, které web ve vašem prohlížeči používá.",
+    "onlyNecessary": "V současnosti používáme jen úložiště, která jsou pro poskytování služby nezbytně nutná. Proto se na souhlas neptáme.",
+    "optionalPresent": "Některé položky níže jsou volitelné a používají se jen s vaším souhlasem.",
+    "tableCaption": "Cookies a úložiště prohlížeče",
+    "columns": {
+      "name": "Název",
+      "purpose": "Účel",
+      "provider": "Poskytovatel",
+      "duration": "Doba",
+      "kind": "Typ",
+      "category": "Kategorie"
+    },
+    "categories": {
+      "necessary": "Nezbytně nutné",
+      "optional": "Volitelné"
+    },
+    "kinds": {
+      "cookie": "Cookie",
+      "localStorage": "Local Storage",
+      "sessionStorage": "Session Storage",
+      "indexedDB": "IndexedDB",
+      "cache": "Cache Storage",
+      "none": "Bez úložiště"
+    },
+    "entries": {
+      "session": {
+        "name": "Přihlašovací relace (sb-…-auth-token)",
+        "purpose": "Udržuje vás přihlášené. Nastaví se až při přihlášení.",
+        "provider": "Revier (vlastní služba provozovaná u Supabase v EU)",
+        "duration": "Až 400 dní; odstraní se při odhlášení"
+      },
+      "pkce": {
+        "name": "Kontrola přihlášení (sb-…-code-verifier)",
+        "purpose": "Chrání přihlášení před manipulací (kontrolní hodnota pro každé přihlášení a seznam otevřených přihlášení).",
+        "provider": "Revier (vlastní služba provozovaná u Supabase v EU)",
+        "duration": "Odstraní se po dokončení přihlášení, nejpozději při odhlášení"
+      },
+      "map": {
+        "name": "Mapa",
+        "purpose": "Zobrazuje inzeráty na mapě. Mapová data se načítají z našeho vlastního serveru.",
+        "provider": "Revier (vlastní služba)",
+        "duration": "Nic neukládá"
+      }
+    },
+    "noThirdParties": "Web nenačítá žádný obsah od třetích stran: žádnou reklamu, žádnou analytiku, žádná cizí písma ani mapy."
+  },
+  "Sources": {
+    "title": "Zdroje dat",
+    "intro": "Referenční a mapová data, která Revier používá, s jejich licencemi a povinnými údaji.",
+    "website": "Web",
+    "licenseLink": "Licence: {license}",
+    "items": {
+      "osm": {
+        "title": "OpenStreetMap",
+        "usage": "Mapová data a oblasti PSČ v Německu.",
+        "notice": "© přispěvatelé OpenStreetMap",
+        "license": "ODbL 1.0"
+      },
+      "protomaps": {
+        "title": "Protomaps",
+        "usage": "Zpracování mapových dat a styl mapy.",
+        "notice": "Protomaps",
+        "license": "BSD 3-Clause"
+      },
+      "bkg": {
+        "title": "Spolkový úřad pro kartografii a geodézii (BKG)",
+        "usage": "Okresy a názvy obcí v Německu (VG250).",
+        "notice": "© GeoBasis-DE / BKG (2026)",
+        "license": "dl-de/by-2-0"
+      },
+      "statistikAustria": {
+        "title": "Statistik Austria",
+        "usage": "Okresy, obce a PSČ v Rakousku. Okres je odvozen z kódu obce.",
+        "notice": "Zdroj dat: Statistik Austria",
+        "license": "CC BY 4.0"
+      },
+      "fonts": {
+        "title": "Noto Sans",
+        "usage": "Písmo popisků mapy.",
+        "notice": "Noto Sans, SIL Open Font License 1.1",
+        "license": "OFL 1.1"
+      }
+    },
+    "postal": {
+      "title": "Tabulka PSČ",
+      "text": "Přiřazení PSČ k okresům a názvům obcí je databáze odvozená z OpenStreetMap. Je k dispozici pod licencí Open Database License (ODbL 1.0) a obsahuje také data BKG a Statistik Austria (údaje výše).",
+      "download": "Stáhnout tabulku PSČ (CSV)"
+    }
   }
 }

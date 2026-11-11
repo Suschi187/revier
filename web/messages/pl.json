@@ -97,15 +97,211 @@
   "Legal": {
     "placeholder": "Tekst zastępczy: ostateczną treść przed startem dostarczy prawnik.",
     "terms": {
-      "title": "Regulamin"
+      "title": "Regulamin",
+      "sections": [
+        {
+          "title": "Zakres",
+          "points": [
+            "Platforma pośredniczy w okazjach łowieckich: dzierżawa obwodu łowieckiego, zezwolenia na polowanie, polowania zbiorowe, polowania trofeowe / gościnne i pomocnicy myśliwych, zawsze jako oferta lub poszukiwanie.",
+            "Żadnej sprzedaży broni ani amunicji."
+          ]
+        },
+        {
+          "title": "Konto",
+          "points": [
+            "Jedno konto na osobę, z prawdziwymi danymi.",
+            "Korzystanie wymaga akceptacji regulaminu i polityki prywatności."
+          ]
+        },
+        {
+          "title": "Ogłoszenia",
+          "points": [
+            "Ogłoszenia są sprawdzane przed publikacją.",
+            "Dane kontaktowe nie należą do tekstu ogłoszenia. Kontakt odbywa się po zalogowaniu przez czat.",
+            "Ogłoszenia wygasają i można je przedłużyć."
+          ]
+        },
+        {
+          "title": "Moderacja",
+          "points": [
+            "Ogłoszenia mogą zostać odrzucone, zwrócone do poprawy lub usunięte. Otrzymasz uzasadnienie.",
+            "Konta mogą zostać zablokowane przy poważnych lub powtarzających się naruszeniach.",
+            "Od decyzji możesz się odwołać: tekst zastępczy."
+          ]
+        },
+        {
+          "title": "Zgłaszanie",
+          "points": [
+            "Ogłoszenia, profile i wiadomości można zgłaszać. Zasady treści opisują, co jest niedozwolone."
+          ]
+        },
+        {
+          "title": "Zakończenie korzystania",
+          "points": [
+            "Możesz w każdej chwili usunąć konto."
+          ]
+        },
+        {
+          "title": "Odpowiedzialność i zmiany",
+          "points": [
+            "Tekst zastępczy."
+          ]
+        }
+      ]
     },
     "privacy": {
-      "title": "Polityka prywatności"
+      "title": "Polityka prywatności",
+      "sections": [
+        {
+          "title": "Administrator i kontakt",
+          "points": [
+            "Nazwa i adres operatora: tekst zastępczy, zob. nota prawna.",
+            "Kontakt w sprawach ochrony danych: tekst zastępczy."
+          ]
+        },
+        {
+          "title": "Konto i logowanie",
+          "points": [
+            "Adres e-mail, kody logowania oraz, jeśli używasz, „Zaloguj się przez Apple”.",
+            "Plik cookie sesji utrzymuje Twoje zalogowanie (zob. ustawienia plików cookie).",
+            "Konta, które nigdy nie zostały potwierdzone, są usuwane po 7 dniach."
+          ]
+        },
+        {
+          "title": "Profil i ogłoszenia",
+          "points": [
+            "Nazwa wyświetlana, typ konta, nazwa firmy, kraj i język.",
+            "Ogłoszenia z tekstami, cenami, gatunkami zwierzyny i zdjęciami.",
+            "Zdjęcia są ponownie kodowane na naszym serwerze. Usuwa to metadane, np. współrzędne GPS."
+          ]
+        },
+        {
+          "title": "Lokalizacja",
+          "points": [
+            "Strony publiczne pokazują tylko region lub powiat albo celowo przesunięty punkt.",
+            "Kod pocztowy i dokładne położenie obwodu łowieckiego nigdy nie są publicznie widoczne."
+          ]
+        },
+        {
+          "title": "Wiadomości",
+          "points": [
+            "Wiadomości między użytkownikami są przechowywane na potrzeby rozmowy i dostarczane w czasie rzeczywistym.",
+            "Powiadomienia e-mail o nowych wiadomościach można wyłączyć.",
+            "Zablokowane osoby nie mogą do Ciebie pisać."
+          ]
+        },
+        {
+          "title": "Zapisane wyszukiwania",
+          "points": [
+            "Filtry, częstotliwość i wyniki Twoich zapisanych wyszukiwań. Działają 6 tygodni, chyba że je przedłużysz.",
+            "Każdy e-mail zawiera link do wypisania się jednym kliknięciem, ważny 90 dni."
+          ]
+        },
+        {
+          "title": "Mapa",
+          "points": [
+            "Mapa jest ładowana z naszego własnego serwera. Żadne zapytania nie trafiają do zewnętrznych dostawców map.",
+            "Mapa niczego nie zapisuje w Twojej przeglądarce."
+          ]
+        },
+        {
+          "title": "Weryfikacja",
+          "points": [
+            "Dobrowolnie: przesłana legitymacja myśliwska lub podobny dokument jest przechowywany prywatnie i widoczny tylko dla Ciebie i administratorów.",
+            "Dokument jest usuwany 30 dni po decyzji."
+          ]
+        },
+        {
+          "title": "Zgłoszenia i moderacja",
+          "points": [
+            "Zgłoszenia, decyzje moderacji i ich uzasadnienia.",
+            "Kopie zgłoszonych wiadomości są przechowywane 12 miesięcy po rozpatrzeniu zgłoszenia.",
+            "Rejestr decyzji administratorów jest przechowywany w formie pseudonimizowanej przez 24 miesiące."
+          ]
+        },
+        {
+          "title": "Usunięcie konta",
+          "points": [
+            "Możesz w każdej chwili usunąć konto po ponownym zalogowaniu.",
+            "Profil, ogłoszenia, zdjęcia, wiadomości, zapisane wyszukiwania i dokumenty są usuwane natychmiast.",
+            "Pozostają tylko pseudonimizowane dane moderacji i zgłoszenia dotyczące konta, do upływu ich terminów."
+          ]
+        },
+        {
+          "title": "Eksport danych",
+          "points": [
+            "Wszystkie swoje dane możesz pobrać na koncie jako plik JSON."
+          ]
+        },
+        {
+          "title": "Hosting i podmioty przetwarzające",
+          "points": [
+            "Baza danych, przechowywanie plików i logowanie: Supabase, region UE (Frankfurt).",
+            "Wysyłka e-maili: dostawca zostanie wskazany.",
+            "Kopie zapasowe i logi u dostawcy hostingu i poczty są przechowywane do upływu ich terminów (zostaną wskazane)."
+          ]
+        },
+        {
+          "title": "Twoje prawa",
+          "points": [
+            "Dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie danych, sprzeciw i skarga do organu nadzorczego: tekst zastępczy."
+          ]
+        }
+      ]
     },
     "imprint": {
       "title": "Nota prawna"
     },
-    "footerLabel": "Informacje prawne"
+    "footerLabel": "Informacje prawne",
+    "outlineNote": "Ten zarys wymienia, co platforma faktycznie przetwarza. Nie jest tekstem prawnym.",
+    "guidelines": {
+      "title": "Zasady treści",
+      "intro": "Te zasady obowiązują dla wszystkich ogłoszeń, profili i wiadomości. Naruszenia prowadzą do odrzucenia lub usunięcia, a przy powtórzeniu do zablokowania konta.",
+      "sections": [
+        {
+          "title": "Tylko okazje łowieckie",
+          "points": [
+            "Każde ogłoszenie musi pasować do jednej z kategorii.",
+            "Żadnej sprzedaży, kupna ani wymiany broni, amunicji lub części broni."
+          ]
+        },
+        {
+          "title": "Treści zabronione",
+          "points": [
+            "Żadnych treści niezgodnych z prawem, dyskryminujących, zawierających groźby ani o charakterze seksualnym.",
+            "Żadnych ofert naruszających prawo łowieckie, np. polowania w okresie ochronnym.",
+            "Żadnych tekstów skopiowanych z innych stron ani zdjęć, do których nie masz praw."
+          ]
+        },
+        {
+          "title": "Prawdziwie i kompletnie",
+          "points": [
+            "Dane muszą być kompletne i wiarygodne.",
+            "Żadnych zduplikowanych ogłoszeń dla tej samej okazji."
+          ]
+        },
+        {
+          "title": "Kontakt i prywatność",
+          "points": [
+            "Żadnych numerów telefonów, adresów e-mail ani linków w tekście ogłoszenia. Kontakt odbywa się przez czat.",
+            "Żadnych dokładnych współrzędnych obwodów łowieckich ani danych osobowych innych osób."
+          ]
+        },
+        {
+          "title": "Wiadomości",
+          "points": [
+            "Żadnego spamu, nękania ani prób oszustwa.",
+            "Możesz zgłaszać wiadomości i blokować osoby."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Ustawienia plików cookie"
+    },
+    "sources": {
+      "title": "Źródła danych"
+    }
   },
   "Account": {
     "metaTitle": "Moje konto",
@@ -956,5 +1152,95 @@
     "settings": "Ustawienia e-maili możesz w każdej chwili zmienić na swoim koncie:",
     "searches": "Zapisane wyszukiwania",
     "profile": "E-maile z czatu w profilu"
+  },
+  "Cookies": {
+    "intro": "Ta strona wymienia każdy plik cookie i każdą inną pamięć, z której strona korzysta w Twojej przeglądarce.",
+    "onlyNecessary": "Obecnie używamy wyłącznie pamięci niezbędnej do świadczenia usługi. Dlatego nie prosimy o zgodę.",
+    "optionalPresent": "Niektóre pozycje poniżej są opcjonalne i są używane tylko za Twoją zgodą.",
+    "tableCaption": "Pliki cookie i pamięć przeglądarki",
+    "columns": {
+      "name": "Nazwa",
+      "purpose": "Cel",
+      "provider": "Dostawca",
+      "duration": "Okres",
+      "kind": "Rodzaj",
+      "category": "Kategoria"
+    },
+    "categories": {
+      "necessary": "Niezbędne",
+      "optional": "Opcjonalne"
+    },
+    "kinds": {
+      "cookie": "Plik cookie",
+      "localStorage": "Local Storage",
+      "sessionStorage": "Session Storage",
+      "indexedDB": "IndexedDB",
+      "cache": "Cache Storage",
+      "none": "Brak pamięci"
+    },
+    "entries": {
+      "session": {
+        "name": "Sesja logowania (sb-…-auth-token)",
+        "purpose": "Utrzymuje Twoje zalogowanie. Ustawiany dopiero przy logowaniu.",
+        "provider": "Revier (własna usługa, działająca w Supabase w UE)",
+        "duration": "Do 400 dni; usuwany przy wylogowaniu"
+      },
+      "pkce": {
+        "name": "Weryfikacja logowania (sb-…-code-verifier)",
+        "purpose": "Chroni logowanie przed manipulacją (wartość kontrolna dla każdego logowania i lista otwartych logowań).",
+        "provider": "Revier (własna usługa, działająca w Supabase w UE)",
+        "duration": "Usuwany po zakończeniu logowania, najpóźniej przy wylogowaniu"
+      },
+      "map": {
+        "name": "Mapa",
+        "purpose": "Pokazuje ogłoszenia na mapie. Dane mapy są ładowane z naszego własnego serwera.",
+        "provider": "Revier (własna usługa)",
+        "duration": "Niczego nie zapisuje"
+      }
+    },
+    "noThirdParties": "Strona nie ładuje żadnych treści od podmiotów trzecich: żadnych reklam, analityki, zewnętrznych czcionek ani map."
+  },
+  "Sources": {
+    "title": "Źródła danych",
+    "intro": "Dane referencyjne i mapowe, z których korzysta Revier, wraz z licencjami i wymaganymi informacjami.",
+    "website": "Strona internetowa",
+    "licenseLink": "Licencja: {license}",
+    "items": {
+      "osm": {
+        "title": "OpenStreetMap",
+        "usage": "Dane mapy i obszary kodów pocztowych w Niemczech.",
+        "notice": "© współtwórcy OpenStreetMap",
+        "license": "ODbL 1.0"
+      },
+      "protomaps": {
+        "title": "Protomaps",
+        "usage": "Przygotowanie danych mapy i styl mapy.",
+        "notice": "Protomaps",
+        "license": "BSD 3-Clause"
+      },
+      "bkg": {
+        "title": "Federalny Urząd Kartografii i Geodezji (BKG)",
+        "usage": "Powiaty i nazwy gmin w Niemczech (VG250).",
+        "notice": "© GeoBasis-DE / BKG (2026)",
+        "license": "dl-de/by-2-0"
+      },
+      "statistikAustria": {
+        "title": "Statistik Austria",
+        "usage": "Powiaty, gminy i kody pocztowe w Austrii. Powiat jest wyznaczany na podstawie kodu gminy.",
+        "notice": "Źródło danych: Statistik Austria",
+        "license": "CC BY 4.0"
+      },
+      "fonts": {
+        "title": "Noto Sans",
+        "usage": "Czcionka opisów na mapie.",
+        "notice": "Noto Sans, SIL Open Font License 1.1",
+        "license": "OFL 1.1"
+      }
+    },
+    "postal": {
+      "title": "Tabela kodów pocztowych",
+      "text": "Przypisanie kodów pocztowych do powiatów i nazw miejscowości to baza danych pochodna od OpenStreetMap. Jest dostępna na licencji Open Database License (ODbL 1.0) i zawiera także dane BKG i Statistik Austria (informacje powyżej).",
+      "download": "Pobierz tabelę kodów pocztowych (CSV)"
+    }
   }
 }

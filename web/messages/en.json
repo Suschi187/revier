@@ -97,15 +97,211 @@
   "Legal": {
     "placeholder": "Placeholder: the final text will be provided by a lawyer before launch.",
     "terms": {
-      "title": "Terms of use"
+      "title": "Terms of use",
+      "sections": [
+        {
+          "title": "Scope",
+          "points": [
+            "The platform brokers hunting opportunities: hunting leases, hunting permits, driven hunts, trophy and guest hunts and hunting helpers, each as an offer or a wanted listing.",
+            "No sale of weapons or ammunition."
+          ]
+        },
+        {
+          "title": "Account",
+          "points": [
+            "One account per person, with truthful information.",
+            "Using the platform requires accepting the terms of use and the privacy policy."
+          ]
+        },
+        {
+          "title": "Listings",
+          "points": [
+            "Listings are reviewed before publication.",
+            "Contact details do not belong in listing texts. Contact runs through the chat after sign-in.",
+            "Listings expire and can be extended."
+          ]
+        },
+        {
+          "title": "Moderation",
+          "points": [
+            "Listings can be rejected, sent back for changes or removed. You receive the reason.",
+            "Accounts can be blocked for serious or repeated violations.",
+            "You can appeal decisions: placeholder."
+          ]
+        },
+        {
+          "title": "Reporting",
+          "points": [
+            "Listings, profiles and messages can be reported. The content guidelines describe what is not allowed."
+          ]
+        },
+        {
+          "title": "Ending use",
+          "points": [
+            "You can delete your account at any time."
+          ]
+        },
+        {
+          "title": "Liability and changes",
+          "points": [
+            "Placeholder."
+          ]
+        }
+      ]
     },
     "privacy": {
-      "title": "Privacy policy"
+      "title": "Privacy policy",
+      "sections": [
+        {
+          "title": "Controller and contact",
+          "points": [
+            "Name and address of the operator: placeholder, see the legal notice.",
+            "Contact for data protection questions: placeholder."
+          ]
+        },
+        {
+          "title": "Account and sign-in",
+          "points": [
+            "Email address, sign-in codes and, if used, Sign in with Apple.",
+            "A session cookie keeps you signed in (see cookie settings).",
+            "Accounts that are never confirmed are deleted after 7 days."
+          ]
+        },
+        {
+          "title": "Profile and listings",
+          "points": [
+            "Display name, account type, business name, country and language.",
+            "Listings with texts, prices, game species and photos.",
+            "Photos are re-encoded on our server. This removes metadata such as GPS coordinates."
+          ]
+        },
+        {
+          "title": "Location",
+          "points": [
+            "Public pages show only the region or district, or a deliberately shifted point.",
+            "The postal code and the exact location of a hunting ground are never shown publicly."
+          ]
+        },
+        {
+          "title": "Messages",
+          "points": [
+            "Messages between users are stored for the conversation and delivered in real time.",
+            "Email notifications about new messages can be switched off.",
+            "People you have blocked cannot write to you."
+          ]
+        },
+        {
+          "title": "Saved searches",
+          "points": [
+            "Filters, frequency and matches of your saved searches. They run for 6 weeks unless you extend them.",
+            "Every email contains a one-click unsubscribe link, valid for 90 days."
+          ]
+        },
+        {
+          "title": "Map",
+          "points": [
+            "The map is served from our own server. No requests go to third-party map providers.",
+            "The map stores nothing in your browser."
+          ]
+        },
+        {
+          "title": "Verification",
+          "points": [
+            "Optional: an uploaded hunting licence or similar document is stored privately and is visible only to you and to administrators.",
+            "The document is deleted 30 days after the decision."
+          ]
+        },
+        {
+          "title": "Reports and moderation",
+          "points": [
+            "Reports, moderation decisions and their reasons.",
+            "Copies of reported messages are kept for 12 months after the report has been handled.",
+            "The record of administrative decisions is kept pseudonymised for 24 months."
+          ]
+        },
+        {
+          "title": "Deleting your account",
+          "points": [
+            "You can delete your account at any time after signing in again.",
+            "Profile, listings, photos, messages, saved searches and documents are deleted immediately.",
+            "Only pseudonymised moderation records and reports concerning the account remain until their deadlines."
+          ]
+        },
+        {
+          "title": "Data export",
+          "points": [
+            "You can download all your data as a JSON file in your account."
+          ]
+        },
+        {
+          "title": "Hosting and processors",
+          "points": [
+            "Database, file storage and sign-in: Supabase, region EU (Frankfurt).",
+            "Email delivery: provider to be named.",
+            "Backups and logs at the hosting and email providers are kept until their own deadlines (to be named)."
+          ]
+        },
+        {
+          "title": "Your rights",
+          "points": [
+            "Access, rectification, erasure, restriction, data portability, objection and the right to lodge a complaint with a supervisory authority: placeholder."
+          ]
+        }
+      ]
     },
     "imprint": {
       "title": "Legal notice"
     },
-    "footerLabel": "Legal"
+    "footerLabel": "Legal",
+    "outlineNote": "This outline lists what the platform actually processes. It is not a legal text.",
+    "guidelines": {
+      "title": "Content guidelines",
+      "intro": "These rules apply to all listings, profiles and messages. Violations lead to rejection or removal and, if repeated, to an account block.",
+      "sections": [
+        {
+          "title": "Only hunting opportunities",
+          "points": [
+            "Every listing must fit one of the categories.",
+            "No sale, purchase or exchange of weapons, ammunition or weapon parts."
+          ]
+        },
+        {
+          "title": "Prohibited content",
+          "points": [
+            "No illegal, discriminatory, threatening or sexual content.",
+            "No offers that violate hunting law, for example hunting during closed seasons.",
+            "No texts copied from other websites and no photos you do not hold the rights to."
+          ]
+        },
+        {
+          "title": "Truthful and complete",
+          "points": [
+            "Information must be complete and plausible.",
+            "No duplicate listings for the same opportunity."
+          ]
+        },
+        {
+          "title": "Contact and privacy",
+          "points": [
+            "No phone numbers, email addresses or links in listing texts. Contact runs through the chat.",
+            "No exact coordinates of hunting grounds and no personal data of other people."
+          ]
+        },
+        {
+          "title": "Messages",
+          "points": [
+            "No spam, harassment or attempted fraud.",
+            "You can report messages and block people."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Cookie settings"
+    },
+    "sources": {
+      "title": "Data sources"
+    }
   },
   "Account": {
     "metaTitle": "My account",
@@ -956,5 +1152,95 @@
     "settings": "You can change your email settings at any time in your account:",
     "searches": "Saved searches",
     "profile": "Chat emails in your profile"
+  },
+  "Cookies": {
+    "intro": "This page lists every cookie and every other storage that the website uses in your browser.",
+    "onlyNecessary": "At the moment we only use storage that is strictly necessary to provide the service. That is why we do not ask for consent.",
+    "optionalPresent": "Some entries below are optional and are only used with your consent.",
+    "tableCaption": "Cookies and browser storage",
+    "columns": {
+      "name": "Name",
+      "purpose": "Purpose",
+      "provider": "Provider",
+      "duration": "Duration",
+      "kind": "Type",
+      "category": "Category"
+    },
+    "categories": {
+      "necessary": "Strictly necessary",
+      "optional": "Optional"
+    },
+    "kinds": {
+      "cookie": "Cookie",
+      "localStorage": "Local storage",
+      "sessionStorage": "Session storage",
+      "indexedDB": "IndexedDB",
+      "cache": "Cache storage",
+      "none": "No storage"
+    },
+    "entries": {
+      "session": {
+        "name": "Sign-in session (sb-…-auth-token)",
+        "purpose": "Keeps you signed in. Set only when you sign in.",
+        "provider": "Revier (own service, operated on Supabase in the EU)",
+        "duration": "Up to 400 days; removed when you sign out"
+      },
+      "pkce": {
+        "name": "Sign-in check (sb-…-code-verifier)",
+        "purpose": "Protects a sign-in against tampering (verifier per sign-in and a list of open sign-ins).",
+        "provider": "Revier (own service, operated on Supabase in the EU)",
+        "duration": "Removed after the sign-in completes, at the latest when you sign out"
+      },
+      "map": {
+        "name": "Map",
+        "purpose": "Shows listings on a map. Map data is loaded from our own server.",
+        "provider": "Revier (own service)",
+        "duration": "Stores nothing"
+      }
+    },
+    "noThirdParties": "The website loads no content from third parties: no advertising, no analytics, no external fonts or maps."
+  },
+  "Sources": {
+    "title": "Data sources",
+    "intro": "Reference and map data used by Revier, with their licences and required notices.",
+    "website": "Website",
+    "licenseLink": "Licence: {license}",
+    "items": {
+      "osm": {
+        "title": "OpenStreetMap",
+        "usage": "Map data and the postal code areas in Germany.",
+        "notice": "© OpenStreetMap contributors",
+        "license": "ODbL 1.0"
+      },
+      "protomaps": {
+        "title": "Protomaps",
+        "usage": "Preparation of the map data and the map style.",
+        "notice": "Protomaps",
+        "license": "BSD 3-Clause"
+      },
+      "bkg": {
+        "title": "Federal Agency for Cartography and Geodesy (BKG)",
+        "usage": "Districts and municipality names in Germany (VG250).",
+        "notice": "© GeoBasis-DE / BKG (2026)",
+        "license": "dl-de/by-2-0"
+      },
+      "statistikAustria": {
+        "title": "Statistik Austria",
+        "usage": "Districts, municipalities and postal codes in Austria. The district is derived from the municipality code.",
+        "notice": "Data source: Statistik Austria",
+        "license": "CC BY 4.0"
+      },
+      "fonts": {
+        "title": "Noto Sans",
+        "usage": "Font for the map labels.",
+        "notice": "Noto Sans, SIL Open Font License 1.1",
+        "license": "OFL 1.1"
+      }
+    },
+    "postal": {
+      "title": "Postal code table",
+      "text": "The assignment of postal codes to districts and place names is a database derived from OpenStreetMap. It is available under the Open Database License (ODbL 1.0) and also contains data from BKG and Statistik Austria (notices above).",
+      "download": "Download postal code table (CSV)"
+    }
   }
 }

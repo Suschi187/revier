@@ -130,6 +130,11 @@ function withNonceCsp(request: NextRequest, respond: () => NextResponse): NextRe
 export default async function proxy(request: NextRequest) {
   const response = await handle(request);
   if (!siteIndexable()) response.headers.set("X-Robots-Tag", "noindex");
+  // `/` wählt die Sprache nach Accept-Language, ohne Cookie (ADR 021, Review H4): nie ohne Vary in einen geteilten Cache.
+  if (request.nextUrl.pathname === "/") {
+    response.headers.set("Vary", "Accept-Language");
+    response.headers.set("Cache-Control", "private, no-cache");
+  }
   // Abbestell-Seite (ADR 018, Review A6): Token in der Query nie per Referer weitergeben, nie cachen oder indexieren.
   if (isUnsubscribePath(request.nextUrl.pathname)) {
     response.headers.set("X-Robots-Tag", "noindex");

@@ -19,9 +19,10 @@ Bestand: Supabase-Session-Cookies nach dem Login, PKCE-Verifier beim Apple-Login
 | Eintrag | Muster | Art | Kategorie | Wann |
 |---|---|---|---|---|
 | Supabase-Session | `^sb-[a-z0-9]+-auth-token(\.\d+)?$` | cookie | necessary | nach dem Login |
-| PKCE-Verifier | `^sb-[a-z0-9]+-auth-token-code-verifier$` | cookie | necessary | während des Apple-Logins |
+| PKCE-Verifier | `^sb-[a-z0-9]+-auth-token(?:-flow-[0-9a-f]{32}\|-flows)?-code-verifier$` | cookie | necessary | ab dem Start einer Anmeldung; entfernt nach dem Code-Austausch, spätestens beim Abmelden |
 | Karte (eigener Dienst, ADR 016) | – | kein Speicher | necessary | Karten- und Detailseiten |
 
+- **PKCE seit auth-js 2.117 (gefunden im E2E, M9a):** Neben dem festen Schlüssel gibt es einen Slot je Anmeldevorgang (`-flow-<32 hex>-code-verifier`) und einen Index (`-flows-code-verifier`). Nach einer Anmeldung per E-Mail-Code (ohne Code-Austausch) bleiben sie bis zum Abmelden liegen; `signOut` entfernt alle. Sie bleiben notwendig (Schutz der Anmeldung), die Seite nennt die tatsächliche Dauer.
 - Die Dauer steht je Eintrag im Inventar und wird im E2E gegen das tatsächliche Ablaufdatum geprüft.
 - Vor einer Nutzeraktion setzt die Seite **kein** Cookie; anonyme Antworten tragen kein `Set-Cookie`.
 
