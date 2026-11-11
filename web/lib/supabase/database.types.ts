@@ -745,6 +745,11 @@ isOneToOne: false
               "level": Database["public"]['Enums']["region_level"],"listings": number,"region_code": string
             }[]
                            },
+"maintenance_storage_objects":
+{ Args: { "p_limit"?: number,"p_secret": string }; Returns: {
+              "bucket_id": string,"name": string,"reason": string
+            }[]
+                           },
 "map_listings":
 { Args: { "p_filters": Json }; Returns: Json
                            },
