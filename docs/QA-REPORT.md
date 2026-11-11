@@ -1915,3 +1915,145 @@ Der Proxy reicht `/api/` unverändert durch, `skipTrailingSlashRedirect` ist an.
 F1 ist **behoben** und ohne Nebenwirkung. Die Änderung verschiebt genau eine Zuweisung, Rechte und Definer sind unverändert, und die Gegenrichtung (echter täglicher Treffer verbraucht den Tag, Release gibt ihn zurück) hält. F2 ist für die Header-URL der Mails **behoben**, in Dev und im Produktions-Build. Die übrigen Seiten und `/api`-Pfade haben unveränderte Header, der Matcher nimmt nichts anderes aus. Offen bleibt nur die Schrägstrich-Variante (N1). F3 ist bis auf die Lücken in N2 erledigt. **Abnahme von M8: ja.** Die Auflagen der Abnahme sind erfüllt. N1 vor dem Cloud-Rollout (M10) nachziehen, N2 vor I6.
 
 **Freigabe:** M8 vom Nutzer am 2026-11-08 abgenommen.
+
+## M9a – Abnahme 2026-11-11
+
+Geprüfter Stand: `34e9c50` (main, Arbeitsbaum sauber bis auf die neuen Proben), Commits `618a680`…`34e9c50` seit `8c6ec29`. Grundlagen: SPEC v0.11 (6 M9a, 7.2, 7.3), Plan M9 mit Architekt-Review (10, 11; für M9a B1, B2, A1–A5, A10, A12–A14, A15 als Runbook), ADR 019, 021, 008 (Nachtrag), 014 (`RV007`), 005 (Runbook), CHANGELOG „M9a Konto und Datenschutz (Web) – 2026-11-11“, CLAUDE.md. Umgebung: macOS, Node 24, Supabase-CLI 3.0.0 lokal (DB frisch zurückgesetzt, kein weiteres `db reset`, kein stop/start; die Edge Runtime bediente `delete-account` und `account-maintenance` bereits), Vault mit `account_deletion_url`, ohne `account_maintenance_url`; vorhandener `next dev` auf Port 3000; Deno 2.1.4 per Docker (Digest wie CI).
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (mit den Proben) |
+| Vitest | 34 Dateien, **654/654** |
+| `supabase test db` | 52 Dateien, **1459** Tests, PASS. Neu `51_qa_m9a_abnahme`: 41 Tests, davon **2 TODO (F1, F2)**. 48–50 grün |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 24 Dateien, **264 bestanden, 2 erwartet fehlgeschlagen** (`it.fails` H2 aus M7 und F3). Neu `qa-m9a.test.ts`: 6 + 1 `it.fails` (F3) |
+| E2E | `cookie-inventory.spec.ts` und `account-delete-export.spec.ts` **6/6**; neu `qa-m9a.spec.ts` **8** (davon 2 `test.fail`: F4, F5). Kein Gesamtlauf aller Specs (M9a ändert nur die geprüften Seiten, Header und den Footer; Footer in eigener Probe) |
+| Deno (Docker wie CI) | `delete-account` 8/8, `account-maintenance` 3/3; `deno task check`, `deno lint` grün |
+
+Aufgeräumt: keine Konten auf `@test.local`, `storage.objects`, `account_deletions`, `reports` und `audit_log` leer, Vault wie vorher (`account_deletion_url` wiederhergestellt, keine `account_maintenance_url`). Vorgefunden und nicht angefasst: ein Konto `probe-1794400853108@test.local` (angelegt 12:40 UTC, vor dieser Prüfung) und 786 Realtime-Ereignisse aus Läufen vor 13:00 UTC.
+
+Beobachtung beim Schreiben der Proben: 6000 per SQL eingefügte Nachrichten erzeugen 6000 Broadcast-Ereignisse. Danach scheiterten im Gesamtlauf `chat-realtime.test.ts` und `qa-m7.test.ts` reproduzierbar (Realtime-Rückstau). Die Probe fügt deshalb ohne Trigger ein (`session_replication_role = replica`); danach war der Gesamtlauf grün.
+
+### Akzeptanz (SPEC 6 M9a)
+
+| Kriterium | Ergebnis | Nachweis |
+|---|---|---|
+| a) Gelöschter Account verschwindet aus allen Tabellen und Buckets bis auf die Allowlist | **erfüllt für Nutzer-ID und E-Mail**, mit Funden F1 (falsche Löschung fremder Auth-Einträge) und F3 (Konversations-IDs in Realtime) | `account-deletion.test.ts`: Normalfall, drei Abbrüche, pg_net-Weg. Die Fixture dort ist schmaler als im ADR: keine Blockierung (der Kommentar nennt sie), kein Gerät, keine Bewertung, kein Suchtreffer, kein offenes Realtime-Abo, keine Fotos mit Thumbnail und Eingang an echten Pfaden. Die Probe `qa-m9a.test.ts` schließt diese Lücken: Anzeige mit PLZ, Wildart, verarbeitetem Foto samt Thumbnail und unverarbeitetem Foto im Eingang (Pfade aus dem Trigger), Dokument, Favoriten und Blockierungen in beide Richtungen, Gerät, Suchauftrag, Abmelde-Token (bytea), zwei Chats (U als Besitzer und als Interessent), Bewertungen in beide Richtungen, drei Meldungen, Export-Zähler und **offene private Realtime-Abos** von U und V während der Löschung. Danach Inventar über alle Nicht-System-Schemas (auch Materialized Views und bytea-Spalten) nach Nutzer-ID, E-Mail, Anzeigen-ID und sechs Markierungen (Name, Titel, Beschreibung, ungemeldete Nachricht, Suchauftrag, Alt-Text, Bewertung): **keine Fundstelle**. Alle vier Dateien geben per API 404. Dazu: altes JWT nach der Löschung (Uploads in alle drei Buckets abgelehnt, Export 42501, erneuter Antrag ohne Anker, kein Insert), zwei parallele Läufe (genau eine Löschung, kein Fehler), Logs der Edge Runtime ohne ID und Adresse. pgTAP 51: Lease, Grenzen und Secrets |
+| b) Ohne Einwilligung laufen keine nicht notwendigen Cookies | **erfüllt (lokal)**, Stage und Produktion stehen aus (M10) | `cookie-inventory.spec.ts` grün: anonym kein einziges `Set-Cookie` auf 20 Seiten und 9 API-, Redirect- und Fehlerpfaden; angemeldet nur Session und PKCE; Abmelden räumt alle `sb-*` ab; keine fremden Origins; Selbsttest schlägt an. Probe: Der Export-Download setzt kein Cookie. Grenzen des Selbsttests siehe H4 |
+
+### Prüfmatrix Blocker und Auflagen (M9a)
+
+| Punkt | Status | Fundstelle / Nachweis |
+|---|---|---|
+| B1 Löschreihenfolge | erfüllt mit Fund **F1** | `delete-account/handler.ts:53-63` (Storage 1 → prepare → deleteUser, 404 = Erfolg → finalize → Storage 2 → complete), `20261111100000_account_deletion.sql:249-290` (`55000` solange `auth.users` die Zeile hat). Backoff beim Claim (`:203`), kein Abbruch: Probe mit 500 Versuchen wird weiter geclaimt, Backoff bleibt bei 1 h. Zähler „Löschungen hängen“ (`admin_stuck_account_deletions`, pgTAP 48). F1: finalize vergleicht die Adresse als Teilzeichenkette |
+| B2 Nachweis über den echten Stack | erfüllt, Fixture-Lücken durch die Probe geschlossen | Inventar über alle Nicht-System-Schemas per `to_jsonb` (Integration) bzw. `concat_ws` (pgTAP 48). Schwächen der Originaltests: bytea- und Geometrie-Spalten ausgenommen, Materialized Views nicht durchsucht, nur ID und E-Mail. Die Probe sucht bytea mit (`net.http_request_queue.body`, `unsubscribe_tokens.token_hash`) und ohne Befund. Wächter `00_meta` (Buckets, Spalten mit Nutzerbezug) vorhanden. Apple-Identität lokal nicht anlegbar (CHANGELOG) |
+| A1 ein Auslöseweg | erfüllt | `verify_jwt = false` (`config.toml:427-429`), nur POST (405), Secret aus dem Vault per Claim-RPC, Vergleich über SHA-256-Digests (`:54-67`), falsches Secret 403. Probe pgTAP 51: null, leer, Großschreibung, angehängtes Leerzeichen und das jeweils andere Secret ergeben 42501. Anstoß per pg_net: Body `{}`, weder ID noch Adresse in URL, Header oder Body (Probe). Server Action ruft die Function nicht (`delete/actions.ts`). Antwort nur Zähler (Probe) |
+| A2 Storage belastbar | erfüllt | Objektliste aus `storage.objects`, höchstens 1000, Löschung nur über `remove()`, Gegenprobe bis 0 (`handler.ts:29-45`), SQL-Delete gesperrt (pgTAP 48). Späte Uploads: Durchlauf 2 (Integration) und mit altem JWT gar nicht möglich, weil die Upload-Policies `is_active_user` bzw. `owns_editable_listing` verlangen (Probe) |
+| A3 frische Anmeldung | erfüllt | `has_fresh_login` (`:76-89`). Probe pgTAP 51: `password`, `anonymous`, alter Code plus frisches `totp`, `amr` als Objekt und ohne `timestamp` → `RV007`; `oauth` neben altem Code, `id_token`, `magiclink` nach 9 Minuten → erlaubt; Rolle mit unbestätigtem Faktor → `42501 admin_role`. Integration: Ein Refresh erneuert `iat`, `amr` bleibt gleich (`otp`, alter Zeitstempel). Web: Code an die Adresse der Session mit `shouldCreateUser: false`, `sub`-Vergleich, TOTP bei bestätigtem Faktor (`ReauthForm.tsx:25-93`) |
+| A4 Erreichbarkeit | erfüllt | `requireSessionUser` in Seite und Action, `guards.test.ts` (SESSION_ONLY). Probe: Gesperrtes Konto ohne Zustimmung erreicht `/de/account/delete` und `/de/account/data` (200, kein Weg zu `/welcome`) und lädt den Export. „Löschung läuft“ bei `deleted_at` (beide Seiten). Ohne JavaScript: Export-Download und Bestätigung der Löschung mit frischer Anmeldung bis zum gelöschten Konto (Probe); der Code-Schritt braucht JavaScript, der `noscript`-Text nennt den Weg (ab- und neu anmelden) |
+| A5 Export vollständig und nur eigene Daten | teilweise (**F2**, **F6**, Doku-Rest in F7) | Allowlist je Abschnitt, Wächter in pgTAP 49. Probe pgTAP 51: keine IDs oder Adressen anderer, keine fremde Meldung über das Konto, kein fremder Chat, kein Admin (`handled_by`, Name), keine Konversations- oder Nachrichten-IDs; Admin-Export ohne Audit. Größe: Die im ADR genannte Messung eines großen Kontos gab es nicht; Probe mit 300 Unterhaltungen und 6000 Nachrichten: **87 ms, 1,9 MB**. Route: `Origin` und `Sec-Fetch-Site` (cross-site, same-site, fremde Origin mit Präfix, `null` → 403), GET 405, `application/json; charset=utf-8`, `attachment; filename=…`, `no-store`, `nosniff`, ohne Session 303 auf `/cs/login?next=…` (Probe). Ohne `Sec-Fetch-Site` reicht der Origin (H2) |
+| A10 Nachweis von b | erfüllt mit Hinweis H4 | Set-Cookie aller Antworten inkl. Redirect-Kette und `/api/*`, Speicher, IndexedDB, Cache, Service Worker, fremde Origins, verankerte Muster (Guard-Test), Selbsttest, `QA_BASE_URL`. Pflichtpunkt in `docs/WEB-RELEASE.md` erst in M10 (Datei fehlt, im CHANGELOG vermerkt) |
+| A12 nie bestätigte Konten | erfüllt | `queue_unconfirmed_account_deletions` legt Anker und `deleted_at` an, derselbe Weg (pgTAP 50 Grenzen; Probe: ein Anker, kein doppelter). Rückgabe zählt Kandidaten, nicht neue Anker (H5) |
+| A13 Cloud-Checkliste | erfüllt | ADR 019 „Folgen“, CHANGELOG „Cloud-Checkliste“ (Rechte auf `auth.audit_log_entries`, `flow_state`, `realtime.messages`; Vault; MFA- und Rollenkaskade; `amr` gegenprüfen; Cron-Jobs) |
+| A14 Platzhalter, Doku, Schnitt | erfüllt | Kein „DSA-konform“, „fertig“ oder Ähnliches in Messages, Seiten, ADR 008/019/021, SPEC, CHANGELOG (grep in 4 Sprachen). Datenschutz, Nutzungsbedingungen, Richtlinien und Cookies tragen in de/en/cs/pl die Markierung (`role=note`) und `noindex` (Probe). Anwaltsliste im CHANGELOG mit den Punkten aus A14 (für M9b markiert). SPEC v0.11 mit Schnitt und M9b-Akzeptanz, Kartenzeile angepasst |
+| A15 Runbook | vorhanden | ADR 005 „Runbook: Admin will sein Konto löschen“ |
+
+Weitere Prüfpunkte aus dem Auftrag:
+
+| Punkt | Ergebnis |
+|---|---|
+| Keine Löschung von Admins | Rolleneintrag geprüft, unabhängig von aal und Faktor (pgTAP 48, Probe 51, E2E Admin-Rolle) |
+| Lease der Schritt-RPCs | Probe: veralteter `claim_id` nach erneutem Claim → alle vier Schritte 42501; `fail` mit altem `claim_id` lässt den neuen Lease stehen; gültiger `claim_id` mit anderer Nutzer-ID 42501; abgelaufener Lease 42501; Claim-Grenzen 1…20, `null` = 5. `deleteUser` selbst prüft keinen Lease, ist aber idempotent (H6) |
+| Rechte und RLS | Probe: 3 neue Tabellen mit RLS, ohne Policy, ohne Rechte für anon, authenticated, service_role, nicht in einer Publikation; Ausführungsrechte aller 20 neuen Funktionen exakt; alle `security definer` mit `search_path = ''` |
+| Logs und Antworten | Function-Logs nur Zähler (Edge-Runtime-Log der Probe ohne ID und Adresse), Antworten nur Zahlen |
+| Foto-Route | Eigentum (fremd 404, eigen 303 auf signierte URL), eigenes unverarbeitetes, fremdes und unbekanntes Foto ergeben dieselbe 404 (Status, Länge, Typ), `private, no-store`. **F4:** `Referrer-Policy` ist nicht `no-referrer` |
+| `service_role` im Web | nicht verwendet: `lib/services/account.ts` arbeitet mit dem Client des Nutzers, nur die Functions halten den Schlüssel |
+| Kein Orakel | Fehlercodes der Löschung sind nur für das eigene Konto sichtbar; Foto-Route einheitlich 404 |
+| Texte in 4 Sprachen | 960 Schlüssel je Sprache ohne Lücke; keine rohen Schlüssel auf Löschen, Export (auch mit Fehlern), Cookies, Datenquellen, Richtlinien, Datenschutz in en/cs/pl (Probe). cs/pl ungeprüft (SPEC 7.6) |
+| `/sources`, Footer | `/sources` ohne `robots`-Meta in 4 Sprachen (lokal setzt der Proxy außerhalb von Prod ohnehin `X-Robots-Tag: noindex`). Footer mit 6 Links auf Startseiten, 404, Login, Impressum |
+| a11y und 360 px | axe (WCAG 2 A/AA, ernst und kritisch) und kein waagerechter Überlauf auf Löschen, Export, Datenquellen, Richtlinien, Datenschutz in en/cs/pl, auch mit Fehlerzuständen. **F5** auf `/cookies` |
+| Aufräumjobs | Probe pgTAP 51: Kandidaten sind nur die alte Datei ohne Zeile (25 h) und der alte Eingang; Foto und Thumbnail mit Zeile (30 Tage alt), frische Dateien (23 h) und ein 400 Tage altes Verifizierungsdokument bleiben; Grenze mindestens 1. Export-Zähler-Job: 6 T 23 h bleibt, 7 T 1 h weg. pgTAP 50: Meldungen (offene bleiben), Audit, nie bestätigte Konten. Wiederholbarkeit: zweiter Lauf legt keinen Anker an. Integration: echte Function mit Storage-API. Hinweis H3 zum Eingang ausstehender Fotos |
+
+### Definition of Done
+
+| Punkt | Ergebnis |
+|---|---|
+| Lint, Typecheck, Build | erfüllt (kein Produktions-Build in dieser Abnahme) |
+| Tests grün | erfüllt |
+| Texte in 4 Sprachen | erfüllt (siehe oben), Glossar mit „Cookie-Einstellungen“ u. a., cs/pl ungeprüft |
+| Web/iOS-Lücke | im CHANGELOG (I6: Löschen, Export, `RV007`/`RV005`, `download_url`); App-Store-Pflicht vor dem Release |
+| RLS für neue Tabellen | erfüllt (Probe) |
+| CHANGELOG mit Testanleitung | erfüllt; Befehle nachvollzogen |
+| UGC-Pflichten | Löschen jetzt mit frischer Anmeldung, auch gesperrt und ohne Zustimmung, mit und ohne JavaScript |
+
+### Funde
+
+**F1 – mittel: `account_deletion_finalize` löscht Auth-Audit-Einträge anderer Konten, deren Adresse die gelöschte Adresse enthält.**
+`20261111100000_account_deletion.sql:265-267` vergleicht `position(mail in lower(e.payload::text))`. Wird `anna@example.de` gelöscht, verschwinden auch alle Einträge von `johanna@example.de` (Anmeldungen, Faktoren, Abmeldungen).
+- Reproduktion (pgTAP 51, TODO Test 30): Konten `qa51-a@test.local` und `jqa51-a@test.local`, je ein Eintrag in `auth.audit_log_entries`; A beantragt die Löschung, Zeile aus `auth.users` entfernen, `finalize` mit gültigem Lease → der Eintrag von D ist weg (`have 0, want 1`).
+- Folge: falsche Löschung im Sicherheitsprotokoll unbeteiligter Personen. Das Protokoll dient Nachweisen bei Kontoübernahmen.
+- Erwartet: nur Einträge, deren Adressfelder exakt der Adresse entsprechen.
+- Vorschlag: exakt vergleichen, z. B. `lower(e.payload->>'actor_username') = mail or lower(e.payload->'traits'->>'user_email') = mail` oder ein Vergleich auf `"<mail>"` mit den JSON-Anführungszeichen, dazu `actor_id`/`traits.user_id` per Gleichheit. Den Test für `user_deleted` (Adresse in Großschreibung) beibehalten.
+
+**F2 – niedrig: Der Export nennt Titel nicht öffentlicher Anzeigen anderer in `favorites`.**
+`20261111110000_data_export.sql:90-92` liest `title` ohne Prüfung der Öffentlichkeit. `my_favorites` zeigt solche Favoriten bewusst nur als Anzahl ohne Titel (QA M5 F3). Zieht der Besitzer eine Anzeige zurück und ändert den Titel im Entwurf, steht der neue Titel im Export der Person, die sie gemerkt hat.
+- Reproduktion (pgTAP 51, TODO Test 33): E merkt sich B2, B setzt B2 auf `draft` mit Titel „QA51 Geheimer Entwurfstitel“, E exportiert → der Titel steht im Export.
+- Erwartet: Titel nur, wenn die Anzeige öffentlich ist (`private.listing_is_public`), sonst `null`. Die Anzeigen-ID bleibt.
+- Vorschlag: `case when private.listing_is_public(l.status, l.expires_at, l.owner_id) then l.title end`, `version` auf 2. Für `conversations.listing_title` und `reports.target_label` (Anzeige) ist das Verhalten wie im Chat und damit vertretbar; bitte im ADR festhalten.
+
+**F3 – niedrig: Realtime-Ereignisse `unread.changed` beim Gegenüber behalten die IDs der gelöschten Unterhaltungen.**
+`finalize` entfernt nur Ereignisse mit Topic `user:<id>` oder der Nutzer-ID in der Nutzlast. `unread.changed` an das Gegenüber trägt nur `conversation_id` (und die eigene `id`). Nach der Löschung bleiben diese Ereignisse in `realtime.messages`, bis die Partition verfällt. Nutzer-ID und E-Mail kommen darin nicht vor; die Allowlist erfasst sie trotzdem nicht.
+- Reproduktion: `qa-m9a.test.ts` „F3“ (`it.fails`): Chat in beide Richtungen, Löschung über die Function, Inventar nach den beiden Konversations-IDs → Fundstelle `realtime.messages`.
+- Folge: gering. Die Unterhaltung existiert nicht mehr, die ID führt nirgends hin. Es ist aber ein Rest außerhalb der Allowlist.
+- Vorschlag: In `prepare` (die Unterhaltungen bestehen dort noch) Ereignisse mit `payload->>'conversation_id'` der Unterhaltungen des Kontos löschen, oder den Rest mit Grund und Frist in die Allowlist von ADR 019 aufnehmen.
+
+**F4 – niedrig: `next.config.ts` überschreibt die `Referrer-Policy` der Foto-Route.**
+`app/api/account/photos/[id]/route.ts` setzt `no-referrer` (ADR 019). Die allgemeine Regel in `next.config.ts:52` setzt `strict-origin-when-cross-origin`. Das ist dasselbe Muster wie QA M8 F2.
+- Reproduktion: `curl -s -D - -o /dev/null http://localhost:3000/api/account/photos/00000000-0000-4000-8000-000000000000` → `Referrer-Policy: strict-origin-when-cross-origin`. Probe: `e2e/qa-m9a.spec.ts` „F4“ (`test.fail`).
+- Folge: gering. Beim Weiterleiten zur signierten Storage-URL geht nur der Ursprung des verweisenden Dokuments mit, kein Pfad. Die Zusage im ADR stimmt aber nicht.
+- Vorschlag: `/api/account/photos/:id` wie `/api/unsubscribe` aus der allgemeinen Regel nehmen oder dahinter mit `no-referrer` überschreiben. Die E2E-Probe prüft dann den Header.
+
+**F5 – niedrig (a11y): Die Inventartabelle auf `/cookies` ist bei 360 px nicht per Tastatur scrollbar.**
+`app/[locale]/cookies/page.tsx`: Tabelle mit `min-w-[40rem]` in `overflow-x-auto` ohne `tabIndex`. axe meldet `scrollable-region-focusable` (ernst, WCAG 2.1.1) in en/cs/pl.
+- Reproduktion: `npx playwright test e2e/qa-m9a.spec.ts -g F5` (`test.fail`).
+- Vorschlag: Den Container fokussierbar machen (`tabIndex={0}`, `role="region"`, `aria-labelledby` auf die Caption) oder die Tabelle unter `sm` als Liste darstellen.
+
+**F6 – niedrig: Die Seite `/account/data` nennt nicht alle Abschnitte des Exports.**
+`DataExport.sections` listet 9 Abschnitte. Bewertungen (`reviews`), Geräte (`devices`) und Rollen (`roles`) fehlen, obwohl der Export sie enthält.
+- Vorschlag: drei Einträge in 4 Sprachen ergänzen (Transparenz nach Art. 15, Platzhalter).
+
+**F7 – niedrig (Doku): Abweichungen zwischen ADR 019 und Tests bzw. Code.**
+- „Der Integrationstest misst ein großes Konto“: Diesen Test gibt es nicht. Die Probe hat gemessen (87 ms, 1,9 MB bei 300 Unterhaltungen und 6000 Nachrichten). Messung in den Test übernehmen oder den Satz durch die gemessenen Werte ersetzen.
+- Die Fixture in `account-deletion.test.ts` nennt „Blockierung“, legt aber keine an; Realtime-Abo, Gerät, Bewertung und Suchtreffer fehlen (ADR „Fixture“). Die Probe deckt sie ab. Fixture ergänzen oder den ADR-Text anpassen.
+- ADR 019 „Einstellungen“ nennt 3 Werte. Es fehlen `account_deletion_stuck_attempts` (10) und `storage_orphan_hours` (24).
+- ADR 008 (Abschnitt Löschung) sagt weiter „Ein Job löscht Konten … hart über `auth.admin.deleteUser`“. Seit A12 legt der Job Anker an, die Function löscht.
+- Export-Route: ADR „prüft Origin und Sec-Fetch-Site (same-origin)“; der Code lässt fehlendes `Sec-Fetch-Site` zu (H2). Satz präzisieren.
+
+### Hinweise (keine Fehler)
+
+- **H1:** Eigene Meldungen des gelöschten Kontos bleiben pseudonymisiert mit Notiz (`reporter_id` null, ADR 008). Freitext der gelöschten Person liegt damit weiter vor; das ist durch „Moderationsdaten bleiben pseudonymisiert“ gedeckt. Für die Anwaltsfrage zu Art. 17 Abs. 3 mitnehmen.
+- **H2:** Die Export-Route nimmt Anfragen mit korrektem `Origin` und ohne `Sec-Fetch-Site` an (ältere Browser). CSRF-Schutz besteht über den Origin; vertretbar, nur die Formulierung im ADR ist strenger (F7).
+- **H3:** `maintenance_storage_objects` löscht Eingangsdateien nach 24 h auch, wenn die Fotozeile noch auf Verarbeitung wartet (`processed_at` null). Die Zeile bleibt dann ohne Datei, und die Verarbeitung meldet `not_uploaded`. Laut ADR 011 ist das gewollt; ein Rückstau über 24 h ist unwahrscheinlich.
+- **H4:** Der Selbsttest des Cookie-Inventars belegt nur zwei Erkennungswege (Cookie im Kontext, Local Storage). Ob `Set-Cookie`-Header, fremde Origins, IndexedDB oder Service Worker anschlagen, prüft er nicht. WebSockets (Realtime) erfasst `page.on("request")` nicht; die CSP begrenzt `connect-src`. Vor dem Lauf gegen Stage (M10) den Selbsttest um ein per `page.route` injiziertes `Set-Cookie` und einen fremden Request erweitern.
+- **H5:** `queue_unconfirmed_account_deletions` liefert die Zahl der Kandidaten. Bis zur Löschung zählt sie dasselbe Konto jeden Tag erneut. Nur Rückgabewert im Cron-Log.
+- **H6:** `deleteUser` läuft ohne Lease-Prüfung. Ein veralteter Lauf kann ihn noch aufrufen; harmlos, weil idempotent und jeder weitere Schritt am Lease scheitert (Probe).
+- **H7:** Das Rest-Inventar der Originaltests lässt bytea- und Geometrie-Spalten und Materialized Views aus. Die Probe hat beides mitgesucht, ohne Befund. Für neue Tabellen mit bytea lohnt es sich, die Suche in `account-deletion.test.ts` zu übernehmen.
+- **H8:** Viele Nachrichten in kurzer Zeit erzeugen ebenso viele Broadcast-Ereignisse; im lokalen Stack verzögerte das andere Realtime-Tests (siehe Prüfläufe). Für Lastmessungen in M10 im Blick behalten.
+
+### Nicht prüfbar
+
+- iOS (I6) und Gleichstand Web/iOS: nicht Teil von M9a, im CHANGELOG als Lücke.
+- Apple: `amr` für OAuth und `id_token`, Token-Widerruf (Apple lokal aus).
+- Cloud: Rechte der Migrationsrolle auf Auth- und Realtime-Tabellen, Hosting- und CDN-Cookies, Logs des Hosters (M10).
+- Muttersprachliche Prüfung cs/pl (SPEC 7.6).
+
+### Proben (neu)
+
+- `supabase/tests/51_qa_m9a_abnahme.test.sql` (41, 2 TODO: F1, F2): RLS, Rechte, Definer und Publikation der neuen Objekte; `amr`-Matrix; pg_net-Anstoß ohne ID; Lease (veraltet, abgelaufen, fremde Zeile, `fail`), Claim-Grenzen, Secrets, kein Abbruch, Backoff-Deckel; finalize gegen Teilzeichenketten (F1); Export ohne fremde Daten, mit eigenen Inhalten, gesperrt ohne Zustimmung, Admin ohne Audit, Favoriten-Titel (F2); Storage-Kandidaten, Export-Zähler-Job, nie bestätigte Konten.
+- `web/integration/qa-m9a.test.ts` (6 + 1 `it.fails` F3): Maximal-Fixture mit offenem Realtime-Abo und Markierungen, Inventar inkl. bytea; Edge-Runtime-Logs; altes JWT nach der Löschung; parallele Läufe; `amr` nach Refresh; großer Export.
+- `web/e2e/qa-m9a.spec.ts` (8, davon 2 `test.fail`: F4, F5): Foto-Route (Header, einheitliche 404), Export-Route (Origin, `Sec-Fetch-Site`, Header, kein Cookie, Login-Redirect), gesperrt ohne Zustimmung, ohne JavaScript bis zum gelöschten Konto, Rechtstexte als Platzhalter mit `noindex`, `/sources`, Footer, axe und 360 px in en/cs/pl.
+
+### Empfehlung
+
+**Abnahme von M9a: ja, mit Auflagen.** Akzeptanz a hält auch mit einer breiteren Fixture: offenes Realtime-Abo, alle Beziehungen in beide Richtungen, Markierungen in allen Freitexten, altes JWT, parallele Läufe und bytea-Spalten. Nutzer-ID, E-Mail und Inhalte bleiben nur in der Allowlist. Akzeptanz b ist lokal belegt. Frische Anmeldung, Admin-Sperre, Lease, Secrets, Rechte und Erreichbarkeit (gesperrt, ohne Zustimmung, ohne JavaScript) hielten allen Proben stand. Auflagen: **F1 vor dem Cloud-Rollout (M10) beheben**, weil sie fremde Sicherheitsprotokolle löscht. F2–F7 gesammelt nachziehen, F4 zusammen mit dem Header-Muster aus M8. H4 vor dem Inventar-Lauf gegen Stage umsetzen.
