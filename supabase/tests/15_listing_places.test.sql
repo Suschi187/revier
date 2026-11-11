@@ -140,12 +140,13 @@ delete from listings where id = :'w';
 select is((select count(*)::int from listing_places where listing_id = :'w'), 0, 'Ort verschwindet mit der Anzeige');
 
 -- Kein Such-Orakel (Review Plan M3 PLZ 2): nur diese Funktionen und keine View verwenden listing_places.
+-- export_my_data (M9a, ADR 019) liest nur die Orte der eigenen Anzeigen (owner_id = auth.uid(), pgTAP 49).
 select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
     where n.nspname not in ('pg_catalog', 'information_schema', 'tests') and p.prosrc ~ 'listing_places'
   union all select schemaname || '.' || viewname from pg_views where definition ~ 'listing_places' $$,
   array['private.listing_children_guard', 'private.listing_content_hash', 'private.listing_readiness',
-        'public.set_listing_location'],
-  'Nur Guard, Bereitschaft, Freigabe-Hash und RPC verwenden listing_places (Allowlist; Trigger der Tabelle lesen nur NEW)');
+        'public.export_my_data', 'public.set_listing_location'],
+  'Nur Guard, Bereitschaft, Freigabe-Hash, Export und RPC verwenden listing_places (Allowlist; Trigger der Tabelle lesen nur NEW)');
 
 select * from finish();
 rollback;
