@@ -2,6 +2,66 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M9a Konto und Datenschutz (Web) – 2026-11-11
+
+Plan `docs/plans/M9-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 019 (Löschung, Export, Aufräumjobs), ADR 021 (Cookies und Einwilligung), SPEC v0.11. M9 ist geteilt; M9b „Vertrauen und Moderation“ (ADR 020) folgt, M9 gilt erst danach als abgeschlossen.
+
+### Geändert
+- **Cookies und Einwilligung (ADR 021):**
+  - Kein Sprach-Cookie mehr (`localeCookie: false`, QA M0 F7). `/` wählt nach `Accept-Language` mit `Vary` und `Cache-Control: private`.
+  - Inventar `web/lib/consent/inventory.ts` als eine Quelle für die Seite `/cookies` und die Tests: Session, PKCE-Verifier und die Karte als eigener Dienst ohne Speicher.
+  - Gefunden im E2E: auth-js 2.117 legt einen PKCE-Verifier je Anmeldevorgang und einen Index an. Nach einem Login per Code bleiben sie bis zum Abmelden liegen; das Inventar und die Seite nennen das, `signOut` räumt alle ab.
+  - Kein Banner, solange nur Notwendiges läuft; ein Guard-Test schlägt fehl, sobald ein Eintrag optional ist und kein Banner existiert.
+- **Rechtstexte (Platzhalter, noindex):** Datenschutz und Nutzungsbedingungen mit einer Gliederung der tatsächlichen Verarbeitungen, neue Seite `/guidelines` (verbotene Inhalte). Neue Seite `/sources` (indexierbar) mit allen Pflichtvermerken und dem ODbL-Download der PLZ-Tabelle unter `/api/sources/postal-codes` (ADR 012). Footer mit sechs Links.
+- **Account-Löschung (ADR 019):**
+  - `request_account_deletion`: frische Anmeldung (höchstens 10 Minuten, `RV007`), bei TOTP-Faktor zusätzlich aal2 (`RV005`), Konten mit Rolle `42501` `admin_role`. Ohne Legal-Gate, auch für gesperrte Konten.
+  - `amr` gemessen: Code, Link und Erstbestätigung schreiben `otp`, ein Refresh behält den Zeitstempel.
+  - Fester Ablauf in der Edge Function `delete-account`: Storage 1 → prepare → deleteUser → finalize (Auth-Audit, `flow_state`, Realtime) → Storage 2 → complete. Lease je Zeile, Backoff 1 min verdoppelt bis 1 h, die Wiederholung bricht nie ab. Auslöser per pg_net nach dem Antrag und per Cron jede Minute.
+  - Es bleiben nur: Audit pseudonymisiert, Meldungen gegen das Konto und Kopien gemeldeter Nachrichten.
+  - Web `/account/delete`: erklärt Gelöschtes und Reste, erneute Anmeldung per Code an die Adresse der Session (bei Faktor mit TOTP), Bestätigung per Server Action (auch ohne JS), danach abgemeldet und Hinweis „wird gelöscht“. Die Sperrfrist von GoTrue zwischen zwei Mails wird angezeigt.
+- **Datenexport:** `export_my_data` mit Allowlist je Abschnitt, Daten anderer nur als Anzeigename, 3 je 24 h (`RV002`). Web `/account/data` mit `POST /api/account/export` (Origin-Prüfung, Download als JSON) und Foto-Links `GET /api/account/photos/{id}` (Login und Eigentum, 60-s-URL). Im Plan fehlte `reviews`; der Abschnitt ist ergänzt.
+- **Erreichbarkeit:** Löschen und Export auch ohne aktuelle Zustimmung (Links auf der Willkommensseite); `guards.test.ts` hält das fest.
+- **Aufräumjobs:** nie bestätigte Konten nach 7 Tagen über denselben Löschweg, erledigte Meldungen samt Kopien nach 12 Monaten, Audit nach 24 Monaten, Export-Zähler nach 7 Tagen, Function `account-maintenance` für Foto-Eingang und Fotos ohne Zeile nach 24 h. Admin-Übersicht mit der Anzahl hängender Löschungen.
+- **Wächter:** `00_meta` prüft, dass jeder Bucket in der Löschliste steht und jede Spalte mit Nutzerbezug in ADR 008 eingeordnet ist; pgTAP 49, dass jede Tabelle mit Nutzerbezug im Export oder in der Ausschlussliste steht.
+- **Doku:** ADR 008 nachgezogen, ADR 014 mit `RV007`, ADR 005 mit dem Runbook „Admin will sein Konto löschen“ (Review A15), Glossar.
+
+### Testen
+- `supabase test db` (pgTAP 48 Löschung mit Rest-Inventar, 49 Export, 50 Aufräumjobs; 00, 12 und 15 erweitert)
+- Edge Functions wie in der CI per Docker: `deno task check && deno lint && deno task test` in `delete-account` und `account-maintenance`
+- `cd web && npm test && INTEGRATION_REQUIRED=1 npm run test:integration && npm run test:e2e`
+- Integration `account-deletion.test.ts`: Normalfall, drei Abbrüche, Auslöseweg über pg_net; Gegenprobe über die Storage-API und Inventar über alle Nicht-System-Schemas. `account-maintenance.test.ts`: echte Function und Storage-API.
+- E2E `cookie-inventory.spec.ts` (anonym, angemeldet, Admin, Abmelden, Selbsttest; gegen Stage/Prod: `QA_BASE_URL=… QA_SUPABASE_URL=…`), `account-delete-export.spec.ts` (Export mit Foto-Links und Limit, Löschen über die Oberfläche bis zum gelöschten Konto, Admin-Rolle).
+- Lokal: Neue Functions bedient die Edge Runtime erst nach `supabase stop && supabase start`.
+
+### Akzeptanz (SPEC 6 M9a)
+- a) Ein gelöschter Account verschwindet aus allen Tabellen und Buckets bis auf die Allowlist: erfüllt (Integration `account-deletion.test.ts` gegen GoTrue und die Storage-API, mit Abbrüchen und Auslöseweg; pgTAP 48 als frühe Warnung).
+- b) Ohne Einwilligung laufen keine nicht notwendigen Cookies: erfüllt für CI und lokal (E2E `cookie-inventory.spec.ts` mit Selbsttest). Gegen Stage und Produktion steht der Lauf aus (Hosting- und CDN-Cookies, M10).
+
+### Bekannte Lücken
+- **iOS (I6):** Löschen, Export, frische Anmeldung (`RV007`/`RV005`) und der `download_url`-Vertrag folgen auf denselben RPCs. Bis dahin hat die iOS-App keinen Lösch- und Exportweg aus M9a (App-Store-Pflicht vor dem Release).
+- **Apple:** Der Token-Widerruf bei der Löschung (Apple-Vorgabe) fehlt; Vorbedingung für `NEXT_PUBLIC_AUTH_APPLE_ENABLED`. `amr` für Apple ist lokal nicht gemessen.
+- **E-Mail-Adresse ändern** fehlt weiter (seit M2), Vorschlag M10.
+- **M9b:** Verifizierung, Melden von Anzeigen und Profilen, Meldungs-Warteschlange, Sperren, Beschwerden, Moderations-Mails für Server-Pfade, verlassene Entwürfe; dazu die Fristen für Verifizierungsdokumente.
+- Die Rechtstexte sind Platzhalter (SPEC 7.2), die Texte auf cs und pl ungeprüft (SPEC 7.6).
+- Der Hinweis „wird gelöscht“ auf der Startseite braucht JavaScript (die Seite bleibt statisch gecacht).
+- `docs/WEB-RELEASE.md` fehlt noch (M10); Pflichtpunkt dort: das Cookie-Inventar gegen Stage und Produktion.
+
+### Anwaltsfragen (SPEC 7.2, neu oder präzisiert)
+- Reste nach der Löschung und ihre Aufbewahrung (Art. 17 Abs. 3 DSGVO), auch der Zustimmungsnachweis (`legal_acceptances`).
+- Einordnung der Session- und PKCE-Cookies als unbedingt erforderlich (TDDDG und die Umsetzungen in AT, CZ, PL).
+- Backups und Logs bei Hoster und Mail-Anbieter (Datenschutzerklärung, M10).
+- Für M9b: Kontaktstellen nach Art. 11/12, Ausnahme nach Art. 19, Transparenzbericht (Art. 15/24), Meldepflicht (Art. 18), Melden ohne Konto, Sperrdauer (Art. 23), EXIF in Verifizierungsfotos.
+
+### Cloud-Checkliste (neu, Review A13)
+- **Vault:** `account_deletion_url` auf `https://<projekt>.supabase.co/functions/v1/delete-account` und `account_maintenance_url` auf `…/functions/v1/account-maintenance`. Die Secrets legen die Migrationen an. Ohne URL bleiben Löschanträge liegen.
+- **Rechte:** Prüfen, ob die Migrationsrolle in der Cloud auf `auth.audit_log_entries`, `auth.flow_state` und `realtime.messages` löschen darf. Sonst das Schreiben des Auth-Audits in die Projektdatenbank abschalten; dann gilt die Frist des Log-Dienstes und gehört in die Datenschutzerklärung.
+- **Nach dem Deploy:** Kaskade von MFA-Faktoren und Rollen nachweisen; `amr`-Allowlist mit einem echten Login gegenprüfen; das Cookie-Inventar gegen die Produktions-URL laufen lassen.
+- **Cron-Jobs:** `account-deletions` jede Minute, `account-maintenance` stündlich, `unconfirmed-accounts`, `reports-retention`, `audit-retention` und `data-exports-cleanup` täglich.
+
+### Lokal von Hand
+- Löschung einschalten: `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/delete-account', 'account_deletion_url')"`
+- Storage-Aufräumen: `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/account-maintenance', 'account_maintenance_url')"`
+
 ## Nachtrag M8: QA-Funde F1–F3 – 2026-11-07
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M8 – Abnahme“.

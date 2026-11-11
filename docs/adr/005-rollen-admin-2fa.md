@@ -15,6 +15,11 @@ SPEC 3.4: Die Admin-Rolle kommt über einen Custom Claim, nie über Felder, die 
 - `user_metadata`/`raw_user_meta_data` werden für Rechte nie gelesen.
 - Hilfsfunktionen sind `security definer` mit `set search_path = ''`. Policies rufen `(select auth.uid())` auf, damit der Planner den Wert cacht.
 
+## Runbook: Admin will sein Konto löschen (M9a, ADR 019, Review A15)
+- Konten mit Rolle können nicht gelöscht werden (`request_account_deletion` → `42501`, `hint {"reason":"admin_role"}`).
+- Ablauf: Ein anderer Admin entzieht die Rolle (`revoke_admin`), danach löscht der Nutzer sein Konto selbst (frische Anmeldung, wegen des TOTP-Faktors mit aal2).
+- **Letzter Admin:** Die Rolle ist nicht entziehbar. Zuerst einen weiteren Admin ernennen; der neue Admin darf erst nach der Karenz von 7 Tagen Rollen ändern (ADR 014). Erst dann entzieht er die Rolle, und das Konto kann gelöscht werden.
+
 ## Alternativen
 - Rolle in `app_metadata`: Sie wird erst beim Token-Refresh wirksam, ein Entzug wäre also verzögert.
 - Rolle in `profiles`: Die Spalte wäre schreibbar und fehleranfällig.
