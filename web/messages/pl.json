@@ -1262,7 +1262,10 @@
       "favoritesBlocks": "Zapisane ogłoszenia i zablokowane osoby",
       "reports": "Twoje zgłoszenia i ich status",
       "legal": "Akceptacja regulaminu i polityki prywatności",
-      "verifications": "Wnioski o weryfikację (bez dokumentu)"
+      "verifications": "Wnioski o weryfikację (bez dokumentu)",
+      "roles": "Role (na przykład administrator), jeśli istnieją",
+      "reviews": "Oceny wystawione i otrzymane (inne osoby tylko z nazwą wyświetlaną)",
+      "devices": "Zarejestrowane urządzenia (platforma i język, bez tokenu push)"
     },
     "photos": "Zdjęcia są w pliku jako linki. Link działa tylko wtedy, gdy jesteś zalogowany.",
     "limit": "Dane możesz pobrać maksymalnie 3 razy w ciągu 24 godzin.",

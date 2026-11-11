@@ -1262,7 +1262,10 @@
       "favoritesBlocks": "Gemerkte Anzeigen und blockierte Personen",
       "reports": "Deine Meldungen und ihr Stand",
       "legal": "Zustimmung zu Nutzungsbedingungen und Datenschutzerklärung",
-      "verifications": "Verifizierungsanträge (ohne das Dokument)"
+      "verifications": "Verifizierungsanträge (ohne das Dokument)",
+      "roles": "Rollen (zum Beispiel Admin), falls vorhanden",
+      "reviews": "Bewertungen, die du geschrieben und erhalten hast (andere Personen nur mit Anzeigenamen)",
+      "devices": "Angemeldete Geräte (Plattform und Sprache, ohne Push-Token)"
     },
     "photos": "Fotos stehen als Links in der Datei. Ein Link funktioniert nur, solange du angemeldet bist.",
     "limit": "Du kannst deine Daten bis zu 3-mal in 24 Stunden herunterladen.",

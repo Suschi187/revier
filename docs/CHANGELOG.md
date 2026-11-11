@@ -2,6 +2,23 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M9a: QA-Funde F1–F7 – 2026-11-11
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M9a – Abnahme“.
+
+### Geändert
+- **F1 (mittel):** `account_deletion_finalize` vergleicht Nutzer-ID und Adresse nur als vollständigen JSON-Wert. Vorher löschte die Löschung von `anna@…` auch Auth-Audit-Einträge von `johanna@…` (Migration `20261111130000_qa_m9a_fixes`).
+- **F2:** Der Export nennt Titel gemerkter Anzeigen nur, wenn sie öffentlich sind (wie `my_favorites`); Export-`version` 2.
+- **F3:** `account_deletion_prepare` entfernt Realtime-Ereignisse zu Unterhaltungen des Kontos (`unread.changed` beim Gegenüber). Die Allowlist in ADR 019 nennt bei Kopien gemeldeter Nachrichten jetzt auch `message_id` und `conversation_id`.
+- **F4:** `/api/account/photos/:id` ist von der allgemeinen Header-Regel in `next.config.ts` ausgenommen und behält `Referrer-Policy: no-referrer`.
+- **F5:** Der waagerecht scrollende Container der Tabelle auf `/cookies` ist per Tastatur erreichbar (`tabIndex`, `role="region"`, Label).
+- **F6:** `/account/data` nennt auch Rollen, Bewertungen und Geräte (4 Sprachen).
+- **F7:** ADR 019 (Messung großer Konten, Fixture, Einstellungen, `Sec-Fetch-Site`) und ADR 008 (Job für nie bestätigte Konten) nachgezogen; Fixture in `account-deletion.test.ts` um Blockierung und Gerät ergänzt.
+- **Proben:** Die TODOs in pgTAP 51 und die erwarteten Fehlschläge F3–F5 in `qa-m9a.test.ts` und `qa-m9a.spec.ts` sind normale Tests. pgTAP 48 prüft, dass Ereignisse des Gegenübers zu anderen Unterhaltungen bleiben.
+
+### Testen
+- `supabase test db` (52), `cd web && npm run test:integration && npx playwright test e2e/qa-m9a.spec.ts e2e/account-delete-export.spec.ts e2e/cookie-inventory.spec.ts`
+
 ## M9a Konto und Datenschutz (Web) – 2026-11-11
 
 Plan `docs/plans/M9-plan.md` mit Architekt-Review (Abschnitte 10/11), ADR 019 (Löschung, Export, Aufräumjobs), ADR 021 (Cookies und Einwilligung), SPEC v0.11. M9 ist geteilt; M9b „Vertrauen und Moderation“ (ADR 020) folgt, M9 gilt erst danach als abgeschlossen.

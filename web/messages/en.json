@@ -1262,7 +1262,10 @@
       "favoritesBlocks": "Saved listings and blocked people",
       "reports": "Your reports and their status",
       "legal": "Acceptance of the terms of use and privacy policy",
-      "verifications": "Verification requests (without the document)"
+      "verifications": "Verification requests (without the document)",
+      "roles": "Roles (for example admin), if any",
+      "reviews": "Reviews you have written and received (other people only by display name)",
+      "devices": "Registered devices (platform and language, without the push token)"
     },
     "photos": "Photos are listed as links. A link only works while you are signed in.",
     "limit": "You can download your data up to 3 times within 24 hours.",

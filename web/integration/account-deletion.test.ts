@@ -177,6 +177,9 @@ describe.skipIf(!f)("Account-Löschung gegen den echten Stack (Akzeptanz a)", ()
     expect(conv.error).toBeNull();
     const reply = await u.client.rpc("send_message", { p_conversation_id: conv.data, p_body: "Del Antwort von Ute" });
     expect(reply.error).toBeNull();
+    // Blockierung und Gerät (QA M9a F7: im Kommentar genannt, fehlten in der Fixture).
+    expect((await service.from("blocks").insert({ blocker_id: u.id, blocked_id: v.id })).error).toBeNull();
+    expect((await service.from("devices").insert({ user_id: u.id, apns_token: "a".repeat(64), platform: "ios", language: "de" })).error).toBeNull();
     // Favorit und Suchauftrag über den Server-Pfad (die API schreibt sie nur per RPC).
     expect((await service.from("favorites").insert({ user_id: u.id, listing_id: lv })).error).toBeNull();
     expect((await service.from("saved_searches").insert({ user_id: u.id, name: "Del Suche", filters: { v: 1, kind: "helper" } })).error).toBeNull();

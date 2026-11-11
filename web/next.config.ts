@@ -49,7 +49,13 @@ const nextConfig: NextConfig = {
     return [
       // /admin bekommt seine CSP mit Nonce aus dem Proxy (ADR 014); die übrigen Header gelten überall.
       // /api/unsubscribe setzt CSP und Referrer-Policy selbst (ADR 018, QA M8 F2) und ist deshalb ausgenommen, auch mit Schrägstrich am Ende (QA M8 N1).
-      { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)|api/unsubscribe/?$).*)", headers: securityHeaders },
+      // Die Foto-Links des Datenexports (ADR 019, QA M9a F4) setzen no-referrer: Die Weiterleitung führt auf eine
+      // signierte Storage-URL. Ausgenommen wie /api/unsubscribe, sonst überschriebe die allgemeine Regel den Header.
+      { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)|api/unsubscribe/?$|api/account/photos/[^/]+/?$).*)", headers: securityHeaders },
+      {
+        source: "/api/account/photos/:id",
+        headers: [...securityHeaders.filter((h) => h.key !== "Referrer-Policy"), { key: "Referrer-Policy", value: "no-referrer" }],
+      },
       ...["/api/unsubscribe", "/api/unsubscribe/"].map((source) => ({
         source,
         headers: [

@@ -77,6 +77,11 @@ Bestand: ADR 008 (Fristen, FK-Tabelle), ADR 010 (Session, `getUser()` für Lösc
 - Die Server Action ruft `getUser()` und `request_account_deletion`, meldet lokal ab (Fehler von `signOut` ignorieren, Cookies trotzdem löschen, H6) und leitet sofort auf `/{lang}?deleted=1`. Der Hinweis sagt „wird gelöscht“, nicht „ist gelöscht“ (H7).
 - **Apple:** Der Token-Widerruf bei Löschung (Apple-Vorgabe) kommt erst, wenn Apple eingeschaltet wird (SPEC 7.1). Bis dahin Lücke im CHANGELOG und Vorbedingung für `NEXT_PUBLIC_AUTH_APPLE_ENABLED`.
 
+### Nachträge QA M9a
+- **F1:** `finalize` vergleicht Nutzer-ID und Adresse nur als vollständigen JSON-Wert (`"…"`); vorher löschte die Löschung von `anna@…` auch Einträge von `johanna@…`.
+- **F2:** `favorites[].title` nur bei öffentlichen Anzeigen (wie `my_favorites`), `version` 2. `conversations[].listing_title` und `reports[].target_label` zeigen den Titel wie der Chat und die eigene Meldung, auch wenn die Anzeige nicht mehr öffentlich ist: Das ist Inhalt der eigenen Unterhaltung bzw. Meldung.
+- **F3:** `prepare` entfernt Realtime-Ereignisse mit der `conversation_id` einer Unterhaltung des Kontos (`unread.changed` beim Gegenüber).
+
 ### Umsetzung im Web (Commit 5)
 - `/account/delete`: Schritt 1 erneute Anmeldung im Browser (`ReauthForm`: Code an die Adresse der Session, `shouldCreateUser: false`, `emailRedirectTo` über `/auth/confirm` wie der Login; gleiche `sub` nach `verifyOtp`; bei bestätigtem TOTP-Faktor zusätzlich `challengeAndVerify`). Schritt 2 Bestätigung per Server Action mit Pflicht-Häkchen, auch ohne JavaScript. Fehler aus der RPC als `?error=reauth|step_up|admin_role|failed`.
 - Anders als beim Login zeigt die Seite die Sperrfrist von GoTrue zwischen zwei Mails an (`429 over_email_send_rate_limit`): Es ist die eigene Adresse, eine Konto-Enumeration gibt es hier nicht. Gefunden im E2E (ein Login kurz vor dem Löschen löste die Sperre aus).
@@ -97,7 +102,7 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
 |---|---|---|---|---|
 | `public.audit_log` | `target_id` (`actor_id` ist `null`) | UUID als Pseudonym, ohne Weg zu Person oder E-Mail | Nachweis von Moderations- und Admin-Entscheidungen (DSA Art. 17/20, berechtigtes Interesse) | `audit_log_months` (24) |
 | `public.reports` | `target_id` bei `target_type = profile` | UUID als Pseudonym | Beweissicherung | `handled_reports_months` (12) nach Bearbeitung; offene bis zur Bearbeitung plus Frist |
-| `private.reported_message_snapshots` | `sender_id`, `body` | Kopie gemeldeter Nachrichten des Kontos | Beweissicherung | wie die Meldung (Kaskade über `report_id`) |
+| `private.reported_message_snapshots` | `sender_id`, `body`, `message_id`, `conversation_id` | Kopie gemeldeter Nachrichten des Kontos; die IDs verweisen nach der Löschung auf nichts mehr (präzisiert nach QA M9a F3) | Beweissicherung | wie die Meldung (Kaskade über `report_id`) |
 
 - Nie gemeldete Nachrichten des Kontos verschwinden, auch beim Gegenüber (SPEC 7.3, Anwalt).
 - Logs und Backups des Hosters und des Mail-Anbieters enthalten Daten bis zu deren Frist (M10, Datenschutzerklärung).
@@ -105,7 +110,7 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
 ### Nachweis von Akzeptanz a (Review B2)
 - **pgTAP-Inventar:** Ein SQL-Helfer durchsucht **alle Nicht-System-Schemas** (alles außer `pg_*` und `information_schema`): jede Zeile als `row_to_json(t)::text`, Nutzer-ID und E-Mail ohne Groß-/Kleinschreibung. Damit sind auch `json`, `varchar`, `citext`, Arrays und die Schemas `realtime`, `net`, `cron` und `storage` erfasst. Erlaubt sind nur die Einträge der Allowlist oben; neue Tabellen fallen automatisch auf.
 - **Verbindlich ist der Integrationstest gegen den echten lokalen Stack:** GoTrue `deleteUser`, Storage-API, danach Gegenprobe je Bucket über die API (Listing je bekanntem Unterordner, Download der bekannten Pfade ergibt 404) und das Inventar.
-  - Fixture: Anzeige mit Fotos, Verifizierungsdokument, Chat mit offenem Realtime-Abo, Suchauftrag mit Treffer, Favorit, Blockierung, eigene und fremde Meldung, MFA-Faktor (ehemaliger Admin, Rolle entzogen), Export-Zähler, Apple-Identität, falls lokal möglich.
+  - Fixture: Anzeige mit Fotos, Verifizierungsdokument, Chat mit offenem Realtime-Abo, Suchauftrag mit Treffer, Favorit, Blockierung, eigene und fremde Meldung, MFA-Faktor (ehemaliger Admin, Rolle entzogen), Export-Zähler, Apple-Identität, falls lokal möglich. `account-deletion.test.ts` deckt den Kern ab (ohne offenes Abo, Bewertung und Suchtreffer); die QA-Probe `qa-m9a.test.ts` ergänzt offenes Realtime-Abo, Bewertung, Suchtreffer und Fotos an echten Pfaden. Eine Apple-Identität ist lokal nicht anlegbar.
   - Fälle: Normalfall; Abbruch nach Storage-Durchlauf 1; Abbruch nach `deleteUser` vor `finalize`; Upload zwischen Durchlauf 1 und 2. Jeweils holt der nächste Lauf nach.
 - **Deno:** Reihenfolge der Schritte 2–7, Wiederholung mit Backoff, Secret, 403 bei falschem Secret, 405 außer POST.
 - **Umsetzung (Commit 4):** `supabase/functions/delete-account` mit `handler.ts` (Ablauf, Abhängigkeiten injiziert, Deno-Tests mit Mocks) und `index.ts` (Verdrahtung). Zeitbudget 40 s je Lauf, höchstens 5 Zeilen; übrige Zeilen gehen per `fail` zurück. `web/integration/account-deletion.test.ts` prüft gegen den echten Stack den Normalfall, die drei Abbruchfälle und den Auslöseweg über pg_net (Vault-URL `http://kong:8000/functions/v1/delete-account`). Der Normalfall nutzt Realtime-Ereignisse aus den Chat-Triggern statt eines offenen Abos; eine Apple-Identität ist lokal nicht anlegbar (Apple aus).
@@ -143,9 +148,9 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
 - **Ausschlussliste mit Grund:** Meldungen anderer über das Konto (Schutz der Meldenden); Audit-Einträge und Admin-Identitäten; `admin_lookups`; `unsubscribe_tokens` und alle Hashes; `listing_location_offsets`, `display_location` und `map_point` (Verfremdung, der Punkt ist keine Eingabe); Zähler (`photo_creations`, `listing_creations`, `data_exports`); Versandzustände (`chat_notifications`, `moderation_notifications`, Suchauftrags-Zustand), weil ihr Inhalt in den Abschnitten oben steht.
 - **Wächter `00_meta`:** Jede Tabelle mit Nutzerbezug steht entweder in der Export-Allowlist oder in der Ausschlussliste.
 - **Rate-Limit:** `export_per_24h` (3), gezählt in `private.data_exports (user_id → profiles cascade, created_at)` unter Advisory-Lock. Fehler `RV002` mit `hint {"retry_after":"<ISO UTC>","scope":"data_export"}`.
-- **Größe:** Der Rollen-`statement_timeout` von `authenticated` gilt. Der Integrationstest misst ein großes Konto; reicht es nicht, wird der Export in Commit 3 in Abschnitte geteilt, nicht das Timeout erhöht.
+- **Größe:** Der Rollen-`statement_timeout` von `authenticated` gilt. Gemessen in der QA-Probe M9a (`web/integration/qa-m9a.test.ts`): 300 Unterhaltungen mit 6000 Nachrichten in 87 ms, 1,9 MB. Wird es knapp, wird der Export in Abschnitte geteilt, nicht das Timeout erhöht.
 - **Route `POST /api/account/export`:**
-  - prüft `Origin` (= `SITE_URL`) **und** `Sec-Fetch-Site` (`same-origin`), dann `getUser()`;
+  - prüft `Origin` (= `SITE_URL`) und, wenn der Browser ihn sendet, `Sec-Fetch-Site` (`same-origin`), dann `getUser()`. Ohne `Origin` immer 403; ein fehlendes `Sec-Fetch-Site` (ältere Browser) allein lehnt die Route nicht ab;
   - Antwort `Content-Type: application/json; charset=utf-8`, `Content-Disposition: attachment; filename="revier-export-<datum>.json"`, `Cache-Control: no-store`, `X-Content-Type-Options: nosniff`;
   - ohne JavaScript per Formular; Fehler und Limit per 303 auf `/{lang}/account/data?error=<code>`;
   - keine Inhalte in Logs.
@@ -173,7 +178,7 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
 - Die Jobs für Verifizierungsdokumente, verwaiste Anträge, verlassene Entwürfe und Beschwerden folgen in M9b (ADR 020).
 
 ### Einstellungen (`app_settings`, M9a)
-`account_deletion_reauth_minutes` 10, `export_per_24h` 3, `unconfirmed_account_days` 7. Alle Werte sind Platzhalter (ADR 008).
+`account_deletion_reauth_minutes` 10, `account_deletion_stuck_attempts` 10, `export_per_24h` 3, `unconfirmed_account_days` 7, `storage_orphan_hours` 24. Alle Werte sind Platzhalter (ADR 008).
 
 ### Fehlercodes (für Web und iOS)
 | Code | Wann | Hinweis |

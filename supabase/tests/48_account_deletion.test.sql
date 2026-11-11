@@ -126,7 +126,9 @@ insert into auth.flow_state (id, user_id, provider_type, authentication_method, 
   values (gen_random_uuid(), :'u', 'email', 'magiclink', 'x', 's256', 'y');
 insert into realtime.messages (topic, extension, payload, private) values
   ('user:' || :'u', 'broadcast', '{}'::jsonb, true),
-  ('user:' || :'v', 'broadcast', jsonb_build_object('sender_id', :'u'), true);
+  ('user:' || :'v', 'broadcast', jsonb_build_object('sender_id', :'u'), true),
+  -- Ereignis des Gegenübers zu einer anderen Unterhaltung: bleibt (QA M9a F3 entfernt nur die des Kontos).
+  ('user:' || :'v', 'broadcast', jsonb_build_object('conversation_id', gen_random_uuid()), true);
 
 -- ---------------------------------------------------------------------------
 -- Löschantrag
@@ -264,7 +266,7 @@ select is((select count(*)::int from audit_log where target_id = :'u' and actor_
 select is((select count(*)::int from messages where id = :'m_v'), 0, 'nie gemeldete Nachrichten verschwinden auch beim Gegenüber');
 select is((select count(*)::int from listings where id = :'lv'), 1, 'Daten des Gegenübers bleiben');
 select is((select count(*)::int from realtime.messages where payload ->> 'sender_id' = :'u'), 0, 'Realtime-Ereignisse mit der ID beim Gegenüber entfernt');
-select ok((select count(*) > 0 from realtime.messages where topic = 'user:' || :'v'), 'eigene Realtime-Ereignisse des Gegenübers bleiben');
+select ok((select count(*) > 0 from realtime.messages where topic = 'user:' || :'v'), 'Ereignisse des Gegenübers zu anderen Unterhaltungen bleiben');
 
 -- Admin-Übersicht: nur Anzahl, nur Admins mit aal2.
 select tests.make_admin(:'v');

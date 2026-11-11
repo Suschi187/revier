@@ -62,7 +62,7 @@ select tests.as_postgres();
 select is(tests.keys(:'e'::jsonb),
   array['account', 'blocks', 'conversations', 'devices', 'favorites', 'format', 'generated_at', 'legal_acceptances', 'listings',
         'profile', 'reports', 'reviews', 'roles', 'saved_searches', 'verifications', 'version'], 'Abschnitte exakt');
-select is((:'e'::jsonb ->> 'format') || ' ' || (:'e'::jsonb ->> 'version'), 'revier-export 1', 'Format und Version');
+select is((:'e'::jsonb ->> 'format') || ' ' || (:'e'::jsonb ->> 'version'), 'revier-export 2', 'Format und Version');
 select is(tests.keys(:'e'::jsonb -> 'account'), array['created_at', 'email', 'last_sign_in_at'], 'account: Schlüssel exakt');
 select is(tests.keys(:'e'::jsonb -> 'profile'),
   array['account_type', 'business_name', 'country', 'created_at', 'display_name', 'is_blocked', 'notify_chat_email', 'preferred_language',

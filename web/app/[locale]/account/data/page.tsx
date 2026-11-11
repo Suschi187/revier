@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle"), robots: { index: false, follow: false } };
 }
 
-const SECTIONS = ["account", "profile", "listings", "conversations", "savedSearches", "favoritesBlocks", "reports", "legal", "verifications"] as const;
+const SECTIONS = ["account", "profile", "roles", "listings", "conversations", "savedSearches", "favoritesBlocks", "reports", "reviews", "devices", "legal", "verifications"] as const;
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 

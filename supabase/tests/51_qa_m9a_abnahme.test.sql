@@ -245,7 +245,7 @@ select lives_ok(format($$ select account_deletion_finalize(%L, %L) $$, :'claim3'
 select tests.as_postgres();
 select is((select count(*)::int from auth.audit_log_entries e where e.payload::text like '%' || :'a' || '%' or lower(e.payload::text) like '%"qa51-a@test.local"%'),
   0, 'finalize: Einträge mit ID oder Adresse von A entfernt');
-select todo('F1: finalize vergleicht die Adresse als Teilzeichenkette und löscht Einträge anderer Konten', 1);
+-- F1 behoben (20261111130000_qa_m9a_fixes): exakter Vergleich.
 select is((select count(*)::int from auth.audit_log_entries e where e.payload ->> 'actor_id' = :'d'),
   1, 'finalize: Auth-Audit von D (jqa51-a@…) bleibt');
 
@@ -288,7 +288,7 @@ select is(
 select ok(position('QA51 Notiz von Emil' in :'export_e') > 0 and position('QA51 Antwort von Emil' in :'export_e') > 0
           and position('QA51 Frage von Bernd' in :'export_e') > 0 and position('QA51 Begründung' in :'export_e') > 0,
   'Export: eigene Meldung, beide Seiten des Chats und die Begründung der Entfernung sind enthalten');
-select todo('F2: Der Export nennt den Titel nicht öffentlicher Favoriten (my_favorites zeigt ihn bewusst nicht, QA M5 F3)', 1);
+-- F2 behoben (20261111130000_qa_m9a_fixes): Titel nur bei öffentlichen Favoriten.
 select is(position('QA51 Geheimer Entwurfstitel' in :'export_e'), 0, 'Export: kein Titel eines nicht öffentlichen fremden Favoriten');
 -- Gesperrt und ohne Zustimmung: Export geht.
 update profiles set is_blocked = true where user_id = :'g';

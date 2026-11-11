@@ -39,7 +39,6 @@ test.describe("QA M9a", () => {
   test.skip(!local, "Lokale Supabase nötig");
 
   test("F4: Foto-Route liefert Referrer-Policy no-referrer (ADR 019)", async ({ request }) => {
-    test.fail(true, "F4: next.config.ts überschreibt die Referrer-Policy der Route mit strict-origin-when-cross-origin");
     const response = await request.get(`/api/account/photos/${crypto.randomUUID()}`, { maxRedirects: 0 });
     expect(response.headers()["cache-control"]).toBe("private, no-store");
     expect(response.headers()["referrer-policy"]).toBe("no-referrer");
@@ -162,7 +161,6 @@ test.describe("QA M9a", () => {
   });
 
   test("F5: /cookies bei 360 px ohne axe-Befund (Tabelle scrollt waagerecht)", async ({ page }) => {
-    test.fail(true, "F5: scrollable-region-focusable – der Scroll-Container der Inventartabelle ist per Tastatur nicht erreichbar");
     await page.setViewportSize({ width: 360, height: 800 });
     for (const lang of ["en", "cs", "pl"]) {
       await page.goto(`/${lang}/cookies`);

@@ -1262,7 +1262,10 @@
       "favoritesBlocks": "Uložené inzeráty a zablokované osoby",
       "reports": "Vaše nahlášení a jejich stav",
       "legal": "Souhlas s podmínkami použití a zásadami ochrany osobních údajů",
-      "verifications": "Žádosti o ověření (bez dokladu)"
+      "verifications": "Žádosti o ověření (bez dokladu)",
+      "roles": "Role (například administrátor), pokud existují",
+      "reviews": "Hodnocení, která jste napsali a obdrželi (ostatní osoby jen se zobrazovaným jménem)",
+      "devices": "Registrovaná zařízení (platforma a jazyk, bez push tokenu)"
     },
     "photos": "Fotografie jsou v souboru jako odkazy. Odkaz funguje jen tehdy, když jste přihlášeni.",
     "limit": "Data si můžete stáhnout nejvýše 3krát za 24 hodin.",

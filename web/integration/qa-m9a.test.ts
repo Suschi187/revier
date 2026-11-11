@@ -20,7 +20,9 @@ const BUCKETS = ["listing-uploads", "listing-photos", "verification-docs"] as co
 const ALLOWED: Record<string, string[]> = {
   "public.audit_log": ["target_id"],
   "public.reports": ["target_id"],
-  "private.reported_message_snapshots": ["sender_id", "body"],
+  // Kopie gemeldeter Nachrichten: die ganze Zeile ist Rest (Beweissicherung), auch message_id und conversation_id
+  // (QA M9a F3, Allowlist in ADR 019 präzisiert).
+  "private.reported_message_snapshots": ["sender_id", "body", "message_id", "conversation_id"],
 };
 const SAFE = /^[A-Za-z0-9@.\- ]+$/;
 
@@ -198,7 +200,8 @@ describe.skipIf(!f)("QA M9a: Account-Löschung, Export und Function gegen den ec
   }, 90_000);
 
   // F3: unread.changed-Ereignisse beim Gegenüber tragen nur die conversation_id; finalize sucht nur die Nutzer-ID.
-  it.fails("F3: keine Realtime-Ereignisse mit IDs gelöschter Unterhaltungen des Kontos beim Gegenüber", () => {
+  // F3 behoben (prepare entfernt die Ereignisse der Unterhaltungen des Kontos).
+  it("F3: keine Realtime-Ereignisse mit IDs gelöschter Unterhaltungen des Kontos beim Gegenüber", () => {
     expect(conversations).toHaveLength(2);
     expect(residue(conversations)).toEqual([]);
   });
