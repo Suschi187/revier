@@ -93,8 +93,9 @@ select is(tests.keys(:'e'::jsonb -> 'verifications' -> 0),
 select ok(position(:'v' in :'e') = 0 and position('exp-v@test.local' in :'e') = 0, 'keine UUID und keine E-Mail des Gegenübers');
 select ok(position('Exp Meldung von Vera' in :'e') = 0 and jsonb_array_length(:'e'::jsonb -> 'reports') = 1, 'fremde Meldungen über das Konto fehlen');
 select is(:'e'::jsonb #>> '{conversations,0,counterpart}', 'Exp Vera', 'Gegenüber nur mit Anzeigenamen');
-select is((select string_agg(m ->> 'from', ',' order by m ->> 'created_at') from jsonb_array_elements(:'e'::jsonb #> '{conversations,0,messages}') m),
-  'me,counterpart', 'Nachrichten beider Seiten mit from');
+-- Beide Nachrichten entstehen in derselben Transaktion (gleiches created_at), daher ohne Reihenfolge.
+select is((select string_agg(m ->> 'from', ',' order by m ->> 'from') from jsonb_array_elements(:'e'::jsonb #> '{conversations,0,messages}') m),
+  'counterpart,me', 'Nachrichten beider Seiten mit from');
 select is(:'e'::jsonb #>> '{blocks,0,display_name}', 'Exp Xaver', 'Blockierungen mit Anzeigenamen statt UUID');
 
 -- Rate-Limit: 3 je 24 h (einer ist schon verbraucht).
