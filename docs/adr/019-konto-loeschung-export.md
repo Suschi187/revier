@@ -126,8 +126,10 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
   | `reports` | eigene Meldungen: Zieltyp, Bezeichnung des Ziels (Titel bzw. Anzeigename), Grund, Notiz, Stand, Zeitpunkte; ohne `handled_by` |
   | `devices` | Plattform, Sprache, Zeitpunkt, ohne Token |
   | `verifications` | Dokumenttyp, Status, Zeitpunkte, Grund-Code, ob das Dokument noch vorliegt; ohne Pfad und Prüfer (M9a: Bestandsspalten) |
+  | `reviews` | geschrieben und erhalten (`direction`), Anzeigename des Gegenübers, Bewertung, Text, Zeitpunkt (Tabelle besteht seit M1, im Plan vergessen; ergänzt in Commit 3b) |
   | M9b | `reports[].outcome`, `decisions` (wie `my_decisions`), `appeals`; jede Änderung der Schlüsselmenge erhöht `version` |
 
+- **Umsetzung (Commit 3b):** `version` 1. Die Region steht als `region_code`. Fotos tragen nur ihre `id` (nur verarbeitete Fotos); `download_url` ergänzt die Route `POST /api/account/export` beim Ausliefern, damit die DB `SITE_URL` nicht kennen muss. Daten anderer erscheinen über `private.export_party_name` (Regel wie `my_blocks`: Firmenname bei gewerblichen Konten, `null` bei gelöschten oder gesperrten Konten).
 - **Ausschlussliste mit Grund:** Meldungen anderer über das Konto (Schutz der Meldenden); Audit-Einträge und Admin-Identitäten; `admin_lookups`; `unsubscribe_tokens` und alle Hashes; `listing_location_offsets`, `display_location` und `map_point` (Verfremdung, der Punkt ist keine Eingabe); Zähler (`photo_creations`, `listing_creations`, `data_exports`); Versandzustände (`chat_notifications`, `moderation_notifications`, Suchauftrags-Zustand), weil ihr Inhalt in den Abschnitten oben steht.
 - **Wächter `00_meta`:** Jede Tabelle mit Nutzerbezug steht entweder in der Export-Allowlist oder in der Ausschlussliste.
 - **Rate-Limit:** `export_per_24h` (3), gezählt in `private.data_exports (user_id → profiles cascade, created_at)` unter Advisory-Lock. Fehler `RV002` mit `hint {"retry_after":"<ISO UTC>","scope":"data_export"}`.
@@ -153,7 +155,7 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
 | Dateien in `listing-photos` ohne Zeile | 24 h | Function `account-maintenance` |
 | Erledigte Meldungen samt Kopien | `handled_reports_months` (12) nach `handled_at` | pg_cron SQL |
 | Audit-Log | `audit_log_months` (24) | pg_cron SQL |
-| Export-Zähler | 7 Tage | pg_cron SQL |
+| Export-Zähler | 7 Tage | pg_cron SQL (`data-exports-cleanup`, schon mit Commit 3b) |
 
 - `account-maintenance` hat ein eigenes Vault-Secret und eine eigene URL; ohne URL macht der Job nichts. Storage nur über die API, Batch-Grenze, Zeitbudget, Logs nur als Zähler.
 - Die Jobs für Verifizierungsdokumente, verwaiste Anträge, verlassene Entwürfe und Beschwerden folgen in M9b (ADR 020).

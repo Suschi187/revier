@@ -33,7 +33,7 @@ select is(
           and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
         order by 1),
   array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_review_queue',
-        'admin_role_rules', 'admin_stuck_account_deletions', 'block_in_conversation', 'conversation_info', 'conversation_messages', 'extend_saved_search',
+        'admin_role_rules', 'admin_stuck_account_deletions', 'block_in_conversation', 'conversation_info', 'conversation_messages', 'export_my_data', 'extend_saved_search',
         'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'mark_conversation_read', 'moderate_listing', 'my_blocks', 'my_conversations', 'my_favorites', 'pause_saved_search', 'provider_listings',
         'public_cache_epoch', 'public_page_state', 'region_geo', 'register_device', 'remove_unavailable_favorites', 'reorder_listing_photos',
         'request_account_deletion', 'resume_saved_search', 'revoke_admin', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'unblock_in_conversation', 'unread_count',
@@ -91,7 +91,7 @@ select is(
              and a.attname ~ '^(user|owner|sender|recipient|actor|reporter|handled_by|reviewed_by|blocker|blocked|interested|target|author)(_id)?$'))
       group by 1
     ) x order by 1),
-  array['private.account_deletions.user_id:nofk', 'private.admin_lookups.actor_id:cascade', 'private.chat_notifications.recipient_id:cascade',
+  array['private.account_deletions.user_id:nofk', 'private.admin_lookups.actor_id:cascade', 'private.chat_notifications.recipient_id:cascade', 'private.data_exports.user_id:cascade',
         'private.listing_creations.owner_id:cascade', 'private.moderation_notifications.owner_id:cascade', 'private.photo_creations.owner_id:cascade',
         'private.reported_message_snapshots.sender_id:nofk', 'private.saved_search_deliveries.user_id:cascade', 'private.saved_search_matches.user_id:cascade',
         'private.search_notification_claims.user_id:cascade', 'private.search_notification_state.user_id:cascade', 'private.unsubscribe_tokens.user_id:cascade',

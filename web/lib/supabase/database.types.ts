@@ -704,6 +704,9 @@ isOneToOne: false
 "conversation_messages":
 { Args: { "p_after_at"?: string,"p_after_id"?: string,"p_before_at"?: string,"p_before_id"?: string,"p_conversation_id": string,"p_limit"?: number }; Returns: Json
                            },
+"export_my_data":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
 "extend_saved_search":
 { Args: { "p_id": string }; Returns: {
               "cadence": Database["public"]['Enums']["saved_search_cadence"],
