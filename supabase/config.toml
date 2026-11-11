@@ -422,6 +422,12 @@ verify_jwt = false
 enabled = true
 verify_jwt = false
 
+# Revier: Account-Löschung (ADR 019, Review A1). Aufruf aus der Datenbank (pg_net, pg_cron) ohne Nutzer-JWT; die
+# Function prüft ein eigenes Geheimnis (Header x-account-deletion-secret) aus dem Vault über account_deletion_claim.
+[functions.delete-account]
+enabled = true
+verify_jwt = false
+
 # Nur lokal und in der CI, keine Geheimnisse: Mailpit im Docker-Netz (Host „inbucket“, SMTP 1025). In der Cloud
 # setzt die Checkliste die Werte per `supabase secrets set` (M10: HTTP-Adapter statt SMTP, ADR 017).
 [edge_runtime.secrets]

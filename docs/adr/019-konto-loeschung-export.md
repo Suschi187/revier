@@ -100,6 +100,8 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
   - Fixture: Anzeige mit Fotos, Verifizierungsdokument, Chat mit offenem Realtime-Abo, Suchauftrag mit Treffer, Favorit, Blockierung, eigene und fremde Meldung, MFA-Faktor (ehemaliger Admin, Rolle entzogen), Export-Zähler, Apple-Identität, falls lokal möglich.
   - Fälle: Normalfall; Abbruch nach Storage-Durchlauf 1; Abbruch nach `deleteUser` vor `finalize`; Upload zwischen Durchlauf 1 und 2. Jeweils holt der nächste Lauf nach.
 - **Deno:** Reihenfolge der Schritte 2–7, Wiederholung mit Backoff, Secret, 403 bei falschem Secret, 405 außer POST.
+- **Umsetzung (Commit 4):** `supabase/functions/delete-account` mit `handler.ts` (Ablauf, Abhängigkeiten injiziert, Deno-Tests mit Mocks) und `index.ts` (Verdrahtung). Zeitbudget 40 s je Lauf, höchstens 5 Zeilen; übrige Zeilen gehen per `fail` zurück. `web/integration/account-deletion.test.ts` prüft gegen den echten Stack den Normalfall, die drei Abbruchfälle und den Auslöseweg über pg_net (Vault-URL `http://kong:8000/functions/v1/delete-account`). Der Normalfall nutzt Realtime-Ereignisse aus den Chat-Triggern statt eines offenen Abos; eine Apple-Identität ist lokal nicht anlegbar (Apple aus).
+- **Lokal einschalten:** `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/delete-account', 'account_deletion_url')"`; ohne URL bleiben Löschanträge liegen, bis sie gesetzt ist (der Cron holt dann nach).
 - **`00_meta`-Wächter:**
   - Jeder Bucket in `storage.buckets` steht in der Löschliste.
   - Jede Tabelle mit Nutzerbezug (FK auf `profiles`/`auth.users` oder Spalte `*user_id`/`*_id` ohne FK) ist in ADR 008 eingeordnet (cascade, set null oder Rest mit Grund).
