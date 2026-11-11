@@ -2057,3 +2057,59 @@ Weitere Prüfpunkte aus dem Auftrag:
 ### Empfehlung
 
 **Abnahme von M9a: ja, mit Auflagen.** Akzeptanz a hält auch mit einer breiteren Fixture: offenes Realtime-Abo, alle Beziehungen in beide Richtungen, Markierungen in allen Freitexten, altes JWT, parallele Läufe und bytea-Spalten. Nutzer-ID, E-Mail und Inhalte bleiben nur in der Allowlist. Akzeptanz b ist lokal belegt. Frische Anmeldung, Admin-Sperre, Lease, Secrets, Rechte und Erreichbarkeit (gesperrt, ohne Zustimmung, ohne JavaScript) hielten allen Proben stand. Auflagen: **F1 vor dem Cloud-Rollout (M10) beheben**, weil sie fremde Sicherheitsprotokolle löscht. F2–F7 gesammelt nachziehen, F4 zusammen mit dem Header-Muster aus M8. H4 vor dem Inventar-Lauf gegen Stage umsetzen.
+
+## M9a – Nachprüfung 2026-11-11
+
+Geprüfter Stand: `fd4dadc` (main, davor `c915ebc` mit neu erzeugten DB-Typen), Korrekturen F1–F7. Migration `20261111130000_qa_m9a_fixes` lokal angewendet (`schema_migrations`), kein `db reset`, kein stop/start. Umgebung wie in der Abnahme; `next dev` auf Port 3000 lief bereits mit der neuen `next.config.ts` (keine Timeouts beobachtet).
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (mit den neuen Proben) |
+| Vitest | 34 Dateien, **654/654** |
+| `supabase test db` | 53 Dateien, **1472** Tests, PASS, kein TODO. 51 ohne TODO (F1, F2 grün), neu `52_qa_m9a_nachpruefung` **13/13** |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 25 Dateien, **267 bestanden, 1 erwartet fehlgeschlagen** (`it.fails` H2 aus M7). `qa-m9a.test.ts` 7/7 (F3 jetzt normaler Test), neu `qa-m9a-nachpruefung.test.ts` **2/2** |
+| E2E | `qa-m9a.spec.ts` 8/8 (F4, F5 jetzt normale Tests), `account-delete-export.spec.ts` 3/3, `cookie-inventory.spec.ts` 3/3, neu `qa-m9a-nachpruefung.spec.ts` **4/4**; zusammen **18/18** |
+| Deno | nicht wiederholt (Functions unverändert) |
+
+Aufgeräumt: keine Konten, Dateien, Ankerzeilen, Meldungen oder Audit-Zeilen; Vault mit `account_deletion_url` wie vorher (für eine Handprobe kurz entfernt und wiederhergestellt); die 16 Auth-Audit-Einträge der Probe-Konten entfernt. Das in der Abnahme vorgefundene Konto `probe-…@test.local` ist nicht mehr da; die E2E-Aufräumroutine löscht alle Adressen auf `@test.local`.
+
+### Ergebnis je Fund
+
+| Fund | Ergebnis | Nachweis |
+|---|---|---|
+| F1 (mittel) finalize mit Teilzeichenkette | **behoben** | `20261111130000_qa_m9a_fixes.sql:27-53`: Vergleich auf `"<uuid>"` und `"<adresse>"` im JSON-Text, Adresse in Kleinschreibung. Probe pgTAP 52: Einträge mit `actor_id`, `traits.user_id`, `actor_username` in Großschreibung (`user_deleted`) und `traits.user_email` in gemischter Schreibweise einer Plus-Adresse gehen. Einträge mit Präfix (`x…`), Suffix (`….evil`) und fremdem Konto bleiben. pgTAP 51 Test 30 (johanna/anna) grün. Gegen den echten Stack (neue Probe): Eine Adresse mit `&` steht im Auth-Audit als `&`. Nach der Löschung über die Function bleibt trotzdem weder Adresse noch ID, weil jeder Eintrag auch die ID trägt (H1). Rechte, Definer und `search_path` unverändert (pgTAP 52) |
+| F2 (niedrig) Favoriten-Titel | **behoben** | `:110-114` mit `private.listing_is_public`, `version` 2. Probe pgTAP 52: Titel nur bei der öffentlichen Anzeige; `null` bei pausiert, abgelaufen, entfernt, gesperrtem und gelöschtem Besitzer. Alle sechs Favoriten bleiben mit ID, Schlüsselmenge `created_at, listing_id, title` unverändert, Abschnitte exakt (pgTAP 49). Die Begründung für `conversations[].listing_title` und `reports[].target_label` steht in ADR 019 („Nachträge QA M9a“) |
+| F3 (niedrig) Realtime-Reste | **behoben**; die erweiterte Allowlist ist **vertretbar** | `prepare` (`:9-25`) löscht Ereignisse mit `payload->>'conversation_id'` der Unterhaltungen des Kontos. `qa-m9a.test.ts` „F3“ grün. Probe pgTAP 52: Ereignisse zu fremden Unterhaltungen bleiben, auch mit verschachtelter `conversation_id`, und `prepare` bleibt idempotent. Neue Probe (echter Stack): Das Gegenüber liest die Unterhaltung nach `prepare` eines abgebrochenen Laufs. Das neue `unread.changed` entfernt der nächste Lauf, weil er `prepare` vor `deleteUser` erneut ausführt. **Bewertung der Allowlist:** `message_id` und `conversation_id` der Kopie gemeldeter Nachrichten sind nach der Löschung Verweise ins Leere (Unterhaltung und Nachricht sind kaskadiert gelöscht). Sie identifizieren niemanden zusätzlich, denn die Kopie trägt `sender_id` und Text ohnehin. Die `message_id` ist zudem schon als `reports.target_id` erlaubt. Für die Beweissicherung ordnen sie die Kopie der Meldung und der Unterhaltung zu. Kein Fund; die Zeile in ADR 019 „Was bleibt“ nennt Inhalt und Grund |
+| F4 (niedrig) Referrer-Policy der Foto-Route | **behoben** | `next.config.ts:52-58`. Probe: `/api/account/photos/<uuid>`, mit Schrägstrich am Ende und mit ungültiger ID: genau eine CSP, genau eine `Referrer-Policy: no-referrer`, `nosniff`, `X-Frame-Options: DENY`, Permissions-Policy, `private, no-store`. Unverändert `strict-origin-when-cross-origin` auf `/api/photos/<uuid>`, `/api/account/photos/<uuid>/x`, `/api/account/photosx/1`, `/api/sources/postal-codes`, `/api/account/export`, `/de/account/data`, `/de`; `/api/unsubscribe` weiter `no-referrer` |
+| F5 (niedrig) Tastatur auf `/cookies` | **behoben** | `cookies/page.tsx:27`: `tabIndex={0}`, `role="region"`, `aria-label` aus `Cookies.tableCaption`. axe ohne Befund bei 360 px in en/cs/pl (`qa-m9a.spec.ts` „F5“). Probe: Der Container ist in de/en/cs/pl per Tab erreichbar, trägt ein übersetztes Label und scrollt mit der Pfeiltaste |
+| F6 (niedrig) Abschnitte auf `/account/data` | **behoben** | 12 Abschnitte (Rollen, Bewertungen, Geräte neu) in 4 Sprachen ohne rohe Schlüssel (Probe); 963 Schlüssel je Sprache ohne Lücke |
+| F7 (niedrig, Doku) | **behoben, mit Rest (N1)** | ADR 019: Messung (87 ms, 1,9 MB), `Sec-Fetch-Site` präzisiert, Einstellungen mit `account_deletion_stuck_attempts` und `storage_orphan_hours`, Fixture-Absatz. ADR 008: Job legt Anker an. `account-deletion.test.ts` mit Blockierung und Gerät. CHANGELOG „Nachtrag M9a“ mit Testbefehlen |
+
+### Neue Funde
+
+#### N1 – niedrig (Doku) – ADR 019 schreibt der QA-Probe einen Suchtreffer zu
+ADR 019, „Nachweis von Akzeptanz a“, Fixture: „die QA-Probe `qa-m9a.test.ts` ergänzt offenes Realtime-Abo, Bewertung, Suchtreffer und Fotos an echten Pfaden“. Die Probe legt einen Suchauftrag an, aber keinen Treffer (`private.saved_search_matches`). Auch `account-deletion.test.ts` hat keinen. Die Kaskade der Treffer prüfen pgTAP 46 (Konto löschen entfernt Treffer, Entdopplung, Claims) und das pgTAP-Inventar 48, nicht der Test gegen den echten Stack.
+- Vorschlag: „Suchtreffer“ im ADR streichen bzw. auf pgTAP 46 verweisen, oder in `account-deletion.test.ts` einen Treffer per SQL anlegen (`private.saved_search_matches`).
+
+### Hinweise (keine Fehler)
+
+- **H1:** finalize vergleicht den JSON-Text. GoTrue maskiert in Adressen `&` als `&` (gemessen), ebenso vermutlich `<` und `>`. Ein Eintrag nur mit einer solchen Adresse und ohne ID würde nicht gefunden. Heute tragen alle gemessenen Einträge (`user_signedup`, `user_recovery_requested`, `user_deleted`) auch die ID, die Probe fand keinen Rest. Robuster wäre ein Vergleich der Felder (`lower(payload->>'actor_username')`, `lower(payload->'traits'->>'user_email')`), denn `->>` dekodiert die Maskierung.
+- **H2:** Eine Nutzer-ID im Fließtext eines Auth-Audit-Eintrags (z. B. in einem Pfad) bleibt seit F1 stehen (pgTAP 52 „stay-id-in-text“). GoTrue schreibt solche Einträge nach den Messungen nicht; das Inventar im Integrationstest würde sie melden.
+- **H3:** Innerhalb eines einzigen Laufs bleibt ein Fenster zwischen `prepare` und `deleteUser`: Liest das Gegenüber genau dann die Unterhaltung, bleibt ein `unread.changed` mit der `conversation_id` bis zum Verfall der Realtime-Partition. Nach Abbrüchen räumt der nächste Lauf nach (Probe). Ohne Personenbezug, kein Fund.
+- **H4:** `prepare` durchsucht `realtime.messages` über `payload->>'conversation_id'` ohne Index. Die Tabelle hält nur wenige Tage (Partitionen); unkritisch, bei Last in M10 messen.
+
+### Nicht prüfbar
+
+- Wie in der Abnahme: iOS (I6), Apple, Cloud (M10), muttersprachliche Prüfung cs/pl.
+
+### Neue Tests
+
+- `supabase/tests/52_qa_m9a_nachpruefung.test.sql` (13): Definer, `search_path` und Rechte der drei ersetzten Funktionen; `prepare` entfernt nur Ereignisse der eigenen Unterhaltungen, idempotent; finalize mit exaktem Vergleich (was geht, was bleibt); Export `version` 2, Favoriten-Titel in sechs Zuständen, Schlüsselmenge.
+- `web/integration/qa-m9a-nachpruefung.test.ts` (2): Adresse mit `&` über GoTrue und die Function ohne Rest; Ereignis des Gegenübers nach `prepare` eines abgebrochenen Laufs ist nach dem nächsten Lauf weg.
+- `web/e2e/qa-m9a-nachpruefung.spec.ts` (4): Header der Foto-Route (auch mit Schrägstrich am Ende), andere Pfade unverändert, Tastatur und Label auf `/cookies` in 4 Sprachen, 12 Abschnitte auf `/account/data` in 4 Sprachen.
+
+### Empfehlung
+
+F1–F6 sind **behoben**, ohne Nebenwirkung auf Rechte, Definer, Export-Schlüssel oder die Header anderer Pfade. Die Erweiterung der Allowlist um `message_id` und `conversation_id` der Kopien ist vertretbar und dokumentiert. F7 ist bis auf N1 erledigt. **Abnahme von M9a: ja.** Die Auflagen der Abnahme sind erfüllt. N1 bei der nächsten Doku-Runde nachziehen, H1 vor M10 erwägen.
