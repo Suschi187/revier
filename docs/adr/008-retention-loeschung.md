@@ -27,6 +27,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 |---|---|
 | `profiles.user_id → auth.users` | cascade |
 | `private.user_roles.user_id → auth.users` | cascade |
+| `private.admin_lookups.actor_id → auth.users` (M4) | cascade |
 | `listings.owner_id → profiles` | cascade |
 | `listings.region_id → regions` | restrict |
 | `regions.parent_id → regions` | restrict |
@@ -47,9 +48,10 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | `verifications.reviewed_by → profiles` | set null |
 | `reviews.*_id` → conversations/profiles | cascade |
 | `devices.user_id → profiles` | cascade |
+| `private.chat_notifications.recipient_id`, `private.listing_creations.owner_id`, `private.photo_creations.owner_id` → profiles (M3/M7) | cascade |
 | `legal_acceptances.user_id → profiles` | cascade (M2; Aufbewahrung des Zustimmungsnachweises nach Löschung rechtlich prüfen) |
 | `audit_log.actor_id → profiles` | set null |
-| M9a (ADR 019): `private.account_deletions` | kein FK (Anker überlebt `deleteUser`); entfernt im letzten Schritt der Löschung |
+| M9a (ADR 019): `private.account_deletions` | kein FK (Anker überlebt `deleteUser`); entfernt im letzten Schritt der Löschung. Wächter in `00_meta`: jede Spalte mit Nutzerbezug steht in dieser Tabelle |
 | M9a (ADR 019): `private.data_exports.user_id → profiles` | cascade; 7 Tage |
 | M9b (ADR 020): `private.verification_attempts`, `private.account_notifications`, `appeals.user_id` → profiles | cascade; Fristen in ADR 020 |
 | `audit_log.target_id`, `reports.target_id`, `private.reported_message_snapshots.sender_id` | kein FK; einzige erlaubte Reste nach der Löschung (Allowlist ADR 019) |

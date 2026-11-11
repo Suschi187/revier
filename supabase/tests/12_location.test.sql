@@ -176,10 +176,11 @@ select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_nam
   union all select schemaname || '.' || viewname from pg_views where schemaname <> 'vault' and definition ~* 'vault\.' $$,
   -- M7 (ADR 017) und M8 (ADR 018): Benachrichtigung. secret_valid gibt nur true/false zurück, trigger ist für keine
   -- API-Rolle ausführbar; sie lesen nur ihre eigenen Secrets (chat_/search_notifications_url/_secret), nie
-  -- listing_location_key (Probe unten).
-  array['private.chat_notifications_secret_valid', 'private.listings_blur_location', 'private.search_notifications_secret_valid',
-        'private.trigger_chat_notifications', 'private.trigger_search_notifications'],
-  'Nur Verfremdung, Chat- und Suchauftrags-Benachrichtigung verwenden vault');
+  -- listing_location_key (Probe unten). M9a (ADR 019): Account-Löschung, ebenso nur eigene Secrets
+  -- (account_deletion_url/_secret).
+  array['private.account_deletion_secret_valid', 'private.chat_notifications_secret_valid', 'private.listings_blur_location', 'private.search_notifications_secret_valid',
+        'private.trigger_account_deletion', 'private.trigger_chat_notifications', 'private.trigger_search_notifications'],
+  'Nur Verfremdung, Benachrichtigungen und Account-Löschung verwenden vault');
 select ok((select bool_and(p.prosrc !~ 'listing_location_key') from pg_proc p join pg_namespace n on n.oid = p.pronamespace
            where n.nspname = 'private' and p.proname in ('chat_notifications_secret_valid', 'trigger_chat_notifications',
                                                          'search_notifications_secret_valid', 'trigger_search_notifications')),

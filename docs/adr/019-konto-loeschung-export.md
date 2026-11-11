@@ -29,14 +29,14 @@ Bestand: ADR 008 (Fristen, FK-Tabelle), ADR 010 (Session, `getUser()` für Lösc
 
 ### Frische Anmeldung (`RV007`, Review A3)
 - Die DB prüft `auth.jwt() -> 'amr'`: mindestens ein Eintrag mit einer Methode der Allowlist und `timestamp` jünger als `account_deletion_reauth_minutes` (10). Muster wie der Step-up in ADR 014.
-- **Allowlist:** `totp` allein zählt nie. Welche Methoden GoTrue tatsächlich schreibt, ermittelt der Integrationstest in Commit 3 gegen den lokalen Stack; die Tabelle wird dann hier ergänzt.
+- **Allowlist (`private.has_fresh_login`):** `otp`, `magiclink`, `oauth`, `id_token`. `totp` allein zählt nie. Gemessen am 2026-11-11 gegen den lokalen Stack (GoTrue aus Supabase CLI 3.0.0): Ein Refresh behält den Zeitstempel, eine alte Session wird dadurch nicht „frisch“. `magiclink` und `id_token` stehen vorsorglich in der Liste (ältere GoTrue-Versionen, iOS); nachgemessen wird in I6 und nach dem Deploy (Cloud-Checkliste).
 
   | Weg | erwartet | gemessen |
   |---|---|---|
-  | Code (`verifyOtp` mit `token`) | `otp` | offen (Commit 3) |
-  | Link (`token_hash`, `type=email`) | `otp` oder `magiclink` | offen (Commit 3) |
-  | Erstbestätigung | `otp` oder `email/signup` | offen (Commit 3) |
-  | Apple Web (OAuth) | `oauth` | offen (lokal ggf. nicht prüfbar) |
+  | Code (`verifyOtp` mit `token`) | `otp` | `otp` |
+  | Link (`token_hash`, `type=email`) | `otp` oder `magiclink` | `otp` |
+  | Erstbestätigung | `otp` oder `email/signup` | `otp` |
+  | Apple Web (OAuth) | `oauth` | lokal nicht prüfbar (Apple aus) |
   | Apple iOS (`id_token`) | `oauth` oder `id_token` | offen (I6) |
 
 - **Web:** Die Seite fordert den Code im Browser an (ADR 010, Limits je IP), an die E-Mail-Adresse **aus der Session**, nicht an eine eingegebene, mit `shouldCreateUser: false`. Nach `verifyOtp` muss die `sub` der neuen Session gleich der alten sein, sonst abmelden und Fehler.
@@ -62,7 +62,8 @@ Bestand: ADR 008 (Fristen, FK-Tabelle), ADR 010 (Session, `getUser()` für Lösc
 ### Auslöseweg (Review A1)
 - **Edge Function `delete-account`:** `verify_jwt = false`, nur `POST`, eigenes Secret im Header, in konstanter Zeit verglichen über die Claim-RPC gegen den Vault (`account_deletion_secret`, `account_deletion_url`), wie ADR 017. Es gibt keinen Pfad mit Nutzer-JWT; die Server Action ruft die Function nicht auf.
 - **Auslöser:** der pg_net-Anstoß aus `request_account_deletion` und ein Cron-Job jede Minute, der nur ruft, wenn fällige Zeilen da sind (`next_attempt_at <= now()`, kein laufender Lease). Ohne URL im Vault macht der Job nichts.
-- **Claim als Lease:** `private.account_deletion_claim(p_secret, p_limit)` (nur `service_role`, `for update skip locked`) setzt `claim_id` und `claimed_until`; die Schritt-RPCs und das Entfernen der Zeile arbeiten nur mit dieser `claim_id`. Batch-Grenze und Zeitbudget je Lauf.
+- **Claim als Lease:** `public.account_deletion_claim(p_secret, p_limit)` (nur `service_role`, `for update skip locked`, höchstens 20) setzt `claim_id` und `claimed_until` (5 Minuten), zählt `attempts` hoch und setzt `next_attempt_at` schon beim Claim auf den Backoff (1 min · 2^(Versuche−1), höchstens 1 h). Ein abgestürzter Lauf verlängert so ebenfalls den Backoff. Batch-Grenze und Zeitbudget je Lauf.
+- **Schritt-RPCs** (alle in `public`, nur `service_role`, nur mit gültigem Lease, sonst `42501`): `account_deletion_objects` (Schritte 2/6, höchstens 1000 Namen je Aufruf), `account_deletion_prepare` (3), `account_deletion_finalize` (5), `account_deletion_complete` (7), `account_deletion_fail` (Lease frei, `last_error_at`). `finalize` und `complete` verweigern mit `55000`, solange `auth.users` die Zeile noch hat. Sie liegen in `public` und nicht in `private`, weil die Function sie über PostgREST ruft (Muster `claim_chat_notifications`).
 - **Antworten und Logs** nur als Zähler, keine UUIDs und keine Adressen (`net._http_response` speichert die Antwort).
 
 ### Storage (Review A2)

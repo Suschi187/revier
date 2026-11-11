@@ -616,6 +616,28 @@ isOneToOne: false
             "accept_legal":
 { Args: { "p_privacy_version": string,"p_source": Database["public"]['Enums']["client_source"],"p_terms_version": string }; Returns: undefined
                            },
+"account_deletion_claim":
+{ Args: { "p_limit"?: number,"p_secret": string }; Returns: {
+              "attempts": number,"claim_id": string,"user_id": string
+            }[]
+                           },
+"account_deletion_complete":
+{ Args: { "p_claim_id": string,"p_user_id": string }; Returns: undefined
+                           },
+"account_deletion_fail":
+{ Args: { "p_claim_id": string,"p_user_id": string }; Returns: undefined
+                           },
+"account_deletion_finalize":
+{ Args: { "p_claim_id": string,"p_user_id": string }; Returns: undefined
+                           },
+"account_deletion_objects":
+{ Args: { "p_claim_id": string,"p_user_id": string }; Returns: {
+              "bucket_id": string,"name": string
+            }[]
+                           },
+"account_deletion_prepare":
+{ Args: { "p_claim_id": string,"p_user_id": string }; Returns: undefined
+                           },
 "admin_access":
 { Args: Record<PropertyKey, never>; Returns: {
               "aal2": boolean,"has_role": boolean
@@ -643,6 +665,9 @@ isOneToOne: false
 { Args: Record<PropertyKey, never>; Returns: {
               "limit_per_admin": number,"limit_total": number,"waiting_days": number
             }[]
+                           },
+"admin_stuck_account_deletions":
+{ Args: Record<PropertyKey, never>; Returns: number
                            },
 "block_in_conversation":
 { Args: { "p_conversation_id": string }; Returns: undefined
@@ -788,6 +813,9 @@ isOneToOne: false
                            },
 "reorder_listing_photos":
 { Args: { "p_listing_id": string,"p_photo_ids": (string)[] }; Returns: undefined
+                           },
+"request_account_deletion":
+{ Args: Record<PropertyKey, never>; Returns: undefined
                            },
 "resume_saved_search":
 { Args: { "p_id": string }; Returns: {
