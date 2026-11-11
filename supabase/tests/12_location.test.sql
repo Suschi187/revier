@@ -178,8 +178,8 @@ select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_nam
   -- API-Rolle ausführbar; sie lesen nur ihre eigenen Secrets (chat_/search_notifications_url/_secret), nie
   -- listing_location_key (Probe unten). M9a (ADR 019): Account-Löschung, ebenso nur eigene Secrets
   -- (account_deletion_url/_secret).
-  array['private.account_deletion_secret_valid', 'private.chat_notifications_secret_valid', 'private.listings_blur_location', 'private.search_notifications_secret_valid',
-        'private.trigger_account_deletion', 'private.trigger_chat_notifications', 'private.trigger_search_notifications'],
+  array['private.account_deletion_secret_valid', 'private.account_maintenance_secret_valid', 'private.chat_notifications_secret_valid', 'private.listings_blur_location', 'private.search_notifications_secret_valid',
+        'private.trigger_account_deletion', 'private.trigger_account_maintenance', 'private.trigger_chat_notifications', 'private.trigger_search_notifications'],
   'Nur Verfremdung, Benachrichtigungen und Account-Löschung verwenden vault');
 select ok((select bool_and(p.prosrc !~ 'listing_location_key') from pg_proc p join pg_namespace n on n.oid = p.pronamespace
            where n.nspname = 'private' and p.proname in ('chat_notifications_secret_valid', 'trigger_chat_notifications',

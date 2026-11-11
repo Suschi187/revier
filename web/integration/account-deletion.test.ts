@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { fixture, SKIPPED } from "./context";
 import { acceptLegal, createSignedInUser, deleteUsers, serviceClient } from "./helpers";
-import { enrollTotp, localRows, localSql, makeAdmin } from "./totp";
+import { enrollTotp, localRows, localSql, makeAdmin, nextTotpWindow } from "./totp";
 import type { Fixture } from "./types";
 
 // M9a, Akzeptanz a (ADR 019, Review B2): Ein gelöschter Account verschwindet aus allen Tabellen und Buckets, bis auf
@@ -195,7 +195,13 @@ describe.skipIf(!f)("Account-Löschung gegen den echten Stack (Akzeptanz a)", ()
     expect((await u.client.rpc("export_my_data")).error).toBeNull();
     makeAdmin(u.id);
     localSql(`delete from private.user_roles where user_id = '${u.id}'`);
-    await enrollTotp(u.client);
+    // Ein Code an der Grenze des 30-s-Fensters kann abgelehnt werden: dann im nächsten Fenster noch einmal.
+    try {
+      await enrollTotp(u.client);
+    } catch {
+      await nextTotpWindow();
+      await enrollTotp(u.client);
+    }
 
     await request(u.client);
     const result = await run();

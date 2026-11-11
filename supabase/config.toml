@@ -428,6 +428,12 @@ verify_jwt = false
 enabled = true
 verify_jwt = false
 
+# Revier: Storage-Aufräumen (ADR 019). Stündlich von pg_cron ohne Nutzer-JWT; Geheimnis im Header
+# x-account-maintenance-secret aus dem Vault, geprüft in maintenance_storage_objects.
+[functions.account-maintenance]
+enabled = true
+verify_jwt = false
+
 # Nur lokal und in der CI, keine Geheimnisse: Mailpit im Docker-Netz (Host „inbucket“, SMTP 1025). In der Cloud
 # setzt die Checkliste die Werte per `supabase secrets set` (M10: HTTP-Adapter statt SMTP, ADR 017).
 [edge_runtime.secrets]

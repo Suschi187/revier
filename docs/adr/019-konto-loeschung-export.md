@@ -168,6 +168,8 @@ Alles andere mit Bezug auf die Nutzer-ID oder E-Mail ist nach Schritt 7 ein Fehl
 | Export-Zähler | 7 Tage | pg_cron SQL (`data-exports-cleanup`, schon mit Commit 3b) |
 
 - `account-maintenance` hat ein eigenes Vault-Secret und eine eigene URL; ohne URL macht der Job nichts. Storage nur über die API, Batch-Grenze, Zeitbudget, Logs nur als Zähler.
+- **Umsetzung (Commit 10):** Migration `20261111120000_maintenance_jobs`. Jobs `unconfirmed-accounts` (täglich 04:07), `reports-retention` (04:27), `audit-retention` (04:37), `account-maintenance` (stündlich :23). Die Kandidaten liefert `public.maintenance_storage_objects(p_secret, p_limit)` (nur `service_role`), Frist `storage_orphan_hours` (24, Platzhalter). Nie bestätigte Konten ohne Rolle; der Job stößt danach `delete-account` an. Tests: pgTAP 50 (Grenzen), Deno (Seiten, Fehler), `web/integration/account-maintenance.test.ts` (echte Function und Storage-API).
+- **Lokal einschalten:** `supabase db query "select vault.create_secret('http://kong:8000/functions/v1/account-maintenance', 'account_maintenance_url')"`.
 - Die Jobs für Verifizierungsdokumente, verwaiste Anträge, verlassene Entwürfe und Beschwerden folgen in M9b (ADR 020).
 
 ### Einstellungen (`app_settings`, M9a)
