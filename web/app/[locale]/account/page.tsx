@@ -63,6 +63,12 @@ async function AccountContent() {
       <Link href="/account/blocked" className="self-start underline">
         {tc("blocked.link")}
       </Link>
+      <Link href="/account/data" className="self-start underline">
+        {t("dataExport")}
+      </Link>
+      <Link href="/account/delete" className="self-start underline">
+        {t("deleteAccount")}
+      </Link>
     </div>
   );
 }

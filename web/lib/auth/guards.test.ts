@@ -18,6 +18,14 @@ const PUBLIC_ACTIONS: Record<string, string> = {
   "[locale]/auth/actions.ts#signOut": "Abmelden ist ohne Session harmlos",
 };
 
+// Ohne Legal-Gate und für gesperrte Konten erreichbar (App Store, DSGVO; ADR 019, Review A4), jeweils mit Grund.
+// Diese Seiten prüfen nur die Session; ein requireOnboardedUser würde Löschen und Export hinter die Zustimmung legen.
+const SESSION_ONLY: Record<string, string> = {
+  "[locale]/account/delete/page.tsx": "Konto löschen muss ohne aktuelle Zustimmung und gesperrt gehen",
+  "[locale]/account/delete/actions.ts": "Bestätigung der Löschung, gleicher Grund",
+  "[locale]/account/data/page.tsx": "Datenexport (Art. 15/20 DSGVO) ohne aktuelle Zustimmung",
+};
+
 function files(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
     entry.isDirectory() ? files(join(dir, entry.name)) : [join(dir, entry.name)],
@@ -59,6 +67,16 @@ describe("Geschützte Seiten und Server Actions", () => {
   it("Seiten mit Anmeldeprüfung liegen in einem geschützten Bereich (Proxy, noindex)", () => {
     for (const { file, path } of all.filter(({ path }) => path.endsWith("/page.tsx"))) {
       if (GUARD_RE.test(readFileSync(file, "utf8"))) expect(path, path).toMatch(sectionRe);
+    }
+  });
+
+  it("Konto löschen und Datenexport prüfen nur die Session, nicht die Zustimmung (Review A4)", () => {
+    for (const [path, reason] of Object.entries(SESSION_ONLY)) {
+      const entry = all.find((f) => f.path === path);
+      expect(entry, path).toBeTruthy();
+      const source = readFileSync(entry!.file, "utf8");
+      expect(source, `${path}: ${reason}`).toMatch(/\bawait requireSessionUser\(/);
+      expect(source, `${path}: ${reason}`).not.toMatch(/requireOnboardedUser\(|@\/lib\/services\/gate/);
     }
   });
 

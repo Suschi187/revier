@@ -9,8 +9,8 @@ import { makeAdmin, totp } from "../integration/totp";
 // context.cookies(), die Set-Cookie-Header aller Antworten (auch Redirects, /api/*, Fehlerseiten), Local/Session
 // Storage, IndexedDB, Cache Storage und Service Worker. Alles muss einem Inventareintrag entsprechen und notwendig
 // sein, und es gibt keine Requests an fremde Origins. Ein Selbsttest beweist, dass der Test anschlägt.
-// Die Seiten aus M9a (Export, Löschen) und M9b (Verifizierung, Melden, Entscheidungen, Admin-Meldungen) kommen mit
-// ihren Commits dazu.
+// Export und Löschen (M9a) sind dabei; die Seiten aus M9b (Verifizierung, Melden, Entscheidungen, Admin-Meldungen)
+// kommen mit ihren Commits dazu.
 // Gegen Stage oder Produktion (nur anonyme Seiten): QA_BASE_URL=https://… QA_SUPABASE_URL=https://….supabase.co
 
 const REMOTE = process.env.QA_BASE_URL;
@@ -166,7 +166,7 @@ test("angemeldet: Login, Konto, Chat, Suchaufträge, Admin und Abmelden bleiben 
   expect((await context.cookies()).some((c) => inventoryEntryFor("cookie", c.name)?.id === "session")).toBe(true);
 
   for (const path of ["/de/account/profile", "/de/account/listings", "/de/account/listings/new", "/de/account/favorites",
-    "/de/account/messages", "/de/account/searches", "/de/account/blocked", "/de/jagdhelfer?view=map"]) {
+    "/de/account/messages", "/de/account/searches", "/de/account/blocked", "/de/account/data", "/de/account/delete", "/de/jagdhelfer?view=map"]) {
     await visit(page, context, collector, path);
   }
 

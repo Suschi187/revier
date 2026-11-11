@@ -92,7 +92,10 @@
       "failed": "Saving failed. Please try again.",
       "outdated": "The terms have just been updated. Please review them and confirm again.",
       "blocked": "Your account is blocked. You cannot change your profile."
-    }
+    },
+    "accountLinks": "Your data",
+    "dataExport": "Download my data",
+    "deleteAccount": "Delete account"
   },
   "Legal": {
     "placeholder": "Placeholder: the final text will be provided by a lawyer before launch.",
@@ -332,7 +335,9 @@
     },
     "myListings": "My listings",
     "favorites": "Saved listings",
-    "savedSearches": "Saved searches"
+    "savedSearches": "Saved searches",
+    "dataExport": "Download my data",
+    "deleteAccount": "Delete account"
   },
   "Listings": {
     "kinds": {
@@ -630,7 +635,8 @@
       "pending": "{count, plural, =0 {No listings awaiting review.} one {# listing awaiting review.} other {# listings awaiting review.}}",
       "queueLink": "Open the review queue",
       "auditLink": "Audit log",
-      "adminsLink": "Manage admins"
+      "adminsLink": "Manage admins",
+      "stuckDeletions": "{count, plural, one {# account deletion is stuck} other {# account deletions are stuck}} (retried automatically)."
     },
     "queue": {
       "metaTitle": "Review queue",
@@ -1241,6 +1247,86 @@
       "title": "Postal code table",
       "text": "The assignment of postal codes to districts and place names is a database derived from OpenStreetMap. It is available under the Open Database License (ODbL 1.0) and also contains data from BKG and Statistik Austria (notices above).",
       "download": "Download postal code table (CSV)"
+    }
+  },
+  "DataExport": {
+    "metaTitle": "Download my data",
+    "title": "Download my data",
+    "intro": "You receive a JSON file with all data stored about your account:",
+    "sections": {
+      "account": "Account: email address, created, last sign-in",
+      "profile": "Profile and settings",
+      "listings": "Your listings with game species, place and photos",
+      "conversations": "Conversations with all messages (other people only by display name)",
+      "savedSearches": "Saved searches with their matches",
+      "favoritesBlocks": "Saved listings and blocked people",
+      "reports": "Your reports and their status",
+      "legal": "Acceptance of the terms of use and privacy policy",
+      "verifications": "Verification requests (without the document)"
+    },
+    "photos": "Photos are listed as links. A link only works while you are signed in.",
+    "limit": "You can download your data up to 3 times within 24 hours.",
+    "download": "Download data (JSON)",
+    "deletionPending": "Your account is being deleted. A download is no longer possible.",
+    "errors": {
+      "rateLimited": "Limit reached. Please try again later.",
+      "rateLimitedUntil": "Limit reached. You can download your data again from {time}.",
+      "notAllowed": "The download is not possible for this account.",
+      "failed": "The download failed. Please try again later."
+    }
+  },
+  "AccountDelete": {
+    "metaTitle": "Delete account",
+    "title": "Delete account",
+    "intro": "Deletion is final and starts immediately after confirmation. It cannot be undone.",
+    "deletedTitle": "What is deleted",
+    "deleted": {
+      "profile": "Your profile and settings",
+      "listings": "All your listings and photos",
+      "messages": "Your conversations and messages, also for the other person, unless a message was reported",
+      "searches": "Saved searches, saved listings and blocks",
+      "documents": "Verification documents",
+      "login": "Your sign-in (email address and linked Apple sign-in)"
+    },
+    "keptTitle": "What remains (pseudonymised)",
+    "kept": {
+      "audit": "Records of moderation and administrative decisions, without your name or email address",
+      "reports": "Reports concerning your account, until their deadline",
+      "snapshots": "Copies of reported messages, until the report's deadline"
+    },
+    "exportHint": "Before deleting, you can download your data.",
+    "exportLink": "Download my data",
+    "step1": "1. Sign in again",
+    "step2": "2. Delete account permanently",
+    "confirmLabel": "I understand that my account and my data will be deleted permanently.",
+    "submit": "Delete account permanently",
+    "noEmail": "This account has no email address. Please sign in again before deleting.",
+    "noscript": "Without JavaScript: sign out and sign in again. You then have 10 minutes to confirm the deletion.",
+    "pending": "Your account is being deleted.",
+    "deletedNotice": "Your account is being deleted. You have been signed out.",
+    "errors": {
+      "reauth": "Please sign in again first (the sign-in must be less than 10 minutes old).",
+      "step_up": "Please also confirm with the code from your authenticator app.",
+      "admin_role": "Accounts with an admin role cannot be deleted. Please have the role revoked first.",
+      "confirm": "Please confirm that you understand the deletion.",
+      "failed": "The deletion could not be started. Please try again later."
+    },
+    "reauth": {
+      "intro": "For your security, we send a code to {email}.",
+      "send": "Send code",
+      "sending": "Sending …",
+      "sent": "We have sent a code to {email}.",
+      "codeLabel": "Sign-in code",
+      "totpLabel": "6-digit code from your authenticator app",
+      "verify": "Confirm",
+      "done": "Sign-in confirmed. You can now delete your account (step 2).",
+      "errors": {
+        "network": "Connection failed. Please try again.",
+        "codeInvalid": "The code is invalid or has expired.",
+        "mismatch": "This code belongs to another account. You have been signed out.",
+        "totpInvalid": "The authenticator code is invalid.",
+        "tooSoon": "Please wait a moment before requesting another code."
+      }
     }
   }
 }

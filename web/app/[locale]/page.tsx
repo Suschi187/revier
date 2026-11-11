@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
+import { DeletedNotice } from "@/components/account/DeletedNotice";
 import { JsonLd } from "@/components/public/JsonLd";
 import { ListingList } from "@/components/public/ListingCard";
 import { publicAlternates } from "@/i18n/metadata";
@@ -61,6 +63,9 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <Suspense fallback={null}>
+        <DeletedNotice />
+      </Suspense>
       <JsonLd
         data={{
           "@context": "https://schema.org",

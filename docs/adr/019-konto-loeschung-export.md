@@ -77,6 +77,14 @@ Bestand: ADR 008 (Fristen, FK-Tabelle), ADR 010 (Session, `getUser()` für Lösc
 - Die Server Action ruft `getUser()` und `request_account_deletion`, meldet lokal ab (Fehler von `signOut` ignorieren, Cookies trotzdem löschen, H6) und leitet sofort auf `/{lang}?deleted=1`. Der Hinweis sagt „wird gelöscht“, nicht „ist gelöscht“ (H7).
 - **Apple:** Der Token-Widerruf bei Löschung (Apple-Vorgabe) kommt erst, wenn Apple eingeschaltet wird (SPEC 7.1). Bis dahin Lücke im CHANGELOG und Vorbedingung für `NEXT_PUBLIC_AUTH_APPLE_ENABLED`.
 
+### Umsetzung im Web (Commit 5)
+- `/account/delete`: Schritt 1 erneute Anmeldung im Browser (`ReauthForm`: Code an die Adresse der Session, `shouldCreateUser: false`, `emailRedirectTo` über `/auth/confirm` wie der Login; gleiche `sub` nach `verifyOtp`; bei bestätigtem TOTP-Faktor zusätzlich `challengeAndVerify`). Schritt 2 Bestätigung per Server Action mit Pflicht-Häkchen, auch ohne JavaScript. Fehler aus der RPC als `?error=reauth|step_up|admin_role|failed`.
+- Anders als beim Login zeigt die Seite die Sperrfrist von GoTrue zwischen zwei Mails an (`429 over_email_send_rate_limit`): Es ist die eigene Adresse, eine Konto-Enumeration gibt es hier nicht. Gefunden im E2E (ein Login kurz vor dem Löschen löste die Sperre aus).
+- Der Hinweis „wird gelöscht“ auf `/{lang}?deleted=1` ist eine Client-Komponente, damit die gecachte Startseite statisch bleibt; ohne JavaScript entfällt nur der Hinweis.
+- `/account/data`: Formular an `POST /api/account/export`; `GET /api/account/photos/{id}` signiert mit dem Client des Nutzers (`listing_photos` mit `listings!inner(owner_id)`).
+- Admin-Übersicht: `admin_stuck_account_deletions` als Satz nur bei Anzahl > 0.
+- Links auf Export und Löschen im Konto und auf der Willkommensseite (ohne Zustimmung erreichbar); `guards.test.ts` hält fest, dass diese Seiten nur die Session prüfen.
+
 ### Erreichbarkeit (Review A4)
 - `/account/delete`, `/account/data` (M9a) sowie `/account/reports`, `/account/decisions` und `/account/decisions/:id/appeal` (M9b) prüfen mit `requireSessionUser`, nicht mit `requireOnboardedUser`: Sie gehen ohne aktuelle Zustimmung und für gesperrte Konten.
 - Mit `deleted_at` zeigen die Konto-Seiten „Löschung läuft“.

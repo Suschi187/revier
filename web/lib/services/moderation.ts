@@ -21,6 +21,13 @@ export async function countPendingListings(adminId: string): Promise<number> {
   return count ?? 0;
 }
 
+/** Löschungen ab 10 Versuchen (ADR 019), nur als Anzahl; `null`, wenn nicht ermittelbar (z. B. ohne aal2). */
+export async function countStuckDeletions(): Promise<number | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.rpc("admin_stuck_account_deletions");
+  return error || typeof data !== "number" ? null : data;
+}
+
 export type QueueItem = {
   id: string;
   title: string;

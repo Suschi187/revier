@@ -92,7 +92,10 @@
       "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal.",
       "outdated": "Die Rechtstexte wurden gerade aktualisiert. Bitte lies sie und bestätige erneut.",
       "blocked": "Dein Konto ist gesperrt. Du kannst dein Profil nicht ändern."
-    }
+    },
+    "accountLinks": "Deine Daten",
+    "dataExport": "Meine Daten herunterladen",
+    "deleteAccount": "Konto löschen"
   },
   "Legal": {
     "placeholder": "Platzhalter: Der endgültige Text wird vor dem Start von einem Anwalt geliefert.",
@@ -332,7 +335,9 @@
     },
     "myListings": "Meine Anzeigen",
     "favorites": "Favoriten",
-    "savedSearches": "Suchaufträge"
+    "savedSearches": "Suchaufträge",
+    "dataExport": "Meine Daten herunterladen",
+    "deleteAccount": "Konto löschen"
   },
   "Listings": {
     "kinds": {
@@ -630,7 +635,8 @@
       "pending": "{count, plural, =0 {Keine Anzeigen zur Freigabe.} one {# Anzeige zur Freigabe.} other {# Anzeigen zur Freigabe.}}",
       "queueLink": "Zur Warteschlange",
       "auditLink": "Audit-Log",
-      "adminsLink": "Admins verwalten"
+      "adminsLink": "Admins verwalten",
+      "stuckDeletions": "{count, plural, one {# Konto-Löschung hängt} other {# Konto-Löschungen hängen}} (wird automatisch wiederholt)."
     },
     "queue": {
       "metaTitle": "Anzeigen zur Freigabe",
@@ -1241,6 +1247,86 @@
       "title": "PLZ-Tabelle",
       "text": "Die Zuordnung der Postleitzahlen zu Landkreisen und Ortsnamen ist eine aus OpenStreetMap abgeleitete Datenbank. Sie steht unter der Open Database License (ODbL 1.0) zur Verfügung und enthält zusätzlich Daten von BKG und Statistik Austria (Vermerke oben).",
       "download": "PLZ-Tabelle herunterladen (CSV)"
+    }
+  },
+  "DataExport": {
+    "metaTitle": "Meine Daten herunterladen",
+    "title": "Meine Daten herunterladen",
+    "intro": "Du erhältst eine JSON-Datei mit allen Daten, die zu deinem Konto gespeichert sind:",
+    "sections": {
+      "account": "Konto: E-Mail-Adresse, angelegt, letzte Anmeldung",
+      "profile": "Profil und Einstellungen",
+      "listings": "Deine Anzeigen mit Wildarten, Ort und Fotos",
+      "conversations": "Unterhaltungen mit allen Nachrichten (andere Personen nur mit Anzeigenamen)",
+      "savedSearches": "Suchaufträge mit ihren Treffern",
+      "favoritesBlocks": "Gemerkte Anzeigen und blockierte Personen",
+      "reports": "Deine Meldungen und ihr Stand",
+      "legal": "Zustimmung zu Nutzungsbedingungen und Datenschutzerklärung",
+      "verifications": "Verifizierungsanträge (ohne das Dokument)"
+    },
+    "photos": "Fotos stehen als Links in der Datei. Ein Link funktioniert nur, solange du angemeldet bist.",
+    "limit": "Du kannst deine Daten bis zu 3-mal in 24 Stunden herunterladen.",
+    "download": "Daten herunterladen (JSON)",
+    "deletionPending": "Dein Konto wird gelöscht. Ein Download ist nicht mehr möglich.",
+    "errors": {
+      "rateLimited": "Limit erreicht. Bitte versuche es später noch einmal.",
+      "rateLimitedUntil": "Limit erreicht. Ab {time} kannst du deine Daten wieder herunterladen.",
+      "notAllowed": "Für dieses Konto ist der Download nicht möglich.",
+      "failed": "Der Download ist fehlgeschlagen. Bitte versuche es später noch einmal."
+    }
+  },
+  "AccountDelete": {
+    "metaTitle": "Konto löschen",
+    "title": "Konto löschen",
+    "intro": "Die Löschung ist endgültig und beginnt sofort nach der Bestätigung. Sie lässt sich nicht rückgängig machen.",
+    "deletedTitle": "Was gelöscht wird",
+    "deleted": {
+      "profile": "Dein Profil und deine Einstellungen",
+      "listings": "Alle deine Anzeigen und Fotos",
+      "messages": "Deine Unterhaltungen und Nachrichten, auch beim Gegenüber, außer eine Nachricht wurde gemeldet",
+      "searches": "Suchaufträge, gemerkte Anzeigen und Blockierungen",
+      "documents": "Verifizierungsdokumente",
+      "login": "Deine Anmeldung (E-Mail-Adresse und verknüpfte Apple-Anmeldung)"
+    },
+    "keptTitle": "Was bleibt (pseudonymisiert)",
+    "kept": {
+      "audit": "Nachweise von Moderations- und Admin-Entscheidungen, ohne deinen Namen und deine E-Mail-Adresse",
+      "reports": "Meldungen zu deinem Konto, bis zu ihrer Frist",
+      "snapshots": "Kopien gemeldeter Nachrichten, bis zur Frist der Meldung"
+    },
+    "exportHint": "Vor dem Löschen kannst du deine Daten herunterladen.",
+    "exportLink": "Meine Daten herunterladen",
+    "step1": "1. Erneut anmelden",
+    "step2": "2. Konto endgültig löschen",
+    "confirmLabel": "Ich habe verstanden, dass mein Konto und meine Daten endgültig gelöscht werden.",
+    "submit": "Konto endgültig löschen",
+    "noEmail": "Dieses Konto hat keine E-Mail-Adresse. Bitte melde dich vor dem Löschen neu an.",
+    "noscript": "Ohne JavaScript: Melde dich ab und neu an. Danach hast du 10 Minuten Zeit, die Löschung zu bestätigen.",
+    "pending": "Dein Konto wird gelöscht.",
+    "deletedNotice": "Dein Konto wird gelöscht. Du wurdest abgemeldet.",
+    "errors": {
+      "reauth": "Bitte melde dich zuerst erneut an (die Anmeldung darf höchstens 10 Minuten alt sein).",
+      "step_up": "Bitte bestätige zusätzlich mit dem Code aus deiner Authenticator-App.",
+      "admin_role": "Konten mit Admin-Rolle lassen sich nicht löschen. Bitte lass dir die Rolle zuerst entziehen.",
+      "confirm": "Bitte bestätige, dass du die Löschung verstanden hast.",
+      "failed": "Die Löschung konnte nicht gestartet werden. Bitte versuche es später noch einmal."
+    },
+    "reauth": {
+      "intro": "Zu deiner Sicherheit schicken wir einen Code an {email}.",
+      "send": "Code senden",
+      "sending": "Wird gesendet …",
+      "sent": "Wir haben einen Code an {email} geschickt.",
+      "codeLabel": "Anmeldecode",
+      "totpLabel": "6-stelliger Code aus deiner Authenticator-App",
+      "verify": "Bestätigen",
+      "done": "Anmeldung bestätigt. Du kannst dein Konto jetzt löschen (Schritt 2).",
+      "errors": {
+        "network": "Verbindung fehlgeschlagen. Bitte versuche es noch einmal.",
+        "codeInvalid": "Der Code ist ungültig oder abgelaufen.",
+        "mismatch": "Dieser Code gehört zu einem anderen Konto. Du wurdest abgemeldet.",
+        "totpInvalid": "Der Code aus der Authenticator-App ist ungültig.",
+        "tooSoon": "Bitte warte einen Moment, bevor du einen neuen Code anforderst."
+      }
     }
   }
 }

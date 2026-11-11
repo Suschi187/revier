@@ -92,7 +92,10 @@
       "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
       "outdated": "Teksty prawne zostały właśnie zaktualizowane. Przeczytaj je i potwierdź ponownie.",
       "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
-    }
+    },
+    "accountLinks": "Twoje dane",
+    "dataExport": "Pobierz moje dane",
+    "deleteAccount": "Usuń konto"
   },
   "Legal": {
     "placeholder": "Tekst zastępczy: ostateczną treść przed startem dostarczy prawnik.",
@@ -332,7 +335,9 @@
     },
     "myListings": "Moje ogłoszenia",
     "favorites": "Ulubione",
-    "savedSearches": "Zapisane wyszukiwania"
+    "savedSearches": "Zapisane wyszukiwania",
+    "dataExport": "Pobierz moje dane",
+    "deleteAccount": "Usuń konto"
   },
   "Listings": {
     "kinds": {
@@ -630,7 +635,8 @@
       "pending": "{count, plural, =0 {Brak ogłoszeń do zatwierdzenia.} one {# ogłoszenie do zatwierdzenia.} few {# ogłoszenia do zatwierdzenia.} other {# ogłoszeń do zatwierdzenia.}}",
       "queueLink": "Otwórz kolejkę",
       "auditLink": "Dziennik audytu",
-      "adminsLink": "Zarządzaj administratorami"
+      "adminsLink": "Zarządzaj administratorami",
+      "stuckDeletions": "{count, plural, one {# usunięcie konta utknęło} few {# usunięcia kont utknęły} many {# usunięć kont utknęło} other {# usunięcia kont utknęło}} (ponawiane automatycznie)."
     },
     "queue": {
       "metaTitle": "Ogłoszenia do zatwierdzenia",
@@ -1241,6 +1247,86 @@
       "title": "Tabela kodów pocztowych",
       "text": "Przypisanie kodów pocztowych do powiatów i nazw miejscowości to baza danych pochodna od OpenStreetMap. Jest dostępna na licencji Open Database License (ODbL 1.0) i zawiera także dane BKG i Statistik Austria (informacje powyżej).",
       "download": "Pobierz tabelę kodów pocztowych (CSV)"
+    }
+  },
+  "DataExport": {
+    "metaTitle": "Pobierz moje dane",
+    "title": "Pobierz moje dane",
+    "intro": "Otrzymasz plik JSON ze wszystkimi danymi zapisanymi dla Twojego konta:",
+    "sections": {
+      "account": "Konto: adres e-mail, data utworzenia, ostatnie logowanie",
+      "profile": "Profil i ustawienia",
+      "listings": "Twoje ogłoszenia z gatunkami zwierzyny, miejscem i zdjęciami",
+      "conversations": "Rozmowy ze wszystkimi wiadomościami (inne osoby tylko z nazwą wyświetlaną)",
+      "savedSearches": "Zapisane wyszukiwania z wynikami",
+      "favoritesBlocks": "Zapisane ogłoszenia i zablokowane osoby",
+      "reports": "Twoje zgłoszenia i ich status",
+      "legal": "Akceptacja regulaminu i polityki prywatności",
+      "verifications": "Wnioski o weryfikację (bez dokumentu)"
+    },
+    "photos": "Zdjęcia są w pliku jako linki. Link działa tylko wtedy, gdy jesteś zalogowany.",
+    "limit": "Dane możesz pobrać maksymalnie 3 razy w ciągu 24 godzin.",
+    "download": "Pobierz dane (JSON)",
+    "deletionPending": "Twoje konto jest usuwane. Pobranie nie jest już możliwe.",
+    "errors": {
+      "rateLimited": "Osiągnięto limit. Spróbuj ponownie później.",
+      "rateLimitedUntil": "Osiągnięto limit. Dane możesz ponownie pobrać od {time}.",
+      "notAllowed": "Dla tego konta pobranie nie jest możliwe.",
+      "failed": "Pobieranie nie powiodło się. Spróbuj ponownie później."
+    }
+  },
+  "AccountDelete": {
+    "metaTitle": "Usuń konto",
+    "title": "Usuń konto",
+    "intro": "Usunięcie jest ostateczne i rozpoczyna się natychmiast po potwierdzeniu. Nie można go cofnąć.",
+    "deletedTitle": "Co zostanie usunięte",
+    "deleted": {
+      "profile": "Twój profil i ustawienia",
+      "listings": "Wszystkie Twoje ogłoszenia i zdjęcia",
+      "messages": "Twoje rozmowy i wiadomości, także u rozmówcy, chyba że wiadomość została zgłoszona",
+      "searches": "Zapisane wyszukiwania, zapisane ogłoszenia i blokady",
+      "documents": "Dokumenty weryfikacyjne",
+      "login": "Twoje logowanie (adres e-mail i powiązane logowanie przez Apple)"
+    },
+    "keptTitle": "Co pozostaje (w formie pseudonimizowanej)",
+    "kept": {
+      "audit": "Rejestry decyzji moderacji i administratorów, bez Twojego imienia i adresu e-mail",
+      "reports": "Zgłoszenia dotyczące Twojego konta, do upływu ich terminu",
+      "snapshots": "Kopie zgłoszonych wiadomości, do upływu terminu zgłoszenia"
+    },
+    "exportHint": "Przed usunięciem możesz pobrać swoje dane.",
+    "exportLink": "Pobierz moje dane",
+    "step1": "1. Zaloguj się ponownie",
+    "step2": "2. Usuń konto na stałe",
+    "confirmLabel": "Rozumiem, że moje konto i moje dane zostaną trwale usunięte.",
+    "submit": "Usuń konto na stałe",
+    "noEmail": "To konto nie ma adresu e-mail. Przed usunięciem zaloguj się ponownie.",
+    "noscript": "Bez JavaScriptu: wyloguj się i zaloguj ponownie. Potem masz 10 minut na potwierdzenie usunięcia.",
+    "pending": "Twoje konto jest usuwane.",
+    "deletedNotice": "Twoje konto jest usuwane. Zostałeś wylogowany.",
+    "errors": {
+      "reauth": "Najpierw zaloguj się ponownie (logowanie może mieć najwyżej 10 minut).",
+      "step_up": "Potwierdź także kodem z aplikacji uwierzytelniającej.",
+      "admin_role": "Kont z rolą administratora nie można usunąć. Najpierw poproś o odebranie roli.",
+      "confirm": "Potwierdź, że rozumiesz skutki usunięcia.",
+      "failed": "Nie udało się rozpocząć usuwania. Spróbuj ponownie później."
+    },
+    "reauth": {
+      "intro": "Dla Twojego bezpieczeństwa wyślemy kod na adres {email}.",
+      "send": "Wyślij kod",
+      "sending": "Wysyłanie …",
+      "sent": "Wysłaliśmy kod na adres {email}.",
+      "codeLabel": "Kod logowania",
+      "totpLabel": "6-cyfrowy kod z aplikacji uwierzytelniającej",
+      "verify": "Potwierdź",
+      "done": "Logowanie potwierdzone. Możesz teraz usunąć konto (krok 2).",
+      "errors": {
+        "network": "Połączenie nie powiodło się. Spróbuj ponownie.",
+        "codeInvalid": "Kod jest nieprawidłowy lub wygasł.",
+        "mismatch": "Ten kod należy do innego konta. Zostałeś wylogowany.",
+        "totpInvalid": "Kod z aplikacji uwierzytelniającej jest nieprawidłowy.",
+        "tooSoon": "Odczekaj chwilę, zanim poprosisz o nowy kod."
+      }
     }
   }
 }

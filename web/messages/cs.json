@@ -92,7 +92,10 @@
       "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
       "outdated": "Právní texty byly právě aktualizovány. Přečtěte si je a potvrďte znovu.",
       "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
-    }
+    },
+    "accountLinks": "Vaše data",
+    "dataExport": "Stáhnout moje data",
+    "deleteAccount": "Smazat účet"
   },
   "Legal": {
     "placeholder": "Zástupný text: konečné znění dodá před spuštěním advokát.",
@@ -332,7 +335,9 @@
     },
     "myListings": "Moje inzeráty",
     "favorites": "Oblíbené",
-    "savedSearches": "Uložená hledání"
+    "savedSearches": "Uložená hledání",
+    "dataExport": "Stáhnout moje data",
+    "deleteAccount": "Smazat účet"
   },
   "Listings": {
     "kinds": {
@@ -630,7 +635,8 @@
       "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}",
       "queueLink": "Otevřít frontu",
       "auditLink": "Protokol auditu",
-      "adminsLink": "Spravovat administrátory"
+      "adminsLink": "Spravovat administrátory",
+      "stuckDeletions": "{count, plural, one {# smazání účtu se zaseklo} few {# smazání účtů se zasekla} other {# smazání účtů se zaseklo}} (opakuje se automaticky)."
     },
     "queue": {
       "metaTitle": "Inzeráty ke schválení",
@@ -1241,6 +1247,86 @@
       "title": "Tabulka PSČ",
       "text": "Přiřazení PSČ k okresům a názvům obcí je databáze odvozená z OpenStreetMap. Je k dispozici pod licencí Open Database License (ODbL 1.0) a obsahuje také data BKG a Statistik Austria (údaje výše).",
       "download": "Stáhnout tabulku PSČ (CSV)"
+    }
+  },
+  "DataExport": {
+    "metaTitle": "Stáhnout moje data",
+    "title": "Stáhnout moje data",
+    "intro": "Obdržíte soubor JSON se všemi daty uloženými k vašemu účtu:",
+    "sections": {
+      "account": "Účet: e-mailová adresa, vytvoření, poslední přihlášení",
+      "profile": "Profil a nastavení",
+      "listings": "Vaše inzeráty s druhy zvěře, místem a fotografiemi",
+      "conversations": "Konverzace se všemi zprávami (ostatní osoby jen se zobrazovaným jménem)",
+      "savedSearches": "Uložená hledání s výsledky",
+      "favoritesBlocks": "Uložené inzeráty a zablokované osoby",
+      "reports": "Vaše nahlášení a jejich stav",
+      "legal": "Souhlas s podmínkami použití a zásadami ochrany osobních údajů",
+      "verifications": "Žádosti o ověření (bez dokladu)"
+    },
+    "photos": "Fotografie jsou v souboru jako odkazy. Odkaz funguje jen tehdy, když jste přihlášeni.",
+    "limit": "Data si můžete stáhnout nejvýše 3krát za 24 hodin.",
+    "download": "Stáhnout data (JSON)",
+    "deletionPending": "Váš účet se maže. Stažení už není možné.",
+    "errors": {
+      "rateLimited": "Limit dosažen. Zkuste to prosím později.",
+      "rateLimitedUntil": "Limit dosažen. Data si můžete znovu stáhnout od {time}.",
+      "notAllowed": "Pro tento účet není stažení možné.",
+      "failed": "Stažení se nezdařilo. Zkuste to prosím později."
+    }
+  },
+  "AccountDelete": {
+    "metaTitle": "Smazat účet",
+    "title": "Smazat účet",
+    "intro": "Smazání je konečné a začne ihned po potvrzení. Nelze ho vrátit.",
+    "deletedTitle": "Co se smaže",
+    "deleted": {
+      "profile": "Váš profil a nastavení",
+      "listings": "Všechny vaše inzeráty a fotografie",
+      "messages": "Vaše konverzace a zprávy, i u druhé strany, pokud zpráva nebyla nahlášena",
+      "searches": "Uložená hledání, uložené inzeráty a blokování",
+      "documents": "Doklady k ověření",
+      "login": "Vaše přihlášení (e-mailová adresa a propojené přihlášení přes Apple)"
+    },
+    "keptTitle": "Co zůstane (pseudonymizovaně)",
+    "kept": {
+      "audit": "Záznamy o rozhodnutích moderace a administrátorů, bez vašeho jména a e-mailové adresy",
+      "reports": "Nahlášení týkající se vašeho účtu, do uplynutí jejich lhůty",
+      "snapshots": "Kopie nahlášených zpráv, do uplynutí lhůty nahlášení"
+    },
+    "exportHint": "Před smazáním si můžete stáhnout svá data.",
+    "exportLink": "Stáhnout moje data",
+    "step1": "1. Znovu se přihlásit",
+    "step2": "2. Trvale smazat účet",
+    "confirmLabel": "Rozumím, že můj účet a moje data budou trvale smazány.",
+    "submit": "Trvale smazat účet",
+    "noEmail": "Tento účet nemá e-mailovou adresu. Před smazáním se prosím znovu přihlaste.",
+    "noscript": "Bez JavaScriptu: odhlaste se a znovu se přihlaste. Pak máte 10 minut na potvrzení smazání.",
+    "pending": "Váš účet se maže.",
+    "deletedNotice": "Váš účet se maže. Byli jste odhlášeni.",
+    "errors": {
+      "reauth": "Nejprve se prosím znovu přihlaste (přihlášení smí být staré nejvýše 10 minut).",
+      "step_up": "Potvrďte prosím také kódem z autentizační aplikace.",
+      "admin_role": "Účty s rolí administrátora nelze smazat. Nechte si prosím nejprve roli odebrat.",
+      "confirm": "Potvrďte prosím, že smazání rozumíte.",
+      "failed": "Smazání se nepodařilo zahájit. Zkuste to prosím později."
+    },
+    "reauth": {
+      "intro": "Pro vaši bezpečnost pošleme kód na {email}.",
+      "send": "Poslat kód",
+      "sending": "Odesílá se …",
+      "sent": "Poslali jsme kód na {email}.",
+      "codeLabel": "Přihlašovací kód",
+      "totpLabel": "6místný kód z autentizační aplikace",
+      "verify": "Potvrdit",
+      "done": "Přihlášení potvrzeno. Nyní můžete účet smazat (krok 2).",
+      "errors": {
+        "network": "Připojení selhalo. Zkuste to prosím znovu.",
+        "codeInvalid": "Kód je neplatný nebo vypršel.",
+        "mismatch": "Tento kód patří k jinému účtu. Byli jste odhlášeni.",
+        "totpInvalid": "Kód z autentizační aplikace je neplatný.",
+        "tooSoon": "Před vyžádáním dalšího kódu chvíli počkejte."
+      }
     }
   }
 }

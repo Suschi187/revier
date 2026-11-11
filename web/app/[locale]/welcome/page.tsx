@@ -6,6 +6,7 @@ import { BlockedNotice } from "@/components/profile/BlockedNotice";
 import { WelcomeForm } from "@/components/profile/WelcomeForm";
 import type { AppLocale } from "@/i18n/routing";
 import { safeNextPath } from "@/lib/auth/paths";
+import { Link } from "@/i18n/navigation";
 import { requireSessionUser } from "@/lib/services/auth";
 import { getLegalStatus } from "@/lib/services/legal";
 import { getOwnProfile, PLACEHOLDER_DISPLAY_NAME } from "@/lib/services/profile";
@@ -25,6 +26,11 @@ export default async function WelcomePage({ searchParams }: PageProps<"/[locale]
       <Suspense fallback={null}>
         <WelcomeContent searchParams={searchParams} />
       </Suspense>
+      {/* Auch ohne Zustimmung erreichbar (ADR 019, Review A4). */}
+      <nav aria-label={t("accountLinks")} className="mt-10 flex flex-col gap-2 text-sm">
+        <Link href="/account/data" className="underline">{t("dataExport")}</Link>
+        <Link href="/account/delete" className="underline">{t("deleteAccount")}</Link>
+      </nav>
     </main>
   );
 }
