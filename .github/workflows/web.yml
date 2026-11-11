@@ -96,6 +96,12 @@ jobs:
       - run: npm ci
       # API-Tests gegen die lokale Supabase (ADR 009, QA M2). CI=true: Abbruch, falls Supabase fehlt.
       - run: npm run test:integration
-      - run: npx playwright install --with-deps chromium
+      # Der Azure-Spiegel der Runner (azure.archive.ubuntu.com) fiel am 2026-11-11 mehrfach aus und brach den Job vor dem
+      # ersten Test ab: auf den Hauptspiegel ausweichen und die Installation bis zu dreimal versuchen.
+      - name: Playwright-Browser mit Systemabhängigkeiten
+        run: |
+          sudo sed -i 's#http://azure.archive.ubuntu.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources 2>/dev/null || true
+          for attempt in 1 2 3; do npx playwright install --with-deps chromium && exit 0; echo "Versuch $attempt fehlgeschlagen"; sleep 30; done
+          exit 1
       - run: npm run build
       - run: npm run test:e2e
