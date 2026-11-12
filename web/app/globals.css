@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Design-Tokens (M10a, docs/DESIGN.md). Seitencode nutzt nur diese Namen, keine Einzelfarben.
+ * Kein Dunkelmodus im ersten Stand (SPEC M10a). Schriften liegen unter /fonts (SIL OFL, kein Drittanbieter).
+ */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/static/fonts/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/static/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/static/fonts/montserrat-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/static/fonts/montserrat-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@theme {
+  /* Markenfarben (design/Design_Master.png, Orange laut Vorgabe #FF914D) */
+  --color-forest: #202b23;
+  --color-forest-hover: #415747;
+  --color-olive: #4a5a44;
+  --color-sand: #e8e3d8;
+  --color-offwhite: #f7f5ef;
+  --color-surface: #ffffff;
+  --color-brand: #ff914d;
+  --color-brand-hover: #ffa66e;
+  /* Orange als Text auf hellem Grund: #FF914D erreicht dort nur 2,1 : 1 */
+  --color-brand-ink: #9a4410;
+  /* Nebentexte und Rahmen von Eingabefeldern (mindestens 3 : 1, WCAG 1.4.11) */
+  --color-muted: #5e655f;
+  --color-field: #7c8279;
+  /* Status (Orange nie für Fehler) */
+  --color-error: #8b0000;
+  --color-error-soft: #fbeaea;
+  --color-success: #006400;
+  --color-success-soft: #e8f1e4;
+  --color-notice: #6b4a00;
+  --color-notice-soft: #fff1dc;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-btn: 4px;
+  --radius-card: 8px;
+  --radius-pill: 40px;
+
+  --tracking-eyebrow: 0.13em;
+  --tracking-caps: 0.06em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background: var(--color-offwhite);
+    color: var(--color-forest);
+    font-family: var(--font-sans);
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  a:hover {
+    color: var(--color-brand-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-brand-ink);
+    outline-offset: 2px;
+  }
+  .on-dark :focus-visible {
+    outline-color: var(--color-brand);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 /* Karte (ADR 016): Einzelpunkte als Buttons (Tastatur, Review A8), Kurzkarte mit echten Links. */
@@ -28,28 +103,28 @@ body {
   min-width: 1.75rem;
   height: 1.75rem;
   border-radius: 9999px;
-  border: 2px solid #fff;
-  background: #7a2e0e;
+  border: 2px solid var(--color-surface);
+  background: var(--color-forest);
   color: #fff;
-  font: 600 0.75rem/1 system-ui, sans-serif;
+  font: 600 0.75rem/1 var(--font-sans);
   cursor: pointer;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.4);
 }
 .map-cluster {
   min-width: 2.25rem;
   height: 2.25rem;
-  background: #3f5f2a;
+  background: var(--color-olive);
 }
 .map-district {
   border-radius: 0.25rem;
-  background: #57534e;
+  background: var(--color-muted);
 }
 .map-chosen {
-  background: #1d4ed8;
+  background: var(--color-brand-ink);
   border-style: dashed;
 }
 .map-marker:focus-visible {
-  outline: 3px solid #1c1917;
+  outline: 3px solid var(--color-brand-ink);
   outline-offset: 2px;
 }
 .map-popup ul {
@@ -64,7 +139,7 @@ body {
 }
 .map-popup p {
   font-size: 0.8rem;
-  color: #44403c;
+  color: var(--color-muted);
 }
 .map-popup button {
   margin-top: 0.5rem;
