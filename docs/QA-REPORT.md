@@ -2113,3 +2113,138 @@ ADR 019, „Nachweis von Akzeptanz a“, Fixture: „die QA-Probe `qa-m9a.test.t
 ### Empfehlung
 
 F1–F6 sind **behoben**, ohne Nebenwirkung auf Rechte, Definer, Export-Schlüssel oder die Header anderer Pfade. Die Erweiterung der Allowlist um `message_id` und `conversation_id` der Kopien ist vertretbar und dokumentiert. F7 ist bis auf N1 erledigt. **Abnahme von M9a: ja.** Die Auflagen der Abnahme sind erfüllt. N1 bei der nächsten Doku-Runde nachziehen, H1 vor M10 erwägen.
+
+## M9b – Abnahme 2026-11-12
+
+Geprüfter Stand: `3c74b6e` (main), Commits `12c0f27`…`3c74b6e` seit `99c4b08` (M9b Commit 6 bis 11, Nachtrag zu 6, Nachtrag „Aktionsfilter im Audit-Log bei 360 px“). Grundlagen: SPEC v0.11 (3.4, 5, 6 M9b, 7.2, 7.3), Plan M9 mit Architekt-Review (10, 11; für M9b B3, A6–A9, A11, A10 für die neuen Seiten, A14 weiter), ADR 020 mit den Abschnitten „Umsetzung“ und den dokumentierten Abweichungen, ADR 008, 017, 019 (Export v4), CHANGELOG „M9b Vertrauen und Moderation (Web) – 2026-11-12“, CLAUDE.md. Umgebung: macOS, Node 24, Supabase-CLI 3.0.0 lokal, DB zu Beginn frisch, Vault mit `account_deletion_url` und `account_maintenance_url`, ohne `search_notifications_url`/`chat_notifications_url`; Edge Functions lokal, Mailpit; Playwright mit eigenem Dev-Server; Deno 2.1.4 per Docker (Digest wie CI). iOS ist nicht Teil von M9b.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (mit den Proben) |
+| Vitest | 36 Dateien, **672/672** |
+| `supabase test db` (nach `supabase db reset`, beide Vault-URLs wieder angelegt) | 57 Dateien, **1797** Tests, PASS. Vor den Proben 56 Dateien/1694 grün. Neu `56_qa_m9b_abnahme`: 103 Tests, davon **6 TODO (F1 ×2, F2, F3 ×2, F4)** |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 28 Dateien, **276 bestanden, 2 erwartet fehlgeschlagen** (`it.fails` H2 aus M7 und F6). Neu `qa-m9b.test.ts`: 4 + 1 `it.fails` (F6). Im ersten Lauf (vor den Proben) scheiterte einmal `saved-searches.test.ts` an einem Zufallstitel (H8), bei der Wiederholung grün |
+| E2E | Vorhandene M9b-Specs `verification.spec.ts`, `reports.spec.ts`, `admin-moderation.spec.ts`, `cookie-inventory.spec.ts`, `admin.spec.ts`: **14/14**. Neu `qa-m9b.spec.ts`: **5/5** (davon 1 `test.fail`: F5). Kein Gesamtlauf aller Specs |
+| Deno (Docker wie CI) | `send-search-notifications` 32/32, `account-maintenance` 3/3; `deno task check`, `deno lint` grün |
+
+Aufgeräumt: keine Konten auf `@test.local`; Vault nach dem Reset mit beiden URLs wie vorgegeben. Die Integrationsprobe entfernt `account_deletion_url` kurz (wie `qa-m9a.test.ts`) und legt sie wieder an.
+
+### Akzeptanz (SPEC 6 M9b)
+
+| Kriterium | Ergebnis | Nachweis |
+|---|---|---|
+| a) Upload → Entscheidung → Badge öffentlich, nach Widerruf weg | **erfüllt** | `verification.spec.ts`: Upload im Browser (umbenannte Datei fällt in der Vorprüfung durch), Dokument erst nach Klick mit genau einem Audit-Eintrag, Entscheidung, Badge auf Anbieter- und Detailseite, Widerruf mit Grund, Badge weg, Status beim Nutzer. pgTAP 53: Cache-Zähler beim Wechsel zu und weg von `verified`. Probe: Eine HTML-Datei, per Storage-API als `image/png` hochgeladen und eingereicht (der Bucket prüft nur den gemeldeten Typ), zeigt der Admin nicht an, sondern markiert sie; die Seite enthält dann keine signierte URL. Nicht über die Oberfläche geprüft: Filter „nur verifizierte“ |
+| b) Meldung einer Anzeige → Entfernen im Admin → Mail an den Besitzer mit Begründung und an die Meldenden mit Ergebnis | **erfüllt**; am Rand F3, F5 | `admin-moderation.spec.ts` (Entfernen über die Oberfläche, danach 410, Meldende in der Zielansicht unsichtbar), `trust-mails.test.ts` (beide Mails über die echte Function in Mailpit; Frist statt Kontakt-Platzhalter, `[Vorläufiger Hinweis]`, Meldende ohne Angaben über das Gegenüber). Schwäche: Die Mail-Probe löst per RPC aus, nicht über die Oberfläche; mit dem E2E zusammen ist der Weg geschlossen, und die Owner-Mail prüft keine Admin-Identität. Probe pgTAP 56: Claim der Moderations-Mail mit Begründung und Frist (≥ 183 Tage), ohne Adresse oder Namen von Melderin und Admin; Besitzer liest keine Meldung, `my_decisions` und Export ohne Meldende und Admin |
+| c) Sperre → Beschwerde → Entsperrung durch einen anderen Admin | **erfüllt** für den geprüften Weg; Nachbarwege F1, F2, F4 | `admin-moderation.spec.ts` (Sperre über die Kontosuche ohne Adresse in der URL, Beschwerde trotz Sperre, ursprünglicher Admin abgewiesen, zweiter Admin entsperrt), `trust-mails.test.ts` (Mails zu Sperre, Beschwerde, Entsperrung ohne Admin-Adressen), pgTAP 54 (Ausweichregel, Rücknahmen) |
+| d) Verifizierungsdokument ohne frischen Audit-Eintrag nicht lesbar, auch nicht für Admins über die Storage-API | **erfüllt** für Lesen und Signieren; Rest **F6** | `verification.test.ts` (aal2 ohne Audit: kein Signieren, kein Download; nach Audit 60 s; nach 3 Minuten nicht mehr), pgTAP 08/53. Proben: 1:59 sichtbar, 2:01 nicht; Audit von Admin A gilt nicht für Admin B (pgTAP und Storage-API); Audit eines anderen Antrags öffnet dieses Dokument nicht; aal1 und gesperrter Admin trotz Audit nicht; `list()` ohne Audit leer; Admins können `audit_log` weder schreiben noch zurückdatieren. F6: Eine im Fenster signierte URL darf beliebig lange gelten |
+
+### Prüfmatrix Auflagen (M9b)
+
+| Punkt | Status | Fundstelle / Nachweis |
+|---|---|---|
+| B3 Dokumentansicht nur mit Audit | **erfüllt, mit F6** | `20261112100000_verification.sql:651-674` (RPC schreibt `verification.document_viewed`, dann Pfad), `:704-735` (Policy: `is_admin()` und Audit desselben Admins für genau diesen Antrag, 2 Minuten). Server signiert 60 s (`lib/services/admin-verifications.ts:145-161`). Proben siehe Akzeptanz d |
+| A6 Verifizierung | **erfüllt** | Zählerzeilen `private.verification_attempts` (`:49-56`, Limit `:421-428`; Zurückziehen umgeht es nicht, pgTAP 53). Upload exakt auf `document_path` eines eigenen, nicht eingereichten Antrags mit aktivem Konto (`:688-726`); Proben: fremder Pfad, Pfad mit Anhang, anderer Bucket, gesperrt → 42501. Keine Update-Policy (pgTAP 53; Integration: Upsert abgelehnt). Löschen nur bis zur Einreichung (Probe). Magic Bytes vor der Anzeige (`lib/verification.ts:30-35`, `admin-verifications.ts:155-158`, E2E-Probe). Cache-Zähler (`:103-105`). „Selbstentscheidungsverbot“ und iOS-JPEG im ADR |
+| A7 Moderationspfade | **erfüllt**, Rand F3 | `remove` mit Version nur über `admin_report_target` (`20261112120000_reports_appeals.sql:107-119, 155-164`), `admin_listing_version` bleibt auf `pending_review` (pgTAP 54). `listings_appeal_guard` (`:192-219`): ohne `revier.appeal` verlässt keine Anzeige `removed`, auch nicht der Server. Probe: Auch der Besitzer mit im SQL gesetztem Flag kommt nicht heraus (`listings_guard`), ändert keine entfernte Anzeige, `moderate_listing approve` gibt `RV003`. Audit und Mails auf Server-Pfaden über `private.moderation_path()` (`20261112100000_verification.sql:739-799`) |
+| A8 Beschwerden | **teilweise** (F1, F2, F4) | Wirkung bei `no_action` (`:909-916`) mit F1 und F4; Ausweichregel (`:832-844, 882-888`) mit F2. FK-Verhalten in ADR 008, `decision_action` hält die Art. `P0002` für fremd, unbekannt, abgelaufen und für Audit-IDs, die keine Entscheidung sind (pgTAP 54, Probe) |
+| A9 Meldungen | **erfüllt** | Eingangsbestätigung `/account/reports?notice=sent` mit Eintrag (E2E). `reports_one_open_idx` (`:29-30`), `23505` im Web als „bereits gemeldet“ (Formular und Chat). `target_gone` (`:613-615`). `admin_find_account`: gemeinsames Limit (`:306-311`), Audit ohne Adresse; Proben: Groß-/Kleinschreibung und Leerzeichen, erfolglose Suchen zählen, Audit nur beim Treffer, Konto mit `deleted_at` nicht auffindbar |
+| A10 Cookie-Inventar über die neuen Seiten | **erfüllt** für die Übersichten, H5 | `cookie-inventory.spec.ts` mit `/account/verification`, `/reports`, `/decisions`, beiden Meldeseiten und `/admin/verifications`, `/reports`, `/users`, `/appeals`; `admin.spec.ts` prüft 403 |
+| A11 Warteschlange `account_notifications` | **erfüllt** | Check-Constraint `kind`, Payload-Allowlist je Art (`20261112100000_verification.sql:196-219`), `ref_id` auf den Fachdatensatz, Text beim Versand gelesen (`account_notification_details`), keine Adresse in der Zeile, `unique (kind, ref_id, user_id)`, cascade, 30 Tage. Proben: fremde Payload-Schlüssel und unbekannte Art → 23514; keine Spalte für Adresse oder Freitext; falsches Secret → 42501 für claim/confirm/release; gesperrt bekommt die Mail, gelöscht und unbestätigt werden ohne Versand erledigt; release zählt Versuche, confirm idempotent; Claim ohne Nutzer-ID und Admin. Nebenwirkung des Unique-Schlüssels: F4 |
+| A14 Platzhalter | **erfüllt** | Kein „DSA-konform“, „fertig“ o. Ä. in den M9b-Änderungen an Doku, Messages und Mailtexten (grep). Zusicherung „[Vorläufiger Wortlaut]“, Rechtsbehelfe „[Vorläufiger Hinweis]“ auf `/account/decisions` und in allen Mails mit Anfechtung, 4 Sprachen. Anwaltsliste im CHANGELOG um die M9b-Punkte ergänzt |
+
+Weitere Prüfpunkte aus dem Auftrag:
+
+| Punkt | Ergebnis |
+|---|---|
+| Rohschreibrechte | `verifications` ohne INSERT/UPDATE, `reports` ohne UPDATE, `appeals` ohne Schreibrecht und ohne Schreib-Policy, für Nutzer und Admins (Proben mit gesetztem Flag: 42501). `audit_log` nicht schreibbar |
+| Flags `revier.*` | Nur die RPCs setzen sie (transaktionslokal, Rückgabe auf den vorigen Wert). Über PostgREST nicht setzbar: `rpc/set_config` und private Helfer 404, `Content-Profile: pg_catalog`/`private` 406 (Integration). Im SQL gesetzte Flags öffnen ohne Rohrechte nichts (pgTAP 56) |
+| aal2, Selbstentscheidung, Rollen | Alle Admin-RPCs über `private.is_admin()` (aal2, Rolle, aktiv). Eigene Verifizierung, Widerruf, Dokument, Anzeige, Meldungen zum eigenen Konto, eigene Beschwerde: 42501. Konten mit Rolle weder über `admin_set_account_blocked`/`admin_warn_account` noch über `resolve_reports` sperr- oder verwarnbar (Probe) |
+| Fehlercodes ohne Orakel | `P0002` für fremd und unbekannt (Antrag, Zurückziehen, Entscheidung, Beschwerde, Konto); beim Melden `42501` für unbekannte und nicht sichtbare Ziele gleich (Probe); `RV003` für Entschiedenes |
+| Meldende und Admin-Identität | Für Betroffene nirgends sichtbar (Meldungen, `my_decisions`, Export, Moderations-Mail; Proben). `decided_by`, `same_reviewer`, `handled_by`, `reviewed_by` per API nicht lesbar; gelöschter Admin → `decided_by = null` |
+| Kopien gemeldeter Nachrichten | nur `admin_report_message`, jeder Abruf auditiert, nur aal2 (pgTAP 54, E2E) |
+| 23 neue RPCs | alle `security definer` mit leerem `search_path`, keine für `anon`; claim/confirm/release nur `service_role`; keine neue Tabelle in einer Publikation, RLS auf allen |
+| Web: Melden | Ohne Legal-Gate, auch gesperrt: `guards.test.ts` (7 Ausnahmen mit Grund); Probe: gesperrt und ohne Zustimmung meldet ohne JavaScript, `/account/reports` und `/account/decisions` 200 ohne Weg zu `/welcome`. Login-Umweg mit Ziel im Pfad für Anzeige (E2E) und Anbieter (Probe). Link statisch, `rel=nofollow`, anonym, angemeldet und für den Besitzer gleich (Probe); eigene Ziele ergeben dieselbe Seite wie unbekannte |
+| Texte in 4 Sprachen | 1300 Schlüssel je Sprache, keine Lücke, kein leerer Wert; die gleich wie en lautenden Werte sind Formate. Keine rohen Schlüssel auf den neuen Seiten in en/cs/pl (Probe). cs/pl ungeprüft (SPEC 7.6) |
+| a11y und 360 px | axe (WCAG 2 A/AA, ernst und kritisch) ohne Befund und kein waagerechter Überlauf auf 20 Seiten in en/cs/pl: `/account/verification`, `/decisions` (auch mit Hinweis), Beschwerdeformular, `/reports` (auch mit Bestätigung), beide Meldeformulare (auch mit Fehler), `/admin`, Verifizierungen (Liste, Detail), Meldungen (Liste, Anzeige, Profil), Konten (Suche, Detail), Beschwerden (Liste, Detail), Audit-Log (Nachtrag `3c74b6e`) |
+| Dokumentansicht | `?document=1`: `Cache-Control: no-store`, `noindex`; Bild als `<img referrerpolicy=no-referrer>`, PDF als Link mit `noopener noreferrer` (Code) |
+| Mails | 9 Arten mit Texten in 4 Sprachen (Deno), Nutzertexte über `clean` (Steuer-/Bidi-Zeichen, Länge), nur Klartext, Labels nur aus Allowlists. Moderations-Mail mit Frist statt Kontakt-Platzhalter (`20261112130000_moderation_mail_appeal.sql`) |
+| Aufräumjobs | Proben an den Grenzen: Zählerzeilen und Warteschlange 29 T 23 h bleibt, 30 T 1 h weg; Beschwerden 23 Monate bleibt, 25 weg, offene bleiben; Dokumente 29 Tage nach Entscheidung kein Kandidat, 31 Tage schon, eingereichter offener Antrag (60 Tage) nie; nicht eingereicht 23 h bleibt, 25 h weg; Entwurfshinweis einen Tag vor der Grenze nicht, aktive und pausierte Anzeigen nie; Löschung 29 Tage nach dem Hinweis nicht, 31 Tage schon. `edited_at`: Admin und Server stempeln nicht, der Besitzer setzt weder `edited_at` noch `draft_notice_at`; Pausieren stempelt, Fortsetzen bleibt ohne neue Prüfung. Fotos gelöschter Entwürfe über `photo_orphan` (Abweichung dokumentiert), Chats bleiben (`listing_id` set null) |
+| Export v4 | `version` 4, `decisions` ohne Audit-ID und Akteur, `appeals` ohne `decided_by`, `reports[].outcome`; Wächter pgTAP 49 |
+| Kontolöschung | Probe gegen den echten Stack: Konto mit eingereichtem Dokument, Sperre, Beschwerde, Zählerzeile und Dienstmail → über die Function gelöscht; kein Treffer für ID, Adresse und Beschwerdetext außerhalb der Allowlist, Dokument weg, Audit der Sperre nur mit `target_id`. pgTAP 56: Kaskade von `appeals`, `verification_attempts`, `account_notifications`, `verifications`; Meldungen pseudonymisiert. Wächter `00_meta` mit den neuen Spalten |
+| Doku | CHANGELOG, ADR 020 (Umsetzung je Commit, Abweichungen), ADR 008/019 und SPEC 3.4 stimmen mit dem Code überein, bis auf F3 (ADR nennt `listing.point_removed` als Entscheidung mit Begründung) und F6 (Restrisiko nicht genannt) |
+
+### Definition of Done
+
+| Punkt | Ergebnis |
+|---|---|
+| Lint, Typecheck | erfüllt (kein Produktions-Build in dieser Abnahme) |
+| Tests grün | erfüllt bis auf die erwarteten Fehlschläge der Funde |
+| Texte in 4 Sprachen | erfüllt, Glossar ergänzt (Dokumenttypen, Widerruf, Anfechten), cs/pl ungeprüft |
+| Web/iOS-Lücke | im CHANGELOG (I6) |
+| RLS für neue Tabellen | erfüllt |
+| CHANGELOG mit Testanleitung | erfüllt; Befehle nachvollzogen |
+
+### Funde
+
+**F1 – mittel: Die Rücknahme einer Beschwerde von Meldenden scheitert, wenn dieselbe Person das Ziel schon einmal gemeldet hatte.**
+`decide_appeal` (`20261112120000_reports_appeals.sql:909-916`) öffnet **alle** bearbeiteten Meldungen des Ziels wieder. Der Ausschluss prüft nur schon offene Meldungen, nicht die, die dieselbe Anweisung gerade öffnet. Hat eine Person das Ziel in zwei Zyklen gemeldet, verletzt das Update `reports_one_open_idx`.
+- Reproduktion (pgTAP 56, TODO Tests 58–59): Rolf meldet, Ada erledigt mit `no_action`; Rolf meldet erneut, Ada erledigt wieder; Rolf legt Beschwerde gegen die zweite Entscheidung ein; Ben `decide_appeal(…, 'reversed', …)` → `23505 reports_one_open_idx`. Im Admin bleibt nur „bestätigen“.
+- Folge: Gerade wiederholte Meldungen lassen sich nicht zurücknehmen; dazu würden Meldungen alter Zyklen mit anderem Ergebnis wieder geöffnet.
+- Erwartet: höchstens eine wieder offene Meldung je Meldendem, nur aus der angefochtenen Bearbeitung.
+- Vorschlag: nur die Meldungen öffnen, die mit der angefochtenen Entscheidung erledigt wurden (z. B. gemeinsame Bearbeitungs-ID oder gleicher `handled_at`), sonst je `reporter_id` nur die jüngste (`distinct on`). Test für zwei Zyklen ergänzen.
+
+**F2 – niedrig: Die Ausweichregel zählt den Beschwerdeführer als „anderen Admin“.**
+`private.other_admin_available()` (`:832-844`) schließt nur den aufrufenden Admin aus. Legt ein Admin Beschwerde ein (Entfernen seiner Anzeige, Ablehnung seiner Verifizierung) und gibt es genau zwei Admins, darf der ursprüngliche Admin nicht und der Beschwerdeführer auch nicht. Die Beschwerde bleibt liegen, was A8 verhindern sollte.
+- Reproduktion (pgTAP 56, TODO Test 66): Ada entfernt Bens Anzeige nach einer Meldung; Ben legt Beschwerde ein; Ben → 42501 (eigene Beschwerde), Ada → 42501 `same_reviewer`.
+- Vorschlag: den Beschwerdeführer in `other_admin_available` ausschließen (Parameter), `same_reviewer_only` in der Warteschlange entsprechend.
+
+**F3 – mittel: Beim Entfernen des Kartenpunkts bekommt der Besitzer weder Begründung noch Mail.**
+`resolve_reports(…, 'point_removed', code, note)` setzt `display_location = null`; das Audit `listing.point_removed` schreibt der Trigger `listings_point_removed_audit` nur mit `{"status": …}`. Code und Begründung stehen nur im `report.handled`-Audit für die Meldenden. `my_decisions` führt `listing.point_removed` als anfechtbare Entscheidung, zeigt aber Grund und Begründung leer; eine Mail entsteht nicht (die Moderations-Mail feuert nur bei Statuswechseln). `resolve_reports` verlangt für `point_removed` auch keine Begründung.
+- Reproduktion (pgTAP 56, TODO Tests 68–69): Anzeige mit Kartenpunkt, Meldung, `resolve_reports('listing', lp, 'point_removed', 'other', 'Q56 Hochsitz exakt erkennbar')` → `my_decisions().reason` ist `null`, keine Zeile in `moderation_notifications` oder `account_notifications` für den Besitzer.
+- Folge: Einschränkung der Sichtbarkeit ohne Begründung an den Betroffenen (DSA Art. 17; Einordnung durch den Anwalt). ADR 020 zählt `listing.point_removed` zu den Entscheidungen mit Begründung.
+- Vorschlag: Code und Begründung für `point_removed` verlangen, im Audit mitschreiben (wie bei Sperre und Verwarnung direkt aus der RPC) und eine Dienstmail (neue Art mit Allowlist, 4 Sprachen) oder eine Zeile in `moderation_notifications` anlegen.
+
+**F4 – niedrig: Nach Wiedereröffnung und neuer Entscheidung erfahren die Meldenden das neue Ergebnis nicht per Mail.**
+`resolve_reports` legt `report_resolved` mit `ref_id = report.id` und `on conflict do nothing` an (`:652-655`). Die Zeile der ersten Entscheidung besteht noch (Frist 30 Tage).
+- Reproduktion (pgTAP 56, TODO Test 62): Meldung, `no_action`, Beschwerde der Melderin, `reversed`, neue Entscheidung `account_warned` → keine neue `report_resolved`-Zeile. „Meine Meldungen“ und `my_decisions` zeigen das neue Ergebnis.
+- Vorschlag: `ref_id` auf `decision_audit_id` (jede Entscheidung eine eigene Mail), `account_notification_details` liest über `audit_log` → `reports`.
+
+**F5 – niedrig: „Anzeige entfernen“ bietet Gründe aus der Gruppe „Konto“ an, die die DB ablehnt.**
+`admin/reports/ReportTargetPage.tsx:114-124` zeigt für alle Maßnahmen Anzeigen- und Konto-Codes; `resolveSchema` (`lib/reports.ts:98-102`) prüft bei `content_removed` nur, dass ein Code gewählt ist. `moderate_listing` schreibt ihn in `listings.reject_code`, dessen Check nur Anzeigen-Codes kennt. Mit „Betrug oder Betrugsversuch“, „Belästigung“, „Spam“ oder „Rechtswidrige Inhalte“ (`illegal`) endet das Entfernen mit 23514 ohne Hinweis; die Seite meldet „Bitte wähle einen Grund.“, obwohl einer gewählt ist.
+- Reproduktion: `npx playwright test e2e/qa-m9b.spec.ts -g F5` (`test.fail`); pgTAP 56 Test „F5“ (23514).
+- Vorschlag: je Maßnahme nur die passenden Codes anbieten und in `resolveSchema` prüfen; in `resolve_reports` den Code je Maßnahme validieren (23514 mit `hint {"fields":["code"]}`). Für Betrug an Anzeigen ggf. einen Anzeigen-Code ergänzen (Platzhalter, Glossar).
+
+**F6 – niedrig: Eine im 2-Minuten-Fenster signierte URL eines Verifizierungsdokuments darf beliebig lange gelten.**
+Die Policy prüft das Audit nur beim Signieren; die Storage-API lässt jede Laufzeit zu. Mit seiner Session (Cookie nicht `httpOnly`, ADR 010) kann ein Admin im Fenster eine URL für ein Jahr erzeugen und das Dokument später ohne neues Audit abrufen oder weitergeben.
+- Reproduktion: `web/integration/qa-m9b.test.ts` „F6“ (`it.fails`): `admin_open_verification_document`, `createSignedUrl(path, 31536000)`, Audit auf 10 Minuten zurückdatiert → `fetch` liefert 200.
+- Folge: „Jeder Abruf wird auditiert“ (B3) gilt nur für Abrufe über die Session. Täter wäre ein Admin mit aal2; das erste Öffnen ist auditiert.
+- Vorschlag: Admin-Select-Policy entfernen und den Inhalt über eine Server-Route ausliefern (RPC mit Audit, Magic Bytes, Streaming mit `no-store`) oder serverseitig mit `service_role` 60 s signieren. Mindestens im ADR als Restrisiko nennen.
+
+### Hinweise (keine Fehler)
+
+- **H1:** Der Besitzer kann eine entfernte Anzeige löschen. Danach fällt die Entscheidung aus `my_decisions` (Join auf `listings`), eine offene Beschwerde zeigt im Admin keine Entscheidung, und eine Rücknahme ändert nichts, meldet aber „aufgehoben“. Vertretbar (eigene Daten), im ADR erwähnen.
+- **H2:** Ist das Ziel weg (Anzeige gelöscht, Unterhaltung mit dem Konto der Meldenden gelöscht), erzwingt `resolve_reports` `target_gone`, auch wenn das Konto des Absenders noch besteht. Sperren bleibt über `/admin/users` möglich.
+- **H3:** `claim_account_notifications` nimmt wie die M8-Warteschlangen nur Zeilen ohne `claim_id`. Bricht die Function nach dem Claim ab, bleibt die Zeile bis zur Frist liegen. Gleiches Muster wie ADR 018, für die Überwachung in M10 vormerken.
+- **H4:** Die Admin-Kontoseite zählt jede Ansicht als Suche (Limit 30 je Stunde); Suchen, Ansehen und eine Maßnahme verbrauchen drei Einheiten.
+- **H5:** Das Cookie-Inventar (A10) umfasst die Übersichten, nicht die Detailseiten (`/admin/verifications/:id?document=1`, `/admin/reports/…/:id`, `/admin/appeals/:id`, `/account/decisions/:id/appeal`). Vor dem Lauf gegen Stage ergänzen.
+- **H6:** Die Admin-Ansicht prüft, ob die ersten Bytes zu einem der drei Typen passen, nicht, ob sie zum gemeldeten `Content-Type` passen. Eine PDF als `image/jpeg` öffnet sich als kaputtes Bild; ungefährlich.
+- **H7:** `report_resolved` und `my_decisions` nennen den aktuellen Titel der gemeldeten Anzeige, auch wenn sie nicht mehr öffentlich ist (wie Export `reports[].target_label`, in M9a als vertretbar festgehalten).
+- **H8:** `saved-searches.test.ts` „Mail-Inhalt“ (M8) prüft `not.toMatch(/…|lng|…/i)` auf einem Zufallstitel; ein Titel „…tblng“ ließ den Test einmal scheitern. Zufallstitel ohne diese Folgen erzeugen oder die Regex auf Wortgrenzen verankern.
+- **H9:** Die Melde-Policy erlaubt per API auch Meldungen eigener Anzeigen und des eigenen Profils (`can_report` prüft Sichtbarkeit, nicht Fremdheit); die Oberfläche verhindert es. Harmlos, Admins sehen dann „eigenes Konto“.
+
+### Nicht prüfbar
+
+- iOS (I6) und Gleichstand Web/iOS: nicht Teil von M9b, im CHANGELOG als Lücke.
+- Cloud: Storage-Policies und Signaturen gegen die gehostete Storage-API, Cron, Hosting-Cookies (M10).
+- Muttersprachliche Prüfung cs/pl (SPEC 7.6); Wortlaute der Platzhalter (Anwalt).
+
+### Proben (neu)
+
+- `supabase/tests/56_qa_m9b_abnahme.test.sql` (103, davon 6 TODO: F1 ×2, F2, F3 ×2, F4): Rechte, Definer, Publikation; Dokumentansicht (fremder Admin, aal1, gesperrt, 1:59/2:01, anderer Antrag); Upload-Bindung; Flags ohne Rohrechte; Meldende und Admins unsichtbar (Besitzer, Export, Moderations-Mail); Konten mit Rolle auf dem Meldungsweg; `removed` mit Flag; Orakel; Kontosuche; Beschwerden (F1, F2, F4), Kartenpunkt (F3), Codes (F5); Warteschlange; Fristen an den Grenzen; `edited_at`, Pausieren/Fortsetzen; Kaskade bei der Kontolöschung.
+- `web/integration/qa-m9b.test.ts` (4 + 1 `it.fails` F6): Flags und private Helfer über PostgREST nicht erreichbar; `list()` und Audit fremder Admins über die Storage-API; lange Signatur (F6); HTML als `image/png`; Kontolöschung mit den M9b-Tabellen über die Function samt Rest-Inventar.
+- `web/e2e/qa-m9b.spec.ts` (5, davon 1 `test.fail` F5): Magic Bytes in der Admin-Ansicht und Header; gesperrt ohne Zustimmung ohne JavaScript, Platzhalter-Markierungen; statische Melde-Links und Login-Umweg für Anbieter; F5; axe, rohe Schlüssel und 360 px auf 20 neuen Seiten in en/cs/pl.
+
+### Empfehlung
+
+**Abnahme von M9b: ja, mit Auflagen.** Die vier Akzeptanzkriterien sind belegt, Akzeptanz d auch gegen fremde Admins, aal1, gesperrte Admins und die Zeitgrenze. Rechte, Definer, Flags, Orakel, Unsichtbarkeit von Meldenden und Admins, Warteschlange, Fristen, Export v4 und die Kontolöschung mit den neuen Tabellen hielten allen Proben stand; die neuen Seiten sind in en/cs/pl ohne axe-Befund und bei 360 px nutzbar. Auflagen: **F1 und F3 vor dem Go-live beheben** (Beschwerden von Meldenden bzw. Begründung an Betroffene). F2, F4, F5 mit derselben Runde nachziehen, F6 zumindest im ADR als Restrisiko festhalten oder per Server-Route schließen. H5 vor dem Inventar-Lauf gegen Stage umsetzen. M9 gilt damit als abgeschlossen, sobald die Nachprüfung F1 und F3 bestätigt.
