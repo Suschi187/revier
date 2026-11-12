@@ -3,6 +3,7 @@ import links from "../../../tests/fixtures/mail_links.json" with { type: "json" 
 import labels from "../../../tests/fixtures/mail_labels.json" with { type: "json" };
 import prices from "../../../tests/fixtures/price_format.json" with { type: "json" };
 import { LANGUAGES } from "../../_shared/mail/text.ts";
+import { ACCOUNT_DECISIONS, ACCOUNT_TEXTS } from "../account_texts.ts";
 import {
   ACCOUNT_LISTINGS,
   ACCOUNT_SEARCHES,
@@ -125,19 +126,21 @@ Deno.test("Moderations-Mail: Betreff je Sprache und Entscheidung, Grund-Label, B
         reason: approved ? null : "Bitte\r\nTelefonnummer entfernen",
         listing_id: ID,
         title: "Drückjagd im Spessart",
+        appeal_until: approved ? null : "2027-05-14T10:00:00Z",
       });
       const t = MODERATION_TEXTS[lang];
       assert(subject === t.subject[decision], `Betreff ${lang} ${decision}`);
       assert(text.includes("Drückjagd im Spessart"), `Titel ${lang} ${decision}`);
       assert(text.includes(`${t.dashboard}\n${SITE}/${lang}/account/listings`), `Dashboard ${lang} ${decision}`);
       if (approved) {
-        assert(!text.includes(t.reasonLabel) && !text.includes(t.contactPlaceholder), `Freigabe ohne Begründung ${lang}`);
+        assert(!text.includes(t.reasonLabel) && !text.includes(ACCOUNT_DECISIONS) && !text.includes(ACCOUNT_TEXTS[lang].remedies),
+          `Freigabe ohne Begründung und ohne Anfechten ${lang}`);
         assert(text.includes(`${t.view}\n${SITE}${links.listing.find((l) => l.lang === lang)!.path}`), `Anzeige-Link ${lang}`);
       } else {
         assert(text.includes(`${t.reasonLabel} ${REJECT_REASONS[lang].contact_in_text}`), `Grund-Label ${lang} ${decision}`);
         assert(text.includes(`${t.reasonText} Bitte  Telefonnummer entfernen`), `Begründung bereinigt ${lang} ${decision}`);
-        assert(text.includes(`${t.contactPlaceholder}\n${SITE}/${lang}/imprint`), `Kontaktweg ${lang} ${decision}`);
-        assert(/^\[[^\]]+\]/.test(t.contactPlaceholder), `Platzhalter markiert ${lang}`);
+        assert(text.includes(`\n${SITE}/${lang}/${ACCOUNT_DECISIONS}\n`) && text.includes("2027"), `Frist und Link ${lang} ${decision}`);
+        assert(text.includes(ACCOUNT_TEXTS[lang].remedies) && !text.includes("/imprint"), `Platzhalter statt Kontaktweg ${lang}`);
       }
       assert(!text.includes("unsubscribe"), `kein Abbestellen ${lang} ${decision}`);
     }

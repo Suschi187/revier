@@ -159,6 +159,10 @@ export async function ListingDetail({
         ) : null}
         <Contact listing={listing} locale={locale} />
       </section>
+      {/* Statischer Link (ADR 020): die gecachte Seite bleibt unpersonalisiert; Login und Prüfung des Ziels auf der Meldeseite. */}
+      <p className="mt-6 text-sm">
+        <a href={`/${locale}/account/report/listing/${listing.id}`} rel="nofollow" className="underline">{tp("report")}</a>
+      </p>
     </main>
   );
 }

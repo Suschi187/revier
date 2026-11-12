@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type Props = { params: Promise<{ id: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 
-const ERRORS = ["reason", "limit", "failed"] as const;
+const ERRORS = ["reason", "limit", "duplicate", "failed"] as const;
 
 export default async function ReportPage(props: Props) {
   const locale = (await getLocale()) as AppLocale;

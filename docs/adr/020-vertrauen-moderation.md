@@ -169,6 +169,12 @@ Migration `20261112120000_reports_appeals.sql`, pgTAP 54 (07, 17, 49, 52, 00 ang
 - **Beschwerden:** `appeals.decision_action` hält die Art fest, auch wenn das Audit nach der Frist fällt. `decided_by` (set null) und `same_reviewer`; die Ausweichregel prüft aktive Admins mit bestätigtem TOTP-Faktor. Aufbewahrung `appeal_keep_months` (24) im Job `trust-retention`.
 - **Export version 4:** `reports[].outcome`, `decisions`, `appeals`.
 
+### Umsetzung (M9b Commit 9a, Nutzerseite und Mails)
+- **Melden:** `/account/report/listing/:id` und `/account/report/profile/:id` statt `?type=&id=` (Plan 5): Der Proxy übernimmt beim Login-Umweg nur den Pfad, wie im Chat (Review A2). Die Links auf Detail- und Anbieterseite sind statisch (`rel=nofollow`). Eigene Anzeigen und das eigene Profil ergeben dieselbe Seite wie nicht sichtbare Ziele. Zusicherung „in gutem Glauben“ als markierter Platzhalter, nicht gespeichert. Eingangsbestätigung: Weiterleitung auf `/account/reports` mit Hinweis.
+- **Chat:** Eine zweite Meldung derselben Nachricht zeigt „bereits gemeldet“ (`23505`) statt „fehlgeschlagen“.
+- **Entscheidungen** `/account/decisions` mit Grund-Label, Begründung, Frist und Beschwerde-Link; `/account/decisions/:id/appeal` (10–2000 Zeichen). Alle vier Konto-Seiten prüfen nur die Session (`guards.test.ts`, Review A4).
+- **Mails:** Moderations-Mails nennen statt des Kontakt-Platzhalters aus M8 die Frist zum Anfechten (`claim_moderation_notifications.appeal_until`) mit Link und den markierten Hinweis zu Rechtsbehelfen. Neue Dienstmails für Sperre, Entsperrung, Verwarnung (mit Link auf die Richtlinien), Meldungsergebnis (nur Zieltyp, Ergebnis, bei Anzeigen der Titel) und Beschwerde (bestätigt mit Hinweis auf Rechtsbehelfe, aufgehoben ohne).
+
 ## Alternativen
 - **Schlanker Beschwerdeweg** (Formular als Meldung, Entscheidung von Hand): keine Wirkung auf die Maßnahme, keine gemeinsame Quelle mit `my_decisions` und Export (10.4/3).
 - **Eigene Tabelle je Mailart** wie in M8: mehr Schema ohne Nutzen (10.4/8).

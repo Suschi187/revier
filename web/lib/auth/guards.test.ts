@@ -24,6 +24,13 @@ const SESSION_ONLY: Record<string, string> = {
   "[locale]/account/delete/page.tsx": "Konto löschen muss ohne aktuelle Zustimmung und gesperrt gehen",
   "[locale]/account/delete/actions.ts": "Bestätigung der Löschung, gleicher Grund",
   "[locale]/account/data/page.tsx": "Datenexport (Art. 15/20 DSGVO) ohne aktuelle Zustimmung",
+  "[locale]/account/report/listing/[id]/page.tsx": "Melden (DSA Art. 16) auch ohne Zustimmung und gesperrt (ADR 020)",
+  "[locale]/account/report/profile/[id]/page.tsx": "Melden eines Anbieters, gleicher Grund",
+  "[locale]/account/report/actions.ts": "Meldung absenden, gleicher Grund",
+  "[locale]/account/reports/page.tsx": "Meine Meldungen mit Ergebnis (Art. 16 Abs. 5)",
+  "[locale]/account/decisions/page.tsx": "Entscheidungen und Begründungen (Art. 17), gerade für gesperrte Konten",
+  "[locale]/account/decisions/[id]/appeal/page.tsx": "Beschwerde (Art. 20), gerade für gesperrte Konten",
+  "[locale]/account/decisions/[id]/appeal/actions.ts": "Beschwerde absenden, gleicher Grund",
 };
 
 function files(dir: string): string[] {

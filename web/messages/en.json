@@ -338,7 +338,9 @@
     "savedSearches": "Saved searches",
     "dataExport": "Download my data",
     "deleteAccount": "Delete account",
-    "verificationLink": "Verification"
+    "verificationLink": "Verification",
+    "myReports": "My reports",
+    "decisions": "Decisions and challenges"
   },
   "Listings": {
     "kinds": {
@@ -842,6 +844,14 @@
       "approve": "Approve",
       "request_changes": "Request changes",
       "reject": "Reject"
+    },
+    "accountCodes": {
+      "scam": "Fraud or attempted fraud",
+      "illegal": "Illegal content",
+      "weapons": "Weapons or ammunition offered",
+      "harassment": "Harassment or insults",
+      "spam": "Spam or misleading advertising",
+      "other": "Other reason"
     }
   },
   "Public": {
@@ -925,7 +935,8 @@
       "verified": "verified",
       "contactLogin": "Contact provider (sign-in required)",
       "ownListing": "This is your listing.",
-      "contact": "Write a message"
+      "contact": "Write a message",
+      "report": "Report this listing"
     },
     "provider": {
       "breadcrumb": "Breadcrumb",
@@ -935,7 +946,8 @@
       "paging": "Pages",
       "first": "Go to first page",
       "next": "Next page",
-      "metaDescription": "Listings by {name} on Revier."
+      "metaDescription": "Listings by {name} on Revier.",
+      "report": "Report this provider"
     }
   },
   "Favorites": {
@@ -1091,7 +1103,8 @@
       "errors": {
         "reason": "Please choose a reason.",
         "limit": "You have sent many reports today. Please try again tomorrow.",
-        "failed": "The report could not be sent. Please try again."
+        "failed": "The report could not be sent. Please try again.",
+        "duplicate": "You have already reported this. Your report is being reviewed."
       }
     },
     "blocked": {
@@ -1472,6 +1485,104 @@
       "notFound": "The request no longer exists. Please reload the page.",
       "failed": "Something went wrong. Please try again.",
       "withdraw": "The request could not be withdrawn. Please reload the page."
+    }
+  },
+  "Report": {
+    "metaTitle": "Report",
+    "title": "Report",
+    "titleListing": "Report a listing",
+    "titleProfile": "Report a provider",
+    "intro": "Your report goes to the team. The person concerned does not learn who reported.",
+    "unavailable": "This content cannot be reported (any more).",
+    "myReports": "My reports",
+    "reason": "Reason",
+    "reasons": {
+      "scam": "Fraud or scam attempt",
+      "illegal": "Illegal content",
+      "weapons": "Weapons or ammunition",
+      "harassment": "Harassment or insults",
+      "wrong_category": "Wrong category or no hunting opportunity",
+      "other": "Other reason"
+    },
+    "note": "Details (optional)",
+    "noteHint": "At most 1000 characters. Please do not include personal data of others that is not needed.",
+    "goodFaith": "[Preliminary wording] I confirm that the information in this report is accurate and complete to the best of my knowledge.",
+    "submit": "Send report",
+    "errors": {
+      "reason": "Please choose a reason.",
+      "note": "The details are too long (at most 1000 characters).",
+      "goodFaith": "Please confirm the statement.",
+      "duplicate": "You have already reported this content. Your report is being reviewed.",
+      "limit": "You have sent many reports in the last 24 hours. Please try again later.",
+      "unavailable": "This content cannot be reported (any more).",
+      "failed": "Sending failed. Please try again."
+    },
+    "listMetaTitle": "My reports",
+    "listTitle": "My reports",
+    "sent": "Thank you. Your report has been received and will be reviewed.",
+    "empty": "You have not reported anything yet.",
+    "targets": {
+      "listing": "Listing",
+      "profile": "Profile",
+      "message": "Message"
+    },
+    "reportedOn": "Reported on {date}",
+    "statusOpen": "Under review",
+    "statusHandled": "Reviewed on {date}: {outcome}",
+    "outcomeUnknown": "Completed",
+    "outcomes": {
+      "no_action": "No action taken",
+      "content_removed": "Content removed",
+      "point_removed": "Map point removed",
+      "account_warned": "Account warned",
+      "account_blocked": "Account blocked",
+      "target_gone": "Content no longer available"
+    },
+    "decisionsLink": "Decisions and challenges"
+  },
+  "Decisions": {
+    "metaTitle": "Decisions and challenges",
+    "title": "Decisions and challenges",
+    "intro": "Here you can see moderation decisions that concern you or your reports, with the reason. You can challenge a decision within the deadline.",
+    "remedies": "[Preliminary note] Information on out-of-court dispute settlement and on legal remedies will follow.",
+    "appealed": "Your challenge has been received. The team will review it.",
+    "empty": "There are no decisions concerning you.",
+    "actions": {
+      "listing_rejected": "Listing rejected",
+      "listing_draft": "Changes requested",
+      "listing_removed": "Listing removed",
+      "listing_point_removed": "Map point removed",
+      "profile_blocked": "Account blocked",
+      "profile_warned": "Warning",
+      "verification_rejected": "Verification rejected",
+      "verification_revoked": "Verification revoked",
+      "report_handled": "Decision on your report"
+    },
+    "reason": "Reason",
+    "explanation": "Explanation",
+    "appealLink": "Challenge this decision",
+    "appealUntil": "possible until {date}",
+    "appealClosed": "The deadline for a challenge has passed.",
+    "appealStatus": {
+      "open": "Challenge submitted, under review",
+      "upheld": "Challenge reviewed: the decision stands",
+      "reversed": "Challenge reviewed: the decision has been reversed"
+    }
+  },
+  "Appeal": {
+    "metaTitle": "Challenge a decision",
+    "title": "Challenge a decision",
+    "back": "Back to decisions",
+    "intro": "Explain why you think the decision is wrong. Another member of the team reviews it. Possible until {date}.",
+    "unavailable": "This decision cannot be challenged (any more).",
+    "alreadyAppealed": "You have already challenged this decision.",
+    "text": "Your reasons",
+    "textHint": "10 to 2000 characters.",
+    "submit": "Submit challenge",
+    "errors": {
+      "text": "Please write between 10 and 2000 characters.",
+      "notFound": "This decision cannot be challenged (any more).",
+      "failed": "Sending failed. Please try again."
     }
   }
 }

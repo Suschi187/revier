@@ -1,5 +1,5 @@
 {
-  "_comment": "Labels in Mails (send-search-notifications/texts.ts) = Web-Messages (ADR 018, Review A13): on_request = Listings.preview.onRequest, price_units = Listings.priceUnits, reject_reasons = Moderation.reasons (Codes laut Check listings.reject_code). Ab M9b (ADR 020): document_types = Verification.documentTypes, verification_reasons = Verification.reasons, revoke_reasons = Verification.revokeReasons (account_texts.ts).",
+  "_comment": "Labels in Mails (send-search-notifications/texts.ts) = Web-Messages (ADR 018, Review A13): on_request = Listings.preview.onRequest, price_units = Listings.priceUnits, reject_reasons = Moderation.reasons (Codes laut Check listings.reject_code). Ab M9b (ADR 020): document_types = Verification.documentTypes, verification_reasons = Verification.reasons, revoke_reasons = Verification.revokeReasons (account_texts.ts). account_codes = Moderation.accountCodes, report_outcomes = Report.outcomes, decision_actions = Decisions.actions.",
   "on_request": {
     "en": "On request",
     "de": "Auf Anfrage",
@@ -158,6 +158,120 @@
       "mismatch": "Dane nie pasują do konta",
       "fraud": "Podejrzenie nadużycia",
       "other": "Inny powód"
+    }
+  },
+  "account_codes": {
+    "en": {
+      "scam": "Fraud or attempted fraud",
+      "illegal": "Illegal content",
+      "weapons": "Weapons or ammunition offered",
+      "harassment": "Harassment or insults",
+      "spam": "Spam or misleading advertising",
+      "other": "Other reason"
+    },
+    "de": {
+      "scam": "Betrug oder Betrugsversuch",
+      "illegal": "Rechtswidrige Inhalte",
+      "weapons": "Waffen oder Munition angeboten",
+      "harassment": "Belästigung oder Beleidigung",
+      "spam": "Spam oder irreführende Werbung",
+      "other": "Anderer Grund"
+    },
+    "cs": {
+      "scam": "Podvod nebo pokus o podvod",
+      "illegal": "Protiprávní obsah",
+      "weapons": "Nabídka zbraní nebo střeliva",
+      "harassment": "Obtěžování nebo urážky",
+      "spam": "Spam nebo klamavá reklama",
+      "other": "Jiný důvod"
+    },
+    "pl": {
+      "scam": "Oszustwo lub próba oszustwa",
+      "illegal": "Treści niezgodne z prawem",
+      "weapons": "Oferowanie broni lub amunicji",
+      "harassment": "Nękanie lub obrażanie",
+      "spam": "Spam lub wprowadzająca w błąd reklama",
+      "other": "Inny powód"
+    }
+  },
+  "report_outcomes": {
+    "en": {
+      "no_action": "No action taken",
+      "content_removed": "Content removed",
+      "point_removed": "Map point removed",
+      "account_warned": "Account warned",
+      "account_blocked": "Account blocked",
+      "target_gone": "Content no longer available"
+    },
+    "de": {
+      "no_action": "Keine Maßnahme",
+      "content_removed": "Inhalt entfernt",
+      "point_removed": "Kartenpunkt entfernt",
+      "account_warned": "Konto verwarnt",
+      "account_blocked": "Konto gesperrt",
+      "target_gone": "Inhalt nicht mehr vorhanden"
+    },
+    "cs": {
+      "no_action": "Bez opatření",
+      "content_removed": "Obsah odstraněn",
+      "point_removed": "Bod na mapě odstraněn",
+      "account_warned": "Účet napomenut",
+      "account_blocked": "Účet zablokován",
+      "target_gone": "Obsah již není k dispozici"
+    },
+    "pl": {
+      "no_action": "Brak działań",
+      "content_removed": "Treść usunięta",
+      "point_removed": "Punkt na mapie usunięty",
+      "account_warned": "Konto upomniane",
+      "account_blocked": "Konto zablokowane",
+      "target_gone": "Treść już niedostępna"
+    }
+  },
+  "decision_actions": {
+    "en": {
+      "listing_rejected": "Listing rejected",
+      "listing_draft": "Changes requested",
+      "listing_removed": "Listing removed",
+      "listing_point_removed": "Map point removed",
+      "profile_blocked": "Account blocked",
+      "profile_warned": "Warning",
+      "verification_rejected": "Verification rejected",
+      "verification_revoked": "Verification revoked",
+      "report_handled": "Decision on your report"
+    },
+    "de": {
+      "listing_rejected": "Anzeige abgelehnt",
+      "listing_draft": "Änderungen angefragt",
+      "listing_removed": "Anzeige entfernt",
+      "listing_point_removed": "Kartenpunkt entfernt",
+      "profile_blocked": "Konto gesperrt",
+      "profile_warned": "Verwarnung",
+      "verification_rejected": "Verifizierung abgelehnt",
+      "verification_revoked": "Verifizierung widerrufen",
+      "report_handled": "Entscheidung zu deiner Meldung"
+    },
+    "cs": {
+      "listing_rejected": "Inzerát zamítnut",
+      "listing_draft": "Požadovány úpravy",
+      "listing_removed": "Inzerát odstraněn",
+      "listing_point_removed": "Bod na mapě odstraněn",
+      "profile_blocked": "Účet zablokován",
+      "profile_warned": "Napomenutí",
+      "verification_rejected": "Ověření zamítnuto",
+      "verification_revoked": "Ověření odvoláno",
+      "report_handled": "Rozhodnutí o vašem nahlášení"
+    },
+    "pl": {
+      "listing_rejected": "Ogłoszenie odrzucone",
+      "listing_draft": "Prośba o poprawki",
+      "listing_removed": "Ogłoszenie usunięte",
+      "listing_point_removed": "Punkt na mapie usunięty",
+      "profile_blocked": "Konto zablokowane",
+      "profile_warned": "Upomnienie",
+      "verification_rejected": "Weryfikacja odrzucona",
+      "verification_revoked": "Weryfikacja cofnięta",
+      "report_handled": "Decyzja w sprawie Twojego zgłoszenia"
     }
   }
 }

@@ -3,7 +3,7 @@
 -- (nur Hash, Hex, Scope und Ziele, kein Orakel, idempotent, anon) sowie Retention.
 begin;
 \ir _helpers.psql
-select plan(67);
+select plan(68);
 
 set constraints all immediate;
 select s.decrypted_secret as secret from vault.decrypted_secrets s where s.name = 'search_notifications_secret' \gset
@@ -176,14 +176,16 @@ create function tests.mail(listing uuid, decision text) returns jsonb language s
 $$;
 select is((select count(*)::int from tests.mod_claims), 6, 'Sechs Mails: fünf an den Besitzer (eine über den Server-Pfad), eine an den gesperrten');
 select is((select array_agg(distinct k order by k) from tests.mod_claims c, jsonb_object_keys(c.e) k),
-  array['claim_id', 'decision', 'email', 'language', 'listing_id', 'reason', 'reject_code', 'title'],
-  'Antwort: genau diese Schlüssel');
+  array['appeal_until', 'claim_id', 'decision', 'email', 'language', 'listing_id', 'reason', 'reject_code', 'title'],
+  'Antwort: genau diese Schlüssel (appeal_until seit M9b)');
+select ok((select bool_and((c.e ->> 'appeal_until') is null = (c.e ->> 'decision' = 'approved')) from tests.mod_claims c),
+  'Frist zum Anfechten nur bei Ablehnung, Änderungswunsch und Entfernen (M9b)');
 select ok((select bool_and(c.e::text not like '%' || :'adm' || '%' and c.e::text not like '%m8u-adm%') from tests.mod_claims c),
   'Nie die Identität des Admins');
 select is(tests.mail(:'l_rej', 'rejected'),
   jsonb_build_object('claim_id', tests.mail(:'l_rej', 'rejected') -> 'claim_id', 'email', 'm8u-owner@test.local',
     'language', 'pl', 'decision', 'rejected', 'reject_code', 'other', 'reason', 'Kein Jagdangebot <b>',
-    'listing_id', :'l_rej'::uuid, 'title', 'M8U Ablehnung'),
+    'listing_id', :'l_rej'::uuid, 'title', 'M8U Ablehnung', 'appeal_until', tests.mail(:'l_rej', 'rejected') -> 'appeal_until'),
   'Inhalt: Empfänger, Sprache, Entscheidung, Code, Freitext roh (escaped erst in der Mail), Titel');
 select is(tests.mail(:'l_ok', 'approved') -> 'reason', 'null'::jsonb, 'Freigabe ohne Begründung');
 select is(tests.mail(:'l_b', 'rejected') ->> 'email', 'm8u-blocked@test.local', 'Gesperrter Besitzer bekommt die Mail');

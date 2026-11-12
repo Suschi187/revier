@@ -320,7 +320,9 @@ test.describe("QA M7: Web-Proben", () => {
       await page.goto(`/de/account/messages/${conversation}/report?message=${ownerMessage}`);
       await page.getByLabel("Belästigung").check().catch(async () => page.locator('input[name="reason"]').first().check());
       await page.getByRole("button", { name: "Meldung senden" }).click();
-      await expect(page).toHaveURL(/notice=reported/);
+      // Dieselbe Nachricht hat das Konto weiter oben schon gemeldet; seit M9b eine offene Meldung je Ziel (ADR 020).
+      // Beides zeigt, dass ein gesperrtes Konto bis zum Speichern kommt.
+      await expect(page).toHaveURL(/notice=reported|error=duplicate/);
     } finally {
       await admin().from("profiles").update({ is_blocked: false }).eq("user_id", interested.id);
       await admin().from("blocks").delete().eq("blocker_id", interested.id);

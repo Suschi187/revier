@@ -1,5 +1,5 @@
 {
-  "_comment": "Links in Mails (send-chat-notifications, send-search-notifications) = Routen im Web (ADR 018, Review A13). Deno prüft die Mailtexte, Vitest (web/lib/public/mail-links.test.ts) prüft publicPath/parsePath und STATIC_ROUTES. pending_static_paths: in Mails schon verlinkt, im Web noch nicht vorhanden (M9b: account/decisions bis Commit 9); kommen sie ins Web, wandern sie nach static_paths.",
+  "_comment": "Links in Mails (send-chat-notifications, send-search-notifications) = Routen im Web (ADR 018, Review A13). Deno prüft die Mailtexte, Vitest (web/lib/public/mail-links.test.ts) prüft publicPath/parsePath und STATIC_ROUTES. pending_static_paths: in Mails schon verlinkt, im Web noch nicht vorhanden (seit M9b Commit 9 wieder leer); kommen sie ins Web, wandern sie nach static_paths.",
   "site": "https://revier.example",
   "listing_id": "3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c",
   "listing": [
@@ -27,10 +27,11 @@
     "account/searches",
     "imprint",
     "unsubscribe",
-    "account/verification"
+    "account/verification",
+    "account/decisions",
+    "account/reports",
+    "guidelines"
   ],
-  "pending_static_paths": [
-    "account/decisions"
-  ],
+  "pending_static_paths": [],
   "unsubscribe_post_path": "/api/unsubscribe"
 }

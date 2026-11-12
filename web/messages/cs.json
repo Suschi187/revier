@@ -338,7 +338,9 @@
     "savedSearches": "Uložená hledání",
     "dataExport": "Stáhnout moje data",
     "deleteAccount": "Smazat účet",
-    "verificationLink": "Ověření"
+    "verificationLink": "Ověření",
+    "myReports": "Moje nahlášení",
+    "decisions": "Rozhodnutí a stížnosti"
   },
   "Listings": {
     "kinds": {
@@ -842,6 +844,14 @@
       "approve": "Schválit",
       "request_changes": "Vyžádat úpravy",
       "reject": "Zamítnout"
+    },
+    "accountCodes": {
+      "scam": "Podvod nebo pokus o podvod",
+      "illegal": "Protiprávní obsah",
+      "weapons": "Nabídka zbraní nebo střeliva",
+      "harassment": "Obtěžování nebo urážky",
+      "spam": "Spam nebo klamavá reklama",
+      "other": "Jiný důvod"
     }
   },
   "Public": {
@@ -925,7 +935,8 @@
       "verified": "ověřený",
       "contactLogin": "Kontaktovat inzerenta (nutné přihlášení)",
       "ownListing": "Toto je váš inzerát.",
-      "contact": "Napsat zprávu"
+      "contact": "Napsat zprávu",
+      "report": "Nahlásit inzerát"
     },
     "provider": {
       "breadcrumb": "Drobečková navigace",
@@ -935,7 +946,8 @@
       "paging": "Stránky",
       "first": "Na první stránku",
       "next": "Další stránka",
-      "metaDescription": "Inzeráty od {name} na Revier."
+      "metaDescription": "Inzeráty od {name} na Revier.",
+      "report": "Nahlásit inzerenta"
     }
   },
   "Favorites": {
@@ -1091,7 +1103,8 @@
       "errors": {
         "reason": "Vyberte prosím důvod.",
         "limit": "Dnes jste již odeslali mnoho hlášení. Zkuste to prosím zítra.",
-        "failed": "Hlášení se nepodařilo odeslat. Zkuste to prosím znovu."
+        "failed": "Hlášení se nepodařilo odeslat. Zkuste to prosím znovu.",
+        "duplicate": "Toto jste už nahlásili. Vaše nahlášení se prověřuje."
       }
     },
     "blocked": {
@@ -1472,6 +1485,104 @@
       "notFound": "Žádost už neexistuje. Načtěte prosím stránku znovu.",
       "failed": "Něco se pokazilo. Zkuste to prosím znovu.",
       "withdraw": "Žádost se nepodařilo stáhnout. Načtěte prosím stránku znovu."
+    }
+  },
+  "Report": {
+    "metaTitle": "Nahlásit",
+    "title": "Nahlásit",
+    "titleListing": "Nahlásit inzerát",
+    "titleProfile": "Nahlásit inzerenta",
+    "intro": "Vaše nahlášení dostane tým. Dotčená osoba se nedozví, kdo nahlásil.",
+    "unavailable": "Tento obsah nelze (již) nahlásit.",
+    "myReports": "Moje nahlášení",
+    "reason": "Důvod",
+    "reasons": {
+      "scam": "Podvod nebo pokus o podvod",
+      "illegal": "Protiprávní obsah",
+      "weapons": "Zbraně nebo střelivo",
+      "harassment": "Obtěžování nebo urážky",
+      "wrong_category": "Nesprávná kategorie nebo nejde o příležitost k lovu",
+      "other": "Jiný důvod"
+    },
+    "note": "Podrobnosti (nepovinné)",
+    "noteHint": "Nejvýše 1000 znaků. Neuvádějte prosím zbytečně osobní údaje jiných osob.",
+    "goodFaith": "[Předběžné znění] Potvrzuji, že údaje v tomto nahlášení jsou podle mého nejlepšího vědomí správné a úplné.",
+    "submit": "Odeslat nahlášení",
+    "errors": {
+      "reason": "Vyberte prosím důvod.",
+      "note": "Podrobnosti jsou příliš dlouhé (nejvýše 1000 znaků).",
+      "goodFaith": "Potvrďte prosím prohlášení.",
+      "duplicate": "Tento obsah jste už nahlásili. Vaše nahlášení se prověřuje.",
+      "limit": "Za posledních 24 hodin jste odeslali mnoho nahlášení. Zkuste to prosím později.",
+      "unavailable": "Tento obsah nelze (již) nahlásit.",
+      "failed": "Odeslání se nezdařilo. Zkuste to prosím znovu."
+    },
+    "listMetaTitle": "Moje nahlášení",
+    "listTitle": "Moje nahlášení",
+    "sent": "Děkujeme. Vaše nahlášení bylo přijato a bude prověřeno.",
+    "empty": "Zatím jste nic nenahlásili.",
+    "targets": {
+      "listing": "Inzerát",
+      "profile": "Profil",
+      "message": "Zpráva"
+    },
+    "reportedOn": "Nahlášeno dne {date}",
+    "statusOpen": "Prověřuje se",
+    "statusHandled": "Prověřeno dne {date}: {outcome}",
+    "outcomeUnknown": "Vyřízeno",
+    "outcomes": {
+      "no_action": "Bez opatření",
+      "content_removed": "Obsah odstraněn",
+      "point_removed": "Bod na mapě odstraněn",
+      "account_warned": "Účet napomenut",
+      "account_blocked": "Účet zablokován",
+      "target_gone": "Obsah již není k dispozici"
+    },
+    "decisionsLink": "Rozhodnutí a stížnosti"
+  },
+  "Decisions": {
+    "metaTitle": "Rozhodnutí a stížnosti",
+    "title": "Rozhodnutí a stížnosti",
+    "intro": "Zde vidíte rozhodnutí moderace, která se týkají vás nebo vašich nahlášení, včetně odůvodnění. Ve lhůtě se proti rozhodnutí můžete ohradit.",
+    "remedies": "[Předběžné upozornění] Informace o mimosoudním řešení sporů a o opravných prostředcích budou doplněny.",
+    "appealed": "Vaše stížnost byla přijata. Tým ji prověří.",
+    "empty": "Nejsou žádná rozhodnutí, která by se vás týkala.",
+    "actions": {
+      "listing_rejected": "Inzerát zamítnut",
+      "listing_draft": "Požadovány úpravy",
+      "listing_removed": "Inzerát odstraněn",
+      "listing_point_removed": "Bod na mapě odstraněn",
+      "profile_blocked": "Účet zablokován",
+      "profile_warned": "Napomenutí",
+      "verification_rejected": "Ověření zamítnuto",
+      "verification_revoked": "Ověření odvoláno",
+      "report_handled": "Rozhodnutí o vašem nahlášení"
+    },
+    "reason": "Důvod",
+    "explanation": "Odůvodnění",
+    "appealLink": "Ohradit se proti rozhodnutí",
+    "appealUntil": "možné do {date}",
+    "appealClosed": "Lhůta pro stížnost uplynula.",
+    "appealStatus": {
+      "open": "Stížnost podána, prověřuje se",
+      "upheld": "Stížnost prověřena: rozhodnutí zůstává v platnosti",
+      "reversed": "Stížnost prověřena: rozhodnutí bylo zrušeno"
+    }
+  },
+  "Appeal": {
+    "metaTitle": "Ohradit se proti rozhodnutí",
+    "title": "Ohradit se proti rozhodnutí",
+    "back": "Zpět na rozhodnutí",
+    "intro": "Vysvětlete, proč je podle vás rozhodnutí chybné. Prověří ho jiný člen týmu. Možné do {date}.",
+    "unavailable": "Proti tomuto rozhodnutí se (již) nelze ohradit.",
+    "alreadyAppealed": "Proti tomuto rozhodnutí jste se už ohradili.",
+    "text": "Vaše odůvodnění",
+    "textHint": "10 až 2000 znaků.",
+    "submit": "Podat stížnost",
+    "errors": {
+      "text": "Napište prosím 10 až 2000 znaků.",
+      "notFound": "Proti tomuto rozhodnutí se (již) nelze ohradit.",
+      "failed": "Odeslání se nezdařilo. Zkuste to prosím znovu."
     }
   }
 }

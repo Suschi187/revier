@@ -168,7 +168,7 @@ export async function myBlocks(): Promise<BlockedPerson[] | null> {
 export const CHAT_REPORT_REASONS = ["scam", "harassment", "illegal", "weapons", "other"] as const;
 export type ChatReportReason = (typeof CHAT_REPORT_REASONS)[number];
 
-export type ReportResult = "ok" | "limit" | "failed";
+export type ReportResult = "ok" | "limit" | "duplicate" | "failed";
 
 export async function reportFromChat(target: { type: "message" | "profile"; id: string }, reason: ChatReportReason, note: string): Promise<ReportResult> {
   if (!UUID.safeParse(target.id).success) return "failed";
@@ -176,7 +176,8 @@ export async function reportFromChat(target: { type: "message" | "profile"; id: 
   const trimmed = note.trim().slice(0, 1000);
   const { error } = await supabase.from("reports").insert({ target_type: target.type, target_id: target.id, reason, note: trimmed || null });
   if (!error) return "ok";
-  return error.code === "54000" ? "limit" : "failed";
+  // Seit M9b höchstens eine offene Meldung je Ziel (ADR 020): „bereits gemeldet“ statt Fehler.
+  return error.code === "54000" ? "limit" : error.code === "23505" ? "duplicate" : "failed";
 }
 
 /** Fremde Nachricht für die Meldeseite (RLS: nur Teilnehmer); null für eigene, fremde oder unbekannte. */

@@ -42,6 +42,10 @@ export async function ProviderPage({
           </nav>
         )}
       </section>
+      {/* Statischer Link (ADR 020), wie am Anzeigen-Detail. */}
+      <p className="mt-8 text-sm">
+        <a href={`/${locale}/account/report/profile/${provider.id}`} rel="nofollow" className="underline">{t("report")}</a>
+      </p>
     </main>
   );
 }

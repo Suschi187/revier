@@ -338,7 +338,9 @@
     "savedSearches": "Zapisane wyszukiwania",
     "dataExport": "Pobierz moje dane",
     "deleteAccount": "Usuń konto",
-    "verificationLink": "Weryfikacja"
+    "verificationLink": "Weryfikacja",
+    "myReports": "Moje zgłoszenia",
+    "decisions": "Decyzje i skargi"
   },
   "Listings": {
     "kinds": {
@@ -842,6 +844,14 @@
       "approve": "Zatwierdź",
       "request_changes": "Poproś o poprawki",
       "reject": "Odrzuć"
+    },
+    "accountCodes": {
+      "scam": "Oszustwo lub próba oszustwa",
+      "illegal": "Treści niezgodne z prawem",
+      "weapons": "Oferowanie broni lub amunicji",
+      "harassment": "Nękanie lub obrażanie",
+      "spam": "Spam lub wprowadzająca w błąd reklama",
+      "other": "Inny powód"
     }
   },
   "Public": {
@@ -925,7 +935,8 @@
       "verified": "zweryfikowany",
       "contactLogin": "Skontaktuj się z ogłaszającym (wymagane logowanie)",
       "ownListing": "To jest twoje ogłoszenie.",
-      "contact": "Napisz wiadomość"
+      "contact": "Napisz wiadomość",
+      "report": "Zgłoś ogłoszenie"
     },
     "provider": {
       "breadcrumb": "Ścieżka nawigacji",
@@ -935,7 +946,8 @@
       "paging": "Strony",
       "first": "Do pierwszej strony",
       "next": "Następna strona",
-      "metaDescription": "Ogłoszenia od {name} w Revier."
+      "metaDescription": "Ogłoszenia od {name} w Revier.",
+      "report": "Zgłoś ogłaszającego"
     }
   },
   "Favorites": {
@@ -1091,7 +1103,8 @@
       "errors": {
         "reason": "Wybierz powód.",
         "limit": "Wysłałeś(-aś) dziś już wiele zgłoszeń. Spróbuj ponownie jutro.",
-        "failed": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie."
+        "failed": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie.",
+        "duplicate": "To zostało już przez Ciebie zgłoszone. Twoje zgłoszenie jest sprawdzane."
       }
     },
     "blocked": {
@@ -1472,6 +1485,104 @@
       "notFound": "Ten wniosek już nie istnieje. Odśwież stronę.",
       "failed": "Coś poszło nie tak. Spróbuj ponownie.",
       "withdraw": "Nie udało się wycofać wniosku. Odśwież stronę."
+    }
+  },
+  "Report": {
+    "metaTitle": "Zgłoś",
+    "title": "Zgłoś",
+    "titleListing": "Zgłoś ogłoszenie",
+    "titleProfile": "Zgłoś ogłaszającego",
+    "intro": "Twoje zgłoszenie trafi do zespołu. Osoba, której dotyczy, nie dowie się, kto zgłosił.",
+    "unavailable": "Tej treści nie można (już) zgłosić.",
+    "myReports": "Moje zgłoszenia",
+    "reason": "Powód",
+    "reasons": {
+      "scam": "Oszustwo lub próba oszustwa",
+      "illegal": "Treści niezgodne z prawem",
+      "weapons": "Broń lub amunicja",
+      "harassment": "Nękanie lub obrażanie",
+      "wrong_category": "Niewłaściwa kategoria lub brak okazji łowieckiej",
+      "other": "Inny powód"
+    },
+    "note": "Szczegóły (opcjonalnie)",
+    "noteHint": "Maksymalnie 1000 znaków. Nie podawaj niepotrzebnie danych osobowych innych osób.",
+    "goodFaith": "[Wstępne brzmienie] Potwierdzam, że informacje w tym zgłoszeniu są zgodnie z moją najlepszą wiedzą prawdziwe i kompletne.",
+    "submit": "Wyślij zgłoszenie",
+    "errors": {
+      "reason": "Wybierz powód.",
+      "note": "Szczegóły są za długie (maksymalnie 1000 znaków).",
+      "goodFaith": "Potwierdź oświadczenie.",
+      "duplicate": "Ta treść została już przez Ciebie zgłoszona. Twoje zgłoszenie jest sprawdzane.",
+      "limit": "W ciągu ostatnich 24 godzin wysłano wiele zgłoszeń. Spróbuj ponownie później.",
+      "unavailable": "Tej treści nie można (już) zgłosić.",
+      "failed": "Wysyłanie nie powiodło się. Spróbuj ponownie."
+    },
+    "listMetaTitle": "Moje zgłoszenia",
+    "listTitle": "Moje zgłoszenia",
+    "sent": "Dziękujemy. Twoje zgłoszenie zostało przyjęte i zostanie sprawdzone.",
+    "empty": "Nie masz jeszcze żadnych zgłoszeń.",
+    "targets": {
+      "listing": "Ogłoszenie",
+      "profile": "Profil",
+      "message": "Wiadomość"
+    },
+    "reportedOn": "Zgłoszono dnia {date}",
+    "statusOpen": "W trakcie sprawdzania",
+    "statusHandled": "Sprawdzono dnia {date}: {outcome}",
+    "outcomeUnknown": "Zakończono",
+    "outcomes": {
+      "no_action": "Brak działań",
+      "content_removed": "Treść usunięta",
+      "point_removed": "Punkt na mapie usunięty",
+      "account_warned": "Konto upomniane",
+      "account_blocked": "Konto zablokowane",
+      "target_gone": "Treść już niedostępna"
+    },
+    "decisionsLink": "Decyzje i skargi"
+  },
+  "Decisions": {
+    "metaTitle": "Decyzje i skargi",
+    "title": "Decyzje i skargi",
+    "intro": "Tutaj widzisz decyzje moderacji dotyczące Ciebie lub Twoich zgłoszeń wraz z uzasadnieniem. W wyznaczonym terminie możesz zakwestionować decyzję.",
+    "remedies": "[Wstępna informacja] Informacje o pozasądowym rozstrzyganiu sporów i o środkach prawnych zostaną uzupełnione.",
+    "appealed": "Twoja skarga została przyjęta. Zespół ją rozpatrzy.",
+    "empty": "Nie ma decyzji, które by Cię dotyczyły.",
+    "actions": {
+      "listing_rejected": "Ogłoszenie odrzucone",
+      "listing_draft": "Prośba o poprawki",
+      "listing_removed": "Ogłoszenie usunięte",
+      "listing_point_removed": "Punkt na mapie usunięty",
+      "profile_blocked": "Konto zablokowane",
+      "profile_warned": "Upomnienie",
+      "verification_rejected": "Weryfikacja odrzucona",
+      "verification_revoked": "Weryfikacja cofnięta",
+      "report_handled": "Decyzja w sprawie Twojego zgłoszenia"
+    },
+    "reason": "Powód",
+    "explanation": "Uzasadnienie",
+    "appealLink": "Zakwestionuj decyzję",
+    "appealUntil": "możliwe do {date}",
+    "appealClosed": "Termin na złożenie skargi upłynął.",
+    "appealStatus": {
+      "open": "Skarga złożona, w trakcie rozpatrywania",
+      "upheld": "Skarga rozpatrzona: decyzja pozostaje w mocy",
+      "reversed": "Skarga rozpatrzona: decyzja została uchylona"
+    }
+  },
+  "Appeal": {
+    "metaTitle": "Zakwestionuj decyzję",
+    "title": "Zakwestionuj decyzję",
+    "back": "Powrót do decyzji",
+    "intro": "Wyjaśnij, dlaczego Twoim zdaniem decyzja jest błędna. Rozpatrzy ją inny członek zespołu. Możliwe do {date}.",
+    "unavailable": "Tej decyzji nie można (już) zakwestionować.",
+    "alreadyAppealed": "Ta decyzja została już przez Ciebie zakwestionowana.",
+    "text": "Twoje uzasadnienie",
+    "textHint": "Od 10 do 2000 znaków.",
+    "submit": "Złóż skargę",
+    "errors": {
+      "text": "Napisz od 10 do 2000 znaków.",
+      "notFound": "Tej decyzji nie można (już) zakwestionować.",
+      "failed": "Wysyłanie nie powiodło się. Spróbuj ponownie."
     }
   }
 }

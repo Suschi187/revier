@@ -2,16 +2,35 @@
 // docs/GLOSSARY.md, Rückfall de. Nur Klartext, Betreff fest je Sprache und Art, nie Admin-Identität, interne Notizen,
 // Kontaktdaten Dritter oder Dokumentinhalte. Begründungen nur bereinigt im Text.
 //
-// In M9b Commit 7 die Verifizierung; Sperre, Verwarnung, Meldungsergebnis, Beschwerde und Entwürfe folgen mit ihren
-// Commits. Dokumenttypen und Grund-Labels sind Kopien aus web/messages (Verification.*); die Fixture
-// supabase/tests/fixtures/mail_labels.json prüft beide Seiten.
+// Verifizierung (Commit 7), Sperre, Verwarnung, Meldungsergebnis und Beschwerde (Commit 9); verlassene Entwürfe folgen
+// mit den Aufräumjobs. Dokumenttypen und Labels sind Kopien aus web/messages (Verification.*, Moderation.accountCodes,
+// Report.outcomes, Decisions.actions); die Fixture supabase/tests/fixtures/mail_labels.json prüft beide
+// Seiten.
 import { clean, type Language } from "../_shared/mail/text.ts";
 
 export const ACCOUNT_VERIFICATION = "account/verification";
 export const ACCOUNT_DECISIONS = "account/decisions";
 
-export type AccountKind = "verification_verified" | "verification_rejected" | "verification_revoked";
-export const ACCOUNT_KINDS: readonly AccountKind[] = ["verification_verified", "verification_rejected", "verification_revoked"];
+export const ACCOUNT_REPORTS = "account/reports";
+export const GUIDELINES = "guidelines";
+
+export type VerificationKind = "verification_verified" | "verification_rejected" | "verification_revoked";
+export type TrustKind = "account_blocked" | "account_unblocked" | "account_warned" | "report_resolved" | "appeal_decided";
+export type AccountKind = VerificationKind | TrustKind;
+export const ACCOUNT_KINDS: readonly AccountKind[] = [
+  "verification_verified",
+  "verification_rejected",
+  "verification_revoked",
+  "account_blocked",
+  "account_unblocked",
+  "account_warned",
+  "report_resolved",
+  "appeal_decided",
+];
+
+function isVerificationKind(kind: AccountKind): kind is VerificationKind {
+  return kind.startsWith("verification_");
+}
 
 export function isAccountKind(value: unknown): value is AccountKind {
   return typeof value === "string" && (ACCOUNT_KINDS as readonly string[]).includes(value);
@@ -75,9 +94,9 @@ export const REVOKE_REASONS: Record<Language, Record<RevokeReason, string>> = {
 };
 
 type AccountTexts = {
-  subject: Record<AccountKind, string>;
+  subject: Record<VerificationKind, string>;
   greeting: string;
-  body: Record<AccountKind, (type: string) => string>;
+  body: Record<VerificationKind, (type: string) => string>;
   verifiedRetention: string;
   reasonLabel: string;
   reasonText: string;
@@ -188,6 +207,11 @@ export type AccountDetails = {
   reason?: string | null;
   decided_at?: string | null;
   appeal_until?: string | null;
+  target_type?: string | null;
+  outcome?: string | null;
+  listing_title?: string | null;
+  status?: string | null;
+  decision_action?: string | null;
 };
 
 function formatDate(iso: string | null | undefined, lang: Language): string | null {
@@ -209,6 +233,7 @@ export function composeAccountMail(
   details: AccountDetails | null,
 ): { subject: string; text: string } | null {
   if (!details) return null;
+  if (!isVerificationKind(kind)) return composeTrustMail(lang, site, kind, details);
   const t = ACCOUNT_TEXTS[lang];
   const type = label(DOCUMENT_TYPES[lang], details.document_type) ?? t.unknownType;
   const verification = `${site}/${lang}/${ACCOUNT_VERIFICATION}`;
@@ -227,5 +252,318 @@ export function composeAccountMail(
     lines.push(t.remedies, "");
   }
   lines.push(t.footer);
+  return { subject: t.subject[kind], text: lines.join("\n") };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Sperre, Verwarnung, Meldungsergebnis, Beschwerde (Commit 9)
+// ---------------------------------------------------------------------------------------------------------------
+
+export type AccountCode = "scam" | "illegal" | "weapons" | "harassment" | "spam" | "other";
+export type ReportOutcome = "no_action" | "content_removed" | "point_removed" | "account_warned" | "account_blocked" | "target_gone";
+export type ReportTarget = "listing" | "profile" | "message";
+export type DecisionAction =
+  | "listing_rejected"
+  | "listing_draft"
+  | "listing_removed"
+  | "listing_point_removed"
+  | "profile_blocked"
+  | "profile_warned"
+  | "verification_rejected"
+  | "verification_revoked"
+  | "report_handled";
+
+/** Moderation.accountCodes aus web/messages (private.account_action_codes). */
+export const ACCOUNT_CODES: Record<Language, Record<AccountCode, string>> = {
+  en: {
+    scam: "Fraud or attempted fraud",
+    illegal: "Illegal content",
+    weapons: "Weapons or ammunition offered",
+    harassment: "Harassment or insults",
+    spam: "Spam or misleading advertising",
+    other: "Other reason",
+  },
+  de: {
+    scam: "Betrug oder Betrugsversuch",
+    illegal: "Rechtswidrige Inhalte",
+    weapons: "Waffen oder Munition angeboten",
+    harassment: "Belästigung oder Beleidigung",
+    spam: "Spam oder irreführende Werbung",
+    other: "Anderer Grund",
+  },
+  cs: {
+    scam: "Podvod nebo pokus o podvod",
+    illegal: "Protiprávní obsah",
+    weapons: "Nabídka zbraní nebo střeliva",
+    harassment: "Obtěžování nebo urážky",
+    spam: "Spam nebo klamavá reklama",
+    other: "Jiný důvod",
+  },
+  pl: {
+    scam: "Oszustwo lub próba oszustwa",
+    illegal: "Treści niezgodne z prawem",
+    weapons: "Oferowanie broni lub amunicji",
+    harassment: "Nękanie lub obrażanie",
+    spam: "Spam lub wprowadzająca w błąd reklama",
+    other: "Inny powód",
+  },
+};
+
+/** Report.outcomes aus web/messages (Check reports.outcome). */
+export const REPORT_OUTCOMES: Record<Language, Record<ReportOutcome, string>> = {
+  en: {
+    no_action: "No action taken",
+    content_removed: "Content removed",
+    point_removed: "Map point removed",
+    account_warned: "Account warned",
+    account_blocked: "Account blocked",
+    target_gone: "Content no longer available",
+  },
+  de: {
+    no_action: "Keine Maßnahme",
+    content_removed: "Inhalt entfernt",
+    point_removed: "Kartenpunkt entfernt",
+    account_warned: "Konto verwarnt",
+    account_blocked: "Konto gesperrt",
+    target_gone: "Inhalt nicht mehr vorhanden",
+  },
+  cs: {
+    no_action: "Bez opatření",
+    content_removed: "Obsah odstraněn",
+    point_removed: "Bod na mapě odstraněn",
+    account_warned: "Účet napomenut",
+    account_blocked: "Účet zablokován",
+    target_gone: "Obsah již není k dispozici",
+  },
+  pl: {
+    no_action: "Brak działań",
+    content_removed: "Treść usunięta",
+    point_removed: "Punkt na mapie usunięty",
+    account_warned: "Konto upomniane",
+    account_blocked: "Konto zablokowane",
+    target_gone: "Treść już niedostępna",
+  },
+};
+
+/** Nur in Mails, im Fall des Satzes „deine Meldung zu …“ (keine Web-Kopie). */
+export const REPORT_TARGETS: Record<Language, Record<ReportTarget, string>> = {
+  en: { listing: "a listing", profile: "a profile", message: "a message" },
+  de: { listing: "einer Anzeige", profile: "einem Profil", message: "einer Nachricht" },
+  cs: { listing: "inzerátu", profile: "profilu", message: "zprávy" },
+  pl: { listing: "ogłoszenia", profile: "profilu", message: "wiadomości" },
+};
+
+/** Decisions.actions aus web/messages (Audit-Arten mit „_“ statt „.“). */
+export const DECISION_ACTIONS: Record<Language, Record<DecisionAction, string>> = {
+  en: {
+    listing_rejected: "Listing rejected",
+    listing_draft: "Changes requested",
+    listing_removed: "Listing removed",
+    listing_point_removed: "Map point removed",
+    profile_blocked: "Account blocked",
+    profile_warned: "Warning",
+    verification_rejected: "Verification rejected",
+    verification_revoked: "Verification revoked",
+    report_handled: "Decision on your report",
+  },
+  de: {
+    listing_rejected: "Anzeige abgelehnt",
+    listing_draft: "Änderungen angefragt",
+    listing_removed: "Anzeige entfernt",
+    listing_point_removed: "Kartenpunkt entfernt",
+    profile_blocked: "Konto gesperrt",
+    profile_warned: "Verwarnung",
+    verification_rejected: "Verifizierung abgelehnt",
+    verification_revoked: "Verifizierung widerrufen",
+    report_handled: "Entscheidung zu deiner Meldung",
+  },
+  cs: {
+    listing_rejected: "Inzerát zamítnut",
+    listing_draft: "Požadovány úpravy",
+    listing_removed: "Inzerát odstraněn",
+    listing_point_removed: "Bod na mapě odstraněn",
+    profile_blocked: "Účet zablokován",
+    profile_warned: "Napomenutí",
+    verification_rejected: "Ověření zamítnuto",
+    verification_revoked: "Ověření odvoláno",
+    report_handled: "Rozhodnutí o vašem nahlášení",
+  },
+  pl: {
+    listing_rejected: "Ogłoszenie odrzucone",
+    listing_draft: "Prośba o poprawki",
+    listing_removed: "Ogłoszenie usunięte",
+    listing_point_removed: "Punkt na mapie usunięty",
+    profile_blocked: "Konto zablokowane",
+    profile_warned: "Upomnienie",
+    verification_rejected: "Weryfikacja odrzucona",
+    verification_revoked: "Weryfikacja cofnięta",
+    report_handled: "Decyzja w sprawie Twojego zgłoszenia",
+  },
+};
+
+type TrustTexts = {
+  subject: Record<TrustKind, string>;
+  blocked: string;
+  unblocked: string;
+  warned: string;
+  guidelines: string;
+  report: (target: string) => string;
+  reportTitle: (title: string) => string;
+  result: string;
+  reports: string;
+  appeal: { upheld: (action: string) => string; reversed: (action: string) => string };
+  decisions: string;
+};
+
+export const TRUST_TEXTS: Record<Language, TrustTexts> = {
+  en: {
+    subject: {
+      account_blocked: "Your account on Revier has been blocked",
+      account_unblocked: "Your account on Revier has been unblocked",
+      account_warned: "A warning for your account on Revier",
+      report_resolved: "Your report on Revier has been reviewed",
+      appeal_decided: "Decision on your challenge on Revier",
+    },
+    blocked:
+      "your account has been blocked. You can no longer publish listings or write messages. You can still sign in, download your data, delete your account and challenge this decision.",
+    unblocked: "your account has been unblocked. You can use Revier as usual again.",
+    warned: "the team has issued a warning for your account. Please follow the content guidelines.",
+    guidelines: "Content guidelines:",
+    report: (target) => `your report about ${target} has been reviewed.`,
+    reportTitle: (title) => `Listing: “${title}”`,
+    result: "Result:",
+    reports: "Your reports:",
+    appeal: {
+      upheld: (action) => `your challenge against the decision “${action}” has been reviewed. The decision stands.`,
+      reversed: (action) => `your challenge against the decision “${action}” has been reviewed. The decision has been reversed.`,
+    },
+    decisions: "Your decisions:",
+  },
+  de: {
+    subject: {
+      account_blocked: "Dein Konto auf Revier wurde gesperrt",
+      account_unblocked: "Dein Konto auf Revier ist wieder entsperrt",
+      account_warned: "Eine Verwarnung für dein Konto auf Revier",
+      report_resolved: "Deine Meldung auf Revier wurde geprüft",
+      appeal_decided: "Entscheidung über deine Beschwerde auf Revier",
+    },
+    blocked:
+      "dein Konto wurde gesperrt. Du kannst keine Anzeigen mehr veröffentlichen und keine Nachrichten schreiben. Anmelden, deine Daten herunterladen, dein Konto löschen und diese Entscheidung anfechten kannst du weiterhin.",
+    unblocked: "dein Konto wurde entsperrt. Du kannst Revier wieder wie gewohnt nutzen.",
+    warned: "das Team hat dein Konto verwarnt. Bitte beachte die Richtlinien für Inhalte.",
+    guidelines: "Richtlinien:",
+    report: (target) => `deine Meldung zu ${target} wurde geprüft.`,
+    reportTitle: (title) => `Anzeige: „${title}“`,
+    result: "Ergebnis:",
+    reports: "Meine Meldungen:",
+    appeal: {
+      upheld: (action) => `deine Beschwerde gegen die Entscheidung „${action}“ wurde geprüft. Die Entscheidung bleibt bestehen.`,
+      reversed: (action) => `deine Beschwerde gegen die Entscheidung „${action}“ wurde geprüft. Die Entscheidung wurde aufgehoben.`,
+    },
+    decisions: "Meine Entscheidungen:",
+  },
+  cs: {
+    subject: {
+      account_blocked: "Váš účet na Revier byl zablokován",
+      account_unblocked: "Váš účet na Revier byl odblokován",
+      account_warned: "Napomenutí pro váš účet na Revier",
+      report_resolved: "Vaše nahlášení na Revier bylo prověřeno",
+      appeal_decided: "Rozhodnutí o vaší stížnosti na Revier",
+    },
+    blocked:
+      "váš účet byl zablokován. Nemůžete již zveřejňovat inzeráty ani psát zprávy. Přihlásit se, stáhnout svá data, smazat účet a ohradit se proti tomuto rozhodnutí můžete i nadále.",
+    unblocked: "váš účet byl odblokován. Revier můžete opět používat jako obvykle.",
+    warned: "tým vám udělil napomenutí. Dodržujte prosím pravidla obsahu.",
+    guidelines: "Pravidla obsahu:",
+    report: (target) => `vaše nahlášení týkající se ${target} bylo prověřeno.`,
+    reportTitle: (title) => `Inzerát: „${title}“`,
+    result: "Výsledek:",
+    reports: "Moje nahlášení:",
+    appeal: {
+      upheld: (action) => `vaše stížnost proti rozhodnutí „${action}“ byla prověřena. Rozhodnutí zůstává v platnosti.`,
+      reversed: (action) => `vaše stížnost proti rozhodnutí „${action}“ byla prověřena. Rozhodnutí bylo zrušeno.`,
+    },
+    decisions: "Moje rozhodnutí:",
+  },
+  pl: {
+    subject: {
+      account_blocked: "Twoje konto w Revier zostało zablokowane",
+      account_unblocked: "Twoje konto w Revier zostało odblokowane",
+      account_warned: "Upomnienie dla Twojego konta w Revier",
+      report_resolved: "Twoje zgłoszenie w Revier zostało sprawdzone",
+      appeal_decided: "Decyzja w sprawie Twojej skargi w Revier",
+    },
+    blocked:
+      "Twoje konto zostało zablokowane. Nie możesz już publikować ogłoszeń ani pisać wiadomości. Nadal możesz się zalogować, pobrać swoje dane, usunąć konto i zakwestionować tę decyzję.",
+    unblocked: "Twoje konto zostało odblokowane. Możesz znów korzystać z Revier jak zwykle.",
+    warned: "zespół udzielił upomnienia dla Twojego konta. Przestrzegaj zasad dotyczących treści.",
+    guidelines: "Zasady treści:",
+    report: (target) => `Twoje zgłoszenie dotyczące ${target} zostało sprawdzone.`,
+    reportTitle: (title) => `Ogłoszenie: „${title}”`,
+    result: "Wynik:",
+    reports: "Moje zgłoszenia:",
+    appeal: {
+      upheld: (action) => `Twoja skarga na decyzję „${action}” została rozpatrzona. Decyzja pozostaje w mocy.`,
+      reversed: (action) => `Twoja skarga na decyzję „${action}” została rozpatrzona. Decyzja została uchylona.`,
+    },
+    decisions: "Moje decyzje:",
+  },
+};
+
+function composeTrustMail(lang: Language, site: string, kind: TrustKind, details: AccountDetails): { subject: string; text: string } | null {
+  const a = ACCOUNT_TEXTS[lang];
+  const t = TRUST_TEXTS[lang];
+  const lines = [a.greeting, ""];
+  const decisions = `${site}/${lang}/${ACCOUNT_DECISIONS}`;
+  const note = details.reason ? clean(details.reason, 1000) : "";
+  const reasonLines = () => {
+    const code = label(ACCOUNT_CODES[lang], details.code);
+    if (code) lines.push(`${a.reasonLabel} ${code}`);
+    if (note) lines.push(`${a.reasonText} ${note}`);
+    if (lines[lines.length - 1] !== "") lines.push("");
+  };
+  const appealLines = () => {
+    const until = formatDate(details.appeal_until, lang);
+    if (until) lines.push(a.appeal(until), decisions, "");
+    lines.push(a.remedies, "");
+  };
+  switch (kind) {
+    case "account_blocked":
+      lines.push(t.blocked, "");
+      reasonLines();
+      appealLines();
+      break;
+    case "account_unblocked":
+      lines.push(t.unblocked, "");
+      if (note) lines.push(`${a.reasonText} ${note}`, "");
+      break;
+    case "account_warned":
+      lines.push(t.warned, "");
+      reasonLines();
+      lines.push(t.guidelines, `${site}/${lang}/${GUIDELINES}`, "");
+      appealLines();
+      break;
+    case "report_resolved": {
+      const target = label(REPORT_TARGETS[lang], details.target_type);
+      const outcome = label(REPORT_OUTCOMES[lang], details.outcome);
+      if (!target || !outcome) return null;
+      lines.push(t.report(target), "");
+      const title = details.listing_title ? clean(details.listing_title) : "";
+      if (title) lines.push(t.reportTitle(title));
+      lines.push(`${t.result} ${outcome}`, "", t.reports, `${site}/${lang}/${ACCOUNT_REPORTS}`, "");
+      appealLines();
+      break;
+    }
+    case "appeal_decided": {
+      const action = label(DECISION_ACTIONS[lang], details.decision_action?.replace(".", "_"));
+      if (!action || (details.status !== "upheld" && details.status !== "reversed")) return null;
+      lines.push(t.appeal[details.status](action), "");
+      if (note) lines.push(`${a.reasonText} ${note}`, "");
+      lines.push(t.decisions, decisions, "");
+      if (details.status === "upheld") lines.push(a.remedies, "");
+      break;
+    }
+  }
+  lines.push(a.footer);
   return { subject: t.subject[kind], text: lines.join("\n") };
 }

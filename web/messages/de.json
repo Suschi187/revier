@@ -338,7 +338,9 @@
     "savedSearches": "Suchaufträge",
     "dataExport": "Meine Daten herunterladen",
     "deleteAccount": "Konto löschen",
-    "verificationLink": "Verifizierung"
+    "verificationLink": "Verifizierung",
+    "myReports": "Meine Meldungen",
+    "decisions": "Entscheidungen und Beschwerden"
   },
   "Listings": {
     "kinds": {
@@ -842,6 +844,14 @@
       "approve": "Freigeben",
       "request_changes": "Bearbeitung anfordern",
       "reject": "Ablehnen"
+    },
+    "accountCodes": {
+      "scam": "Betrug oder Betrugsversuch",
+      "illegal": "Rechtswidrige Inhalte",
+      "weapons": "Waffen oder Munition angeboten",
+      "harassment": "Belästigung oder Beleidigung",
+      "spam": "Spam oder irreführende Werbung",
+      "other": "Anderer Grund"
     }
   },
   "Public": {
@@ -925,7 +935,8 @@
       "verified": "verifiziert",
       "contactLogin": "Anbieter kontaktieren (Anmeldung nötig)",
       "ownListing": "Das ist deine Anzeige.",
-      "contact": "Nachricht schreiben"
+      "contact": "Nachricht schreiben",
+      "report": "Anzeige melden"
     },
     "provider": {
       "breadcrumb": "Brotkrumen",
@@ -935,7 +946,8 @@
       "paging": "Seiten",
       "first": "Zur ersten Seite",
       "next": "Nächste Seite",
-      "metaDescription": "Anzeigen von {name} auf Revier."
+      "metaDescription": "Anzeigen von {name} auf Revier.",
+      "report": "Anbieter melden"
     }
   },
   "Favorites": {
@@ -1091,7 +1103,8 @@
       "errors": {
         "reason": "Bitte wähle einen Grund.",
         "limit": "Du hast heute schon viele Meldungen gesendet. Bitte versuche es morgen erneut.",
-        "failed": "Die Meldung konnte nicht gesendet werden. Bitte versuche es erneut."
+        "failed": "Die Meldung konnte nicht gesendet werden. Bitte versuche es erneut.",
+        "duplicate": "Du hast das schon gemeldet. Deine Meldung wird geprüft."
       }
     },
     "blocked": {
@@ -1472,6 +1485,104 @@
       "notFound": "Den Antrag gibt es nicht mehr. Bitte lade die Seite neu.",
       "failed": "Etwas ist schiefgelaufen. Bitte versuche es noch einmal.",
       "withdraw": "Der Antrag konnte nicht zurückgezogen werden. Bitte lade die Seite neu."
+    }
+  },
+  "Report": {
+    "metaTitle": "Melden",
+    "title": "Melden",
+    "titleListing": "Anzeige melden",
+    "titleProfile": "Anbieter melden",
+    "intro": "Deine Meldung geht an das Team. Die betroffene Person erfährt nicht, wer gemeldet hat.",
+    "unavailable": "Dieser Inhalt lässt sich (nicht mehr) melden.",
+    "myReports": "Meine Meldungen",
+    "reason": "Grund",
+    "reasons": {
+      "scam": "Betrug oder Betrugsversuch",
+      "illegal": "Rechtswidrige Inhalte",
+      "weapons": "Waffen oder Munition",
+      "harassment": "Belästigung oder Beleidigung",
+      "wrong_category": "Falsche Kategorie oder keine Jagdgelegenheit",
+      "other": "Anderer Grund"
+    },
+    "note": "Angaben (freiwillig)",
+    "noteHint": "Höchstens 1000 Zeichen. Bitte keine personenbezogenen Daten anderer, die nicht nötig sind.",
+    "goodFaith": "[Vorläufiger Wortlaut] Ich bestätige, dass die Angaben in dieser Meldung nach bestem Wissen richtig und vollständig sind.",
+    "submit": "Meldung senden",
+    "errors": {
+      "reason": "Bitte wähle einen Grund.",
+      "note": "Die Angaben sind zu lang (höchstens 1000 Zeichen).",
+      "goodFaith": "Bitte bestätige die Erklärung.",
+      "duplicate": "Du hast diesen Inhalt schon gemeldet. Deine Meldung wird geprüft.",
+      "limit": "Du hast in den letzten 24 Stunden viele Meldungen gesendet. Bitte versuche es später noch einmal.",
+      "unavailable": "Dieser Inhalt lässt sich (nicht mehr) melden.",
+      "failed": "Senden fehlgeschlagen. Bitte versuche es noch einmal."
+    },
+    "listMetaTitle": "Meine Meldungen",
+    "listTitle": "Meine Meldungen",
+    "sent": "Danke. Deine Meldung ist eingegangen und wird geprüft.",
+    "empty": "Du hast noch nichts gemeldet.",
+    "targets": {
+      "listing": "Anzeige",
+      "profile": "Profil",
+      "message": "Nachricht"
+    },
+    "reportedOn": "Gemeldet am {date}",
+    "statusOpen": "In Prüfung",
+    "statusHandled": "Geprüft am {date}: {outcome}",
+    "outcomeUnknown": "Erledigt",
+    "outcomes": {
+      "no_action": "Keine Maßnahme",
+      "content_removed": "Inhalt entfernt",
+      "point_removed": "Kartenpunkt entfernt",
+      "account_warned": "Konto verwarnt",
+      "account_blocked": "Konto gesperrt",
+      "target_gone": "Inhalt nicht mehr vorhanden"
+    },
+    "decisionsLink": "Entscheidungen und Beschwerden"
+  },
+  "Decisions": {
+    "metaTitle": "Entscheidungen und Beschwerden",
+    "title": "Entscheidungen und Beschwerden",
+    "intro": "Hier siehst du Entscheidungen der Moderation, die dich oder deine Meldungen betreffen, mit Begründung. Innerhalb der Frist kannst du eine Entscheidung anfechten.",
+    "remedies": "[Vorläufiger Hinweis] Angaben zur außergerichtlichen Streitbeilegung und zu Rechtsbehelfen folgen.",
+    "appealed": "Deine Beschwerde ist eingegangen. Das Team prüft sie.",
+    "empty": "Es gibt keine Entscheidungen, die dich betreffen.",
+    "actions": {
+      "listing_rejected": "Anzeige abgelehnt",
+      "listing_draft": "Änderungen angefragt",
+      "listing_removed": "Anzeige entfernt",
+      "listing_point_removed": "Kartenpunkt entfernt",
+      "profile_blocked": "Konto gesperrt",
+      "profile_warned": "Verwarnung",
+      "verification_rejected": "Verifizierung abgelehnt",
+      "verification_revoked": "Verifizierung widerrufen",
+      "report_handled": "Entscheidung zu deiner Meldung"
+    },
+    "reason": "Grund",
+    "explanation": "Begründung",
+    "appealLink": "Entscheidung anfechten",
+    "appealUntil": "möglich bis {date}",
+    "appealClosed": "Die Frist für eine Beschwerde ist abgelaufen.",
+    "appealStatus": {
+      "open": "Beschwerde eingelegt, in Prüfung",
+      "upheld": "Beschwerde geprüft: Die Entscheidung bleibt bestehen",
+      "reversed": "Beschwerde geprüft: Die Entscheidung wurde aufgehoben"
+    }
+  },
+  "Appeal": {
+    "metaTitle": "Entscheidung anfechten",
+    "title": "Entscheidung anfechten",
+    "back": "Zurück zu den Entscheidungen",
+    "intro": "Erkläre, warum die Entscheidung aus deiner Sicht falsch ist. Ein anderes Mitglied des Teams prüft sie. Möglich bis zum {date}.",
+    "unavailable": "Diese Entscheidung lässt sich (nicht mehr) anfechten.",
+    "alreadyAppealed": "Du hast diese Entscheidung schon angefochten.",
+    "text": "Deine Begründung",
+    "textHint": "10 bis 2000 Zeichen.",
+    "submit": "Beschwerde einlegen",
+    "errors": {
+      "text": "Bitte schreibe zwischen 10 und 2000 Zeichen.",
+      "notFound": "Diese Entscheidung lässt sich (nicht mehr) anfechten.",
+      "failed": "Senden fehlgeschlagen. Bitte versuche es noch einmal."
     }
   }
 }

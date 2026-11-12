@@ -47,7 +47,7 @@ export const STATIC_SECTIONS = [
  * mehr, im Produktions-Build käme sonst 200 mit der 404-Seite. Ein Vitest gleicht mit den page.tsx/route.ts ab.
  */
 export const STATIC_ROUTES: Record<(typeof STATIC_SECTIONS)[number], readonly string[]> = {
-  account: ["", "blocked", "data", "delete", "favorites", "listings", "listings/new", "listings/:id/edit", "messages", "messages/:id", "messages/:id/report", "messages/new/:id", "profile", "searches", "verification"],
+  account: ["", "blocked", "data", "delete", "favorites", "listings", "listings/new", "listings/:id/edit", "messages", "messages/:id", "messages/:id/report", "messages/new/:id", "profile", "report/listing/:id", "report/profile/:id", "reports", "decisions", "decisions/:id/appeal", "searches", "verification"],
   admin: ["", "admins", "audit", "listings", "listings/:id", "mfa", "verifications", "verifications/:id"],
   auth: ["apple", "callback", "confirm"],
   cookies: [""],

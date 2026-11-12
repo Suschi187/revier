@@ -8,6 +8,7 @@
 // (mail_links.json, mail_labels.json, price_format.json) prüfen beide Seiten.
 import { unsubscribePageUrl } from "../_shared/mail/site.ts";
 import { clean, type Language } from "../_shared/mail/text.ts";
+import { ACCOUNT_DECISIONS, ACCOUNT_TEXTS } from "./account_texts.ts";
 
 export { language, type Language } from "../_shared/mail/text.ts";
 
@@ -295,9 +296,6 @@ type ModerationTexts = {
   reasonText: string;
   view: string;
   dashboard: string;
-  // PLATZHALTER (A8): kein Widerspruchsweg im Produkt, bis SPEC 7.2 und M9 (Beschwerdeweg nach DSA Art. 20) geklärt
-  // sind. Nur Verweis auf den bestehenden Kontaktweg (Impressum) und das Dashboard, nichts versprechen.
-  contactPlaceholder: string;
   footer: string;
 };
 
@@ -321,8 +319,6 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
     reasonText: "Note from moderation:",
     view: "View listing:",
     dashboard: "Your listings:",
-    contactPlaceholder:
-      "[Preliminary note] If you have questions about this decision, please use the contact details in the legal notice:",
     footer: "This message was sent automatically. Replies to this email are not delivered.",
   },
   de: {
@@ -344,7 +340,6 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
     reasonText: "Hinweis der Moderation:",
     view: "Zur Anzeige:",
     dashboard: "Meine Anzeigen:",
-    contactPlaceholder: "[Vorläufiger Hinweis] Bei Fragen zu dieser Entscheidung nutze bitte die Kontaktangaben im Impressum:",
     footer: "Diese Nachricht wurde automatisch versendet. Antworten auf diese E-Mail kommen nicht an.",
   },
   cs: {
@@ -366,7 +361,6 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
     reasonText: "Poznámka moderace:",
     view: "Zobrazit inzerát:",
     dashboard: "Moje inzeráty:",
-    contactPlaceholder: "[Předběžné upozornění] S dotazy k tomuto rozhodnutí použijte kontaktní údaje v právních informacích:",
     footer: "Tato zpráva byla odeslána automaticky. Odpovědi na tento e-mail nebudou doručeny.",
   },
   pl: {
@@ -388,7 +382,6 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
     reasonText: "Uwaga moderacji:",
     view: "Zobacz ogłoszenie:",
     dashboard: "Moje ogłoszenia:",
-    contactPlaceholder: "[Wstępna informacja] W razie pytań dotyczących tej decyzji skorzystaj z danych kontaktowych w nocie prawnej:",
     footer: "Ta wiadomość została wysłana automatycznie. Odpowiedzi na tego e-maila nie są dostarczane.",
   },
 };
@@ -399,9 +392,10 @@ export type ModerationClaim = {
   reason: string | null;
   listing_id: string;
   title: string | null;
+  appeal_until?: string | null;
 };
 
-/** Moderations-Mail: Freigabe ohne Begründungsteil; sonst Grund-Label, Begründung bereinigt und Kontaktweg. */
+/** Moderations-Mail: Freigabe ohne Begründungsteil; sonst Grund-Label, Begründung bereinigt, Frist zum Anfechten. */
 export function composeModerationMail(lang: Language, site: string, claim: ModerationClaim): { subject: string; text: string } {
   const t = MODERATION_TEXTS[lang];
   const title = (claim.title ? clean(claim.title) : "") || t.untitled;
@@ -419,7 +413,13 @@ export function composeModerationMail(lang: Language, site: string, claim: Moder
     if (lines[lines.length - 1] !== "") lines.push("");
   }
   lines.push(t.dashboard, `${site}/${lang}/${ACCOUNT_LISTINGS}`, "");
-  if (claim.decision !== "approved") lines.push(t.contactPlaceholder, `${site}/${lang}/${IMPRINT}`, "");
+  // Begründung und Rechtsbehelf (DSA Art. 17, 20; ADR 020): Frist zum Anfechten mit Link, Hinweis auf
+  // Streitbeilegung als markierter Platzhalter. Ersetzt den Kontakt-Platzhalter aus M8.
+  if (claim.decision !== "approved") {
+    const until = formatDate(claim.appeal_until ?? "", lang);
+    if (until) lines.push(ACCOUNT_TEXTS[lang].appeal(until), `${site}/${lang}/${ACCOUNT_DECISIONS}`, "");
+    lines.push(ACCOUNT_TEXTS[lang].remedies, "");
+  }
   lines.push(t.footer);
   return { subject: t.subject[claim.decision], text: lines.join("\n") };
 }
