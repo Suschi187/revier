@@ -1768,5 +1768,27 @@
       "notFound": "Tej decyzji nie można (już) zakwestionować.",
       "failed": "Wysyłanie nie powiodło się. Spróbuj ponownie."
     }
+  },
+  "Styleguide": {
+    "metaTitle": "Przewodnik stylu",
+    "title": "Przewodnik stylu.",
+    "intro": "Wszystkie elementy interfejsu w ich stanach. Widoczne tylko lokalnie i na stagingu.",
+    "colors": "Kolory",
+    "typography": "Typografia",
+    "buttons": "Przyciski",
+    "fields": "Pola formularza",
+    "badges": "Status i etykiety",
+    "notices": "Komunikaty",
+    "cards": "Karta ogłoszenia",
+    "icons": "Ikony",
+    "logo": "Logo",
+    "states": "Stany puste i błędów",
+    "fieldLabel": "Tytuł ogłoszenia",
+    "fieldHint": "Od 3 do 100 znaków.",
+    "fieldError": "Wpisz tytuł.",
+    "disabled": "Nieaktywny",
+    "sampleTitle": "Odstrzał w obwodzie polnym, sarna i dzik",
+    "headingSample": "Znajdź swój obwód.",
+    "bodySample": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
   }
 }

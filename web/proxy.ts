@@ -81,7 +81,12 @@ async function pageStatusResponse(request: NextRequest): Promise<NextResponse | 
 function isMissing(pathname: string): boolean {
   const parsed = parsePath(pathname);
   if (parsed.type === "unknown") return true;
-  if (parsed.type === "static") return (STATUS_SECTIONS as readonly string[]).includes(pathname.split("/")[2]);
+  if (parsed.type === "static") {
+    const section = pathname.split("/")[2];
+    // Styleguide nur lokal und in Staging (SPEC M10a Schritt 3): in Prod wie ein unbekannter Pfad.
+    if (section === "styleguide" && siteIndexable()) return true;
+    return (STATUS_SECTIONS as readonly string[]).includes(section);
+  }
   if (parsed.type !== "public") return false;
   const page = parsed.page;
   if (page.route === "state") return !regionFromSlugs(page.state);

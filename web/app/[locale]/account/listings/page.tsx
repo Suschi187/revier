@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { ModerationNote } from "@/components/listings/ModerationNote";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireOnboardedUser } from "@/lib/services/gate";
-import { listOwnListings, type ListingStatus, type OwnListingSummary } from "@/lib/services/listings";
+import { listOwnListings, type OwnListingSummary } from "@/lib/services/listings";
 import { changeListing } from "./actions";
 
 // Inhalt ohne Suspense-Grenze statt Hülle plus Stream: Gestreamte Inhalte setzt erst ein Inline-Skript ein,
@@ -20,15 +21,6 @@ export async function generateMetadata(): Promise<Metadata> {
 const NOTICES = ["withdrawn", "paused", "resumed", "resumedReview", "deleted", "submitted"] as const;
 const ERRORS = ["failed", "legal"] as const;
 
-const STATUS_STYLE: Record<ListingStatus, string> = {
-  draft: "bg-sand text-muted",
-  pending_review: "bg-notice-soft text-notice",
-  active: "bg-success-soft text-success",
-  paused: "bg-sky-100 text-sky-900",
-  expired: "bg-sand text-muted",
-  rejected: "bg-error-soft text-error",
-  removed: "bg-error-soft text-error",
-};
 
 export default async function MyListingsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const t = await getTranslations("Listings.mine");
@@ -90,10 +82,7 @@ async function ListingRow({ listing, locale }: { listing: OwnListingSummary; loc
         <h2 id={headingId} className="font-display text-lg font-bold break-words">
           {listing.title}
         </h2>
-        <span className={`rounded px-2 py-0.5 text-sm font-medium ${STATUS_STYLE[listing.status]}`}>
-          <span className="sr-only">{t("mine.statusLabel")}: </span>
-          {t(`status.${listing.status}`)}
-        </span>
+        <StatusBadge status={listing.status} label={t(`status.${listing.status}`)} srPrefix={t("mine.statusLabel")} />
       </div>
       <p className="mt-1 text-sm text-muted">
         {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)} · {t("mine.createdAt", { date: date(listing.createdAt) })}

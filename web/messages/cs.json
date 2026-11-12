@@ -1768,5 +1768,27 @@
       "notFound": "Proti tomuto rozhodnutí se (již) nelze ohradit.",
       "failed": "Odeslání se nezdařilo. Zkuste to prosím znovu."
     }
+  },
+  "Styleguide": {
+    "metaTitle": "Styleguide",
+    "title": "Styleguide.",
+    "intro": "Všechny prvky rozhraní v jejich stavech. Viditelné jen lokálně a na stagingu.",
+    "colors": "Barvy",
+    "typography": "Písmo",
+    "buttons": "Tlačítka",
+    "fields": "Vstupní pole",
+    "badges": "Stav a štítky",
+    "notices": "Upozornění",
+    "cards": "Karta inzerátu",
+    "icons": "Ikony",
+    "logo": "Logo",
+    "states": "Prázdné a chybové stavy",
+    "fieldLabel": "Název inzerátu",
+    "fieldHint": "3 až 100 znaků.",
+    "fieldError": "Zadejte prosím název.",
+    "disabled": "Neaktivní",
+    "sampleTitle": "Povolenka k lovu v polní honitbě, srnčí a černá zvěř",
+    "headingSample": "Najděte svůj revír.",
+    "bodySample": "Pronájem honitby, povolenka k lovu nebo místo na naháňce. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
   }
 }

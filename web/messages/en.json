@@ -1768,5 +1768,27 @@
       "notFound": "This decision cannot be challenged (any more).",
       "failed": "Sending failed. Please try again."
     }
+  },
+  "Styleguide": {
+    "metaTitle": "Style guide",
+    "title": "Style guide.",
+    "intro": "All interface building blocks in their states. Only visible locally and on staging.",
+    "colors": "Colours",
+    "typography": "Typography",
+    "buttons": "Buttons",
+    "fields": "Input fields",
+    "badges": "Status and chips",
+    "notices": "Notices",
+    "cards": "Listing card",
+    "icons": "Icons",
+    "logo": "Logo",
+    "states": "Empty and error states",
+    "fieldLabel": "Listing title",
+    "fieldHint": "3 to 100 characters.",
+    "fieldError": "Please enter a title.",
+    "disabled": "Disabled",
+    "sampleTitle": "Hunting permit in farmland, roe deer and boar",
+    "headingSample": "Find your hunting ground.",
+    "bodySample": "A lease, a hunting permit or a stand on a driven hunt. Directly from hunter to hunter. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
   }
 }

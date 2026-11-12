@@ -1768,5 +1768,27 @@
       "notFound": "Diese Entscheidung lässt sich (nicht mehr) anfechten.",
       "failed": "Senden fehlgeschlagen. Bitte versuche es noch einmal."
     }
+  },
+  "Styleguide": {
+    "metaTitle": "Styleguide",
+    "title": "Styleguide.",
+    "intro": "Alle Bausteine der Oberfläche in ihren Zuständen. Nur lokal und in Staging sichtbar.",
+    "colors": "Farben",
+    "typography": "Schrift",
+    "buttons": "Buttons",
+    "fields": "Eingabefelder",
+    "badges": "Status und Chips",
+    "notices": "Hinweise",
+    "cards": "Anzeigenkarte",
+    "icons": "Icons",
+    "logo": "Logo",
+    "states": "Leer- und Fehlerzustände",
+    "fieldLabel": "Titel der Anzeige",
+    "fieldHint": "3 bis 100 Zeichen.",
+    "fieldError": "Bitte gib einen Titel ein.",
+    "disabled": "Deaktiviert",
+    "sampleTitle": "Begehungsschein im Feldrevier, Reh und Sau",
+    "headingSample": "Finde dein Revier.",
+    "bodySample": "Pacht, Begehungsschein oder Platz auf der Drückjagd. Direkt von Jäger zu Jäger. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
   }
 }
