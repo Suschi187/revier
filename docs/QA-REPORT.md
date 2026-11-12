@@ -2248,3 +2248,76 @@ Die Policy prüft das Audit nur beim Signieren; die Storage-API lässt jede Lauf
 ### Empfehlung
 
 **Abnahme von M9b: ja, mit Auflagen.** Die vier Akzeptanzkriterien sind belegt, Akzeptanz d auch gegen fremde Admins, aal1, gesperrte Admins und die Zeitgrenze. Rechte, Definer, Flags, Orakel, Unsichtbarkeit von Meldenden und Admins, Warteschlange, Fristen, Export v4 und die Kontolöschung mit den neuen Tabellen hielten allen Proben stand; die neuen Seiten sind in en/cs/pl ohne axe-Befund und bei 360 px nutzbar. Auflagen: **F1 und F3 vor dem Go-live beheben** (Beschwerden von Meldenden bzw. Begründung an Betroffene). F2, F4, F5 mit derselben Runde nachziehen, F6 zumindest im ADR als Restrisiko festhalten oder per Server-Route schließen. H5 vor dem Inventar-Lauf gegen Stage umsetzen. M9 gilt damit als abgeschlossen, sobald die Nachprüfung F1 und F3 bestätigt.
+
+## M9b – Nachprüfung 2026-11-12
+
+Geprüfter Stand: `abc60c5` (main), Korrekturen F1–F6 (Migration `20261112160000_qa_m9b_fixes.sql`, Edge Function `verification-document`, Web-Route `/api/admin/verifications/:id/document`), CHANGELOG „Nachtrag M9b: QA-Funde F1–F6“, ADR 020 „Nachträge QA M9b“. Umgebung: Stack neu gestartet (die neue Function lief), DB frisch zurückgesetzt, beide Vault-URLs gesetzt; am Ende erneut `supabase db reset` mit beiden URLs.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| `npm run lint`, `npm run typecheck` | grün (mit den neuen Proben) |
+| Vitest | 36 Dateien, **672/672** |
+| `supabase test db` (frische DB) | 58 Dateien, **1828** Tests, PASS. Vorher 1798. Neu `57_qa_m9b_nachpruefung` 30 Tests, davon **1 TODO (N1)**. 56 ohne TODO |
+| `INTEGRATION_REQUIRED=1 npm run test:integration` | 29 Dateien, **283 bestanden, 1 erwartet fehlgeschlagen** (H2 aus M7). `qa-m9b.test.ts` 5/5 (F6 jetzt normaler Test), neu `qa-m9b-nachpruefung.test.ts` **6/6** |
+| E2E | `verification.spec.ts`, `admin-moderation.spec.ts`, `reports.spec.ts`, `qa-m9b.spec.ts`, `cookie-inventory.spec.ts`, `admin.spec.ts` und neu `qa-m9b-nachpruefung.spec.ts` (3, davon 1 `test.fail`: N2): **22/22** |
+| Deno (Docker wie CI) | `verification-document` 4/4, `send-search-notifications` 33/33 (mit der neuen Probe `tests/qa_m9b_point_removed_test.ts`); `deno task check`, `deno lint` grün |
+
+Aufgeräumt: keine Konten auf `@test.local`, Vault mit beiden URLs.
+
+### Ergebnis je Fund
+
+| Fund | Ergebnis | Nachweis |
+|---|---|---|
+| F1 (mittel) Wiedereröffnen nach zwei Zyklen | **behoben** | `reports.resolution_id` je Bearbeitung (`20261112160000_qa_m9b_fixes.sql`, `reports_guard`, `resolve_reports`), `decide_appeal` öffnet nur Meldungen dieser Bearbeitung. Probe pgTAP 57: Zyklus 1 bleibt erledigt, beide Meldungen der angefochtenen Bearbeitung (auch die einer anderen Meldenden) werden wieder offen, `resolution_id` und `decision_audit_id` danach `null`, je Zyklus eine neue ID, Spalte per API nicht lesbar. Server-Pfad per SQL (ohne RPC) setzt weder `resolution_id` noch ein Audit; damit gibt es dort keine anfechtbare Entscheidung (kein toter Zweig in `decide_appeal`). pgTAP 56 Tests 58–59 grün |
+| F2 (niedrig) Ausweichregel | **behoben** | `other_admin_available(p_exclude)` schließt den Beschwerdeführer aus, alte Signatur entfernt, nicht für Nutzer ausführbar. pgTAP 56 Test 66 grün; Probe: Mit drei Admins bleibt der ursprüngliche Admin abgewiesen (`same_reviewer`), der dritte entscheidet ohne Markierung |
+| F3 (mittel) Kartenpunkt ohne Begründung und Mail | **behoben für den Meldungsweg**, Rest **N1** | `resolve_reports` verlangt Anzeigen-Grund und Begründung (23514 mit `fields code`/`note`), der Trigger schreibt beides ins Audit und legt `moderation_notifications` mit `point_removed` an. Proben: Besitzer sieht Grund und Begründung in `my_decisions`; Claim mit Frist ≥ 183 Tage; Flags nach der RPC leer. Mailtexte in 4 Sprachen (neue Deno-Probe): eigener Betreff ohne Nutzertext, Grund-Label, bereinigte Begründung, Link `/{lang}/account/decisions`, markierter Rechtsbehelf, kein Link auf die Anzeige. Die vorhandenen Deno-Tests deckten `point_removed` nicht ab |
+| F4 (niedrig) Ergebnis-Mail nach Wiedereröffnung | **behoben** | `report_resolved.ref_id = decision_audit_id`, Details aus dem Audit. Probe: neue Bearbeitung → je Meldendem eine Mail mit dem neuen Ergebnis, Schlüssel weiter nur Ziel und Ergebnis, ohne Begründung, Admin und Betroffene |
+| F5 (niedrig) Codes je Maßnahme | **behoben** | Getrennte Felder `codeListing`/`codeAccount`, die Action nimmt je Maßnahme nur das passende (`admin/reports/actions.ts`), `resolveSchema` und `resolve_reports` prüfen (23514 mit `fields code`, beim Entfernen vor der Versionsprüfung). Probe ohne JavaScript: Kartenpunkt nur mit Konto-Grund → Fehler `code`; mit beiden Feldern gefüllt zählt nur der Anzeigen-Grund (Audit `code: other`) |
+| F6 (niedrig) lange Signatur | **behoben**; A6/B3 **weiter erfüllt**, mit N2 und N3 | Policy `verification_docs_select_admin` und `verification_document_viewed` entfernt, Admins signieren und laden auch direkt nach dem Audit nichts über die Storage-API (Integration). Function (Integration gegen den echten Stack): ohne JWT 401 bzw. ohne Token 400, anon-Key, Nutzer, Admin mit aal1 und eigener Antrag 403 ohne Audit; GET 405, fehlende/ungültige ID 400; unbekannt und „Datei weg“ gleiche 404 (gleicher Body); Bild `inline`, PDF `attachment`, HTML als `image/png` 415 ohne Inhalt; Header `private, no-store`, `nosniff`, `no-referrer`, `default-src 'none'; sandbox`; **jeder Abruf ein Audit**, auch der mit 415; Logs der Edge Runtime nur Ergebnis und Dauer, ohne Antrags-ID, Pfad oder Nutzer-ID. Route: ohne Session und mit ungültiger ID 404, Nutzer ohne Rolle 403/404 ohne Audit, kein `Set-Cookie`, die Seite selbst schreibt kein Audit (erst der Abruf), PDF-Link ohne neues Fenster |
+
+**Bewertung des Ersatzes (A6/B3):** B3 ist strenger erfüllt als vorher: Es gibt keinen Lesepfad für Admins außerhalb der Function, und jeder einzelne Abruf (nicht nur das Öffnen) ist auditiert; langlebige Links sind ausgeschlossen. Die Function nutzt `service_role` nur serverseitig in der Edge Function (CLAUDE.md). A6 „Magic Bytes vor dem Anzeigen“ ist erfüllt (415, nichts wird ausgeliefert). „Markiert“ ist schwächer geworden (N3), und die Header der Web-Route entsprechen nicht dem ADR (N2).
+
+### Neue Funde
+
+**N1 – niedrig: Admins können den Kartenpunkt weiter am Meldungsweg vorbei entfernen; dann entsteht eine Mail ohne Begründung.**
+`listings_update_admin` erlaubt Admins das Update fremder Anzeigen, und `authenticated` hat das Spaltenrecht auf `display_location` (für `set_listing_location`). Ein `PATCH /rest/v1/listings?id=eq.<id>` mit `display_location: null` durch einen Admin mit aal2 löst den Trigger aus: Audit `listing.point_removed` ohne Code und Begründung und eine Moderations-Mail `point_removed` ohne Begründung. Die Oberfläche nutzt diesen Weg nicht.
+- Reproduktion: pgTAP 57, TODO Test 26 (Update gelingt), Test 27 (Mail ohne Begründung).
+- Vorschlag: im Trigger bzw. Guard das Entfernen durch Admins nur mit gesetztem Flag aus `resolve_reports` zulassen (sonst 42501), oder ohne Flag kein Audit und keine Mail, sondern Abbruch.
+
+**N2 – niedrig: Die allgemeine Header-Regel überschreibt `Referrer-Policy` und CSP der Dokument-Route.**
+`next.config.ts:54` nimmt `/api/admin/verifications/:id/document` nicht aus. Die Antwort trägt `Referrer-Policy: strict-origin-when-cross-origin` und die CSP der App (`script-src 'self' 'unsafe-inline' 'unsafe-eval'`, kein `sandbox`) statt `no-referrer` und `default-src 'none'; sandbox`, die Route und Function setzen und ADR 020 zusagt. Gleiches Muster wie QA M8 F2 und M9a F4. Die Folge ist gering: Ausgeliefert werden nur geprüfte Bilder (inline) und PDFs (Download), `nosniff` bleibt.
+- Reproduktion: `npx playwright test e2e/qa-m9b-nachpruefung.spec.ts -g N2` (`test.fail`, gemessene Header im Log).
+- Vorschlag: die Route wie `/api/account/photos/:id` aus der allgemeinen Regel nehmen und die übrigen Sicherheits-Header ohne CSP und Referrer-Policy setzen; die E2E-Probe prüft dann genau eine CSP und `no-referrer`.
+
+**N3 – niedrig (A6): Abweichende Dateien sind nur noch indirekt markiert; die Darstellung folgt dem gemeldeten Typ.**
+Die Seite wählt `<img>` oder PDF-Link nach dem gemeldeten `Content-Type` (`admin_verification.document_mime`) und zeigt nach „Dokument anzeigen“ immer denselben Hinweis („Erscheint kein Bild, passt der Inhalt … nicht“). Ob die Route 415 liefert, erfährt die Seite nicht. Folgen: Bei falschen Bytes sieht der Admin ein kaputtes Bild bzw. einen fehlschlagenden Download; ein echtes PDF, das als `image/png` gemeldet wurde, erscheint als kaputtes Bild, und der Hinweis rät zur Ablehnung, obwohl das Dokument gültig ist. Ohne Sicherheitsfolge, aber die Zusage „markiert“ aus A6 trägt nur noch der allgemeine Hinweis.
+- Vorschlag: Die Seite fragt den Typ einmal serverseitig ab (z. B. eine `HEAD`-artige Prüfung in der Function ohne Auslieferung, ebenfalls auditiert, oder die Function liefert den erkannten Typ in einem Header) und zeigt bei 415 eine eindeutige Markierung; `<img>`/Download nach dem erkannten statt dem gemeldeten Typ.
+
+**N4 – niedrig (Doku): ADR 020 und der M9b-Abschnitt im CHANGELOG beschreiben die alte Dokumentansicht weiter als gültig.**
+ADR 020 „Dokumentansicht nur mit Audit (Review B3)“ (2-Minuten-Policy, 60-s-Signatur, `<img>` von der Storage-Origin, H12) und CHANGELOG „M9b … Geändert/Akzeptanz“ (Storage-Policy, pgTAP 08/53 als Nachweis) stehen ohne Verweis auf den Nachtrag. `verification_doc_link_seconds` ist in `app_settings` geblieben, wird aber nicht mehr gelesen.
+- Vorschlag: den Abschnitt im ADR als ersetzt markieren (Verweis auf „Nachträge QA M9b“), H12 anpassen, Einstellung entfernen oder als ungenutzt kennzeichnen.
+
+### Hinweise (keine Fehler)
+
+- **H1:** Die Web-Route antwortet auf GET mit Session-Cookie. Ein fremder Link (Navigation auf oberster Ebene, `SameSite=Lax`) kann bei einem angemeldeten Admin einen Abruf und damit einen Audit-Eintrag auslösen, ohne dass er die Seite geöffnet hat. Inhalt erreicht Dritte nicht; ein Prüfen von `Sec-Fetch-Site` (same-origin) wie bei der Export-Route würde das ausschließen.
+- **H2:** Admins können die Function auch direkt mit ihrem Access Token aufrufen. Jeder Abruf ist auditiert; das ist gewollt und im ADR so beschrieben.
+- **H3:** Mit nur dem `apikey` (publishable) lässt das lokale Gateway den Aufruf ohne `Authorization` bis zur Function durch, die mit 400 ablehnt. In der Cloud mit `verify_jwt` prüfen (M10).
+- **H4:** Meldungen, die vor der Migration erledigt wurden, haben keine `resolution_id`; eine Beschwerde dagegen würde nichts wieder öffnen, meldet aber „aufgehoben“. Vor dem Go-live gibt es solche Daten nicht; sonst wäre ein Nachtrag nötig.
+- **H5:** Das Next-Dev-Log nennt die Route mit Antrags-ID (`GET /api/admin/verifications/<id>/document`). Für Stage und Produktion die Zugriffslogs des Hosters prüfen (M10).
+
+### Nicht prüfbar
+
+- Wie in der Abnahme: iOS (I6), Cloud (Gateway, `verify_jwt`, Logs des Hosters), muttersprachliche Prüfung cs/pl.
+
+### Neue Tests
+
+- `supabase/tests/57_qa_m9b_nachpruefung.test.sql` (30, davon 1 TODO: N1): `resolution_id` (Rechte, je Bearbeitung, mehrere Meldende, Server-Pfad), Ergebnis-Mails je Bearbeitung, drei Admins, Codes und Begründung je Maßnahme mit `hint`, Audit und Mail beim Kartenpunkt, Frist, Flags, Weg am RPC vorbei (N1), Bucket ohne Admin-Policy, RPC-Rechte.
+- `web/integration/qa-m9b-nachpruefung.test.ts` (6): Function `verification-document` mit Rechten, Eingaben, gleichen 404, Headern, 415, Audit je Abruf, eigenem Konto, Storage-API für Admins, Logs.
+- `web/e2e/qa-m9b-nachpruefung.spec.ts` (3, davon 1 `test.fail`: N2): Web-Route (Rechte, Header, kein Cookie, Audit je Abruf, PDF als Download, Seite ohne JavaScript), Header-Überschreibung (N2), F5 ohne JavaScript beim Kartenpunkt.
+- `supabase/functions/send-search-notifications/tests/qa_m9b_point_removed_test.ts` (1): Mail `point_removed` in 4 Sprachen.
+
+### Empfehlung
+
+F1–F6 sind **behoben**; F3 auf dem Meldungsweg, der einzige Weg der Oberfläche. Der Ersatz der Dokumentansicht durch `verification-document` erfüllt B3 strenger als vorher und A6 im Kern (nichts Abweichendes wird ausgeliefert). **Abnahme von M9b: ja.** Damit ist M9 abgeschlossen. N1–N4 sind niedrig und können gesammelt mit der nächsten Runde nachgezogen werden, N2 zusammen mit dem bekannten Header-Muster; H1 (Prüfung von `Sec-Fetch-Site`) vor M10 erwägen.
