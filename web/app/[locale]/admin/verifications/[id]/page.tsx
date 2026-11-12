@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
-import { getVerification } from "@/lib/services/admin-verifications";
+import { documentView, getVerification } from "@/lib/services/admin-verifications";
 import { REVOKE_CODES, VERIFICATION_NOTE_MAX, VERIFICATION_REJECT_CODES } from "@/lib/verification";
 import { decideVerificationAction, revokeVerificationAction } from "./actions";
 
@@ -43,6 +43,8 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
   // Erst nach „Dokument anzeigen“ lädt der Browser das Dokument über die Server-Route (je Abruf ein Audit, QA M9b F6).
   const show = query.document === "1" && v.documentPresent && !v.isOwn;
   const src = `/api/admin/verifications/${v.id}/document`;
+  // Ein Abruf über die Function (Audit), Darstellung nach dem erkannten Typ (QA M9b N3).
+  const view = show ? await documentView(v.id) : null;
   const type = tv(`documentTypes.${v.documentType}`);
   const canRevoke = v.status === "verified" && !v.revokedAt && !v.isOwn;
   const radio = "flex items-center gap-2";
@@ -117,17 +119,21 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
         ) : (
           <>
             <p className="text-sm text-stone-700">{t("documentHint")}</p>
-            {show &&
-              (v.documentMime === "application/pdf" ? (
+            {view?.ok === true &&
+              (view.mime === "application/pdf" ? (
                 <a href={src} rel="noopener noreferrer" className="underline">
                   {t("pdfLink")}
                 </a>
               ) : (
-                // Server-Route ohne Cache; next/image würde das Dokument über den Bildoptimierer laden und cachen.
+                // Eingebettet aus dem einen Abruf; next/image würde das Dokument über den Bildoptimierer laden und cachen.
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={src} alt={t("imageAlt", { type })} referrerPolicy="no-referrer" className="max-h-[80vh] w-auto rounded border" />
+                <img src={view.dataUrl} alt={t("imageAlt", { type })} className="max-h-[80vh] w-auto rounded border" />
               ))}
-            {show && <p className="text-xs text-stone-700">{t("documentShownHint")}</p>}
+            {view?.ok === false && (
+              <p role="alert" className="text-red-700">
+                {t(`documentErrors.${view.error}`)}
+              </p>
+            )}
             <form method="get" action="#document">
               <input type="hidden" name="document" value="1" />
               <button type="submit" className="rounded border border-stone-500 px-4 py-2">

@@ -139,6 +139,31 @@ export async function getVerification(id: string): Promise<AdminVerification | n
  * Dokument über die Edge Function verification-document (QA M9b F6): Admins haben keinen Lesezugriff über die
  * Storage-API mehr. Die Function schreibt je Abruf das Audit, prüft die ersten Bytes und antwortet mit no-store.
  */
+export type DocumentView =
+  | { ok: true; mime: "image/jpeg" | "image/png"; dataUrl: string }
+  | { ok: true; mime: "application/pdf" }
+  | { ok: false; error: "mismatch" | "missing" | "forbidden" };
+
+/**
+ * Ein Abruf für die Admin-Ansicht (QA M9b N3): Die Function prüft die ersten Bytes, die Seite zeigt nach dem erkannten
+ * Typ an. Bilder werden eingebettet (kein zweiter Abruf, ein Audit je Ansicht), PDFs als Download über die Route.
+ */
+export async function documentView(id: string): Promise<DocumentView> {
+  const response = await fetchDocument(id);
+  if (!response) return { ok: false, error: "forbidden" };
+  if (response.status === 415) return { ok: false, error: "mismatch" };
+  if (response.status === 403) return { ok: false, error: "forbidden" };
+  if (!response.ok) return { ok: false, error: "missing" };
+  const mime = response.headers.get("content-type");
+  if (mime === "application/pdf") {
+    await response.body?.cancel();
+    return { ok: true, mime };
+  }
+  if (mime !== "image/jpeg" && mime !== "image/png") return { ok: false, error: "mismatch" };
+  const bytes = Buffer.from(await response.arrayBuffer());
+  return { ok: true, mime, dataUrl: `data:${mime};base64,${bytes.toString("base64")}` };
+}
+
 export async function fetchDocument(id: string): Promise<Response | null> {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.auth.getSession();

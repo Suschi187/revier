@@ -837,7 +837,11 @@
           "notFound": "The request no longer exists.",
           "failed": "Saving failed. Please try again."
         },
-        "documentShownHint": "If no image appears, the file content does not match an allowed type (JPEG, PNG, PDF). Reject the request in that case."
+        "documentErrors": {
+          "mismatch": "The file content does not match an allowed type (JPEG, PNG, PDF). It is not shown. Reject the request.",
+          "missing": "The document is no longer available.",
+          "forbidden": "You cannot view this document (own request or missing two-factor login)."
+        }
       }
     },
     "reports": {

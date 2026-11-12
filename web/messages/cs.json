@@ -837,7 +837,11 @@
           "notFound": "Žádost už neexistuje.",
           "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
         },
-        "documentShownHint": "Pokud se nezobrazí žádný obrázek, obsah souboru neodpovídá povolenému typu (JPEG, PNG, PDF). V takovém případě žádost zamítněte."
+        "documentErrors": {
+          "mismatch": "Obsah souboru neodpovídá žádnému povolenému typu (JPEG, PNG, PDF). Nezobrazí se. Žádost zamítněte.",
+          "missing": "Doklad již není k dispozici.",
+          "forbidden": "Tento doklad nemůžete zobrazit (vlastní žádost nebo chybí dvoufázové přihlášení)."
+        }
       }
     },
     "reports": {

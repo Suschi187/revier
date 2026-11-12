@@ -51,7 +51,15 @@ const nextConfig: NextConfig = {
       // /api/unsubscribe setzt CSP und Referrer-Policy selbst (ADR 018, QA M8 F2) und ist deshalb ausgenommen, auch mit Schrägstrich am Ende (QA M8 N1).
       // Die Foto-Links des Datenexports (ADR 019, QA M9a F4) setzen no-referrer: Die Weiterleitung führt auf eine
       // signierte Storage-URL. Ausgenommen wie /api/unsubscribe, sonst überschriebe die allgemeine Regel den Header.
-      { source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)|api/unsubscribe/?$|api/account/photos/[^/]+/?$).*)", headers: securityHeaders },
+      // Das Verifizierungsdokument (ADR 020, QA M9b N2) setzt CSP mit sandbox und no-referrer selbst (aus der Function).
+      {
+        source: "/((?!(?:de|en|cs|pl)/admin(?:/|$)|api/unsubscribe/?$|api/account/photos/[^/]+/?$|api/admin/verifications/[^/]+/document/?$).*)",
+        headers: securityHeaders,
+      },
+      {
+        source: "/api/admin/verifications/:id/document",
+        headers: securityHeaders.filter((h) => h.key !== "Content-Security-Policy" && h.key !== "Referrer-Policy"),
+      },
       {
         source: "/api/account/photos/:id",
         headers: [...securityHeaders.filter((h) => h.key !== "Referrer-Policy"), { key: "Referrer-Policy", value: "no-referrer" }],
@@ -64,7 +72,8 @@ const nextConfig: NextConfig = {
         ],
       })),
       // `:path*` deckt auch /:locale/admin selbst ab.
-      { source: "/:locale/admin/:path*", headers: securityHeaders.filter((h) => h.key !== "Content-Security-Policy") },
+      // Nur die vier Sprachen: sonst träfe die Regel auch /api/admin/… (QA M9b N2).
+      { source: "/:locale(de|en|cs|pl)/admin/:path*", headers: securityHeaders.filter((h) => h.key !== "Content-Security-Policy") },
       // Kartenstil, Schriften und Worker sind versioniert (ADR 016, Review A9); public/ liefert sonst max-age=0.
       { source: "/static/map/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
       // Token im Query-String nie per Referer weitergeben (ADR 010).

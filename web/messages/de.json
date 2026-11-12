@@ -837,7 +837,11 @@
           "notFound": "Den Antrag gibt es nicht mehr.",
           "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
         },
-        "documentShownHint": "Erscheint kein Bild, passt der Inhalt der Datei zu keinem erlaubten Typ (JPEG, PNG, PDF). Lehne den Antrag dann ab."
+        "documentErrors": {
+          "mismatch": "Der Inhalt der Datei passt zu keinem erlaubten Typ (JPEG, PNG, PDF). Sie wird nicht angezeigt. Lehne den Antrag ab.",
+          "missing": "Das Dokument ist nicht mehr vorhanden.",
+          "forbidden": "Du kannst dieses Dokument nicht ansehen (eigener Antrag oder keine Zwei-Faktor-Anmeldung)."
+        }
       }
     },
     "reports": {

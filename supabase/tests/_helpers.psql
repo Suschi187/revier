@@ -131,3 +131,8 @@ grant execute on function tests.authenticate_totp(uuid, integer) to anon, authen
 -- älteren Tests moderieren per Roh-UPDATE und setzen es deshalb für die ganze Sitzung; 21_moderation prüft
 -- die RPC und den Fall ohne Flag.
 select set_config('revier.moderation', 'on', false);
+
+-- Kartenpunkt entfernen läuft im Produkt nur über resolve_reports, das dieses Flag mit dem Grund setzt (QA M9b N1).
+-- Die älteren Tests (M6) entfernen den Punkt als Admin per Roh-UPDATE und setzen es deshalb für die Sitzung; 57 prüft
+-- den Fall ohne Flag.
+select set_config('revier.point_code', 'test', false);

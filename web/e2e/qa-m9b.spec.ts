@@ -56,8 +56,9 @@ test.describe("QA M9b", () => {
     await page.goto(`/de/admin/verifications/${begun.id}`);
     await page.getByRole("button", { name: "Dokument anzeigen" }).click();
     await expect(page).toHaveURL(new RegExp(`/de/admin/verifications/${begun.id}\\?document=1`));
-    // Seit F6: Die Route liefert den Inhalt nicht aus (415); die Seite weist darauf hin, signierte URLs gibt es nicht.
-    await expect(page.getByText(/passt der Inhalt der Datei zu keinem erlaubten Typ/)).toBeVisible();
+    // Seit F6/N3: Die Function liefert den Inhalt nicht aus (415), die Seite markiert die Datei; keine signierten URLs.
+    await expect(page.getByRole("alert").filter({ hasText: "Der Inhalt der Datei passt zu keinem erlaubten Typ" })).toBeVisible();
+    await expect(page.locator("#document img")).toHaveCount(0);
     expect(await page.locator("#document a[href*='/storage/']").count()).toBe(0);
     expect(await page.content()).not.toContain("/storage/v1/object/sign/");
     const doc = await page.request.get(`/api/admin/verifications/${begun.id}/document`);

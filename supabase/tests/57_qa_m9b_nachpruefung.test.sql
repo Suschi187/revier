@@ -167,13 +167,14 @@ set local session_replication_role = replica;
 update listings set display_location = extensions.st_setsrid(extensions.st_makepoint(13.95, 50.95), 4326)::extensions.geography where id = :'lp';
 set local session_replication_role = origin;
 select tests.authenticate_as(:'a', 'aal2');
-select todo('N1: listings_update_admin und das Spaltenrecht auf display_location erlauben Admins das Entfernen des Punkts an resolve_reports vorbei', 1);
+-- N1 behoben (Migration 20261112170000_qa_m9b_recheck): ohne Flag aus resolve_reports kein Entfernen durch Admins.
+select set_config('revier.point_code', '', true);
 select is(tests.q57_err(format($$ update listings set display_location = null where id = %L $$, :'lp')), '42501',
   'Admin entfernt den Punkt nicht am RPC vorbei (sonst Mail ohne Begründung)');
 
 select tests.as_postgres();
-select is((select count(*)::int from private.moderation_notifications where listing_id = :'lp' and decision = 'point_removed' and reason is null), 1,
-  'N1 (Ist-Stand): am RPC vorbei entsteht eine Mail point_removed ohne Begründung');
+select is((select count(*)::int from private.moderation_notifications where listing_id = :'lp' and decision = 'point_removed' and reason is null), 0,
+  'N1: keine Mail point_removed ohne Begründung');
 
 -- ---------------------------------------------------------------------------
 -- F6: Bucket und RPC

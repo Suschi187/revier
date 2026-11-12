@@ -67,9 +67,14 @@ test.describe("QA M9b Nachprüfung", () => {
     expect(all("x-content-type-options")).toEqual(["nosniff"]);
     expect(all("set-cookie")).toEqual([]);
     // Header genau einmal: die allgemeine Regel in next.config.ts darf sie nicht überschreiben (wie QA M9a F4)
-    // N2: die allgemeine Regel setzt Referrer-Policy und CSP der App (geprüft getrennt im Test „N2“)
-    expect(all("content-security-policy").length, "CSP vorhanden").toBeGreaterThan(0);
+    // N2 behoben: genau die Header der Function
+    expect(all("content-security-policy")).toEqual(["default-src 'none'; sandbox"]);
+    expect(all("referrer-policy")).toEqual(["no-referrer"]);
     await modContext.request.get(route(jpeg.id));
+    expect(viewed(jpeg.id)).toBe(2);
+    // H1 behoben: Abruf von fremder Seite (Fetch-Metadata) ergibt 403 ohne Audit
+    const cross = await modContext.request.get(route(jpeg.id), { headers: { "sec-fetch-site": "cross-site" } });
+    expect(cross.status()).toBe(403);
     expect(viewed(jpeg.id)).toBe(2);
 
     const doc = await modContext.request.get(route(pdf.id));
@@ -85,14 +90,14 @@ test.describe("QA M9b Nachprüfung", () => {
     const link = page.getByRole("link", { name: "PDF herunterladen" });
     expect(await link.getAttribute("href")).toBe(route(pdf.id));
     expect(await link.getAttribute("target")).toBeNull();
-    // Das Rendern der Seite selbst schreibt kein Audit, erst der Abruf
-    expect(viewed(pdf.id)).toBe(1);
+    // Die Ansicht prüft den Typ mit einem Abruf über die Function (ein Audit je Ansicht, QA M9b N3)
+    expect(viewed(pdf.id)).toBe(2);
     await modContext.close();
     await admin().storage.from("verification-docs").remove([jpeg.path, pdf.path]);
   });
 
-  test("N2: Referrer-Policy und CSP der Dokument-Route werden von next.config.ts überschrieben", async ({ browser }) => {
-    test.fail(true, "N2: /api/admin/verifications/:id/document fällt unter die allgemeine Header-Regel (wie QA M9a F4)");
+  test("N2 (behoben): Referrer-Policy und CSP der Dokument-Route kommen genau einmal aus der Function", async ({ browser }) => {
+    // N2 behoben: die Route ist aus der allgemeinen Header-Regel ausgenommen (wie QA M9a F4).
     const owner = await createAccount("qa9n-n2", "QA9n N2", created);
     const v = (await owner.client.rpc("begin_verification", { p_document_type: "jagdschein" })).data as { id: string; path: string };
     await owner.client.storage.from("verification-docs").upload(v.path, new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0x10, 0xff, 0xd9]), { contentType: "image/jpeg" });

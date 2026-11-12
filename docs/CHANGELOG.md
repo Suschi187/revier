@@ -2,6 +2,21 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M9b: QA-Nachprüfung N1–N4 und H1 – 2026-11-12
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M9b – Nachprüfung“. Migration `20261112170000_qa_m9b_recheck.sql`, ADR 020 „Nachträge QA M9b Nachprüfung“.
+
+### Geändert
+- **N1:** Admins entfernen den Kartenpunkt nur noch über die Meldungs-Entscheidung mit Grund und Begründung; ein direktes UPDATE ergibt `42501`.
+- **N2:** Die Dokument-Route behält `no-referrer` und die Sandbox-CSP der Function (ausgenommen aus der allgemeinen Header-Regel).
+- **N3:** Die Admin-Ansicht zeigt nach dem erkannten Typ (Bild eingebettet, PDF als Download) und markiert abweichende Dateien eindeutig; ein Abruf und ein Audit je Ansicht.
+- **H1:** Die Dokument-Route lehnt Abrufe von fremden Seiten ab (`Sec-Fetch-Site`).
+- **N4:** ADR 020 und CHANGELOG nachgezogen; `verification_doc_link_seconds` entfernt.
+- **Tests:** Der Test-Helfer setzt `revier.point_code` für die älteren Tests mit Roh-UPDATE (wie `revier.moderation`); TODO N1 in pgTAP 57 und `test.fail` N2 in `qa-m9b-nachpruefung.spec.ts` sind normale Tests.
+
+### Testen
+- `supabase test db`; `cd web && npm test && npx playwright test e2e/verification.spec.ts e2e/qa-m9b.spec.ts e2e/qa-m9b-nachpruefung.spec.ts`
+
 ## Nachtrag M9b: QA-Funde F1–F6 – 2026-11-12
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M9b – Abnahme“. Migration `20261112160000_qa_m9b_fixes.sql`, ADR 020 „Nachträge QA M9b“.
@@ -26,7 +41,7 @@ Bericht: `docs/QA-REPORT.md`, Abschnitt „M9b – Abnahme“. Migration `202611
 Plan `docs/plans/M9-plan.md` (Architekt-Review Abschnitt 10, Freigabe Abschnitt 11), ADR 020 mit den Abschnitten „Umsetzung“ je Commit, SPEC v0.11. Mit M9b ist M9 vollständig.
 
 ### Geändert
-- **Verifizierung (ADR 020, Review A6, B3):** Antrag „Zeile zuerst“ (`begin_verification` → Upload genau auf den Serverpfad → `submit_verification`), Zurückziehen, Limit 3 in 30 Tagen in eigenen Zählerzeilen (`RV002`), kein HEIC. Entscheiden und Widerrufen nur per RPC mit aal2, nie über das eigene Konto. Admins sehen ein Dokument nur nach „Dokument anzeigen“ (Audit `verification.document_viewed`, die Storage-Policy verlangt ihn 2 Minuten lang), als 60-Sekunden-URL und nur, wenn die ersten Bytes zu JPEG, PNG oder PDF passen. Profilstatus aus den Anträgen abgeleitet, der Cache-Zähler steigt beim Badge-Wechsel. Web: `/account/verification`, `/admin/verifications`, `/admin/verifications/:id`.
+- **Verifizierung (ADR 020, Review A6, B3):** Antrag „Zeile zuerst“ (`begin_verification` → Upload genau auf den Serverpfad → `submit_verification`), Zurückziehen, Limit 3 in 30 Tagen in eigenen Zählerzeilen (`RV002`), kein HEIC. Entscheiden und Widerrufen nur per RPC mit aal2, nie über das eigene Konto. Admins sehen ein Dokument nur nach „Dokument anzeigen“ (Audit `verification.document_viewed`) und nur, wenn die ersten Bytes zu JPEG, PNG oder PDF passen; seit dem Nachtrag F6 nur über die Edge Function `verification-document`, nie über die Storage-API. Profilstatus aus den Anträgen abgeleitet, der Cache-Zähler steigt beim Badge-Wechsel. Web: `/account/verification`, `/admin/verifications`, `/admin/verifications/:id`.
 - **Melden (Review A9):** Anzeigen und Anbieter über statische Links auf `/account/report/listing/:id` bzw. `/profile/:id` (Ziel im Pfad, damit der Login-Rücksprung es behält), Zusicherung „in gutem Glauben“ als Platzhalter, höchstens eine offene Meldung je Ziel, Eingangsbestätigung in „Meine Meldungen“ (`/account/reports`) mit Stand und Ergebnis. Im Chat zeigt eine zweite Meldung „bereits gemeldet“.
 - **Meldungen im Admin:** Warteschlange je Ziel, Zielansicht mit Maßnahmen (keine, Anzeige entfernen, Kartenpunkt entfernen, Konto verwarnen, Konto sperren; `target_gone` automatisch), gemeldete Chat-Nachricht nur nach Klick und auditiert. `moderate_listing` kennt `remove` (Version nur über `admin_report_target`). Eine entfernte Anzeige verlässt `removed` nur nach einer erfolgreichen Beschwerde (Flag `revier.appeal`), auch nicht auf Server-Pfaden.
 - **Konten im Admin:** Suche per POST (exakte E-Mail oder ID, gemeinsames Limit, Audit ohne Adresse), Sperren, Entsperren, Verwarnen mit Codes und Begründung; nie das eigene Konto, nie Konten mit Rolle.
@@ -48,7 +63,7 @@ Plan `docs/plans/M9-plan.md` (Architekt-Review Abschnitt 10, Freigabe Abschnitt 
 - Upload eines Dokuments → Entscheidung im Admin → Badge „verifiziert“ öffentlich sichtbar, nach Widerruf wieder weg: erfüllt (E2E `verification.spec.ts`).
 - Meldung einer Anzeige → Entfernen im Admin → Mail an den Besitzer mit Begründung und an die Meldenden mit dem Ergebnis: erfüllt (E2E `admin-moderation.spec.ts` für den Weg im Admin, Integration `trust-mails.test.ts` für die Mails).
 - Sperre eines Kontos → Beschwerde des Betroffenen → Entsperrung durch einen anderen Admin: erfüllt (E2E `admin-moderation.spec.ts`, Mails in `trust-mails.test.ts`; pgTAP 54 für Ausweichregel und Rücknahmen).
-- Ein Verifizierungsdokument ist ohne frischen Audit-Eintrag `verification.document_viewed` nicht lesbar, auch nicht für Admins über die Storage-API: erfüllt (Integration `verification.test.ts`, pgTAP 08 und 53).
+- Ein Verifizierungsdokument ist ohne frischen Audit-Eintrag `verification.document_viewed` nicht lesbar, auch nicht für Admins über die Storage-API: erfüllt; seit Nachtrag F6 strenger: kein Lesen über die Storage-API, jeder Abruf über `verification-document` auditiert (Integration `verification.test.ts`, `qa-m9b-nachpruefung.test.ts`, pgTAP 08, 53, 56).
 
 ### Bekannte Lücken
 - **iOS (I6):** Verifizierung per Kamera (JPEG statt HEIC), Melden, „Meine Meldungen“, Entscheidungen und Beschwerde folgen auf denselben RPCs.

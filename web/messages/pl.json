@@ -837,7 +837,11 @@
           "notFound": "Ten wniosek już nie istnieje.",
           "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
         },
-        "documentShownHint": "Jeśli obraz się nie pojawi, zawartość pliku nie pasuje do dozwolonego typu (JPEG, PNG, PDF). W takim przypadku odrzuć wniosek."
+        "documentErrors": {
+          "mismatch": "Zawartość pliku nie pasuje do żadnego dozwolonego typu (JPEG, PNG, PDF). Nie zostanie pokazany. Odrzuć wniosek.",
+          "missing": "Dokument nie jest już dostępny.",
+          "forbidden": "Nie możesz wyświetlić tego dokumentu (własny wniosek lub brak logowania dwuskładnikowego)."
+        }
       }
     },
     "reports": {

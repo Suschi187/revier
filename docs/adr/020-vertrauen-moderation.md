@@ -37,11 +37,13 @@ Bestand: `verifications` und Bucket `verification-docs` (M1), `reports` und `rep
 - **Badge:** unverändert über `public_profiles`. Was „verifiziert“ zusagt (Dokument gesehen, keine Identitätsgarantie, kein Ablaufdatum), steht im Tooltip und in den Nutzungsbedingungen, beides Platzhalter (SPEC 7.2).
 
 ### Dokumentansicht nur mit Audit (Review B3)
+> **Ersetzt** durch „Nachträge QA M9b“ (F6, N2, N3): kein Lesen über die Storage-API mehr, Auslieferung nur über die Edge Function `verification-document`. Der folgende Stand gilt nicht mehr und bleibt als Begründung stehen.
+
 - `admin_open_verification_document(p_id)` schreibt `verification.document_viewed` (Admin, Antrag) und liefert den Pfad.
 - Die Policy `verification_docs_select_admin` verlangt zusätzlich zu `private.is_admin()` einen Eintrag `verification.document_viewed` **desselben Admins für genau diesen Antrag aus den letzten 2 Minuten** (Muster `lookup_required`, ADR 014). Ein direkter Zugriff über die Storage-API ohne diesen Eintrag scheitert, auch für Admins.
 - Danach signiert der Server mit dem Client des Admins für `verification_doc_link_seconds` (60). Bilder als `<img>`, PDFs als Link in neuem Tab (`noopener noreferrer`); `Cache-Control: no-store`, nie in geteilten Caches.
 - Dokumente erscheinen nie öffentlich, nie im Export und nie in Mails.
-- Restrisiko (H12): PDFs öffnen sich auf der Storage-Origin; dort liegen keine Session-Cookies der App.
+- Restrisiko (H12, überholt): PDFs öffneten sich auf der Storage-Origin. Seit F6 kommen PDFs als Download mit `Content-Security-Policy: sandbox` von der eigenen Origin.
 
 ### Aufbewahrung der Dokumente
 - `verification_document_days` (30) nach `decided_at`: Datei löschen (Storage-API), `document_path = null`, `document_deleted_at` setzen.
@@ -130,7 +132,7 @@ Bestand: `verifications` und Bucket `verification-docs` (M1), `reports` und `rep
 Function, Secret und Grenzen wie ADR 019 (`account-maintenance`).
 
 ### Einstellungen (`app_settings`, M9b)
-`verification_requests_per_30d` 3, `verification_doc_link_seconds` 60, `appeal_window_days` 183, `draft_inactive_months` 12, `draft_notice_days` 30. Alle Werte sind Platzhalter.
+`verification_requests_per_30d` 3, `appeal_window_days` 183 (`verification_doc_link_seconds` entfiel mit QA M9b N4), `draft_inactive_months` 12, `draft_notice_days` 30. Alle Werte sind Platzhalter.
 
 ### Fehlercodes (für Web und iOS)
 | Code | Wann | Hinweis |
@@ -195,6 +197,13 @@ Migration `20261112140000_trust_maintenance.sql`, pgTAP 55:
 - **F4:** `report_resolved` verweist auf das Audit der Bearbeitung (`decision_audit_id`); jede neue Entscheidung nach einer Wiedereröffnung ergibt eine eigene Mail.
 - **F5:** Getrennte Auswahl „Grund für die Anzeige“ und „Grund für das Konto“; Schema und `resolve_reports` prüfen den Code je Maßnahme (`23514`, `hint fields code`).
 - **F6 (ersetzt die Dokumentansicht aus Commit 7):** Admins haben keinen Lesezugriff mehr über die Storage-API; die Policy `verification_docs_select_admin` und das 2-Minuten-Fenster entfallen. Jeder Abruf läuft über die Edge Function `verification-document` (`verify_jwt`, `admin_open_verification_document` mit dem JWT des Admins schreibt das Audit, Download mit `service_role`, erste Bytes, `no-store`, `sandbox`, PDF als Download) und die Web-Route `/api/admin/verifications/:id/document`. Langlebige signierte Links gibt es damit nicht mehr. `verification_doc_link_seconds` wird nicht mehr genutzt.
+
+### Nachträge QA M9b Nachprüfung (Migration `20261112170000_qa_m9b_recheck.sql`)
+- **N1:** Der Trigger `listings_point_guard` lässt Admins den Kartenpunkt fremder Anzeigen nur mit dem Flag aus `resolve_reports` (Grund und Begründung) entfernen; ein direktes UPDATE per PostgREST ergibt `42501`. Besitzer und Server-Pfade bleiben frei.
+- **N2:** `/api/admin/verifications/:id/document` ist aus der allgemeinen Header-Regel ausgenommen; CSP `sandbox` und `no-referrer` kommen genau einmal.
+- **N3:** Die Admin-Seite ruft das Dokument einmal über die Function ab (ein Audit je Ansicht) und zeigt nach dem **erkannten** Typ: Bilder eingebettet (`data:`), PDFs als Download-Link auf die Route, abweichende Dateien mit eindeutiger Markierung.
+- **H1:** Die Route weist Abrufe mit `Sec-Fetch-Site` außer `same-origin` mit 403 ab (kein Audit durch fremde Links).
+- **N4:** Doku nachgezogen, `verification_doc_link_seconds` entfernt.
 
 ## Alternativen
 - **Schlanker Beschwerdeweg** (Formular als Meldung, Entscheidung von Hand): keine Wirkung auf die Maßnahme, keine gemeinsame Quelle mit `my_decisions` und Export (10.4/3).
