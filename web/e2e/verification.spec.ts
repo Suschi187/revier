@@ -61,9 +61,15 @@ test("Verifizierung: Upload, Dokument mit Audit, Entscheidung, Badge, Widerruf",
 
   await adminPage.getByRole("button", { name: "Dokument anzeigen" }).click();
   await expect(adminPage.getByRole("img", { name: "Hochgeladenes Dokument: Jagdkarte" })).toBeAttached();
-  expect(await viewed()).toBe(1);
+  // Das Bild lädt über die Server-Route; jeder Abruf schreibt ein Audit (QA M9b F6).
+  await expect.poll(viewed).toBeGreaterThanOrEqual(1);
   const src = await adminPage.getByRole("img", { name: "Hochgeladenes Dokument: Jagdkarte" }).getAttribute("src");
-  expect(src).toContain("/storage/v1/object/sign/verification-docs/");
+  expect(src).toBe(`/api/admin/verifications/${request.id}/document`);
+  expect(await adminPage.content()).not.toContain("/storage/v1/object/sign/");
+  const doc = await adminPage.request.get(src!);
+  expect(doc.status()).toBe(200);
+  expect(doc.headers()["cache-control"]).toMatch(/no-store/);
+  expect(doc.headers()["content-type"]).toBe("image/jpeg");
 
   await adminPage.getByLabel("Verifizieren").check();
   await adminPage.getByRole("button", { name: "Entscheidung speichern" }).click();

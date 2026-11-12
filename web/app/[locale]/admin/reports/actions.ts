@@ -23,9 +23,12 @@ export async function resolveReportsAction(form: FormData): Promise<void> {
   const detail = `/${locale}/admin/reports/${type}/${UUID.test(id) ? id : ""}`;
   await requireAdmin(locale, detail);
   if (!UUID.test(id)) redirect(`/${locale}/admin/reports`);
+  const chosen = String(form.get("outcome") ?? "");
+  // Anzeigen-Maßnahmen nehmen den Anzeigen-Grund, Konto-Maßnahmen den Konto-Grund (QA M9b F5).
+  const codeField = chosen === "content_removed" || chosen === "point_removed" ? "codeListing" : "codeAccount";
   const parsed = resolveSchema.safeParse({
-    outcome: form.get("outcome"),
-    code: String(form.get("code") ?? "") || null,
+    outcome: chosen,
+    code: String(form.get(codeField) ?? "") || null,
     note: String(form.get("note") ?? ""),
     version: String(form.get("version") ?? "") || null,
   });

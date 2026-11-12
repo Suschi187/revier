@@ -35,7 +35,7 @@ select is((select count(*)::int from storage.objects where bucket_id = 'verifica
 select tests.authenticate_as(:'admin_id', 'aal2');
 select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Admin mit 2FA sieht das Dokument nicht ohne frisches Audit (B3)');
 select admin_open_verification_document(:'ver_id') is not null;
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'Nach admin_open_verification_document sieht der Admin das Dokument');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Auch nach admin_open_verification_document kein Zugriff über die Storage-API (QA M9b F6)');
 
 select tests.authenticate_as(:'a_id');
 delete from storage.objects where bucket_id = 'verification-docs';

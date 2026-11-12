@@ -43,7 +43,7 @@ test("Meldung → Entfernen, Sperre → Beschwerde → Entsperrung durch einen a
   await expect(pa.getByText("Patronen")).toBeVisible();
   await expect(pa.getByText("Hinweisgeberin")).toHaveCount(0);
   await pa.getByLabel("Anzeige entfernen").check();
-  await pa.getByLabel("Grund").selectOption({ label: "Waffen oder Munition angeboten" });
+  await pa.getByLabel("Grund für die Anzeige").selectOption({ label: "Waffen oder Munition angeboten" });
   await pa.getByLabel("Begründung für die Betroffenen").fill("Im Text werden Patronen angeboten.");
   await pa.getByRole("button", { name: "Meldungen erledigen" }).click();
   await expect(pa).toHaveURL("/de/admin/reports?notice=resolved");
@@ -138,7 +138,7 @@ test("Gemeldete Chat-Nachricht: erst nach Klick sichtbar, jeder Abruf auditiert"
   // Keine Maßnahme gegen Inhalte bei Nachrichten
   await expect(page.getByLabel("Anzeige entfernen")).toHaveCount(0);
   await page.getByLabel("Konto verwarnen").check();
-  await page.getByLabel("Grund").selectOption({ label: "Betrug oder Betrugsversuch" });
+  await page.getByLabel("Grund für das Konto").selectOption({ label: "Betrug oder Betrugsversuch" });
   await page.getByRole("button", { name: "Meldungen erledigen" }).click();
   await expect(page).toHaveURL("/de/admin/reports?notice=resolved");
   expect((await admin().from("audit_log").select("action").eq("action", "profile.warned").eq("target_id", owner.id)).data).toHaveLength(1);

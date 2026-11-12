@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { REJECT_CODES } from "@/lib/moderation";
 import type { Database } from "@/lib/supabase/database.types";
 
 // Melden, Ergebnisse und Beschwerden (ADR 020). Die Listen spiegeln die Checks und Enums der Migrationen;
@@ -95,11 +96,12 @@ export const resolveSchema = z
     if (value.outcome === "account_warned" || value.outcome === "account_blocked") {
       if (!(ACCOUNT_CODES as readonly string[]).includes(value.code ?? "")) ctx.addIssue({ code: "custom", path: ["code"], message: "code" });
     }
-    if (value.outcome === "content_removed") {
-      if (!value.code) ctx.addIssue({ code: "custom", path: ["code"], message: "code" });
+    if (value.outcome === "content_removed" || value.outcome === "point_removed") {
+      // Anzeigen-Grund (listings.reject_code), Begründung Pflicht (QA M9b F3, F5).
+      if (!(REJECT_CODES as readonly string[]).includes(value.code ?? "")) ctx.addIssue({ code: "custom", path: ["code"], message: "code" });
       if (!value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "note" });
-      if (!value.version) ctx.addIssue({ code: "custom", path: ["version"], message: "changed" });
     }
+    if (value.outcome === "content_removed" && !value.version) ctx.addIssue({ code: "custom", path: ["version"], message: "changed" });
     if (value.code === "other" && !value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "note" });
   });
 

@@ -249,7 +249,7 @@ select document_path as vc_path from verifications where id = :'vc' \gset
 select tests.authenticate_as(:'adm', 'aal2');
 select is((select count(*)::int from storage.objects where name = :'vc_path'), 0, 'Ohne Audit: kein Zugriff, auch für Admins');
 select is(admin_open_verification_document(:'vc'), :'vc_path', 'admin_open_verification_document liefert den Pfad');
-select is((select count(*)::int from storage.objects where name = :'vc_path'), 1, 'Mit frischem Audit: Zugriff');
+select is((select count(*)::int from storage.objects where name = :'vc_path'), 0, 'Auch mit frischem Audit kein Zugriff über die Storage-API (QA M9b F6)');
 select tests.authenticate_as(:'adm2', 'aal2');
 select is((select count(*)::int from storage.objects where name = :'vc_path'), 0, 'Das Audit eines anderen Admins gilt nicht');
 select tests.as_postgres();

@@ -2,8 +2,8 @@
 -- Rechte, Definer und Publikation der neuen Objekte; Dokumentansicht nur für den Admin mit eigenem, frischem Audit
 -- genau dieses Antrags (B3, Grenzen 1:59/2:01, aal1, gesperrt, Fälschung des Audits); Upload-Bindung; Flags im SQL
 -- ohne Rohrechte wirkungslos; Orakel der Fehlercodes; Meldende und Admins für Betroffene unsichtbar; Konten mit
--- Rolle auf dem Meldungsweg; Wiedereröffnen nach Beschwerde (F1, TODO), Ausweichregel bei zwei Admins (F2, TODO),
--- Begründung und Mail beim Entfernen des Kartenpunkts (F3, TODO), Ergebnis-Mail nach Wiedereröffnung (F4, TODO);
+-- Rolle auf dem Meldungsweg; Wiedereröffnen nach Beschwerde (F1), Ausweichregel bei zwei Admins (F2),
+-- Begründung und Mail beim Entfernen des Kartenpunkts (F3), Ergebnis-Mail nach Wiedereröffnung (F4);
 -- Warteschlange (Allowlist, gelöschte, gesperrte, unbestätigte Empfänger, claim/confirm/release); Fristen der Jobs an
 -- den Grenzen; edited_at nur durch den Besitzer, Pausieren/Fortsetzen ohne neue Prüfung; Export v4; Kaskade der
 -- neuen Tabellen bei der Kontolöschung. Alles in einer Transaktion mit Rollback.
@@ -121,7 +121,7 @@ select document_path as pu from verifications where id = :'vu' \gset
 select tests.authenticate_as(:'adm', 'aal2');
 select is(tests.q56_docs(:'pu'), 0, 'Admin ohne Audit sieht das Objekt nicht');
 select admin_open_verification_document(:'vu');
-select is(tests.q56_docs(:'pu'), 1, 'Nach eigenem Audit sichtbar');
+select is(tests.q56_docs(:'pu'), 0, 'F6 behoben: auch nach eigenem Audit kein Zugriff über die Storage-API (nur über verification-document)');
 select tests.authenticate_as(:'adm2', 'aal2');
 select is(tests.q56_docs(:'pu'), 0, 'Das Audit von Ada gilt nicht für Ben');
 select tests.authenticate_as(:'adm', 'aal1');
@@ -134,7 +134,7 @@ select tests.as_postgres();
 update profiles set is_blocked = false where user_id = :'adm';
 update audit_log set created_at = now() - interval '119 seconds' where action = 'verification.document_viewed' and target_id = :'vu';
 select tests.authenticate_as(:'adm', 'aal2');
-select is(tests.q56_docs(:'pu'), 1, 'Audit 1:59 alt: noch sichtbar');
+select is(tests.q56_docs(:'pu'), 0, 'F6 behoben: kein Zeitfenster mehr für die Storage-API');
 select tests.as_postgres();
 update audit_log set created_at = now() - interval '121 seconds' where action = 'verification.document_viewed' and target_id = :'vu';
 select tests.authenticate_as(:'adm', 'aal2');
@@ -146,7 +146,7 @@ select document_path as pr from verifications where id = :'vr' \gset
 insert into public.audit_log (actor_id, action, target_type, target_id) values (:'adm', 'verification.document_viewed', 'verification', :'vr');
 select tests.authenticate_as(:'adm', 'aal2');
 select is(tests.q56_docs(:'pu'), 0, 'Frisches Audit eines anderen Antrags öffnet dieses Dokument nicht');
-select is(tests.q56_docs(:'pr'), 1, '… nur das eigene Ziel');
+select is(tests.q56_docs(:'pr'), 0, 'F6 behoben: auch das eigene Ziel nicht über die Storage-API');
 select is(tests.q56_err(format($$ select admin_open_verification_document(%L) $$, gen_random_uuid())), 'P0002', 'Unbekannter Antrag: P0002');
 select tests.authenticate_as(:'u');
 select is(tests.q56_err(format($$ select admin_open_verification_document(%L) $$, :'vu')), '42501', 'Nutzer öffnen keine Dokumente per RPC');
@@ -317,7 +317,7 @@ update private.account_notifications set done_at = now(), sent_at = now() where 
 select tests.authenticate_as(:'r2');
 select submit_appeal(:'d_l2b', 'Es ist eindeutig Betrug, bitte erneut prüfen.') as ap_l2 \gset
 select tests.authenticate_as(:'adm2', 'aal2');
-select todo('F1: decide_appeal öffnet alle bearbeiteten Meldungen des Ziels und verletzt reports_one_open_idx (23505)', 2);
+-- F1 behoben (Migration 20261112160000_qa_m9b_fixes)
 select is(tests.q56_err(format($$ select decide_appeal(%L, 'reversed', 'Neu prüfen') $$, :'ap_l2')), 'ok',
   'Beschwerde der Meldenden nach zwei Meldezyklen: reversed möglich');
 select is((select count(*)::int from reports where target_id = :'l2' and status = 'open'), 1, '… danach genau eine offene Meldung');
@@ -342,7 +342,7 @@ select is((select status::text from reports where id = :'rep_l3'), 'open', '… 
 select tests.authenticate_as(:'adm2', 'aal2');
 select resolve_reports('listing', :'l3', 'account_warned', 'scam', 'Verwarnt nach Beschwerde');
 select tests.as_postgres();
-select todo('F4: unique (kind, ref_id, user_id) mit ON CONFLICT DO NOTHING unterdrückt die Ergebnis-Mail der neuen Entscheidung', 1);
+-- F4 behoben (Migration 20261112160000_qa_m9b_fixes)
 select is((select count(*)::int from private.account_notifications where user_id = :'r2' and kind = 'report_resolved' and done_at is null), 1,
   'Nach Wiedereröffnung und neuer Entscheidung: neue Ergebnis-Mail an die Meldende');
 select tests.authenticate_as(:'r2');
@@ -364,7 +364,7 @@ select submit_appeal(:'d_la', 'Meine Anzeige war in Ordnung, bitte prüfen.') as
 select tests.authenticate_as(:'adm2', 'aal2');
 select is(tests.q56_err(format($$ select decide_appeal(%L, 'reversed', 'x') $$, :'ap_la')), '42501', 'Ben entscheidet die eigene Beschwerde nicht');
 select tests.authenticate_as(:'adm', 'aal2');
-select todo('F2: other_admin_available zählt den Beschwerdeführer als „anderen Admin“; die Beschwerde bleibt liegen', 1);
+-- F2 behoben (Migration 20261112160000_qa_m9b_fixes)
 select is(tests.q56_err(format($$ select decide_appeal(%L, 'reversed', 'Neu geprüft') $$, :'ap_la')), 'ok',
   'Zwei Admins, einer ist Beschwerdeführer: Ada entscheidet mit same_reviewer');
 
@@ -386,7 +386,7 @@ insert into reports (target_type, target_id, reason) values ('listing', :'lp', '
 select tests.authenticate_as(:'adm', 'aal2');
 select is(resolve_reports('listing', :'lp', 'point_removed', 'other', 'Q56 Hochsitz exakt erkennbar'), 'point_removed', 'Kartenpunkt entfernt');
 select tests.as_postgres();
-select todo('F3: listing.point_removed speichert weder Code noch Begründung, und der Besitzer bekommt keine Mail', 2);
+-- F3 behoben (Migration 20261112160000_qa_m9b_fixes)
 select tests.authenticate_as(:'u');
 select is((select reason from my_decisions() where action = 'listing.point_removed' and target_id = :'lp'), 'Q56 Hochsitz exakt erkennbar',
   'Besitzer sieht die Begründung der Entfernung des Kartenpunkts');

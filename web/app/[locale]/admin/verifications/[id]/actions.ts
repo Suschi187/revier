@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { isAppLocale } from "@/lib/auth/paths";
 import { requireAdmin } from "@/lib/services/admin";
-import { decideVerification, openDocument, revokeVerification } from "@/lib/services/admin-verifications";
+import { decideVerification, revokeVerification } from "@/lib/services/admin-verifications";
 import { invalidatePublicProvider } from "@/lib/services/public-cache";
 import { revokeSchema, verificationDecisionSchema } from "@/lib/verification";
 
@@ -17,14 +17,6 @@ function context(form: FormData) {
   const locale = isAppLocale(rawLocale) ? rawLocale : "de";
   const id = String(form.get("id") ?? "");
   return { locale, id, detail: `/${locale}/admin/verifications/${UUID.test(id) ? id : ""}` };
-}
-
-/** Dokument öffnen: schreibt das Audit (Review B3), danach signiert die Seite die URL für 60 Sekunden. */
-export async function openVerificationDocument(form: FormData): Promise<void> {
-  const { locale, id, detail } = context(form);
-  await requireAdmin(locale, detail);
-  if (!UUID.test(id)) redirect(`/${locale}/admin/verifications`);
-  redirect((await openDocument(id)) ? `${detail}?document=1#document` : `${detail}?error=forbidden#document`);
 }
 
 export async function decideVerificationAction(form: FormData): Promise<void> {

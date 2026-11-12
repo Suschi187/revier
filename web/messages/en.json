@@ -813,17 +813,12 @@
         "history": "Earlier requests",
         "historyEmpty": "No earlier requests.",
         "documentTitle": "Document",
-        "documentHint": "Opening is recorded in the audit log. The link is valid for 60 seconds.",
+        "documentHint": "Each view is recorded in the audit log. The document is never cached.",
         "documentShow": "Show document",
         "documentAgain": "Show again",
         "documentMissing": "The document has already been deleted (retention period).",
-        "pdfLink": "Open PDF in a new tab",
+        "pdfLink": "Download PDF",
         "imageAlt": "Uploaded document: {type}",
-        "documentErrors": {
-          "mismatch": "The file content does not match an allowed type (JPEG, PNG, PDF). It is not shown. Reject the request.",
-          "expired": "The link has expired. Open the document again.",
-          "missing": "The document has already been deleted."
-        },
         "decision": "Decision",
         "verify": "Verify",
         "reject": "Reject",
@@ -841,7 +836,8 @@
           "forbidden": "You cannot do this (own account or missing two-factor login).",
           "notFound": "The request no longer exists.",
           "failed": "Saving failed. Please try again."
-        }
+        },
+        "documentShownHint": "If no image appears, the file content does not match an allowed type (JPEG, PNG, PDF). Reject the request in that case."
       }
     },
     "reports": {
@@ -881,11 +877,8 @@
         "account_warned": "Warn account",
         "account_blocked": "Block account"
       },
-      "code": "Reason",
       "codeNone": "Choose a reason",
-      "codesListing": "Listing",
-      "codesAccount": "Account",
-      "codeHint": "Removing a listing needs a listing reason, warnings and blocks an account reason.",
+      "codeHint": "Removing a listing or its map point uses the listing reason, warnings and blocks the account reason.",
       "note": "Explanation for those concerned",
       "noteHint": "Shown to the account concerned as the reason; required for removals and “Other reason”. Reporters only learn the result. No internal notes.",
       "submit": "Close reports",
@@ -897,7 +890,9 @@
         "adminRole": "Accounts with a role cannot be warned or blocked.",
         "notFound": "This content is no longer available.",
         "failed": "Saving failed. Please try again."
-      }
+      },
+      "codeListing": "Reason for the listing",
+      "codeAccount": "Reason for the account"
     },
     "users": {
       "metaTitle": "Accounts",

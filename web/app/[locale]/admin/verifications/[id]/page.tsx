@@ -4,13 +4,13 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
-import { documentView, getVerification, type DocumentView } from "@/lib/services/admin-verifications";
+import { getVerification } from "@/lib/services/admin-verifications";
 import { REVOKE_CODES, VERIFICATION_NOTE_MAX, VERIFICATION_REJECT_CODES } from "@/lib/verification";
-import { decideVerificationAction, openVerificationDocument, revokeVerificationAction } from "./actions";
+import { decideVerificationAction, revokeVerificationAction } from "./actions";
 
-// Antrag mit Konto, Verlauf und Dokument (ADR 020). Das Dokument erscheint nur nach einem Klick, der das Audit
-// schreibt (Review B3); die Seite signiert dann 60 Sekunden lang und zeigt Bilder als <img>, PDFs als Link in einem
-// neuen Tab. Passt der Inhalt nicht zum erlaubten Typ, wird nichts angezeigt (Review A6). Status und CSP setzt der Proxy.
+// Antrag mit Konto, Verlauf und Dokument (ADR 020). Das Dokument erscheint nur nach einem Klick; geladen wird es über
+// /api/admin/verifications/:id/document (Edge Function, Audit je Abruf, erste Bytes, QA M9b F6). Bilder als <img>,
+// PDFs als Download. Passt der Inhalt nicht, liefert die Route 415 und nichts wird angezeigt. Status und CSP: Proxy.
 export const instant = false;
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -40,7 +40,9 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
   ]);
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "medium", timeStyle: "short" });
   const error = ERRORS.find((e) => e === query.error);
-  const view: DocumentView | null = query.document === "1" && v.documentPresent && !v.isOwn ? await documentView(v.id) : null;
+  // Erst nach „Dokument anzeigen“ lädt der Browser das Dokument über die Server-Route (je Abruf ein Audit, QA M9b F6).
+  const show = query.document === "1" && v.documentPresent && !v.isOwn;
+  const src = `/api/admin/verifications/${v.id}/document`;
   const type = tv(`documentTypes.${v.documentType}`);
   const canRevoke = v.status === "verified" && !v.revokedAt && !v.isOwn;
   const radio = "flex items-center gap-2";
@@ -115,26 +117,21 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
         ) : (
           <>
             <p className="text-sm text-stone-700">{t("documentHint")}</p>
-            {view?.ok === true &&
-              (view.mime === "application/pdf" ? (
-                <a href={view.url} target="_blank" rel="noopener noreferrer" className="underline">
+            {show &&
+              (v.documentMime === "application/pdf" ? (
+                <a href={src} rel="noopener noreferrer" className="underline">
                   {t("pdfLink")}
                 </a>
               ) : (
-                // Signierte 60-s-URL der Storage-Origin; next/image würde sie über den Server cachen.
+                // Server-Route ohne Cache; next/image würde das Dokument über den Bildoptimierer laden und cachen.
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={view.url} alt={t("imageAlt", { type })} referrerPolicy="no-referrer" className="max-h-[80vh] w-auto rounded border" />
+                <img src={src} alt={t("imageAlt", { type })} referrerPolicy="no-referrer" className="max-h-[80vh] w-auto rounded border" />
               ))}
-            {view?.ok === false && (
-              <p role="alert" className="text-red-700">
-                {t(`documentErrors.${view.error}`)}
-              </p>
-            )}
-            <form action={openVerificationDocument}>
-              <input type="hidden" name="locale" value={locale} />
-              <input type="hidden" name="id" value={v.id} />
+            {show && <p className="text-xs text-stone-700">{t("documentShownHint")}</p>}
+            <form method="get" action="#document">
+              <input type="hidden" name="document" value="1" />
               <button type="submit" className="rounded border border-stone-500 px-4 py-2">
-                {view?.ok ? t("documentAgain") : t("documentShow")}
+                {show ? t("documentAgain") : t("documentShow")}
               </button>
             </form>
           </>

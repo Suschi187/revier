@@ -110,16 +110,21 @@ export async function ReportTargetPage({ locale, type, id, query }: { locale: Ap
               </label>
             ))}
           </fieldset>
+          {/* QA M9b F5: getrennte Auswahl je Gruppe, damit ohne JavaScript kein unpassender Code ankommt. */}
+          {type === "listing" && (
+            <div>
+              <label htmlFor="r-code-listing" className="font-medium">{t("codeListing")}</label>
+              <select id="r-code-listing" name="codeListing" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
+                <option value="">{t("codeNone")}</option>
+                {REJECT_CODES.map((code) => <option key={code} value={code}>{tm(`reasons.${code}`)}</option>)}
+              </select>
+            </div>
+          )}
           <div>
-            <label htmlFor="r-code" className="font-medium">{t("code")}</label>
-            <select id="r-code" name="code" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
+            <label htmlFor="r-code-account" className="font-medium">{t("codeAccount")}</label>
+            <select id="r-code-account" name="codeAccount" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
               <option value="">{t("codeNone")}</option>
-              <optgroup label={t("codesListing")}>
-                {REJECT_CODES.map((code) => <option key={`l-${code}`} value={code}>{tm(`reasons.${code}`)}</option>)}
-              </optgroup>
-              <optgroup label={t("codesAccount")}>
-                {ACCOUNT_CODES.filter((c) => c !== "other").map((code) => <option key={`a-${code}`} value={code}>{tm(`accountCodes.${code}`)}</option>)}
-              </optgroup>
+              {ACCOUNT_CODES.map((code) => <option key={code} value={code}>{tm(`accountCodes.${code}`)}</option>)}
             </select>
             <p id="r-code-hint" className="text-xs text-stone-700">{t("codeHint")}</p>
           </div>

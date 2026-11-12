@@ -51,7 +51,7 @@ select is(
   array['can_report', 'chat_item', 'claim_listing_creation', 'has_accepted_current_legal', 'has_admin_role',
         'is_active_user', 'is_admin', 'is_blocked_with', 'is_conversation_participant', 'is_server', 'is_server_caller',
         'listing_attributes_error', 'listing_card', 'listing_is_public', 'listing_resume_allowed', 'listing_review_version', 'moderation_path', 'owns_editable_listing',
-        'search_conditions', 'search_filters_error', 'setting_int', 'trim_all', 'verification_document_viewed', 'verification_upload_allowed']::text[],
+        'search_conditions', 'search_filters_error', 'setting_int', 'trim_all', 'verification_upload_allowed']::text[],
   'Nur bewusst freigegebene Hilfsfunktionen in private sind ausführbar (Allowlist)'
 );
 

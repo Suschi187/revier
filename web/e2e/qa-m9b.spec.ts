@@ -8,7 +8,7 @@ import { enrollTotp, localSql, makeAdmin } from "../integration/totp";
 // - Header der Dokumentansicht (no-store, Referrer-Policy).
 // - Melden, Meine Meldungen und Entscheidungen für ein gesperrtes Konto ohne aktuelle Zustimmung, ohne JavaScript.
 // - Statischer Melde-Link: anonym und angemeldet derselbe, Login-Umweg mit Ziel im Pfad (Anbieter).
-// - F5: „Anzeige entfernen“ mit einem Grund aus der Gruppe „Konto“ scheitert (test.fail).
+// - F5 (behoben): „Anzeige entfernen“ bietet nur Anzeigen-Gründe; ein Konto-Grund ergibt einen verständlichen Hinweis.
 // - axe (WCAG 2 A/AA, ernst/kritisch), keine rohen Schlüssel und kein Überlauf bei 360 px auf den neuen Konto- und
 //   Admin-Seiten in en/cs/pl, inklusive Audit-Log (Nachtrag 3c74b6e).
 
@@ -56,10 +56,13 @@ test.describe("QA M9b", () => {
     await page.goto(`/de/admin/verifications/${begun.id}`);
     await page.getByRole("button", { name: "Dokument anzeigen" }).click();
     await expect(page).toHaveURL(new RegExp(`/de/admin/verifications/${begun.id}\\?document=1`));
-    await expect(page.getByRole("alert").filter({ hasText: "Der Inhalt der Datei passt zu keinem erlaubten Typ" })).toBeVisible();
-    await expect(page.locator("#document img")).toHaveCount(0);
+    // Seit F6: Die Route liefert den Inhalt nicht aus (415); die Seite weist darauf hin, signierte URLs gibt es nicht.
+    await expect(page.getByText(/passt der Inhalt der Datei zu keinem erlaubten Typ/)).toBeVisible();
     expect(await page.locator("#document a[href*='/storage/']").count()).toBe(0);
     expect(await page.content()).not.toContain("/storage/v1/object/sign/");
+    const doc = await page.request.get(`/api/admin/verifications/${begun.id}/document`);
+    expect(doc.status()).toBe(415);
+    expect(doc.headers()["cache-control"] ?? "").toMatch(/no-store/);
 
     const response = await page.request.get(`/de/admin/verifications/${begun.id}?document=1`);
     expect(response.status()).toBe(200);
@@ -124,7 +127,7 @@ test.describe("QA M9b", () => {
   });
 
   test("F5: Anzeige entfernen mit einem Grund aus der Gruppe „Konto“", async ({ browser }) => {
-    test.fail(true, "F5: Die Auswahl bietet Konto-Codes an, listings.reject_code lehnt sie ab (23514 → „Bitte wähle einen Grund“)");
+    // F5 behoben: getrennte Auswahl je Gruppe; für das Entfernen gibt es nur Anzeigen-Gründe.
     const owner = await createAccount("qa9b-f5o", "QA9b F5", created);
     const listing = await createPublicListing(owner.id, "QA9b Betrugsanzeige");
     const reporter = await createAccount("qa9b-f5r", "QA9b F5 Melder", created);
@@ -134,10 +137,15 @@ test.describe("QA M9b", () => {
     const page = await context.newPage();
     await page.goto(`/de/admin/reports/listing/${listing}`);
     await page.getByLabel("Anzeige entfernen").check();
-    await page.getByLabel("Grund").selectOption({ label: "Betrug oder Betrugsversuch" });
+    await expect(page.getByLabel("Grund für die Anzeige").locator("option", { hasText: "Betrug" })).toHaveCount(0);
+    await page.getByLabel("Grund für das Konto").selectOption({ label: "Betrug oder Betrugsversuch" });
+    await page.getByRole("button", { name: "Meldungen erledigen" }).click();
+    await expect(page.getByRole("alert")).toHaveText(/Grund, der zur Maßnahme passt/);
+    await page.getByLabel("Anzeige entfernen").check();
+    await page.getByLabel("Grund für die Anzeige").selectOption({ label: "Anderer Grund" });
     await page.getByLabel("Begründung für die Betroffenen").fill("Vorkasse per Gutschein verlangt.");
     await page.getByRole("button", { name: "Meldungen erledigen" }).click();
-    await expect(page).toHaveURL("/de/admin/reports?notice=resolved", { timeout: 5_000 });
+    await expect(page).toHaveURL(/\/de\/admin\/reports\?notice=resolved(#decision)?$/, { timeout: 5_000 });
     await context.close();
   });
 

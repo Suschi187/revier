@@ -813,17 +813,12 @@
         "history": "Frühere Anträge",
         "historyEmpty": "Keine früheren Anträge.",
         "documentTitle": "Dokument",
-        "documentHint": "Das Öffnen wird im Audit-Log festgehalten. Der Link gilt 60 Sekunden.",
+        "documentHint": "Jeder Abruf wird im Audit-Log festgehalten. Das Dokument wird nie zwischengespeichert.",
         "documentShow": "Dokument anzeigen",
         "documentAgain": "Erneut anzeigen",
         "documentMissing": "Das Dokument ist schon gelöscht (Aufbewahrungsfrist).",
-        "pdfLink": "PDF in neuem Tab öffnen",
+        "pdfLink": "PDF herunterladen",
         "imageAlt": "Hochgeladenes Dokument: {type}",
-        "documentErrors": {
-          "mismatch": "Der Inhalt der Datei passt zu keinem erlaubten Typ (JPEG, PNG, PDF). Sie wird nicht angezeigt. Lehne den Antrag ab.",
-          "expired": "Der Link ist abgelaufen. Öffne das Dokument noch einmal.",
-          "missing": "Das Dokument ist schon gelöscht."
-        },
         "decision": "Entscheidung",
         "verify": "Verifizieren",
         "reject": "Ablehnen",
@@ -841,7 +836,8 @@
           "forbidden": "Das geht nicht (eigenes Konto oder keine Zwei-Faktor-Anmeldung).",
           "notFound": "Den Antrag gibt es nicht mehr.",
           "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
-        }
+        },
+        "documentShownHint": "Erscheint kein Bild, passt der Inhalt der Datei zu keinem erlaubten Typ (JPEG, PNG, PDF). Lehne den Antrag dann ab."
       }
     },
     "reports": {
@@ -881,11 +877,8 @@
         "account_warned": "Konto verwarnen",
         "account_blocked": "Konto sperren"
       },
-      "code": "Grund",
       "codeNone": "Grund wählen",
-      "codesListing": "Anzeige",
-      "codesAccount": "Konto",
-      "codeHint": "Entfernen braucht einen Grund für Anzeigen, Verwarnen und Sperren einen Grund für Konten.",
+      "codeHint": "Entfernen der Anzeige oder des Kartenpunkts nimmt den Grund für die Anzeige, Verwarnen und Sperren den Grund für das Konto.",
       "note": "Begründung für die Betroffenen",
       "noteHint": "Das betroffene Konto sieht sie als Begründung; Pflicht beim Entfernen und bei „Anderer Grund“. Meldende erfahren nur das Ergebnis. Keine internen Notizen.",
       "submit": "Meldungen erledigen",
@@ -897,7 +890,9 @@
         "adminRole": "Konten mit Rolle lassen sich nicht verwarnen oder sperren.",
         "notFound": "Diesen Inhalt gibt es nicht mehr.",
         "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
-      }
+      },
+      "codeListing": "Grund für die Anzeige",
+      "codeAccount": "Grund für das Konto"
     },
     "users": {
       "metaTitle": "Konten",

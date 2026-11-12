@@ -7,7 +7,7 @@ import { enrollTotp, localRows, localSql, makeAdmin } from "./totp";
 // verification.test.ts und trust-mails.test.ts hinaus:
 // - Flags revier.* sind über PostgREST nicht setzbar (set_config und private Helfer nicht erreichbar).
 // - B3 über die Storage-API: list() ohne Audit leer, Audit eines Admins gilt nicht für einen anderen, und eine
-//   im Fenster erzeugte signierte URL mit langer Laufzeit (F6, it.fails).
+//   im Fenster erzeugte signierte URL mit langer Laufzeit (F6, behoben: kein Lesen über die Storage-API mehr).
 // - Der Bucket prüft nur den gemeldeten Typ: eine HTML-Datei als image/png lässt sich hochladen und einreichen
 //   (die Magic-Bytes-Prüfung im Admin muss greifen, E2E qa-m9b.spec.ts).
 // - Kontolöschung über die Function mit Verifizierung, Beschwerde, Zählerzeile und Dienstmail: kein Rest außerhalb
@@ -97,26 +97,21 @@ describe.skipIf(!f)("QA M9b: Flags, Dokumentzugriff und Löschung gegen den echt
     }
   });
 
-  it("B3: list() ohne Audit leer; das Audit von Admin A öffnet das Dokument nicht für Admin B", async () => {
+  it("B3: list() leer; auch nach dem Audit kein Zugriff über die Storage-API, für keinen Admin (seit F6)", async () => {
     const folder = request.path.split("/")[0];
     expect((await modA.client.storage.from("verification-docs").list(folder)).data ?? []).toEqual([]);
     expect((await modA.client.rpc("admin_open_verification_document", { p_id: request.id })).error).toBeNull();
-    expect((await modA.client.storage.from("verification-docs").createSignedUrl(request.path, 60)).error).toBeNull();
+    expect((await modA.client.storage.from("verification-docs").createSignedUrl(request.path, 60)).data).toBeNull();
     expect((await modB.client.storage.from("verification-docs").createSignedUrl(request.path, 60)).data).toBeNull();
     expect((await modB.client.storage.from("verification-docs").download(request.path)).data).toBeNull();
     // Anon und ein dritter Nutzer ohnehin nicht
     expect((await service.storage.from("verification-docs").exists(request.path)).data).toBe(true);
   });
 
-  it.fails("F6: Eine im 2-Minuten-Fenster signierte URL mit langer Laufzeit gilt danach ohne neues Audit weiter", async () => {
+  it("F6 (behoben): Auch nach dem Audit lässt sich keine signierte URL mit langer Laufzeit erzeugen", async () => {
     expect((await modA.client.rpc("admin_open_verification_document", { p_id: request.id })).error).toBeNull();
     const signed = await modA.client.storage.from("verification-docs").createSignedUrl(request.path, 365 * 24 * 3600);
-    // Erwartet: höchstens verification_doc_link_seconds (60) signierbar, oder der Link endet mit dem Fenster.
-    if (signed.error || !signed.data) return;
-    localSql(`update public.audit_log set created_at = now() - interval '10 minutes'
-              where action = 'verification.document_viewed' and target_id = '${request.id}'`);
-    const later = await fetch(signed.data.signedUrl);
-    expect(later.status).not.toBe(200);
+    expect(signed.data).toBeNull();
   });
 
   it("Bucket prüft nur den gemeldeten Typ: HTML als image/png lässt sich hochladen und einreichen", async () => {

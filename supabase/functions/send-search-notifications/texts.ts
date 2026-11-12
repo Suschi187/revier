@@ -279,9 +279,9 @@ export function composeSearchMail(
 // Moderations-Mail (Dienstmail ohne Abbestellen, A8)
 // ---------------------------------------------------------------------------------------------------------------
 
-export type Decision = "approved" | "changes_requested" | "rejected" | "removed";
+export type Decision = "approved" | "changes_requested" | "rejected" | "removed" | "point_removed";
 
-export const DECISIONS: readonly Decision[] = ["approved", "changes_requested", "rejected", "removed"];
+export const DECISIONS: readonly Decision[] = ["approved", "changes_requested", "rejected", "removed", "point_removed"];
 
 export function isDecision(value: unknown): value is Decision {
   return typeof value === "string" && (DECISIONS as readonly string[]).includes(value);
@@ -306,6 +306,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: "Changes requested for your listing on Revier",
       rejected: "Your listing on Revier has been rejected",
       removed: "Your listing on Revier has been removed",
+      point_removed: "The map point of your listing on Revier has been removed",
     },
     greeting: "Hello,",
     decision: {
@@ -313,6 +314,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: (title) => `moderation has asked for changes to your listing “${title}”. It is a draft again.`,
       rejected: (title) => `your listing “${title}” has been rejected by moderation.`,
       removed: (title) => `your listing “${title}” has been removed by moderation and is no longer public.`,
+      point_removed: (title) => `moderation has removed the map point of your listing “${title}”. The listing remains public and only shows the district.`,
     },
     untitled: "Untitled",
     reasonLabel: "Reason:",
@@ -327,6 +329,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: "Änderungen an deiner Anzeige auf Revier angefragt",
       rejected: "Deine Anzeige auf Revier wurde abgelehnt",
       removed: "Deine Anzeige auf Revier wurde entfernt",
+      point_removed: "Der Kartenpunkt deiner Anzeige auf Revier wurde entfernt",
     },
     greeting: "Hallo,",
     decision: {
@@ -334,6 +337,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: (title) => `die Moderation bittet um Änderungen an deiner Anzeige „${title}“. Sie ist wieder ein Entwurf.`,
       rejected: (title) => `deine Anzeige „${title}“ wurde von der Moderation abgelehnt.`,
       removed: (title) => `deine Anzeige „${title}“ wurde von der Moderation entfernt und ist nicht mehr öffentlich.`,
+      point_removed: (title) => `die Moderation hat den Kartenpunkt deiner Anzeige „${title}“ entfernt. Die Anzeige bleibt öffentlich und zeigt nur noch den Landkreis.`,
     },
     untitled: "Ohne Titel",
     reasonLabel: "Grund:",
@@ -348,6 +352,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: "K vašemu inzerátu na Revier jsou požadovány úpravy",
       rejected: "Váš inzerát na Revier byl zamítnut",
       removed: "Váš inzerát na Revier byl odstraněn",
+      point_removed: "Bod na mapě u vašeho inzerátu na Revier byl odstraněn",
     },
     greeting: "Dobrý den,",
     decision: {
@@ -355,6 +360,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: (title) => `moderace žádá o úpravy vašeho inzerátu „${title}“. Inzerát je opět konceptem.`,
       rejected: (title) => `váš inzerát „${title}“ byl moderací zamítnut.`,
       removed: (title) => `váš inzerát „${title}“ byl moderací odstraněn a již není veřejný.`,
+      point_removed: (title) => `moderace odstranila bod na mapě u vašeho inzerátu „${title}“. Inzerát zůstává veřejný a zobrazuje už jen okres.`,
     },
     untitled: "Bez názvu",
     reasonLabel: "Důvod:",
@@ -369,6 +375,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: "Prośba o poprawki w Twoim ogłoszeniu w Revier",
       rejected: "Twoje ogłoszenie w Revier zostało odrzucone",
       removed: "Twoje ogłoszenie w Revier zostało usunięte",
+      point_removed: "Punkt na mapie Twojego ogłoszenia w Revier został usunięty",
     },
     greeting: "Dzień dobry,",
     decision: {
@@ -376,6 +383,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       changes_requested: (title) => `moderacja prosi o poprawki w Twoim ogłoszeniu „${title}”. Jest ono ponownie szkicem.`,
       rejected: (title) => `Twoje ogłoszenie „${title}” zostało odrzucone przez moderację.`,
       removed: (title) => `Twoje ogłoszenie „${title}” zostało usunięte przez moderację i nie jest już publiczne.`,
+      point_removed: (title) => `moderacja usunęła punkt na mapie Twojego ogłoszenia „${title}”. Ogłoszenie pozostaje publiczne i pokazuje już tylko powiat.`,
     },
     untitled: "Bez tytułu",
     reasonLabel: "Powód:",

@@ -3,7 +3,7 @@
 -- Dienstmails und Export.
 begin;
 \ir _helpers.psql
-select plan(98);
+select plan(99);
 
 select s.decrypted_secret as secret from vault.decrypted_secrets s where s.name = 'search_notifications_secret' \gset
 
@@ -162,7 +162,9 @@ select is(tests.err(format($$ update listings set status = 'pending_review' wher
 -- 4. Kartenpunkt, Nachricht ohne Maßnahme
 -- ---------------------------------------------------------------------------
 select tests.authenticate_as(:'adm', 'aal2');
-select is(resolve_reports('listing', :'lp', 'point_removed', null, 'Lage zu genau'), 'point_removed', 'Kartenpunkt entfernt');
+select is(tests.err(format($$ select resolve_reports('listing', %L, 'point_removed', null, 'Lage zu genau') $$, :'lp')), '23514',
+  'Kartenpunkt entfernen braucht einen Grund (QA M9b F3)');
+select is(resolve_reports('listing', :'lp', 'point_removed', 'other', 'Lage zu genau'), 'point_removed', 'Kartenpunkt entfernt');
 select tests.as_postgres();
 select ok((select display_location is null and status = 'active' from listings where id = :'lp'), 'Punkt weg, Anzeige aktiv');
 select is((select count(*)::int from audit_log where action = 'listing.point_removed' and target_id = :'lp'), 1, 'Audit listing.point_removed');

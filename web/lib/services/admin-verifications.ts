@@ -1,17 +1,16 @@
 import "server-only";
-import { sniffDocument, type DocumentMime, type DocumentType, type RevokeCode, type VerificationRejectCode } from "@/lib/verification";
+import { publicEnv } from "@/lib/env";
+import type { DocumentType, RevokeCode, VerificationRejectCode } from "@/lib/verification";
 import { fieldsFromHint } from "@/lib/validation/listing";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 
 // Verifizierung im Admin (ADR 020). Rechte prüft die DB (is_admin mit aal2, nie das eigene Konto). Das Dokument
-// gibt es nur nach admin_open_verification_document (Audit, Review B3) als 60-Sekunden-URL mit der Session des
-// Admins; vor dem Anzeigen prüft der Server die ersten Bytes (Review A6).
+// liefert nur die Edge Function verification-document aus (Audit je Abruf, erste Bytes, no-store; Review B3, A6,
+// QA M9b F6).
 
 type Enums = Database["public"]["Enums"];
 
-/** Laufzeit der signierten URL (app_settings.verification_doc_link_seconds). */
-export const DOC_LINK_SECONDS = 60;
 export const VERIFICATION_QUEUE_PAGE = 25;
 
 /** Eingereichte offene Anträge ohne die eigenen. */
@@ -70,6 +69,7 @@ export type AdminVerification = {
   revokeCode: RevokeCode | null;
   revokeReason: string | null;
   documentPresent: boolean;
+  documentMime: string | null;
   isOwn: boolean;
   user: {
     id: string;
@@ -87,7 +87,7 @@ export type AdminVerification = {
 type Raw = {
   id: string; status: AdminVerification["status"]; document_type: DocumentType; submitted_at: string; decided_at: string | null;
   reject_code: VerificationRejectCode | null; reject_reason: string | null; revoked_at: string | null; revoke_code: RevokeCode | null;
-  revoke_reason: string | null; document_present: boolean; is_own: boolean;
+  revoke_reason: string | null; document_present: boolean; document_mime: string | null; is_own: boolean;
   user: { id: string; display_name: string; account_type: Enums["account_type"]; business_name: string | null; country: Enums["country_code"];
           verification_status: Enums["verification_status"]; is_blocked: boolean; member_since: string };
   history: { id: string; status: AdminVerification["status"]; document_type: DocumentType; decided_at: string | null;
@@ -112,6 +112,7 @@ export async function getVerification(id: string): Promise<AdminVerification | n
     revokeCode: v.revoke_code,
     revokeReason: v.revoke_reason,
     documentPresent: v.document_present,
+    documentMime: v.document_mime,
     isOwn: v.is_own,
     user: {
       id: v.user.id,
@@ -134,36 +135,21 @@ export async function getVerification(id: string): Promise<AdminVerification | n
   };
 }
 
-/** Schreibt das Audit `verification.document_viewed` (Review B3). Erst danach lässt sich das Dokument signieren. */
-export async function openDocument(id: string): Promise<boolean> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.rpc("admin_open_verification_document", { p_id: id });
-  return !error && typeof data === "string";
-}
-
-export type DocumentView =
-  | { ok: true; url: string; mime: DocumentMime }
-  /** Die ersten Bytes passen zu keinem erlaubten Typ: nicht anzeigen, nur markieren (Review A6). */
-  | { ok: false; error: "mismatch" | "expired" | "missing" };
-
 /**
- * Signierte URL mit der Session des Admins, nur innerhalb von 2 Minuten nach dem Audit (Storage-Policy). Die ersten
- * Bytes liest der Server über dieselbe URL per Range-Request.
+ * Dokument über die Edge Function verification-document (QA M9b F6): Admins haben keinen Lesezugriff über die
+ * Storage-API mehr. Die Function schreibt je Abruf das Audit, prüft die ersten Bytes und antwortet mit no-store.
  */
-export async function documentView(id: string): Promise<DocumentView> {
+export async function fetchDocument(id: string): Promise<Response | null> {
   const supabase = await createSupabaseServerClient();
-  const { data: row } = await supabase.from("verifications").select("document_path").eq("id", id).maybeSingle();
-  if (!row?.document_path) return { ok: false, error: "missing" };
-  const { data, error } = await supabase.storage.from("verification-docs").createSignedUrl(row.document_path, DOC_LINK_SECONDS);
-  if (error || !data?.signedUrl) return { ok: false, error: "expired" };
-  try {
-    const head = await fetch(data.signedUrl, { headers: { Range: "bytes=0-15" }, cache: "no-store" });
-    if (!head.ok) return { ok: false, error: "expired" };
-    const mime = sniffDocument(new Uint8Array(await head.arrayBuffer()).slice(0, 16));
-    return mime ? { ok: true, url: data.signedUrl, mime } : { ok: false, error: "mismatch" };
-  } catch {
-    return { ok: false, error: "expired" };
-  }
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) return null;
+  return fetch(`${publicEnv.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/verification-document`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, apikey: publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+    cache: "no-store",
+  });
 }
 
 export type AdminDecisionResult = { ok: true } | { ok: false; error: "decided" | "notFound" | "code" | "note" | "forbidden" | "failed" };

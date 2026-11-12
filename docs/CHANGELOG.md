@@ -2,6 +2,25 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Nachtrag M9b: QA-Funde F1–F6 – 2026-11-12
+
+Bericht: `docs/QA-REPORT.md`, Abschnitt „M9b – Abnahme“. Migration `20261112160000_qa_m9b_fixes.sql`, ADR 020 „Nachträge QA M9b“.
+
+### Geändert
+- **F1 (mittel):** Eine Beschwerde von Meldenden öffnet nur die Meldungen der angefochtenen Bearbeitung wieder (`reports.resolution_id`); vorher scheiterte die Rücknahme nach zwei Meldezyklen an `reports_one_open_idx`.
+- **F3 (mittel):** Kartenpunkt entfernen verlangt Grund und Begründung, beides steht im Audit und in „Entscheidungen“, der Besitzer bekommt eine Mail (4 Sprachen).
+- **F2:** Die Ausweichregel zählt den Beschwerdeführer nicht mehr als „anderen Admin“.
+- **F4:** Nach Wiedereröffnung und neuer Entscheidung bekommen Meldende eine neue Ergebnis-Mail.
+- **F5:** Getrennte Auswahl für Anzeigen- und Konto-Gründe, Prüfung je Maßnahme im Web und in der DB.
+- **F6:** Verifizierungsdokumente nur noch über die Edge Function `verification-document` (Audit je Abruf, erste Bytes, `no-store`); kein Lesen und Signieren über die Storage-API mehr, auch nicht für Admins.
+- **CI:** Deno-Job für `verification-document`.
+- **Proben:** Die TODOs F1–F4 in pgTAP 56, `test.fail` F5 in `qa-m9b.spec.ts` und `it.fails` F6 in `qa-m9b.test.ts` sind normale Tests.
+
+### Testen
+- `supabase test db`; Deno per Docker in `supabase/functions/verification-document` und `send-search-notifications`
+- `cd web && npm test && INTEGRATION_REQUIRED=1 npm run test:integration && npx playwright test e2e/verification.spec.ts e2e/qa-m9b.spec.ts e2e/admin-moderation.spec.ts`
+- Lokal: Die neue Function bedient die Edge Runtime erst nach `supabase stop && supabase start`.
+
 ## M9b Vertrauen und Moderation (Web) – 2026-11-12
 
 Plan `docs/plans/M9-plan.md` (Architekt-Review Abschnitt 10, Freigabe Abschnitt 11), ADR 020 mit den Abschnitten „Umsetzung“ je Commit, SPEC v0.11. Mit M9b ist M9 vollständig.

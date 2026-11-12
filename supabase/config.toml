@@ -434,6 +434,12 @@ verify_jwt = false
 enabled = true
 verify_jwt = false
 
+# Revier: Verifizierungsdokument für Admins (ADR 020, QA M9b F6). Aufruf nur vom Web-Server mit dem Access Token des
+# Admins; Rechte und Audit prüft admin_open_verification_document, der Download läuft mit service_role.
+[functions.verification-document]
+enabled = true
+verify_jwt = true
+
 # Nur lokal und in der CI, keine Geheimnisse: Mailpit im Docker-Netz (Host „inbucket“, SMTP 1025). In der Cloud
 # setzt die Checkliste die Werte per `supabase secrets set` (M10: HTTP-Adapter statt SMTP, ADR 017).
 [edge_runtime.secrets]

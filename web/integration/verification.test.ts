@@ -1,10 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { fixture, SKIPPED } from "./context";
 import { createSignedInUser, deleteUsers, JPEG, serviceClient } from "./helpers";
-import { enrollTotp, localSql, makeAdmin } from "./totp";
+import { enrollTotp, localRows, localSql, makeAdmin } from "./totp";
 
 // M9b (ADR 020) gegen die echte Storage-API und echtes aal2: Upload nur auf den Pfad des eigenen Antrags, Löschen
-// durch den Besitzer bis zur Einreichung (Review A6), Dokumente für Admins nur mit frischem Audit (Review B3).
+// durch den Besitzer bis zur Einreichung (Review A6), Dokumente für Admins nur über verification-document mit Audit
+// je Abruf (Review B3, QA M9b F6).
 
 const f = fixture();
 
@@ -50,23 +51,34 @@ describe.skipIf(!f)("Verifizierung über Storage-API und PostgREST", () => {
     expect((await service.storage.from("verification-docs").exists(request.path)).data).toBe(true);
   });
 
-  it("Admin mit aal2 signiert nicht ohne frisches Audit, danach 60 s lang schon (Review B3)", async () => {
+  it("Admins lesen nie über die Storage-API; das Dokument kommt nur über verification-document mit Audit (B3, QA M9b F6)", async () => {
     const adminDocs = mod.client.storage.from("verification-docs");
     expect((await adminDocs.createSignedUrl(request.path, 60)).data).toBeNull();
     expect((await adminDocs.download(request.path)).data).toBeNull();
+    expect((await mod.client.rpc("admin_open_verification_document", { p_id: request.id })).error).toBeNull();
+    // Auch direkt nach dem Audit kein Signieren mehr (keine langen Links, F6)
+    expect((await adminDocs.createSignedUrl(request.path, 365 * 24 * 3600)).data).toBeNull();
 
-    const opened = await mod.client.rpc("admin_open_verification_document", { p_id: request.id });
-    expect(opened.error).toBeNull();
-    expect(opened.data).toBe(request.path);
-    const signed = await adminDocs.createSignedUrl(request.path, 60);
-    expect(signed.error).toBeNull();
-    const response = await fetch(signed.data!.signedUrl);
+    const viewed = () => localRows<{ n: number }>(`select count(*)::int as n from public.audit_log
+      where action = 'verification.document_viewed' and target_id = '${request.id}'`)[0].n;
+    const before = viewed();
+    const { data: session } = await mod.client.auth.getSession();
+    const call = (token: string) => fetch(`${fx.url}/functions/v1/verification-document`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, apikey: fx.publishableKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ id: request.id }),
+    });
+    const response = await call(session.session!.access_token);
     expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("image/jpeg");
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
     expect(new Uint8Array(await response.arrayBuffer())).toEqual(JPEG);
+    expect(viewed()).toBe(before + 1);
 
-    localSql(`update public.audit_log set created_at = now() - interval '3 minutes'
-              where action = 'verification.document_viewed' and target_id = '${request.id}'`);
-    expect((await adminDocs.createSignedUrl(request.path, 60)).data).toBeNull();
+    // Der Besitzer (kein Admin) bekommt über die Function nichts
+    const { data: own } = await owner.client.auth.getSession();
+    expect((await call(own.session!.access_token)).status).toBe(403);
+    expect(viewed()).toBe(before + 1);
   });
 
   it("Entscheidung per RPC schaltet das Badge; der Besitzer sieht keinen Prüfer", async () => {

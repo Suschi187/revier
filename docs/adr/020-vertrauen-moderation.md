@@ -188,6 +188,14 @@ Migration `20261112140000_trust_maintenance.sql`, pgTAP 55:
 - **Verlassene Entwürfe:** `listings.edited_at` stempelt der Trigger `listings_edited_at` bei jeder Änderung des Besitzers (Vergleich über `to_jsonb`, weil der Zeilenvergleich für Geodaten keinen Operator hat), der Kinder-Guard bei Fotos, Wildarten und Ort. `edited_at` und `draft_notice_at` stehen nicht im Inhalts-Hash, sonst müsste eine pausierte Anzeige nach dem Fortsetzen neu geprüft werden (gefunden im Integrationstest). Hinweis per Dienstmail `draft_expiry_notice` mit Löschdatum und Link zum Bearbeiten; gelöscht werden nur Entwürfe, deren Hinweis 30 Tage alt ist und die seitdem nicht bearbeitet wurden. **Abweichung vom Plan:** Der Job löscht die Zeile; die Fotodateien entfernt danach der bestehende Job für Dateien ohne Zeile (`photo_orphan`, ADR 019), statt einer eigenen Reihenfolge in der Function. Das Ergebnis ist dasselbe, ein zweiter Löschweg entfällt.
 - **Fristen:** `trust-retention` löscht Warteschlange und Zählerzeilen nach 30 Tagen und Beschwerden nach `appeal_keep_months`.
 
+### Nachträge QA M9b (Migration `20261112160000_qa_m9b_fixes.sql`)
+- **F1:** `reports.resolution_id` kennzeichnet eine Bearbeitung von `resolve_reports`. Eine Beschwerde von Meldenden öffnet nur die Meldungen dieser Bearbeitung wieder, nicht frühere Zyklen.
+- **F2:** Die Ausweichregel schließt neben dem entscheidenden Admin auch den Beschwerdeführer aus (`other_admin_available(p_exclude)`).
+- **F3:** Kartenpunkt entfernen verlangt einen Anzeigen-Grund und eine Begründung, schreibt beides ins Audit `listing.point_removed` und legt eine Moderations-Mail (`point_removed`, 4 Sprachen) mit Frist zum Anfechten an.
+- **F4:** `report_resolved` verweist auf das Audit der Bearbeitung (`decision_audit_id`); jede neue Entscheidung nach einer Wiedereröffnung ergibt eine eigene Mail.
+- **F5:** Getrennte Auswahl „Grund für die Anzeige“ und „Grund für das Konto“; Schema und `resolve_reports` prüfen den Code je Maßnahme (`23514`, `hint fields code`).
+- **F6 (ersetzt die Dokumentansicht aus Commit 7):** Admins haben keinen Lesezugriff mehr über die Storage-API; die Policy `verification_docs_select_admin` und das 2-Minuten-Fenster entfallen. Jeder Abruf läuft über die Edge Function `verification-document` (`verify_jwt`, `admin_open_verification_document` mit dem JWT des Admins schreibt das Audit, Download mit `service_role`, erste Bytes, `no-store`, `sandbox`, PDF als Download) und die Web-Route `/api/admin/verifications/:id/document`. Langlebige signierte Links gibt es damit nicht mehr. `verification_doc_link_seconds` wird nicht mehr genutzt.
+
 ## Alternativen
 - **Schlanker Beschwerdeweg** (Formular als Meldung, Entscheidung von Hand): keine Wirkung auf die Maßnahme, keine gemeinsame Quelle mit `my_decisions` und Export (10.4/3).
 - **Eigene Tabelle je Mailart** wie in M8: mehr Schema ohne Nutzen (10.4/8).

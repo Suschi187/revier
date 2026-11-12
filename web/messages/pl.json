@@ -813,17 +813,12 @@
         "history": "Wcześniejsze wnioski",
         "historyEmpty": "Brak wcześniejszych wniosków.",
         "documentTitle": "Dokument",
-        "documentHint": "Otwarcie zostanie zapisane w dzienniku audytu. Link jest ważny 60 sekund.",
+        "documentHint": "Każde wyświetlenie jest zapisywane w dzienniku audytu. Dokument nigdy nie jest buforowany.",
         "documentShow": "Pokaż dokument",
         "documentAgain": "Pokaż ponownie",
         "documentMissing": "Dokument został już usunięty (okres przechowywania).",
-        "pdfLink": "Otwórz PDF w nowej karcie",
+        "pdfLink": "Pobierz PDF",
         "imageAlt": "Przesłany dokument: {type}",
-        "documentErrors": {
-          "mismatch": "Zawartość pliku nie pasuje do żadnego dozwolonego typu (JPEG, PNG, PDF). Nie zostanie pokazany. Odrzuć wniosek.",
-          "expired": "Link wygasł. Otwórz dokument ponownie.",
-          "missing": "Dokument został już usunięty."
-        },
         "decision": "Decyzja",
         "verify": "Zweryfikuj",
         "reject": "Odrzuć",
@@ -841,7 +836,8 @@
           "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
           "notFound": "Ten wniosek już nie istnieje.",
           "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
-        }
+        },
+        "documentShownHint": "Jeśli obraz się nie pojawi, zawartość pliku nie pasuje do dozwolonego typu (JPEG, PNG, PDF). W takim przypadku odrzuć wniosek."
       }
     },
     "reports": {
@@ -881,11 +877,8 @@
         "account_warned": "Upomnij konto",
         "account_blocked": "Zablokuj konto"
       },
-      "code": "Powód",
       "codeNone": "Wybierz powód",
-      "codesListing": "Ogłoszenie",
-      "codesAccount": "Konto",
-      "codeHint": "Usunięcie wymaga powodu dla ogłoszeń, upomnienie i blokada powodu dla kont.",
+      "codeHint": "Usunięcie ogłoszenia lub punktu na mapie używa powodu dla ogłoszenia, upomnienie i blokada powodu dla konta.",
       "note": "Uzasadnienie dla osób, których dotyczy",
       "noteHint": "Konto, którego dotyczy, zobaczy je jako uzasadnienie; wymagane przy usunięciu i przy „Inny powód”. Zgłaszający poznają tylko wynik. Bez notatek wewnętrznych.",
       "submit": "Zamknij zgłoszenia",
@@ -897,7 +890,9 @@
         "adminRole": "Kont z rolą nie można upominać ani blokować.",
         "notFound": "Ta treść jest już niedostępna.",
         "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
-      }
+      },
+      "codeListing": "Powód dla ogłoszenia",
+      "codeAccount": "Powód dla konta"
     },
     "users": {
       "metaTitle": "Konta",

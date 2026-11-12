@@ -493,14 +493,14 @@ isOneToOne: false
                   ]
                 },"reports": {
                   Row: {
-                    "created_at": string,"decision_audit_id": string | null,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"outcome": string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id": string | null,"status": Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+                    "created_at": string,"decision_audit_id": string | null,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"outcome": string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id": string | null,"resolution_id": string | null,"status": Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"decision_audit_id"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"outcome"?: string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+                    "created_at"?: string,"decision_audit_id"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"outcome"?: string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"resolution_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
                   }
                   Update: {
-                    "created_at"?: string,"decision_audit_id"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"outcome"?: string | null,"reason"?: Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id"?: string,"target_type"?: Database["public"]['Enums']["report_target"]
+                    "created_at"?: string,"decision_audit_id"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"outcome"?: string | null,"reason"?: Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"resolution_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id"?: string,"target_type"?: Database["public"]['Enums']["report_target"]
                   }
                   Relationships: [
                     {

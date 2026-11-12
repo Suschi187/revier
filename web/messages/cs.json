@@ -813,17 +813,12 @@
         "history": "Dřívější žádosti",
         "historyEmpty": "Žádné dřívější žádosti.",
         "documentTitle": "Doklad",
-        "documentHint": "Otevření se zaznamená do auditního protokolu. Odkaz platí 60 sekund.",
+        "documentHint": "Každé zobrazení se zaznamená do auditního protokolu. Doklad se nikdy neukládá do mezipaměti.",
         "documentShow": "Zobrazit doklad",
         "documentAgain": "Zobrazit znovu",
         "documentMissing": "Doklad už byl smazán (lhůta uchování).",
-        "pdfLink": "Otevřít PDF v nové kartě",
+        "pdfLink": "Stáhnout PDF",
         "imageAlt": "Nahraný doklad: {type}",
-        "documentErrors": {
-          "mismatch": "Obsah souboru neodpovídá žádnému povolenému typu (JPEG, PNG, PDF). Nezobrazí se. Žádost zamítněte.",
-          "expired": "Platnost odkazu vypršela. Otevřete doklad znovu.",
-          "missing": "Doklad už byl smazán."
-        },
         "decision": "Rozhodnutí",
         "verify": "Ověřit",
         "reject": "Zamítnout",
@@ -841,7 +836,8 @@
           "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
           "notFound": "Žádost už neexistuje.",
           "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
-        }
+        },
+        "documentShownHint": "Pokud se nezobrazí žádný obrázek, obsah souboru neodpovídá povolenému typu (JPEG, PNG, PDF). V takovém případě žádost zamítněte."
       }
     },
     "reports": {
@@ -881,11 +877,8 @@
         "account_warned": "Napomenout účet",
         "account_blocked": "Zablokovat účet"
       },
-      "code": "Důvod",
       "codeNone": "Vyberte důvod",
-      "codesListing": "Inzerát",
-      "codesAccount": "Účet",
-      "codeHint": "Odstranění vyžaduje důvod pro inzeráty, napomenutí a blokace důvod pro účty.",
+      "codeHint": "Odstranění inzerátu nebo bodu na mapě používá důvod pro inzerát, napomenutí a blokace důvod pro účet.",
       "note": "Odůvodnění pro dotčené",
       "noteHint": "Dotčený účet ho uvidí jako odůvodnění; povinné při odstranění a u „Jiný důvod“. Oznamovatelé se dozví jen výsledek. Žádné interní poznámky.",
       "submit": "Vyřídit nahlášení",
@@ -897,7 +890,9 @@
         "adminRole": "Účty s rolí nelze napomenout ani zablokovat.",
         "notFound": "Tento obsah již není k dispozici.",
         "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
-      }
+      },
+      "codeListing": "Důvod pro inzerát",
+      "codeAccount": "Důvod pro účet"
     },
     "users": {
       "metaTitle": "Účty",
