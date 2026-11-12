@@ -5,8 +5,7 @@
   },
   "HomePage": {
     "metaTitle": "Możliwości polowań w Europie Środkowej",
-    "title": "Znajdź możliwości polowań",
-    "intro": "Dzierżawa obwodów łowieckich, odstrzały, polowania zbiorowe, polowania trofeowe i pomocnicy myśliwych w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
+    "title": "Znajdź swój obwód."
   },
   "LocaleSwitcher": {
     "label": "Język",
@@ -1036,24 +1035,28 @@
       "toSearch": "Przejdź do wyszukiwania"
     },
     "home": {
-      "searchLabel": "Szukaj",
-      "searchPlaceholder": "np. sarna, ambona, Bawaria",
-      "searchButton": "Szukaj",
-      "kindsHeading": "Kategorie",
-      "countriesHeading": "Kraje",
+      "kindsHeading": "Kategorie.",
+      "countriesHeading": "Według kraju.",
       "countrySoon": "{country} (wkrótce)",
-      "newestHeading": "Najnowsze ogłoszenia",
+      "newestHeading": "Najnowsze ogłoszenia.",
       "newestEmpty": "Nie opublikowano jeszcze żadnych ogłoszeń.",
       "newestError": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
       "loading": "Wczytywanie ogłoszeń …",
-      "allListings": "Zobacz wszystkie ogłoszenia",
-      "crumb": "Start"
+      "allListings": "Wszystkie ogłoszenia",
+      "crumb": "Start",
+      "heroText": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Bezpośrednio od myśliwego do myśliwego.",
+      "heroCta": "Dodaj ogłoszenie",
+      "trustHeading": "Bezpiecznie wśród myśliwych.",
+      "trustVerified": "Zweryfikowani myśliwi ze sprawdzonymi uprawnieniami łowieckimi",
+      "trustLocation": "Dokładna lokalizacja obwodu pozostaje chroniona",
+      "trustReview": "Każde ogłoszenie sprawdzamy przed publikacją"
     },
     "card": {
       "photoAlt": "{title}, zdjęcie 1",
       "postalArea": "Kod {prefix}…",
       "verified": "zweryfikowany",
-      "published": "opublikowano {date}"
+      "published": "opublikowano {date}",
+      "area": "{area} ha"
     },
     "search": {
       "heading": "Szukaj ogłoszeń",

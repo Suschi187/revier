@@ -5,8 +5,7 @@
   },
   "HomePage": {
     "metaTitle": "Jagdgelegenheiten in Mitteleuropa",
-    "title": "Jagdgelegenheiten finden",
-    "intro": "Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäenjagden und Jagdhelfer in Deutschland, Österreich, der Schweiz, Tschechien und Polen."
+    "title": "Finde dein Revier."
   },
   "LocaleSwitcher": {
     "label": "Sprache",
@@ -1036,24 +1035,28 @@
       "toSearch": "Zur Suche"
     },
     "home": {
-      "searchLabel": "Suche",
-      "searchPlaceholder": "z. B. Rehwild, Hochsitz, Bayern",
-      "searchButton": "Suchen",
-      "kindsHeading": "Kategorien",
-      "countriesHeading": "Länder",
+      "kindsHeading": "Kategorien.",
+      "countriesHeading": "Nach Land.",
       "countrySoon": "{country} (bald)",
-      "newestHeading": "Neueste Anzeigen",
+      "newestHeading": "Neueste Anzeigen.",
       "newestEmpty": "Noch keine Anzeigen veröffentlicht.",
       "newestError": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
       "loading": "Anzeigen werden geladen …",
-      "allListings": "Alle Anzeigen ansehen",
-      "crumb": "Start"
+      "allListings": "Alle Anzeigen",
+      "crumb": "Start",
+      "heroText": "Pacht, Begehungsschein oder Platz auf der Drückjagd. Direkt von Jäger zu Jäger.",
+      "heroCta": "Jetzt inserieren",
+      "trustHeading": "Sicher unter Jägern.",
+      "trustVerified": "Verifizierte Jäger mit geprüftem Jagdschein",
+      "trustLocation": "Die genaue Revierlage bleibt geschützt",
+      "trustReview": "Jede Anzeige wird vor der Freigabe geprüft"
     },
     "card": {
       "photoAlt": "{title}, Foto 1",
       "postalArea": "PLZ {prefix}…",
       "verified": "verifiziert",
-      "published": "veröffentlicht am {date}"
+      "published": "veröffentlicht am {date}",
+      "area": "{area} ha"
     },
     "search": {
       "heading": "Anzeigen suchen",

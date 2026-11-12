@@ -5,8 +5,7 @@
   },
   "HomePage": {
     "metaTitle": "Hunting opportunities in Central Europe",
-    "title": "Find hunting opportunities",
-    "intro": "Hunting leases, hunting permits, driven hunts, trophy hunts and hunting helpers in Germany, Austria, Switzerland, Czechia and Poland."
+    "title": "Find your hunting ground."
   },
   "LocaleSwitcher": {
     "label": "Language",
@@ -1036,24 +1035,28 @@
       "toSearch": "Go to search"
     },
     "home": {
-      "searchLabel": "Search",
-      "searchPlaceholder": "e.g. roe deer, high seat, Bavaria",
-      "searchButton": "Search",
-      "kindsHeading": "Categories",
-      "countriesHeading": "Countries",
+      "kindsHeading": "Categories.",
+      "countriesHeading": "By country.",
       "countrySoon": "{country} (coming soon)",
-      "newestHeading": "Latest listings",
+      "newestHeading": "Latest listings.",
       "newestEmpty": "No listings published yet.",
       "newestError": "The listings could not be loaded. Please try again later.",
       "loading": "Loading listings …",
-      "allListings": "View all listings",
-      "crumb": "Home"
+      "allListings": "All listings",
+      "crumb": "Home",
+      "heroText": "A lease, a hunting permit or a stand on a driven hunt. Directly from hunter to hunter.",
+      "heroCta": "Post a listing",
+      "trustHeading": "Safe among hunters.",
+      "trustVerified": "Verified hunters with a checked hunting licence",
+      "trustLocation": "The exact location of the hunting ground stays protected",
+      "trustReview": "Every listing is reviewed before it goes live"
     },
     "card": {
       "photoAlt": "{title}, photo 1",
       "postalArea": "Postcode {prefix}…",
       "verified": "verified",
-      "published": "published on {date}"
+      "published": "published on {date}",
+      "area": "{area} ha"
     },
     "search": {
       "heading": "Search listings",

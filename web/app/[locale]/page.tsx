@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { DeletedNotice } from "@/components/account/DeletedNotice";
+import { KindIcon } from "@/components/brand/KindIcon";
+import { Icon } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
+import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/public/JsonLd";
 import { ListingList } from "@/components/public/ListingCard";
 import { publicAlternates } from "@/i18n/metadata";
@@ -48,21 +52,41 @@ async function Newest({ locale }: { locale: AppLocale }) {
     favoriteContext(publicPath({ route: "home" }, locale)),
   ]);
   if (!result.ok) return <p className="mt-4" role="alert">{t("newestError")}</p>;
-  return <ListingList items={result.page.items} locale={locale} regions={regions} empty={t("newestEmpty")} favorites={favorites} />;
+  return <ListingList items={result.page.items} locale={locale} regions={regions} empty={t("newestEmpty")} favorites={favorites} layout="grid" />;
+}
+
+/** Höhenlinien als dezentes Muster im Banner (eigene Zeichnung, docs/DESIGN.md 7). */
+function Contours() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 size-full opacity-20">
+      <g fill="none" stroke="var(--color-sand)">
+        <path d="M600 260 C 640 180, 820 150, 900 200 S 1100 260, 1200 230" />
+        <path d="M560 260 C 600 150, 830 100, 920 170 S 1110 230, 1200 190" />
+        <path d="M520 260 C 560 120, 840 50, 940 140 S 1120 200, 1200 150" />
+        <path d="M880 120 C 900 100, 950 100, 960 120 S 930 150, 905 145 S 870 140, 880 120" />
+      </g>
+    </svg>
+  );
 }
 
 export default async function HomePage() {
   const locale = (await getLocale()) as AppLocale;
-  const [t, th, tl, tc] = await Promise.all([
+  const [t, th, tl, tc, tb] = await Promise.all([
     getTranslations("Public.home"),
     getTranslations("HomePage"),
     getTranslations("Listings"),
     getTranslations("Profile.countries"),
+    getTranslations("Brand"),
   ]);
   const searchPath = publicPath({ route: "search" }, locale);
+  const trust = [
+    ["shield", "trustVerified"],
+    ["lock", "trustLocation"],
+    ["flag", "trustReview"],
+  ] as const;
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className={`${ui.container} flex flex-1 flex-col gap-10 py-6 sm:gap-12`}>
       <Suspense fallback={null}>
         <DeletedNotice />
       </Suspense>
@@ -80,55 +104,73 @@ export default async function HomePage() {
           },
         }}
       />
-      <h1 className="text-3xl font-semibold">{th("title")}</h1>
-      <p className="mt-4 text-lg">{th("intro")}</p>
 
-      <form action={searchPath} method="get" role="search" className="mt-6 flex flex-wrap gap-2">
-        <label htmlFor="home-q" className="sr-only">
-          {t("searchLabel")}
-        </label>
-        <input id="home-q" name="q" type="search" maxLength={200} placeholder={t("searchPlaceholder")}
-          className="min-w-0 flex-1 rounded border border-stone-400 px-3 py-2" />
-        <button type="submit" className="rounded bg-stone-900 px-4 py-2 text-white">
-          {t("searchButton")}
-        </button>
-      </form>
-
-      <section aria-labelledby="home-kinds" className="mt-10">
-        <h2 id="home-kinds" className="text-xl font-semibold">{t("kindsHeading")}</h2>
-        <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <nav aria-labelledby="home-kinds">
+        <h2 id="home-kinds" className="sr-only">{t("kindsHeading")}</h2>
+        <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
           {LISTING_KINDS.map((kind) => (
             <li key={kind}>
-              <a href={publicPath({ route: "kind", kind }, locale)} className="block rounded border border-stone-300 px-4 py-3 underline-offset-2 hover:underline focus-visible:underline">
-                {tl(`kinds.${kind}`)}
+              <a href={publicPath({ route: "kind", kind }, locale)}
+                className={`${ui.card} flex h-full flex-col items-center gap-2.5 px-2.5 py-4 text-center font-semibold text-forest no-underline hover:border-forest`}>
+                <span className="flex size-14 items-center justify-center rounded-full bg-sand"><KindIcon kind={kind} /></span>
+                <span className="[overflow-wrap:anywhere] hyphens-auto">{tl(`kinds.${kind}`)}</span>
               </a>
             </li>
           ))}
+          <li>
+            <a href={searchPath} className={`${ui.card} flex h-full flex-col items-center gap-2.5 px-2.5 py-4 text-center font-semibold text-forest no-underline hover:border-forest`}>
+              <span className="flex size-14 items-center justify-center rounded-full bg-sand"><Icon name="search" size={28} /></span>
+              <span>{t("allListings")}</span>
+            </a>
+          </li>
         </ul>
+      </nav>
+
+      <section aria-labelledby="home-title" className="on-dark relative flex min-h-64 items-center overflow-hidden rounded-card bg-forest text-offwhite">
+        <Contours />
+        <div className="relative max-w-2xl px-6 py-9 sm:px-10">
+          <p className="mb-2.5 font-display text-[0.8125rem] font-bold uppercase tracking-eyebrow text-brand">{tb("tagline")}</p>
+          <h1 id="home-title" className={`${ui.headingCaps} text-4xl leading-none tracking-tight sm:text-5xl`}>{th("title")}</h1>
+          <p className="mb-6 mt-3 text-lg leading-relaxed">{t("heroText")}</p>
+          <Link href="/account/listings/new" prefetch={false} className={ui.btnPrimary}>
+            {t("heroCta")}
+            <Icon name="arrow" size={16} />
+          </Link>
+        </div>
       </section>
 
-      <section aria-labelledby="home-countries" className="mt-10">
-        <h2 id="home-countries" className="text-xl font-semibold">{t("countriesHeading")}</h2>
-        <ul className="mt-3 flex flex-wrap gap-3">
-          {COUNTRIES.map(({ code, live }) => (
-            <li key={code}>
-              {live ? (
-                <a href={`${searchPath}?country=${code}`} className="underline">{tc(code)}</a>
-              ) : (
-                <span className="text-stone-700">{t("countrySoon", { country: tc(code) })}</span>
-              )}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section aria-labelledby="home-newest" className="mt-10">
-        <h2 id="home-newest" className="text-xl font-semibold">{t("newestHeading")}</h2>
+      <section aria-labelledby="home-newest">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="home-newest" className={`${ui.headingCaps} text-2xl`}>{t("newestHeading")}</h2>
+          <a href={searchPath} className={ui.link}>{t("allListings")} →</a>
+        </div>
         <Newest locale={locale} />
-        <p className="mt-4">
-          <a href={searchPath} className="underline">{t("allListings")}</a>
-        </p>
       </section>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <section aria-labelledby="home-countries" className={`${ui.card} px-6 py-5`}>
+          <h2 id="home-countries" className={`${ui.headingCaps} mb-3 text-lg`}>{t("countriesHeading")}</h2>
+          <ul className="grid grid-cols-2 gap-x-4">
+            {COUNTRIES.map(({ code, live }) => (
+              <li key={code}>
+                {live ? (
+                  <a href={`${searchPath}?country=${code}`} className="block py-2 text-forest underline underline-offset-2">{tc(code)}</a>
+                ) : (
+                  <span className="block py-2 text-muted">{t("countrySoon", { country: tc(code) })}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section aria-labelledby="home-trust" className="rounded-card bg-sand px-6 py-5">
+          <h2 id="home-trust" className={`${ui.headingCaps} mb-3 text-lg`}>{t("trustHeading")}</h2>
+          <ul className="flex flex-col gap-3">
+            {trust.map(([icon, key]) => (
+              <li key={key} className="flex gap-2.5"><Icon name={icon} size={22} className="shrink-0" />{t(key)}</li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </main>
   );
 }

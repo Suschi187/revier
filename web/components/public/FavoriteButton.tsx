@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { toggleFavorite } from "@/app/[locale]/account/favorites/actions";
 import type { AppLocale } from "@/i18n/routing";
+import { Icon } from "@/components/ui/Icon";
 import { safeNextPath } from "@/lib/auth/paths";
 
 /**
@@ -14,6 +15,7 @@ export async function FavoriteButton({
   back,
   locale,
   title,
+  variant = "button",
 }: {
   listingId: string;
   active: boolean;
@@ -21,14 +23,25 @@ export async function FavoriteButton({
   back: string;
   locale: AppLocale;
   title: string;
+  /** `icon`: runder Knopf auf dem Anzeigenfoto, Zustand über Füllung und `aria-pressed`. */
+  variant?: "button" | "icon";
 }) {
   const t = await getTranslations("Favorites");
-  const className = "inline-flex min-w-28 justify-center rounded border border-stone-500 px-3 py-1 text-sm";
+  const className =
+    variant === "icon"
+      ? "flex size-11 items-center justify-center rounded-full border border-sand bg-offwhite text-forest hover:bg-sand"
+      : "inline-flex min-h-11 min-w-28 items-center justify-center gap-2 rounded-btn border border-forest bg-surface px-3 text-sm font-semibold text-forest hover:bg-sand";
+  const content = (filled: boolean, label: string) => (
+    <>
+      <Icon name="bookmark" size={18} className={filled ? "fill-current" : undefined} />
+      {variant === "button" && label}
+    </>
+  );
   if (!signedIn) {
     return (
       // Ohne Suchtext im Login-Link (H10, QA M5 F9).
       <a href={`/${locale}/login?next=${encodeURIComponent(safeNextPath(back, locale))}`} className={className} aria-label={t("saveLabel", { title })}>
-        {t("save")}
+        {content(false, t("save"))}
       </a>
     );
   }
@@ -39,7 +52,7 @@ export async function FavoriteButton({
       <input type="hidden" name="back" value={back} />
       <input type="hidden" name="op" value={active ? "remove" : "add"} />
       <button type="submit" aria-pressed={active} aria-label={t("saveLabel", { title })} className={className}>
-        {active ? t("saved") : t("save")}
+        {content(active, active ? t("saved") : t("save"))}
       </button>
     </form>
   );

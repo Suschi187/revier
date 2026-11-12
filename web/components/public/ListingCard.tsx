@@ -1,4 +1,7 @@
 import { getFormatter, getTranslations } from "next-intl/server";
+import { KindIcon } from "@/components/brand/KindIcon";
+import { Icon } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import type { AppLocale } from "@/i18n/routing";
 import { photoUrl, priceText, thumbSize } from "@/lib/public/format";
 import { publicPath } from "@/lib/public/paths";
@@ -6,17 +9,24 @@ import type { FavoriteContext } from "@/lib/services/favorites";
 import type { ListingCard as Card } from "@/lib/services/public-listings";
 import { FavoriteButton } from "./FavoriteButton";
 
-/** Ein Treffer in Listen (Start, Kategorie, Suche, Anbieter, Favoriten). Kein Kontakt, keine PLZ. */
+export type CardLayout = "row" | "grid";
+
+/**
+ * Ein Treffer in Listen (Start, Kategorie, Suche, Anbieter, Favoriten). Kein Kontakt, keine PLZ.
+ * `grid`: Foto oben (Startseite), `row`: Foto links und Preis rechts (Suche, Desktop; mobil gestapelt).
+ */
 export async function ListingCard({
   card,
   locale,
   regions,
   favorites,
+  layout = "row",
 }: {
   card: Card;
   locale: AppLocale;
   regions: Record<string, string>;
   favorites?: FavoriteContext;
+  layout?: CardLayout;
 }) {
   const [t, tp, format] = await Promise.all([getTranslations("Listings"), getTranslations("Public.card"), getFormatter()]);
   const href = publicPath({ route: "listing", id: card.id }, locale);
@@ -28,47 +38,78 @@ export async function ListingCard({
   const size = card.photo ? thumbSize(card.photo.width, card.photo.height) : null;
   const provider = card.provider;
   const providerName = provider?.account_type === "business" && provider.business_name ? provider.business_name : provider?.display_name;
+  const place = `${regions[card.district_code] ?? card.district_code}, ${regions[card.state_code] ?? card.state_code}`;
+  const date = format.dateTime(new Date(card.published_at), { dateStyle: "medium", timeZone: "Europe/Berlin" });
+  const favorite = favorites && card.provider?.id !== favorites.userId && (
+    <FavoriteButton listingId={card.id} active={favorites.ids.has(card.id)} signedIn={favorites.signedIn} back={favorites.back}
+      locale={locale} title={card.title} variant="icon" />
+  );
+  const media = card.photo && size ? (
+    // eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf), kein Optimizer
+    <img
+      src={photoUrl(card.photo.id, "thumb")}
+      alt={card.photo.alt_text || tp("photoAlt", { title: card.title })}
+      width={size.width}
+      height={size.height}
+      loading="lazy"
+      className="size-full object-cover"
+    />
+  ) : (
+    <div className="flex size-full items-center justify-center bg-sand text-olive" aria-hidden="true">
+      <KindIcon kind={card.kind} size={56} accent={false} />
+    </div>
+  );
+  const directionBadge = card.direction === "wanted" && (
+    <span className="absolute left-2 top-2 rounded-btn bg-forest px-2 py-1 text-xs font-semibold text-offwhite">{t("directions.wanted")}</span>
+  );
+  const title = (
+    <a href={href} className="text-forest no-underline after:absolute after:inset-0 hover:text-brand-ink focus-visible:outline-none">
+      {card.title}
+    </a>
+  );
+
+  if (layout === "grid") {
+    return (
+      // Ganze Karte klickbar über den Titel-Link (::after); Merken liegt darüber (z-10).
+      <article className={`${ui.card} relative flex h-full min-w-0 flex-col overflow-hidden has-[a:focus-visible]:outline has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-brand-ink`}>
+        <div className="relative aspect-[4/3] bg-olive">
+          {media}
+          {directionBadge}
+          {favorite && <div className="absolute right-1.5 top-1.5 z-10">{favorite}</div>}
+        </div>
+        <div className="flex flex-1 flex-col gap-1 p-3.5">
+          <p className="text-[0.8125rem] text-muted">{place} · {date}</p>
+          <h3 className="text-[0.9375rem] font-semibold leading-snug [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>{title}</h3>
+          {price && <p className="mt-auto pt-1 font-display text-[1.0625rem] font-extrabold">{price}</p>}
+        </div>
+      </article>
+    );
+  }
 
   return (
-    <article className="flex min-w-0 gap-4 rounded border border-stone-300 p-3">
-      {card.photo && size ? (
-        // eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf), kein Optimizer
-        <img
-          src={photoUrl(card.photo.id, "thumb")}
-          alt={card.photo.alt_text || tp("photoAlt", { title: card.title })}
-          width={size.width}
-          height={size.height}
-          loading="lazy"
-          className="h-24 w-32 shrink-0 rounded object-cover"
-        />
-      ) : (
-        <div className="h-24 w-32 shrink-0 rounded bg-stone-100" aria-hidden="true" />
-      )}
-      <div className="min-w-0">
-        <p className="text-sm text-stone-700">
-          {t(`kinds.${card.kind}`)} · {t(`directions.${card.direction}`)}
+    <article className={`${ui.card} relative flex min-w-0 flex-wrap gap-4 p-3 has-[a:focus-visible]:outline has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-brand-ink`}>
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-btn bg-olive sm:w-48">
+        {media}
+        {directionBadge}
+      </div>
+      <div className="flex min-w-0 flex-[1_1_16rem] flex-col gap-1.5">
+        <p className="flex flex-wrap justify-between gap-x-3 text-[0.8125rem] text-muted">
+          <span>{place}{card.postal_prefix && <> · {tp("postalArea", { prefix: card.postal_prefix })}</>}</span>
+          <span>{date}</span>
         </p>
-        <h3 className="font-semibold [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>
-          <a href={href} className="underline-offset-2 hover:underline focus-visible:underline">
-            {card.title}
-          </a>
-        </h3>
-        <p className="text-sm">
-          {regions[card.district_code] ?? card.district_code}, {regions[card.state_code] ?? card.state_code}
-          {card.postal_prefix && <> · {tp("postalArea", { prefix: card.postal_prefix })}</>}
-        </p>
-        {price && <p className="text-sm font-medium">{price}</p>}
-        <p className="mt-1 text-xs text-stone-700 [overflow-wrap:anywhere]">
-          {providerName}
-          {provider?.verified && <> · {tp("verified")}</>} ·{" "}
-          {tp("published", { date: format.dateTime(new Date(card.published_at), { dateStyle: "medium", timeZone: "Europe/Berlin" }) })}
-        </p>
-        {favorites && card.provider?.id !== favorites.userId && (
-          <div className="mt-2">
-            <FavoriteButton listingId={card.id} active={favorites.ids.has(card.id)} signedIn={favorites.signedIn} back={favorites.back}
-              locale={locale} title={card.title} />
-          </div>
-        )}
+        <h3 className="text-lg font-semibold leading-snug [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>{title}</h3>
+        <p className="text-sm text-muted [overflow-wrap:anywhere]">{providerName}</p>
+        <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
+          <span className={ui.chip}>{t(`kinds.${card.kind}`)}</span>
+          {card.area_hectares !== null && <span className={ui.chip}>{tp("area", { area: format.number(card.area_hectares) })}</span>}
+          {provider?.verified && (
+            <span className={ui.chip}><Icon name="shield" size={14} />{tp("verified")}</span>
+          )}
+        </div>
+      </div>
+      <div className="flex w-full items-end justify-between gap-2 sm:w-auto sm:flex-col">
+        {price && <p className="font-display text-xl font-extrabold sm:text-right">{price}</p>}
+        {favorite && <div className="relative z-10 sm:mt-auto">{favorite}</div>}
       </div>
     </article>
   );
@@ -81,19 +122,21 @@ export async function ListingList({
   regions,
   empty,
   favorites,
+  layout = "row",
 }: {
   items: Card[];
   locale: AppLocale;
   regions: Record<string, string>;
   empty: string;
   favorites?: FavoriteContext;
+  layout?: CardLayout;
 }) {
   if (items.length === 0) return <p className="mt-4">{empty}</p>;
   return (
-    <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3">
+    <ul className={layout === "grid" ? "mt-4 grid grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))] gap-4" : "mt-4 grid grid-cols-[minmax(0,1fr)] gap-3"}>
       {items.map((card) => (
         <li key={card.id} className="min-w-0">
-          <ListingCard card={card} locale={locale} regions={regions} favorites={favorites} />
+          <ListingCard card={card} locale={locale} regions={regions} favorites={favorites} layout={layout} />
         </li>
       ))}
     </ul>
