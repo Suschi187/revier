@@ -1,19 +1,34 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { signOut } from "@/app/[locale]/auth/actions";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { Link } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/services/auth";
 import { UnreadRefresh } from "@/components/chat/UnreadRefresh";
 import { unreadCount } from "@/lib/services/chat";
 
-// Liest die Session und steht deshalb im Layout hinter einer Suspense-Grenze.
+const item = "relative flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 px-2 text-[0.6875rem] leading-tight text-forest no-underline";
+
+function NavItem({ href, icon, label, ariaLabel, badge }: { href: string; icon: IconName; label: string; ariaLabel?: string; badge?: number }) {
+  return (
+    <Link href={href} prefetch={false} className={item} aria-label={ariaLabel}>
+      <Icon name={icon} size={22} />
+      <span>{label}</span>
+      {badge ? (
+        <span aria-hidden="true" className="absolute right-1 top-0 min-w-5 rounded-pill bg-brand px-1 text-center text-[0.6875rem] font-bold text-forest">{badge}</span>
+      ) : null}
+    </Link>
+  );
+}
+
+// Liest die Session und steht deshalb im Kopf hinter einer Suspense-Grenze.
 export async function AuthNav() {
-  const [user, t, locale] = await Promise.all([getSessionUser(), getTranslations("Auth.nav"), getLocale()]);
+  const [user, t, locale] = await Promise.all([getSessionUser(), getTranslations("Header"), getLocale()]);
 
   if (!user) {
     return (
-      <Link href="/login" className="underline">
-        {t("signIn")}
-      </Link>
+      <nav aria-label={t("accountNav")} className="flex items-center">
+        <NavItem href="/login" icon="user" label={t("signIn")} />
+      </nav>
     );
   }
 
@@ -21,26 +36,19 @@ export async function AuthNav() {
   const [unread, tc] = await Promise.all([unreadCount(), getTranslations("Chat")]);
 
   return (
-    <div className="flex items-center gap-4">
+    <nav aria-label={t("accountNav")} className="flex items-center">
       <UnreadRefresh />
-      <Link href="/account/messages" prefetch={false} className="underline" aria-label={unread ? tc("navUnread", { count: unread }) : undefined}>
-        {tc("nav")}
-        {unread ? <span className="ml-1 rounded bg-stone-900 px-1.5 text-sm text-white no-underline" aria-hidden="true">{unread}</span> : null}
-      </Link>
-      {user.adminHint && (
-        <Link href="/admin" className="underline">
-          {t("admin")}
-        </Link>
-      )}
-      <Link href="/account" className="underline">
-        {t("account")}
-      </Link>
+      <NavItem href="/account/messages" icon="message" label={t("messages")} ariaLabel={unread ? tc("navUnread", { count: unread }) : undefined} badge={unread || undefined} />
+      <NavItem href="/account/favorites" icon="bookmark" label={t("favorites")} />
+      <NavItem href="/account" icon="user" label={t("account")} />
+      {user.adminHint && <NavItem href="/admin" icon="shieldAdmin" label={t("admin")} />}
       <form action={signOut}>
         <input type="hidden" name="locale" value={locale} />
-        <button type="submit" className="underline">
-          {t("signOut")}
+        <button type="submit" className={item}>
+          <Icon name="logout" size={22} />
+          <span>{t("signOut")}</span>
         </button>
       </form>
-    </div>
+    </nav>
   );
 }

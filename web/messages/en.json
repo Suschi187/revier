@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "siteName": "Revier",
+    "siteName": "Reviro",
     "siteDescription": "Marketplace for hunting opportunities in Germany, Austria, Switzerland, Czechia and Poland."
   },
   "HomePage": {
@@ -16,6 +16,29 @@
       "cs": "Čeština",
       "pl": "Polski"
     }
+  },
+  "Brand": {
+    "name": "REVIRO",
+    "endorsement": "by Die Jagdbrüder",
+    "tagline": "Hunting Marketplace",
+    "homeLabel": "Reviro by Die Jagdbrüder, home",
+    "claim": "Hunting opportunities in DE · AT · CH · CZ · PL",
+    "shop": "Die Jagdbrüder shop",
+    "shopLabel": "Die Jagdbrüder shop (external site)"
+  },
+  "Header": {
+    "searchWhat": "What are you looking for?",
+    "searchWhere": "Where?",
+    "searchWhereAny": "All regions",
+    "searchButton": "Search",
+    "create": "Post a listing",
+    "favorites": "Saved",
+    "account": "My Reviro",
+    "messages": "Messages",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "admin": "Admin",
+    "accountNav": "Account"
   },
   "NotFound": {
     "title": "Page not found",
@@ -48,12 +71,6 @@
       "submit": "Confirm sign-in",
       "invalid": "This link is invalid or has expired. Enter the code from the email or request a new email.",
       "backToLogin": "Back to sign-in"
-    },
-    "nav": {
-      "signIn": "Sign in",
-      "account": "My account",
-      "signOut": "Sign out",
-      "admin": "Admin"
     }
   },
   "Profile": {

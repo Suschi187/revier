@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "siteName": "Revier",
+    "siteName": "Reviro",
     "siteDescription": "Tržiště loveckých příležitostí v Německu, Rakousku, Švýcarsku, Česku a Polsku."
   },
   "HomePage": {
@@ -16,6 +16,29 @@
       "cs": "Čeština",
       "pl": "Polski"
     }
+  },
+  "Brand": {
+    "name": "REVIRO",
+    "endorsement": "by Die Jagdbrüder",
+    "tagline": "Hunting Marketplace",
+    "homeLabel": "Reviro by Die Jagdbrüder, úvodní stránka",
+    "claim": "Příležitosti k lovu v DE · AT · CH · CZ · PL",
+    "shop": "Obchod Die Jagdbrüder",
+    "shopLabel": "Obchod Die Jagdbrüder (externí stránka)"
+  },
+  "Header": {
+    "searchWhat": "Co hledáš?",
+    "searchWhere": "Kde?",
+    "searchWhereAny": "Všechny regiony",
+    "searchButton": "Hledat",
+    "create": "Podat inzerát",
+    "favorites": "Uložené",
+    "account": "Můj Reviro",
+    "messages": "Zprávy",
+    "signIn": "Přihlásit se",
+    "signOut": "Odhlásit se",
+    "admin": "Admin",
+    "accountNav": "Účet"
   },
   "NotFound": {
     "title": "Stránka nenalezena",
@@ -48,12 +71,6 @@
       "submit": "Potvrdit přihlášení",
       "invalid": "Tento odkaz je neplatný nebo jeho platnost vypršela. Zadejte kód z e-mailu nebo si vyžádejte nový e-mail.",
       "backToLogin": "Zpět k přihlášení"
-    },
-    "nav": {
-      "signIn": "Přihlásit se",
-      "account": "Můj účet",
-      "signOut": "Odhlásit se",
-      "admin": "Administrace"
     }
   },
   "Profile": {

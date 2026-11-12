@@ -3,10 +3,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { locale as rootLocale } from "next/root-params";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import { AuthNav } from "@/components/auth/AuthNav";
-import { LocaleSwitcher } from "@/components/LocaleSwitcher";
 import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
 import { routing } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
 import "../globals.css";
@@ -34,15 +32,8 @@ export default async function LocaleLayout({
     <html lang={locale} className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <header className="flex flex-wrap items-center justify-end gap-4 p-4">
-            {/* Suspense: Bei dynamischen Routen (z. B. /account/listings/[id]) ist der Pfad erst zur Anfrage bekannt. */}
-            <Suspense fallback={null}>
-              <LocaleSwitcher />
-            </Suspense>
-            <Suspense fallback={null}>
-              <AuthNav />
-            </Suspense>
-          </header>
+          {/* Sprachwahl und Konto stehen im Kopf hinter Suspense: Bei dynamischen Routen ist der Pfad erst zur Anfrage bekannt. */}
+          <SiteHeader />
           {children}
           <SiteFooter />
         </NextIntlClientProvider>

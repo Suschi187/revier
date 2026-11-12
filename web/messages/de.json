@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "siteName": "Revier",
+    "siteName": "Reviro",
     "siteDescription": "Marktplatz für Jagdgelegenheiten in Deutschland, Österreich, der Schweiz, Tschechien und Polen."
   },
   "HomePage": {
@@ -16,6 +16,29 @@
       "cs": "Čeština",
       "pl": "Polski"
     }
+  },
+  "Brand": {
+    "name": "REVIRO",
+    "endorsement": "by Die Jagdbrüder",
+    "tagline": "Hunting Marketplace",
+    "homeLabel": "Reviro by Die Jagdbrüder, zur Startseite",
+    "claim": "Jagdgelegenheiten in DE · AT · CH · CZ · PL",
+    "shop": "Die Jagdbrüder Shop",
+    "shopLabel": "Die Jagdbrüder Shop (externe Seite)"
+  },
+  "Header": {
+    "searchWhat": "Was suchst du?",
+    "searchWhere": "Wo?",
+    "searchWhereAny": "Alle Regionen",
+    "searchButton": "Finden",
+    "create": "Anzeige aufgeben",
+    "favorites": "Merkliste",
+    "account": "Mein Reviro",
+    "messages": "Nachrichten",
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "admin": "Admin",
+    "accountNav": "Konto"
   },
   "NotFound": {
     "title": "Seite nicht gefunden",
@@ -48,12 +71,6 @@
       "submit": "Anmeldung bestätigen",
       "invalid": "Dieser Link ist ungültig oder abgelaufen. Gib den Code aus der E-Mail ein oder fordere eine neue E-Mail an.",
       "backToLogin": "Zurück zur Anmeldung"
-    },
-    "nav": {
-      "signIn": "Anmelden",
-      "account": "Mein Konto",
-      "signOut": "Abmelden",
-      "admin": "Admin"
     }
   },
   "Profile": {
