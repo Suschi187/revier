@@ -27,6 +27,7 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - Teilen-Button auf der Detailseite fehlt noch (braucht JavaScript oder einen Link-Fallback).
 - Keine Markenfotos: Banner und Platzhalter sind gezeichnet.
 - iOS übernimmt die Tokens ab I1.
+- **Offener Testfehler:** `e2e/qa-m5.spec.ts:483` (ohne JavaScript, Sprachwahl auf `/de/jagdpacht/bayern?cur=EUR`). Auf dieser Seite ist der Seiteninhalt fertig, bevor `useSearchParams` in der Sprachwahl aufgelöst ist; Sprachwahl und Konto-Links kommen dann nur gestreamt und bleiben ohne JavaScript unsichtbar. Andere Listen-URLs sind nicht betroffen. Vor M10a lag das Rennen knapp auf der anderen Seite. Lösungsidee: Sprachwahl serverseitig aus einem vom Proxy gesetzten URL-Header rendern statt per `useSearchParams`.
 
 ## Nachtrag M9b: QA-Nachprüfung N1–N4 und H1 – 2026-11-12
 
