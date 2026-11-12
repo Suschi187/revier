@@ -143,6 +143,16 @@ Function, Secret und Grenzen wie ADR 019 (`account-maintenance`).
 | `23505` | zweite offene Meldung zum selben Ziel, zweite Beschwerde zur selben Entscheidung | „bereits gemeldet“ bzw. „bereits eingelegt“ |
 | `54000` | Meldungs-Limit, Kontosuche | wie bisher |
 
+### Umsetzung (M9b Commit 6)
+Migration `20261112100000_verification.sql`, pgTAP 53 (07, 08, 45 angepasst):
+- **Beginn:** Ein noch nicht eingereichter eigener Antrag wird von `begin_verification` wiederverwendet (neuer Dokumenttyp, kein neuer Versuch), damit ein gescheiterter Upload nicht das Limit verbraucht. Ein eingereichter offener Antrag ergibt `23505`. Legal-Gate (`RV001`) und aktives Konto für Beginn und Einreichen; Zurückziehen ohne Legal-Gate, auch gesperrt.
+- **Profilstatus** wird aus den Anträgen abgeleitet (`private.sync_verification_status`): `verified`, solange ein verifizierter Antrag nicht widerrufen ist; sonst `pending` bei einem eingereichten offenen Antrag; sonst `rejected`, wenn die letzte Entscheidung (Widerruf eingeschlossen) eine Ablehnung war; sonst `none`. Ein nicht eingereichter Antrag ändert nichts. Der Cache-Zähler steigt per Trigger auf `profiles`, wenn `verified` dazukommt oder wegfällt.
+- **Widerruf** steht am verifizierten Antrag (`revoked_at`, `revoke_code`, `revoke_reason`, einmalig, unveränderlich). Codes `expired | mismatch | fraud | other` (Platzhalter), Freitext Pflicht bei `other`.
+- **Guard:** Einreichen, Entscheiden und Widerrufen nur mit dem Transaktions-Flag `revier.verification`, das nur die RPCs setzen; ohne Flag `42501`, auch für den Server.
+- **Admin-Lesepfade:** `admin_verification_queue` (eingereichte offene Anträge, Keyset, `is_own`), `admin_verification` (Antrag, Konto, Verlauf; ohne Pfad und Prüfer), `admin_open_verification_document` (Audit, dann Pfad).
+- **Dienstmails:** Die Warteschlange `private.account_notifications` hat claim/confirm/release mit dem Secret der Suchauftrags-Mails (derselbe Lauf, `account_email_batch` 50). Die Details je Art liest `private.account_notification_details` aus dem Fachdatensatz; fehlt die Quelle oder der Empfänger, ist die Zeile ohne Versand erledigt. In Commit 6 gibt es die Zweige für die drei Verifizierungsarten, die übrigen Arten folgen mit ihren Commits. Fristen: Job `trust-retention` (Warteschlange und Zählerzeilen nach 30 Tagen).
+- **Server-Pfade:** `private.moderation_path()` (Admin-JWT oder Flag `revier.moderation`/`revier.appeal`) steuert `listings_audit` und `listings_moderation_notify`. Auf einem Server-Pfad entsteht das Audit ohne Akteur.
+
 ## Alternativen
 - **Schlanker Beschwerdeweg** (Formular als Meldung, Entscheidung von Hand): keine Wirkung auf die Maßnahme, keine gemeinsame Quelle mit `my_decisions` und Export (10.4/3).
 - **Eigene Tabelle je Mailart** wie in M8: mehr Schema ohne Nutzen (10.4/8).

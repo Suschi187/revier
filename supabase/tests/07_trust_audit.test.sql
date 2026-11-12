@@ -14,16 +14,19 @@ values (:'b_id', 'trophy_hunt', 'offer', 'Gamsjagd', 'de', :'district', 'active'
 insert into listings (owner_id, kind, direction, title, content_language, region_id)
 values (:'b_id', 'lease', 'offer', 'Entwurf', 'de', :'district') returning id as draft \gset
 
--- Verifizierungen: Akzeptanzkriterium M1 (Verifizierungsdokumente) ------------------
+-- Verifizierungen: Akzeptanzkriterium M1 (Verifizierungsdokumente); seit M9b nur über die RPCs (ADR 020) ----------
 select tests.authenticate_as(:'a_id');
-insert into verifications (document_path, document_type) values (:'a_id' || '/jagdschein.jpg', 'jagdschein') returning id as ver_a \gset
-select is((select verification_status::text from profiles where user_id = :'a_id'), 'pending', 'Antrag setzt das Profil auf pending');
-select throws_ok(format($$ insert into verifications (document_path, document_type) values (%L, 'jagdschein') $$, :'b_id' || '/fremd.jpg'),
-  '23514', null, 'Dokumentpfad muss im eigenen Ordner liegen');
-select throws_ok(format($$ insert into verifications (document_path, document_type) values (%L, 'jagdkarte') $$, :'a_id' || '/zweites.jpg'),
-  '23505', null, 'Nur ein offener Antrag gleichzeitig');
-update verifications set status = 'verified' where id = :'ver_a';
-select is((select status::text from verifications where id = :'ver_a'), 'pending', 'Nutzer verifiziert sich nicht selbst');
+select begin_verification('jagdschein') ->> 'id' as ver_a \gset
+select tests.as_postgres();
+insert into storage.objects (bucket_id, name, owner_id) select 'verification-docs', document_path, :'a_id' from verifications where id = :'ver_a';
+select tests.authenticate_as(:'a_id');
+select submit_verification(:'ver_a');
+select is((select verification_status::text from profiles where user_id = :'a_id'), 'pending', 'Eingereichter Antrag setzt das Profil auf pending');
+select throws_ok(format($$ insert into verifications (document_path, document_type) values (%L, 'jagdschein') $$, :'a_id' || '/direkt.jpg'),
+  '42501', null, 'Anträge entstehen nur per begin_verification');
+select throws_ok($$ select begin_verification('jagdkarte') $$, '23505', null, 'Nur ein offener Antrag gleichzeitig');
+select throws_ok(format($$ update verifications set status = 'verified' where id = %L $$, :'ver_a'), '42501', null,
+  'Nutzer verifiziert sich nicht selbst');
 
 select tests.authenticate_as(:'b_id');
 select is((select count(*)::int from verifications), 0, 'B liest die Verifizierung von A nicht');
@@ -34,23 +37,27 @@ select is((select count(*)::int from verifications), 0, 'Admin ohne 2FA liest ke
 
 select tests.authenticate_as(:'admin_id', 'aal2');
 select is((select count(*)::int from verifications), 1, 'Admin mit 2FA liest Verifizierungen');
-select throws_ok(format($$ update verifications set status = 'rejected' where id = %L $$, :'ver_a'), '23514', null, 'Ablehnung braucht einen Grund');
-update verifications set status = 'verified' where id = :'ver_a';
+select throws_ok(format($$ select decide_verification(%L, 'reject') $$, :'ver_a'), '23514', null, 'Ablehnung braucht einen Grund');
+select decide_verification(:'ver_a', 'verify');
 select tests.as_postgres();
 select results_eq(format($$ select reviewed_by, decided_at is not null from verifications where id = %L $$, :'ver_a'),
   format($$ values (%L::uuid, true) $$, :'admin_id'), 'Entscheidung setzt Prüfer und Datum');
 select tests.authenticate_as(:'admin_id', 'aal2');
 select throws_ok(format($$ update verifications set reject_reason = 'nachträglich' where id = %L $$, :'ver_a'), '42501', null,
-  'Grund einer entschiedenen Verifizierung ist unveränderlich');
+  'Kein Roh-UPDATE an Verifizierungen, auch nicht für Admins');
 select tests.authenticate_as(:'a_id');
 select throws_ok($$ select reviewed_by from verifications $$, '42501', null, 'Antragsteller sieht nicht, welcher Admin geprüft hat');
 select tests.authenticate_as(:'admin_id', 'aal2');
 select is((select verification_status::text from profiles where user_id = :'a_id'), 'verified', 'Profil wird verifiziert');
-select throws_ok(format($$ update verifications set status = 'rejected', reject_reason = 'doch nicht' where id = %L $$, :'ver_a'), '42501', null,
+select throws_ok(format($$ select decide_verification(%L, 'reject', 'other', 'doch nicht') $$, :'ver_a'), 'RV003', null,
   'Entschiedene Verifizierungen sind abgeschlossen');
 
 select tests.authenticate_as(:'a_id');
-insert into verifications (document_path, document_type) values (:'a_id' || '/jagdkarte.jpg', 'jagdkarte');
+select begin_verification('jagdkarte') ->> 'id' as ver_a2 \gset
+select tests.as_postgres();
+insert into storage.objects (bucket_id, name, owner_id) select 'verification-docs', document_path, :'a_id' from verifications where id = :'ver_a2';
+select tests.authenticate_as(:'a_id');
+select submit_verification(:'ver_a2');
 select is((select verification_status::text from profiles where user_id = :'a_id'), 'verified', 'Neuer Antrag hebt eine bestehende Verifizierung nicht auf');
 
 -- Meldungen -------------------------------------------------------------------

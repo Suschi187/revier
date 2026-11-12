@@ -557,14 +557,14 @@ isOneToOne: false
                   ]
                 },"verifications": {
                   Row: {
-                    "created_at": string,"decided_at": string | null,"document_deleted_at": string | null,"document_path": string | null,"document_type": Database["public"]['Enums']["document_type"],"id": string,"reject_reason": string | null,"reviewed_at": string | null,"reviewed_by": string | null,"status": Database["public"]['Enums']["verification_request_status"],"user_id": string
+                    "created_at": string,"decided_at": string | null,"document_deleted_at": string | null,"document_path": string | null,"document_type": Database["public"]['Enums']["document_type"],"id": string,"reject_code": string | null,"reject_reason": string | null,"reviewed_at": string | null,"reviewed_by": string | null,"revoke_code": string | null,"revoke_reason": string | null,"revoked_at": string | null,"status": Database["public"]['Enums']["verification_request_status"],"submitted_at": string | null,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"decided_at"?: string | null,"document_deleted_at"?: string | null,"document_path"?: string | null,"document_type": Database["public"]['Enums']["document_type"],"id"?: string,"reject_reason"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"status"?: Database["public"]['Enums']["verification_request_status"],"user_id"?: string
+                    "created_at"?: string,"decided_at"?: string | null,"document_deleted_at"?: string | null,"document_path"?: string | null,"document_type": Database["public"]['Enums']["document_type"],"id"?: string,"reject_code"?: string | null,"reject_reason"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"revoke_code"?: string | null,"revoke_reason"?: string | null,"revoked_at"?: string | null,"status"?: Database["public"]['Enums']["verification_request_status"],"submitted_at"?: string | null,"user_id"?: string
                   }
                   Update: {
-                    "created_at"?: string,"decided_at"?: string | null,"document_deleted_at"?: string | null,"document_path"?: string | null,"document_type"?: Database["public"]['Enums']["document_type"],"id"?: string,"reject_reason"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"status"?: Database["public"]['Enums']["verification_request_status"],"user_id"?: string
+                    "created_at"?: string,"decided_at"?: string | null,"document_deleted_at"?: string | null,"document_path"?: string | null,"document_type"?: Database["public"]['Enums']["document_type"],"id"?: string,"reject_code"?: string | null,"reject_reason"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"revoke_code"?: string | null,"revoke_reason"?: string | null,"revoked_at"?: string | null,"status"?: Database["public"]['Enums']["verification_request_status"],"submitted_at"?: string | null,"user_id"?: string
                   }
                   Relationships: [
                     {
@@ -656,6 +656,9 @@ isOneToOne: false
 "admin_listing_version":
 { Args: { "p_listing_id": string }; Returns: string
                            },
+"admin_open_verification_document":
+{ Args: { "p_id": string }; Returns: string
+                           },
 "admin_review_queue":
 { Args: { "p_after_id"?: string,"p_after_submitted"?: string,"p_limit"?: number }; Returns: {
               "country": Database["public"]['Enums']["country_code"],"direction": Database["public"]['Enums']["listing_direction"],"hint_count": number,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"listing_rejections": number,"owner_id": string,"owner_name": string,"owner_rejections": number,"region_id": string,"submitted_at": string,"title": string
@@ -669,8 +672,22 @@ isOneToOne: false
 "admin_stuck_account_deletions":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
+"admin_verification":
+{ Args: { "p_id": string }; Returns: Json
+                           },
+"admin_verification_queue":
+{ Args: { "p_after_id"?: string,"p_after_submitted"?: string,"p_limit"?: number }; Returns: {
+              "account_type": Database["public"]['Enums']["account_type"],"country": Database["public"]['Enums']["country_code"],"display_name": string,"document_type": Database["public"]['Enums']["document_type"],"id": string,"is_own": boolean,"previous_requests": number,"profile_status": Database["public"]['Enums']["verification_status"],"submitted_at": string,"user_id": string
+            }[]
+                           },
+"begin_verification":
+{ Args: { "p_document_type": Database["public"]['Enums']["document_type"] }; Returns: Json
+                           },
 "block_in_conversation":
 { Args: { "p_conversation_id": string }; Returns: undefined
+                           },
+"claim_account_notifications":
+{ Args: { "p_limit"?: number,"p_secret": string }; Returns: Json
                            },
 "claim_chat_notifications":
 { Args: { "p_limit"?: number,"p_secret": string }; Returns: Json
@@ -689,6 +706,9 @@ isOneToOne: false
 "complete_photo_processing":
 { Args: { "p_height": number,"p_photo_id": string,"p_width": number }; Returns: string
                            },
+"confirm_account_notifications":
+{ Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
+                           },
 "confirm_chat_notifications":
 { Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
                            },
@@ -703,6 +723,9 @@ isOneToOne: false
                            },
 "conversation_messages":
 { Args: { "p_after_at"?: string,"p_after_id"?: string,"p_before_at"?: string,"p_before_id"?: string,"p_conversation_id": string,"p_limit"?: number }; Returns: Json
+                           },
+"decide_verification":
+{ Args: { "p_code"?: string,"p_decision": string,"p_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["verification_request_status"]
                            },
 "export_my_data":
 { Args: Record<PropertyKey, never>; Returns: Json
@@ -807,6 +830,9 @@ isOneToOne: false
 "register_device":
 { Args: { "apns_token": string,"language"?: Database["public"]['Enums']["language_code"] }; Returns: undefined
                            },
+"release_account_notifications":
+{ Args: { "p_claim_ids": (string)[],"p_secret": string }; Returns: number
+                           },
 "release_chat_notifications":
 { Args: { "p_recipients": (string)[],"p_secret": string }; Returns: number
                            },
@@ -848,6 +874,9 @@ isOneToOne: false
 "revoke_admin":
 { Args: { "p_user_id": string }; Returns: undefined
                            },
+"revoke_verification":
+{ Args: { "p_code": string,"p_note"?: string,"p_user_id": string }; Returns: undefined
+                           },
 "search_listings":
 { Args: { "p_cursor"?: string,"p_filters": Json,"p_limit"?: number }; Returns: Json
                            },
@@ -860,6 +889,9 @@ isOneToOne: false
 "start_conversation":
 { Args: { "p_body": string,"p_listing_id": string }; Returns: string
                            },
+"submit_verification":
+{ Args: { "p_id": string }; Returns: undefined
+                           },
 "unblock_in_conversation":
 { Args: { "p_conversation_id": string }; Returns: undefined
                            },
@@ -868,6 +900,9 @@ isOneToOne: false
                            },
 "unsubscribe":
 { Args: { "p_token": string }; Returns: undefined
+                           },
+"withdraw_verification":
+{ Args: { "p_id": string }; Returns: undefined
                            }
           }
           Enums: {

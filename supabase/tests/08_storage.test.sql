@@ -1,6 +1,6 @@
 begin;
 \ir _helpers.psql
-select plan(31);
+select plan(32);
 
 -- Wie die Storage-API: Löschen freischalten, die RLS-Policies gelten weiter.
 select set_config('storage.allow_delete_query', 'true', true);
@@ -14,14 +14,17 @@ select id as district from regions where code = 'DE-14612' \gset
 select ok(not (select public from storage.buckets where id = 'verification-docs'), 'verification-docs ist privat');
 select ok(not (select public from storage.buckets where id = 'listing-photos'), 'listing-photos ist privat (Zugriff nur über Policies)');
 
--- Verifizierungsdokumente: Akzeptanzkriterium M1 (Bucket) -----------------------
+-- Verifizierungsdokumente: Akzeptanzkriterium M1 (Bucket); seit M9b an den Antrag gebunden (ADR 020, A6, B3) -----
 select tests.authenticate_as(:'a_id');
-insert into storage.objects (bucket_id, name, owner_id) values ('verification-docs', :'a_id' || '/jagdschein.jpg', :'a_id');
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'A lädt den eigenen Jagdschein hoch und sieht ihn');
+select begin_verification('jagdschein') as ver \gset
+select (:'ver'::jsonb) ->> 'id' as ver_id, (:'ver'::jsonb) ->> 'path' as doc_a \gset
+insert into storage.objects (bucket_id, name, owner_id) values ('verification-docs', :'doc_a', :'a_id');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'A lädt auf den Pfad des eigenen Antrags hoch und sieht ihn');
 select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('verification-docs', %L) $$, :'b_id' || '/untergeschoben.jpg'),
   '42501', null, 'A lädt nicht in den Ordner von B hoch');
-select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('verification-docs', %L) $$, :'a_id' || '/tief/verschachtelt.jpg'),
-  '42501', null, 'Keine Unterordner im Dokument-Bucket');
+select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('verification-docs', %L) $$, :'a_id' || '/anderer-name.jpg'),
+  '42501', null, 'Nur genau der Pfad des Antrags, kein zweiter Name im eigenen Ordner');
+select submit_verification(:'ver_id');
 
 select tests.authenticate_as(:'b_id');
 select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'B sieht den Jagdschein von A nicht');
@@ -30,12 +33,14 @@ select is((select count(*)::int from storage.objects where bucket_id = 'verifica
 select tests.authenticate_as(:'admin_id', 'aal1');
 select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Admin ohne 2FA sieht keine Dokumente');
 select tests.authenticate_as(:'admin_id', 'aal2');
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'Admin mit 2FA sieht das Dokument');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Admin mit 2FA sieht das Dokument nicht ohne frisches Audit (B3)');
+select admin_open_verification_document(:'ver_id') is not null;
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'Nach admin_open_verification_document sieht der Admin das Dokument');
 
 select tests.authenticate_as(:'a_id');
 delete from storage.objects where bucket_id = 'verification-docs';
 select tests.as_postgres();
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'Dokumente löscht nur der Server (Retention, M9)');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'Nach dem Einreichen löscht nur der Server (Aufräumjob)');
 
 -- Anzeigenfotos (ADR 011): Zeile anlegen → Original in den Eingang → Server verarbeitet -------
 select ok(not (select public from storage.buckets where id = 'listing-uploads'), 'listing-uploads (Eingang) ist privat');

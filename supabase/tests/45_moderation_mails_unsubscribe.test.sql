@@ -3,7 +3,7 @@
 -- (nur Hash, Hex, Scope und Ziele, kein Orakel, idempotent, anon) sowie Retention.
 begin;
 \ir _helpers.psql
-select plan(66);
+select plan(67);
 
 set constraints all immediate;
 select s.decrypted_secret as secret from vault.decrypted_secrets s where s.name = 'search_notifications_secret' \gset
@@ -108,8 +108,11 @@ update listings set status = 'active' where id = :'l_adm';
 select tests.as_postgres();
 update listings set status = 'rejected', reject_code = 'duplicate' where id = :'l_act';
 update listings set status = 'paused' where id = :'l_act';
-select is((select count(*)::int from private.moderation_notifications where listing_id in (:'l_act', :'l_adm')), 0,
-  'Pausieren/Fortsetzen durch Besitzer, Admin an eigener Anzeige und Server-Pfad: keine Mail');
+select is((select count(*)::int from private.moderation_notifications where listing_id = :'l_adm'), 0,
+  'Pausieren/Fortsetzen durch Besitzer und Admin an eigener Anzeige: keine Mail');
+-- M9b (ADR 020, Review A7): Ein Server-Pfad mit dem Flag revier.moderation (hier für die Sitzung gesetzt) löst die
+-- Mail aus; Pausieren und Fortsetzen nicht.
+select is(tests.notes(:'l_act'), array['rejected:duplicate:-'], 'Server-Pfad mit Flag: genau eine Mail für die Ablehnung');
 select is((select array_agg(column_name::text order by column_name) from information_schema.columns
            where table_schema = 'private' and table_name = 'moderation_notifications'),
   array['attempts', 'claim_id', 'claimed_at', 'created_at', 'decision', 'done_at', 'id', 'listing_id', 'owner_id',
@@ -171,7 +174,7 @@ create table tests.mod_claims as select e from jsonb_array_elements(:'m1'::jsonb
 create function tests.mail(listing uuid, decision text) returns jsonb language sql as $$
   select e from tests.mod_claims where (e ->> 'listing_id')::uuid = listing and e ->> 'decision' = mail.decision;
 $$;
-select is((select count(*)::int from tests.mod_claims), 5, 'Fünf Mails: vier an den Besitzer, eine an den gesperrten');
+select is((select count(*)::int from tests.mod_claims), 6, 'Sechs Mails: fünf an den Besitzer (eine über den Server-Pfad), eine an den gesperrten');
 select is((select array_agg(distinct k order by k) from tests.mod_claims c, jsonb_object_keys(c.e) k),
   array['claim_id', 'decision', 'email', 'language', 'listing_id', 'reason', 'reject_code', 'title'],
   'Antwort: genau diese Schlüssel');

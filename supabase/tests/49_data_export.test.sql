@@ -62,7 +62,7 @@ select tests.as_postgres();
 select is(tests.keys(:'e'::jsonb),
   array['account', 'blocks', 'conversations', 'devices', 'favorites', 'format', 'generated_at', 'legal_acceptances', 'listings',
         'profile', 'reports', 'reviews', 'roles', 'saved_searches', 'verifications', 'version'], 'Abschnitte exakt');
-select is((:'e'::jsonb ->> 'format') || ' ' || (:'e'::jsonb ->> 'version'), 'revier-export 2', 'Format und Version');
+select is((:'e'::jsonb ->> 'format') || ' ' || (:'e'::jsonb ->> 'version'), 'revier-export 3', 'Format und Version (3 seit M9b)');
 select is(tests.keys(:'e'::jsonb -> 'account'), array['created_at', 'email', 'last_sign_in_at'], 'account: Schlüssel exakt');
 select is(tests.keys(:'e'::jsonb -> 'profile'),
   array['account_type', 'business_name', 'country', 'created_at', 'display_name', 'is_blocked', 'notify_chat_email', 'preferred_language',
@@ -87,7 +87,8 @@ select is(tests.keys(:'e'::jsonb -> 'reports' -> 0),
   array['created_at', 'handled_at', 'note', 'reason', 'status', 'target_label', 'target_type'], 'reports: Schlüssel exakt (ohne handled_by)');
 select is(tests.keys(:'e'::jsonb -> 'devices' -> 0), array['created_at', 'language', 'platform'], 'devices: ohne Token');
 select is(tests.keys(:'e'::jsonb -> 'verifications' -> 0),
-  array['created_at', 'decided_at', 'document_present', 'document_type', 'reject_reason', 'status'], 'verifications: ohne Pfad und Prüfer');
+  array['created_at', 'decided_at', 'document_present', 'document_type', 'reject_code', 'reject_reason', 'revoke_code',
+        'revoke_reason', 'revoked_at', 'status', 'submitted_at'], 'verifications: ohne Pfad und Prüfer');
 
 -- Keine Daten anderer außer Anzeigenamen.
 select ok(position(:'v' in :'e') = 0 and position('exp-v@test.local' in :'e') = 0, 'keine UUID und keine E-Mail des Gegenübers');
@@ -136,7 +137,9 @@ select is(
           'public.audit_log', 'private.admin_lookups', 'private.reported_message_snapshots', 'private.unsubscribe_tokens',
           'private.listing_creations', 'private.photo_creations', 'private.data_exports', 'private.chat_notifications',
           'private.moderation_notifications', 'private.saved_search_deliveries', 'private.search_notification_claims',
-          'private.search_notification_state', 'private.account_deletions'])
+          'private.search_notification_state', 'private.account_deletions',
+          -- M9b (ADR 020): Limit-Zähler der Verifizierung, Versandzustand der Dienstmails
+          'private.verification_attempts', 'private.account_notifications'])
         order by 1),
   '{}'::text[], 'Jede Tabelle mit Nutzerbezug steht in der Export-Allowlist oder der Ausschlussliste');
 
