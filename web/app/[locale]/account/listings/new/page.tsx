@@ -29,7 +29,7 @@ export default async function NewListingPage({ searchParams }: { searchParams: S
       <Link href="/account/listings" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("newTitle")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("newTitle")}</h1>
       <NewListing searchParams={searchParams} />
     </main>
   );
@@ -49,9 +49,9 @@ async function NewListing({ searchParams }: { searchParams: SearchParams }) {
   return (
     <>
       <StepNav listingId={null} current="basics" />
-      <p className="mt-4 text-sm text-stone-700">{t("wizard.draftHint")}</p>
+      <p className="mt-4 text-sm text-muted">{t("wizard.draftHint")}</p>
       {params.error === "rateLimited" && (
-        <p role="alert" className="mt-6 rounded bg-red-50 p-3 text-red-800">
+        <p role="alert" className="mt-6 rounded bg-error-soft p-3 text-error">
           {retry ? t("errors.rateLimited", { time: format.dateTime(retry, { dateStyle: "medium", timeStyle: "short" }) }) : t("errors.rateLimitedNoTime")}
         </p>
       )}

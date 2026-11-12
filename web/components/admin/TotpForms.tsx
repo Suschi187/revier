@@ -4,8 +4,8 @@ import { useTranslations } from "next-intl";
 import { useActionState, useSyncExternalStore } from "react";
 import type { ConfirmState, EnrollState } from "@/app/[locale]/admin/mfa/actions";
 
-const input = "mt-1 w-40 rounded border border-stone-400 px-3 py-2 text-lg tracking-widest";
-const button = "self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white";
+const input = "mt-1 w-40 rounded border border-field px-3 py-2 text-lg tracking-widest";
+const button = "self-start rounded bg-forest px-4 py-2 font-medium text-offwhite";
 
 const noSubscription = () => () => {};
 
@@ -44,7 +44,7 @@ export function CodeForm({
         className={input}
       />
       {error && (
-        <p id="totp-error" role="alert" className="text-red-800">
+        <p id="totp-error" role="alert" className="text-error">
           {t("errors.code")}
         </p>
       )}
@@ -82,10 +82,10 @@ export function EnrollTotp({
         <input type="hidden" name="locale" value={locale} />
         <p>{t("setupIntro")}</p>
         <noscript>
-          <p className="text-red-800">{t("noscript")}</p>
+          <p className="text-error">{t("noscript")}</p>
         </noscript>
         {state.error && (
-          <p role="alert" className="text-red-800">
+          <p role="alert" className="text-error">
             {t(`errors.${state.error}`)}
           </p>
         )}
@@ -99,9 +99,9 @@ export function EnrollTotp({
   return (
     <div className="mt-6 flex flex-col gap-3">
       {/* eslint-disable-next-line @next/next/no-img-element -- SVG als data:-URL von Supabase, kein Optimizer */}
-      <img src={state.enrollment.qrCode} alt={t("qrAlt")} width={200} height={200} className="rounded border border-stone-300 bg-white p-2" />
+      <img src={state.enrollment.qrCode} alt={t("qrAlt")} width={200} height={200} className="rounded border border-sand bg-surface p-2" />
       <p>{t("secretLabel")}</p>
-      <code className="w-fit select-all rounded bg-stone-100 px-2 py-1 font-mono break-all">{state.enrollment.secret}</code>
+      <code className="w-fit select-all rounded bg-sand px-2 py-1 font-mono break-all">{state.enrollment.secret}</code>
       <CodeForm action={confirmAction} locale={locale} factorId={state.enrollment.factorId} next={next} error={confirmState.error === "code"} />
     </div>
   );

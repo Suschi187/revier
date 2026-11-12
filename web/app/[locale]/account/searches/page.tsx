@@ -37,11 +37,11 @@ export default async function SavedSearchesPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{t("page.back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("page.title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("page.title")}</h1>
       <p className="mt-2">{t("page.intro")}</p>
-      {notice && <p role="status" className="mt-4 rounded bg-emerald-50 p-3 text-emerald-900">{t(`notices.${notice}`)}</p>}
+      {notice && <p role="status" className="mt-4 rounded bg-success-soft p-3 text-success">{t(`notices.${notice}`)}</p>}
       {error && (
-        <p role="alert" className="mt-4 rounded bg-red-50 p-3 text-red-800">
+        <p role="alert" className="mt-4 rounded bg-error-soft p-3 text-error">
           {t(`errors.${error}`)}
           {error === "legal" && (
             <>
@@ -59,7 +59,7 @@ export default async function SavedSearchesPage(props: Props) {
       )}
       {items && items.length > 0 && (
         <>
-          <p className="mt-4 text-sm text-stone-700">{t("page.count", { count: items.length, max: SAVED_SEARCH_LIMIT })}</p>
+          <p className="mt-4 text-sm text-muted">{t("page.count", { count: items.length, max: SAVED_SEARCH_LIMIT })}</p>
           <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-4">
             {items.map((item) => (
               <SavedSearchItem key={item.id} item={item} locale={locale} confirmDelete={confirmDelete === item.id} />
@@ -71,7 +71,7 @@ export default async function SavedSearchesPage(props: Props) {
   );
 }
 
-const button = "rounded border border-stone-500 px-3 py-1";
+const button = "rounded border border-field px-3 py-1";
 
 function ActionForm({ locale, id, op, label, className = button }: { locale: AppLocale; id: string; op: string; label: string; className?: string }) {
   return (
@@ -94,14 +94,14 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
   const headingId = `search-${item.id}-name`;
 
   return (
-    <li id={`search-${item.id}`} className="rounded border border-stone-300 p-4" aria-labelledby={headingId}>
+    <li id={`search-${item.id}`} className="rounded border border-sand p-4" aria-labelledby={headingId}>
       <h2 id={headingId} className="text-xl font-semibold [overflow-wrap:anywhere]">{item.name}</h2>
       {filters ? (
-        <p className="mt-1 text-sm text-stone-800 [overflow-wrap:anywhere]">
+        <p className="mt-1 text-sm text-muted [overflow-wrap:anywhere]">
           {describeFilters(filters, locale, texts).join(" · ") || t("save.noFilters")}
         </p>
       ) : (
-        <p className="mt-1 text-sm text-red-800">{t("page.invalidFilters")}</p>
+        <p className="mt-1 text-sm text-error">{t("page.invalidFilters")}</p>
       )}
 
       <p className="mt-2 font-medium">
@@ -109,7 +109,7 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
           ? t("status.expired", { date: date(status.expiresAt), deleteDate: date(status.deleteAt) })
           : t(`status.${status.state}`, { date: date(status.expiresAt) })}
       </p>
-      {status.state === "paused" && <p className="text-sm text-stone-700">{t("status.pausedHint")}</p>}
+      {status.state === "paused" && <p className="text-sm text-muted">{t("status.pausedHint")}</p>}
       <dl className="mt-2 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 text-sm">
         <dt className="font-medium">{t("fields.cadence")}</dt>
         <dd>{t(`cadence.${item.cadence}`)}</dd>
@@ -124,7 +124,7 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
       </dl>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        {filters && <a href={resultsHref(filters, locale)} className="rounded bg-stone-900 px-3 py-1 text-white">{t("actions.results")}</a>}
+        {filters && <a href={resultsHref(filters, locale)} className="rounded bg-forest px-3 py-1 text-offwhite">{t("actions.results")}</a>}
         {status.state !== "expired" &&
           (item.paused_at === null ? (
             <ActionForm locale={locale} id={item.id} op="pause" label={t("actions.pause")} />
@@ -135,7 +135,7 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
         <ActionForm locale={locale} id={item.id} op={item.notify_email ? "emailOff" : "emailOn"} label={t(item.notify_email ? "actions.emailOff" : "actions.emailOn")} />
         <ActionForm locale={locale} id={item.id} op={item.cadence === "instant" ? "daily" : "instant"} label={t(item.cadence === "instant" ? "actions.toDaily" : "actions.toInstant")} />
       </div>
-      {!extend.open && <p className="mt-2 text-sm text-stone-700">{t("actions.extendFrom", { date: date(extend.from) })}</p>}
+      {!extend.open && <p className="mt-2 text-sm text-muted">{t("actions.extendFrom", { date: date(extend.from) })}</p>}
 
       <details className="mt-3">
         <summary className="cursor-pointer underline">{t("actions.rename")}</summary>
@@ -152,9 +152,9 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
               maxLength={NAME_MAX}
               defaultValue={item.name}
               aria-describedby={`rename-${item.id}-hint`}
-              className="w-full rounded border border-stone-400 px-2 py-1.5"
+              className="w-full rounded border border-field px-2 py-1.5"
             />
-            <p id={`rename-${item.id}-hint`} className="text-sm text-stone-700">{t("fields.nameHint")}</p>
+            <p id={`rename-${item.id}-hint`} className="text-sm text-muted">{t("fields.nameHint")}</p>
           </div>
           <button type="submit" className={button}>{t("actions.renameSubmit")}</button>
         </form>
@@ -162,16 +162,16 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
 
       {/* Löschen zweistufig ohne confirm(): Der Link zeigt die Rückfrage, erst der Button löscht (POST). */}
       {confirmDelete ? (
-        <div role="group" aria-labelledby={`delete-${item.id}`} className="mt-3 rounded border border-red-700 bg-red-50 p-3">
-          <p id={`delete-${item.id}`} className="font-medium text-red-900">{t("actions.deleteConfirm", { name: item.name })}</p>
+        <div role="group" aria-labelledby={`delete-${item.id}`} className="mt-3 rounded border border-error bg-error-soft p-3">
+          <p id={`delete-${item.id}`} className="font-medium text-error">{t("actions.deleteConfirm", { name: item.name })}</p>
           <div className="mt-2 flex flex-wrap items-center gap-3">
-            <ActionForm locale={locale} id={item.id} op="delete" label={t("actions.deleteYes")} className="rounded bg-red-800 px-3 py-1 text-white" />
+            <ActionForm locale={locale} id={item.id} op="delete" label={t("actions.deleteYes")} className="rounded bg-error px-3 py-1 text-offwhite" />
             <a href={`/${locale}/account/searches#search-${item.id}`} className="underline">{t("actions.cancel")}</a>
           </div>
         </div>
       ) : (
         <p className="mt-3">
-          <a href={`/${locale}/account/searches?delete=${item.id}#search-${item.id}`} className="text-red-800 underline">{t("actions.delete")}</a>
+          <a href={`/${locale}/account/searches?delete=${item.id}#search-${item.id}`} className="text-error underline">{t("actions.delete")}</a>
         </p>
       )}
     </li>

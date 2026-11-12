@@ -52,11 +52,11 @@ export default async function DecisionsPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{tc("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2">{t("intro")}</p>
       {/* PLATZHALTER (SPEC 7.2): Rechtsbehelfe und außergerichtliche Streitbeilegung (DSA Art. 17 Abs. 3 f, Art. 21). */}
-      <p className="mt-2 text-sm text-stone-700">{t("remedies")}</p>
-      {query.notice === "appealed" && <p role="status" className="mt-4 text-emerald-800">{t("appealed")}</p>}
+      <p className="mt-2 text-sm text-muted">{t("remedies")}</p>
+      {query.notice === "appealed" && <p role="status" className="mt-4 text-success">{t("appealed")}</p>}
       {decisions.length === 0 ? (
         <p className="mt-6">{t("empty")}</p>
       ) : (
@@ -65,9 +65,9 @@ export default async function DecisionsPage(props: Props) {
             const key = actionKey(d.action);
             const code = codeLabel(d.action, d.code);
             return (
-              <li key={d.id} className="rounded border border-stone-300 p-3">
+              <li key={d.id} className="rounded border border-sand p-3">
                 <p className="font-medium">{key ? t(`actions.${key}`) : d.action}</p>
-                <p className="text-sm text-stone-700">{date(d.createdAt)}</p>
+                <p className="text-sm text-muted">{date(d.createdAt)}</p>
                 {d.targetLabel && (
                   <p className="mt-1 [overflow-wrap:anywhere]">
                     {d.action.startsWith("verification.") ? tv(`documentTypes.${d.targetLabel}`) : d.targetLabel}
@@ -83,10 +83,10 @@ export default async function DecisionsPage(props: Props) {
                 ) : d.appealable ? (
                   <p className="mt-2">
                     <Link href={`/account/decisions/${d.id}/appeal`} className="underline">{t("appealLink")}</Link>
-                    <span className="ml-2 text-sm text-stone-700">{t("appealUntil", { date: date(d.appealUntil) })}</span>
+                    <span className="ml-2 text-sm text-muted">{t("appealUntil", { date: date(d.appealUntil) })}</span>
                   </p>
                 ) : (
-                  <p className="mt-2 text-sm text-stone-700">{t("appealClosed")}</p>
+                  <p className="mt-2 text-sm text-muted">{t("appealClosed")}</p>
                 )}
               </li>
             );

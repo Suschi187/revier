@@ -63,7 +63,7 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
         onChange={onChange}
         aria-describedby={`${inputId}-hint`}
       />
-      <p id={`${inputId}-hint`} className="text-sm text-stone-700">
+      <p id={`${inputId}-hint`} className="text-sm text-muted">
         {freeSlots.length === 0 ? t("limit") : t("intro")}
       </p>
       <p role="status" aria-live="polite" className="text-sm">
@@ -71,12 +71,12 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
         {status.kind === "done" && t("done", { count: status.count })}
       </p>
       {skipped > 0 && (
-        <p role="alert" className="text-sm text-red-800">
+        <p role="alert" className="text-sm text-error">
           {t("skipped", { count: skipped })}
         </p>
       )}
       {status.kind === "error" && (
-        <p role="alert" className="text-sm text-red-800">
+        <p role="alert" className="text-sm text-error">
           {status.name ? `${status.name}: ` : ""}
           {t(`errors.${status.error}`)}
         </p>

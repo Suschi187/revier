@@ -10,7 +10,7 @@ export async function ModerationNote({ status, code, note, className = "" }: { s
   if (!code || !(status === "rejected" || status === "removed" || status === "draft")) return null;
   const [t, tm] = await Promise.all([getTranslations("Listings.mine"), getTranslations("Moderation")]);
   return (
-    <div className={`text-sm text-red-800 ${className}`}>
+    <div className={`text-sm text-error ${className}`}>
       {status === "draft" && <p>{t("changesRequested")}</p>}
       <p>{t("rejectReason", { reason: tm(`reasons.${code}`) })}</p>
       {note && <p className="break-words whitespace-pre-line">{t("moderationNote", { note })}</p>}

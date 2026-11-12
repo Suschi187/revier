@@ -6,7 +6,7 @@ export default async function Forbidden() {
   const t = await getTranslations("Admin.forbidden");
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("text")}</p>
       <Link href="/" className="mt-4 inline-block underline">
         {t("backHome")}

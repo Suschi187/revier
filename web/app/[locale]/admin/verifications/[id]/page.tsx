@@ -54,7 +54,7 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
       <Link href="/admin/verifications" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold break-words">{t("title", { type, name: v.user.displayName })}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title", { type, name: v.user.displayName })}</h1>
 
       <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 text-sm">
         <dt className="font-medium">{t("status")}</dt>
@@ -73,8 +73,8 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
         <dt className="font-medium">{t("profileStatus")}</dt>
         <dd>{ta(`verificationStatus.${v.user.verificationStatus}`)}</dd>
       </dl>
-      {v.user.isBlocked && <p className="mt-2 font-medium text-red-800">{t("blocked")}</p>}
-      {v.isOwn && <p className="mt-2 w-fit rounded bg-amber-100 px-2 py-0.5 text-amber-950">{t("own")}</p>}
+      {v.user.isBlocked && <p className="mt-2 font-medium text-error">{t("blocked")}</p>}
+      {v.isOwn && <p className="mt-2 w-fit rounded bg-notice-soft px-2 py-0.5 text-notice">{t("own")}</p>}
       {v.rejectCode && (
         <p className="mt-2 text-sm">
           {tv("reasonLabel")}: {tv(`reasons.${v.rejectCode}`)}. {v.rejectReason}
@@ -87,7 +87,7 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
       )}
 
       <section className="mt-6" aria-labelledby="h-history">
-        <h2 id="h-history" className="text-xl font-semibold">
+        <h2 id="h-history" className="font-display text-xl font-bold">
           {t("history")}
         </h2>
         {v.history.length === 0 ? (
@@ -108,8 +108,8 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
         )}
       </section>
 
-      <section id="document" className="mt-6 flex flex-col gap-2 rounded border border-stone-400 p-4" aria-labelledby="h-document">
-        <h2 id="h-document" className="text-xl font-semibold">
+      <section id="document" className="mt-6 flex flex-col gap-2 rounded border border-field p-4" aria-labelledby="h-document">
+        <h2 id="h-document" className="font-display text-xl font-bold">
           {t("documentTitle")}
         </h2>
         {!v.documentPresent ? (
@@ -118,7 +118,7 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
           <p>{t("own")}</p>
         ) : (
           <>
-            <p className="text-sm text-stone-700">{t("documentHint")}</p>
+            <p className="text-sm text-muted">{t("documentHint")}</p>
             {view?.ok === true &&
               (view.mime === "application/pdf" ? (
                 <a href={src} rel="noopener noreferrer" className="underline">
@@ -130,13 +130,13 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
                 <img src={view.dataUrl} alt={t("imageAlt", { type })} className="max-h-[80vh] w-auto rounded border" />
               ))}
             {view?.ok === false && (
-              <p role="alert" className="text-red-700">
+              <p role="alert" className="text-error">
                 {t(`documentErrors.${view.error}`)}
               </p>
             )}
             <form method="get" action="#document">
               <input type="hidden" name="document" value="1" />
-              <button type="submit" className="rounded border border-stone-500 px-4 py-2">
+              <button type="submit" className="rounded border border-field px-4 py-2">
                 {show ? t("documentAgain") : t("documentShow")}
               </button>
             </form>
@@ -145,13 +145,13 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
       </section>
 
       {error && (
-        <p id="v-error" role="alert" className="mt-6 rounded bg-red-50 p-3 text-red-800">
+        <p id="v-error" role="alert" className="mt-6 rounded bg-error-soft p-3 text-error">
           {t(`errors.${error}`)}
         </p>
       )}
 
       {v.status === "pending" && !v.isOwn && (
-        <form action={decideVerificationAction} id="decision" className="mt-6 flex flex-col gap-4 rounded border border-stone-400 p-4">
+        <form action={decideVerificationAction} id="decision" className="mt-6 flex flex-col gap-4 rounded border border-field p-4">
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="id" value={v.id} />
           <input type="hidden" name="userId" value={v.user.id} />
@@ -170,7 +170,7 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
             <label htmlFor="v-code" className="font-medium">
               {t("reason")}
             </label>
-            <select id="v-code" name="code" defaultValue="" aria-invalid={error === "code" || undefined} className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
+            <select id="v-code" name="code" defaultValue="" aria-invalid={error === "code" || undefined} className="mt-1 w-full rounded border border-field px-3 py-2">
               <option value="">{t("reasonNone")}</option>
               {VERIFICATION_REJECT_CODES.map((code) => (
                 <option key={code} value={code}>
@@ -183,29 +183,29 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
             <label htmlFor="v-note" className="font-medium">
               {t("note")}
             </label>
-            <textarea id="v-note" name="note" rows={3} maxLength={VERIFICATION_NOTE_MAX} aria-describedby="v-note-hint" aria-invalid={error === "note" || undefined} className="mt-1 w-full rounded border border-stone-400 px-3 py-2" />
-            <p id="v-note-hint" className="text-xs text-stone-700">
+            <textarea id="v-note" name="note" rows={3} maxLength={VERIFICATION_NOTE_MAX} aria-describedby="v-note-hint" aria-invalid={error === "note" || undefined} className="mt-1 w-full rounded border border-field px-3 py-2" />
+            <p id="v-note-hint" className="text-xs text-muted">
               {t("noteHint")}
             </p>
           </div>
-          <button type="submit" className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white">
+          <button type="submit" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">
             {t("submit")}
           </button>
         </form>
       )}
 
       {canRevoke && (
-        <form action={revokeVerificationAction} id="revoke" className="mt-6 flex flex-col gap-4 rounded border border-red-300 p-4">
+        <form action={revokeVerificationAction} id="revoke" className="mt-6 flex flex-col gap-4 rounded border border-error p-4">
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="id" value={v.id} />
           <input type="hidden" name="userId" value={v.user.id} />
-          <h2 className="text-xl font-semibold">{t("revokeTitle")}</h2>
+          <h2 className="font-display text-xl font-bold">{t("revokeTitle")}</h2>
           <p className="text-sm">{t("revokeHint")}</p>
           <div>
             <label htmlFor="r-code" className="font-medium">
               {t("reason")}
             </label>
-            <select id="r-code" name="code" required defaultValue="" className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
+            <select id="r-code" name="code" required defaultValue="" className="mt-1 w-full rounded border border-field px-3 py-2">
               <option value="" disabled>
                 {t("reasonNone")}
               </option>
@@ -220,12 +220,12 @@ export default async function AdminVerificationPage({ params, searchParams }: Pr
             <label htmlFor="r-note" className="font-medium">
               {t("note")}
             </label>
-            <textarea id="r-note" name="note" rows={3} maxLength={VERIFICATION_NOTE_MAX} aria-describedby="r-note-hint" className="mt-1 w-full rounded border border-stone-400 px-3 py-2" />
-            <p id="r-note-hint" className="text-xs text-stone-700">
+            <textarea id="r-note" name="note" rows={3} maxLength={VERIFICATION_NOTE_MAX} aria-describedby="r-note-hint" className="mt-1 w-full rounded border border-field px-3 py-2" />
+            <p id="r-note-hint" className="text-xs text-muted">
               {t("noteHint")}
             </p>
           </div>
-          <button type="submit" className="self-start rounded bg-red-800 px-4 py-2 font-medium text-white">
+          <button type="submit" className="self-start rounded bg-error px-4 py-2 font-medium text-offwhite">
             {t("revokeSubmit")}
           </button>
         </form>

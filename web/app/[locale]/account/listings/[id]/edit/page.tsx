@@ -40,7 +40,7 @@ export default async function EditListingPage(props: Props) {
       <Link href="/account/listings" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("editTitle")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("editTitle")}</h1>
       <EditListing {...props} />
     </main>
   );
@@ -62,29 +62,29 @@ async function EditListing({ params, searchParams }: Props) {
   const errors = parseErrorCodes(query.errors);
 
   if (listing.status === "removed") {
-    return <p className="mt-6 rounded bg-red-50 p-3 text-red-800">{t("wizard.lockedNote")}</p>;
+    return <p className="mt-6 rounded bg-error-soft p-3 text-error">{t("wizard.lockedNote")}</p>;
   }
 
   return (
     <>
       <StepNav listingId={listing.id} current={step} />
-      <ModerationNote status={listing.status} code={listing.rejectCode} note={listing.rejectReason} className="mt-4 rounded bg-red-50 p-3" />
+      <ModerationNote status={listing.status} code={listing.rejectCode} note={listing.rejectReason} className="mt-4 rounded bg-error-soft p-3" />
       {(listing.status === "active" || listing.status === "paused") && (
-        <p className="mt-4 rounded bg-amber-50 p-3 text-amber-950">{t("wizard.publishedNote")}</p>
+        <p className="mt-4 rounded bg-notice-soft p-3 text-notice">{t("wizard.publishedNote")}</p>
       )}
       {query.saved === "1" && errors.length === 0 && (
-        <p role="status" className="mt-4 text-emerald-800">
+        <p role="status" className="mt-4 text-success">
           {t("wizard.saved")}
         </p>
       )}
       <ErrorSummary codes={errors} listingId={listing.id} current={step} />
       {step === "photos" && PHOTO_NOTICES.includes(query.photoNotice as (typeof PHOTO_NOTICES)[number]) && (
-        <p role="status" className="mt-4 text-emerald-800">
+        <p role="status" className="mt-4 text-success">
           {t(`photos.notices.${query.photoNotice as (typeof PHOTO_NOTICES)[number]}`)}
         </p>
       )}
       {step === "photos" && query.photoError === "failed" && (
-        <p role="alert" className="mt-4 text-red-800">
+        <p role="alert" className="mt-4 text-error">
           {t("errors.failed")}
         </p>
       )}

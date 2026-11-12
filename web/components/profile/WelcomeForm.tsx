@@ -59,18 +59,18 @@ export function WelcomeForm({ locale, next, initial, termsVersion, privacyVersio
           </span>
         </label>
         {state.legalError && (
-          <p id="accept-error" className="text-sm text-red-700">
+          <p id="accept-error" className="text-sm text-error">
             {t("acceptRequired")}
           </p>
         )}
       </div>
 
       {state.formError && (
-        <p role="alert" className="text-red-700">
+        <p role="alert" className="text-error">
           {t(`errors.${state.formError}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
         {t("submit")}
       </button>
     </form>

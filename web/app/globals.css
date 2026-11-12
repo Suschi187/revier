@@ -80,6 +80,12 @@
   a:hover {
     color: var(--color-brand-ink);
   }
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: var(--color-forest);
+    width: 1.125rem;
+    height: 1.125rem;
+  }
   :focus-visible {
     outline: 3px solid var(--color-brand-ink);
     outline-offset: 2px;

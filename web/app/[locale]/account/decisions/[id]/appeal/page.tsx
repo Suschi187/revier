@@ -37,7 +37,7 @@ export default async function AppealPage(props: Props) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/account/decisions" className="underline">{t("back")}</Link>
-        <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+        <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
         <p className="mt-4">{decision?.appealId ? t("alreadyAppealed") : t("unavailable")}</p>
       </main>
     );
@@ -46,10 +46,10 @@ export default async function AppealPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account/decisions" className="underline">{t("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2 font-medium">{key ? td(`actions.${key}`) : decision.action} · {format.dateTime(new Date(decision.createdAt), { dateStyle: "medium" })}</p>
       <p className="mt-2">{t("intro", { date: format.dateTime(new Date(decision.appealUntil), { dateStyle: "long" }) })}</p>
-      {error && <p className="mt-4 text-red-800" role="alert" id="appeal-error">{t(`errors.${error}`)}</p>}
+      {error && <p className="mt-4 text-error" role="alert" id="appeal-error">{t(`errors.${error}`)}</p>}
       <form action={submitAppealAction} className="mt-6 grid gap-4">
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="id" value={decision.id} />
@@ -57,10 +57,10 @@ export default async function AppealPage(props: Props) {
           <label htmlFor="appeal-text" className="block font-medium">{t("text")}</label>
           <textarea id="appeal-text" name="text" rows={6} minLength={APPEAL_MIN} maxLength={APPEAL_MAX} required
             aria-describedby={`appeal-hint${error ? " appeal-error" : ""}`} aria-invalid={error === "text" || undefined}
-            className="w-full rounded border border-stone-400 px-2 py-1.5" />
-          <p id="appeal-hint" className="text-sm text-stone-700">{t("textHint")}</p>
+            className="w-full rounded border border-field px-2 py-1.5" />
+          <p id="appeal-hint" className="text-sm text-muted">{t("textHint")}</p>
         </div>
-        <button type="submit" className="justify-self-start rounded bg-stone-900 px-4 py-2 text-white">{t("submit")}</button>
+        <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
       </form>
     </main>
   );

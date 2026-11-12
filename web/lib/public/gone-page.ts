@@ -28,7 +28,7 @@ export function goneHtml(locale: AppLocale): string {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>${escape(g.metaTitle)} | ${escape(m.Metadata.siteName)}</title>
-<style>body{font-family:system-ui,sans-serif;max-width:48rem;margin:0 auto;padding:3rem 1rem;color:#1c1917;line-height:1.5}a{color:inherit}ul{display:flex;flex-wrap:wrap;gap:1rem;list-style:none;padding:0}</style>
+<style>body{font-family:system-ui,sans-serif;max-width:48rem;margin:0 auto;padding:3rem 1rem;color:#202b23;background:#f7f5ef;line-height:1.5}h1{text-transform:uppercase;font-weight:800}a{color:inherit}ul{display:flex;flex-wrap:wrap;gap:1rem;list-style:none;padding:0}</style>
 </head>
 <body>
 <main>

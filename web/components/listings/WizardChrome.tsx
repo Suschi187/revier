@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
 import { fieldIdOf, fieldMessageKey, stepOfField, WIZARD_STEPS, type WizardStep } from "@/lib/listing-wizard";
 
@@ -8,15 +9,19 @@ import { fieldIdOf, fieldMessageKey, stepOfField, WIZARD_STEPS, type WizardStep 
 export async function StepNav({ listingId, current }: { listingId: string | null; current: WizardStep }) {
   const t = await getTranslations("Listings.wizard");
   const index = WIZARD_STEPS.indexOf(current);
+  const chip = "inline-flex min-h-9 items-center rounded-pill px-3 text-sm";
   return (
     <nav aria-label={t("stepsLabel")} className="mt-4">
-      <p className="text-sm font-medium">{t("progress", { current: index + 1, total: WIZARD_STEPS.length })}</p>
-      <ol className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      <p className="text-sm font-semibold">{t("progress", { current: index + 1, total: WIZARD_STEPS.length })}</p>
+      <div aria-hidden="true" className="mt-2 h-1.5 overflow-hidden rounded-pill bg-sand">
+        <div className="h-full rounded-pill bg-brand" style={{ width: `${((index + 1) / WIZARD_STEPS.length) * 100}%` }} />
+      </div>
+      <ol className="mt-3 flex flex-wrap gap-2">
         {WIZARD_STEPS.map((step, i) => {
           const label = `${i + 1}. ${t(`steps.${step}`)}`;
           if (step === current) {
             return (
-              <li key={step} aria-current="step" className="font-semibold">
+              <li key={step} aria-current="step" className={`${chip} bg-forest font-semibold text-offwhite`}>
                 {label}
               </li>
             );
@@ -24,11 +29,11 @@ export async function StepNav({ listingId, current }: { listingId: string | null
           return (
             <li key={step}>
               {listingId ? (
-                <Link href={`/account/listings/${listingId}/edit?step=${step}`} className="underline">
+                <Link href={`/account/listings/${listingId}/edit?step=${step}`} className={`${chip} border border-sand bg-surface text-forest underline underline-offset-2`}>
                   {label}
                 </Link>
               ) : (
-                <span className="text-stone-500">{label}</span>
+                <span className={`${chip} border border-sand text-muted`}>{label}</span>
               )}
             </li>
           );
@@ -42,8 +47,8 @@ export async function ErrorSummary({ codes, listingId, current }: { codes: strin
   if (codes.length === 0) return null;
   const t = await getTranslations("Listings");
   return (
-    <div role="alert" tabIndex={-1} id="error-summary" className="mt-6 rounded border border-red-700 bg-red-50 p-4">
-      <p className="font-semibold text-red-900">{t("wizard.errorSummary")}</p>
+    <div role="alert" tabIndex={-1} id="error-summary" className="mt-6 rounded-card border border-error bg-error-soft p-4">
+      <p className="font-semibold text-error">{t("wizard.errorSummary")}</p>
       <ul className="mt-2 list-disc pl-5">
         {codes.map((code) => {
           const step = stepOfField(code);
@@ -51,11 +56,11 @@ export async function ErrorSummary({ codes, listingId, current }: { codes: strin
           return (
             <li key={code}>
               {step === current || !listingId ? (
-                <a href={href} className="text-red-900 underline">
+                <a href={href} className="text-error underline">
                   {t(`fieldErrors.${fieldMessageKey(code)}`)}
                 </a>
               ) : (
-                <Link href={href} className="text-red-900 underline">
+                <Link href={href} className="text-error underline">
                   {t(`fieldErrors.${fieldMessageKey(code)}`)} – {t("preview.fix", { step: t(`wizard.steps.${step}`) })}
                 </Link>
               )}
@@ -73,7 +78,7 @@ export async function FieldError({ codes, fieldId }: { codes: string[]; fieldId:
   if (!code) return null;
   const t = await getTranslations("Listings.fieldErrors");
   return (
-    <p id={`${fieldId}-error`} className="text-sm text-red-800">
+    <p id={`${fieldId}-error`} className="text-sm text-error">
       {t(fieldMessageKey(code))}
     </p>
   );
@@ -94,6 +99,6 @@ export function describedBy(
   return { ...(invalid && !group ? { "aria-invalid": true as const } : {}), ...(ids ? { "aria-describedby": ids } : {}) };
 }
 
-export const inputClass = "mt-1 w-full rounded border border-stone-400 px-3 py-2";
-export const labelClass = "font-medium";
-export const buttonClass = "self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white";
+export const inputClass = `mt-1 ${ui.input}`;
+export const labelClass = "font-semibold";
+export const buttonClass = `${ui.btnPrimary} self-start`;

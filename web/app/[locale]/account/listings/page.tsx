@@ -21,13 +21,13 @@ const NOTICES = ["withdrawn", "paused", "resumed", "resumedReview", "deleted", "
 const ERRORS = ["failed", "legal"] as const;
 
 const STATUS_STYLE: Record<ListingStatus, string> = {
-  draft: "bg-stone-100 text-stone-800",
-  pending_review: "bg-amber-100 text-amber-900",
-  active: "bg-emerald-100 text-emerald-900",
+  draft: "bg-sand text-muted",
+  pending_review: "bg-notice-soft text-notice",
+  active: "bg-success-soft text-success",
   paused: "bg-sky-100 text-sky-900",
-  expired: "bg-stone-200 text-stone-800",
-  rejected: "bg-red-100 text-red-900",
-  removed: "bg-red-200 text-red-900",
+  expired: "bg-sand text-muted",
+  rejected: "bg-error-soft text-error",
+  removed: "bg-error-soft text-error",
 };
 
 export default async function MyListingsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
@@ -37,7 +37,7 @@ export default async function MyListingsPage({ searchParams }: { searchParams: P
       <Link href="/account" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <MyListings searchParams={searchParams} />
     </main>
   );
@@ -53,16 +53,16 @@ async function MyListings({ searchParams }: { searchParams: Promise<Record<strin
   return (
     <div className="mt-6 flex flex-col gap-6">
       {notice && (
-        <p role="status" className="rounded bg-emerald-50 p-3 text-emerald-900">
+        <p role="status" className="rounded bg-success-soft p-3 text-success">
           {t(`notices.${notice}`)}
         </p>
       )}
       {error && (
-        <p role="alert" className="rounded bg-red-50 p-3 text-red-800">
+        <p role="alert" className="rounded bg-error-soft p-3 text-error">
           {t(`errors.${error}`)}
         </p>
       )}
-      <Link href="/account/listings/new" className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white">
+      <Link href="/account/listings/new" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">
         {t("mine.create")}
       </Link>
       {listings.length === 0 ? (
@@ -85,9 +85,9 @@ async function ListingRow({ listing, locale }: { listing: OwnListingSummary; loc
   const editable = listing.status !== "removed";
 
   return (
-    <li className="rounded border border-stone-300 p-4" aria-labelledby={headingId}>
+    <li className="rounded border border-sand p-4" aria-labelledby={headingId}>
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <h2 id={headingId} className="text-lg font-semibold break-words">
+        <h2 id={headingId} className="font-display text-lg font-bold break-words">
           {listing.title}
         </h2>
         <span className={`rounded px-2 py-0.5 text-sm font-medium ${STATUS_STYLE[listing.status]}`}>
@@ -95,7 +95,7 @@ async function ListingRow({ listing, locale }: { listing: OwnListingSummary; loc
           {t(`status.${listing.status}`)}
         </span>
       </div>
-      <p className="mt-1 text-sm text-stone-700">
+      <p className="mt-1 text-sm text-muted">
         {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)} · {t("mine.createdAt", { date: date(listing.createdAt) })}
       </p>
       {listing.status === "pending_review" && <p className="mt-2 text-sm">{t("mine.reviewHint")}</p>}
@@ -114,7 +114,7 @@ async function ListingRow({ listing, locale }: { listing: OwnListingSummary; loc
         {listing.status === "paused" && <ActionButton listing={listing} locale={locale} action="resume" label={t("actions.resume")} />}
         {listing.status === "draft" && (
           <details className="w-full sm:w-auto">
-            <summary className="cursor-pointer text-red-800 underline">{t("actions.delete")}</summary>
+            <summary className="cursor-pointer text-error underline">{t("actions.delete")}</summary>
             <div className="mt-2 flex flex-col gap-2">
               <p className="text-sm">{t("actions.deleteQuestion", { title: listing.title })}</p>
               <ActionButton listing={listing} locale={locale} action="delete" label={t("actions.deleteConfirm")} danger />
@@ -134,7 +134,7 @@ function ActionButton({ listing, locale, action, label, danger }: { listing: Own
       <input type="hidden" name="action" value={action} />
       <button
         type="submit"
-        className={danger ? "rounded bg-red-800 px-3 py-1.5 text-sm font-medium text-white" : "rounded border border-stone-400 px-3 py-1.5 text-sm"}
+        className={danger ? "rounded bg-error px-3 py-1.5 text-sm font-medium text-offwhite" : "rounded border border-field px-3 py-1.5 text-sm"}
       >
         {label}
       </button>

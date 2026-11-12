@@ -14,13 +14,13 @@ export type ProfileValues = {
 };
 
 const { account_type, country_code, language_code } = Constants.public.Enums;
-const inputClass = "rounded border border-neutral-400 px-3 py-2";
+const inputClass = "rounded border border-field px-3 py-2";
 
 function FieldError({ id, code }: { id: string; code?: string }) {
   const t = useTranslations("Profile.errors");
   if (!code) return null;
   return (
-    <p id={id} className="text-sm text-red-700">
+    <p id={id} className="text-sm text-error">
       {t(code as "required" | "tooLong" | "invalid")}
     </p>
   );
@@ -49,7 +49,7 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
           aria-describedby={describedBy("displayName") ?? "displayName-hint"}
           className={inputClass}
         />
-        <p id="displayName-hint" className="text-sm text-neutral-600">
+        <p id="displayName-hint" className="text-sm text-muted">
           {t("displayNameHint")}
         </p>
         <FieldError id="displayName-error" code={errors.displayName} />
@@ -129,7 +129,7 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
             </option>
           ))}
         </select>
-        <p id="preferredLanguage-hint" className="text-sm text-neutral-600">
+        <p id="preferredLanguage-hint" className="text-sm text-muted">
           {t("preferredLanguageHint")}
         </p>
         <FieldError id="preferredLanguage-error" code={errors.preferredLanguage} />

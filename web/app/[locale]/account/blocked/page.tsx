@@ -30,7 +30,7 @@ export default async function BlockedPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{tc("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2">{t("intro")}</p>
       {query.notice === "unblocked" && <p className="mt-4" role="status">{tc("notices.unblocked")}</p>}
       {query.notice === "failed" && <p className="mt-4" role="alert">{tc("notices.failed")}</p>}
@@ -39,15 +39,15 @@ export default async function BlockedPage(props: Props) {
       {blocks && blocks.length > 0 && (
         <ul className="mt-6 grid gap-3">
           {blocks.map((person) => (
-            <li key={person.id} className="flex flex-wrap items-center justify-between gap-3 rounded border border-stone-300 p-3">
+            <li key={person.id} className="flex flex-wrap items-center justify-between gap-3 rounded border border-sand p-3">
               <span className="min-w-0">
                 <span className="block font-semibold [overflow-wrap:anywhere]">{person.name ?? t("unknown")}</span>
-                <span className="block text-sm text-stone-700">{t("since", { date: format.dateTime(new Date(person.since), { dateStyle: "medium" }) })}</span>
+                <span className="block text-sm text-muted">{t("since", { date: format.dateTime(new Date(person.since), { dateStyle: "medium" }) })}</span>
               </span>
               <form action={unblockUserAction}>
                 <input type="hidden" name="locale" value={locale} />
                 <input type="hidden" name="blocked" value={person.id} />
-                <button type="submit" className="rounded border border-stone-500 px-3 py-1">{t("unblock")}</button>
+                <button type="submit" className="rounded border border-field px-3 py-1">{t("unblock")}</button>
               </form>
             </li>
           ))}

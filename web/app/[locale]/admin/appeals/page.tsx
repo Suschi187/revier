@@ -31,8 +31,8 @@ export default async function AdminAppealsPage({ searchParams }: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/admin" className="underline">{t("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
-      {notice && <p role="status" className="mt-4 text-emerald-800">{t(`notices.${notice}`)}</p>}
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
+      {notice && <p role="status" className="mt-4 text-success">{t(`notices.${notice}`)}</p>}
       {items.length === 0 ? (
         <p className="mt-6">{t("empty")}</p>
       ) : (
@@ -40,12 +40,12 @@ export default async function AdminAppealsPage({ searchParams }: Props) {
           {items.map((item) => {
             const key = actionKey(item.decisionAction);
             return (
-              <li key={item.id} className="rounded border border-stone-300 p-4">
-                <h2 className="text-lg font-semibold break-words">
+              <li key={item.id} className="rounded border border-sand p-4">
+                <h2 className="font-display text-lg font-bold break-words">
                   <Link href={`/admin/appeals/${item.id}`} className="underline">{t("itemTitle", { action: key ? td(`actions.${key}`) : item.decisionAction, name: item.displayName })}</Link>
                 </h2>
-                <p className="text-sm text-stone-700">{t("waiting", { time: format.relativeTime(new Date(item.createdAt)) })}</p>
-                {item.sameReviewerOnly && <p className="mt-1 w-fit rounded bg-amber-100 px-2 py-0.5 text-sm text-amber-950">{t("byMe")}</p>}
+                <p className="text-sm text-muted">{t("waiting", { time: format.relativeTime(new Date(item.createdAt)) })}</p>
+                {item.sameReviewerOnly && <p className="mt-1 w-fit rounded bg-notice-soft px-2 py-0.5 text-sm text-notice">{t("byMe")}</p>}
               </li>
             );
           })}

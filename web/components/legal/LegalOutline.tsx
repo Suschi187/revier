@@ -6,7 +6,7 @@ export type OutlineSection = { title: string; points: string[] };
 export async function PlaceholderNote() {
   const t = await getTranslations("Legal");
   return (
-    <p role="note" className="mt-4 rounded border border-amber-600 bg-amber-50 p-3 text-amber-950">
+    <p role="note" className="mt-4 rounded border border-notice bg-notice-soft p-3 text-notice">
       {t("placeholder")}
     </p>
   );
@@ -17,10 +17,10 @@ export async function LegalOutline({ sections }: { sections: OutlineSection[] })
   const t = await getTranslations("Legal");
   return (
     <>
-      <p className="mt-4 text-sm text-neutral-700">{t("outlineNote")}</p>
+      <p className="mt-4 text-sm text-muted">{t("outlineNote")}</p>
       {sections.map((section) => (
         <section key={section.title} className="mt-8">
-          <h2 className="text-xl font-semibold">{section.title}</h2>
+          <h2 className="font-display text-xl font-bold">{section.title}</h2>
           <ul className="mt-2 list-disc space-y-1 pl-6">
             {section.points.map((point) => (
               <li key={point}>{point}</li>

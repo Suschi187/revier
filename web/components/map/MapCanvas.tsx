@@ -109,6 +109,6 @@ export default function MapCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tilesUrl, locale]);
 
-  if (failed) return <p role="alert" className="rounded border border-stone-300 p-4">{failedText}</p>;
-  return <div ref={container} className={`${className} rounded border border-stone-300`} role="region" aria-label={label} />;
+  if (failed) return <p role="alert" className="rounded border border-sand p-4">{failedText}</p>;
+  return <div ref={container} className={`${className} rounded border border-sand`} role="region" aria-label={label} />;
 }

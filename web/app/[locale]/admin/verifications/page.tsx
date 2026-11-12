@@ -42,9 +42,9 @@ export default async function VerificationQueuePage({ searchParams }: Props) {
       <Link href="/admin" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {notice && (
-        <p role="status" className="mt-4 text-emerald-800">
+        <p role="status" className="mt-4 text-success">
           {t(`notices.${notice}`)}
         </p>
       )}
@@ -53,19 +53,19 @@ export default async function VerificationQueuePage({ searchParams }: Props) {
       ) : (
         <ol className="mt-6 flex flex-col gap-4">
           {items.map((item) => (
-            <li key={item.id} className="rounded border border-stone-300 p-4">
-              <h2 className="text-lg font-semibold break-words">
+            <li key={item.id} className="rounded border border-sand p-4">
+              <h2 className="font-display text-lg font-bold break-words">
                 <Link href={`/admin/verifications/${item.id}`} className="underline">
                   {t("itemTitle", { type: tv(`documentTypes.${item.documentType}`), name: item.displayName })}
                 </Link>
               </h2>
-              <p className="text-sm text-stone-700">
+              <p className="text-sm text-muted">
                 {ta(`accountTypes.${item.accountType}`)} · {tp(`countries.${item.country}`)} · {ta(`verificationStatus.${item.profileStatus}`)}
               </p>
               <p className="mt-1 text-sm">
                 {t("waiting", { time: format.relativeTime(new Date(item.submittedAt)) })} · {t("previous", { count: item.previousRequests })}
               </p>
-              {item.isOwn && <p className="mt-1 w-fit rounded bg-amber-100 px-2 py-0.5 text-sm text-amber-950">{t("own")}</p>}
+              {item.isOwn && <p className="mt-1 w-fit rounded bg-notice-soft px-2 py-0.5 text-sm text-notice">{t("own")}</p>}
             </li>
           ))}
         </ol>

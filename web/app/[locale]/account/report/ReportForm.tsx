@@ -17,7 +17,7 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
   if (!target) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <h1 className="text-3xl font-semibold">{t("title")}</h1>
+        <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
         <p className="mt-4">{t("unavailable")}</p>
         <Link href="/account/reports" className="mt-4 inline-block underline">{t("myReports")}</Link>
       </main>
@@ -25,10 +25,10 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
   }
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t(type === "listing" ? "titleListing" : "titleProfile")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t(type === "listing" ? "titleListing" : "titleProfile")}</h1>
       <p className="mt-2 font-medium [overflow-wrap:anywhere]">{target.label}</p>
-      <p className="mt-2 text-sm text-stone-700">{t("intro")}</p>
-      {shown && <p className="mt-4 text-red-800" role="alert" id="report-error">{t(`errors.${shown}`)}</p>}
+      <p className="mt-2 text-sm text-muted">{t("intro")}</p>
+      {shown && <p className="mt-4 text-error" role="alert" id="report-error">{t(`errors.${shown}`)}</p>}
       <form action={reportTargetAction} className="mt-6 grid gap-4" aria-describedby={shown ? "report-error" : undefined}>
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="type" value={type} />
@@ -47,15 +47,15 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
         <div>
           <label htmlFor="report-note" className="block font-medium">{t("note")}</label>
           <textarea id="report-note" name="note" rows={4} maxLength={REPORT_NOTE_MAX} aria-describedby="report-note-hint"
-            className="w-full rounded border border-stone-400 px-2 py-1.5" />
-          <p id="report-note-hint" className="text-sm text-stone-700">{t("noteHint")}</p>
+            className="w-full rounded border border-field px-2 py-1.5" />
+          <p id="report-note-hint" className="text-sm text-muted">{t("noteHint")}</p>
         </div>
         {/* PLATZHALTER (SPEC 7.2): Wortlaut der Zusicherung nach DSA Art. 16 Abs. 2 d liefert der Anwalt; nicht gespeichert. */}
         <label className="flex items-start gap-2">
           <input type="checkbox" name="goodFaith" required className="mt-1" />
           <span>{t("goodFaith")}</span>
         </label>
-        <button type="submit" className="justify-self-start rounded bg-stone-900 px-4 py-2 text-white">{t("submit")}</button>
+        <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
       </form>
     </main>
   );

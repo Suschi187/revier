@@ -23,13 +23,13 @@ export default async function UnsubscribePage(props: Props) {
 
   return (
     <main className="mx-auto w-full max-w-md flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {token ? (
         <form action="/api/unsubscribe" method="post" className="mt-4 grid gap-4">
           <input type="hidden" name="lang" value={locale} />
           <input type="hidden" name="t" value={token} />
           <p>{t("intro")}</p>
-          <button type="submit" className="justify-self-start rounded bg-stone-900 px-4 py-2 text-white">{t("submit")}</button>
+          <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
         </form>
       ) : (
         <p role="alert" className="mt-4">{t("missing")}</p>

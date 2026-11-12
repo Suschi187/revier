@@ -43,7 +43,7 @@ export function Composer({ action, id, locale, initialError, owner = false }: Pr
         key={state.draft}
         aria-invalid={shown === "body" || undefined}
         aria-describedby={shown ? "composer-error composer-count" : "composer-count"}
-        className="w-full rounded border border-stone-400 px-2 py-1.5 whitespace-pre-wrap"
+        className="w-full rounded border border-field px-2 py-1.5 whitespace-pre-wrap"
         onChange={(event) => setText(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
@@ -53,21 +53,21 @@ export function Composer({ action, id, locale, initialError, owner = false }: Pr
         }}
       />
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p id="composer-count" className={`text-sm ${length > MAX_BODY ? "text-red-800" : "text-stone-700"}`}>
+        <p id="composer-count" className={`text-sm ${length > MAX_BODY ? "text-error" : "text-muted"}`}>
           {t("composer.count", { count: length, max: MAX_BODY })}
         </p>
-        <button type="submit" disabled={pending} className="rounded bg-stone-900 px-4 py-2 text-white disabled:opacity-60">
+        <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 text-offwhite disabled:opacity-60">
           {pending ? t("composer.sending") : t("composer.send")}
         </button>
       </div>
-      <p id="composer-shortcut" className="text-sm text-stone-700">{t("composer.shortcut")}</p>
+      <p id="composer-shortcut" className="text-sm text-muted">{t("composer.shortcut")}</p>
       {/* Nur Hinweise, Senden bleibt möglich (SPEC 7.8). Ohne JavaScript gilt der feste Sicherheitshinweis. */}
       <div aria-live="polite" className="grid gap-2">
-        {hints.contact && <p className="rounded border border-amber-700 bg-amber-50 p-2 text-sm">{t("hints.contact")}</p>}
-        {owner && hints.location && <p className="rounded border border-amber-700 bg-amber-50 p-2 text-sm">{t("hints.location")}</p>}
+        {hints.contact && <p className="rounded border border-notice bg-notice-soft p-2 text-sm">{t("hints.contact")}</p>}
+        {owner && hints.location && <p className="rounded border border-notice bg-notice-soft p-2 text-sm">{t("hints.location")}</p>}
       </div>
       {shown && (
-        <p id="composer-error" role="alert" className="text-red-800">
+        <p id="composer-error" role="alert" className="text-error">
           {t(`errors.${shown}`)}
         </p>
       )}

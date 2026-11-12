@@ -23,7 +23,7 @@ export default async function ProfilePage(props: Props) {
       <Link href="/account" className="underline">
         {t("profile.back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("profile.title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("profile.title")}</h1>
       <Suspense fallback={null}>
         <ProfileContent />
       </Suspense>
@@ -61,8 +61,8 @@ async function NotificationSettings({ searchParams }: Props) {
   const [t, enabled, query] = await Promise.all([getTranslations("Chat.notifications"), getNotifyChatEmail(user.id), searchParams]);
   if (enabled === null) return null;
   return (
-    <section aria-labelledby="notifications-heading" className="mt-10 border-t border-stone-300 pt-6">
-      <h2 id="notifications-heading" className="text-xl font-semibold">{t("title")}</h2>
+    <section aria-labelledby="notifications-heading" className="mt-10 border-t border-sand pt-6">
+      <h2 id="notifications-heading" className="font-display text-xl font-bold">{t("title")}</h2>
       {query.notice === "notifications" && <p className="mt-2" role="status">{t("saved")}</p>}
       {query.notice === "notificationsFailed" && <p className="mt-2" role="alert">{t("failed")}</p>}
       <form action={saveNotifications} className="mt-3 grid gap-3">
@@ -71,8 +71,8 @@ async function NotificationSettings({ searchParams }: Props) {
           <input type="checkbox" name="notifyChatEmail" defaultChecked={enabled} className="mt-1" aria-describedby="notify-hint" />
           <span>{t("chatEmail")}</span>
         </label>
-        <p id="notify-hint" className="text-sm text-stone-700">{t("hint")}</p>
-        <button type="submit" className="justify-self-start rounded border border-stone-500 px-3 py-1">{t("save")}</button>
+        <p id="notify-hint" className="text-sm text-muted">{t("hint")}</p>
+        <button type="submit" className="justify-self-start rounded border border-field px-3 py-1">{t("save")}</button>
       </form>
     </section>
   );

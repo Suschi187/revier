@@ -11,7 +11,7 @@ export async function Breadcrumbs({ crumbs }: { crumbs: Crumb[] }) {
     <>
       <JsonLd data={breadcrumbList(crumbs)} />
       <nav aria-label={t("breadcrumb")}>
-        <ol className="flex flex-wrap gap-1 text-sm text-stone-700">
+        <ol className="flex flex-wrap gap-1 text-sm text-muted">
           {crumbs.map((crumb, i) => (
             <li key={crumb.href} className="flex gap-1">
               {i > 0 && <span aria-hidden="true">›</span>}

@@ -17,16 +17,16 @@ export function ProfileForm({ locale, initial }: { locale: AppLocale; initial: P
       <input type="hidden" name="locale" value={locale} />
       <ProfileFields values={values} errors={state.fieldErrors} />
       {state.status === "saved" && (
-        <p role="status" className="text-emerald-800">
+        <p role="status" className="text-success">
           {t("saved")}
         </p>
       )}
       {state.formError && (
-        <p role="alert" className="text-red-700">
+        <p role="alert" className="text-error">
           {t(state.formError === "blocked" ? "blocked" : "failed")}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
         {t("submit")}
       </button>
     </form>

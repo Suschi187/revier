@@ -42,7 +42,7 @@ export default async function ConversationPage(props: Props) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
-        <h1 className="mt-4 text-3xl font-semibold">{t("conversation.metaTitle")}</h1>
+        <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("conversation.metaTitle")}</h1>
         <p className="mt-4">{t("conversation.notFound")}</p>
       </main>
     );
@@ -61,7 +61,7 @@ export default async function ConversationPage(props: Props) {
       <ChatLive userId={user.id} conversationId={id} />
       <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
       <header className="mt-4">
-        <h1 className="text-3xl font-semibold [overflow-wrap:anywhere]">{name}</h1>
+        <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{name}</h1>
         <p className="mt-1 [overflow-wrap:anywhere]">
           {info.listing?.public ? (
             <a href={publicPath({ route: "listing", id: info.listing.id }, locale)} className="underline">{info.listing.title}</a>
@@ -78,11 +78,11 @@ export default async function ConversationPage(props: Props) {
               <form action={blockAction}>
                 <input type="hidden" name="locale" value={locale} />
                 <input type="hidden" name="id" value={id} />
-                <button type="submit" className="rounded border border-stone-500 px-3 py-1">{t("menu.block")}</button>
+                <button type="submit" className="rounded border border-field px-3 py-1">{t("menu.block")}</button>
               </form>
             )}
             {info.counterpart.profile && (
-              <Link href={`/account/messages/${id}/report?profile=1`} prefetch={false} className="rounded border border-stone-500 px-3 py-1">
+              <Link href={`/account/messages/${id}/report?profile=1`} prefetch={false} className="rounded border border-field px-3 py-1">
                 {t("menu.reportProfile")}
               </Link>
             )}
@@ -93,7 +93,7 @@ export default async function ConversationPage(props: Props) {
         <p className="mt-4" role={notice === "failed" ? "alert" : "status"}>{t(`notices.${notice}`)}</p>
       )}
 
-      <p className="mt-4 rounded border border-amber-700 bg-amber-50 p-3 text-sm">{t("safety")}</p>
+      <p className="mt-4 rounded border border-notice bg-notice-soft p-3 text-sm">{t("safety")}</p>
 
       {page?.hasMore && first && (
         <Link
@@ -112,10 +112,10 @@ export default async function ConversationPage(props: Props) {
           <li
             key={message.id}
             id={index === all.length - 1 ? "latest" : undefined}
-            className={`max-w-[85%] rounded p-3 ${message.mine ? "justify-self-end bg-stone-900 text-white" : "justify-self-start border border-stone-300"}`}
+            className={`max-w-[85%] rounded p-3 ${message.mine ? "justify-self-end bg-forest text-offwhite" : "justify-self-start border border-sand"}`}
           >
             <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</p>
-            <p className={`mt-1 text-xs ${message.mine ? "text-stone-200" : "text-stone-700"}`}>
+            <p className={`mt-1 text-xs ${message.mine ? "text-offwhite" : "text-muted"}`}>
               <time dateTime={message.created_at}>{format.dateTime(new Date(message.created_at), { dateStyle: "short", timeStyle: "short" })}</time>
               {message.mine && <> · {message.read_at ? t("conversation.read") : t("conversation.sent")}</>}
             </p>
@@ -131,14 +131,14 @@ export default async function ConversationPage(props: Props) {
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
 
       {info.can_write && legal && !legal.accepted ? (
-        <p className="mt-6 rounded border border-stone-400 p-3" role="status">
+        <p className="mt-6 rounded border border-field p-3" role="status">
           {t("legalRequired")}{" "}
           <a href={`/${locale}/welcome?next=${encodeURIComponent(path)}`} className="underline">{t("legalLink")}</a>
         </p>
       ) : info.can_write ? (
         <Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} owner={info.role === "owner"} />
       ) : (
-        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-stone-400 p-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-field p-3">
           <p>{info.blocked_by_me ? t("blockedByMe") : t("cannotWrite")}</p>
           {info.blocked_by_me && (
             <form action={unblockAction}>

@@ -47,25 +47,25 @@ export default async function VerificationPage(props: Props) {
       <Link href="/account" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2">{t("intro")}</p>
       {/* PLATZHALTER (SPEC 7.2): Was das Badge zusagt, steht in den Nutzungsbedingungen, sobald der Anwalt liefert. */}
-      <p className="mt-2 text-sm text-stone-700">{t("badgeNote")}</p>
-      <p className="mt-2 text-sm text-stone-700">{t("retention")}</p>
+      <p className="mt-2 text-sm text-muted">{t("badgeNote")}</p>
+      <p className="mt-2 text-sm text-muted">{t("retention")}</p>
 
       {notice && (
-        <p role="status" className="mt-4 text-emerald-800">
+        <p role="status" className="mt-4 text-success">
           {t(`notices.${notice}`)}
         </p>
       )}
       {query.error === "withdraw" && (
-        <p role="alert" className="mt-4 text-red-700">
+        <p role="alert" className="mt-4 text-error">
           {t("errors.withdraw")}
         </p>
       )}
 
       <section className="mt-6 flex flex-col gap-2" aria-labelledby="v-status">
-        <h2 id="v-status" className="text-xl font-semibold">
+        <h2 id="v-status" className="font-display text-xl font-bold">
           {t("status")}: {ta(`verificationStatus.${profile.verificationStatus}`)}
         </h2>
         <p>{t(`statusText.${profile.verificationStatus}`)}</p>
@@ -84,18 +84,18 @@ export default async function VerificationPage(props: Props) {
       </section>
 
       {open && (
-        <section className="mt-6 flex flex-col gap-2 rounded border border-stone-300 p-4" aria-labelledby="v-open">
-          <h2 id="v-open" className="text-lg font-semibold">
+        <section className="mt-6 flex flex-col gap-2 rounded border border-sand p-4" aria-labelledby="v-open">
+          <h2 id="v-open" className="font-display text-lg font-bold">
             {t(`documentTypes.${open.documentType}`)}
           </h2>
           <p>{open.submittedAt ? t("inReview", { date: date(open.submittedAt) }) : t("unfinished")}</p>
           <form action={withdrawVerificationAction}>
             <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={open.id} />
-            <button type="submit" className="rounded border border-stone-500 px-4 py-2">
+            <button type="submit" className="rounded border border-field px-4 py-2">
               {t("withdraw")}
             </button>
-            <p className="mt-1 text-sm text-stone-700">{t("withdrawHint")}</p>
+            <p className="mt-1 text-sm text-muted">{t("withdrawHint")}</p>
           </form>
         </section>
       )}
@@ -104,14 +104,14 @@ export default async function VerificationPage(props: Props) {
         <div className="mt-6">
           <VerificationUpload types={documentTypesFor(profile.accountType)} />
           <noscript>
-            <p className="mt-2 text-red-700">{t("noscript")}</p>
+            <p className="mt-2 text-error">{t("noscript")}</p>
           </noscript>
         </div>
       )}
 
       {decided.length > 0 && (
         <section className="mt-8" aria-labelledby="v-history">
-          <h2 id="v-history" className="text-xl font-semibold">
+          <h2 id="v-history" className="font-display text-xl font-bold">
             {t("history")}
           </h2>
           <ul className="mt-2 list-disc space-y-1 pl-6">

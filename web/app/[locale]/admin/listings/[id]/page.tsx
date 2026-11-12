@@ -48,7 +48,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
         <Link href="/admin/listings" className="underline">
           {t("back")}
         </Link>
-        <h1 className="mt-4 text-3xl font-semibold break-words">{review.listing.title}</h1>
+        <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{review.listing.title}</h1>
         <p className="mt-4">{t("notPending", { status: tl(`status.${review.listing.status}`) })}</p>
       </main>
     );
@@ -88,12 +88,12 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
           <p>{t("previousRejections", { count: review.previousRejections })}</p>
         </section>
 
-        <form action={decideListing} id="decision" className="flex flex-col gap-4 rounded border border-stone-400 p-4">
+        <form action={decideListing} id="decision" className="flex flex-col gap-4 rounded border border-field p-4">
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="id" value={listing.id} />
           <input type="hidden" name="version" value={review.version} />
           {error && (
-            <div id="r-error" role="alert" className="rounded bg-red-50 p-3 text-red-800">
+            <div id="r-error" role="alert" className="rounded bg-error-soft p-3 text-error">
               <p>{t(`errors.${error}`)}</p>
               {missing.length > 0 && (
                 <ul className="mt-1 list-disc pl-5">
@@ -123,7 +123,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               defaultValue=""
               aria-describedby={error === "code" ? "r-code-hint r-error" : "r-code-hint"}
               aria-invalid={error === "code" || undefined}
-              className="mt-1 w-full rounded border border-stone-400 px-3 py-2"
+              className="mt-1 w-full rounded border border-field px-3 py-2"
             >
               <option value="">{t("reasonNone")}</option>
               {REJECT_CODES.map((code) => (
@@ -132,7 +132,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
                 </option>
               ))}
             </select>
-            <p id="r-code-hint" className="text-xs text-stone-700">
+            <p id="r-code-hint" className="text-xs text-muted">
               {t("reasonHint")}
             </p>
           </div>
@@ -147,13 +147,13 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               maxLength={NOTE_MAX}
               aria-describedby={error === "note" ? "r-note-hint r-error" : "r-note-hint"}
               aria-invalid={error === "note" || undefined}
-              className="mt-1 w-full rounded border border-stone-400 px-3 py-2"
+              className="mt-1 w-full rounded border border-field px-3 py-2"
             />
-            <p id="r-note-hint" className="text-xs text-stone-700">
+            <p id="r-note-hint" className="text-xs text-muted">
               {t("noteHint")}
             </p>
           </div>
-          <button type="submit" className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white">
+          <button type="submit" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">
             {t("submit")}
           </button>
         </form>

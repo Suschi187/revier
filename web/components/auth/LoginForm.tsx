@@ -78,32 +78,32 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
           type="email"
           required
           autoComplete="email"
-          className="rounded border border-neutral-400 px-3 py-2"
+          className="rounded border border-field px-3 py-2"
         />
-        <button type="submit" disabled={pending} className="rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">
+        <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
           {pending ? t("sending") : t("submit")}
         </button>
         {errorText && (
-          <p role="alert" className="text-red-700">
+          <p role="alert" className="text-error">
             {errorText}
           </p>
         )}
         {publicEnv.NEXT_PUBLIC_AUTH_APPLE_ENABLED && (
           <a
             href={`/${locale}/auth/apple?next=${encodeURIComponent(next)}`}
-            className="rounded border border-neutral-900 px-4 py-2 text-center font-medium"
+            className="rounded border border-forest px-4 py-2 text-center font-medium"
           >
             {t("apple")}
           </a>
         )}
-        <p className="text-sm text-neutral-600">{t("termsHint")}</p>
+        <p className="text-sm text-muted">{t("termsHint")}</p>
       </form>
     );
   }
 
   return (
     <div className="mt-6 flex flex-col gap-3">
-      <h2 className="text-xl font-semibold">{t("sentTitle")}</h2>
+      <h2 className="font-display text-xl font-bold">{t("sentTitle")}</h2>
       <p role="status">{t("sentText", { email: step.email })}</p>
       <form onSubmit={verifyCode} className="flex flex-col gap-3">
         <label htmlFor="code" className="font-medium">
@@ -116,13 +116,13 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
           autoComplete="one-time-code"
           pattern="[0-9 ]{6,7}"
           required
-          className="rounded border border-neutral-400 px-3 py-2 tracking-widest"
+          className="rounded border border-field px-3 py-2 tracking-widest"
         />
-        <button type="submit" disabled={pending} className="rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">
+        <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
           {pending ? t("verifying") : t("codeSubmit")}
         </button>
         {errorText && (
-          <p role="alert" className="text-red-700">
+          <p role="alert" className="text-error">
             {errorText}
           </p>
         )}

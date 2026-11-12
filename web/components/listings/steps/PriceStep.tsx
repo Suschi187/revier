@@ -64,7 +64,7 @@ export async function PriceStep({
             className={inputClass}
             {...describedBy(errors, "f-amount", "f-amount-hint")}
           />
-          <p id="f-amount-hint" className="text-xs text-stone-700">
+          <p id="f-amount-hint" className="text-xs text-muted">
             {t("fields.amountHint")}
           </p>
           <FieldError codes={errors} fieldId="f-amount" />

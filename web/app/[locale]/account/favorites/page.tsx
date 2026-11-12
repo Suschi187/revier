@@ -33,7 +33,7 @@ export default async function FavoritesPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{t("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {query.notice === "removed" && <p className="mt-4" role="status">{t("removedNotice")}</p>}
       {(query.error === "failed" || query.error === "limit") && <p className="mt-4" role="alert">{t(query.error)}</p>}
       {overview ? (
@@ -48,10 +48,10 @@ export default async function FavoritesPage(props: Props) {
         <p className="mt-4" role="alert">{t("loadFailed")}</p>
       )}
       {unavailable > 0 && (
-        <form action={removeUnavailableFavorites} className="mt-6 flex flex-wrap items-center gap-3 rounded border border-stone-300 p-3">
+        <form action={removeUnavailableFavorites} className="mt-6 flex flex-wrap items-center gap-3 rounded border border-sand p-3">
           <input type="hidden" name="locale" value={locale} />
           <p>{t("unavailable", { count: unavailable })}</p>
-          <button type="submit" className="rounded border border-stone-500 px-3 py-1">{t("removeUnavailable")}</button>
+          <button type="submit" className="rounded border border-field px-3 py-1">{t("removeUnavailable")}</button>
         </form>
       )}
     </main>

@@ -35,9 +35,9 @@ export default async function GlobalNotFound() {
           {sections.map(({ locale, title, backHome }, index) => (
             <section key={locale} lang={locale} className="mt-8">
               {index === 0 ? (
-                <h1 className="text-2xl font-semibold">{title}</h1>
+                <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{title}</h1>
               ) : (
-                <h2 className="text-xl font-semibold">{title}</h2>
+                <h2 className="font-display text-xl font-bold">{title}</h2>
               )}
               <a href={`/${locale}`} hrefLang={locale} className="mt-2 inline-block underline">
                 {backHome}
@@ -45,7 +45,7 @@ export default async function GlobalNotFound() {
             </section>
           ))}
         </main>
-        <footer className="mt-auto border-t border-neutral-300 p-4">
+        <footer className="mt-auto border-t border-sand p-4">
           <nav aria-label={legal("footerLabel")}>
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
               {legalLinks.map(({ href, label }) => (

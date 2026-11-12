@@ -7,7 +7,7 @@ import type { MapApi } from "./MapCanvas";
 // Kleine Karte am Detail (ADR 016, Review A9): MapLibre erst nach Klick, nie vor dem LCP. Der Marker unterscheidet
 // verfremdeten Punkt und Kreismittelpunkt per Form und Beschriftung, nicht nur per Farbe (A8, H5).
 
-const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-64 w-full rounded bg-stone-100" /> });
+const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-64 w-full rounded bg-sand" /> });
 
 export function DetailMap({
   tilesUrl,
@@ -40,7 +40,7 @@ export function DetailMap({
 
   if (!open) {
     return (
-      <button type="button" onClick={() => setOpen(true)} className="mt-2 rounded border border-stone-500 px-3 py-1.5">
+      <button type="button" onClick={() => setOpen(true)} className="mt-2 rounded border border-field px-3 py-1.5">
         {texts.show}
       </button>
     );

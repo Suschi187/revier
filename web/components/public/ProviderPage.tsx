@@ -27,13 +27,13 @@ export async function ProviderPage({
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Breadcrumbs crumbs={[{ name: tHome("crumb"), href: publicPath({ route: "home" }, locale) }, { name, href: path }]} />
-      <h1 className="mt-2 text-3xl font-semibold [overflow-wrap:anywhere] hyphens-auto">{name}</h1>
+      <h1 className="mt-2 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{name}</h1>
       <p className="mt-1">
         {tProfile(`accountTypes.${provider.account_type}`)}
         {provider.verified && <> · <strong>{t("verified")}</strong></>}
       </p>
       <section aria-labelledby="provider-listings" className="mt-8">
-        <h2 id="provider-listings" className="text-xl font-semibold">{t("listings")}</h2>
+        <h2 id="provider-listings" className="font-display text-xl font-bold">{t("listings")}</h2>
         <ListingList items={listings.items} locale={locale} regions={regions} empty={t("empty")} favorites={favorites} />
         {(listings.nextCursor || cursor) && (
           <nav aria-label={t("paging")} className="mt-6 flex gap-4">

@@ -56,7 +56,7 @@ export default async function AuditPage({ searchParams }: Props) {
       <Link href="/admin" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
 
       <form method="get" className="mt-6 flex flex-wrap items-end gap-4">
         {/* min-w-0/max-w-full: lange Aktions-Labels (M9b, z. B. pl) dürfen die Seite bei 360 px nicht verbreitern. */}
@@ -64,7 +64,7 @@ export default async function AuditPage({ searchParams }: Props) {
           <label htmlFor="a-action" className="font-medium">
             {t("filterAction")}
           </label>
-          <select id="a-action" name="action" defaultValue={action ?? ""} className="mt-1 block w-full max-w-full rounded border border-stone-400 px-3 py-2">
+          <select id="a-action" name="action" defaultValue={action ?? ""} className="mt-1 block w-full max-w-full rounded border border-field px-3 py-2">
             <option value="">{t("filterAll")}</option>
             {AUDIT_ACTIONS.map((a) => (
               <option key={a} value={a}>
@@ -77,9 +77,9 @@ export default async function AuditPage({ searchParams }: Props) {
           <label htmlFor="a-target" className="font-medium">
             {t("filterTarget")}
           </label>
-          <input id="a-target" name="target" defaultValue={targetId ?? ""} className="mt-1 block w-80 max-w-full rounded border border-stone-400 px-3 py-2 font-mono text-sm" />
+          <input id="a-target" name="target" defaultValue={targetId ?? ""} className="mt-1 block w-80 max-w-full rounded border border-field px-3 py-2 font-mono text-sm" />
         </div>
-        <button type="submit" className="rounded bg-emerald-800 px-4 py-2 font-medium text-white">
+        <button type="submit" className="rounded bg-forest px-4 py-2 font-medium text-offwhite">
           {t("filter")}
         </button>
       </form>
@@ -90,7 +90,7 @@ export default async function AuditPage({ searchParams }: Props) {
         <div className="mt-6 overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-stone-400">
+              <tr className="border-b border-field">
                 <th scope="col" className="py-2 pr-4">{t("time")}</th>
                 <th scope="col" className="py-2 pr-4">{t("action")}</th>
                 <th scope="col" className="py-2 pr-4">{t("actor")}</th>
@@ -100,7 +100,7 @@ export default async function AuditPage({ searchParams }: Props) {
             </thead>
             <tbody>
               {entries.map((entry) => (
-                <tr key={entry.id} className="border-b border-stone-200 align-top">
+                <tr key={entry.id} className="border-b border-sand align-top">
                   <td className="py-2 pr-4 whitespace-nowrap">{format.dateTime(new Date(entry.createdAt), { dateStyle: "short", timeStyle: "medium" })}</td>
                   <td className="py-2 pr-4">{label(entry.action)}</td>
                   <td className="py-2 pr-4">{entry.actorName ?? t("system")}</td>

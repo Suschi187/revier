@@ -33,7 +33,7 @@ export default async function NewConversationPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("new.title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("new.title")}</h1>
       {!listing ? (
         <p className="mt-4">{t("new.unavailable")}</p>
       ) : (
@@ -46,7 +46,7 @@ export default async function NewConversationPage(props: Props) {
           ) : (
             <>
               <p className="mt-4">{t("new.intro")}</p>
-              <p className="mt-4 rounded border border-amber-700 bg-amber-50 p-3 text-sm">{t("safety")}</p>
+              <p className="mt-4 rounded border border-notice bg-notice-soft p-3 text-sm">{t("safety")}</p>
               <Composer action={startConversationAction} id={listing.id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} />
             </>
           )}

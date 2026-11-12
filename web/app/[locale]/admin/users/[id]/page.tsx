@@ -40,7 +40,7 @@ export default async function AdminUserPage(props: Props) {
     return (
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/admin/users" className="underline">{t("back")}</Link>
-        <p role="alert" className="mt-4 text-red-800">{t(`errors.${result.error}`)}</p>
+        <p role="alert" className="mt-4 text-error">{t(`errors.${result.error}`)}</p>
       </main>
     );
   }
@@ -52,8 +52,8 @@ export default async function AdminUserPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/admin/users" className="underline">{t("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold break-words">{account.displayName}</h1>
-      {notice && <p role="status" className="mt-4 text-emerald-800">{t(`notices.${notice}`)}</p>}
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{account.displayName}</h1>
+      {notice && <p role="status" className="mt-4 text-success">{t(`notices.${notice}`)}</p>}
       <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 text-sm">
         <dt className="font-medium">{t("accountType")}</dt>
         <dd>{ta(`accountTypes.${account.accountType}`)}</dd>
@@ -68,13 +68,13 @@ export default async function AdminUserPage(props: Props) {
         <dt className="font-medium">{t("openReports")}</dt>
         <dd>{account.openReports}</dd>
         <dt className="font-medium">{t("status")}</dt>
-        <dd className={account.isBlocked ? "font-medium text-red-800" : undefined}>{account.isBlocked ? t("blocked") : t("active")}</dd>
+        <dd className={account.isBlocked ? "font-medium text-error" : undefined}>{account.isBlocked ? t("blocked") : t("active")}</dd>
       </dl>
       {account.hasRole && <p className="mt-4 font-medium">{t("hasRole")}</p>}
-      {error && <p role="alert" id="a-error" className="mt-6 rounded bg-red-50 p-3 text-red-800">{t(`errors.${error}`)}</p>}
+      {error && <p role="alert" id="a-error" className="mt-6 rounded bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
 
       {!account.hasRole && (
-        <form action={accountAction} className="mt-6 flex flex-col gap-4 rounded border border-stone-400 p-4">
+        <form action={accountAction} className="mt-6 flex flex-col gap-4 rounded border border-field p-4">
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="id" value={account.id} />
           <fieldset className="flex flex-col gap-2" aria-describedby={error ? "a-error" : undefined}>
@@ -90,17 +90,17 @@ export default async function AdminUserPage(props: Props) {
           </fieldset>
           <div>
             <label htmlFor="a-code" className="font-medium">{t("code")}</label>
-            <select id="a-code" name="code" defaultValue="" className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
+            <select id="a-code" name="code" defaultValue="" className="mt-1 w-full rounded border border-field px-3 py-2">
               <option value="">{t("codeNone")}</option>
               {ACCOUNT_CODES.map((code) => <option key={code} value={code}>{tm(`accountCodes.${code}`)}</option>)}
             </select>
           </div>
           <div>
             <label htmlFor="a-note" className="font-medium">{t("note")}</label>
-            <textarea id="a-note" name="note" rows={3} maxLength={REPORT_NOTE_MAX} aria-describedby="a-note-hint" className="mt-1 w-full rounded border border-stone-400 px-3 py-2" />
-            <p id="a-note-hint" className="text-xs text-stone-700">{t("noteHint")}</p>
+            <textarea id="a-note" name="note" rows={3} maxLength={REPORT_NOTE_MAX} aria-describedby="a-note-hint" className="mt-1 w-full rounded border border-field px-3 py-2" />
+            <p id="a-note-hint" className="text-xs text-muted">{t("noteHint")}</p>
           </div>
-          <button type="submit" className="self-start rounded bg-red-800 px-4 py-2 font-medium text-white">{t("submit")}</button>
+          <button type="submit" className="self-start rounded bg-error px-4 py-2 font-medium text-offwhite">{t("submit")}</button>
         </form>
       )}
     </main>

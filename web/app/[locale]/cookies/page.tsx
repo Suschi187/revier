@@ -19,7 +19,7 @@ export default async function CookiesPage() {
   const tl = await getTranslations("Legal");
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{tl("cookies.title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{tl("cookies.title")}</h1>
       <PlaceholderNote />
       <p className="mt-4">{t("intro")}</p>
       <p className="mt-2 font-medium">{consentRequired() ? t("optionalPresent") : t("onlyNecessary")}</p>
@@ -28,7 +28,7 @@ export default async function CookiesPage() {
         <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
           <caption className="sr-only">{t("tableCaption")}</caption>
           <thead>
-            <tr className="border-b border-neutral-400">
+            <tr className="border-b border-field">
               <th scope="col" className="py-2 pr-4">{t("columns.name")}</th>
               <th scope="col" className="py-2 pr-4">{t("columns.purpose")}</th>
               <th scope="col" className="py-2 pr-4">{t("columns.provider")}</th>
@@ -39,7 +39,7 @@ export default async function CookiesPage() {
           </thead>
           <tbody>
             {CONSENT_INVENTORY.map((entry) => (
-              <tr key={entry.id} className="border-b border-neutral-200 align-top">
+              <tr key={entry.id} className="border-b border-sand align-top">
                 <th scope="row" className="py-2 pr-4 font-medium">{t(`entries.${entry.id}.name`)}</th>
                 <td className="py-2 pr-4">{t(`entries.${entry.id}.purpose`)}</td>
                 <td className="py-2 pr-4">{t(`entries.${entry.id}.provider`)}</td>

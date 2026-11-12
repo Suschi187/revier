@@ -101,13 +101,13 @@ async function HeaderSearch() {
       role="search"
       className="order-last flex w-full overflow-hidden rounded-card border-[1.5px] border-forest bg-surface lg:order-none lg:w-auto lg:flex-1"
     >
-      <div className="flex min-w-0 flex-[2] items-center gap-2 px-3">
+      <div className="flex min-w-40 flex-[2] items-center gap-2 px-3">
         <Icon name="search" size={18} className="shrink-0 text-muted" />
         <label htmlFor="header-q" className="sr-only">{t("searchWhat")}</label>
         <input id="header-q" name={PARAM_NAMES.q} type="search" maxLength={200} placeholder={t("searchWhat")}
           className="min-w-0 flex-1 bg-transparent py-2.5 placeholder:text-muted focus-visible:outline-offset-4" />
       </div>
-      <div className="hidden min-w-0 flex-1 items-center gap-2 border-l border-sand px-3 sm:flex">
+      <div className="hidden min-w-44 flex-1 items-center gap-2 border-l border-sand px-3 sm:flex">
         <Icon name="pin" size={18} className="shrink-0 text-muted" />
         <label htmlFor="header-where" className="sr-only">{t("searchWhere")}</label>
         <select id="header-where" name={PARAM_NAMES.region} defaultValue="" className="min-w-0 flex-1 bg-transparent py-2.5">

@@ -16,7 +16,7 @@ export default async function GuidelinesPage() {
   const t = await getTranslations("Legal");
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("guidelines.title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("guidelines.title")}</h1>
       <PlaceholderNote />
       <p className="mt-4">{t("guidelines.intro")}</p>
       <LegalOutline sections={t.raw("guidelines.sections") as OutlineSection[]} />

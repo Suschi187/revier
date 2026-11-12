@@ -15,7 +15,7 @@ export default async function ConfirmPage({ searchParams }: PageProps<"/[locale]
   const t = await getTranslations("Auth.confirm");
   return (
     <main className="mx-auto w-full max-w-md flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("text")}</p>
       <Suspense fallback={null}>
         <ConfirmFormWithParams searchParams={searchParams} />

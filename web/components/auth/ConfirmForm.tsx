@@ -15,7 +15,7 @@ export function ConfirmForm({ locale, tokenHash, redirectTo }: Props) {
   if (state.error || !tokenHash) {
     return (
       <div className="mt-6 flex flex-col gap-3">
-        <p role="alert" className="text-red-700">
+        <p role="alert" className="text-error">
           {t("invalid")}
         </p>
         <Link href="/login" className="underline">
@@ -30,7 +30,7 @@ export function ConfirmForm({ locale, tokenHash, redirectTo }: Props) {
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="token_hash" value={tokenHash} />
       <input type="hidden" name="redirect_to" value={redirectTo} />
-      <button type="submit" disabled={pending} className="rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">
+      <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
         {t("submit")}
       </button>
     </form>

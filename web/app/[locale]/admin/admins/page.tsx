@@ -18,9 +18,9 @@ export async function generateMetadata(): Promise<Metadata> {
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const NOTICES = ["granted", "revoked"] as const;
 const ERRORS = ["notFound", "code", "stepUp", "waiting", "limit", "lastAdmin", "lookup", "forbidden", "failed"] as const;
-const input = "mt-1 block w-full max-w-md rounded border border-stone-400 px-3 py-2";
-const codeInput = "mt-1 block w-40 rounded border border-stone-400 px-3 py-2 tracking-widest";
-const button = "rounded bg-emerald-800 px-4 py-2 font-medium text-white";
+const input = "mt-1 block w-full max-w-md rounded border border-field px-3 py-2";
+const codeInput = "mt-1 block w-40 rounded border border-field px-3 py-2 tracking-widest";
+const button = "rounded bg-forest px-4 py-2 font-medium text-offwhite";
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
@@ -54,20 +54,20 @@ export default async function AdminsPage({ searchParams }: Props) {
       <Link href="/admin" className="underline">
         {t("back")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
       {rules && (
-        <p className="mt-2 text-sm text-stone-700">
+        <p className="mt-2 text-sm text-muted">
           {t("rules", { days: rules.waitingDays, perAdmin: rules.limitPerAdmin, total: rules.limitTotal })}
         </p>
       )}
       {notice && (
-        <p role="status" className="mt-4 text-emerald-800">
+        <p role="status" className="mt-4 text-success">
           {t(`notices.${notice}`)}
         </p>
       )}
       {error && (
-        <p role="alert" className="mt-4 rounded bg-red-50 p-3 text-red-800">
+        <p role="alert" className="mt-4 rounded bg-error-soft p-3 text-error">
           {error === "waiting" && rules
             ? until
               ? t("errors.waiting", { date: date(until), days: rules.waitingDays })
@@ -77,14 +77,14 @@ export default async function AdminsPage({ searchParams }: Props) {
       )}
 
       <section className="mt-8" aria-labelledby="admins-list">
-        <h2 id="admins-list" className="text-xl font-semibold">
+        <h2 id="admins-list" className="font-display text-xl font-bold">
           {t("listTitle")}
         </h2>
         <ul className="mt-3 flex flex-col gap-3">
           {admins.map((entry) => {
             const name = entry.displayName ?? entry.userId.slice(0, 8);
             return (
-              <li key={entry.userId} className="rounded border border-stone-300 p-3">
+              <li key={entry.userId} className="rounded border border-sand p-3">
                 <p className="font-medium">
                   {name} {entry.userId === me.id && t("you")}
                 </p>
@@ -100,7 +100,7 @@ export default async function AdminsPage({ searchParams }: Props) {
                       {t("revokeCode", { name })}
                     </label>
                     <input id={`code-${entry.userId}`} name="code" inputMode="numeric" autoComplete="one-time-code" required className={codeInput} />
-                    <button type="submit" className="self-start rounded border border-red-700 px-3 py-1.5 text-red-800">
+                    <button type="submit" className="self-start rounded border border-error px-3 py-1.5 text-error">
                       {t("revokeConfirm", { name })}
                     </button>
                   </form>
@@ -112,7 +112,7 @@ export default async function AdminsPage({ searchParams }: Props) {
       </section>
 
       <section className="mt-8" aria-labelledby="admins-find">
-        <h2 id="admins-find" className="text-xl font-semibold">
+        <h2 id="admins-find" className="font-display text-xl font-bold">
           {t("findTitle")}
         </h2>
         <form action={findAdminCandidate} className="mt-3 flex flex-col gap-2">
@@ -127,7 +127,7 @@ export default async function AdminsPage({ searchParams }: Props) {
         </form>
 
         {candidate && candidateId && (
-          <div className="mt-4 rounded border border-stone-400 p-4">
+          <div className="mt-4 rounded border border-field p-4">
             <p className="font-medium">{t("candidate", { name: candidate.displayName, date: date(candidate.memberSince) })}</p>
             {isAdmin ? (
               <p className="mt-2">{t("alreadyAdmin")}</p>

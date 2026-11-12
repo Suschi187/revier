@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Icon, type IconName } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireOnboardedUser } from "@/lib/services/gate";
@@ -17,8 +19,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AccountPage() {
   const t = await getTranslations("Account");
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <AccountContent />
     </main>
   );
@@ -30,54 +32,74 @@ async function AccountContent() {
   const [profile, t, tc] = await Promise.all([getOwnProfile(user.id), getTranslations("Account"), getTranslations("Chat")]);
   if (!profile) throw new Error("Profil nicht verfügbar");
 
+  const main: [string, IconName, string][] = [
+    ["/account/listings", "list", t("myListings")],
+    ["/account/messages", "message", tc("title")],
+    ["/account/favorites", "bookmark", t("favorites")],
+    ["/account/searches", "bell", t("savedSearches")],
+  ];
+  const more: [string, IconName, string][] = [
+    ["/account/verification", "shield", t("verificationLink")],
+    ["/account/blocked", "block", tc("blocked.link")],
+    ["/account/reports", "flag", t("myReports")],
+    ["/account/decisions", "scale", t("decisions")],
+    ["/account/data", "download", t("dataExport")],
+    ["/account/delete", "trash", t("deleteAccount")],
+  ];
+
   return (
-    <div className="mt-6 flex flex-col gap-4">
-      {/* Eingeloggte Adresse sichtbar machen (Login-CSRF, ADR 010). */}
-      <p>{t("signedInAs", { email: user.email ?? "–" })}</p>
-      <dl className="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
-        <dt className="font-medium">{t("displayName")}</dt>
-        <dd>{profile.displayName}</dd>
-        <dt className="font-medium">{t("accountType")}</dt>
-        <dd>
-          {t(`accountTypes.${profile.accountType}`)}
-          {profile.businessName ? ` (${profile.businessName})` : ""}
-        </dd>
-        <dt className="font-medium">{t("verification")}</dt>
-        <dd>{t(`verificationStatus.${profile.verificationStatus}`)}</dd>
-      </dl>
-      <Link href="/account/profile" className="self-start underline">
-        {t("editProfile")}
-      </Link>
-      <Link href="/account/verification" className="self-start underline">
-        {t("verificationLink")}
-      </Link>
-      <Link href="/account/listings" className="self-start underline">
-        {t("myListings")}
-      </Link>
-      <Link href="/account/favorites" className="self-start underline">
-        {t("favorites")}
-      </Link>
-      <Link href="/account/searches" className="self-start underline">
-        {t("savedSearches")}
-      </Link>
-      <Link href="/account/messages" className="self-start underline">
-        {tc("title")}
-      </Link>
-      <Link href="/account/blocked" className="self-start underline">
-        {tc("blocked.link")}
-      </Link>
-      <Link href="/account/reports" className="self-start underline">
-        {t("myReports")}
-      </Link>
-      <Link href="/account/decisions" className="self-start underline">
-        {t("decisions")}
-      </Link>
-      <Link href="/account/data" className="self-start underline">
-        {t("dataExport")}
-      </Link>
-      <Link href="/account/delete" className="self-start underline">
-        {t("deleteAccount")}
-      </Link>
+    <div className="mt-6 grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)] lg:items-start">
+      <section aria-label={t("displayName")} className={`${ui.card} flex flex-col gap-4 p-5`}>
+        <div className="flex items-center gap-3">
+          <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-full bg-olive font-semibold text-offwhite">
+            {profile.displayName.slice(0, 2).toUpperCase()}
+          </span>
+          <p className="min-w-0 font-semibold [overflow-wrap:anywhere]">{profile.displayName}</p>
+        </div>
+        {/* Eingeloggte Adresse sichtbar machen (Login-CSRF, ADR 010). */}
+        <p className="text-sm text-muted [overflow-wrap:anywhere]">{t("signedInAs", { email: user.email ?? "–" })}</p>
+        <dl className="grid grid-cols-[max-content_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-sm">
+          <dt className="text-muted">{t("displayName")}</dt>
+          <dd className="font-semibold [overflow-wrap:anywhere]">{profile.displayName}</dd>
+          <dt className="text-muted">{t("accountType")}</dt>
+          <dd className="font-semibold">
+            {t(`accountTypes.${profile.accountType}`)}
+            {profile.businessName ? ` (${profile.businessName})` : ""}
+          </dd>
+          <dt className="text-muted">{t("verification")}</dt>
+          <dd className="font-semibold">{t(`verificationStatus.${profile.verificationStatus}`)}</dd>
+        </dl>
+        <Link href="/account/profile" className={ui.btnSecondary}>
+          <Icon name="edit" size={16} />
+          {t("editProfile")}
+        </Link>
+      </section>
+
+      <div className="flex flex-col gap-6">
+        <nav aria-label={t("title")}>
+          <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {main.map(([href, icon, label]) => (
+              <li key={href}>
+                <Link href={href} className={`${ui.card} flex h-full flex-col items-start gap-3 p-4 font-semibold text-forest no-underline hover:border-forest`}>
+                  <span className="flex size-11 items-center justify-center rounded-full bg-sand"><Icon name={icon} size={22} /></span>
+                  <span className="[overflow-wrap:anywhere] hyphens-auto">{label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <ul className={`${ui.card} divide-y divide-sand`}>
+          {more.map(([href, icon, label]) => (
+            <li key={href}>
+              <Link href={href} className="flex min-h-12 items-center gap-3 px-4 py-2.5 text-forest no-underline hover:bg-offwhite">
+                <Icon name={icon} size={20} className="shrink-0 text-muted" />
+                <span className="flex-1 [overflow-wrap:anywhere]">{label}</span>
+                <Icon name="chevron" size={18} className="shrink-0 text-muted" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

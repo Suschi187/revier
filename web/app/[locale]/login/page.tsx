@@ -15,10 +15,10 @@ export default async function LoginPage({ searchParams }: PageProps<"/[locale]/l
   const t = await getTranslations("Auth.login");
   return (
     <main className="mx-auto w-full max-w-md flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
       {/* Art. 13 DSGVO: Information beim Erheben der E-Mail-Adresse (QA M2 F3). */}
-      <p className="mt-3 text-sm text-neutral-600">
+      <p className="mt-3 text-sm text-muted">
         {t.rich("privacyHint", {
           link: (chunks) => (
             <Link href="/privacy" className="underline">

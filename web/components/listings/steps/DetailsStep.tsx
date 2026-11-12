@@ -40,7 +40,7 @@ export async function DetailsStep({
         <label htmlFor="f-description" className={labelClass}>
           {t("fields.description")}
         </label>
-        <p id="f-description-hint" className="text-sm text-stone-700">
+        <p id="f-description-hint" className="text-sm text-muted">
           {t("fields.descriptionHint")}
         </p>
         <textarea
@@ -81,7 +81,7 @@ export async function DetailsStep({
 
       <fieldset className="flex flex-col gap-2" id="f-species" {...describedBy(errors, "f-species", "f-species-hint", true)}>
         <legend className={labelClass}>{t("fields.species")}</legend>
-        <p id="f-species-hint" className="text-sm text-stone-700">
+        <p id="f-species-hint" className="text-sm text-muted">
           {t("fields.speciesHint")}
         </p>
         <FieldError codes={errors} fieldId="f-species" />
@@ -110,7 +110,7 @@ async function AttributeInput({ field, value, errors }: { field: AttributeField;
   const hintKey = field.key === "tasks" || field.key === "legal_ack" ? `attributeHints.${field.key}` : null;
   const hintId = hintKey ? `${id}-hint` : undefined;
   const hint = hintKey ? (
-    <p id={hintId} className="text-sm text-stone-700">
+    <p id={hintId} className="text-sm text-muted">
       {t(hintKey)}
     </p>
   ) : null;

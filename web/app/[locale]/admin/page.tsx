@@ -30,10 +30,10 @@ export default async function AdminPage() {
   ]);
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-4">{t("pending", { count: pending })}</p>
       {/* Hängende Löschungen nur als Anzahl, ohne Identität (ADR 019). */}
-      {stuck !== null && stuck > 0 && <p className="mt-2 font-medium text-red-800" role="status">{t("stuckDeletions", { count: stuck })}</p>}
+      {stuck !== null && stuck > 0 && <p className="mt-2 font-medium text-error" role="status">{t("stuckDeletions", { count: stuck })}</p>}
       <Link href="/admin/listings" className="mt-2 block underline">
         {t("queueLink")}
       </Link>

@@ -34,7 +34,7 @@ export default async function DataExportPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{tc("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2">{t("intro")}</p>
       <ul className="mt-4 list-disc space-y-1 pl-6">
         {SECTIONS.map((key) => <li key={key}>{t(`sections.${key}`)}</li>)}
@@ -42,17 +42,17 @@ export default async function DataExportPage(props: Props) {
       <p className="mt-4">{t("photos")}</p>
       <p className="mt-2">{t("limit")}</p>
       {error === "rate_limited" && (
-        <p role="alert" className="mt-4 text-red-700">
+        <p role="alert" className="mt-4 text-error">
           {retry ? t("errors.rateLimitedUntil", { time: format.dateTime(retry, { dateStyle: "medium", timeStyle: "short" }) }) : t("errors.rateLimited")}
         </p>
       )}
-      {error && error !== "rate_limited" && <p role="alert" className="mt-4 text-red-700">{t(error === "not_allowed" ? "errors.notAllowed" : "errors.failed")}</p>}
+      {error && error !== "rate_limited" && <p role="alert" className="mt-4 text-error">{t(error === "not_allowed" ? "errors.notAllowed" : "errors.failed")}</p>}
       {pending ? (
         <p role="status" className="mt-6 font-medium">{t("deletionPending")}</p>
       ) : (
         <form method="post" action="/api/account/export" className="mt-6">
           <input type="hidden" name="locale" value={locale} />
-          <button type="submit" className="rounded bg-emerald-800 px-4 py-2 font-medium text-white">{t("download")}</button>
+          <button type="submit" className="rounded bg-forest px-4 py-2 font-medium text-offwhite">{t("download")}</button>
         </form>
       )}
     </main>

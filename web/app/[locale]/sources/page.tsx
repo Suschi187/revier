@@ -24,11 +24,11 @@ export default async function SourcesPage() {
   const t = await getTranslations("Sources");
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <h1 className="text-3xl font-semibold">{t("title")}</h1>
+      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-4">{t("intro")}</p>
       {SOURCES.map((source) => (
         <section key={source.id} className="mt-8">
-          <h2 className="text-xl font-semibold">{t(`items.${source.id}.title`)}</h2>
+          <h2 className="font-display text-xl font-bold">{t(`items.${source.id}.title`)}</h2>
           <p className="mt-2">{t(`items.${source.id}.usage`)}</p>
           <p className="mt-2 font-medium">{t(`items.${source.id}.notice`)}</p>
           <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
@@ -42,7 +42,7 @@ export default async function SourcesPage() {
         </section>
       ))}
       <section className="mt-10">
-        <h2 className="text-xl font-semibold">{t("postal.title")}</h2>
+        <h2 className="font-display text-xl font-bold">{t("postal.title")}</h2>
         <p className="mt-2">{t("postal.text")}</p>
         <p className="mt-2">
           <a href="/api/sources/postal-codes" className="underline" download>

@@ -25,15 +25,15 @@ export default async function AdminUsersPage({ searchParams }: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/admin" className="underline">{t("back")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
-      <p className="mt-2 text-sm text-stone-700">{t("intro")}</p>
-      {error && <p role="alert" id="u-error" className="mt-4 text-red-800">{t(`errors.${error}`)}</p>}
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
+      <p className="mt-2 text-sm text-muted">{t("intro")}</p>
+      {error && <p role="alert" id="u-error" className="mt-4 text-error">{t(`errors.${error}`)}</p>}
       <form action={findAccountAction} className="mt-6 flex flex-col gap-2">
         <input type="hidden" name="locale" value={locale} />
         <label htmlFor="u-query" className="font-medium">{t("query")}</label>
         <input id="u-query" name="query" type="text" required autoComplete="off" maxLength={320} aria-describedby={error ? "u-error" : undefined}
-          className="rounded border border-stone-400 px-3 py-2" />
-        <button type="submit" className="self-start rounded bg-stone-900 px-4 py-2 text-white">{t("search")}</button>
+          className="rounded border border-field px-3 py-2" />
+        <button type="submit" className="self-start rounded bg-forest px-4 py-2 text-offwhite">{t("search")}</button>
       </form>
     </main>
   );

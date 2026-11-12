@@ -42,8 +42,8 @@ export async function ListingSummary({
 
   return (
     <>
-      <article className="rounded border border-stone-300 p-4">
-        <p className="text-sm text-stone-700">
+      <article className="rounded border border-sand p-4">
+        <p className="text-sm text-muted">
           {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)} · {t(`status.${listing.status}`)}
         </p>
         <h2 className="mt-1 text-2xl font-semibold break-words">{listing.title}</h2>
@@ -51,7 +51,7 @@ export async function ListingSummary({
         {listing.place && (listing.place.postalCode || listing.place.placeName) && (
           <p className="mt-1 text-sm">
             {[listing.place.postalCode, listing.place.placeName].filter(Boolean).join(" ")}{" "}
-            <span className="rounded bg-stone-200 px-1.5 py-0.5 text-xs">{t(viewer === "owner" ? "preview.privateBadge" : "preview.privateBadgeModerator")}</span>
+            <span className="rounded bg-sand px-1.5 py-0.5 text-xs">{t(viewer === "owner" ? "preview.privateBadge" : "preview.privateBadgeModerator")}</span>
           </p>
         )}
         {photos.length > 0 && (
@@ -97,8 +97,8 @@ export async function ListingSummary({
       </article>
 
       {hints.length > 0 && (
-        <section aria-labelledby="weapons-title" className="rounded border-2 border-amber-600 bg-amber-50 p-4">
-          <h2 id="weapons-title" className="font-semibold text-amber-950">
+        <section aria-labelledby="weapons-title" className="rounded border-2 border-notice bg-notice-soft p-4">
+          <h2 id="weapons-title" className="font-semibold text-notice">
             {t("preview.weaponsTitle")}
           </h2>
           <p className="mt-1">{t("preview.weaponsText")}</p>

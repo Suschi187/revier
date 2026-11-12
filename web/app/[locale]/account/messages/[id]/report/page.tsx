@@ -42,15 +42,15 @@ export default async function ReportPage(props: Props) {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href={`/account/messages/${id}`} className="underline">{t("cancel")}</Link>
-      <h1 className="mt-4 text-3xl font-semibold">{message ? t("titleMessage") : t("titleProfile")}</h1>
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{message ? t("titleMessage") : t("titleProfile")}</h1>
       <p className="mt-2 [overflow-wrap:anywhere]">{counterpartName(info, tc("accountUnavailable"))}</p>
       {message && (
-        <figure className="mt-4 rounded border border-stone-300 p-3">
-          <figcaption className="text-sm text-stone-700">{t("quoted")}</figcaption>
+        <figure className="mt-4 rounded border border-sand p-3">
+          <figcaption className="text-sm text-muted">{t("quoted")}</figcaption>
           <blockquote className="mt-1 whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</blockquote>
         </figure>
       )}
-      {error && <p className="mt-4 text-red-800" role="alert">{t(`errors.${error}`)}</p>}
+      {error && <p className="mt-4 text-error" role="alert">{t(`errors.${error}`)}</p>}
       <form action={reportAction} className="mt-6 grid gap-4">
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="id" value={id} />
@@ -70,10 +70,10 @@ export default async function ReportPage(props: Props) {
         <div>
           <label htmlFor="report-note" className="block font-medium">{t("note")}</label>
           <textarea id="report-note" name="note" rows={3} maxLength={1000} aria-describedby="report-note-hint"
-            className="w-full rounded border border-stone-400 px-2 py-1.5" />
-          <p id="report-note-hint" className="text-sm text-stone-700">{t("noteHint")}</p>
+            className="w-full rounded border border-field px-2 py-1.5" />
+          <p id="report-note-hint" className="text-sm text-muted">{t("noteHint")}</p>
         </div>
-        <button type="submit" className="justify-self-start rounded bg-stone-900 px-4 py-2 text-white">{t("submit")}</button>
+        <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
       </form>
     </main>
   );

@@ -60,13 +60,13 @@ export function VerificationUpload({ types }: { types: readonly DocumentType[] }
   const retry = error?.retryAfter && !Number.isNaN(Date.parse(error.retryAfter)) ? new Date(error.retryAfter) : null;
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded border border-stone-400 p-4" aria-busy={status.kind === "working"}>
-      <h2 className="text-xl font-semibold">{t("newRequest")}</h2>
+    <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded border border-field p-4" aria-busy={status.kind === "working"}>
+      <h2 className="font-display text-xl font-bold">{t("newRequest")}</h2>
       <div>
         <label htmlFor={typeId} className="font-medium">
           {t("documentType")}
         </label>
-        <select id={typeId} name="type" required disabled={!ready} className="mt-1 w-full rounded border border-stone-400 px-3 py-2">
+        <select id={typeId} name="type" required disabled={!ready} className="mt-1 w-full rounded border border-field px-3 py-2">
           {types.map((type) => (
             <option key={type} value={type}>
               {t(`documentTypes.${type}`)}
@@ -89,17 +89,17 @@ export function VerificationUpload({ types }: { types: readonly DocumentType[] }
           aria-invalid={error && error.error.startsWith("file") ? true : undefined}
           className="mt-1 block w-full"
         />
-        <p id={`${fileId}-hint`} className="text-sm text-stone-700">
+        <p id={`${fileId}-hint`} className="text-sm text-muted">
           {t("fileHint")}
         </p>
       </div>
       {error && (
-        <p id={`${fileId}-error`} role="alert" className="text-red-700">
+        <p id={`${fileId}-error`} role="alert" className="text-error">
           {retry ? t("errors.rateLimitedUntil", { time: format.dateTime(retry, { dateStyle: "medium", timeStyle: "short" }) }) : t(`errors.${error.error}`)}
         </p>
       )}
       {status.kind === "working" && <p role="status">{t("working")}</p>}
-      <button type="submit" disabled={!ready || status.kind === "working"} className="self-start rounded bg-emerald-800 px-4 py-2 font-medium text-white disabled:opacity-60">
+      <button type="submit" disabled={!ready || status.kind === "working"} className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
         {t("submit")}
       </button>
     </form>
