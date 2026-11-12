@@ -1,5 +1,5 @@
 {
-  "_comment": "Labels in Mails (send-search-notifications/texts.ts) = Web-Messages (ADR 018, Review A13): on_request = Listings.preview.onRequest, price_units = Listings.priceUnits, reject_reasons = Moderation.reasons (Codes laut Check listings.reject_code).",
+  "_comment": "Labels in Mails (send-search-notifications/texts.ts) = Web-Messages (ADR 018, Review A13): on_request = Listings.preview.onRequest, price_units = Listings.priceUnits, reject_reasons = Moderation.reasons (Codes laut Check listings.reject_code). Ab M9b (ADR 020): document_types = Verification.documentTypes, verification_reasons = Verification.reasons, revoke_reasons = Verification.revokeReasons (account_texts.ts).",
   "on_request": {
     "en": "On request",
     "de": "Auf Anfrage",
@@ -75,6 +75,88 @@
       "duplicate": "Zduplikowane ogłoszenie",
       "contact_in_text": "Dane kontaktowe w treści",
       "implausible": "Niewiarygodne informacje",
+      "other": "Inny powód"
+    }
+  },
+  "document_types": {
+    "en": {
+      "jagdschein": "Hunting licence",
+      "jagdkarte": "Hunting card",
+      "revierbescheinigung": "Hunting ground certificate",
+      "gewerbe": "Business registration"
+    },
+    "de": {
+      "jagdschein": "Jagdschein",
+      "jagdkarte": "Jagdkarte",
+      "revierbescheinigung": "Revierbescheinigung",
+      "gewerbe": "Gewerbenachweis"
+    },
+    "cs": {
+      "jagdschein": "Lovecký lístek",
+      "jagdkarte": "Lovecká karta",
+      "revierbescheinigung": "Potvrzení o honitbě",
+      "gewerbe": "Doklad o podnikání"
+    },
+    "pl": {
+      "jagdschein": "Legitymacja myśliwska",
+      "jagdkarte": "Karta łowiecka",
+      "revierbescheinigung": "Zaświadczenie o obwodzie łowieckim",
+      "gewerbe": "Dowód działalności gospodarczej"
+    }
+  },
+  "verification_reasons": {
+    "en": {
+      "unreadable": "Document not readable",
+      "expired": "Document expired",
+      "mismatch": "Details do not match the account",
+      "wrong_document": "Wrong document type",
+      "other": "Other reason"
+    },
+    "de": {
+      "unreadable": "Dokument nicht lesbar",
+      "expired": "Dokument abgelaufen",
+      "mismatch": "Angaben passen nicht zum Konto",
+      "wrong_document": "Falscher Dokumenttyp",
+      "other": "Anderer Grund"
+    },
+    "cs": {
+      "unreadable": "Doklad není čitelný",
+      "expired": "Platnost dokladu vypršela",
+      "mismatch": "Údaje neodpovídají účtu",
+      "wrong_document": "Nesprávný typ dokladu",
+      "other": "Jiný důvod"
+    },
+    "pl": {
+      "unreadable": "Dokument nieczytelny",
+      "expired": "Dokument wygasł",
+      "mismatch": "Dane nie pasują do konta",
+      "wrong_document": "Niewłaściwy rodzaj dokumentu",
+      "other": "Inny powód"
+    }
+  },
+  "revoke_reasons": {
+    "en": {
+      "expired": "Document expired",
+      "mismatch": "Details do not match the account",
+      "fraud": "Suspicion of misuse",
+      "other": "Other reason"
+    },
+    "de": {
+      "expired": "Dokument abgelaufen",
+      "mismatch": "Angaben passen nicht zum Konto",
+      "fraud": "Verdacht auf Missbrauch",
+      "other": "Anderer Grund"
+    },
+    "cs": {
+      "expired": "Platnost dokladu vypršela",
+      "mismatch": "Údaje neodpovídají účtu",
+      "fraud": "Podezření na zneužití",
+      "other": "Jiný důvod"
+    },
+    "pl": {
+      "expired": "Dokument wygasł",
+      "mismatch": "Dane nie pasują do konta",
+      "fraud": "Podejrzenie nadużycia",
       "other": "Inny powód"
     }
   }

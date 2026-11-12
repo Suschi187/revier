@@ -337,7 +337,8 @@
     "favorites": "Oblíbené",
     "savedSearches": "Uložená hledání",
     "dataExport": "Stáhnout moje data",
-    "deleteAccount": "Smazat účet"
+    "deleteAccount": "Smazat účet",
+    "verificationLink": "Ověření"
   },
   "Listings": {
     "kinds": {
@@ -636,7 +637,9 @@
       "queueLink": "Otevřít frontu",
       "auditLink": "Protokol auditu",
       "adminsLink": "Spravovat administrátory",
-      "stuckDeletions": "{count, plural, one {# smazání účtu se zaseklo} few {# smazání účtů se zasekla} other {# smazání účtů se zaseklo}} (opakuje se automaticky)."
+      "stuckDeletions": "{count, plural, one {# smazání účtu se zaseklo} few {# smazání účtů se zasekla} other {# smazání účtů se zaseklo}} (opakuje se automaticky).",
+      "verificationsPending": "{count, plural, =0 {Žádné žádosti o ověření ke kontrole.} one {# žádost o ověření ke kontrole.} few {# žádosti o ověření ke kontrole.} other {# žádostí o ověření ke kontrole.}}",
+      "verificationsLink": "Kontrolovat ověření"
     },
     "queue": {
       "metaTitle": "Inzeráty ke schválení",
@@ -759,6 +762,68 @@
         "lookup": "Nejprve prosím vyhledejte účet podle e-mailové adresy (platí 1 hodinu).",
         "forbidden": "K tomu nemáte oprávnění.",
         "failed": "Změnu se nepodařilo uložit. Zkuste to prosím znovu."
+      }
+    },
+    "verifications": {
+      "metaTitle": "Ověření",
+      "title": "Ověření ke kontrole",
+      "back": "Zpět do administrace",
+      "empty": "Žádné žádosti ke kontrole.",
+      "itemTitle": "{type} od {name}",
+      "waiting": "Podáno {time}",
+      "previous": "{count, plural, =0 {první žádost} one {# dřívější žádost} few {# dřívější žádosti} other {# dřívějších žádostí}}",
+      "own": "Vaše vlastní žádost: rozhodne jiný admin.",
+      "more": "Další žádosti",
+      "notices": {
+        "verified": "Účet ověřen.",
+        "rejected": "Žádost zamítnuta.",
+        "revoked": "Ověření odvoláno.",
+        "decided": "O této žádosti už bylo rozhodnuto."
+      },
+      "detail": {
+        "metaTitle": "Kontrola ověření",
+        "back": "Zpět na seznam",
+        "title": "{type} od {name}",
+        "status": "Stav",
+        "submitted": "Podáno",
+        "accountType": "Typ účtu",
+        "country": "Země",
+        "memberSince": "Členem od",
+        "profileStatus": "Stav v profilu",
+        "blocked": "Tento účet je zablokovaný.",
+        "own": "Vaše vlastní žádost: rozhodne jiný admin.",
+        "history": "Dřívější žádosti",
+        "historyEmpty": "Žádné dřívější žádosti.",
+        "documentTitle": "Doklad",
+        "documentHint": "Otevření se zaznamená do auditního protokolu. Odkaz platí 60 sekund.",
+        "documentShow": "Zobrazit doklad",
+        "documentAgain": "Zobrazit znovu",
+        "documentMissing": "Doklad už byl smazán (lhůta uchování).",
+        "pdfLink": "Otevřít PDF v nové kartě",
+        "imageAlt": "Nahraný doklad: {type}",
+        "documentErrors": {
+          "mismatch": "Obsah souboru neodpovídá žádnému povolenému typu (JPEG, PNG, PDF). Nezobrazí se. Žádost zamítněte.",
+          "expired": "Platnost odkazu vypršela. Otevřete doklad znovu.",
+          "missing": "Doklad už byl smazán."
+        },
+        "decision": "Rozhodnutí",
+        "verify": "Ověřit",
+        "reject": "Zamítnout",
+        "reason": "Důvod",
+        "reasonNone": "Vyberte důvod",
+        "note": "Odůvodnění pro uživatele",
+        "noteHint": "Uživatel ho uvidí jako odůvodnění, povinné u „Jiný důvod“. Žádné interní poznámky.",
+        "submit": "Uložit rozhodnutí",
+        "revokeTitle": "Odvolat ověření",
+        "revokeHint": "Okamžitě odstraní odznak. Uživatel se to dozví e-mailem s odůvodněním.",
+        "revokeSubmit": "Odvolat",
+        "errors": {
+          "code": "Vyberte prosím důvod.",
+          "note": "Odůvodněte prosím rozhodnutí (nejvýše 1000 znaků).",
+          "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
+          "notFound": "Žádost už neexistuje.",
+          "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+        }
       }
     }
   },
@@ -1330,6 +1395,83 @@
         "totpInvalid": "Kód z autentizační aplikace je neplatný.",
         "tooSoon": "Před vyžádáním dalšího kódu chvíli počkejte."
       }
+    }
+  },
+  "Verification": {
+    "metaTitle": "Ověření",
+    "title": "Ověření",
+    "back": "Zpět na můj účet",
+    "intro": "Ověření je dobrovolné. Jakmile tým zkontroluje váš doklad, vaše inzeráty a stránka inzerenta zobrazí odznak „ověřený“ a objevíte se ve filtru „jen ověření“.",
+    "badgeNote": "[Předběžné upozornění] Odznak znamená pouze, že tým viděl doklad. Není zárukou totožnosti a nesleduje datum platnosti.",
+    "retention": "Váš doklad bude smazán 30 dní po rozhodnutí. Uchová se pouze rozhodnutí.",
+    "status": "Stav",
+    "statusText": {
+      "none": "Nejste ověřeni.",
+      "pending": "Vaše žádost se kontroluje.",
+      "verified": "Váš účet je ověřený.",
+      "rejected": "Vaše poslední žádost byla zamítnuta. Můžete podat novou."
+    },
+    "rejected": "Zamítnuto dne {date}.",
+    "revoked": "Vaše ověření bylo odvoláno dne {date}.",
+    "reasonLabel": "Důvod",
+    "inReview": "Podáno dne {date}. Tým kontroluje váš doklad.",
+    "unfinished": "Nahrávání nebylo dokončeno. Vyberte soubor znovu a žádost podejte.",
+    "withdraw": "Stáhnout žádost",
+    "withdrawHint": "Žádost i nahraný doklad budou smazány.",
+    "newRequest": "Požádat o ověření",
+    "documentType": "Doklad",
+    "documentTypes": {
+      "jagdschein": "Lovecký lístek",
+      "jagdkarte": "Lovecká karta",
+      "revierbescheinigung": "Potvrzení o honitbě",
+      "gewerbe": "Doklad o podnikání"
+    },
+    "file": "Soubor",
+    "fileHint": "JPEG, PNG nebo PDF, nejvýše 10 MB. Fotky z iPhonu uložte prosím jako JPEG.",
+    "submit": "Nahrát a podat",
+    "working": "Nahrává se …",
+    "noscript": "Nahrání dokladu vyžaduje JavaScript. Povolte prosím JavaScript pro tuto stránku.",
+    "history": "Dřívější žádosti",
+    "historyItem": "{date}: {type} – {status}",
+    "requestStatus": {
+      "pending": "Ve schvalování",
+      "verified": "Ověřeno",
+      "rejected": "Zamítnuto",
+      "revoked": "Odvoláno"
+    },
+    "reasons": {
+      "unreadable": "Doklad není čitelný",
+      "expired": "Platnost dokladu vypršela",
+      "mismatch": "Údaje neodpovídají účtu",
+      "wrong_document": "Nesprávný typ dokladu",
+      "other": "Jiný důvod"
+    },
+    "revokeReasons": {
+      "expired": "Platnost dokladu vypršela",
+      "mismatch": "Údaje neodpovídají účtu",
+      "fraud": "Podezření na zneužití",
+      "other": "Jiný důvod"
+    },
+    "notices": {
+      "submitted": "Děkujeme. Vaše žádost byla podána.",
+      "withdrawn": "Vaše žádost byla stažena."
+    },
+    "errors": {
+      "fileType": "Vyberte prosím soubor JPEG, PNG nebo PDF.",
+      "fileSize": "Soubor je větší než 10 MB.",
+      "fileEmpty": "Vyberte prosím soubor.",
+      "open": "Už máte žádost, která se kontroluje.",
+      "rateLimited": "Dosáhli jste limitu 3 žádostí za 30 dní.",
+      "rateLimitedUntil": "Dosáhli jste limitu 3 žádostí za 30 dní. Zkuste to znovu po {time}.",
+      "legal": "Nejprve prosím odsouhlaste aktuální podmínky užívání.",
+      "type": "Tento typ dokladu není pro váš účet k dispozici.",
+      "notAllowed": "Váš účet teď nemůže podat žádost.",
+      "upload": "Nahrávání se nezdařilo. Zkuste to prosím znovu.",
+      "missingFile": "Doklad chybí. Nahrajte ho prosím znovu.",
+      "submitted": "Tato žádost už byla podána.",
+      "notFound": "Žádost už neexistuje. Načtěte prosím stránku znovu.",
+      "failed": "Něco se pokazilo. Zkuste to prosím znovu.",
+      "withdraw": "Žádost se nepodařilo stáhnout. Načtěte prosím stránku znovu."
     }
   }
 }

@@ -337,7 +337,8 @@
     "favorites": "Favoriten",
     "savedSearches": "Suchaufträge",
     "dataExport": "Meine Daten herunterladen",
-    "deleteAccount": "Konto löschen"
+    "deleteAccount": "Konto löschen",
+    "verificationLink": "Verifizierung"
   },
   "Listings": {
     "kinds": {
@@ -636,7 +637,9 @@
       "queueLink": "Zur Warteschlange",
       "auditLink": "Audit-Log",
       "adminsLink": "Admins verwalten",
-      "stuckDeletions": "{count, plural, one {# Konto-Löschung hängt} other {# Konto-Löschungen hängen}} (wird automatisch wiederholt)."
+      "stuckDeletions": "{count, plural, one {# Konto-Löschung hängt} other {# Konto-Löschungen hängen}} (wird automatisch wiederholt).",
+      "verificationsPending": "{count, plural, =0 {Keine Verifizierungen zur Prüfung.} one {# Verifizierung zur Prüfung.} other {# Verifizierungen zur Prüfung.}}",
+      "verificationsLink": "Verifizierungen prüfen"
     },
     "queue": {
       "metaTitle": "Anzeigen zur Freigabe",
@@ -759,6 +762,68 @@
         "lookup": "Bitte suche das Konto zuerst per E-Mail-Adresse (gültig 1 Stunde).",
         "forbidden": "Das darfst du nicht.",
         "failed": "Die Änderung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
+      }
+    },
+    "verifications": {
+      "metaTitle": "Verifizierungen",
+      "title": "Verifizierungen zur Prüfung",
+      "back": "Zurück zum Admin-Bereich",
+      "empty": "Keine Anträge zur Prüfung.",
+      "itemTitle": "{type} von {name}",
+      "waiting": "Eingereicht {time}",
+      "previous": "{count, plural, =0 {erster Antrag} one {# früherer Antrag} other {# frühere Anträge}}",
+      "own": "Dein eigener Antrag: Ein anderer Admin entscheidet.",
+      "more": "Weitere Anträge",
+      "notices": {
+        "verified": "Konto verifiziert.",
+        "rejected": "Antrag abgelehnt.",
+        "revoked": "Verifizierung widerrufen.",
+        "decided": "Dieser Antrag ist schon entschieden."
+      },
+      "detail": {
+        "metaTitle": "Verifizierung prüfen",
+        "back": "Zurück zur Liste",
+        "title": "{type} von {name}",
+        "status": "Status",
+        "submitted": "Eingereicht",
+        "accountType": "Kontotyp",
+        "country": "Land",
+        "memberSince": "Dabei seit",
+        "profileStatus": "Status im Profil",
+        "blocked": "Dieses Konto ist gesperrt.",
+        "own": "Dein eigener Antrag: Ein anderer Admin entscheidet.",
+        "history": "Frühere Anträge",
+        "historyEmpty": "Keine früheren Anträge.",
+        "documentTitle": "Dokument",
+        "documentHint": "Das Öffnen wird im Audit-Log festgehalten. Der Link gilt 60 Sekunden.",
+        "documentShow": "Dokument anzeigen",
+        "documentAgain": "Erneut anzeigen",
+        "documentMissing": "Das Dokument ist schon gelöscht (Aufbewahrungsfrist).",
+        "pdfLink": "PDF in neuem Tab öffnen",
+        "imageAlt": "Hochgeladenes Dokument: {type}",
+        "documentErrors": {
+          "mismatch": "Der Inhalt der Datei passt zu keinem erlaubten Typ (JPEG, PNG, PDF). Sie wird nicht angezeigt. Lehne den Antrag ab.",
+          "expired": "Der Link ist abgelaufen. Öffne das Dokument noch einmal.",
+          "missing": "Das Dokument ist schon gelöscht."
+        },
+        "decision": "Entscheidung",
+        "verify": "Verifizieren",
+        "reject": "Ablehnen",
+        "reason": "Grund",
+        "reasonNone": "Grund wählen",
+        "note": "Begründung für den Nutzer",
+        "noteHint": "Der Nutzer sieht sie als Begründung, Pflicht bei „Anderer Grund“. Keine internen Notizen.",
+        "submit": "Entscheidung speichern",
+        "revokeTitle": "Verifizierung widerrufen",
+        "revokeHint": "Entfernt das Badge sofort. Der Nutzer erfährt es per E-Mail mit Begründung.",
+        "revokeSubmit": "Widerrufen",
+        "errors": {
+          "code": "Bitte wähle einen Grund.",
+          "note": "Bitte begründe die Entscheidung (höchstens 1000 Zeichen).",
+          "forbidden": "Das geht nicht (eigenes Konto oder keine Zwei-Faktor-Anmeldung).",
+          "notFound": "Den Antrag gibt es nicht mehr.",
+          "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
+        }
       }
     }
   },
@@ -1330,6 +1395,83 @@
         "totpInvalid": "Der Code aus der Authenticator-App ist ungültig.",
         "tooSoon": "Bitte warte einen Moment, bevor du einen neuen Code anforderst."
       }
+    }
+  },
+  "Verification": {
+    "metaTitle": "Verifizierung",
+    "title": "Verifizierung",
+    "back": "Zurück zu Mein Konto",
+    "intro": "Die Verifizierung ist freiwillig. Hat das Team dein Dokument geprüft, zeigen deine Anzeigen und deine Anbieterseite das Badge „verifiziert“, und du erscheinst im Filter „nur verifizierte“.",
+    "badgeNote": "[Vorläufiger Hinweis] Das Badge sagt nur, dass das Team ein Dokument gesehen hat. Es ist keine Garantie für die Identität und prüft kein Ablaufdatum.",
+    "retention": "Dein Dokument wird 30 Tage nach der Entscheidung gelöscht. Es bleibt nur die Entscheidung.",
+    "status": "Status",
+    "statusText": {
+      "none": "Du bist nicht verifiziert.",
+      "pending": "Dein Antrag wird geprüft.",
+      "verified": "Dein Konto ist verifiziert.",
+      "rejected": "Dein letzter Antrag wurde abgelehnt. Du kannst einen neuen stellen."
+    },
+    "rejected": "Abgelehnt am {date}.",
+    "revoked": "Deine Verifizierung wurde am {date} widerrufen.",
+    "reasonLabel": "Grund",
+    "inReview": "Eingereicht am {date}. Das Team prüft dein Dokument.",
+    "unfinished": "Dein Upload wurde nicht abgeschlossen. Wähle die Datei noch einmal, um den Antrag einzureichen.",
+    "withdraw": "Antrag zurückziehen",
+    "withdrawHint": "Der Antrag und das hochgeladene Dokument werden gelöscht.",
+    "newRequest": "Verifizierung beantragen",
+    "documentType": "Dokument",
+    "documentTypes": {
+      "jagdschein": "Jagdschein",
+      "jagdkarte": "Jagdkarte",
+      "revierbescheinigung": "Revierbescheinigung",
+      "gewerbe": "Gewerbenachweis"
+    },
+    "file": "Datei",
+    "fileHint": "JPEG, PNG oder PDF, höchstens 10 MB. Fotos vom iPhone bitte als JPEG speichern.",
+    "submit": "Hochladen und einreichen",
+    "working": "Wird hochgeladen …",
+    "noscript": "Das Hochladen eines Dokuments braucht JavaScript. Bitte aktiviere JavaScript für diese Seite.",
+    "history": "Frühere Anträge",
+    "historyItem": "{date}: {type} – {status}",
+    "requestStatus": {
+      "pending": "In Prüfung",
+      "verified": "Verifiziert",
+      "rejected": "Abgelehnt",
+      "revoked": "Widerrufen"
+    },
+    "reasons": {
+      "unreadable": "Dokument nicht lesbar",
+      "expired": "Dokument abgelaufen",
+      "mismatch": "Angaben passen nicht zum Konto",
+      "wrong_document": "Falscher Dokumenttyp",
+      "other": "Anderer Grund"
+    },
+    "revokeReasons": {
+      "expired": "Dokument abgelaufen",
+      "mismatch": "Angaben passen nicht zum Konto",
+      "fraud": "Verdacht auf Missbrauch",
+      "other": "Anderer Grund"
+    },
+    "notices": {
+      "submitted": "Danke. Dein Antrag ist eingereicht.",
+      "withdrawn": "Dein Antrag wurde zurückgezogen."
+    },
+    "errors": {
+      "fileType": "Bitte wähle eine JPEG-, PNG- oder PDF-Datei.",
+      "fileSize": "Die Datei ist größer als 10 MB.",
+      "fileEmpty": "Bitte wähle eine Datei.",
+      "open": "Du hast schon einen Antrag in Prüfung.",
+      "rateLimited": "Du hast die Grenze von 3 Anträgen in 30 Tagen erreicht.",
+      "rateLimitedUntil": "Du hast die Grenze von 3 Anträgen in 30 Tagen erreicht. Versuche es nach {time} wieder.",
+      "legal": "Bitte stimme zuerst den aktuellen Nutzungsbedingungen zu.",
+      "type": "Dieser Dokumenttyp ist für dein Konto nicht verfügbar.",
+      "notAllowed": "Dein Konto kann gerade keinen Antrag stellen.",
+      "upload": "Das Hochladen ist fehlgeschlagen. Bitte versuche es noch einmal.",
+      "missingFile": "Das Dokument fehlt. Bitte lade es noch einmal hoch.",
+      "submitted": "Dieser Antrag ist schon eingereicht.",
+      "notFound": "Den Antrag gibt es nicht mehr. Bitte lade die Seite neu.",
+      "failed": "Etwas ist schiefgelaufen. Bitte versuche es noch einmal.",
+      "withdraw": "Der Antrag konnte nicht zurückgezogen werden. Bitte lade die Seite neu."
     }
   }
 }

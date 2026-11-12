@@ -48,6 +48,9 @@ async function AccountContent() {
       <Link href="/account/profile" className="self-start underline">
         {t("editProfile")}
       </Link>
+      <Link href="/account/verification" className="self-start underline">
+        {t("verificationLink")}
+      </Link>
       <Link href="/account/listings" className="self-start underline">
         {t("myListings")}
       </Link>

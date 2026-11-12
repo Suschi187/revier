@@ -3,7 +3,7 @@
 -- Warteschlange account_notifications, Audit und Moderations-Mails auf Server-Pfaden mit Flag.
 begin;
 \ir _helpers.psql
-select plan(89);
+select plan(90);
 
 select set_config('storage.allow_delete_query', 'true', true);
 select s.decrypted_secret as secret from vault.decrypted_secrets s where s.name = 'search_notifications_secret' \gset
@@ -288,8 +288,11 @@ select is((select array_agg(e ->> 'kind' order by e ->> 'kind') from jsonb_array
 select ok((select done_at is not null and sent_at is null from private.account_notifications where user_id = :'c'), 'Gelöschtes Konto: erledigt ohne Versand');
 select is((select e -> 'details' from jsonb_array_elements(:'claims'::jsonb) e where e ->> 'kind' = 'verification_revoked'),
   jsonb_build_object('document_type', 'jagdkarte', 'code', 'fraud', 'reason', 'Nach Meldung wegen Betrugs',
-                     'decided_at', (select revoked_at from verifications where id = :'vb2')),
+                     'decided_at', (select revoked_at from verifications where id = :'vb2'),
+                     'appeal_until', (select revoked_at + interval '183 days' from verifications where id = :'vb2')),
   'Details aus dem Fachdatensatz (Allowlist)');
+select is((select e -> 'details' -> 'appeal_until' from jsonb_array_elements(:'claims'::jsonb) e where e ->> 'kind' = 'verification_verified'),
+  'null'::jsonb, 'Verifiziert: keine Anfechtungsfrist');
 select is((select array_agg(k order by k) from jsonb_array_elements(:'claims'::jsonb) e, jsonb_object_keys(e) k
            where e ->> 'kind' = 'verification_verified'),
   array['claim_id', 'details', 'email', 'kind', 'language'], 'Claim-Schlüssel exakt (kein Admin, kein Pfad)');

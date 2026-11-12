@@ -337,7 +337,8 @@
     "favorites": "Ulubione",
     "savedSearches": "Zapisane wyszukiwania",
     "dataExport": "Pobierz moje dane",
-    "deleteAccount": "Usuń konto"
+    "deleteAccount": "Usuń konto",
+    "verificationLink": "Weryfikacja"
   },
   "Listings": {
     "kinds": {
@@ -636,7 +637,9 @@
       "queueLink": "Otwórz kolejkę",
       "auditLink": "Dziennik audytu",
       "adminsLink": "Zarządzaj administratorami",
-      "stuckDeletions": "{count, plural, one {# usunięcie konta utknęło} few {# usunięcia kont utknęły} many {# usunięć kont utknęło} other {# usunięcia kont utknęło}} (ponawiane automatycznie)."
+      "stuckDeletions": "{count, plural, one {# usunięcie konta utknęło} few {# usunięcia kont utknęły} many {# usunięć kont utknęło} other {# usunięcia kont utknęło}} (ponawiane automatycznie).",
+      "verificationsPending": "{count, plural, =0 {Brak wniosków o weryfikację do sprawdzenia.} one {# wniosek o weryfikację do sprawdzenia.} few {# wnioski o weryfikację do sprawdzenia.} other {# wniosków o weryfikację do sprawdzenia.}}",
+      "verificationsLink": "Sprawdź weryfikacje"
     },
     "queue": {
       "metaTitle": "Ogłoszenia do zatwierdzenia",
@@ -759,6 +762,68 @@
         "lookup": "Najpierw wyszukaj konto po adresie e-mail (ważne przez 1 godzinę).",
         "forbidden": "Nie masz do tego uprawnień.",
         "failed": "Nie udało się zapisać zmiany. Spróbuj ponownie."
+      }
+    },
+    "verifications": {
+      "metaTitle": "Weryfikacje",
+      "title": "Weryfikacje do sprawdzenia",
+      "back": "Powrót do panelu administracyjnego",
+      "empty": "Brak wniosków do sprawdzenia.",
+      "itemTitle": "{type} od {name}",
+      "waiting": "Złożono {time}",
+      "previous": "{count, plural, =0 {pierwszy wniosek} one {# wcześniejszy wniosek} few {# wcześniejsze wnioski} other {# wcześniejszych wniosków}}",
+      "own": "Twój własny wniosek: decyduje inny administrator.",
+      "more": "Więcej wniosków",
+      "notices": {
+        "verified": "Konto zweryfikowane.",
+        "rejected": "Wniosek odrzucony.",
+        "revoked": "Weryfikacja cofnięta.",
+        "decided": "W sprawie tego wniosku już zdecydowano."
+      },
+      "detail": {
+        "metaTitle": "Sprawdzanie weryfikacji",
+        "back": "Powrót do listy",
+        "title": "{type} od {name}",
+        "status": "Status",
+        "submitted": "Złożono",
+        "accountType": "Rodzaj konta",
+        "country": "Kraj",
+        "memberSince": "Członek od",
+        "profileStatus": "Status w profilu",
+        "blocked": "To konto jest zablokowane.",
+        "own": "Twój własny wniosek: decyduje inny administrator.",
+        "history": "Wcześniejsze wnioski",
+        "historyEmpty": "Brak wcześniejszych wniosków.",
+        "documentTitle": "Dokument",
+        "documentHint": "Otwarcie zostanie zapisane w dzienniku audytu. Link jest ważny 60 sekund.",
+        "documentShow": "Pokaż dokument",
+        "documentAgain": "Pokaż ponownie",
+        "documentMissing": "Dokument został już usunięty (okres przechowywania).",
+        "pdfLink": "Otwórz PDF w nowej karcie",
+        "imageAlt": "Przesłany dokument: {type}",
+        "documentErrors": {
+          "mismatch": "Zawartość pliku nie pasuje do żadnego dozwolonego typu (JPEG, PNG, PDF). Nie zostanie pokazany. Odrzuć wniosek.",
+          "expired": "Link wygasł. Otwórz dokument ponownie.",
+          "missing": "Dokument został już usunięty."
+        },
+        "decision": "Decyzja",
+        "verify": "Zweryfikuj",
+        "reject": "Odrzuć",
+        "reason": "Powód",
+        "reasonNone": "Wybierz powód",
+        "note": "Uzasadnienie dla użytkownika",
+        "noteHint": "Użytkownik zobaczy je jako uzasadnienie, wymagane przy „Inny powód”. Bez notatek wewnętrznych.",
+        "submit": "Zapisz decyzję",
+        "revokeTitle": "Cofnij weryfikację",
+        "revokeHint": "Natychmiast usuwa odznakę. Użytkownik otrzyma e-mail z uzasadnieniem.",
+        "revokeSubmit": "Cofnij",
+        "errors": {
+          "code": "Wybierz powód.",
+          "note": "Uzasadnij decyzję (maksymalnie 1000 znaków).",
+          "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
+          "notFound": "Ten wniosek już nie istnieje.",
+          "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+        }
       }
     }
   },
@@ -1330,6 +1395,83 @@
         "totpInvalid": "Kod z aplikacji uwierzytelniającej jest nieprawidłowy.",
         "tooSoon": "Odczekaj chwilę, zanim poprosisz o nowy kod."
       }
+    }
+  },
+  "Verification": {
+    "metaTitle": "Weryfikacja",
+    "title": "Weryfikacja",
+    "back": "Powrót do mojego konta",
+    "intro": "Weryfikacja jest dobrowolna. Gdy zespół sprawdzi Twój dokument, Twoje ogłoszenia i strona ogłaszającego pokażą odznakę „zweryfikowany”, a Ty pojawisz się w filtrze „tylko zweryfikowani”.",
+    "badgeNote": "[Wstępna informacja] Odznaka oznacza tylko, że zespół widział dokument. Nie jest gwarancją tożsamości i nie sprawdza daty ważności.",
+    "retention": "Twój dokument zostanie usunięty 30 dni po decyzji. Zachowana zostanie tylko decyzja.",
+    "status": "Status",
+    "statusText": {
+      "none": "Nie jesteś zweryfikowany.",
+      "pending": "Twój wniosek jest sprawdzany.",
+      "verified": "Twoje konto jest zweryfikowane.",
+      "rejected": "Twój ostatni wniosek został odrzucony. Możesz złożyć nowy."
+    },
+    "rejected": "Odrzucono dnia {date}.",
+    "revoked": "Twoja weryfikacja została cofnięta dnia {date}.",
+    "reasonLabel": "Powód",
+    "inReview": "Złożono dnia {date}. Zespół sprawdza Twój dokument.",
+    "unfinished": "Przesyłanie nie zostało zakończone. Wybierz plik ponownie, aby złożyć wniosek.",
+    "withdraw": "Wycofaj wniosek",
+    "withdrawHint": "Wniosek i przesłany dokument zostaną usunięte.",
+    "newRequest": "Złóż wniosek o weryfikację",
+    "documentType": "Dokument",
+    "documentTypes": {
+      "jagdschein": "Legitymacja myśliwska",
+      "jagdkarte": "Karta łowiecka",
+      "revierbescheinigung": "Zaświadczenie o obwodzie łowieckim",
+      "gewerbe": "Dowód działalności gospodarczej"
+    },
+    "file": "Plik",
+    "fileHint": "JPEG, PNG lub PDF, maksymalnie 10 MB. Zdjęcia z iPhone’a zapisz jako JPEG.",
+    "submit": "Prześlij i złóż",
+    "working": "Przesyłanie …",
+    "noscript": "Przesłanie dokumentu wymaga JavaScriptu. Włącz JavaScript dla tej strony.",
+    "history": "Wcześniejsze wnioski",
+    "historyItem": "{date}: {type} – {status}",
+    "requestStatus": {
+      "pending": "W weryfikacji",
+      "verified": "Zweryfikowano",
+      "rejected": "Odrzucono",
+      "revoked": "Cofnięto"
+    },
+    "reasons": {
+      "unreadable": "Dokument nieczytelny",
+      "expired": "Dokument wygasł",
+      "mismatch": "Dane nie pasują do konta",
+      "wrong_document": "Niewłaściwy rodzaj dokumentu",
+      "other": "Inny powód"
+    },
+    "revokeReasons": {
+      "expired": "Dokument wygasł",
+      "mismatch": "Dane nie pasują do konta",
+      "fraud": "Podejrzenie nadużycia",
+      "other": "Inny powód"
+    },
+    "notices": {
+      "submitted": "Dziękujemy. Twój wniosek został złożony.",
+      "withdrawn": "Twój wniosek został wycofany."
+    },
+    "errors": {
+      "fileType": "Wybierz plik JPEG, PNG lub PDF.",
+      "fileSize": "Plik jest większy niż 10 MB.",
+      "fileEmpty": "Wybierz plik.",
+      "open": "Masz już wniosek w trakcie sprawdzania.",
+      "rateLimited": "Osiągnięto limit 3 wniosków w ciągu 30 dni.",
+      "rateLimitedUntil": "Osiągnięto limit 3 wniosków w ciągu 30 dni. Spróbuj ponownie po {time}.",
+      "legal": "Najpierw zaakceptuj aktualny regulamin.",
+      "type": "Ten rodzaj dokumentu nie jest dostępny dla Twojego konta.",
+      "notAllowed": "Twoje konto nie może teraz złożyć wniosku.",
+      "upload": "Przesyłanie nie powiodło się. Spróbuj ponownie.",
+      "missingFile": "Brakuje dokumentu. Prześlij go ponownie.",
+      "submitted": "Ten wniosek został już złożony.",
+      "notFound": "Ten wniosek już nie istnieje. Odśwież stronę.",
+      "failed": "Coś poszło nie tak. Spróbuj ponownie.",
+      "withdraw": "Nie udało się wycofać wniosku. Odśwież stronę."
     }
   }
 }

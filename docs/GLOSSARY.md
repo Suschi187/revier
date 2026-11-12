@@ -217,3 +217,19 @@ Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen
 | data_sources | Data sources | Datenquellen | Zdroje dat | Źródła danych | ungeprüft |
 | strictly_necessary | Strictly necessary | Unbedingt erforderlich | Nezbytně nutné | Niezbędne | ungeprüft |
 | placeholder_legal | Placeholder | Platzhalter | Zástupný text | Tekst zastępczy | ungeprüft |
+
+## Vertrauen und Moderation (M9b)
+
+Dokumenttypen sind länderübergreifend benannt; die Entsprechung je Land (z. B. AT „Jagdkarte“, CZ „lovecký lístek“, PL „legitymacja“ bzw. „karta łowiecka“) prüft ein Muttersprachler vor dem Go-live.
+
+| Schlüssel | en | de | cs | pl | Status |
+|------|----|----|----|----|--------|
+| verification | Verification | Verifizierung | Ověření | Weryfikacja | ungeprüft |
+| verification_request | Verification request | Antrag auf Verifizierung | Žádost o ověření | Wniosek o weryfikację | ungeprüft |
+| revoke_verification | Revoke (verification) | Widerrufen | Odvolat | Cofnąć | ungeprüft |
+| withdraw_request | Withdraw request | Antrag zurückziehen | Stáhnout žádost | Wycofać wniosek | ungeprüft |
+| doc_jagdschein | Hunting licence | Jagdschein | Lovecký lístek | Legitymacja myśliwska | ungeprüft |
+| doc_jagdkarte | Hunting card | Jagdkarte | Lovecká karta | Karta łowiecka | ungeprüft |
+| doc_revierbescheinigung | Hunting ground certificate | Revierbescheinigung | Potvrzení o honitbě | Zaświadczenie o obwodzie łowieckim | ungeprüft |
+| doc_gewerbe | Business registration | Gewerbenachweis | Doklad o podnikání | Dowód działalności gospodarczej | ungeprüft |
+| challenge_decision | Challenge a decision | Entscheidung anfechten | Ohradit se proti rozhodnutí | Zakwestionować decyzję | ungeprüft |

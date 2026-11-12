@@ -42,7 +42,7 @@ describe("Mail-Links = Web-Routen", () => {
     }
   });
 
-  // In Mails verlinkt, im Web noch nicht vorhanden (seit M8 Commit 7 leer); kommen sie ins Web, nach static_paths verschieben.
+  // In Mails verlinkt, im Web noch nicht vorhanden (M9b: account/decisions bis Commit 9); kommen sie ins Web, nach static_paths verschieben.
   it.each(links.pending_static_paths as string[])("vorgemerkt: %s ist noch keine Web-Route", (pattern) => {
     expect(parsePath(`/de/${pattern}`).type).toBe("unknown");
   });
@@ -66,5 +66,8 @@ describe("Labels der Mails = Web-Messages", () => {
     expect(labels.on_request[locale]).toBe(messages.Listings.preview.onRequest);
     expect(labels.price_units[locale]).toEqual(messages.Listings.priceUnits);
     expect(labels.reject_reasons[locale]).toEqual(messages.Moderation.reasons);
+    expect(labels.document_types[locale]).toEqual(messages.Verification.documentTypes);
+    expect(labels.verification_reasons[locale]).toEqual(messages.Verification.reasons);
+    expect(labels.revoke_reasons[locale]).toEqual(messages.Verification.revokeReasons);
   });
 });

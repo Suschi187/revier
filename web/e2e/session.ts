@@ -35,11 +35,16 @@ export async function createAccount(label: string, displayName: string, created:
   await client.auth.verifyOtp({ token_hash: link.data.properties!.hashed_token, type: "email" });
   const { data: legal } = await client.rpc("legal_status").single<{ terms_version: string; privacy_version: string }>();
   await client.rpc("accept_legal", { p_terms_version: legal!.terms_version, p_privacy_version: legal!.privacy_version, p_source: "web" });
+  return { id, email, client, cookies: await sessionCookies(client) };
+}
+
+/** Session-Cookies wie @supabase/ssr aus der aktuellen Session des Clients (z. B. nach TOTP mit aal2). */
+export async function sessionCookies(client: SupabaseClient): Promise<{ name: string; value: string }[]> {
   const { data: session } = await client.auth.getSession();
   const name = `sb-${new URL(local!.url).hostname.split(".")[0]}-auth-token`;
   const value = `base64-${Buffer.from(JSON.stringify(session.session)).toString("base64url")}`;
   const chunks = value.length <= 3180 ? [value] : (value.match(/.{1,3180}/g) ?? []);
-  return { id, email, client, cookies: chunks.map((chunk, i) => ({ name: chunks.length === 1 ? name : `${name}.${i}`, value: chunk })) };
+  return chunks.map((chunk, i) => ({ name: chunks.length === 1 ? name : `${name}.${i}`, value: chunk }));
 }
 
 export async function signInAs(context: BrowserContext, account: TestAccount): Promise<void> {

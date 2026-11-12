@@ -81,6 +81,18 @@ const moderationClaim = [
   { claim_id: "m-unknown", email: "x@example.de", language: "de", decision: "deleted", reject_code: null, reason: null, listing_id: LISTING, title: "Pacht" },
 ];
 
+const accountClaim = [
+  {
+    claim_id: "a-ok",
+    kind: "verification_rejected",
+    email: "verif@example.de",
+    language: "de",
+    details: { document_type: "jagdschein", code: "unreadable", reason: "Bitte schärfer", decided_at: "2026-11-12T10:00:00Z", appeal_until: "2027-05-14T10:00:00Z" },
+  },
+  { claim_id: "a-nodetails", kind: "verification_verified", email: "x@example.de", language: "en", details: null },
+  { claim_id: "a-unknown", kind: "newsletter", email: "x@example.de", language: "en", details: {} },
+];
+
 function post(secret: string | null = SECRET): Request {
   return new Request("http://localhost/functions/v1/send-search-notifications", {
     method: "POST",
@@ -128,13 +140,18 @@ Deno.test("Suchauftrags- und Moderations-Mails: Confirm bei Erfolg, Release bei 
   const { rpc, calls } = mockRpc({
     claim_search_notifications: { data: searchClaim },
     claim_moderation_notifications: { data: moderationClaim },
+    claim_account_notifications: { data: accountClaim },
   });
   const mailer = new MockMailer(["fail@example.de"]);
   const { result, logs } = await captureLogs(() => handle(post(), { rpc, mailer, siteUrl: SITE }));
   assert(result.status === 200, `Status ${result.status}`);
   const body = await result.json();
   assert(
-    JSON.stringify(body) === JSON.stringify({ search: { recipients: 4, sent: 1, failed: 2 }, moderation: { recipients: 3, sent: 1, failed: 1 } }),
+    JSON.stringify(body) === JSON.stringify({
+      search: { recipients: 4, sent: 1, failed: 2 },
+      moderation: { recipients: 3, sent: 1, failed: 1 },
+      account: { recipients: 3, sent: 1, failed: 0 },
+    }),
     JSON.stringify(body),
   );
 
@@ -147,6 +164,8 @@ Deno.test("Suchauftrags- und Moderations-Mails: Confirm bei Erfolg, Release bei 
       "claim_moderation_notifications",
       "release_moderation_notifications",
       "confirm_moderation_notifications",
+      "claim_account_notifications",
+      "confirm_account_notifications",
     ]),
     order.join(),
   );
@@ -163,10 +182,13 @@ Deno.test("Suchauftrags- und Moderations-Mails: Confirm bei Erfolg, Release bei 
   assert(search.text.includes(`${SITE}/cs/unsubscribe?t=${TOKEN_A}`) && search.text.includes(`${SITE}/cs/inzerat/${LISTING}`), "Sprache des Empfängers");
   assert(moderation.to === "owner@example.de" && moderation.headers === undefined, "Moderation ohne List-Unsubscribe");
   assert(moderation.text.includes("Weapons or ammunition offered"), "Grund-Label");
+  const account = mailer.sent[2];
+  assert(account.to === "verif@example.de" && account.headers === undefined && account.text.includes("Dokument nicht lesbar"), "Dienstmail");
+  assert(JSON.stringify(args("confirm_account_notifications")) === JSON.stringify({ p_secret: SECRET, p_claim_ids: ["a-ok"] }), "Confirm Dienstmails");
 
   // Logs: JSON mit fn/kind, nur Zähler
   const parsed = logs.map((line) => JSON.parse(line) as Record<string, unknown>);
-  assert(parsed.length === 2, `zwei Logzeilen: ${logs.length}`);
+  assert(parsed.length === 3, `drei Logzeilen: ${logs.length}`);
   for (const entry of parsed) {
     assert(entry.fn === "send-search-notifications", "fn");
     for (const [key, value] of Object.entries(entry)) {
@@ -175,17 +197,24 @@ Deno.test("Suchauftrags- und Moderations-Mails: Confirm bei Erfolg, Release bei 
   }
   assert(parsed[0].kind === "search" && parsed[0].queue_matches === 2 && parsed[0].skipped === 1, "Zähler Suche");
   assert(parsed[1].kind === "moderation" && parsed[1].skipped === 1, "Zähler Moderation");
+  assert(parsed[2].kind === "account" && parsed[2].skipped === 2, "Zähler Dienstmails");
   const all = logs.join("\n");
-  for (const secret of ["example.de", TOKEN_A, TOKEN_B, "Honitba", "Pacht", "Nein", SECRET, "c-ok", "m-ok"]) {
+  for (const secret of ["example.de", TOKEN_A, TOKEN_B, "Honitba", "Pacht", "Nein", "schärfer", SECRET, "c-ok", "m-ok", "a-ok"]) {
     assert(!all.includes(secret), `kein ${secret} im Log`);
   }
 });
 
 Deno.test("Ohne Fälliges keine Buchung; Fehler im Suchauftrags-Claim hält die Moderations-Mails nicht auf", async () => {
-  const empty = mockRpc({ claim_search_notifications: { data: { queue: {}, recipients: [] } }, claim_moderation_notifications: { data: [] } });
+  const empty = mockRpc({
+    claim_search_notifications: { data: { queue: {}, recipients: [] } },
+    claim_moderation_notifications: { data: [] },
+    claim_account_notifications: { data: [] },
+  });
   const { result } = await captureLogs(() => handle(post(), { rpc: empty.rpc, mailer: new MockMailer(), siteUrl: SITE }));
   assert(result.status === 200, "200");
-  assert(JSON.stringify(empty.calls.map((c) => c.fn)) === JSON.stringify(["claim_search_notifications", "claim_moderation_notifications"]), "nur Claims");
+  assert(JSON.stringify(empty.calls.map((c) => c.fn)) === JSON.stringify(["claim_search_notifications", "claim_moderation_notifications", "claim_account_notifications"]),
+    "nur Claims",
+  );
 
   const broken = mockRpc({
     claim_search_notifications: { error: { code: "57014" } },

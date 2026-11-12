@@ -337,7 +337,8 @@
     "favorites": "Saved listings",
     "savedSearches": "Saved searches",
     "dataExport": "Download my data",
-    "deleteAccount": "Delete account"
+    "deleteAccount": "Delete account",
+    "verificationLink": "Verification"
   },
   "Listings": {
     "kinds": {
@@ -636,7 +637,9 @@
       "queueLink": "Open the review queue",
       "auditLink": "Audit log",
       "adminsLink": "Manage admins",
-      "stuckDeletions": "{count, plural, one {# account deletion is stuck} other {# account deletions are stuck}} (retried automatically)."
+      "stuckDeletions": "{count, plural, one {# account deletion is stuck} other {# account deletions are stuck}} (retried automatically).",
+      "verificationsPending": "{count, plural, =0 {No verification requests to review.} one {# verification request to review.} other {# verification requests to review.}}",
+      "verificationsLink": "Review verifications"
     },
     "queue": {
       "metaTitle": "Review queue",
@@ -759,6 +762,68 @@
         "lookup": "Please look up the account by email address first (valid for 1 hour).",
         "forbidden": "You are not allowed to do this.",
         "failed": "The change could not be saved. Please try again."
+      }
+    },
+    "verifications": {
+      "metaTitle": "Verifications",
+      "title": "Verifications to review",
+      "back": "Back to the admin area",
+      "empty": "No requests to review.",
+      "itemTitle": "{type} from {name}",
+      "waiting": "Submitted {time}",
+      "previous": "{count, plural, =0 {first request} one {# earlier request} other {# earlier requests}}",
+      "own": "Your own request: another admin decides.",
+      "more": "More requests",
+      "notices": {
+        "verified": "Account verified.",
+        "rejected": "Request rejected.",
+        "revoked": "Verification revoked.",
+        "decided": "This request has already been decided."
+      },
+      "detail": {
+        "metaTitle": "Review verification",
+        "back": "Back to the list",
+        "title": "{type} from {name}",
+        "status": "Status",
+        "submitted": "Submitted",
+        "accountType": "Account type",
+        "country": "Country",
+        "memberSince": "Member since",
+        "profileStatus": "Profile status",
+        "blocked": "This account is blocked.",
+        "own": "Your own request: another admin decides.",
+        "history": "Earlier requests",
+        "historyEmpty": "No earlier requests.",
+        "documentTitle": "Document",
+        "documentHint": "Opening is recorded in the audit log. The link is valid for 60 seconds.",
+        "documentShow": "Show document",
+        "documentAgain": "Show again",
+        "documentMissing": "The document has already been deleted (retention period).",
+        "pdfLink": "Open PDF in a new tab",
+        "imageAlt": "Uploaded document: {type}",
+        "documentErrors": {
+          "mismatch": "The file content does not match an allowed type (JPEG, PNG, PDF). It is not shown. Reject the request.",
+          "expired": "The link has expired. Open the document again.",
+          "missing": "The document has already been deleted."
+        },
+        "decision": "Decision",
+        "verify": "Verify",
+        "reject": "Reject",
+        "reason": "Reason",
+        "reasonNone": "Choose a reason",
+        "note": "Explanation for the user",
+        "noteHint": "Shown to the user as the reason, required for “Other reason”. No internal notes.",
+        "submit": "Save decision",
+        "revokeTitle": "Revoke verification",
+        "revokeHint": "Removes the badge immediately. The user is informed by email with the reason.",
+        "revokeSubmit": "Revoke",
+        "errors": {
+          "code": "Please choose a reason.",
+          "note": "Please explain the reason (at most 1000 characters).",
+          "forbidden": "You cannot do this (own account or missing two-factor login).",
+          "notFound": "The request no longer exists.",
+          "failed": "Saving failed. Please try again."
+        }
       }
     }
   },
@@ -1330,6 +1395,83 @@
         "totpInvalid": "The authenticator code is invalid.",
         "tooSoon": "Please wait a moment before requesting another code."
       }
+    }
+  },
+  "Verification": {
+    "metaTitle": "Verification",
+    "title": "Verification",
+    "back": "Back to my account",
+    "intro": "Verification is voluntary. Once the team has reviewed your document, your listings and your provider page show the badge “Verified”, and you appear in the filter “Verified only”.",
+    "badgeNote": "[Preliminary note] The badge only means that the team has seen a document. It is not a guarantee of identity and does not track expiry dates.",
+    "retention": "Your document is deleted 30 days after the decision. Only the decision is kept.",
+    "status": "Status",
+    "statusText": {
+      "none": "You are not verified.",
+      "pending": "Your request is being reviewed.",
+      "verified": "Your account is verified.",
+      "rejected": "Your last request was rejected. You can submit a new one."
+    },
+    "rejected": "Rejected on {date}.",
+    "revoked": "Your verification was revoked on {date}.",
+    "reasonLabel": "Reason",
+    "inReview": "Submitted on {date}. The team reviews your document.",
+    "unfinished": "Your upload was not completed. Choose the file again to submit the request.",
+    "withdraw": "Withdraw request",
+    "withdrawHint": "The request and the uploaded document are deleted.",
+    "newRequest": "Request verification",
+    "documentType": "Document",
+    "documentTypes": {
+      "jagdschein": "Hunting licence",
+      "jagdkarte": "Hunting card",
+      "revierbescheinigung": "Hunting ground certificate",
+      "gewerbe": "Business registration"
+    },
+    "file": "File",
+    "fileHint": "JPEG, PNG or PDF, at most 10 MB. Please save iPhone photos as JPEG.",
+    "submit": "Upload and submit",
+    "working": "Uploading …",
+    "noscript": "Uploading a document needs JavaScript. Please enable JavaScript for this page.",
+    "history": "Earlier requests",
+    "historyItem": "{date}: {type} – {status}",
+    "requestStatus": {
+      "pending": "Pending",
+      "verified": "Verified",
+      "rejected": "Rejected",
+      "revoked": "Revoked"
+    },
+    "reasons": {
+      "unreadable": "Document not readable",
+      "expired": "Document expired",
+      "mismatch": "Details do not match the account",
+      "wrong_document": "Wrong document type",
+      "other": "Other reason"
+    },
+    "revokeReasons": {
+      "expired": "Document expired",
+      "mismatch": "Details do not match the account",
+      "fraud": "Suspicion of misuse",
+      "other": "Other reason"
+    },
+    "notices": {
+      "submitted": "Thank you. Your request has been submitted.",
+      "withdrawn": "Your request has been withdrawn."
+    },
+    "errors": {
+      "fileType": "Please choose a JPEG, PNG or PDF file.",
+      "fileSize": "The file is larger than 10 MB.",
+      "fileEmpty": "Please choose a file.",
+      "open": "You already have a request under review.",
+      "rateLimited": "You have reached the limit of 3 requests in 30 days.",
+      "rateLimitedUntil": "You have reached the limit of 3 requests in 30 days. Try again after {time}.",
+      "legal": "Please accept the current terms first.",
+      "type": "This document type is not available for your account.",
+      "notAllowed": "Your account cannot submit a request at the moment.",
+      "upload": "The upload failed. Please try again.",
+      "missingFile": "The document is missing. Please upload it again.",
+      "submitted": "This request has already been submitted.",
+      "notFound": "The request no longer exists. Please reload the page.",
+      "failed": "Something went wrong. Please try again.",
+      "withdraw": "The request could not be withdrawn. Please reload the page."
     }
   }
 }

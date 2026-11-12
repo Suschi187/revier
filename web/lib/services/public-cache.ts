@@ -11,3 +11,9 @@ export function invalidatePublicListing(id: string, ownerId?: string): void {
   updateTag(PUBLIC_TAGS.listing(id));
   if (ownerId) updateTag(PUBLIC_TAGS.provider(ownerId));
 }
+
+/** Nach Änderungen am Badge eines Anbieters (Verifizierung, ADR 020): Anbieterseite und alle Listen mit Karten. */
+export function invalidatePublicProvider(ownerId: string): void {
+  updateTag(PUBLIC_TAGS.all);
+  updateTag(PUBLIC_TAGS.provider(ownerId));
+}

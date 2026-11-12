@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
+import { countPendingVerifications } from "@/lib/services/admin-verifications";
 import { countPendingListings, countStuckDeletions } from "@/lib/services/moderation";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
@@ -18,7 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminPage() {
   const locale = (await getLocale()) as AppLocale;
   const me = await requireAdmin(locale, `/${locale}/admin`);
-  const [t, pending, stuck] = await Promise.all([getTranslations("Admin.overview"), countPendingListings(me.id), countStuckDeletions()]);
+  const [t, pending, verifications, stuck] = await Promise.all([
+    getTranslations("Admin.overview"),
+    countPendingListings(me.id),
+    countPendingVerifications(me.id),
+    countStuckDeletions(),
+  ]);
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <h1 className="text-3xl font-semibold">{t("title")}</h1>
@@ -28,7 +34,11 @@ export default async function AdminPage() {
       <Link href="/admin/listings" className="mt-2 block underline">
         {t("queueLink")}
       </Link>
-      <Link href="/admin/audit" className="mt-2 block underline">
+      <p className="mt-6">{t("verificationsPending", { count: verifications })}</p>
+      <Link href="/admin/verifications" className="mt-2 block underline">
+        {t("verificationsLink")}
+      </Link>
+      <Link href="/admin/audit" className="mt-6 block underline">
         {t("auditLink")}
       </Link>
       <Link href="/admin/admins" className="mt-2 block underline">

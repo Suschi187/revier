@@ -2,9 +2,11 @@
 // RPC-Client, Mailer und SITE_URL ein, die Tests einen Mock. Zwei getrennte Schritte mit eigenen Zählern:
 //   1. Suchauftrags-Mails: claim_search_notifications → senden → confirm (Erfolg) bzw. release (Fehler), je claim_id.
 //   2. Moderations-Mails: claim_moderation_notifications → senden → confirm bzw. release, je claim_id.
+//   3. Dienstmails (ADR 020): claim_account_notifications → senden → confirm bzw. release, je claim_id.
 // Logs und Antwort nur Zähler: keine Adressen, Titel, Namen, Begründungen oder Token.
 import type { Mailer } from "../_shared/mail/mailer.ts";
 import { unsubscribeHeaders, validToken } from "../_shared/mail/site.ts";
+import { type AccountDetails, composeAccountMail, isAccountKind } from "./account_texts.ts";
 import {
   composeModerationMail,
   composeSearchMail,
@@ -40,6 +42,8 @@ type ModerationRecipient = Omit<ModerationClaim, "decision"> & {
   decision: string;
 };
 
+type AccountRecipient = { claim_id: string; kind: string; email: string | null; language: string | null; details: AccountDetails | null };
+
 type Counts = Record<string, number>;
 
 export function log(kind: string, result: string, counts: Counts = {}): void {
@@ -61,7 +65,7 @@ function queueCounts(queue: Record<string, unknown> | null | undefined): Counts 
 async function deliver<T extends { claim_id: string }>(
   deps: Deps & { mailer: Mailer; siteUrl: string },
   secret: string,
-  kind: "search" | "moderation",
+  kind: "search" | "moderation" | "account",
   recipients: T[],
   compose: (recipient: T) => Parameters<Mailer["send"]>[0] | null,
 ): Promise<Counts> {
@@ -140,6 +144,25 @@ async function moderationStep(deps: Deps & { mailer: Mailer; siteUrl: string }, 
   return { status: "ok", counts };
 }
 
+async function accountStep(deps: Deps & { mailer: Mailer; siteUrl: string }, secret: string): Promise<Step> {
+  const { data, error } = await deps.rpc("claim_account_notifications", { p_secret: secret });
+  if (error) {
+    const status = error.code === "42501" ? "unauthorized" : "claim_failed";
+    log("account", status);
+    return { status, counts: {} };
+  }
+  const recipients = (Array.isArray(data) ? data : []) as AccountRecipient[];
+  const site = deps.siteUrl;
+  const counts = await deliver(deps, secret, "account", recipients, (r) => {
+    if (!r.email || !isAccountKind(r.kind)) return null;
+    // Dienstmail ohne Abbestellen (ADR 020), auch an gesperrte Konten.
+    const mail = composeAccountMail(language(r.language), site, r.kind, r.details);
+    return mail ? { to: r.email, ...mail } : null;
+  });
+  log("account", "done", counts);
+  return { status: "ok", counts };
+}
+
 export async function handle(request: Request, deps: Deps): Promise<Response> {
   if (request.method !== "POST") return Response.json({ error: "method" }, { status: 405 });
   const secret = request.headers.get("x-search-notify-secret") ?? "";
@@ -158,10 +181,12 @@ export async function handle(request: Request, deps: Deps): Promise<Response> {
   // Getrennter Schritt (H8): ein Fehler im Suchauftrags-Claim hält die Moderations-Mails nicht auf.
   const moderation = await moderationStep(ready, secret);
   if (moderation.status === "unauthorized") return Response.json({ error: "unauthorized" }, { status: 401 });
-  const failedClaim = search.status === "claim_failed" || moderation.status === "claim_failed";
+  const account = await accountStep(ready, secret);
+  if (account.status === "unauthorized") return Response.json({ error: "unauthorized" }, { status: 401 });
+  const failedClaim = [search, moderation, account].some((step) => step.status === "claim_failed");
   const summary = (step: Step) => ({ recipients: step.counts.recipients ?? 0, sent: step.counts.sent ?? 0, failed: step.counts.failed ?? 0 });
   return Response.json(
-    { ...(failedClaim ? { error: "claim_failed" } : {}), search: summary(search), moderation: summary(moderation) },
+    { ...(failedClaim ? { error: "claim_failed" } : {}), search: summary(search), moderation: summary(moderation), account: summary(account) },
     { status: failedClaim ? 500 : 200 },
   );
 }
