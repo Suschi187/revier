@@ -2,6 +2,32 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a GUI/UX-Design (Web), Teil 1: Marke, Tokens, Kopf, Start, Suche, Detail – 2026-11-12
+
+Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Reviro ist eine eigene Marke „by Die Jagdbrüder“; Bedienung wie ein Kleinanzeigen-Portal, Aussehen aus dem Designsystem der Marke.
+
+### Geändert
+- **Tokens und Schriften:** Farben (Orange `#FF914D`, Waldgrün, Oliv, Sand, Offwhite) und Status als `@theme` in `globals.css`; Montserrat und Inter selbst gehostet unter `/static/fonts` (SIL OFL, Lizenztexte daneben, keine Anfragen an Dritte); sichtbarer Fokus, `prefers-reduced-motion`; kein Dunkelmodus.
+- **Komponenten:** `components/ui/styles.ts` (Buttons, Felder, Karten, Chips, Überschriften), `components/ui/Icon.tsx`, `components/brand/` (Logo L1 Geweih-Pin, Kategorie-Icons), App-Icon `app/icon.svg` (ersetzt `favicon.ico`).
+- **Kopf und Fuß:** dunkelgrüne Leiste mit Sprachwahl und Shop-Link, Wortmarke, Suche „Was?/Wo?“ (GET, ohne JavaScript), Konto-Links mit Icons, Hauptaktion „Anzeige aufgeben“; Fuß mit Logo und Rechtslinks. Seitentitel „Reviro“.
+- **Startseite:** Kategorie-Kacheln, Markenbanner „FINDE DEIN REVIER.“, neueste Anzeigen als Raster, Länder, Vertrauensbox.
+- **Suche und Listen:** Filter als Seitenleiste (mobil aufklappbar), Angebote/Gesuche und Liste/Karte als Links, Regionen als Chips, Trefferzeilen mit Foto links und Preis rechts.
+- **Detail:** großes erstes Foto und Vorschaubilder, Eckdaten, Beschreibung, Lage; Kontaktbox mit Anbieter, Verifizierung, Merken, Sicherheitshinweisen und Melden; mobil Kontakt fest unten.
+- **Texte:** neue Namensräume `Brand` und `Header`, neue Schlüssel in `Public.home`, `Public.card`, `Public.detail` in de/en/cs/pl (cs/pl ungeprüft); `Auth.nav` und die alte Startseiten-Suche entfernt.
+- **Tests:** E2E an Kopf-Suche, doppelten Link „Anzeige aufgeben“, „Mein Reviro“ und das große Detailfoto angepasst.
+
+### Testen
+- `cd web && npm run lint && npm run typecheck && npm test`
+- `npx playwright test` (Kernseiten mit axe und 360 px)
+- Sichtprüfung: `/de`, `/de/suche`, eine Anzeige, je in 360 und 1280 px; Netzwerk-Tab ohne Drittanfragen
+
+### Lücken
+- Styleguide-Seite (Schritt 3) und die übrigen Seiten (Inserieren, Konto, Chat, Anmeldung, Rechtsseiten, Admin; Schritt 4.5 bis 4.10) tragen noch den alten Stil.
+- Mails nennen die Plattform noch „Revier“; Umbenennung zusammen mit der Namensfreigabe (SPEC 7.1).
+- Teilen-Button auf der Detailseite fehlt noch (braucht JavaScript oder einen Link-Fallback).
+- Keine Markenfotos: Banner und Platzhalter sind gezeichnet.
+- iOS übernimmt die Tokens ab I1.
+
 ## Nachtrag M9b: QA-Nachprüfung N1–N4 und H1 – 2026-11-12
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M9b – Nachprüfung“. Migration `20261112170000_qa_m9b_recheck.sql`, ADR 020 „Nachträge QA M9b Nachprüfung“.
