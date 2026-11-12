@@ -59,11 +59,12 @@ export default async function AuditPage({ searchParams }: Props) {
       <h1 className="mt-4 text-3xl font-semibold">{t("title")}</h1>
 
       <form method="get" className="mt-6 flex flex-wrap items-end gap-4">
-        <div>
+        {/* min-w-0/max-w-full: lange Aktions-Labels (M9b, z. B. pl) dürfen die Seite bei 360 px nicht verbreitern. */}
+        <div className="min-w-0 max-w-full">
           <label htmlFor="a-action" className="font-medium">
             {t("filterAction")}
           </label>
-          <select id="a-action" name="action" defaultValue={action ?? ""} className="mt-1 block rounded border border-stone-400 px-3 py-2">
+          <select id="a-action" name="action" defaultValue={action ?? ""} className="mt-1 block w-full max-w-full rounded border border-stone-400 px-3 py-2">
             <option value="">{t("filterAll")}</option>
             {AUDIT_ACTIONS.map((a) => (
               <option key={a} value={a}>
