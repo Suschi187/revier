@@ -59,8 +59,6 @@ async function AccountContent() {
         {/* Eingeloggte Adresse sichtbar machen (Login-CSRF, ADR 010). */}
         <p className="text-sm text-muted [overflow-wrap:anywhere]">{t("signedInAs", { email: user.email ?? "–" })}</p>
         <dl className="grid grid-cols-[max-content_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-sm">
-          <dt className="text-muted">{t("displayName")}</dt>
-          <dd className="font-semibold [overflow-wrap:anywhere]">{profile.displayName}</dd>
           <dt className="text-muted">{t("accountType")}</dt>
           <dd className="font-semibold">
             {t(`accountTypes.${profile.accountType}`)}

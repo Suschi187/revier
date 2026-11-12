@@ -14,6 +14,9 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - **Suche und Listen:** Filter als Seitenleiste (mobil aufklappbar), Angebote/Gesuche und Liste/Karte als Links, Regionen als Chips, Trefferzeilen mit Foto links und Preis rechts.
 - **Detail:** großes erstes Foto und Vorschaubilder, Eckdaten, Beschreibung, Lage; Kontaktbox mit Anbieter, Verifizierung, Merken, Sicherheitshinweisen und Melden; mobil Kontakt fest unten.
 - **Texte:** neue Namensräume `Brand` und `Header`, neue Schlüssel in `Public.home`, `Public.card`, `Public.detail` in de/en/cs/pl (cs/pl ungeprüft); `Auth.nav` und die alte Startseiten-Suche entfernt.
+- **Alle übrigen Seiten:** alte Farbklassen per Durchgang auf Tokens umgestellt (383 Stellen in 64 Dateien), Überschriften im Markenstil, Radio und Checkbox in Waldgrün, 410- und Abbestell-Seite in Markenfarben.
+- **Inserieren-Assistent:** Fortschrittsbalken, Schritte als Chips, Felder und Hauptaktion aus der Bibliothek.
+- **Konto-Übersicht:** Profilkarte, Kacheln für Anzeigen, Nachrichten, Favoriten, Suchaufträge, Liste für Verifizierung bis Konto löschen.
 - **Tests:** E2E an Kopf-Suche, doppelten Link „Anzeige aufgeben“, „Mein Reviro“ und das große Detailfoto angepasst.
 
 ### Testen
@@ -22,7 +25,7 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - Sichtprüfung: `/de`, `/de/suche`, eine Anzeige, je in 360 und 1280 px; Netzwerk-Tab ohne Drittanfragen
 
 ### Lücken
-- Styleguide-Seite (Schritt 3) und die übrigen Seiten (Inserieren, Konto, Chat, Anmeldung, Rechtsseiten, Admin; Schritt 4.5 bis 4.10) tragen noch den alten Stil.
+- Styleguide-Seite (Schritt 3) fehlt noch. Chat, Anmeldung, Rechtsseiten und Admin nutzen Tokens und Schriften, aber noch kein eigenes Layout (Schritt 4.7 bis 4.10).
 - Mails nennen die Plattform noch „Revier“; Umbenennung zusammen mit der Namensfreigabe (SPEC 7.1).
 - Teilen-Button auf der Detailseite fehlt noch (braucht JavaScript oder einen Link-Fallback).
 - Keine Markenfotos: Banner und Platzhalter sind gezeichnet.
