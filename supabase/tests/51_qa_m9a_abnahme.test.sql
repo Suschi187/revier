@@ -326,8 +326,9 @@ select tests.q51_service();
 select is(
   array(select o.bucket_id || ':' || case when o.name = :'p_pending' then 'pending' else split_part(o.name, '/', 3) end || ':' || o.reason
         from maintenance_storage_objects(:'mt_secret', 1000) o where o.name like :'b' || '/%' order by 1),
-  array['listing-photos:orphan.jpg:photo_orphan', 'listing-uploads:pending:upload_expired'],
-  'Kandidaten: nur alte Datei ohne Zeile und alter Eingang; Foto und Thumbnail mit Zeile, frische Dateien und Verifizierungsdokumente bleiben');
+  -- M9b (ADR 020): Ein Dokument ohne Antrag ist seitdem ebenfalls Kandidat (verification_orphan).
+  array['listing-photos:orphan.jpg:photo_orphan', 'listing-uploads:pending:upload_expired', 'verification-docs::verification_orphan'],
+  'Kandidaten: alte Datei ohne Zeile, alter Eingang und Dokument ohne Antrag; Foto und Thumbnail mit Zeile und frische Dateien bleiben');
 select is(
   array[(select count(*)::int from maintenance_storage_objects(:'mt_secret', 0)), (select count(*)::int from maintenance_storage_objects(:'mt_secret', -1))],
   array[1, 1], 'Kandidaten-Grenze: mindestens 1');

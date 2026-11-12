@@ -32,7 +32,7 @@ Deno.test("Seiten bis zur leeren Liste, je Bucket ein remove, Zähler je Grund",
   const { deps, calls } = mock([[up("a"), orphan("b"), up("c")], [orphan("d")]]);
   const result = await handle("POST", "s", deps);
   assertEquals(calls, ["candidates:s", "remove:listing-uploads:a,c", "remove:listing-photos:b", "candidates:s", "remove:listing-photos:d", "candidates:s"], "Aufrufe");
-  assertEquals(result, { status: 200, body: { upload_expired: 2, photo_orphan: 2, failed: 0 } }, "Zähler");
+  assertEquals(result, { status: 200, body: { upload_expired: 2, photo_orphan: 2, verification_expired: 0, verification_orphan: 0, failed: 0 } }, "Zähler");
 });
 
 Deno.test("Falsches Secret 403, anderer Fehler 500, nur POST", async () => {

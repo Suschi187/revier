@@ -1,5 +1,5 @@
-// Storage-Aufräumen (ADR 019, Aufräumjobs M9a), ohne Netzwerk: Foto-Eingang nach Frist und Dateien in listing-photos
-// ohne Zeile. Die Kandidaten liefert die RPC (Secret dort geprüft), gelöscht wird nur über die Storage-API.
+// Storage-Aufräumen (ADR 019, Aufräumjobs M9a; ADR 020, M9b), ohne Netzwerk: Foto-Eingang nach Frist, Dateien in
+// listing-photos ohne Zeile, Verifizierungsdokumente nach der Frist und Dokumente ohne Antrag. Die Kandidaten liefert die RPC (Secret dort geprüft), gelöscht wird nur über die Storage-API.
 // Seitenweise bis zur leeren Liste, mit Seiten- und Zeitbudget. Antworten und Logs nur als Zähler.
 
 export type Candidate = { bucket_id: string; name: string; reason: string };
@@ -19,7 +19,7 @@ export type Result = { status: number; body: Record<string, number | string> };
 export async function handle(method: string, secret: string, deps: Deps): Promise<Result> {
   if (method !== "POST") return { status: 405, body: { error: "method" } };
   const started = deps.now();
-  const removed: Record<string, number> = { upload_expired: 0, photo_orphan: 0 };
+  const removed: Record<string, number> = { upload_expired: 0, photo_orphan: 0, verification_expired: 0, verification_orphan: 0 };
   let failed = 0;
   for (let page = 0; page < MAX_PAGES && deps.now() - started <= TIME_BUDGET_MS; page++) {
     const { data, error } = await deps.candidates(secret);

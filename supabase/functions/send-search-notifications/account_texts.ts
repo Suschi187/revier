@@ -12,10 +12,12 @@ export const ACCOUNT_VERIFICATION = "account/verification";
 export const ACCOUNT_DECISIONS = "account/decisions";
 
 export const ACCOUNT_REPORTS = "account/reports";
+export const ACCOUNT_LISTINGS_PATH = "account/listings";
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const GUIDELINES = "guidelines";
 
 export type VerificationKind = "verification_verified" | "verification_rejected" | "verification_revoked";
-export type TrustKind = "account_blocked" | "account_unblocked" | "account_warned" | "report_resolved" | "appeal_decided";
+export type TrustKind = "account_blocked" | "account_unblocked" | "account_warned" | "report_resolved" | "appeal_decided" | "draft_expiry_notice";
 export type AccountKind = VerificationKind | TrustKind;
 export const ACCOUNT_KINDS: readonly AccountKind[] = [
   "verification_verified",
@@ -26,6 +28,7 @@ export const ACCOUNT_KINDS: readonly AccountKind[] = [
   "account_warned",
   "report_resolved",
   "appeal_decided",
+  "draft_expiry_notice",
 ];
 
 function isVerificationKind(kind: AccountKind): kind is VerificationKind {
@@ -212,6 +215,8 @@ export type AccountDetails = {
   listing_title?: string | null;
   status?: string | null;
   decision_action?: string | null;
+  listing_id?: string | null;
+  deletes_at?: string | null;
 };
 
 function formatDate(iso: string | null | undefined, lang: Language): string | null {
@@ -413,6 +418,9 @@ type TrustTexts = {
   reports: string;
   appeal: { upheld: (action: string) => string; reversed: (action: string) => string };
   decisions: string;
+  draft: (title: string, date: string) => string;
+  draftEdit: string;
+  untitled: string;
 };
 
 export const TRUST_TEXTS: Record<Language, TrustTexts> = {
@@ -423,6 +431,7 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       account_warned: "A warning for your account on Revier",
       report_resolved: "Your report on Revier has been reviewed",
       appeal_decided: "Decision on your challenge on Revier",
+      draft_expiry_notice: "Your draft on Revier will be deleted soon",
     },
     blocked:
       "your account has been blocked. You can no longer publish listings or write messages. You can still sign in, download your data, delete your account and challenge this decision.",
@@ -438,6 +447,9 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       reversed: (action) => `your challenge against the decision “${action}” has been reviewed. The decision has been reversed.`,
     },
     decisions: "Your decisions:",
+    draft: (title, date) => `your draft “${title}” has not been edited for a long time and will be deleted on ${date}. If you want to keep it, edit it before then:`,
+    draftEdit: "Edit draft:",
+    untitled: "Untitled",
   },
   de: {
     subject: {
@@ -446,6 +458,7 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       account_warned: "Eine Verwarnung für dein Konto auf Revier",
       report_resolved: "Deine Meldung auf Revier wurde geprüft",
       appeal_decided: "Entscheidung über deine Beschwerde auf Revier",
+      draft_expiry_notice: "Dein Entwurf auf Revier wird bald gelöscht",
     },
     blocked:
       "dein Konto wurde gesperrt. Du kannst keine Anzeigen mehr veröffentlichen und keine Nachrichten schreiben. Anmelden, deine Daten herunterladen, dein Konto löschen und diese Entscheidung anfechten kannst du weiterhin.",
@@ -461,6 +474,9 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       reversed: (action) => `deine Beschwerde gegen die Entscheidung „${action}“ wurde geprüft. Die Entscheidung wurde aufgehoben.`,
     },
     decisions: "Meine Entscheidungen:",
+    draft: (title, date) => `dein Entwurf „${title}“ wurde lange nicht bearbeitet und wird am ${date} gelöscht. Wenn du ihn behalten möchtest, bearbeite ihn vorher:`,
+    draftEdit: "Entwurf bearbeiten:",
+    untitled: "Ohne Titel",
   },
   cs: {
     subject: {
@@ -469,6 +485,7 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       account_warned: "Napomenutí pro váš účet na Revier",
       report_resolved: "Vaše nahlášení na Revier bylo prověřeno",
       appeal_decided: "Rozhodnutí o vaší stížnosti na Revier",
+      draft_expiry_notice: "Váš koncept na Revier bude brzy smazán",
     },
     blocked:
       "váš účet byl zablokován. Nemůžete již zveřejňovat inzeráty ani psát zprávy. Přihlásit se, stáhnout svá data, smazat účet a ohradit se proti tomuto rozhodnutí můžete i nadále.",
@@ -484,6 +501,9 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       reversed: (action) => `vaše stížnost proti rozhodnutí „${action}“ byla prověřena. Rozhodnutí bylo zrušeno.`,
     },
     decisions: "Moje rozhodnutí:",
+    draft: (title, date) => `váš koncept „${title}“ nebyl dlouho upravován a dne ${date} bude smazán. Pokud si ho chcete ponechat, upravte ho předtím:`,
+    draftEdit: "Upravit koncept:",
+    untitled: "Bez názvu",
   },
   pl: {
     subject: {
@@ -492,6 +512,7 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       account_warned: "Upomnienie dla Twojego konta w Revier",
       report_resolved: "Twoje zgłoszenie w Revier zostało sprawdzone",
       appeal_decided: "Decyzja w sprawie Twojej skargi w Revier",
+      draft_expiry_notice: "Twój szkic w Revier zostanie wkrótce usunięty",
     },
     blocked:
       "Twoje konto zostało zablokowane. Nie możesz już publikować ogłoszeń ani pisać wiadomości. Nadal możesz się zalogować, pobrać swoje dane, usunąć konto i zakwestionować tę decyzję.",
@@ -507,6 +528,9 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
       reversed: (action) => `Twoja skarga na decyzję „${action}” została rozpatrzona. Decyzja została uchylona.`,
     },
     decisions: "Moje decyzje:",
+    draft: (title, date) => `Twój szkic „${title}” nie był długo edytowany i zostanie usunięty ${date}. Jeśli chcesz go zachować, edytuj go wcześniej:`,
+    draftEdit: "Edytuj szkic:",
+    untitled: "Bez tytułu",
   },
 };
 
@@ -561,6 +585,14 @@ function composeTrustMail(lang: Language, site: string, kind: TrustKind, details
       if (note) lines.push(`${a.reasonText} ${note}`, "");
       lines.push(t.decisions, decisions, "");
       if (details.status === "upheld") lines.push(a.remedies, "");
+      break;
+    }
+    case "draft_expiry_notice": {
+      const date = formatDate(details.deletes_at, lang);
+      const id = details.listing_id && UUID.test(details.listing_id) ? details.listing_id : null;
+      if (!date || !id) return null;
+      const title = (details.listing_title ? clean(details.listing_title) : "") || t.untitled;
+      lines.push(t.draft(title, date), "", t.draftEdit, `${site}/${lang}/${ACCOUNT_LISTINGS_PATH}/${id}/edit`, "");
       break;
     }
   }

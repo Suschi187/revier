@@ -175,6 +175,19 @@ Migration `20261112120000_reports_appeals.sql`, pgTAP 54 (07, 17, 49, 52, 00 ang
 - **Entscheidungen** `/account/decisions` mit Grund-Label, Begründung, Frist und Beschwerde-Link; `/account/decisions/:id/appeal` (10–2000 Zeichen). Alle vier Konto-Seiten prüfen nur die Session (`guards.test.ts`, Review A4).
 - **Mails:** Moderations-Mails nennen statt des Kontakt-Platzhalters aus M8 die Frist zum Anfechten (`claim_moderation_notifications.appeal_until`) mit Link und den markierten Hinweis zu Rechtsbehelfen. Neue Dienstmails für Sperre, Entsperrung, Verwarnung (mit Link auf die Richtlinien), Meldungsergebnis (nur Zieltyp, Ergebnis, bei Anzeigen der Titel) und Beschwerde (bestätigt mit Hinweis auf Rechtsbehelfe, aufgehoben ohne).
 
+### Umsetzung (M9b Commit 9b, Admin)
+- **Meldungen:** `/admin/reports` (je Ziel, älteste zuerst) und `/admin/reports/{listing|profile|message}/:id` (der Routen-Parser kennt nur UUID-Platzhalter). Die Zielansicht zeigt offene Meldungen ohne Meldende, das betroffene Konto und nur die passenden Maßnahmen; Verwarnen und Sperren sind bei Konten mit Rolle und beim eigenen Konto gesperrt. Die Kopie einer gemeldeten Nachricht erscheint erst nach „Gemeldete Nachricht anzeigen“ (`?show=<Meldung>`); jede Ansicht ruft `admin_report_message` und wird auditiert.
+- **Konten:** `/admin/users` sucht per POST (Adresse nie in der URL), `/admin/users/:id` zeigt das Konto mit Sperren, Entsperren und Verwarnen. Jede Ansicht zählt als Suche (Limit, Audit `user.looked_up`).
+- **Beschwerden:** `/admin/appeals` und `/admin/appeals/:id` mit der ursprünglichen Entscheidung (ohne Admin-Identität, nur „deine eigene Entscheidung“) und Pflicht-Begründung.
+- **Übersicht** zählt offene Meldungen und Beschwerden; das Audit-Log kennt die neuen Arten.
+- **Tests:** E2E `admin-moderation.spec.ts` (Akzeptanz 2 über die Oberfläche, Akzeptanz 3 mit Vier-Augen-Regel, Kopie nur nach Klick), Integration `trust-mails.test.ts` (Mails zu Akzeptanz 2 und 3 über die echte Edge Function in Mailpit).
+
+### Umsetzung (M9b Commit 10, Aufräumjobs)
+Migration `20261112140000_trust_maintenance.sql`, pgTAP 55:
+- **Verifizierung:** `account-maintenance` löscht über die Storage-API Dokumente entschiedener Anträge nach `verification_document_days` (`verification_expired`) und Dateien ohne Antrag nach `storage_orphan_hours` (`verification_orphan`). Der tägliche Job `trust-maintenance` (`private.run_trust_maintenance`) löscht nicht eingereichte Anträge nach derselben Frist und setzt `document_path = null`, `document_deleted_at`, sobald die Datei weg ist. Nie per SQL in `storage.objects`.
+- **Verlassene Entwürfe:** `listings.edited_at` stempelt der Trigger `listings_edited_at` bei jeder Änderung des Besitzers (Vergleich über `to_jsonb`, weil der Zeilenvergleich für Geodaten keinen Operator hat), der Kinder-Guard bei Fotos, Wildarten und Ort. `edited_at` und `draft_notice_at` stehen nicht im Inhalts-Hash, sonst müsste eine pausierte Anzeige nach dem Fortsetzen neu geprüft werden (gefunden im Integrationstest). Hinweis per Dienstmail `draft_expiry_notice` mit Löschdatum und Link zum Bearbeiten; gelöscht werden nur Entwürfe, deren Hinweis 30 Tage alt ist und die seitdem nicht bearbeitet wurden. **Abweichung vom Plan:** Der Job löscht die Zeile; die Fotodateien entfernt danach der bestehende Job für Dateien ohne Zeile (`photo_orphan`, ADR 019), statt einer eigenen Reihenfolge in der Function. Das Ergebnis ist dasselbe, ein zweiter Löschweg entfällt.
+- **Fristen:** `trust-retention` löscht Warteschlange und Zählerzeilen nach 30 Tagen und Beschwerden nach `appeal_keep_months`.
+
 ## Alternativen
 - **Schlanker Beschwerdeweg** (Formular als Meldung, Entscheidung von Hand): keine Wirkung auf die Maßnahme, keine gemeinsame Quelle mit `my_decisions` und Export (10.4/3).
 - **Eigene Tabelle je Mailart** wie in M8: mehr Schema ohne Nutzen (10.4/8).

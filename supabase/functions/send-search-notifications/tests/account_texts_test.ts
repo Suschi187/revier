@@ -129,3 +129,15 @@ Deno.test("Beschwerde: bestätigt mit Platzhalter, aufgehoben ohne", () => {
   }
   assert(composeAccountMail("de", SITE, "appeal_decided", { status: "open", decision_action: "profile.blocked" }) === null, "offen: keine Mail");
 });
+
+Deno.test("Hinweis auf verlassenen Entwurf: Titel, Datum, Link zum Bearbeiten; ohne ID keine Mail", () => {
+  const id = "3f2b8c1e-6a4d-4e7b-9c10-5d8e2f1a0b7c";
+  for (const lang of LANGUAGES) {
+    const mail = composeAccountMail(lang, SITE, "draft_expiry_notice", { listing_id: id, listing_title: "Pacht\nSpessart", deletes_at: "2026-12-12T00:00:00Z" })!;
+    assert(mail.subject === TRUST_TEXTS[lang].subject.draft_expiry_notice, `Betreff ${lang}`);
+    assert(mail.text.includes("Pacht Spessart") && mail.text.includes("2026"), `Titel und Datum ${lang}`);
+    assert(mail.text.includes(`${SITE}/${lang}/account/listings/${id}/edit`), `Link ${lang}`);
+    assert(!mail.text.includes(ACCOUNT_DECISIONS), `kein Anfechten ${lang}`);
+  }
+  assert(composeAccountMail("de", SITE, "draft_expiry_notice", { listing_id: "x", deletes_at: "2026-12-12T00:00:00Z" }) === null, "ID ungültig");
+});

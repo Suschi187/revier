@@ -67,6 +67,8 @@ describe.skipIf(!f)("Storage-Aufräumen (account-maintenance)", () => {
     expect(await exists(files.oldOrphan), "Foto ohne Zeile").toBe(false);
     expect(await exists(files.newUpload), "frische Eingangsdatei bleibt").toBe(true);
     expect(await exists(files.kept), "Foto mit Zeile bleibt").toBe(true);
-    expect(await exists(files.doc), "Dokument bleibt (Frist in M9b)").toBe(true);
+    // Seit M9b (ADR 020): Ein Dokument ohne Antrag älter als 24 h wird ebenfalls entfernt.
+    expect(await exists(files.doc), "Dokument ohne Antrag").toBe(false);
+    expect(body.verification_orphan).toBeGreaterThanOrEqual(1);
   });
 });

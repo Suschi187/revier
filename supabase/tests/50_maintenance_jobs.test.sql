@@ -108,8 +108,9 @@ insert into storage.objects (bucket_id, name, created_at) values
 select tests.as_service();
 select is(tests.mt_err($$ select * from maintenance_storage_objects('falsch') $$), '42501', 'falsches Secret: 42501');
 select set_eq(format($$ select name || ':' || reason from maintenance_storage_objects(%L) where name like %L $$, :'secret', :'r' || '/%'),
-  array[:'r' || '/' || :'l' || '/old.jpg:upload_expired', :'r' || '/' || :'l' || '/orphan-old.jpg:photo_orphan'],
-  'Nur Eingang und Dateien ohne Zeile älter als 24 h; Datei mit Zeile und Dokumente nicht');
+  array[:'r' || '/' || :'l' || '/old.jpg:upload_expired', :'r' || '/' || :'l' || '/orphan-old.jpg:photo_orphan',
+        :'r' || '/doc.jpg:verification_orphan'],
+  'Nur Eingang und Dateien ohne Zeile älter als 24 h, nicht die Datei mit Zeile; seit M9b auch Dokumente ohne Antrag (ADR 020)');
 select tests.as_postgres();
 
 -- ---------------------------------------------------------------------------
