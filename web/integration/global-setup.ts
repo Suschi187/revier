@@ -6,7 +6,7 @@ import type { Fixture } from "./types";
 
 // Baut einmal je Lauf drei Nutzer und deren Daten auf (wenige verifyOtp-Aufrufe wegen des
 // Rate-Limits token_verifications) und löscht alles am Ende wieder:
-// - A: Entwurf mit Foto, Jagdschein im privaten Bucket mit Verifizierungsantrag
+// - A: Entwurf mit Foto, eingereichter Verifizierungsantrag mit Jagdschein im privaten Bucket
 // - B: freigegebene Anzeige mit Foto
 // - A schreibt B zur Anzeige von B; C ist unbeteiligt.
 
@@ -60,14 +60,13 @@ export default async function setup(project: TestProject) {
     // Fotos wie ADR 011: Zeile anlegen (Pfade setzt der Server), Verarbeitung simuliert der Service-Key.
     const draftPhotoA = await processedPhoto(a.client, draftA, jpeg(1));
 
-    // A: Jagdschein und Verifizierungsantrag
-    const docA = `${a.id}/jagdschein.jpg`;
+    // A: Verifizierungsantrag „Zeile zuerst“ (ADR 020): Pfad vom Server, Upload genau dorthin, dann einreichen.
+    const begun = must(await a.client.rpc("begin_verification", { p_document_type: "jagdschein" }), "Verifizierung A") as { id: string; path: string };
+    const verificationA = begun.id;
+    const docA = begun.path;
     must(await a.client.storage.from("verification-docs").upload(docA, jpeg(2), { contentType: "image/jpeg" }), "Jagdschein A");
     uploaded.push({ bucket: "verification-docs", path: docA });
-    const verificationA = must(
-      await a.client.from("verifications").insert({ document_path: docA, document_type: "jagdschein" }).select("id").single<{ id: string }>(),
-      "Verifizierung A",
-    ).id;
+    must(await a.client.rpc("submit_verification", { p_id: verificationA }).then((r) => ({ ...r, data: r.error ? null : true })), "Verifizierung A einreichen");
 
     // B: Anzeige mit Foto, eingereicht und vom Server freigegeben
     const activeB = must(

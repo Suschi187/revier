@@ -120,7 +120,8 @@ describe.skipIf(!f)("PostgREST: Embeddings auf fremde und private Daten", () => 
   it("Verifizierungen und AGB-Nachweise anderer bleiben unsichtbar", async () => {
     // Spalten-GRANT (QA M1 F6): reviewed_by ist für Nutzer nicht lesbar, deshalb explizite Spalten.
     expect((await rest(fx, "verifications?select=*", { token: a.token })).status).toBe(403);
-    expect(await json(await rest(fx, "verifications?select=id,user_id,document_path", { token: c.token }))).toEqual([]);
+    // C hat ggf. einen eigenen Antrag (storage.test.ts); fremde Zeilen sieht C nie.
+    expect(await json(await rest(fx, `verifications?select=id,user_id,document_path&user_id=neq.${c.id}`, { token: c.token }))).toEqual([]);
     expect(await json(await rest(fx, `verifications?select=id&id=eq.${fx.ids.verificationA}`, { token: c.token }))).toEqual([]);
     expect(await json(await rest(fx, `legal_acceptances?select=*&user_id=neq.${c.id}`, { token: c.token }))).toEqual([]);
     expect(await json(await rest(fx, `legal_acceptances?user_id=eq.${a.id}`, { token: b.token }))).toEqual([]);

@@ -51,10 +51,18 @@ async function bytesOf(blob: Blob | null): Promise<number[]> {
   return blob ? Array.from(new Uint8Array(await blob.arrayBuffer())) : [];
 }
 
+const basename = (path: string) => path.split("/").pop()!;
+
 describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
   const fx = f ?? SKIPPED;
   const { a, c } = fx.users;
   const docs = (client = userClient(fx, c)) => client.storage.from("verification-docs");
+  // Antrag von C (ein offener, nicht eingereichter Antrag; begin_verification liefert ihn wieder).
+  let ownPath: string | null = null;
+  const ownDocPath = async () => {
+    ownPath ??= ((await userClient(fx, c).rpc("begin_verification", { p_document_type: "jagdkarte" })).data as { path: string }).path;
+    return ownPath;
+  };
 
   it("Positivkontrolle: A erzeugt eine Signed URL für den eigenen Jagdschein und lädt ihn", async () => {
     const { data, error } = await docs(userClient(fx, a)).createSignedUrl(fx.paths.docA, 60);
@@ -93,7 +101,7 @@ describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
     expect((await anonClient(fx).storage.from("verification-docs").list(a.id)).data ?? []).toEqual([]);
     // Positivkontrolle
     const own = await docs(userClient(fx, a)).list(a.id);
-    expect(own.data?.map((entry) => entry.name)).toEqual(["jagdschein.jpg"]);
+    expect(own.data?.map((entry) => entry.name)).toEqual([basename(fx.paths.docA)]);
   });
 
   it("C kann den Jagdschein von A weder überschreiben (Upsert) noch löschen, kopieren oder verschieben", async () => {
@@ -133,9 +141,12 @@ describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
       `${c.id}/..\\${a.id}/untergeschoben.jpg`,
     ];
     const body = new Uint8Array(await jpeg(7).arrayBuffer());
-    // Positivkontrolle: derselbe rohe Aufruf in den eigenen Ordner klappt.
-    const own = await rawStorage(fx, "POST", `object/verification-docs/${c.id}/eigen.jpg`, c.token, body, { "Content-Type": "image/jpeg" });
+    // Positivkontrolle: derselbe rohe Aufruf auf den Pfad des eigenen Antrags klappt (ADR 020: Zeile zuerst).
+    const own = await rawStorage(fx, "POST", `object/verification-docs/${await ownDocPath()}`, c.token, body, { "Content-Type": "image/jpeg" });
     expect(own.status).toBe(200);
+    // Ein anderer Name im eigenen Ordner geht nicht.
+    const other = await rawStorage(fx, "POST", `object/verification-docs/${c.id}/eigen.jpg`, c.token, body, { "Content-Type": "image/jpeg" });
+    expect(other.status).toBeGreaterThanOrEqual(400);
     for (const path of tricks) {
       const response = await rawStorage(fx, "POST", `object/verification-docs/${path}`, c.token, body, {
         "Content-Type": "image/jpeg",
@@ -144,8 +155,8 @@ describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
       expect(response.status, path).toBeGreaterThanOrEqual(400);
     }
     // list vergleicht Präfixe ohne Groß-/Kleinschreibung, deckt also auch die UUID in Großbuchstaben ab.
-    expect(await serverList(fx, "verification-docs", a.id)).toEqual(["jagdschein.jpg"]);
-    expect(await serverList(fx, "verification-docs", c.id)).toEqual(["eigen.jpg"]);
+    expect(await serverList(fx, "verification-docs", a.id)).toEqual([basename(fx.paths.docA)]);
+    expect(await serverList(fx, "verification-docs", c.id)).toEqual([basename(await ownDocPath())]);
   });
 
   it("Pfadtricks beim Signieren und Lesen liefern den Jagdschein von A nicht", async () => {
@@ -158,7 +169,7 @@ describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
     ];
     const signBody = new TextEncoder().encode('{"expiresIn":60}');
     // Positivkontrolle: C signiert die eigene Datei aus dem vorigen Test.
-    const own = await rawStorage(fx, "POST", `object/sign/verification-docs/${c.id}/eigen.jpg`, c.token, signBody, { "Content-Type": "application/json" });
+    const own = await rawStorage(fx, "POST", `object/sign/verification-docs/${await ownDocPath()}`, c.token, signBody, { "Content-Type": "application/json" });
     expect(own.status).toBe(200);
     for (const path of tricks) {
       const sign = await rawStorage(fx, "POST", `object/sign/verification-docs/${path}`, c.token, signBody, {
@@ -171,7 +182,6 @@ describe.skipIf(!f)("Storage: Jagdschein-Bucket verification-docs", () => {
   });
 });
 
-const basename = (path: string) => path.split("/").pop()!;
 
 describe.skipIf(!f)("Storage: Anzeigenfotos listing-photos", () => {
   const fx = f ?? SKIPPED;
