@@ -44,7 +44,8 @@ async function signUp(page: Page, name: string): Promise<{ email: string; id: st
   return { email, id };
 }
 
-const ADMIN_PAGES = ["/de/admin", "/de/admin/mfa", "/de/admin/listings", "/de/admin/audit", "/de/admin/admins"];
+const ADMIN_PAGES = ["/de/admin", "/de/admin/mfa", "/de/admin/listings", "/de/admin/audit", "/de/admin/admins", "/de/admin/verifications",
+  "/de/admin/reports", "/de/admin/users", "/de/admin/appeals"];
 
 test("Anonym: Admin-Seiten leiten zur Anmeldung", async ({ page }) => {
   for (const path of ADMIN_PAGES) {

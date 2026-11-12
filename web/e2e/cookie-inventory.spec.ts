@@ -166,7 +166,10 @@ test("angemeldet: Login, Konto, Chat, Suchaufträge, Admin und Abmelden bleiben 
   expect((await context.cookies()).some((c) => inventoryEntryFor("cookie", c.name)?.id === "session")).toBe(true);
 
   for (const path of ["/de/account/profile", "/de/account/listings", "/de/account/listings/new", "/de/account/favorites",
-    "/de/account/messages", "/de/account/searches", "/de/account/blocked", "/de/account/data", "/de/account/delete", "/de/jagdhelfer?view=map"]) {
+    "/de/account/messages", "/de/account/searches", "/de/account/blocked", "/de/account/data", "/de/account/delete", "/de/jagdhelfer?view=map",
+    // M9b (Review A10): Verifizierung, Melden, Meldungen, Entscheidungen
+    "/de/account/verification", "/de/account/reports", "/de/account/decisions", `/de/account/report/listing/${crypto.randomUUID()}`,
+    `/de/account/report/profile/${crypto.randomUUID()}`]) {
     await visit(page, context, collector, path);
   }
 
@@ -178,7 +181,8 @@ test("angemeldet: Login, Konto, Chat, Suchaufträge, Admin und Abmelden bleiben 
   await page.getByLabel("6-stelliger Code aus der App").fill(totp(secret));
   await page.getByRole("button", { name: "Bestätigen" }).click();
   await expect(page).toHaveURL("/de/admin");
-  for (const path of ["/de/admin", "/de/admin/listings", "/de/admin/audit", "/de/admin/admins"]) await visit(page, context, collector, path);
+  for (const path of ["/de/admin", "/de/admin/listings", "/de/admin/audit", "/de/admin/admins", "/de/admin/verifications", "/de/admin/reports",
+    "/de/admin/users", "/de/admin/appeals"]) await visit(page, context, collector, path);
 
   await page.getByRole("button", { name: "Abmelden" }).click();
   await expect(page).toHaveURL("/de");

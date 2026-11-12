@@ -2,6 +2,41 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M9b Vertrauen und Moderation (Web) – 2026-11-12
+
+Plan `docs/plans/M9-plan.md` (Architekt-Review Abschnitt 10, Freigabe Abschnitt 11), ADR 020 mit den Abschnitten „Umsetzung“ je Commit, SPEC v0.11. Mit M9b ist M9 vollständig.
+
+### Geändert
+- **Verifizierung (ADR 020, Review A6, B3):** Antrag „Zeile zuerst“ (`begin_verification` → Upload genau auf den Serverpfad → `submit_verification`), Zurückziehen, Limit 3 in 30 Tagen in eigenen Zählerzeilen (`RV002`), kein HEIC. Entscheiden und Widerrufen nur per RPC mit aal2, nie über das eigene Konto. Admins sehen ein Dokument nur nach „Dokument anzeigen“ (Audit `verification.document_viewed`, die Storage-Policy verlangt ihn 2 Minuten lang), als 60-Sekunden-URL und nur, wenn die ersten Bytes zu JPEG, PNG oder PDF passen. Profilstatus aus den Anträgen abgeleitet, der Cache-Zähler steigt beim Badge-Wechsel. Web: `/account/verification`, `/admin/verifications`, `/admin/verifications/:id`.
+- **Melden (Review A9):** Anzeigen und Anbieter über statische Links auf `/account/report/listing/:id` bzw. `/profile/:id` (Ziel im Pfad, damit der Login-Rücksprung es behält), Zusicherung „in gutem Glauben“ als Platzhalter, höchstens eine offene Meldung je Ziel, Eingangsbestätigung in „Meine Meldungen“ (`/account/reports`) mit Stand und Ergebnis. Im Chat zeigt eine zweite Meldung „bereits gemeldet“.
+- **Meldungen im Admin:** Warteschlange je Ziel, Zielansicht mit Maßnahmen (keine, Anzeige entfernen, Kartenpunkt entfernen, Konto verwarnen, Konto sperren; `target_gone` automatisch), gemeldete Chat-Nachricht nur nach Klick und auditiert. `moderate_listing` kennt `remove` (Version nur über `admin_report_target`). Eine entfernte Anzeige verlässt `removed` nur nach einer erfolgreichen Beschwerde (Flag `revier.appeal`), auch nicht auf Server-Pfaden.
+- **Konten im Admin:** Suche per POST (exakte E-Mail oder ID, gemeinsames Limit, Audit ohne Adresse), Sperren, Entsperren, Verwarnen mit Codes und Begründung; nie das eigene Konto, nie Konten mit Rolle.
+- **Entscheidungen und Beschwerden (DSA Art. 17, 20; Platzhalter):** `/account/decisions` mit Grund, Begründung und Frist (183 Tage), Beschwerde unter `/account/decisions/:id/appeal`, auch gesperrt und ohne aktuelle Zustimmung. Admins entscheiden unter `/admin/appeals`; nicht der Admin der ursprünglichen Entscheidung, außer es gibt keinen anderen mit bestätigtem TOTP (markiert). `reversed` nimmt die Maßnahme zurück (Anzeige vorne in die Prüfung, Sperre aufheben, Verifizierung ohne Anrechnung aufs Limit, Meldungen wieder offen).
+- **Dienstmails (Review A11):** Warteschlange `private.account_notifications` im selben Lauf wie die Moderations-Mails, Texte in 4 Sprachen für Verifizierung, Sperre, Entsperrung, Verwarnung, Meldungsergebnis (nur Zieltyp und Ergebnis), Beschwerde und verlassene Entwürfe. Die Moderations-Mails aus M8 nennen statt des Kontakt-Platzhalters die Frist zum Anfechten mit Link; Rechtsbehelfe bleiben ein markierter Platzhalter.
+- **Server-Pfade (Review A7, Lücke M8):** Audit und Moderations-Mails auch ohne Admin-JWT, wenn das Flag `revier.moderation` bzw. `revier.appeal` gesetzt ist.
+- **Aufräumjobs:** Dokumente 30 Tage nach der Entscheidung, Anträge ohne Einreichung und Dateien ohne Antrag nach 24 h, verlassene Entwürfe nach 12 Monaten ohne Bearbeitung mit Hinweis 30 Tage vorher (`listings.edited_at`, `draft_notice_at`), Warteschlange und Zähler nach 30 Tagen, Beschwerden nach 24 Monaten.
+- **Export:** `version` 4 mit Verifizierungsspalten, `reports[].outcome`, `decisions` und `appeals`.
+- **Doku:** ADR 008 (FK-Tabelle), ADR 019 (Export), ADR 020 (Umsetzung je Commit, Abweichungen), SPEC 3.4, Glossar (Dokumenttypen, Widerruf, Anfechten).
+
+### Testen
+- `supabase test db` (53 Verifizierung, 54 Meldungen und Beschwerden, 55 Aufräumjobs; 00, 07, 08, 17, 45, 49, 52 angepasst)
+- Edge Functions wie in der CI per Docker: `send-search-notifications` (Dienstmails, Moderations-Mail) und `account-maintenance`
+- `cd web && npm test && INTEGRATION_REQUIRED=1 npm run test:integration && npm run test:e2e`
+- Integration `verification.test.ts` (Pfadbindung, Review B3 gegen die echte Storage-API), `trust-mails.test.ts` (Mails zu Akzeptanz 2 und 3 über die echte Function in Mailpit)
+- E2E `verification.spec.ts`, `reports.spec.ts`, `admin-moderation.spec.ts`; `cookie-inventory.spec.ts` und `admin.spec.ts` decken die neuen Seiten ab (Review A10)
+
+### Akzeptanz (SPEC 6 M9b)
+- Upload eines Dokuments → Entscheidung im Admin → Badge „verifiziert“ öffentlich sichtbar, nach Widerruf wieder weg: erfüllt (E2E `verification.spec.ts`).
+- Meldung einer Anzeige → Entfernen im Admin → Mail an den Besitzer mit Begründung und an die Meldenden mit dem Ergebnis: erfüllt (E2E `admin-moderation.spec.ts` für den Weg im Admin, Integration `trust-mails.test.ts` für die Mails).
+- Sperre eines Kontos → Beschwerde des Betroffenen → Entsperrung durch einen anderen Admin: erfüllt (E2E `admin-moderation.spec.ts`, Mails in `trust-mails.test.ts`; pgTAP 54 für Ausweichregel und Rücknahmen).
+- Ein Verifizierungsdokument ist ohne frischen Audit-Eintrag `verification.document_viewed` nicht lesbar, auch nicht für Admins über die Storage-API: erfüllt (Integration `verification.test.ts`, pgTAP 08 und 53).
+
+### Bekannte Lücken
+- **iOS (I6):** Verifizierung per Kamera (JPEG statt HEIC), Melden, „Meine Meldungen“, Entscheidungen und Beschwerde folgen auf denselben RPCs.
+- **Rechtlich zu prüfen (SPEC 7.2, Anwalt):** Wortlaut von Begründung, Rechtsbehelf und Streitbeilegung (Art. 17, 21), Zusicherung „in gutem Glauben“ (Art. 16), Melden ohne Konto (Art. 16; heute Kontaktweg im Impressum), befristete Sperren (Art. 23, Spalte `blocked_until` erst dann), Ausnahme nach Art. 19 und Ausweichregel (Art. 20 Abs. 6), Transparenzbericht (Art. 15/24, Zählwerte vor den Fristjobs sichern), Meldepflicht (Art. 18), Kontaktstellen (Art. 11/12), Fristen (30 Tage Dokumente, 183 Tage Anfechten, 12/24 Monate), Zusage des Badges, EXIF in Fotos von Dokumenten (H1), Codes für Maßnahmen.
+- **Hinweis zu verlassenen Entwürfen** nur per Mail; „Meine Anzeigen“ zeigt das Löschdatum noch nicht.
+- **Sperrumgehung** durch Löschen und Neuregistrieren (H8) bleibt offen.
+
 ## Nachtrag M9a: QA-Funde F1–F7 – 2026-11-11
 
 Bericht: `docs/QA-REPORT.md`, Abschnitt „M9a – Abnahme“.
