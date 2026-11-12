@@ -87,19 +87,19 @@ export async function ListingCard({
   }
 
   return (
-    <article className={`${ui.card} relative flex min-w-0 flex-wrap gap-4 p-3 has-[a:focus-visible]:outline has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-brand-ink`}>
-      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-btn bg-olive sm:w-48">
+    <article className={`${ui.card} relative grid min-w-0 grid-cols-[7rem_minmax(0,1fr)] gap-x-3 gap-y-2 p-3 sm:grid-cols-[12rem_minmax(0,1fr)_auto] sm:gap-x-4 has-[a:focus-visible]:outline has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-brand-ink`}>
+      <div className="relative aspect-[4/3] self-start overflow-hidden rounded-btn bg-olive">
         {media}
         {directionBadge}
       </div>
-      <div className="flex min-w-0 flex-[1_1_16rem] flex-col gap-1.5">
+      <div className="flex min-w-0 flex-col gap-1.5">
         <p className="flex flex-wrap justify-between gap-x-3 text-[0.8125rem] text-muted">
           <span>{place}{card.postal_prefix && <> · {tp("postalArea", { prefix: card.postal_prefix })}</>}</span>
           <span>{date}</span>
         </p>
-        <h3 className="text-lg font-semibold leading-snug [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>{title}</h3>
-        <p className="text-sm text-muted [overflow-wrap:anywhere]">{providerName}</p>
-        <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
+        <h3 className="text-base font-semibold leading-snug sm:text-lg [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>{title}</h3>
+        <p className="hidden text-sm text-muted [overflow-wrap:anywhere] sm:block">{providerName}</p>
+        <div className="mt-auto hidden flex-wrap gap-1.5 pt-1 sm:flex">
           <span className={ui.chip}>{t(`kinds.${card.kind}`)}</span>
           {card.area_hectares !== null && <span className={ui.chip}>{tp("area", { area: format.number(card.area_hectares) })}</span>}
           {provider?.verified && (
@@ -107,8 +107,8 @@ export async function ListingCard({
           )}
         </div>
       </div>
-      <div className="flex w-full items-end justify-between gap-2 sm:w-auto sm:flex-col">
-        {price && <p className="font-display text-xl font-extrabold sm:text-right">{price}</p>}
+      <div className="col-start-2 flex items-center justify-between gap-2 sm:col-start-3 sm:flex-col sm:items-end">
+        {price && <p className="font-display text-lg font-extrabold sm:text-right sm:text-xl">{price}</p>}
         {favorite && <div className="relative z-10 sm:mt-auto">{favorite}</div>}
       </div>
     </article>

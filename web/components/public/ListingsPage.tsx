@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { ListingsMap } from "@/components/map/ListingsMap";
+import { ui } from "@/components/ui/styles";
 import { SaveSearch } from "@/components/saved-searches/SaveSearch";
 import { boundsAround, DEFAULT_BOUNDS, type Bounds } from "@/lib/map/bounds";
 import { tilesUrl } from "@/lib/map/tiles";
@@ -91,7 +92,20 @@ export async function ListingsPage({
   const mapHref = `${path}?${new URLSearchParams([...listQuery, [VIEW_PARAM, "map"]])}`;
   const withoutArea = paramsFromFilters(filters, [...fixedKeys, "bbox"]);
   if (mapView) withoutArea.set(VIEW_PARAM, "map");
-  const tm = await getTranslations("Map");
+  const [tm, tl, tf] = await Promise.all([getTranslations("Map"), getTranslations("Listings"), getTranslations("Public.filters")]);
+  // Umschalter Angebote/Gesuche als Links (ohne JavaScript, gleiche Filter wie das Formular).
+  const directionHref = (direction: Filters["direction"]) => {
+    const q = paramsFromFilters({ ...filters, direction }, fixedKeys);
+    if (mapView) q.set(VIEW_PARAM, "map");
+    return `${path}${q.size ? `?${q}` : ""}`;
+  };
+  const directions = [
+    { key: "all", label: tf("any"), value: undefined },
+    { key: "offer", label: tl("directions.offer"), value: "offer" as const },
+    { key: "wanted", label: tl("directions.wanted"), value: "wanted" as const },
+  ];
+  const segment = (active: boolean) =>
+    `flex min-h-10 items-center px-4 text-sm font-semibold no-underline ${active ? "bg-forest text-offwhite hover:text-offwhite" : "bg-surface text-forest"}`;
   let mapBounds: Bounds = DEFAULT_BOUNDS;
   if (mapView) {
     const regionCode = filters.region;
@@ -100,88 +114,112 @@ export async function ListingsPage({
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className={`${ui.container} flex-1 py-4 sm:py-6`}>
       <Breadcrumbs crumbs={crumbs} />
-      <h1 className="mt-2 text-3xl font-semibold">{heading}</h1>
+      <h1 className={`${ui.headingCaps} mt-2 text-2xl [overflow-wrap:anywhere] hyphens-auto`}>{heading}</h1>
 
       {regionLinks.length > 0 && (
-        <nav aria-labelledby="region-links" className="mt-6">
-          <h2 id="region-links" className="text-lg font-semibold">{t(page.route === "kind" ? "states" : "districts")}</h2>
-          <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+        <nav aria-labelledby="region-links" className="mt-4">
+          <h2 id="region-links" className="text-sm font-semibold">{t(page.route === "kind" ? "states" : "districts")}</h2>
+          <ul className="mt-2 flex flex-wrap gap-2">
             {regionLinks.map((r) => (
               <li key={r.code}>
-                <a href={r.href} className="underline">{r.name}</a> <span className="text-sm text-stone-700">({r.count})</span>
+                <a href={r.href} className={`${ui.chip} min-h-9 text-forest no-underline hover:bg-forest hover:text-offwhite`}>
+                  {r.name} <span className="text-muted">({r.count})</span>
+                </a>
               </li>
             ))}
           </ul>
         </nav>
       )}
 
-      <nav aria-label={tm("viewLabel")} className="mt-6 flex gap-4">
-        <a href={listHref} aria-current={mapView ? undefined : "page"} className={mapView ? "underline" : "font-semibold"}>{tm("viewList")}</a>
-        <a href={mapHref} aria-current={mapView ? "page" : undefined} className={mapView ? "font-semibold" : "underline"}>{tm("viewMap")}</a>
-      </nav>
-      {mapView && (
-        <>
-          <noscript>
-            <p className="mt-4 rounded border border-stone-300 p-3">{tm("noscript")}</p>
-          </noscript>
-          <ListingsMap
-            tilesUrl={tilesUrl()}
-            locale={locale}
-            bounds={mapBounds}
-            query={paramsFromFilters(filters, ["bbox"]).toString()}
-            path={path}
-            texts={{
-              label: tm("label"),
-              attribution: tm.raw("attribution") as string,
-              failed: tm("failed"),
-              loading: tm("loading"),
-              loadFailed: tm("loadFailed"),
-              retry: tm("retry"),
-              truncated: tm("truncated"),
-              searchArea: tm("searchArea"),
-              searchAreaHint: tm("searchAreaHint"),
-              stack: tm.raw("stack") as string,
-              cluster: tm.raw("cluster") as string,
-              close: tm("close"),
-              count: tm.raw("count") as string,
-            }}
-          />
-        </>
-      )}
-      {filters.bbox && (
-        <p className="mt-3 text-sm">
-          {tm("areaActive")} <a href={`${path}${withoutArea.size ? `?${withoutArea}` : ""}`} className="underline">{tm("areaRemove")}</a>
-        </p>
-      )}
+      <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-start">
+        {/* Mobil aufklappbar, ab Desktop immer offen (::details-content); ohne Unterstützung bleibt der Klick. */}
+        <details className={`${ui.card} group shrink-0 lg:w-72 lg:[&::details-content]:[content-visibility:visible] lg:[&::details-content]:block`}>
+          <summary className="flex min-h-12 cursor-pointer items-center justify-between px-4 font-display text-sm font-extrabold uppercase tracking-caps">
+            {tf("heading")}
+            <span aria-hidden="true" className="transition-transform group-open:rotate-180 lg:hidden">▾</span>
+          </summary>
+          <FilterForm action={path} filters={filters} fixed={fixedKeys} locale={locale} species={species} regionNames={names} keep={mapView ? { [VIEW_PARAM]: "map" } : {}} />
+        </details>
 
-      {/* Suchauftrag aus der Suche, Liste und Karte (ADR 018, Plan M8 5). */}
-      {page.route === "search" && (
-        <SaveSearch locale={locale} filters={filters} mapView={mapView} signedIn={favorites.signedIn} back={currentPath} error={searchParams.error} />
-      )}
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <nav aria-label={tl("fields.direction")} className="flex overflow-hidden rounded-card border border-forest">
+              {directions.map((d) => {
+                const active = filters.direction === d.value;
+                return (
+                  <a key={d.key} href={directionHref(d.value)} aria-current={active ? "page" : undefined} className={segment(active)}>{d.label}</a>
+                );
+              })}
+            </nav>
+            <nav aria-label={tm("viewLabel")} className="flex gap-1.5 lg:ml-auto">
+              <a href={listHref} aria-current={mapView ? undefined : "page"} className={`${segment(!mapView)} rounded-card border border-forest`}>{tm("viewList")}</a>
+              <a href={mapHref} aria-current={mapView ? "page" : undefined} className={`${segment(mapView)} rounded-card border border-forest`}>{tm("viewMap")}</a>
+            </nav>
+          </div>
 
-      <FilterForm action={path} filters={filters} fixed={fixedKeys} locale={locale} species={species} regionNames={names} keep={mapView ? { [VIEW_PARAM]: "map" } : {}} />
+          {/* Suchauftrag aus der Suche, Liste und Karte (ADR 018, Plan M8 5). */}
+          {page.route === "search" && (
+            <SaveSearch locale={locale} filters={filters} mapView={mapView} signedIn={favorites.signedIn} back={currentPath} error={searchParams.error} />
+          )}
 
-      <section aria-labelledby="results-heading" className="mt-8">
-        <h2 id="results-heading" className="text-xl font-semibold">{t("results")}</h2>
-        {result.ok ? (
-          <>
-            <p className="mt-1" aria-live="polite">
-              {result.page.totalCapped ? t("countCapped") : t("count", { count: result.page.total ?? result.page.items.length })}
+          {mapView && (
+            <>
+              <noscript>
+                <p className={`${ui.card} p-3`}>{tm("noscript")}</p>
+              </noscript>
+              <ListingsMap
+                tilesUrl={tilesUrl()}
+                locale={locale}
+                bounds={mapBounds}
+                query={paramsFromFilters(filters, ["bbox"]).toString()}
+                path={path}
+                texts={{
+                  label: tm("label"),
+                  attribution: tm.raw("attribution") as string,
+                  failed: tm("failed"),
+                  loading: tm("loading"),
+                  loadFailed: tm("loadFailed"),
+                  retry: tm("retry"),
+                  truncated: tm("truncated"),
+                  searchArea: tm("searchArea"),
+                  searchAreaHint: tm("searchAreaHint"),
+                  stack: tm.raw("stack") as string,
+                  cluster: tm.raw("cluster") as string,
+                  close: tm("close"),
+                  count: tm.raw("count") as string,
+                }}
+              />
+            </>
+          )}
+          {filters.bbox && (
+            <p className="text-sm">
+              {tm("areaActive")} <a href={`${path}${withoutArea.size ? `?${withoutArea}` : ""}`} className={ui.link}>{tm("areaRemove")}</a>
             </p>
-            <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} favorites={favorites} />
-            {(nextHref || firstHref) && (
-              <nav aria-label={t("paging")} className="mt-6 flex gap-4">
-                {firstHref && <a href={firstHref} className="underline">{t("first")}</a>}
-                {nextHref && <a href={nextHref} rel="next" className="underline">{t("next")}</a>}
-              </nav>
+          )}
+
+          <section aria-labelledby="results-heading">
+            <h2 id="results-heading" className="sr-only">{t("results")}</h2>
+            {result.ok ? (
+              <>
+                <p className="text-sm font-semibold" aria-live="polite">
+                  {result.page.totalCapped ? t("countCapped") : t("count", { count: result.page.total ?? result.page.items.length })}
+                </p>
+                <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} favorites={favorites} />
+                {(nextHref || firstHref) && (
+                  <nav aria-label={t("paging")} className="mt-6 flex flex-wrap justify-center gap-2">
+                    {firstHref && <a href={firstHref} className={ui.btnSecondary}>{t("first")}</a>}
+                    {nextHref && <a href={nextHref} rel="next" className={ui.btnSecondary}>{t("next")} →</a>}
+                  </nav>
+                )}
+              </>
+            ) : (
+              <p className="mt-2 rounded-card bg-error-soft p-3 text-error" role="alert">{t(result.error === "invalid" ? (result.key === "q" ? "queryTooLong" : "invalid") : "failed")}</p>
             )}
-          </>
-        ) : (
-          <p className="mt-2" role="alert">{t(result.error === "invalid" ? (result.key === "q" ? "queryTooLong" : "invalid") : "failed")}</p>
-        )}
-      </section>
+          </section>
+        </div>
+      </div>
     </main>
   );
 }
