@@ -5,7 +5,51 @@ export type Database = {
   
   "public": {
           Tables: {
-            "audit_log": {
+            "appeals": {
+                  Row: {
+                    "created_at": string,"decided_at": string | null,"decided_by": string | null,"decision_action": string,"decision_audit_id": string | null,"decision_note": string | null,"id": string,"same_reviewer": boolean,"status": string,"text": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"decided_at"?: string | null,"decided_by"?: string | null,"decision_action": string,"decision_audit_id"?: string | null,"decision_note"?: string | null,"id"?: string,"same_reviewer"?: boolean,"status"?: string,"text": string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"decided_at"?: string | null,"decided_by"?: string | null,"decision_action"?: string,"decision_audit_id"?: string | null,"decision_note"?: string | null,"id"?: string,"same_reviewer"?: boolean,"status"?: string,"text"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "appeals_decided_by_fkey"
+      columns: ["decided_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "appeals_decided_by_fkey"
+      columns: ["decided_by"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "appeals_decision_audit_id_fkey"
+      columns: ["decision_audit_id"]
+isOneToOne: true
+      referencedRelation: "audit_log"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "appeals_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["user_id"]
+    },{
+      foreignKeyName: "appeals_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "public_profiles"
+      referencedColumns: ["user_id"]
+    }
+                  ]
+                },"audit_log": {
                   Row: {
                     "action": string,"actor_id": string | null,"created_at": string,"details": NonNullable<Json>,"id": string,"target_id": string,"target_type": string
                   }
@@ -449,17 +493,23 @@ isOneToOne: false
                   ]
                 },"reports": {
                   Row: {
-                    "created_at": string,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id": string | null,"status": Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+                    "created_at": string,"decision_audit_id": string | null,"handled_at": string | null,"handled_by": string | null,"id": string,"note": string | null,"outcome": string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id": string | null,"status": Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+                    "created_at"?: string,"decision_audit_id"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"outcome"?: string | null,"reason": Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
                   }
                   Update: {
-                    "created_at"?: string,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"reason"?: Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id"?: string,"target_type"?: Database["public"]['Enums']["report_target"]
+                    "created_at"?: string,"decision_audit_id"?: string | null,"handled_at"?: string | null,"handled_by"?: string | null,"id"?: string,"note"?: string | null,"outcome"?: string | null,"reason"?: Database["public"]['Enums']["report_reason"],"reporter_id"?: string | null,"status"?: Database["public"]['Enums']["report_status"],"target_id"?: string,"target_type"?: Database["public"]['Enums']["report_target"]
                   }
                   Relationships: [
                     {
+      foreignKeyName: "reports_decision_audit_id_fkey"
+      columns: ["decision_audit_id"]
+isOneToOne: false
+      referencedRelation: "audit_log"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "reports_handled_by_fkey"
       columns: ["handled_by"]
 isOneToOne: false
@@ -643,6 +693,19 @@ isOneToOne: false
               "aal2": boolean,"has_role": boolean
             }[]
                            },
+"admin_appeal":
+{ Args: { "p_id": string }; Returns: Json
+                           },
+"admin_appeal_queue":
+{ Args: { "p_after_created"?: string,"p_after_id"?: string,"p_limit"?: number }; Returns: {
+              "created_at": string,"decision_action": string,"display_name": string,"id": string,"same_reviewer_only": boolean
+            }[]
+                           },
+"admin_find_account":
+{ Args: { "p_query": string }; Returns: {
+              "account_type": Database["public"]['Enums']["account_type"],"country": Database["public"]['Enums']["country_code"],"display_name": string,"has_role": boolean,"is_blocked": boolean,"listing_count": number,"member_since": string,"open_reports": number,"user_id": string,"verification_status": Database["public"]['Enums']["verification_status"]
+            }[]
+                           },
 "admin_find_user":
 { Args: { "p_email": string }; Returns: {
               "display_name": string,"is_admin": boolean,"member_since": string,"user_id": string
@@ -659,6 +722,17 @@ isOneToOne: false
 "admin_open_verification_document":
 { Args: { "p_id": string }; Returns: string
                            },
+"admin_report_message":
+{ Args: { "p_report_id": string }; Returns: Json
+                           },
+"admin_report_queue":
+{ Args: { "p_after_id"?: string,"p_after_oldest"?: string,"p_after_type"?: Database["public"]['Enums']["report_target"],"p_limit"?: number }; Returns: {
+              "label": string,"oldest": string,"reasons": (Database["public"]['Enums']["report_reason"])[],"report_count": number,"target_gone": boolean,"target_id": string,"target_type": Database["public"]['Enums']["report_target"]
+            }[]
+                           },
+"admin_report_target":
+{ Args: { "p_target_id": string,"p_target_type": Database["public"]['Enums']["report_target"] }; Returns: Json
+                           },
 "admin_review_queue":
 { Args: { "p_after_id"?: string,"p_after_submitted"?: string,"p_limit"?: number }; Returns: {
               "country": Database["public"]['Enums']["country_code"],"direction": Database["public"]['Enums']["listing_direction"],"hint_count": number,"id": string,"kind": Database["public"]['Enums']["listing_kind"],"listing_rejections": number,"owner_id": string,"owner_name": string,"owner_rejections": number,"region_id": string,"submitted_at": string,"title": string
@@ -668,6 +742,9 @@ isOneToOne: false
 { Args: Record<PropertyKey, never>; Returns: {
               "limit_per_admin": number,"limit_total": number,"waiting_days": number
             }[]
+                           },
+"admin_set_account_blocked":
+{ Args: { "p_blocked": boolean,"p_code"?: string,"p_note"?: string,"p_user_id": string }; Returns: string
                            },
 "admin_stuck_account_deletions":
 { Args: Record<PropertyKey, never>; Returns: number
@@ -679,6 +756,9 @@ isOneToOne: false
 { Args: { "p_after_id"?: string,"p_after_submitted"?: string,"p_limit"?: number }; Returns: {
               "account_type": Database["public"]['Enums']["account_type"],"country": Database["public"]['Enums']["country_code"],"display_name": string,"document_type": Database["public"]['Enums']["document_type"],"id": string,"is_own": boolean,"previous_requests": number,"profile_status": Database["public"]['Enums']["verification_status"],"submitted_at": string,"user_id": string
             }[]
+                           },
+"admin_warn_account":
+{ Args: { "p_code": string,"p_note"?: string,"p_user_id": string }; Returns: string
                            },
 "begin_verification":
 { Args: { "p_document_type": Database["public"]['Enums']["document_type"] }; Returns: Json
@@ -723,6 +803,9 @@ isOneToOne: false
                            },
 "conversation_messages":
 { Args: { "p_after_at"?: string,"p_after_id"?: string,"p_before_at"?: string,"p_before_id"?: string,"p_conversation_id": string,"p_limit"?: number }; Returns: Json
+                           },
+"decide_appeal":
+{ Args: { "p_appeal_id": string,"p_note": string,"p_outcome": string }; Returns: string
                            },
 "decide_verification":
 { Args: { "p_code"?: string,"p_decision": string,"p_id": string,"p_note"?: string }; Returns: Database["public"]['Enums']["verification_request_status"]
@@ -790,6 +873,11 @@ isOneToOne: false
 "my_conversations":
 { Args: { "p_cursor"?: string,"p_limit"?: number }; Returns: Json
                            },
+"my_decisions":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "action": string,"appeal_id": string,"appeal_status": string,"appeal_until": string,"appealable": boolean,"code": string,"created_at": string,"id": string,"outcome": string,"reason": string,"target_id": string,"target_label": string,"target_type": string
+            }[]
+                           },
 "my_favorites":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
@@ -851,6 +939,9 @@ isOneToOne: false
 "request_account_deletion":
 { Args: Record<PropertyKey, never>; Returns: undefined
                            },
+"resolve_reports":
+{ Args: { "p_code"?: string,"p_expected_version"?: string,"p_note"?: string,"p_outcome": string,"p_target_id": string,"p_target_type": Database["public"]['Enums']["report_target"] }; Returns: string
+                           },
 "resume_saved_search":
 { Args: { "p_id": string }; Returns: {
               "cadence": Database["public"]['Enums']["saved_search_cadence"],
@@ -888,6 +979,9 @@ isOneToOne: false
                            },
 "start_conversation":
 { Args: { "p_body": string,"p_listing_id": string }; Returns: string
+                           },
+"submit_appeal":
+{ Args: { "p_decision_id": string,"p_text": string }; Returns: string
                            },
 "submit_verification":
 { Args: { "p_id": string }; Returns: undefined

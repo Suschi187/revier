@@ -316,9 +316,12 @@ values (:'a', 'helper', 'offer', 'M9b Server', 'de', :'dd', 'active', now() + in
 returning id as l_srv \gset
 select tests.make_ready(:'l_srv');
 select set_config('revier.moderation', '', false);
-select tests.err(format($$ update listings set status = 'removed', reject_code = 'prohibited_content' where id = %L $$, :'l_srv'));
-select is((select count(*)::int from audit_log where target_id = :'l_srv'), 0, 'Ohne Flag und ohne Admin: kein Audit');
-update listings set status = 'active', reject_code = null where id = :'l_srv' and status <> 'active';
+insert into listings (owner_id, kind, direction, title, content_language, region_id, status, expires_at, attributes)
+values (:'a', 'helper', 'offer', 'M9b Server ohne Flag', 'de', :'dd', 'active', now() + interval '30 days', '{"tasks": ["Ansitz"]}')
+returning id as l_noflag \gset
+select tests.make_ready(:'l_noflag');
+select tests.err(format($$ update listings set status = 'removed', reject_code = 'prohibited_content' where id = %L $$, :'l_noflag'));
+select is((select count(*)::int from audit_log where target_id = :'l_noflag'), 0, 'Ohne Flag und ohne Admin: kein Audit');
 select set_config('revier.moderation', 'on', false);
 update listings set status = 'removed', reject_code = 'prohibited_content' where id = :'l_srv';
 select ok((select actor_id is null from audit_log where target_id = :'l_srv' and action = 'listing.removed'),

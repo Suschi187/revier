@@ -68,22 +68,24 @@ select throws_ok(format($$ insert into reports (target_type, target_id, reason) 
   'Nicht sichtbare Ziele lassen sich nicht melden');
 select throws_ok(format($$ insert into reports (target_type, target_id, reason) values ('profile', %L, 'harassment') $$, gen_random_uuid()), '42501', null,
   'Erfundene IDs lassen sich nicht melden');
-update reports set status = 'handled' where id = :'rep';
-select is((select status::text from reports where id = :'rep'), 'open', 'Meldende erledigen ihre Meldung nicht selbst');
+select throws_ok(format($$ update reports set status = 'handled' where id = %L $$, :'rep'), '42501', null,
+  'Meldende erledigen ihre Meldung nicht selbst (kein UPDATE-Recht, seit M9b)');
 
 select tests.authenticate_as(:'b_id');
 select is((select count(*)::int from reports), 0, 'Gemeldeter sieht die Meldung nicht');
 
 select tests.authenticate_as(:'admin_id', 'aal2');
-update reports set status = 'handled' where id = :'rep';
+select resolve_reports('listing', :'listing', 'no_action');
 select tests.as_postgres();
 select is((select handled_by from reports where id = :'rep'), :'admin_id'::uuid, 'Erledigt setzt handled_by');
 select tests.authenticate_as(:'a_id');
 select throws_ok($$ select handled_by from reports $$, '42501', null, 'Meldende sehen nicht, welcher Admin entschieden hat');
 select is((select status::text from reports where id = :'rep'), 'handled', 'Meldende sehen den Stand ihrer Meldung');
 
+-- Seit M9b höchstens eine offene Meldung je Ziel: 19 weitere Meldungen von A zu anderen Zielen (Server-Pfad).
+select tests.as_postgres();
+insert into reports (reporter_id, target_type, target_id, reason) select :'a_id', 'profile', gen_random_uuid(), 'other' from generate_series(1, 19);
 select tests.authenticate_as(:'a_id');
-insert into reports (target_type, target_id, reason) select 'listing', :'listing', 'other' from generate_series(1, 19);
 select throws_ok(format($$ insert into reports (target_type, target_id, reason) values ('listing', %L, 'other') $$, :'listing'), '54000', null,
   'Höchstens 20 Meldungen in 24 Stunden');
 

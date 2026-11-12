@@ -32,11 +32,11 @@ select is(
         where n.nspname = 'public'
           and (has_function_privilege('anon', p.oid, 'execute') or has_function_privilege('authenticated', p.oid, 'execute'))
         order by 1),
-  array['accept_legal', 'admin_access', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_open_verification_document', 'admin_review_queue',
-        'admin_role_rules', 'admin_stuck_account_deletions', 'admin_verification', 'admin_verification_queue', 'begin_verification', 'block_in_conversation', 'conversation_info', 'conversation_messages', 'decide_verification', 'export_my_data', 'extend_saved_search',
-        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'mark_conversation_read', 'moderate_listing', 'my_blocks', 'my_conversations', 'my_favorites', 'pause_saved_search', 'provider_listings',
+  array['accept_legal', 'admin_access', 'admin_appeal', 'admin_appeal_queue', 'admin_find_account', 'admin_find_user', 'admin_list_admins', 'admin_listing_version', 'admin_open_verification_document', 'admin_report_message', 'admin_report_queue', 'admin_report_target', 'admin_review_queue',
+        'admin_role_rules', 'admin_set_account_blocked', 'admin_stuck_account_deletions', 'admin_verification', 'admin_verification_queue', 'admin_warn_account', 'begin_verification', 'block_in_conversation', 'conversation_info', 'conversation_messages', 'decide_appeal', 'decide_verification', 'export_my_data', 'extend_saved_search',
+        'grant_admin', 'legal_status', 'listing_content_hints', 'listing_region_counts', 'map_listings', 'mark_conversation_read', 'moderate_listing', 'my_blocks', 'my_conversations', 'my_decisions', 'my_favorites', 'pause_saved_search', 'provider_listings',
         'public_cache_epoch', 'public_page_state', 'region_geo', 'register_device', 'remove_unavailable_favorites', 'reorder_listing_photos',
-        'request_account_deletion', 'resume_saved_search', 'revoke_admin', 'revoke_verification', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'submit_verification', 'unblock_in_conversation', 'unread_count',
+        'request_account_deletion', 'resolve_reports', 'resume_saved_search', 'revoke_admin', 'revoke_verification', 'search_listings', 'send_message', 'set_listing_location', 'start_conversation', 'submit_appeal', 'submit_verification', 'unblock_in_conversation', 'unread_count',
         'unsubscribe', 'withdraw_verification']::text[],
   'Nur bewusst freigegebene RPCs in public sind ausführbar (Allowlist)'
 );
@@ -95,7 +95,7 @@ select is(
         'private.listing_creations.owner_id:cascade', 'private.moderation_notifications.owner_id:cascade', 'private.photo_creations.owner_id:cascade',
         'private.reported_message_snapshots.sender_id:nofk', 'private.saved_search_deliveries.user_id:cascade', 'private.saved_search_matches.user_id:cascade',
         'private.search_notification_claims.user_id:cascade', 'private.search_notification_state.user_id:cascade', 'private.unsubscribe_tokens.user_id:cascade',
-        'private.user_roles.user_id:cascade', 'private.verification_attempts.user_id:cascade', 'public.audit_log.actor_id:set null', 'public.audit_log.target_id:nofk', 'public.blocks.blocked_id:cascade',
+        'private.user_roles.user_id:cascade', 'private.verification_attempts.user_id:cascade', 'public.appeals.decided_by:set null', 'public.appeals.user_id:cascade', 'public.audit_log.actor_id:set null', 'public.audit_log.target_id:nofk', 'public.blocks.blocked_id:cascade',
         'public.blocks.blocker_id:cascade', 'public.conversations.interested_id:cascade', 'public.conversations.owner_id:cascade', 'public.devices.user_id:cascade',
         'public.favorites.user_id:cascade', 'public.legal_acceptances.user_id:cascade', 'public.listings.owner_id:cascade', 'public.messages.recipient_id:cascade',
         'public.messages.sender_id:cascade', 'public.profiles.user_id:cascade', 'public.reports.handled_by:set null', 'public.reports.reporter_id:set null',

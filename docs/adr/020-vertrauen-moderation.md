@@ -159,6 +159,16 @@ Migration `20261112100000_verification.sql`, pgTAP 53 (07, 08, 45 angepasst):
 - **Mails:** `send-search-notifications` hat einen dritten Schritt `account` (claim/confirm/release). Texte in `account_texts.ts` (4 Sprachen); Ablehnung und Widerruf nennen Grund, Begründung, die Frist zum Anfechten (`appeal_window_days`, ab der Entscheidung) mit Link `/{lang}/account/decisions` (Seite folgt mit Commit 9, in `mail_links.json` vorgemerkt) und den markierten Platzhalter zu Rechtsbehelfen. Labels sind Kopien der Web-Texte, geprüft über `mail_labels.json`.
 - **Tests:** Vitest `lib/verification.test.ts`, Integration `verification.test.ts` (B3 gegen die echte Storage-API), E2E `verification.spec.ts` (Upload → Dokument mit Audit → Entscheidung → Badge → Widerruf), Deno `account_texts_test.ts` und `handler_test.ts`.
 
+### Umsetzung (M9b Commit 8)
+Migration `20261112120000_reports_appeals.sql`, pgTAP 54 (07, 17, 49, 52, 00 angepasst):
+- **Meldungen:** Erledigen nur per `resolve_reports` (Flag `revier.report`); `report.handled` je Meldung mit `outcome`, Code und Begründung, `decision_audit_id` zeigt darauf. Nutzer haben kein UPDATE-Recht mehr; Server-Pfade (Jobs, SQL) bleiben wie bei den übrigen Guards frei. `reporter_id` fällt bei einer Kontolöschung per FK auf `null`. Wiedereröffnen nur per `decide_appeal` (Audit `report.reopened`), nicht für Meldende, die zum selben Ziel inzwischen neu gemeldet haben.
+- **Maßnahmen:** `content_removed` über `moderate_listing(…, 'remove', version)`; die Version liefert `private.listing_moderation_version` (jeder Status, nur über `admin_report_target`). `point_removed` setzt `display_location = null` (Audit wie M6 F7). `account_warned`/`account_blocked` gegen Besitzer, Profil bzw. Absender laut Kopie; ein schon gesperrtes Konto wird nicht erneut gesperrt (keine zweite Mail). Ist das Ziel weg, gilt `target_gone`.
+- **Codes für Konten** (Platzhalter): `scam | illegal | weapons | harassment | spam | other`, Freitext Pflicht bei `other`. Sperren und Verwarnen schreiben das Audit selbst mit Code und Begründung (`profiles_audit` schweigt dann) und legen die Dienstmail an.
+- **Removed ist endgültig** bis zur Beschwerde: Der Trigger `listings_appeal_guard` lässt ohne Flag `revier.appeal` keinen Wechsel weg von `removed` zu, auch nicht für den Server. Mit dem Flag nur `removed | rejected | draft → pending_review`; die alte Einreichungszeit bleibt, die Anzeige steht damit vorne.
+- **Entscheidungen:** `private.decisions_for(user)` ist die eine Quelle für `my_decisions`, Beschwerde und Export (Anzeige-Entscheidungen, Sperre, Verwarnung, Verifizierung, `report.handled` für Meldende). Meldende sehen bei Profil- und Nachrichtenmeldungen keinen Namen.
+- **Beschwerden:** `appeals.decision_action` hält die Art fest, auch wenn das Audit nach der Frist fällt. `decided_by` (set null) und `same_reviewer`; die Ausweichregel prüft aktive Admins mit bestätigtem TOTP-Faktor. Aufbewahrung `appeal_keep_months` (24) im Job `trust-retention`.
+- **Export version 4:** `reports[].outcome`, `decisions`, `appeals`.
+
 ## Alternativen
 - **Schlanker Beschwerdeweg** (Formular als Meldung, Entscheidung von Hand): keine Wirkung auf die Maßnahme, keine gemeinsame Quelle mit `my_decisions` und Export (10.4/3).
 - **Eigene Tabelle je Mailart** wie in M8: mehr Schema ohne Nutzen (10.4/8).

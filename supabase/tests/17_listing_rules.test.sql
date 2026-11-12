@@ -301,8 +301,9 @@ select set_eq($$ select n.nspname || '.' || p.proname from pg_proc p join pg_nam
   union select n.nspname || '.' || p.proname from pg_trigger t join pg_proc p on p.oid = t.tgfoid
     join pg_namespace n on n.oid = p.pronamespace
     where t.tgrelid = 'public.listings'::regclass and p.prosrc ~* 'new\.status\s*:=' $$,
-  array['private.listings_guard', 'private.listing_children_guard', 'public.complete_photo_processing', 'public.moderate_listing'],
-  'Nur Guard, Kinder-Guard und Foto-Abschluss (pending_review) sowie die Moderations-RPC setzen den Status');
+  array['private.listings_guard', 'private.listing_children_guard', 'public.complete_photo_processing', 'public.moderate_listing',
+        'public.decide_appeal'],
+  'Nur Guard, Kinder-Guard und Foto-Abschluss (pending_review), die Moderations-RPC und die Rücknahme nach Beschwerde (M9b) setzen den Status');
 select is((select count(*)::int from pg_trigger where tgrelid = 'public.listings'::regclass and tgname = 'listings_ready' and tgdeferrable and tginitdeferred), 1,
   'Bereitschaftsprüfung ist deferred');
 select ok(not has_function_privilege('authenticated', 'private.listing_readiness(uuid, boolean)', 'execute')

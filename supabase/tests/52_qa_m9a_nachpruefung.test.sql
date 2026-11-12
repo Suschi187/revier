@@ -115,8 +115,8 @@ update profiles set deleted_at = now() where user_id = :'d';
 select tests.authenticate_as(:'e');
 select export_my_data() as ex \gset
 select tests.as_postgres();
--- M9b hebt die Version für die neuen Verifizierungsspalten auf 3 (ADR 020); F2 gilt unverändert.
-select is((:'ex'::jsonb ->> 'version'), '3', 'Export: version 3 (seit M9b)');
+-- M9b hebt die Version an (3: Verifizierung, 4: Entscheidungen und Beschwerden, ADR 020); F2 gilt unverändert.
+select is((:'ex'::jsonb ->> 'version'), '4', 'Export: version 4 (seit M9b)');
 select is(
   array(select coalesce(f ->> 'title', '<null>') from jsonb_array_elements(:'ex'::jsonb -> 'favorites') f order by 1),
   array['<null>', '<null>', '<null>', '<null>', '<null>', 'QA52 oeffentlich'],

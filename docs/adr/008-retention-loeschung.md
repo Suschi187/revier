@@ -54,6 +54,7 @@ DSGVO (Datensparsamkeit, Recht auf Löschung), App-Store-Pflicht zur Account-Lö
 | M9a (ADR 019): `private.account_deletions` | kein FK (Anker überlebt `deleteUser`); entfernt im letzten Schritt der Löschung. Wächter in `00_meta`: jede Spalte mit Nutzerbezug steht in dieser Tabelle |
 | M9a (ADR 019): `private.data_exports.user_id → profiles` | cascade; 7 Tage |
 | M9b (ADR 020): `private.verification_attempts`, `private.account_notifications`, `appeals.user_id` → profiles | cascade; Fristen in ADR 020 |
+| M9b (ADR 020): `appeals.decided_by → profiles`, `reports.decision_audit_id`/`appeals.decision_audit_id → audit_log` | set null (Admin gelöscht bzw. Audit nach `audit_log_months`); `appeals.decision_action` hält die Art fest |
 | `audit_log.target_id`, `reports.target_id`, `private.reported_message_snapshots.sender_id` | kein FK; einzige erlaubte Reste nach der Löschung (Allowlist ADR 019) |
 
 Löscht ein Besitzer nur eine Anzeige, bleiben die Chats für beide Seiten erhalten, angezeigt als „Anzeige gelöscht“. Gesperrte Nutzer können keine Anzeigen löschen, und Admins entfernen Anzeigen über den Status `removed` (auditiert) statt per DELETE.

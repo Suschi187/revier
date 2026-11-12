@@ -60,9 +60,9 @@ select tests.authenticate_as(:'u');
 select export_my_data() as e \gset
 select tests.as_postgres();
 select is(tests.keys(:'e'::jsonb),
-  array['account', 'blocks', 'conversations', 'devices', 'favorites', 'format', 'generated_at', 'legal_acceptances', 'listings',
-        'profile', 'reports', 'reviews', 'roles', 'saved_searches', 'verifications', 'version'], 'Abschnitte exakt');
-select is((:'e'::jsonb ->> 'format') || ' ' || (:'e'::jsonb ->> 'version'), 'revier-export 3', 'Format und Version (3 seit M9b)');
+  array['account', 'appeals', 'blocks', 'conversations', 'decisions', 'devices', 'favorites', 'format', 'generated_at', 'legal_acceptances',
+        'listings', 'profile', 'reports', 'reviews', 'roles', 'saved_searches', 'verifications', 'version'], 'Abschnitte exakt');
+select is((:'e'::jsonb ->> 'format') || ' ' || (:'e'::jsonb ->> 'version'), 'revier-export 4', 'Format und Version (4 seit M9b Commit 8)');
 select is(tests.keys(:'e'::jsonb -> 'account'), array['created_at', 'email', 'last_sign_in_at'], 'account: Schlüssel exakt');
 select is(tests.keys(:'e'::jsonb -> 'profile'),
   array['account_type', 'business_name', 'country', 'created_at', 'display_name', 'is_blocked', 'notify_chat_email', 'preferred_language',
@@ -84,7 +84,7 @@ select is(tests.keys(:'e'::jsonb -> 'conversations' -> 0),
 select is(tests.keys(:'e'::jsonb -> 'conversations' -> 0 -> 'messages' -> 0), array['body', 'created_at', 'from', 'read_at'], 'messages: Schlüssel exakt');
 select is(tests.keys(:'e'::jsonb -> 'blocks' -> 0), array['created_at', 'display_name'], 'blocks: Schlüssel exakt');
 select is(tests.keys(:'e'::jsonb -> 'reports' -> 0),
-  array['created_at', 'handled_at', 'note', 'reason', 'status', 'target_label', 'target_type'], 'reports: Schlüssel exakt (ohne handled_by)');
+  array['created_at', 'handled_at', 'note', 'outcome', 'reason', 'status', 'target_label', 'target_type'], 'reports: Schlüssel exakt (ohne handled_by)');
 select is(tests.keys(:'e'::jsonb -> 'devices' -> 0), array['created_at', 'language', 'platform'], 'devices: ohne Token');
 select is(tests.keys(:'e'::jsonb -> 'verifications' -> 0),
   array['created_at', 'decided_at', 'document_present', 'document_type', 'reject_code', 'reject_reason', 'revoke_code',
@@ -131,7 +131,7 @@ select is(
           -- Export-Allowlist
           'public.profiles', 'private.user_roles', 'public.legal_acceptances', 'public.listings', 'public.favorites', 'public.saved_searches',
           'private.saved_search_matches', 'public.conversations', 'public.messages', 'public.blocks', 'public.reports', 'public.devices',
-          'public.verifications', 'public.reviews',
+          'public.verifications', 'public.reviews', 'public.appeals',
           -- Ausschlussliste (ADR 019): Audit und Admin-Daten, Kopien gemeldeter Nachrichten (Schutz der Meldenden),
           -- Hashes und Token, Zähler, Versandzustände, Anker der Löschung
           'public.audit_log', 'private.admin_lookups', 'private.reported_message_snapshots', 'private.unsubscribe_tokens',
