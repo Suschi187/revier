@@ -43,7 +43,7 @@ async function signUp(page: Page, name: string) {
 test("Pacht-Angebot vollständig anlegen und zur Prüfung absenden", async ({ page }) => {
   await signUp(page, "Pächterin Test");
   await expect(page.getByText("Du hast noch keine Anzeigen.")).toBeVisible();
-  await page.getByRole("link", { name: "Anzeige aufgeben" }).click();
+  await page.getByRole("main").getByRole("link", { name: "Anzeige aufgeben" }).click();
 
   // Schritt 1: Grunddaten, Kreis (Pflichtspalten des Entwurfs)
   await expect(page.getByText("Schritt 1 von 6")).toBeVisible();

@@ -2,13 +2,16 @@
  * Gemeinsame Klassen der Komponentenbibliothek (M10a, docs/DESIGN.md). Seiten setzen Farben und Abstände nur
  * über diese Bausteine und die Tokens aus `app/globals.css`.
  */
-const btnBase =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-btn px-4 py-2.5 font-display text-sm font-bold uppercase tracking-caps no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-60";
+const btnShape =
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-btn px-4 py-2.5 font-display text-sm font-bold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-60";
+const btnBase = `${btnShape} uppercase tracking-caps`;
 
 export const ui = {
   container: "mx-auto w-full max-w-7xl px-4 sm:px-6",
   /** Hauptaktion: Marken-Orange mit Waldgrün (6,6 : 1). */
   btnPrimary: `${btnBase} bg-brand text-forest hover:bg-brand-hover hover:text-forest`,
+  /** Hauptaktion mit längerem Text (z. B. Kontakt): ohne Großbuchstaben, damit sie in allen Sprachen lesbar bleibt. */
+  btnPrimaryText: `${btnShape} bg-brand text-center text-forest hover:bg-brand-hover hover:text-forest`,
   /** Bestätigen und Suchen: Waldgrün. */
   btnDark: `${btnBase} bg-forest text-offwhite hover:bg-forest-hover hover:text-offwhite`,
   /** Nebenaktion: Rahmen in Waldgrün. */

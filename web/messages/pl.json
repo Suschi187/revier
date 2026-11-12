@@ -1113,7 +1113,14 @@
       "contactLogin": "Skontaktuj się z ogłaszającym (wymagane logowanie)",
       "ownListing": "To jest twoje ogłoszenie.",
       "contact": "Napisz wiadomość",
-      "report": "Zgłoś ogłoszenie"
+      "report": "Zgłoś ogłoszenie",
+      "facts": "Najważniejsze dane",
+      "description": "Opis",
+      "safety": "Wskazówki bezpieczeństwa",
+      "safety1": "Nie płać z góry bez pisemnej umowy",
+      "safety2": "Obejrzyj obwód na miejscu",
+      "safety3": "Sprawdź uprawnienia łowieckie i dane ogłoszeniodawcy",
+      "contactPrivate": "Kontakt tylko przez czat. Numer telefonu i e-mail pozostają ukryte."
     },
     "provider": {
       "breadcrumb": "Ścieżka nawigacji",

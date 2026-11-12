@@ -17,30 +17,19 @@ const SHOP_URL = "https://www.jagdbrueder.de/";
 /**
  * Kopf auf allen Seiten (SPEC M10a Schritt 4.1): dunkelgrüne Leiste, Wortmarke, Suche mit „Was?“ und „Wo?“
  * (Bundesland, als GET-Formular ohne JavaScript), Konto-Links und die Hauptaktion „Anzeige aufgeben“.
+ *
+ * Bewusst synchron: Die Suspense-Grenzen (Sprachwahl liest den Query-String, Konto die Session) beginnen so
+ * gleichzeitig mit der Seite und stehen fertig im ersten HTML, auch ohne JavaScript (QA M5). Läge eine Grenze in
+ * einer async-Komponente, rendert sie erst nach deren `await` und käme nur noch gestreamt (verborgen ohne JS).
  */
-export async function SiteHeader() {
-  const locale = (await getLocale()) as AppLocale;
-  const [t, tb, tc, names] = await Promise.all([
-    getTranslations("Header"),
-    getTranslations("Brand"),
-    getTranslations("Profile.countries"),
-    regionNames(locale),
-  ]);
-  const states = allRegionRefs()
-    .filter((r) => r.level === "state")
-    .map((r) => ({ ...r, name: names[r.code] ?? r.code }))
-    .sort((a, b) => a.name.localeCompare(b.name, locale));
-  const countries = [...new Set(states.map((s) => s.country))];
-
+export function SiteHeader() {
   return (
     <>
       <div className="on-dark bg-forest text-xs text-offwhite">
         <div className={`${ui.container} flex flex-wrap items-center gap-x-5 gap-y-1 py-1.5`}>
-          <p className="hidden font-display font-semibold uppercase tracking-[0.1em] sm:block">{tb("claim")}</p>
+          <TopBarText />
           <div className="ml-auto flex flex-wrap items-center gap-x-5">
-            <a href={SHOP_URL} rel="noopener" aria-label={tb("shopLabel")} className="py-1.5 hover:text-brand">
-              {tb("shop")}
-            </a>
+            <ShopLink />
             <Suspense fallback={null}>
               <LocaleSwitcher />
             </Suspense>
@@ -49,48 +38,90 @@ export async function SiteHeader() {
       </div>
       <header className="border-b border-sand bg-offwhite">
         <div className={`${ui.container} flex flex-wrap items-center gap-x-5 gap-y-3 py-3`}>
-          <Link href="/" aria-label={tb("homeLabel")} className="text-forest no-underline">
-            <Logo />
-          </Link>
-          <form
-            action={publicPath({ route: "search" }, locale)}
-            method="get"
-            role="search"
-            className="order-last flex w-full overflow-hidden rounded-card border-[1.5px] border-forest bg-surface lg:order-none lg:w-auto lg:flex-1"
-          >
-            <label className="flex min-w-0 flex-[2] items-center gap-2 px-3">
-              <Icon name="search" size={18} className="shrink-0 text-muted" />
-              <span className="sr-only">{t("searchWhat")}</span>
-              <input name={PARAM_NAMES.q} type="search" maxLength={200} placeholder={t("searchWhat")}
-                className="min-w-0 flex-1 bg-transparent py-2.5 placeholder:text-muted focus-visible:outline-offset-4" />
-            </label>
-            <label className="hidden min-w-0 flex-1 items-center gap-2 border-l border-sand px-3 sm:flex">
-              <Icon name="pin" size={18} className="shrink-0 text-muted" />
-              <span className="sr-only">{t("searchWhere")}</span>
-              <select name={PARAM_NAMES.region} defaultValue="" className="min-w-0 flex-1 bg-transparent py-2.5">
-                <option value="">{t("searchWhereAny")}</option>
-                {countries.map((country) => (
-                  <optgroup key={country} label={tc(country)}>
-                    {states.filter((s) => s.country === country).map((s) => <option key={s.code} value={s.code}>{s.name}</option>)}
-                  </optgroup>
-                ))}
-              </select>
-            </label>
-            <button type="submit" className="bg-forest px-5 font-display text-[0.8125rem] font-bold uppercase tracking-caps text-offwhite hover:bg-forest-hover">
-              {t("searchButton")}
-            </button>
-          </form>
-          <div className="ml-auto flex items-center gap-1 lg:ml-0">
+          <HomeLink />
+          <HeaderSearch />
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-1 lg:ml-0">
             <Suspense fallback={null}>
               <AuthNav />
             </Suspense>
-            <Link href="/account/listings/new" prefetch={false} className={`${ui.btnPrimary} ml-2`}>
-              <Icon name="plus" size={16} />
-              {t("create")}
-            </Link>
+            <CreateLink />
           </div>
         </div>
       </header>
     </>
+  );
+}
+
+async function TopBarText() {
+  const tb = await getTranslations("Brand");
+  return <p className="hidden font-display font-semibold uppercase tracking-[0.1em] sm:block">{tb("claim")}</p>;
+}
+
+async function ShopLink() {
+  const tb = await getTranslations("Brand");
+  return (
+    <a href={SHOP_URL} rel="noopener" aria-label={tb("shopLabel")} className="py-1.5 hover:text-brand">
+      {tb("shop")}
+    </a>
+  );
+}
+
+async function HomeLink() {
+  const tb = await getTranslations("Brand");
+  return (
+    <Link href="/" aria-label={tb("homeLabel")} className="text-forest no-underline">
+      <Logo />
+    </Link>
+  );
+}
+
+async function CreateLink() {
+  const t = await getTranslations("Header");
+  return (
+    <Link href="/account/listings/new" prefetch={false} className={`${ui.btnPrimary} ml-2`}>
+      <Icon name="plus" size={16} />
+      {t("create")}
+    </Link>
+  );
+}
+
+async function HeaderSearch() {
+  const locale = (await getLocale()) as AppLocale;
+  const [t, tc, names] = await Promise.all([getTranslations("Header"), getTranslations("Profile.countries"), regionNames(locale)]);
+  const states = allRegionRefs()
+    .filter((r) => r.level === "state")
+    .map((r) => ({ ...r, name: names[r.code] ?? r.code }))
+    .sort((a, b) => a.name.localeCompare(b.name, locale));
+  const countries = [...new Set(states.map((s) => s.country))];
+
+  return (
+    <form
+      action={publicPath({ route: "search" }, locale)}
+      method="get"
+      role="search"
+      className="order-last flex w-full overflow-hidden rounded-card border-[1.5px] border-forest bg-surface lg:order-none lg:w-auto lg:flex-1"
+    >
+      <div className="flex min-w-0 flex-[2] items-center gap-2 px-3">
+        <Icon name="search" size={18} className="shrink-0 text-muted" />
+        <label htmlFor="header-q" className="sr-only">{t("searchWhat")}</label>
+        <input id="header-q" name={PARAM_NAMES.q} type="search" maxLength={200} placeholder={t("searchWhat")}
+          className="min-w-0 flex-1 bg-transparent py-2.5 placeholder:text-muted focus-visible:outline-offset-4" />
+      </div>
+      <div className="hidden min-w-0 flex-1 items-center gap-2 border-l border-sand px-3 sm:flex">
+        <Icon name="pin" size={18} className="shrink-0 text-muted" />
+        <label htmlFor="header-where" className="sr-only">{t("searchWhere")}</label>
+        <select id="header-where" name={PARAM_NAMES.region} defaultValue="" className="min-w-0 flex-1 bg-transparent py-2.5">
+          <option value="">{t("searchWhereAny")}</option>
+          {countries.map((country) => (
+            <optgroup key={country} label={tc(country)}>
+              {states.filter((s) => s.country === country).map((s) => <option key={s.code} value={s.code}>{s.name}</option>)}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+      <button type="submit" className="bg-forest px-5 font-display text-[0.8125rem] font-bold uppercase tracking-caps text-offwhite hover:bg-forest-hover">
+        {t("searchButton")}
+      </button>
+    </form>
   );
 }

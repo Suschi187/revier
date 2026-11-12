@@ -1113,7 +1113,14 @@
       "contactLogin": "Kontaktovat inzerenta (nutné přihlášení)",
       "ownListing": "Toto je váš inzerát.",
       "contact": "Napsat zprávu",
-      "report": "Nahlásit inzerát"
+      "report": "Nahlásit inzerát",
+      "facts": "Základní údaje",
+      "description": "Popis",
+      "safety": "Bezpečnostní tipy",
+      "safety1": "Nikdy neplaťte předem bez písemné smlouvy",
+      "safety2": "Prohlédněte si honitbu osobně",
+      "safety3": "Ověřte lovecký lístek a údaje inzerenta",
+      "contactPrivate": "Kontakt pouze přes chat. Telefon a e-mail zůstávají skryté."
     },
     "provider": {
       "breadcrumb": "Drobečková navigace",

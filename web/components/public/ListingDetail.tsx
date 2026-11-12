@@ -1,6 +1,9 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import { AttributeRow } from "@/components/listings/ListingSummary";
+import { KindIcon } from "@/components/brand/KindIcon";
 import { DetailMap } from "@/components/map/DetailMap";
+import { Icon } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import { tilesUrl } from "@/lib/map/tiles";
 import type { AppLocale } from "@/i18n/routing";
 import { photoUrl, priceText, thumbSize } from "@/lib/public/format";
@@ -52,117 +55,170 @@ export async function ListingDetail({
   const provider = listing.provider;
   const providerName = provider?.account_type === "business" && provider.business_name ? provider.business_name : provider?.display_name;
 
+  const first = listing.photos[0];
+  const firstSize = first ? thumbSize(first.width, first.height) : null;
+  const factRows = "grid grid-cols-[minmax(0,max-content)_minmax(0,1fr)] gap-x-6 [&>dd]:border-b [&>dd]:border-sand [&>dd]:py-2.5 [&>dd]:font-semibold [&>dt]:border-b [&>dt]:border-sand [&>dt]:py-2.5 [&>dt]:font-normal [&>dt]:text-muted";
+  const sectionHeading = "font-display text-sm font-extrabold uppercase tracking-caps";
+  const showFavorite = favorites.userId !== listing.ownerId;
+
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className={`${ui.container} flex-1 pb-28 pt-4 sm:pt-6 lg:pb-12`}>
       <Breadcrumbs crumbs={crumbs} />
-      <p className="mt-4 text-sm text-stone-700">
-        {t(`kinds.${listing.kind}`)} · {t(`directions.${listing.direction}`)}
-      </p>
-      <h1 className="mt-1 text-3xl font-semibold [overflow-wrap:anywhere] hyphens-auto" lang={listing.contentLanguage}>{listing.title}</h1>
-      {favorites.userId !== listing.ownerId && (
-        <div className="mt-2">
-          <FavoriteButton listingId={listing.id} active={favorites.ids.has(listing.id)} signedIn={favorites.signedIn} back={favorites.back}
-            locale={locale} title={listing.title} />
+
+      <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start">
+        <div className="flex min-w-0 flex-1 flex-col gap-4">
+          <section aria-label={tp("gallery")} className={`${ui.card} p-3`}>
+            {first && firstSize ? (
+              <>
+                <a href={photoUrl(first.id, "full")} className="block overflow-hidden rounded-btn">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
+                  <img src={photoUrl(first.id, "full")} alt={first.altText || tp("photoAlt", { title: listing.title, n: 1, m: listing.photos.length })}
+                    width={first.width ?? firstSize.width} height={first.height ?? firstSize.height}
+                    className="aspect-[16/10] w-full bg-olive object-cover" />
+                </a>
+                {listing.photos.length > 1 && (
+                  <ul className="mt-2.5 grid grid-cols-4 gap-2 sm:grid-cols-6">
+                    {listing.photos.slice(1).map((photo, i) => {
+                      const size = thumbSize(photo.width, photo.height);
+                      const alt = photo.altText || tp("photoAlt", { title: listing.title, n: i + 2, m: listing.photos.length });
+                      return (
+                        <li key={photo.id}>
+                          <a href={photoUrl(photo.id, "full")} className="block overflow-hidden rounded-btn">
+                            {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
+                            <img src={photoUrl(photo.id, "thumb")} alt={alt} width={size.width} height={size.height} loading={i < 5 ? "eager" : "lazy"}
+                              className="aspect-[4/3] w-full object-cover" />
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </>
+            ) : (
+              <div className="flex aspect-[16/10] items-center justify-center rounded-btn bg-sand text-olive" aria-hidden="true">
+                <KindIcon kind={listing.kind} size={96} accent={false} />
+              </div>
+            )}
+          </section>
+
+          <article className={`${ui.card} flex flex-col gap-3 px-5 py-5 sm:px-6`}>
+            <p className="text-[0.8125rem] text-muted">
+              {t(`directions.${listing.direction}`)} · {t(`kinds.${listing.kind}`)} · {tp("published")}{" "}
+              {format.dateTime(new Date(listing.publishedAt), { dateStyle: "medium", timeZone: "Europe/Berlin" })}
+            </p>
+            <h1 className="text-2xl font-bold leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-[1.75rem]" lang={listing.contentLanguage}>{listing.title}</h1>
+            <p className="font-display text-[1.75rem] font-extrabold">{price}</p>
+            <p className="flex items-center gap-1.5">
+              <Icon name="pin" size={18} />
+              {district ? `${district.name}, ${district.stateName}` : null}
+              {listing.postalPrefix && <> · {tp("postalArea", { prefix: listing.postalPrefix })}</>}
+            </p>
+
+            <h2 className={`${sectionHeading} mt-3`}>{tp("facts")}</h2>
+            <dl className={factRows}>
+              {(listing.startDate || listing.endDate) && (
+                <>
+                  <dt>{tp("period")}</dt>
+                  <dd>{listing.startDate ? date(listing.startDate) : "…"} – {listing.endDate ? date(listing.endDate) : "…"}</dd>
+                </>
+              )}
+              {listing.areaHectares !== null && (
+                <>
+                  <dt>{t("fields.area")}</dt>
+                  <dd>{format.number(listing.areaHectares)}</dd>
+                </>
+              )}
+              {listing.species.length > 0 && (
+                <>
+                  <dt>{t("fields.species")}</dt>
+                  <dd>{listing.species.map((code) => species[code] ?? code).join(", ")}</dd>
+                </>
+              )}
+              {Object.entries(listing.attributes).map(([key, value]) => (
+                <AttributeRow key={key} attribute={key} value={value} />
+              ))}
+              <dt>{t("fields.price")}</dt>
+              <dd>{price}</dd>
+            </dl>
+
+            <h2 className={`${sectionHeading} mt-3`}>{tp("description")}</h2>
+            <p className="whitespace-pre-line leading-relaxed [overflow-wrap:anywhere]" lang={listing.contentLanguage}>{listing.description}</p>
+          </article>
+
+          <section aria-labelledby="location-heading" className={`${ui.card} px-5 py-5 sm:px-6`}>
+            <h2 id="location-heading" className={sectionHeading}>{tm("locationHeading")}</h2>
+            <p className="mt-1">
+              {listing.approx === "point" ? tm("detailPoint") : tm("detailDistrict", { district: district?.name ?? "" })}
+            </p>
+            {listing.point && (
+              <>
+                <noscript>
+                  <p className="mt-2 text-sm">{tm("noscriptDetail")}</p>
+                </noscript>
+                <DetailMap
+                  tilesUrl={tilesUrl()}
+                  locale={locale}
+                  point={listing.point}
+                  approx={listing.approx}
+                  texts={{
+                    show: tm("showMap"),
+                    label: tm("detailLabel"),
+                    attribution: tm.raw("attribution") as string,
+                    failed: tm("failed"),
+                    marker: listing.approx === "point" ? tm("approxPoint") : tm("approxDistrict"),
+                  }}
+                />
+              </>
+            )}
+          </section>
         </div>
-      )}
-      <p className="mt-1">
-        {district ? `${district.name}, ${district.stateName}` : null}
-        {listing.postalPrefix && <> · {tp("postalArea", { prefix: listing.postalPrefix })}</>}
-      </p>
 
-      {listing.photos.length > 0 && (
-        <section aria-label={tp("gallery")} className="mt-6">
-          <ul className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {listing.photos.map((photo, i) => {
-              const size = thumbSize(photo.width, photo.height);
-              const alt = photo.altText || tp("photoAlt", { title: listing.title, n: i + 1, m: listing.photos.length });
-              return (
-                <li key={photo.id}>
-                  <a href={photoUrl(photo.id, "full")} className="block rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900">
-                    {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
-                    <img src={photoUrl(photo.id, "thumb")} alt={alt} width={size.width} height={size.height} loading={i < 4 ? "eager" : "lazy"}
-                      className="aspect-[4/3] w-full rounded object-cover" />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      )}
+        <aside aria-label={tp("provider")} className="flex flex-col gap-3 lg:sticky lg:top-4 lg:w-[22rem]">
+          <section aria-labelledby="provider-heading" className={`${ui.card} flex flex-col gap-3.5 p-5`}>
+            <h2 id="provider-heading" className="sr-only">{tp("provider")}</h2>
+            {provider ? (
+              <div className="flex items-center gap-3">
+                <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-full bg-olive font-semibold text-offwhite">
+                  {(providerName ?? "?").slice(0, 2).toUpperCase()}
+                </span>
+                <p className="flex min-w-0 flex-col">
+                  <a href={publicPath({ route: "provider", id: provider.id }, locale)} className="font-semibold text-forest [overflow-wrap:anywhere]">{providerName}</a>
+                  <span className="text-[0.8125rem] text-muted">{tProfile(`accountTypes.${provider.account_type}`)}</span>
+                </p>
+              </div>
+            ) : null}
+            {provider?.verified && (
+              <p className="flex items-center gap-2 rounded-btn bg-sand px-2.5 py-2 text-sm font-semibold">
+                <Icon name="shield" size={18} />
+                {tp("verified")}
+              </p>
+            )}
+            {/* Ein einziger Kontakt-Link: mobil fest unten (SPEC M10a 4.4), ab Desktop in der Box. */}
+            <div className="fixed inset-x-0 bottom-0 z-20 border-t border-sand bg-offwhite p-3 lg:static lg:border-0 lg:bg-transparent lg:p-0">
+              <Contact listing={listing} locale={locale} />
+            </div>
+            {showFavorite && (
+              <FavoriteButton listingId={listing.id} active={favorites.ids.has(listing.id)} signedIn={favorites.signedIn} back={favorites.back}
+                locale={locale} title={listing.title} />
+            )}
+            <p className="text-[0.8125rem] text-muted">{tp("contactPrivate")}</p>
+          </section>
+          <section aria-labelledby="safety-heading" className="rounded-card bg-sand px-5 py-4">
+            <h2 id="safety-heading" className={sectionHeading}>{tp("safety")}</h2>
+            <ul className="mt-2 list-disc ps-5 text-sm leading-relaxed">
+              <li>{tp("safety1")}</li>
+              <li>{tp("safety2")}</li>
+              <li>{tp("safety3")}</li>
+            </ul>
+          </section>
+          {/* Statischer Link (ADR 020): die gecachte Seite bleibt unpersonalisiert; Login und Prüfung des Ziels auf der Meldeseite. */}
+          <a href={`/${locale}/account/report/listing/${listing.id}`} rel="nofollow" className="flex min-h-11 items-center gap-2 px-1 text-sm text-muted underline underline-offset-2">
+            <Icon name="flag" size={16} />
+            {tp("report")}
+          </a>
+        </aside>
+      </div>
 
-      <p className="mt-6 whitespace-pre-line [overflow-wrap:anywhere]" lang={listing.contentLanguage}>{listing.description}</p>
-
-      <dl className="mt-6 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1">
-        <dt className="font-medium">{t("fields.price")}</dt>
-        <dd>{price}</dd>
-        {(listing.startDate || listing.endDate) && (
-          <>
-            <dt className="font-medium">{tp("period")}</dt>
-            <dd>{listing.startDate ? date(listing.startDate) : "…"} – {listing.endDate ? date(listing.endDate) : "…"}</dd>
-          </>
-        )}
-        {listing.areaHectares !== null && (
-          <>
-            <dt className="font-medium">{t("fields.area")}</dt>
-            <dd>{format.number(listing.areaHectares)}</dd>
-          </>
-        )}
-        {listing.species.length > 0 && (
-          <>
-            <dt className="font-medium">{t("fields.species")}</dt>
-            <dd>{listing.species.map((code) => species[code] ?? code).join(", ")}</dd>
-          </>
-        )}
-        {Object.entries(listing.attributes).map(([key, value]) => (
-          <AttributeRow key={key} attribute={key} value={value} />
-        ))}
-        <dt className="font-medium">{tp("published")}</dt>
-        <dd>{format.dateTime(new Date(listing.publishedAt), { dateStyle: "medium", timeZone: "Europe/Berlin" })}</dd>
-      </dl>
-
-      <section aria-labelledby="location-heading" className="mt-8">
-        <h2 id="location-heading" className="text-lg font-semibold">{tm("locationHeading")}</h2>
-        <p className="mt-1">
-          {listing.approx === "point" ? tm("detailPoint") : tm("detailDistrict", { district: district?.name ?? "" })}
-        </p>
-        {listing.point && (
-          <>
-            <noscript>
-              <p className="mt-2 text-sm">{tm("noscriptDetail")}</p>
-            </noscript>
-            <DetailMap
-              tilesUrl={tilesUrl()}
-              locale={locale}
-              point={listing.point}
-              approx={listing.approx}
-              texts={{
-                show: tm("showMap"),
-                label: tm("detailLabel"),
-                attribution: tm.raw("attribution") as string,
-                failed: tm("failed"),
-                marker: listing.approx === "point" ? tm("approxPoint") : tm("approxDistrict"),
-              }}
-            />
-          </>
-        )}
-      </section>
-
-      <section aria-labelledby="provider-heading" className="mt-8 rounded border border-stone-300 p-4">
-        <h2 id="provider-heading" className="text-lg font-semibold">{tp("provider")}</h2>
-        {provider ? (
-          <p className="mt-1">
-            <a href={publicPath({ route: "provider", id: provider.id }, locale)} className="underline">{providerName}</a>
-            {" · "}
-            {tProfile(`accountTypes.${provider.account_type}`)}
-            {provider.verified && <> · <strong>{tp("verified")}</strong></>}
-          </p>
-        ) : null}
-        <Contact listing={listing} locale={locale} />
-      </section>
-      {/* Statischer Link (ADR 020): die gecachte Seite bleibt unpersonalisiert; Login und Prüfung des Ziels auf der Meldeseite. */}
-      <p className="mt-6 text-sm">
-        <a href={`/${locale}/account/report/listing/${listing.id}`} rel="nofollow" className="underline">{tp("report")}</a>
-      </p>
     </main>
   );
 }
@@ -173,13 +229,12 @@ export async function ListingDetail({
  */
 async function Contact({ listing, locale }: { listing: PublicListing; locale: AppLocale }) {
   const [tp, user] = await Promise.all([getTranslations("Public.detail"), getSessionUser()]);
-  if (user?.id === listing.ownerId) return <p className="mt-3 text-sm">{tp("ownListing")}</p>;
+  if (user?.id === listing.ownerId) return <p className="text-sm">{tp("ownListing")}</p>;
   return (
-    <p className="mt-3">
-      <a href={`/${locale}/account/messages/new/${listing.id}`} className="inline-block rounded bg-stone-900 px-4 py-2 text-white">
-        {user ? tp("contact") : tp("contactLogin")}
-      </a>
-    </p>
+    <a href={`/${locale}/account/messages/new/${listing.id}`} className={`${ui.btnPrimaryText} min-h-12 w-full text-[0.9375rem]`}>
+      <Icon name="message" size={18} />
+      {user ? tp("contact") : tp("contactLogin")}
+    </a>
   );
 }
 

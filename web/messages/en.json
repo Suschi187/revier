@@ -1113,7 +1113,14 @@
       "contactLogin": "Contact provider (sign-in required)",
       "ownListing": "This is your listing.",
       "contact": "Write a message",
-      "report": "Report this listing"
+      "report": "Report this listing",
+      "facts": "Key facts",
+      "description": "Description",
+      "safety": "Safety tips",
+      "safety1": "Never pay in advance without a written contract",
+      "safety2": "Visit the hunting ground in person",
+      "safety3": "Check the hunting licence and the provider's details",
+      "contactPrivate": "Contact only via chat. Phone number and email stay hidden."
     },
     "provider": {
       "breadcrumb": "Breadcrumb",

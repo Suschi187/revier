@@ -231,8 +231,9 @@ test.describe("Öffentliche Seiten (M5)", () => {
     // Ab M7 ein fester Link auf „Nachricht schreiben“; ohne Login leitet der Proxy zum Login (ADR 017).
     await expect(main.getByRole("link", { name: /Anbieter kontaktieren/ })).toHaveAttribute("href", `/de/account/messages/new/${ids.muc}`);
     await expect(main.getByRole("link", { name: "M5 Privat" })).toHaveAttribute("href", `/de/anbieter/${private_.id}`);
+    // Großes erstes Foto in voller Größe (M10a), weitere als Vorschaubild; beides über die eigene Route.
     const img = main.locator("img").first();
-    await expect(img).toHaveAttribute("src", `/api/photos/${ids.photo}/thumb`);
+    await expect(img).toHaveAttribute("src", `/api/photos/${ids.photo}/full`);
     const html = await page.content();
     expect(html).not.toContain("listing-photos");
     expect(html).not.toMatch(/\b\d{5}\b Testort/);
@@ -256,8 +257,9 @@ test.describe("Öffentliche Seiten (M5)", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto("/de");
-    await page.getByRole("searchbox", { name: "Suche" }).fill(`M5 ${RUN} Kitzbühel`);
-    await page.getByRole("button", { name: "Suchen" }).click();
+    // Suche im Kopf (M10a): „Was?“ und „Wo?“ als GET-Formular.
+    await page.getByRole("searchbox", { name: "Was suchst du?" }).fill(`M5 ${RUN} Kitzbühel`);
+    await page.getByRole("button", { name: "Finden" }).click();
     await expect(page).toHaveURL(/\/de\/suche\?q=/);
     expect(await titles(page)).toEqual([T("Pacht Kitzbühel")]);
     await page.getByLabel("Währung").selectOption("EUR");

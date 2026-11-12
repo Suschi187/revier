@@ -1113,7 +1113,14 @@
       "contactLogin": "Anbieter kontaktieren (Anmeldung nötig)",
       "ownListing": "Das ist deine Anzeige.",
       "contact": "Nachricht schreiben",
-      "report": "Anzeige melden"
+      "report": "Anzeige melden",
+      "facts": "Eckdaten",
+      "description": "Beschreibung",
+      "safety": "Sicherheitshinweise",
+      "safety1": "Keine Vorauszahlung ohne schriftlichen Vertrag",
+      "safety2": "Das Revier vor Ort besichtigen",
+      "safety3": "Jagdschein und Angaben des Anbieters prüfen",
+      "contactPrivate": "Kontakt nur über den Chat. Telefonnummer und E-Mail bleiben verborgen."
     },
     "provider": {
       "breadcrumb": "Brotkrumen",
