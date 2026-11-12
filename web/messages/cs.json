@@ -641,7 +641,12 @@
       "adminsLink": "Spravovat administrátory",
       "stuckDeletions": "{count, plural, one {# smazání účtu se zaseklo} few {# smazání účtů se zasekla} other {# smazání účtů se zaseklo}} (opakuje se automaticky).",
       "verificationsPending": "{count, plural, =0 {Žádné žádosti o ověření ke kontrole.} one {# žádost o ověření ke kontrole.} few {# žádosti o ověření ke kontrole.} other {# žádostí o ověření ke kontrole.}}",
-      "verificationsLink": "Kontrolovat ověření"
+      "verificationsLink": "Kontrolovat ověření",
+      "reportsOpen": "{count, plural, =0 {Žádná otevřená nahlášení.} one {# otevřené nahlášení.} few {# otevřená nahlášení.} other {# otevřených nahlášení.}}",
+      "reportsLink": "Prověřit nahlášení",
+      "appealsOpen": "{count, plural, =0 {Žádné otevřené stížnosti.} one {# otevřená stížnost.} few {# otevřené stížnosti.} other {# otevřených stížností.}}",
+      "appealsLink": "Prověřit stížnosti",
+      "usersLink": "Vyhledat účet"
     },
     "queue": {
       "metaTitle": "Inzeráty ke schválení",
@@ -712,7 +717,14 @@
         "profile_unblocked": "Účet odblokován",
         "verification_verified": "Ověření potvrzeno",
         "verification_rejected": "Ověření zamítnuto",
-        "report_handled": "Hlášení vyřízeno"
+        "report_handled": "Hlášení vyřízeno",
+        "verification_revoked": "Ověření odvoláno",
+        "verification_document_viewed": "Doklad k ověření zobrazen",
+        "profile_warned": "Účet napomenut",
+        "report_reopened": "Nahlášení znovu otevřeno",
+        "report_message_viewed": "Nahlášená zpráva zobrazena",
+        "appeal_upheld": "Stížnost zamítnuta",
+        "appeal_reversed": "Stížnosti vyhověno"
       },
       "detailKeys": {
         "from": "Předtím",
@@ -722,7 +734,11 @@
         "via": "Přes",
         "target_type": "Typ cíle",
         "user_id": "Účet",
-        "status": "Stav"
+        "status": "Stav",
+        "outcome": "Výsledek",
+        "note": "Odůvodnění",
+        "same_reviewer": "Stejný admin",
+        "decision_action": "Rozhodnutí"
       },
       "via": {
         "ui": "Administrace",
@@ -826,6 +842,148 @@
           "notFound": "Žádost už neexistuje.",
           "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
         }
+      }
+    },
+    "reports": {
+      "metaTitle": "Nahlášení",
+      "title": "Otevřená nahlášení",
+      "back": "Zpět do administrace",
+      "empty": "Žádná otevřená nahlášení.",
+      "noLabel": "(bez názvu)",
+      "count": "{count, plural, one {# nahlášení} few {# nahlášení} other {# nahlášení}}",
+      "oldest": "nejstarší {time}",
+      "gone": "Obsah již není k dispozici",
+      "more": "Další nahlášení",
+      "notices": {
+        "resolved": "Nahlášení vyřízena a opatření provedeno.",
+        "decided": "Tato nahlášení již byla vyřízena."
+      },
+      "detailMetaTitle": "Prověřit nahlášení",
+      "goneHint": "Obsah již neexistuje. Při vyřízení se zaznamená „Obsah již není k dispozici“.",
+      "reviewLink": "Otevřít ve frontě ke schválení",
+      "publicLink": "Veřejná stránka",
+      "account": "Dotčený účet",
+      "listings": "{count, plural, one {# inzerát} few {# inzeráty} other {# inzerátů}}",
+      "memberSince": "Členem od {date}",
+      "blocked": "Účet je zablokovaný.",
+      "hasRole": "Účet má roli: žádné napomenutí ani blokace (nejprve odeberte roli).",
+      "own": "Váš vlastní účet: rozhodne jiný admin.",
+      "openReports": "{count, plural, =0 {Žádná otevřená nahlášení} one {# otevřené nahlášení} few {# otevřená nahlášení} other {# otevřených nahlášení}}",
+      "handledBefore": "{count, plural, one {# dřívější nahlášení již vyřízeno} few {# dřívější nahlášení již vyřízena} other {# dřívějších nahlášení již vyřízeno}}",
+      "showMessage": "Zobrazit nahlášenou zprávu",
+      "showMessageHint": "Každé zobrazení se zaznamená do auditního protokolu.",
+      "messageCaption": "Od {sender}, odesláno {date}",
+      "measure": "Rozhodnutí",
+      "measures": {
+        "no_action": "Bez opatření",
+        "content_removed": "Odstranit inzerát",
+        "point_removed": "Odstranit bod na mapě",
+        "account_warned": "Napomenout účet",
+        "account_blocked": "Zablokovat účet"
+      },
+      "code": "Důvod",
+      "codeNone": "Vyberte důvod",
+      "codesListing": "Inzerát",
+      "codesAccount": "Účet",
+      "codeHint": "Odstranění vyžaduje důvod pro inzeráty, napomenutí a blokace důvod pro účty.",
+      "note": "Odůvodnění pro dotčené",
+      "noteHint": "Dotčený účet ho uvidí jako odůvodnění; povinné při odstranění a u „Jiný důvod“. Oznamovatelé se dozví jen výsledek. Žádné interní poznámky.",
+      "submit": "Vyřídit nahlášení",
+      "errors": {
+        "changed": "Inzerát se od otevření změnil. Načtěte stránku znovu a zkontrolujte ho.",
+        "code": "Vyberte prosím důvod, který odpovídá opatření.",
+        "note": "Odůvodněte prosím rozhodnutí (nejvýše 1000 znaků).",
+        "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
+        "adminRole": "Účty s rolí nelze napomenout ani zablokovat.",
+        "notFound": "Tento obsah již není k dispozici.",
+        "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+      }
+    },
+    "users": {
+      "metaTitle": "Účty",
+      "title": "Vyhledat účet",
+      "back": "Zpět do administrace",
+      "intro": "Přesná e-mailová adresa nebo ID účtu. Každé hledání se zaznamená do auditního protokolu (bez adresy) a počítá se do hodinového limitu.",
+      "query": "E-mailová adresa nebo ID účtu",
+      "search": "Hledat",
+      "errors": {
+        "empty": "Zadejte prosím e-mailovou adresu nebo ID účtu.",
+        "notFound": "Účet nenalezen.",
+        "limit": "Příliš mnoho hledání za poslední hodinu.",
+        "failed": "Hledání se nezdařilo. Zkuste to prosím znovu.",
+        "code": "Vyberte prosím důvod.",
+        "note": "Odůvodněte prosím rozhodnutí (nejvýše 1000 znaků).",
+        "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
+        "adminRole": "Účty s rolí nelze napomenout ani zablokovat.",
+        "decided": "Účet už tento stav má."
+      },
+      "detailMetaTitle": "Účet",
+      "accountType": "Typ účtu",
+      "country": "Země",
+      "memberSince": "Členem od",
+      "verification": "Ověření",
+      "listings": "Inzeráty",
+      "openReports": "Otevřená nahlášení",
+      "status": "Stav",
+      "blocked": "Zablokovaný",
+      "active": "Aktivní",
+      "hasRole": "Tento účet má roli. Před napomenutím nebo blokací roli odeberte.",
+      "action": "Opatření",
+      "actions": {
+        "warn": "Napomenout",
+        "block": "Zablokovat",
+        "unblock": "Odblokovat"
+      },
+      "code": "Důvod",
+      "codeNone": "Vyberte důvod",
+      "note": "Odůvodnění pro účet",
+      "noteHint": "Účet ho uvidí jako odůvodnění (povinné u „Jiný důvod“). Žádné interní poznámky.",
+      "submit": "Provést",
+      "notices": {
+        "block": "Účet zablokován.",
+        "unblock": "Účet odblokován.",
+        "warn": "Napomenutí odesláno."
+      }
+    },
+    "appeals": {
+      "metaTitle": "Stížnosti",
+      "title": "Otevřené stížnosti",
+      "back": "Zpět do administrace",
+      "empty": "Žádné otevřené stížnosti.",
+      "itemTitle": "{action}: {name}",
+      "waiting": "Podáno {time}",
+      "byMe": "Vaše vlastní původní rozhodnutí",
+      "more": "Další stížnosti",
+      "notices": {
+        "upheld": "Stížnost zamítnuta, rozhodnutí zůstává.",
+        "reversed": "Stížnosti vyhověno, opatření bylo vzato zpět.",
+        "decided": "O této stížnosti již bylo rozhodnuto."
+      },
+      "detailMetaTitle": "Prověřit stížnost",
+      "submitted": "Podáno dne {date}",
+      "decision": "Původní rozhodnutí",
+      "decisionGone": "Původní rozhodnutí již není uloženo (lhůta uchování).",
+      "code": "Kód",
+      "targetLink": "Zobrazit nahlášení k tomuto inzerátu",
+      "text": "Odůvodnění stížnosti",
+      "status": {
+        "upheld": "Zamítnuto",
+        "reversed": "Vyhověno"
+      },
+      "sameReviewer": "rozhodl stejný admin, jiný admin není k dispozici",
+      "outcome": "Rozhodnutí",
+      "outcomes": {
+        "upheld": "Zamítnout stížnost (rozhodnutí zůstává)",
+        "reversed": "Vyhovět stížnosti (vzít opatření zpět)"
+      },
+      "note": "Odůvodnění pro osobu",
+      "noteHint": "Povinné. Osoba, která si stěžovala, ho uvidí. Žádné interní poznámky.",
+      "submit": "Uložit rozhodnutí",
+      "errors": {
+        "note": "Odůvodněte prosím rozhodnutí (1 až 1000 znaků).",
+        "forbidden": "Musí rozhodnout jiný admin: původní rozhodnutí jste učinili vy.",
+        "notFound": "Tato stížnost již neexistuje.",
+        "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
       }
     }
   },

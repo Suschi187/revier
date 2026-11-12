@@ -48,7 +48,7 @@ export const STATIC_SECTIONS = [
  */
 export const STATIC_ROUTES: Record<(typeof STATIC_SECTIONS)[number], readonly string[]> = {
   account: ["", "blocked", "data", "delete", "favorites", "listings", "listings/new", "listings/:id/edit", "messages", "messages/:id", "messages/:id/report", "messages/new/:id", "profile", "report/listing/:id", "report/profile/:id", "reports", "decisions", "decisions/:id/appeal", "searches", "verification"],
-  admin: ["", "admins", "audit", "listings", "listings/:id", "mfa", "verifications", "verifications/:id"],
+  admin: ["", "admins", "appeals", "appeals/:id", "audit", "listings", "listings/:id", "mfa", "reports", "reports/listing/:id", "reports/message/:id", "reports/profile/:id", "users", "users/:id", "verifications", "verifications/:id"],
   auth: ["apple", "callback", "confirm"],
   cookies: [""],
   forbidden: [""],

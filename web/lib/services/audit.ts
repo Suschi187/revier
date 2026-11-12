@@ -17,7 +17,14 @@ export const AUDIT_ACTIONS = [
   "profile.unblocked",
   "verification.verified",
   "verification.rejected",
+  "verification.revoked",
+  "verification.document_viewed",
+  "profile.warned",
   "report.handled",
+  "report.reopened",
+  "report.message_viewed",
+  "appeal.upheld",
+  "appeal.reversed",
 ] as const;
 
 export const AUDIT_PAGE = 50;

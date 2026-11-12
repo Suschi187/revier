@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
+import { countOpenAppeals, countOpenReports } from "@/lib/services/admin-reports";
 import { countPendingVerifications } from "@/lib/services/admin-verifications";
 import { countPendingListings, countStuckDeletions } from "@/lib/services/moderation";
 
@@ -19,10 +20,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdminPage() {
   const locale = (await getLocale()) as AppLocale;
   const me = await requireAdmin(locale, `/${locale}/admin`);
-  const [t, pending, verifications, stuck] = await Promise.all([
+  const [t, pending, verifications, reports, appeals, stuck] = await Promise.all([
     getTranslations("Admin.overview"),
     countPendingListings(me.id),
     countPendingVerifications(me.id),
+    countOpenReports(),
+    countOpenAppeals(),
     countStuckDeletions(),
   ]);
   return (
@@ -38,7 +41,18 @@ export default async function AdminPage() {
       <Link href="/admin/verifications" className="mt-2 block underline">
         {t("verificationsLink")}
       </Link>
-      <Link href="/admin/audit" className="mt-6 block underline">
+      <p className="mt-6">{t("reportsOpen", { count: reports })}</p>
+      <Link href="/admin/reports" className="mt-2 block underline">
+        {t("reportsLink")}
+      </Link>
+      <p className="mt-6">{t("appealsOpen", { count: appeals })}</p>
+      <Link href="/admin/appeals" className="mt-2 block underline">
+        {t("appealsLink")}
+      </Link>
+      <Link href="/admin/users" className="mt-6 block underline">
+        {t("usersLink")}
+      </Link>
+      <Link href="/admin/audit" className="mt-2 block underline">
         {t("auditLink")}
       </Link>
       <Link href="/admin/admins" className="mt-2 block underline">

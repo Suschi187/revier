@@ -69,3 +69,53 @@ export const appealSchema = z.object({
     .transform((v) => v.trim())
     .refine((v) => [...v].length >= APPEAL_MIN && [...v].length <= APPEAL_MAX, { error: "text" }),
 });
+
+/** Maßnahmen je Zieltyp im Admin (resolve_reports); target_gone setzt nur die DB. */
+export const OUTCOMES_BY_TARGET: Record<ReportTarget, readonly Exclude<ReportOutcome, "target_gone">[]> = {
+  listing: ["no_action", "content_removed", "point_removed", "account_warned", "account_blocked"],
+  profile: ["no_action", "account_warned", "account_blocked"],
+  message: ["no_action", "account_warned", "account_blocked"],
+};
+
+const adminNote = z
+  .string()
+  .transform((v) => v.trim())
+  .refine((v) => [...v].length <= REPORT_NOTE_MAX, { error: "note" })
+  .transform((v) => v || null);
+
+/** Admin-Formular „Meldungen entscheiden“: Code passend zur Maßnahme, Begründung bei Entfernen und „anderer Grund“. */
+export const resolveSchema = z
+  .object({
+    outcome: z.enum(["no_action", "content_removed", "point_removed", "account_warned", "account_blocked"]),
+    code: z.string().nullable(),
+    note: adminNote,
+    version: z.string().regex(/^[0-9a-f]{64}$/).nullable(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.outcome === "account_warned" || value.outcome === "account_blocked") {
+      if (!(ACCOUNT_CODES as readonly string[]).includes(value.code ?? "")) ctx.addIssue({ code: "custom", path: ["code"], message: "code" });
+    }
+    if (value.outcome === "content_removed") {
+      if (!value.code) ctx.addIssue({ code: "custom", path: ["code"], message: "code" });
+      if (!value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "note" });
+      if (!value.version) ctx.addIssue({ code: "custom", path: ["version"], message: "changed" });
+    }
+    if (value.code === "other" && !value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "note" });
+  });
+
+/** Admin-Formular „Konto sperren / verwarnen / entsperren“. */
+export const accountActionSchema = z
+  .object({ action: z.enum(["block", "unblock", "warn"]), code: z.enum(ACCOUNT_CODES).nullable(), note: adminNote })
+  .superRefine((value, ctx) => {
+    if (value.action !== "unblock" && !value.code) ctx.addIssue({ code: "custom", path: ["code"], message: "code" });
+    if (value.code === "other" && !value.note) ctx.addIssue({ code: "custom", path: ["note"], message: "note" });
+  });
+
+/** Admin-Formular „Beschwerde entscheiden“: Begründung Pflicht (Art. 20 Abs. 5). */
+export const appealDecisionSchema = z.object({
+  outcome: z.enum(["upheld", "reversed"]),
+  note: z
+    .string()
+    .transform((v) => v.trim())
+    .refine((v) => [...v].length >= 1 && [...v].length <= REPORT_NOTE_MAX, { error: "note" }),
+});

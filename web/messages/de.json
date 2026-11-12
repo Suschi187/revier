@@ -641,7 +641,12 @@
       "adminsLink": "Admins verwalten",
       "stuckDeletions": "{count, plural, one {# Konto-Löschung hängt} other {# Konto-Löschungen hängen}} (wird automatisch wiederholt).",
       "verificationsPending": "{count, plural, =0 {Keine Verifizierungen zur Prüfung.} one {# Verifizierung zur Prüfung.} other {# Verifizierungen zur Prüfung.}}",
-      "verificationsLink": "Verifizierungen prüfen"
+      "verificationsLink": "Verifizierungen prüfen",
+      "reportsOpen": "{count, plural, =0 {Keine offenen Meldungen.} one {# offene Meldung.} other {# offene Meldungen.}}",
+      "reportsLink": "Meldungen prüfen",
+      "appealsOpen": "{count, plural, =0 {Keine offenen Beschwerden.} one {# offene Beschwerde.} other {# offene Beschwerden.}}",
+      "appealsLink": "Beschwerden prüfen",
+      "usersLink": "Konto suchen"
     },
     "queue": {
       "metaTitle": "Anzeigen zur Freigabe",
@@ -712,7 +717,14 @@
         "profile_unblocked": "Konto entsperrt",
         "verification_verified": "Verifizierung bestätigt",
         "verification_rejected": "Verifizierung abgelehnt",
-        "report_handled": "Meldung bearbeitet"
+        "report_handled": "Meldung bearbeitet",
+        "verification_revoked": "Verifizierung widerrufen",
+        "verification_document_viewed": "Verifizierungsdokument angesehen",
+        "profile_warned": "Konto verwarnt",
+        "report_reopened": "Meldung wieder geöffnet",
+        "report_message_viewed": "Gemeldete Nachricht angesehen",
+        "appeal_upheld": "Beschwerde zurückgewiesen",
+        "appeal_reversed": "Beschwerde stattgegeben"
       },
       "detailKeys": {
         "from": "Vorher",
@@ -722,7 +734,11 @@
         "via": "Über",
         "target_type": "Zieltyp",
         "user_id": "Konto",
-        "status": "Status"
+        "status": "Status",
+        "outcome": "Ergebnis",
+        "note": "Begründung",
+        "same_reviewer": "Gleicher Admin",
+        "decision_action": "Entscheidung"
       },
       "via": {
         "ui": "Admin-Bereich",
@@ -826,6 +842,148 @@
           "notFound": "Den Antrag gibt es nicht mehr.",
           "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
         }
+      }
+    },
+    "reports": {
+      "metaTitle": "Meldungen",
+      "title": "Offene Meldungen",
+      "back": "Zurück zum Admin-Bereich",
+      "empty": "Keine offenen Meldungen.",
+      "noLabel": "(ohne Namen)",
+      "count": "{count, plural, one {# Meldung} other {# Meldungen}}",
+      "oldest": "älteste {time}",
+      "gone": "Inhalt nicht mehr vorhanden",
+      "more": "Weitere Meldungen",
+      "notices": {
+        "resolved": "Meldungen erledigt und Maßnahme ausgeführt.",
+        "decided": "Diese Meldungen sind schon erledigt."
+      },
+      "detailMetaTitle": "Meldungen prüfen",
+      "goneHint": "Den Inhalt gibt es nicht mehr. Beim Erledigen wird „Inhalt nicht mehr vorhanden“ festgehalten.",
+      "reviewLink": "In der Prüfwarteschlange öffnen",
+      "publicLink": "Öffentliche Seite",
+      "account": "Betroffenes Konto",
+      "listings": "{count, plural, one {# Anzeige} other {# Anzeigen}}",
+      "memberSince": "Dabei seit {date}",
+      "blocked": "Das Konto ist gesperrt.",
+      "hasRole": "Das Konto hat eine Rolle: keine Verwarnung oder Sperre (erst die Rolle entziehen).",
+      "own": "Dein eigenes Konto: Ein anderer Admin entscheidet.",
+      "openReports": "{count, plural, =0 {Keine offenen Meldungen} one {# offene Meldung} other {# offene Meldungen}}",
+      "handledBefore": "{count, plural, one {# frühere Meldung schon erledigt} other {# frühere Meldungen schon erledigt}}",
+      "showMessage": "Gemeldete Nachricht anzeigen",
+      "showMessageHint": "Jede Ansicht wird im Audit-Log festgehalten.",
+      "messageCaption": "Von {sender}, gesendet {date}",
+      "measure": "Entscheidung",
+      "measures": {
+        "no_action": "Keine Maßnahme",
+        "content_removed": "Anzeige entfernen",
+        "point_removed": "Kartenpunkt entfernen",
+        "account_warned": "Konto verwarnen",
+        "account_blocked": "Konto sperren"
+      },
+      "code": "Grund",
+      "codeNone": "Grund wählen",
+      "codesListing": "Anzeige",
+      "codesAccount": "Konto",
+      "codeHint": "Entfernen braucht einen Grund für Anzeigen, Verwarnen und Sperren einen Grund für Konten.",
+      "note": "Begründung für die Betroffenen",
+      "noteHint": "Das betroffene Konto sieht sie als Begründung; Pflicht beim Entfernen und bei „Anderer Grund“. Meldende erfahren nur das Ergebnis. Keine internen Notizen.",
+      "submit": "Meldungen erledigen",
+      "errors": {
+        "changed": "Die Anzeige hat sich seit dem Öffnen geändert. Bitte neu laden und erneut prüfen.",
+        "code": "Bitte wähle einen Grund, der zur Maßnahme passt.",
+        "note": "Bitte begründe die Entscheidung (höchstens 1000 Zeichen).",
+        "forbidden": "Das geht nicht (eigenes Konto oder keine Zwei-Faktor-Anmeldung).",
+        "adminRole": "Konten mit Rolle lassen sich nicht verwarnen oder sperren.",
+        "notFound": "Diesen Inhalt gibt es nicht mehr.",
+        "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
+      }
+    },
+    "users": {
+      "metaTitle": "Konten",
+      "title": "Konto suchen",
+      "back": "Zurück zum Admin-Bereich",
+      "intro": "Exakte E-Mail-Adresse oder Konto-ID. Jede Suche steht im Audit-Log (ohne die Adresse) und zählt zur stündlichen Grenze.",
+      "query": "E-Mail-Adresse oder Konto-ID",
+      "search": "Suchen",
+      "errors": {
+        "empty": "Bitte gib eine E-Mail-Adresse oder Konto-ID ein.",
+        "notFound": "Kein Konto gefunden.",
+        "limit": "Zu viele Suchen in der letzten Stunde.",
+        "failed": "Die Suche ist fehlgeschlagen. Bitte versuche es noch einmal.",
+        "code": "Bitte wähle einen Grund.",
+        "note": "Bitte begründe die Entscheidung (höchstens 1000 Zeichen).",
+        "forbidden": "Das geht nicht (eigenes Konto oder keine Zwei-Faktor-Anmeldung).",
+        "adminRole": "Konten mit Rolle lassen sich nicht verwarnen oder sperren.",
+        "decided": "Das Konto hat diesen Status schon."
+      },
+      "detailMetaTitle": "Konto",
+      "accountType": "Kontotyp",
+      "country": "Land",
+      "memberSince": "Dabei seit",
+      "verification": "Verifizierung",
+      "listings": "Anzeigen",
+      "openReports": "Offene Meldungen",
+      "status": "Status",
+      "blocked": "Gesperrt",
+      "active": "Aktiv",
+      "hasRole": "Dieses Konto hat eine Rolle. Entziehe die Rolle, bevor du verwarnst oder sperrst.",
+      "action": "Maßnahme",
+      "actions": {
+        "warn": "Verwarnen",
+        "block": "Sperren",
+        "unblock": "Entsperren"
+      },
+      "code": "Grund",
+      "codeNone": "Grund wählen",
+      "note": "Begründung für das Konto",
+      "noteHint": "Das Konto sieht sie als Begründung (Pflicht bei „Anderer Grund“). Keine internen Notizen.",
+      "submit": "Ausführen",
+      "notices": {
+        "block": "Konto gesperrt.",
+        "unblock": "Konto entsperrt.",
+        "warn": "Verwarnung gesendet."
+      }
+    },
+    "appeals": {
+      "metaTitle": "Beschwerden",
+      "title": "Offene Beschwerden",
+      "back": "Zurück zum Admin-Bereich",
+      "empty": "Keine offenen Beschwerden.",
+      "itemTitle": "{action}: {name}",
+      "waiting": "Eingelegt {time}",
+      "byMe": "Deine eigene ursprüngliche Entscheidung",
+      "more": "Weitere Beschwerden",
+      "notices": {
+        "upheld": "Beschwerde zurückgewiesen, die Entscheidung bleibt.",
+        "reversed": "Beschwerde stattgegeben, die Maßnahme ist zurückgenommen.",
+        "decided": "Über diese Beschwerde ist schon entschieden."
+      },
+      "detailMetaTitle": "Beschwerde prüfen",
+      "submitted": "Eingelegt am {date}",
+      "decision": "Ursprüngliche Entscheidung",
+      "decisionGone": "Die ursprüngliche Entscheidung ist nicht mehr gespeichert (Aufbewahrungsfrist).",
+      "code": "Code",
+      "targetLink": "Meldungen zu dieser Anzeige ansehen",
+      "text": "Begründung der Beschwerde",
+      "status": {
+        "upheld": "Zurückgewiesen",
+        "reversed": "Stattgegeben"
+      },
+      "sameReviewer": "vom selben Admin entschieden, kein anderer Admin verfügbar",
+      "outcome": "Entscheidung",
+      "outcomes": {
+        "upheld": "Beschwerde zurückweisen (Entscheidung bleibt)",
+        "reversed": "Beschwerde stattgeben (Maßnahme zurücknehmen)"
+      },
+      "note": "Begründung für die Person",
+      "noteHint": "Pflicht. Die Person, die angefochten hat, sieht sie. Keine internen Notizen.",
+      "submit": "Entscheidung speichern",
+      "errors": {
+        "note": "Bitte begründe die Entscheidung (1 bis 1000 Zeichen).",
+        "forbidden": "Ein anderer Admin muss entscheiden: Du hast die ursprüngliche Entscheidung getroffen.",
+        "notFound": "Diese Beschwerde gibt es nicht mehr.",
+        "failed": "Speichern fehlgeschlagen. Bitte versuche es noch einmal."
       }
     }
   },

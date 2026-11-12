@@ -641,7 +641,12 @@
       "adminsLink": "Manage admins",
       "stuckDeletions": "{count, plural, one {# account deletion is stuck} other {# account deletions are stuck}} (retried automatically).",
       "verificationsPending": "{count, plural, =0 {No verification requests to review.} one {# verification request to review.} other {# verification requests to review.}}",
-      "verificationsLink": "Review verifications"
+      "verificationsLink": "Review verifications",
+      "reportsOpen": "{count, plural, =0 {No open reports.} one {# open report.} other {# open reports.}}",
+      "reportsLink": "Review reports",
+      "appealsOpen": "{count, plural, =0 {No open challenges.} one {# open challenge.} other {# open challenges.}}",
+      "appealsLink": "Review challenges",
+      "usersLink": "Find an account"
     },
     "queue": {
       "metaTitle": "Review queue",
@@ -712,7 +717,14 @@
         "profile_unblocked": "Account unblocked",
         "verification_verified": "Verification confirmed",
         "verification_rejected": "Verification rejected",
-        "report_handled": "Report handled"
+        "report_handled": "Report handled",
+        "verification_revoked": "Verification revoked",
+        "verification_document_viewed": "Verification document viewed",
+        "profile_warned": "Account warned",
+        "report_reopened": "Report reopened",
+        "report_message_viewed": "Reported message viewed",
+        "appeal_upheld": "Challenge rejected",
+        "appeal_reversed": "Challenge granted"
       },
       "detailKeys": {
         "from": "Before",
@@ -722,7 +734,11 @@
         "via": "Via",
         "target_type": "Target type",
         "user_id": "Account",
-        "status": "Status"
+        "status": "Status",
+        "outcome": "Result",
+        "note": "Explanation",
+        "same_reviewer": "Same admin",
+        "decision_action": "Decision"
       },
       "via": {
         "ui": "Admin area",
@@ -826,6 +842,148 @@
           "notFound": "The request no longer exists.",
           "failed": "Saving failed. Please try again."
         }
+      }
+    },
+    "reports": {
+      "metaTitle": "Reports",
+      "title": "Open reports",
+      "back": "Back to the admin area",
+      "empty": "No open reports.",
+      "noLabel": "(no name)",
+      "count": "{count, plural, one {# report} other {# reports}}",
+      "oldest": "oldest {time}",
+      "gone": "Content no longer available",
+      "more": "More reports",
+      "notices": {
+        "resolved": "Reports closed and measure applied.",
+        "decided": "These reports have already been handled."
+      },
+      "detailMetaTitle": "Review reports",
+      "goneHint": "The content no longer exists. Closing records “Content no longer available”.",
+      "reviewLink": "Open in the review queue",
+      "publicLink": "Public page",
+      "account": "Account concerned",
+      "listings": "{count, plural, one {# listing} other {# listings}}",
+      "memberSince": "Member since {date}",
+      "blocked": "The account is blocked.",
+      "hasRole": "The account has a role: no warning or block (remove the role first).",
+      "own": "Your own account: another admin decides.",
+      "openReports": "{count, plural, =0 {No open reports} one {# open report} other {# open reports}}",
+      "handledBefore": "{count, plural, one {# earlier report already handled} other {# earlier reports already handled}}",
+      "showMessage": "Show reported message",
+      "showMessageHint": "Each view is recorded in the audit log.",
+      "messageCaption": "From {sender}, sent {date}",
+      "measure": "Decision",
+      "measures": {
+        "no_action": "No action",
+        "content_removed": "Remove listing",
+        "point_removed": "Remove map point",
+        "account_warned": "Warn account",
+        "account_blocked": "Block account"
+      },
+      "code": "Reason",
+      "codeNone": "Choose a reason",
+      "codesListing": "Listing",
+      "codesAccount": "Account",
+      "codeHint": "Removing a listing needs a listing reason, warnings and blocks an account reason.",
+      "note": "Explanation for those concerned",
+      "noteHint": "Shown to the account concerned as the reason; required for removals and “Other reason”. Reporters only learn the result. No internal notes.",
+      "submit": "Close reports",
+      "errors": {
+        "changed": "The listing has changed since it was opened. Please reload and check again.",
+        "code": "Please choose a reason that fits the measure.",
+        "note": "Please explain the decision (at most 1000 characters).",
+        "forbidden": "Not possible (own account or missing two-factor login).",
+        "adminRole": "Accounts with a role cannot be warned or blocked.",
+        "notFound": "This content is no longer available.",
+        "failed": "Saving failed. Please try again."
+      }
+    },
+    "users": {
+      "metaTitle": "Accounts",
+      "title": "Find an account",
+      "back": "Back to the admin area",
+      "intro": "Exact email address or account ID. Each search is recorded in the audit log (without the address) and counts towards the hourly limit.",
+      "query": "Email address or account ID",
+      "search": "Search",
+      "errors": {
+        "empty": "Please enter an email address or account ID.",
+        "notFound": "No account found.",
+        "limit": "Too many searches in the last hour.",
+        "failed": "The search failed. Please try again.",
+        "code": "Please choose a reason.",
+        "note": "Please explain the decision (at most 1000 characters).",
+        "forbidden": "Not possible (own account or missing two-factor login).",
+        "adminRole": "Accounts with a role cannot be warned or blocked.",
+        "decided": "The account already has this status."
+      },
+      "detailMetaTitle": "Account",
+      "accountType": "Account type",
+      "country": "Country",
+      "memberSince": "Member since",
+      "verification": "Verification",
+      "listings": "Listings",
+      "openReports": "Open reports",
+      "status": "Status",
+      "blocked": "Blocked",
+      "active": "Active",
+      "hasRole": "This account has a role. Remove the role before warning or blocking.",
+      "action": "Measure",
+      "actions": {
+        "warn": "Warn",
+        "block": "Block",
+        "unblock": "Unblock"
+      },
+      "code": "Reason",
+      "codeNone": "Choose a reason",
+      "note": "Explanation for the account",
+      "noteHint": "Shown to the account as the reason (required for “Other reason”). No internal notes.",
+      "submit": "Apply",
+      "notices": {
+        "block": "Account blocked.",
+        "unblock": "Account unblocked.",
+        "warn": "Warning sent."
+      }
+    },
+    "appeals": {
+      "metaTitle": "Challenges",
+      "title": "Open challenges",
+      "back": "Back to the admin area",
+      "empty": "No open challenges.",
+      "itemTitle": "{action}: {name}",
+      "waiting": "Submitted {time}",
+      "byMe": "Your own original decision",
+      "more": "More challenges",
+      "notices": {
+        "upheld": "Challenge rejected, the decision stands.",
+        "reversed": "Challenge granted, the measure has been reversed.",
+        "decided": "This challenge has already been decided."
+      },
+      "detailMetaTitle": "Review challenge",
+      "submitted": "Submitted on {date}",
+      "decision": "Original decision",
+      "decisionGone": "The original decision is no longer stored (retention period).",
+      "code": "Code",
+      "targetLink": "View reports on this listing",
+      "text": "Reasons given",
+      "status": {
+        "upheld": "Rejected",
+        "reversed": "Granted"
+      },
+      "sameReviewer": "decided by the same admin, no other admin available",
+      "outcome": "Decision",
+      "outcomes": {
+        "upheld": "Reject the challenge (decision stands)",
+        "reversed": "Grant the challenge (reverse the measure)"
+      },
+      "note": "Reasons for the person",
+      "noteHint": "Required. Shown to the person who challenged. No internal notes.",
+      "submit": "Save decision",
+      "errors": {
+        "note": "Please give reasons (1 to 1000 characters).",
+        "forbidden": "Another admin must decide: you made the original decision.",
+        "notFound": "This challenge no longer exists.",
+        "failed": "Saving failed. Please try again."
       }
     }
   },

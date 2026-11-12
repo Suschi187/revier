@@ -641,7 +641,12 @@
       "adminsLink": "Zarządzaj administratorami",
       "stuckDeletions": "{count, plural, one {# usunięcie konta utknęło} few {# usunięcia kont utknęły} many {# usunięć kont utknęło} other {# usunięcia kont utknęło}} (ponawiane automatycznie).",
       "verificationsPending": "{count, plural, =0 {Brak wniosków o weryfikację do sprawdzenia.} one {# wniosek o weryfikację do sprawdzenia.} few {# wnioski o weryfikację do sprawdzenia.} other {# wniosków o weryfikację do sprawdzenia.}}",
-      "verificationsLink": "Sprawdź weryfikacje"
+      "verificationsLink": "Sprawdź weryfikacje",
+      "reportsOpen": "{count, plural, =0 {Brak otwartych zgłoszeń.} one {# otwarte zgłoszenie.} few {# otwarte zgłoszenia.} other {# otwartych zgłoszeń.}}",
+      "reportsLink": "Sprawdź zgłoszenia",
+      "appealsOpen": "{count, plural, =0 {Brak otwartych skarg.} one {# otwarta skarga.} few {# otwarte skargi.} other {# otwartych skarg.}}",
+      "appealsLink": "Sprawdź skargi",
+      "usersLink": "Wyszukaj konto"
     },
     "queue": {
       "metaTitle": "Ogłoszenia do zatwierdzenia",
@@ -712,7 +717,14 @@
         "profile_unblocked": "Konto odblokowane",
         "verification_verified": "Weryfikacja potwierdzona",
         "verification_rejected": "Weryfikacja odrzucona",
-        "report_handled": "Zgłoszenie rozpatrzone"
+        "report_handled": "Zgłoszenie rozpatrzone",
+        "verification_revoked": "Weryfikacja cofnięta",
+        "verification_document_viewed": "Dokument weryfikacyjny wyświetlony",
+        "profile_warned": "Konto upomniane",
+        "report_reopened": "Zgłoszenie ponownie otwarte",
+        "report_message_viewed": "Zgłoszona wiadomość wyświetlona",
+        "appeal_upheld": "Skarga oddalona",
+        "appeal_reversed": "Skarga uwzględniona"
       },
       "detailKeys": {
         "from": "Wcześniej",
@@ -722,7 +734,11 @@
         "via": "Przez",
         "target_type": "Typ celu",
         "user_id": "Konto",
-        "status": "Status"
+        "status": "Status",
+        "outcome": "Wynik",
+        "note": "Uzasadnienie",
+        "same_reviewer": "Ten sam administrator",
+        "decision_action": "Decyzja"
       },
       "via": {
         "ui": "Panel administracyjny",
@@ -826,6 +842,148 @@
           "notFound": "Ten wniosek już nie istnieje.",
           "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
         }
+      }
+    },
+    "reports": {
+      "metaTitle": "Zgłoszenia",
+      "title": "Otwarte zgłoszenia",
+      "back": "Powrót do panelu administracyjnego",
+      "empty": "Brak otwartych zgłoszeń.",
+      "noLabel": "(bez nazwy)",
+      "count": "{count, plural, one {# zgłoszenie} few {# zgłoszenia} other {# zgłoszeń}}",
+      "oldest": "najstarsze {time}",
+      "gone": "Treść już niedostępna",
+      "more": "Więcej zgłoszeń",
+      "notices": {
+        "resolved": "Zgłoszenia zamknięte, działanie wykonane.",
+        "decided": "Te zgłoszenia zostały już rozpatrzone."
+      },
+      "detailMetaTitle": "Sprawdzanie zgłoszeń",
+      "goneHint": "Ta treść już nie istnieje. Przy zamknięciu zostanie zapisane „Treść już niedostępna”.",
+      "reviewLink": "Otwórz w kolejce do sprawdzenia",
+      "publicLink": "Strona publiczna",
+      "account": "Konto, którego dotyczy",
+      "listings": "{count, plural, one {# ogłoszenie} few {# ogłoszenia} other {# ogłoszeń}}",
+      "memberSince": "Członek od {date}",
+      "blocked": "Konto jest zablokowane.",
+      "hasRole": "Konto ma rolę: bez upomnienia ani blokady (najpierw odbierz rolę).",
+      "own": "Twoje własne konto: decyduje inny administrator.",
+      "openReports": "{count, plural, =0 {Brak otwartych zgłoszeń} one {# otwarte zgłoszenie} few {# otwarte zgłoszenia} other {# otwartych zgłoszeń}}",
+      "handledBefore": "{count, plural, one {# wcześniejsze zgłoszenie już rozpatrzone} few {# wcześniejsze zgłoszenia już rozpatrzone} other {# wcześniejszych zgłoszeń już rozpatrzonych}}",
+      "showMessage": "Pokaż zgłoszoną wiadomość",
+      "showMessageHint": "Każde wyświetlenie zostanie zapisane w dzienniku audytu.",
+      "messageCaption": "Od {sender}, wysłano {date}",
+      "measure": "Decyzja",
+      "measures": {
+        "no_action": "Brak działań",
+        "content_removed": "Usuń ogłoszenie",
+        "point_removed": "Usuń punkt na mapie",
+        "account_warned": "Upomnij konto",
+        "account_blocked": "Zablokuj konto"
+      },
+      "code": "Powód",
+      "codeNone": "Wybierz powód",
+      "codesListing": "Ogłoszenie",
+      "codesAccount": "Konto",
+      "codeHint": "Usunięcie wymaga powodu dla ogłoszeń, upomnienie i blokada powodu dla kont.",
+      "note": "Uzasadnienie dla osób, których dotyczy",
+      "noteHint": "Konto, którego dotyczy, zobaczy je jako uzasadnienie; wymagane przy usunięciu i przy „Inny powód”. Zgłaszający poznają tylko wynik. Bez notatek wewnętrznych.",
+      "submit": "Zamknij zgłoszenia",
+      "errors": {
+        "changed": "Ogłoszenie zmieniło się od otwarcia. Odśwież stronę i sprawdź ponownie.",
+        "code": "Wybierz powód pasujący do działania.",
+        "note": "Uzasadnij decyzję (maksymalnie 1000 znaków).",
+        "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
+        "adminRole": "Kont z rolą nie można upominać ani blokować.",
+        "notFound": "Ta treść jest już niedostępna.",
+        "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+      }
+    },
+    "users": {
+      "metaTitle": "Konta",
+      "title": "Wyszukaj konto",
+      "back": "Powrót do panelu administracyjnego",
+      "intro": "Dokładny adres e-mail lub identyfikator konta. Każde wyszukiwanie jest zapisywane w dzienniku audytu (bez adresu) i wlicza się do limitu godzinowego.",
+      "query": "Adres e-mail lub identyfikator konta",
+      "search": "Szukaj",
+      "errors": {
+        "empty": "Podaj adres e-mail lub identyfikator konta.",
+        "notFound": "Nie znaleziono konta.",
+        "limit": "Zbyt wiele wyszukiwań w ostatniej godzinie.",
+        "failed": "Wyszukiwanie nie powiodło się. Spróbuj ponownie.",
+        "code": "Wybierz powód.",
+        "note": "Uzasadnij decyzję (maksymalnie 1000 znaków).",
+        "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
+        "adminRole": "Kont z rolą nie można upominać ani blokować.",
+        "decided": "Konto ma już ten status."
+      },
+      "detailMetaTitle": "Konto",
+      "accountType": "Rodzaj konta",
+      "country": "Kraj",
+      "memberSince": "Członek od",
+      "verification": "Weryfikacja",
+      "listings": "Ogłoszenia",
+      "openReports": "Otwarte zgłoszenia",
+      "status": "Status",
+      "blocked": "Zablokowane",
+      "active": "Aktywne",
+      "hasRole": "To konto ma rolę. Odbierz rolę przed upomnieniem lub blokadą.",
+      "action": "Działanie",
+      "actions": {
+        "warn": "Upomnij",
+        "block": "Zablokuj",
+        "unblock": "Odblokuj"
+      },
+      "code": "Powód",
+      "codeNone": "Wybierz powód",
+      "note": "Uzasadnienie dla konta",
+      "noteHint": "Konto zobaczy je jako uzasadnienie (wymagane przy „Inny powód”). Bez notatek wewnętrznych.",
+      "submit": "Wykonaj",
+      "notices": {
+        "block": "Konto zablokowane.",
+        "unblock": "Konto odblokowane.",
+        "warn": "Upomnienie wysłane."
+      }
+    },
+    "appeals": {
+      "metaTitle": "Skargi",
+      "title": "Otwarte skargi",
+      "back": "Powrót do panelu administracyjnego",
+      "empty": "Brak otwartych skarg.",
+      "itemTitle": "{action}: {name}",
+      "waiting": "Złożono {time}",
+      "byMe": "Twoja własna pierwotna decyzja",
+      "more": "Więcej skarg",
+      "notices": {
+        "upheld": "Skarga oddalona, decyzja pozostaje w mocy.",
+        "reversed": "Skarga uwzględniona, działanie zostało cofnięte.",
+        "decided": "W sprawie tej skargi już zdecydowano."
+      },
+      "detailMetaTitle": "Rozpatrzenie skargi",
+      "submitted": "Złożono dnia {date}",
+      "decision": "Pierwotna decyzja",
+      "decisionGone": "Pierwotna decyzja nie jest już przechowywana (okres przechowywania).",
+      "code": "Kod",
+      "targetLink": "Zobacz zgłoszenia dotyczące tego ogłoszenia",
+      "text": "Uzasadnienie skargi",
+      "status": {
+        "upheld": "Oddalono",
+        "reversed": "Uwzględniono"
+      },
+      "sameReviewer": "zdecydował ten sam administrator, brak innego dostępnego administratora",
+      "outcome": "Decyzja",
+      "outcomes": {
+        "upheld": "Oddal skargę (decyzja pozostaje)",
+        "reversed": "Uwzględnij skargę (cofnij działanie)"
+      },
+      "note": "Uzasadnienie dla osoby",
+      "noteHint": "Wymagane. Osoba składająca skargę je zobaczy. Bez notatek wewnętrznych.",
+      "submit": "Zapisz decyzję",
+      "errors": {
+        "note": "Uzasadnij decyzję (od 1 do 1000 znaków).",
+        "forbidden": "Musi zdecydować inny administrator: to Ty podjąłeś pierwotną decyzję.",
+        "notFound": "Ta skarga już nie istnieje.",
+        "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
       }
     }
   },
