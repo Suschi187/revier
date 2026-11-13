@@ -76,15 +76,15 @@ export async function ListingCard({
     return (
       // Ganze Karte klickbar über den Titel-Link (::after); Merken liegt darüber (z-10).
       <article className={`${ui.card} relative flex h-full min-w-0 flex-col overflow-hidden has-[a:focus-visible]:outline has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-brand-ink`}>
-        <div className="relative aspect-[4/3] bg-olive">
+        <div className="relative aspect-photo bg-olive">
           {media}
           {directionBadge}
           {favorite && <div className="absolute right-1.5 top-1.5 z-10">{favorite}</div>}
         </div>
         <div className="flex flex-1 flex-col gap-1 p-3.5">
-          <p className="text-[0.8125rem] text-muted">{place} · {date}</p>
-          <h3 className="text-[0.9375rem] font-semibold leading-snug [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>{title}</h3>
-          {price && <p className="mt-auto pt-1 font-display text-[1.0625rem] font-extrabold">{price}</p>}
+          <p className="text-meta text-muted">{place} · {date}</p>
+          <h3 className="text-compact font-semibold leading-snug [overflow-wrap:anywhere] hyphens-auto" lang={card.content_language}>{title}</h3>
+          {price && <p className="mt-auto pt-1 font-display text-price font-extrabold">{price}</p>}
         </div>
       </article>
     );
@@ -92,12 +92,12 @@ export async function ListingCard({
 
   return (
     <article className={`${ui.card} relative grid min-w-0 grid-cols-[7rem_minmax(0,1fr)] gap-x-3 gap-y-2 p-3 sm:grid-cols-[12rem_minmax(0,1fr)_auto] sm:gap-x-4 has-[a:focus-visible]:outline has-[a:focus-visible]:outline-3 has-[a:focus-visible]:outline-brand-ink`}>
-      <div className="relative aspect-[4/3] self-start overflow-hidden rounded-btn bg-olive">
+      <div className="relative aspect-photo self-start overflow-hidden rounded-btn bg-olive">
         {media}
         {directionBadge}
       </div>
       <div className="flex min-w-0 flex-col gap-1.5">
-        <p className="flex flex-wrap justify-between gap-x-3 text-[0.8125rem] text-muted">
+        <p className="flex flex-wrap justify-between gap-x-3 text-meta text-muted">
           <span>{place}{card.postal_prefix && <> · {tp("postalArea", { prefix: card.postal_prefix })}</>}</span>
           <span>{date}</span>
         </p>

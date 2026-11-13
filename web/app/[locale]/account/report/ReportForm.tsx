@@ -47,7 +47,7 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
         <div>
           <label htmlFor="report-note" className="block font-medium">{t("note")}</label>
           <textarea id="report-note" name="note" rows={4} maxLength={REPORT_NOTE_MAX} aria-describedby="report-note-hint"
-            className="w-full rounded border border-field px-2 py-1.5" />
+            className="w-full rounded-btn border border-field px-2 py-1.5" />
           <p id="report-note-hint" className="text-sm text-muted">{t("noteHint")}</p>
         </div>
         {/* PLATZHALTER (SPEC 7.2): Wortlaut der Zusicherung nach DSA Art. 16 Abs. 2 d liefert der Anwalt; nicht gespeichert. */}
@@ -55,7 +55,7 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
           <input type="checkbox" name="goodFaith" required className="mt-1" />
           <span>{t("goodFaith")}</span>
         </label>
-        <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
+        <button type="submit" className="justify-self-start rounded-btn bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
       </form>
     </main>
   );

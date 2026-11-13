@@ -129,7 +129,7 @@ export default async function HomePage() {
       <section aria-labelledby="home-title" className="on-dark relative flex min-h-64 items-center overflow-hidden rounded-card bg-forest text-offwhite">
         <Contours />
         <div className="relative max-w-2xl px-6 py-9 sm:px-10">
-          <p className="mb-2.5 font-display text-[0.8125rem] font-bold uppercase tracking-eyebrow text-brand">{tb("tagline")}</p>
+          <p className="mb-2.5 font-display text-meta font-bold uppercase tracking-eyebrow text-brand">{tb("tagline")}</p>
           <h1 id="home-title" className={`${ui.headingCaps} text-4xl leading-none tracking-tight sm:text-5xl`}>{th("title")}</h1>
           <p className="mb-6 mt-3 text-lg leading-relaxed">{t("heroText")}</p>
           <Link href="/account/listings/new" prefetch={false} className={ui.btnPrimary}>

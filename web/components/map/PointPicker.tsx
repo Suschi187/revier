@@ -9,7 +9,7 @@ import type { Bounds, MapApi } from "./MapCanvas";
 // Fadenkreuz-Button setzt `set` mit lat/lng, „Punkt entfernen“ setzt `clear`. Der gespeicherte Punkt erscheint nur als
 // „So erscheint die Lage öffentlich“ und nie in den Eingabefeldern, sonst verschöbe jedes Speichern ihn erneut.
 
-const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-80 w-full rounded bg-sand" /> });
+const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-80 w-full rounded-btn bg-sand" /> });
 
 export type PickerTexts = {
   label: string;
@@ -115,7 +115,7 @@ export function PointPicker({
         </span>
       </div>
       <div className="mt-2 flex flex-wrap gap-3">
-        <button type="button" onClick={setCentre} disabled={!ready} className="rounded border border-field px-3 py-1.5 disabled:opacity-50">{texts.setCentre}</button>
+        <button type="button" onClick={setCentre} disabled={!ready} className="rounded-btn border border-field px-3 py-1.5 disabled:opacity-50">{texts.setCentre}</button>
         {mode === "set" && <button type="button" onClick={discard} className="underline">{texts.discard}</button>}
         {(publicPoint || mode === "set") && mode !== "clear" && <button type="button" onClick={remove} className="underline">{texts.remove}</button>}
       </div>

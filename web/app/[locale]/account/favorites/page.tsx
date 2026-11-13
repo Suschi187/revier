@@ -48,10 +48,10 @@ export default async function FavoritesPage(props: Props) {
         <p className="mt-4" role="alert">{t("loadFailed")}</p>
       )}
       {unavailable > 0 && (
-        <form action={removeUnavailableFavorites} className="mt-6 flex flex-wrap items-center gap-3 rounded border border-sand p-3">
+        <form action={removeUnavailableFavorites} className="mt-6 flex flex-wrap items-center gap-3 rounded-btn border border-sand p-3">
           <input type="hidden" name="locale" value={locale} />
           <p>{t("unavailable", { count: unavailable })}</p>
-          <button type="submit" className="rounded border border-field px-3 py-1">{t("removeUnavailable")}</button>
+          <button type="submit" className="rounded-btn border border-field px-3 py-1">{t("removeUnavailable")}</button>
         </form>
       )}
     </main>

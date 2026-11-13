@@ -26,7 +26,7 @@ export default async function CookiesPage() {
       <p className="mt-2 font-semibold">{consentRequired() ? t("optionalPresent") : t("onlyNecessary")}</p>
       {/* Bei 360 px scrollt die Tabelle waagerecht; der Container ist dafür per Tastatur erreichbar (QA M9a F5). */}
       <div className={`${ui.card} mt-6 overflow-x-auto`} tabIndex={0} role="region" aria-label={t("tableCaption")}>
-        <table className="w-full min-w-[40rem] border-collapse text-left text-sm">
+        <table className="w-full min-w-160 border-collapse text-left text-sm">
           <caption className="sr-only">{t("tableCaption")}</caption>
           <thead>
             <tr className="bg-sand">

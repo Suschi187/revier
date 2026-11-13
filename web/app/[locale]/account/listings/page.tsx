@@ -45,16 +45,16 @@ async function MyListings({ searchParams }: { searchParams: Promise<Record<strin
   return (
     <div className="mt-6 flex flex-col gap-6">
       {notice && (
-        <p role="status" className="rounded bg-success-soft p-3 text-success">
+        <p role="status" className="rounded-btn bg-success-soft p-3 text-success">
           {t(`notices.${notice}`)}
         </p>
       )}
       {error && (
-        <p role="alert" className="rounded bg-error-soft p-3 text-error">
+        <p role="alert" className="rounded-btn bg-error-soft p-3 text-error">
           {t(`errors.${error}`)}
         </p>
       )}
-      <Link href="/account/listings/new" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">
+      <Link href="/account/listings/new" className="self-start rounded-btn bg-forest px-4 py-2 font-medium text-offwhite">
         {t("mine.create")}
       </Link>
       {listings.length === 0 ? (
@@ -77,7 +77,7 @@ async function ListingRow({ listing, locale }: { listing: OwnListingSummary; loc
   const editable = listing.status !== "removed";
 
   return (
-    <li className="rounded border border-sand p-4" aria-labelledby={headingId}>
+    <li className="rounded-btn border border-sand p-4" aria-labelledby={headingId}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <h2 id={headingId} className="font-display text-lg font-bold break-words">
           {listing.title}
@@ -123,7 +123,7 @@ function ActionButton({ listing, locale, action, label, danger }: { listing: Own
       <input type="hidden" name="action" value={action} />
       <button
         type="submit"
-        className={danger ? "rounded bg-error px-3 py-1.5 text-sm font-medium text-offwhite" : "rounded border border-field px-3 py-1.5 text-sm"}
+        className={danger ? "rounded-btn bg-error px-3 py-1.5 text-sm font-medium text-offwhite" : "rounded-btn border border-field px-3 py-1.5 text-sm"}
       >
         {label}
       </button>

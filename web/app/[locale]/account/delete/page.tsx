@@ -52,14 +52,14 @@ export default async function AccountDeletePage(props: Props) {
             <Link href="/account/data" className="underline">{t("exportLink")}</Link>
           </p>
           {error && <p role="alert" className="mt-6 text-error">{t(`errors.${error}`)}</p>}
-          <section className="mt-8 rounded border border-sand p-4">
+          <section className="mt-8 rounded-btn border border-sand p-4">
             <h2 className="font-display text-xl font-bold">{t("step1")}</h2>
             <div className="mt-3">
               {user.email ? <ReauthForm email={user.email} userId={user.id} locale={locale} /> : <p>{t("noEmail")}</p>}
               <noscript><p className="mt-2">{t("noscript")}</p></noscript>
             </div>
           </section>
-          <section className="mt-6 rounded border border-error p-4">
+          <section className="mt-6 rounded-btn border border-error p-4">
             <h2 className="font-display text-xl font-bold">{t("step2")}</h2>
             <form action={deleteAccountAction} className="mt-3 flex flex-col gap-3">
               <input type="hidden" name="locale" value={locale} />
@@ -67,7 +67,7 @@ export default async function AccountDeletePage(props: Props) {
                 <input type="checkbox" name="confirm" value="yes" required className="mt-1" />
                 <span>{t("confirmLabel")}</span>
               </label>
-              <button type="submit" className="self-start rounded bg-error px-4 py-2 font-medium text-offwhite">{t("submit")}</button>
+              <button type="submit" className="self-start rounded-btn bg-error px-4 py-2 font-medium text-offwhite">{t("submit")}</button>
             </form>
           </section>
         </>

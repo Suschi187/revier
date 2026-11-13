@@ -45,7 +45,7 @@ export default async function ReportPage(props: Props) {
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{message ? t("titleMessage") : t("titleProfile")}</h1>
       <p className="mt-2 [overflow-wrap:anywhere]">{counterpartName(info, tc("accountUnavailable"))}</p>
       {message && (
-        <figure className="mt-4 rounded border border-sand p-3">
+        <figure className="mt-4 rounded-btn border border-sand p-3">
           <figcaption className="text-sm text-muted">{t("quoted")}</figcaption>
           <blockquote className="mt-1 whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</blockquote>
         </figure>
@@ -70,10 +70,10 @@ export default async function ReportPage(props: Props) {
         <div>
           <label htmlFor="report-note" className="block font-medium">{t("note")}</label>
           <textarea id="report-note" name="note" rows={3} maxLength={1000} aria-describedby="report-note-hint"
-            className="w-full rounded border border-field px-2 py-1.5" />
+            className="w-full rounded-btn border border-field px-2 py-1.5" />
           <p id="report-note-hint" className="text-sm text-muted">{t("noteHint")}</p>
         </div>
-        <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
+        <button type="submit" className="justify-self-start rounded-btn bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
       </form>
     </main>
   );

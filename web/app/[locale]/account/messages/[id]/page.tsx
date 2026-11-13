@@ -117,7 +117,7 @@ export default async function ConversationPage(props: Props) {
           <li
             key={message.id}
             id={index === all.length - 1 ? "latest" : undefined}
-            className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 ${message.mine ? "justify-self-end rounded-br-sm bg-forest text-offwhite" : "justify-self-start rounded-bl-sm border border-sand bg-surface"}`}
+            className={`max-w-[85%] rounded-bubble px-3.5 py-2.5 ${message.mine ? "justify-self-end rounded-br-tail bg-forest text-offwhite" : "justify-self-start rounded-bl-tail border border-sand bg-surface"}`}
           >
             <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</p>
             <p className={`mt-1 text-xs ${message.mine ? "text-offwhite" : "text-muted"}`}>

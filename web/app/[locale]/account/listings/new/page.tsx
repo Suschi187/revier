@@ -51,7 +51,7 @@ async function NewListing({ searchParams }: { searchParams: SearchParams }) {
       <StepNav listingId={null} current="basics" />
       <p className="mt-4 text-sm text-muted">{t("wizard.draftHint")}</p>
       {params.error === "rateLimited" && (
-        <p role="alert" className="mt-6 rounded bg-error-soft p-3 text-error">
+        <p role="alert" className="mt-6 rounded-btn bg-error-soft p-3 text-error">
           {retry ? t("errors.rateLimited", { time: format.dateTime(retry, { dateStyle: "medium", timeStyle: "short" }) }) : t("errors.rateLimitedNoTime")}
         </p>
       )}

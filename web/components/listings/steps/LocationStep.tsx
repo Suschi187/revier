@@ -49,7 +49,7 @@ export async function LocationStep({
 
       <DistrictSelect states={regions.states} districts={regions.districts} selected={regionId} errors={errors} />
 
-      <p id="f-place-private" className="rounded bg-sand p-3 text-sm">
+      <p id="f-place-private" className="rounded-btn bg-sand p-3 text-sm">
         {t("fields.placePrivate")}
       </p>
 
@@ -119,12 +119,12 @@ export async function LocationStep({
       {point && (
         <fieldset className="flex flex-col gap-2" aria-describedby="f-point-hint">
           <legend className={labelClass}>{tm("legend")}</legend>
-          <p id="f-point-hint" className="rounded bg-sand p-3 text-sm">{tm("hint")}</p>
+          <p id="f-point-hint" className="rounded-btn bg-sand p-3 text-sm">{tm("hint")}</p>
           {point.small ? (
             <p className="text-sm">{t("fieldErrors.place_point_small_district")}</p>
           ) : (
             <>
-              {point.otherPoints > 0 && <p className="rounded border border-notice bg-notice-soft p-3 text-sm">{tm("otherPoints")}</p>}
+              {point.otherPoints > 0 && <p className="rounded-btn border border-notice bg-notice-soft p-3 text-sm">{tm("otherPoints")}</p>}
               <p className="text-sm text-muted">{tm("districtChange")}</p>
               <noscript>
                 <p className="text-sm">{tm("noscript")}</p>

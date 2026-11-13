@@ -62,15 +62,15 @@ async function EditListing({ params, searchParams }: Props) {
   const errors = parseErrorCodes(query.errors);
 
   if (listing.status === "removed") {
-    return <p className="mt-6 rounded bg-error-soft p-3 text-error">{t("wizard.lockedNote")}</p>;
+    return <p className="mt-6 rounded-btn bg-error-soft p-3 text-error">{t("wizard.lockedNote")}</p>;
   }
 
   return (
     <>
       <StepNav listingId={listing.id} current={step} />
-      <ModerationNote status={listing.status} code={listing.rejectCode} note={listing.rejectReason} className="mt-4 rounded bg-error-soft p-3" />
+      <ModerationNote status={listing.status} code={listing.rejectCode} note={listing.rejectReason} className="mt-4 rounded-btn bg-error-soft p-3" />
       {(listing.status === "active" || listing.status === "paused") && (
-        <p className="mt-4 rounded bg-notice-soft p-3 text-notice">{t("wizard.publishedNote")}</p>
+        <p className="mt-4 rounded-btn bg-notice-soft p-3 text-notice">{t("wizard.publishedNote")}</p>
       )}
       {query.saved === "1" && errors.length === 0 && (
         <p role="status" className="mt-4 text-success">

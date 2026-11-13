@@ -117,7 +117,7 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
           autoComplete="one-time-code"
           pattern="[0-9 ]{6,7}"
           required
-          className={`${ui.input} text-center text-lg tracking-[0.3em]`}
+          className={`${ui.input} text-center text-lg tracking-code`}
         />
         <button type="submit" disabled={pending} className={ui.btnPrimaryText}>
           {pending ? t("verifying") : t("codeSubmit")}

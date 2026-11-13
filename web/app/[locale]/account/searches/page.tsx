@@ -39,9 +39,9 @@ export default async function SavedSearchesPage(props: Props) {
       <Link href="/account" className="underline">{t("page.back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("page.title")}</h1>
       <p className="mt-2">{t("page.intro")}</p>
-      {notice && <p role="status" className="mt-4 rounded bg-success-soft p-3 text-success">{t(`notices.${notice}`)}</p>}
+      {notice && <p role="status" className="mt-4 rounded-btn bg-success-soft p-3 text-success">{t(`notices.${notice}`)}</p>}
       {error && (
-        <p role="alert" className="mt-4 rounded bg-error-soft p-3 text-error">
+        <p role="alert" className="mt-4 rounded-btn bg-error-soft p-3 text-error">
           {t(`errors.${error}`)}
           {error === "legal" && (
             <>
@@ -71,7 +71,7 @@ export default async function SavedSearchesPage(props: Props) {
   );
 }
 
-const button = "rounded border border-field px-3 py-1";
+const button = "rounded-btn border border-field px-3 py-1";
 
 function ActionForm({ locale, id, op, label, className = button }: { locale: AppLocale; id: string; op: string; label: string; className?: string }) {
   return (
@@ -94,7 +94,7 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
   const headingId = `search-${item.id}-name`;
 
   return (
-    <li id={`search-${item.id}`} className="rounded border border-sand p-4" aria-labelledby={headingId}>
+    <li id={`search-${item.id}`} className="rounded-btn border border-sand p-4" aria-labelledby={headingId}>
       <h2 id={headingId} className="text-xl font-semibold [overflow-wrap:anywhere]">{item.name}</h2>
       {filters ? (
         <p className="mt-1 text-sm text-muted [overflow-wrap:anywhere]">
@@ -124,7 +124,7 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
       </dl>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        {filters && <a href={resultsHref(filters, locale)} className="rounded bg-forest px-3 py-1 text-offwhite">{t("actions.results")}</a>}
+        {filters && <a href={resultsHref(filters, locale)} className="rounded-btn bg-forest px-3 py-1 text-offwhite">{t("actions.results")}</a>}
         {status.state !== "expired" &&
           (item.paused_at === null ? (
             <ActionForm locale={locale} id={item.id} op="pause" label={t("actions.pause")} />
@@ -152,7 +152,7 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
               maxLength={NAME_MAX}
               defaultValue={item.name}
               aria-describedby={`rename-${item.id}-hint`}
-              className="w-full rounded border border-field px-2 py-1.5"
+              className="w-full rounded-btn border border-field px-2 py-1.5"
             />
             <p id={`rename-${item.id}-hint`} className="text-sm text-muted">{t("fields.nameHint")}</p>
           </div>
@@ -162,10 +162,10 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
 
       {/* Löschen zweistufig ohne confirm(): Der Link zeigt die Rückfrage, erst der Button löscht (POST). */}
       {confirmDelete ? (
-        <div role="group" aria-labelledby={`delete-${item.id}`} className="mt-3 rounded border border-error bg-error-soft p-3">
+        <div role="group" aria-labelledby={`delete-${item.id}`} className="mt-3 rounded-btn border border-error bg-error-soft p-3">
           <p id={`delete-${item.id}`} className="font-medium text-error">{t("actions.deleteConfirm", { name: item.name })}</p>
           <div className="mt-2 flex flex-wrap items-center gap-3">
-            <ActionForm locale={locale} id={item.id} op="delete" label={t("actions.deleteYes")} className="rounded bg-error px-3 py-1 text-offwhite" />
+            <ActionForm locale={locale} id={item.id} op="delete" label={t("actions.deleteYes")} className="rounded-btn bg-error px-3 py-1 text-offwhite" />
             <a href={`/${locale}/account/searches#search-${item.id}`} className="underline">{t("actions.cancel")}</a>
           </div>
         </div>

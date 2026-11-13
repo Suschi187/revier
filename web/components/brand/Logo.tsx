@@ -23,10 +23,10 @@ export async function Logo({ onDark = false, compact = false }: { onDark?: boole
     <span className="flex items-center gap-2.5">
       <LogoMark size={compact ? 34 : 40} cutout={onDark ? "var(--color-forest)" : "var(--color-offwhite)"} />
       <span className="flex flex-col leading-none">
-        <span className={`font-display font-black tracking-[0.02em] ${compact ? "text-xl" : "text-2xl"} ${onDark ? "text-offwhite" : "text-forest"}`}>
+        <span className={`font-display font-black tracking-wordmark ${compact ? "text-xl" : "text-2xl"} ${onDark ? "text-offwhite" : "text-forest"}`}>
           {t("name")}
         </span>
-        <span className={`mt-1 font-display text-[0.5625rem] font-bold uppercase tracking-[0.2em] ${onDark ? "text-brand" : "text-olive"}`}>
+        <span className={`mt-1 font-display text-logo-sub font-bold uppercase tracking-logo-sub ${onDark ? "text-brand" : "text-olive"}`}>
           {t("endorsement")}
         </span>
       </span>

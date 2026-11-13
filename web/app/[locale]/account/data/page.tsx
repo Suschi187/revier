@@ -52,7 +52,7 @@ export default async function DataExportPage(props: Props) {
       ) : (
         <form method="post" action="/api/account/export" className="mt-6">
           <input type="hidden" name="locale" value={locale} />
-          <button type="submit" className="rounded bg-forest px-4 py-2 font-medium text-offwhite">{t("download")}</button>
+          <button type="submit" className="rounded-btn bg-forest px-4 py-2 font-medium text-offwhite">{t("download")}</button>
         </form>
       )}
     </main>

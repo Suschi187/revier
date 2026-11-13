@@ -8,5 +8,5 @@ import { useSearchParams } from "next/navigation";
 export function DeletedNotice() {
   const t = useTranslations("AccountDelete");
   if (useSearchParams().get("deleted") !== "1") return null;
-  return <p role="status" className="mb-6 rounded border border-success bg-success-soft p-3 text-success">{t("deletedNotice")}</p>;
+  return <p role="status" className="mb-6 rounded-btn border border-success bg-success-soft p-3 text-success">{t("deletedNotice")}</p>;
 }

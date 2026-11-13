@@ -6,7 +6,7 @@ import { saveSearchAction, type SaveState } from "@/app/[locale]/account/searche
 import { errorParam, isErrorParam, type ErrorParam } from "@/lib/saved-searches/errors";
 import { NAME_MAX } from "@/lib/saved-searches/rules";
 
-const input = "w-full rounded border border-field px-2 py-1.5";
+const input = "w-full rounded-btn border border-field px-2 py-1.5";
 
 type Props = {
   locale: string;
@@ -35,7 +35,7 @@ export function SaveSearchForm({ locale, filters, view, suggestedName, summary, 
   const open = shown !== null || undefined;
 
   return (
-    <details open={open} className="mt-6 rounded border border-sand p-4">
+    <details open={open} className="mt-6 rounded-btn border border-sand p-4">
       <summary className="cursor-pointer font-semibold">{t("save.open")}</summary>
       <form action={formAction} className="mt-4 grid gap-4" aria-describedby="save-intro">
         <p id="save-intro" className="text-sm text-muted">{t("save.intro")}</p>
@@ -94,7 +94,7 @@ export function SaveSearchForm({ locale, filters, view, suggestedName, summary, 
         <p className="text-sm text-muted">{t("save.runtime")}</p>
 
         <div className="flex flex-wrap items-center gap-4">
-          <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 text-offwhite disabled:opacity-60">
+          <button type="submit" disabled={pending} className="rounded-btn bg-forest px-4 py-2 text-offwhite disabled:opacity-60">
             {pending ? t("save.saving") : t("save.submit")}
           </button>
         </div>

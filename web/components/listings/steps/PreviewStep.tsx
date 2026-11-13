@@ -37,7 +37,7 @@ export async function PreviewStep({
       {submittable ? (
         <>
           {missing.length > 0 ? (
-            <section aria-labelledby="missing-title" className="rounded border border-field p-4">
+            <section aria-labelledby="missing-title" className="rounded-btn border border-field p-4">
               <h2 id="missing-title" className="font-semibold">
                 {t("preview.missing")}
               </h2>

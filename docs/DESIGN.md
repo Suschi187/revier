@@ -58,6 +58,28 @@ Logos sind von den Kontrastregeln ausgenommen (WCAG 1.4.3), deshalb bleibt der P
 Montserrat (Überschriften und Buttons, 700 bis 900, Großbuchstaben, Überschriften mit Punkt am Ende) und Inter (Fließtext, Formulare, 400 bis 600).
 Fließtext mindestens 16 px. Eyebrow 13 px, Laufweite 0.13em. Beide Schriften werden selbst gehostet (Latin und Latin Extended-A für cs/pl). Dateinamen tragen eine Version (`.v1`), weil `/static/fonts` ein Jahr unveränderlich gecacht wird; bei jeder Änderung hochzählen. Dazu kommt `inter-czech-wght-normal.v1.woff2` (2 KB, nur Č č Š š, mit fonttools aus der Latin-Extended-Datei geschnitten, SIL OFL erlaubt Teilmengen): Die Sprachwahl zeigt „Čeština“ auf jeder Seite, ohne dass de/en-Seiten die 84 KB große Latin-Extended-Datei laden. Montserrat und Inter (Latin) werden vorgeladen, auf cs/pl auch Latin Extended.
 
+### Tokens (`web/app/globals.css`, `@theme`)
+
+Seiten verwenden nur Tokens oder Tailwind-Stufen, keine festen Werte in eckigen Klammern.
+
+| Gruppe | Token | Wert | Verwendung |
+|---|---|---|---|
+| Schrift | `text-logo-sub` | 9 px | Zusatz unter der Wortmarke |
+| | `text-micro` | 11 px | Beschriftung der Navigation unten, Zähler-Badges |
+| | `text-meta` | 13 px | Eyebrow, Chips, Ort und Datum, Suchbutton |
+| | `text-compact` | 15 px | Titel in Anzeigenkarten, Kontaktbutton |
+| | `text-price` | 17 px | Preis in Anzeigenkarten |
+| | `text-title` | 28 px | Titel und Preis der Detailseite (ab `sm`) |
+| Laufweite | `tracking-wordmark` / `caps` / `claim` / `eyebrow` / `logo-sub` / `code` | 0.02 / 0.06 / 0.1 / 0.13 / 0.2 / 0.3 em | Wortmarke, Buttons, Claim, Eyebrow, Logo-Zusatz, Einmalcode |
+| Radius | `rounded-btn` / `card` / `pill` | 4 / 8 / 40 px | Buttons, Bilder, kleine Flächen / Karten, Felder / Chips, Badges |
+| | `rounded-bubble`, `rounded-*-tail` | 16 / 2 px | Chat-Blase und ihre Spitze zur Absenderseite |
+| | `rounded-full` | Kreis | nur runde Elemente (Avatar, Punkt, Kartenmarker) |
+| Seitenverhältnis | `aspect-photo` / `aspect-hero` | 4:3 / 16:10 | Anzeigenfotos / Hauptbild der Detailseite |
+| Schatten | `--shadow-marker` | | Kartenmarker |
+| ohne Klasse (`:root`) | `--stroke-strong`, `--color-map-land` | 1.5 px, `#eceee6` | Rahmen der Suchleiste, Kartengrund ohne Kacheln |
+
+Erlaubte feste Werte, weil sie Layout und keine Gestaltung sind: Spaltenaufteilungen (`grid-cols-[…]`), `max-w-[85%]` (Chat-Blase), `max-h-[80vh]` (Dokumentvorschau im Admin), `flex-[2]` (Suchfeld neben der Regionswahl), `[overflow-wrap:anywhere]` (lange Wörter in cs/pl). Größen für Karte, Seitenleiste und Tabellen kommen aus der Abstandsskala (`h-112`, `w-88`, `min-w-160`).
+
 ## 4. Logo: L1 Geweih-Pin (gewählt 2026-11-12)
 
 Kartenmarker in Marken-Orange `#FF914D` mit ausgespartem Geweih und Kopf. Die Wortmarke REVIRO ist in Montserrat Black gesetzt (Waldgrün, auf Dunkel Offwhite), darunter steht „BY DIE JAGDBRÜDER“ in Montserrat Bold mit 0.2em Laufweite (Oliv, auf Dunkel Orange).

@@ -7,7 +7,7 @@ import { getSessionUser } from "@/lib/services/auth";
 import { UnreadRefresh } from "@/components/chat/UnreadRefresh";
 import { unreadCount } from "@/lib/services/chat";
 
-const item = "relative flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 px-2 text-[0.6875rem] leading-tight text-forest no-underline";
+const item = "relative flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 px-2 text-micro leading-tight text-forest no-underline";
 
 function NavItem({ href, icon, label, ariaLabel, badge }: { href: string; icon: IconName; label: string; ariaLabel?: string; badge?: number }) {
   return (
@@ -15,7 +15,7 @@ function NavItem({ href, icon, label, ariaLabel, badge }: { href: string; icon: 
       <Icon name={icon} size={22} />
       <span>{label}</span>
       {badge ? (
-        <span aria-hidden="true" className="absolute right-1 top-0 min-w-5 rounded-pill bg-brand px-1 text-center text-[0.6875rem] font-bold text-forest">{badge}</span>
+        <span aria-hidden="true" className="absolute right-1 top-0 min-w-5 rounded-pill bg-brand px-1 text-center text-micro font-bold text-forest">{badge}</span>
       ) : null}
     </Link>
   );

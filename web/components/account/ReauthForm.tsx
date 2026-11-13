@@ -100,7 +100,7 @@ export function ReauthForm({ email, userId, locale }: { email: string; userId: s
     return (
       <div className="flex flex-col gap-3">
         <p>{t("intro", { email })}</p>
-        <button type="button" onClick={requestCode} disabled={pending} className="self-start rounded border border-forest px-4 py-2 font-medium disabled:opacity-60">
+        <button type="button" onClick={requestCode} disabled={pending} className="self-start rounded-btn border border-forest px-4 py-2 font-medium disabled:opacity-60">
           {pending ? t("sending") : t("send")}
         </button>
         {alert}
@@ -113,8 +113,8 @@ export function ReauthForm({ email, userId, locale }: { email: string; userId: s
         <p role="status">{t("sent", { email })}</p>
         <label htmlFor="reauth-code" className="font-medium">{t("codeLabel")}</label>
         <input id="reauth-code" name="code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9 ]{6,7}" required
-          className="rounded border border-field px-3 py-2 tracking-widest" />
-        <button type="submit" disabled={pending} className="self-start rounded border border-forest px-4 py-2 font-medium disabled:opacity-60">
+          className="rounded-btn border border-field px-3 py-2 tracking-widest" />
+        <button type="submit" disabled={pending} className="self-start rounded-btn border border-forest px-4 py-2 font-medium disabled:opacity-60">
           {t("verify")}
         </button>
         {alert}
@@ -125,8 +125,8 @@ export function ReauthForm({ email, userId, locale }: { email: string; userId: s
     <form onSubmit={verifyTotp} className="flex flex-col gap-3">
       <label htmlFor="reauth-totp" className="font-medium">{t("totpLabel")}</label>
       <input id="reauth-totp" name="totp" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" required
-        className="rounded border border-field px-3 py-2 tracking-widest" />
-      <button type="submit" disabled={pending} className="self-start rounded border border-forest px-4 py-2 font-medium disabled:opacity-60">
+        className="rounded-btn border border-field px-3 py-2 tracking-widest" />
+      <button type="submit" disabled={pending} className="self-start rounded-btn border border-forest px-4 py-2 font-medium disabled:opacity-60">
         {t("verify")}
       </button>
       {alert}

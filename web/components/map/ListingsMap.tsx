@@ -12,7 +12,7 @@ import type { Bounds, MapApi } from "./MapCanvas";
 // Anzeigen dort. „In diesem Bereich suchen“ setzt bbox in der URL, Liste und Karte filtern dann gleich. Die Punkte
 // kommen für den sichtbaren Ausschnitt und werden nach jeder Bewegung neu geladen (QA M6 F1).
 
-const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-[28rem] w-full rounded bg-sand" /> });
+const MapCanvas = dynamic(() => import("./MapCanvas"), { ssr: false, loading: () => <div className="h-112 w-full rounded-btn bg-sand" /> });
 
 export type MapTexts = {
   label: string;
@@ -297,7 +297,7 @@ export function ListingsMap({
     <section aria-label={texts.label} className="mt-6">
       <MapCanvas tilesUrl={tilesUrl} locale={locale} bounds={bounds} label={texts.label} attribution={texts.attribution} failedText={texts.failed} onReady={onReady} />
       <div className="mt-2 flex flex-wrap items-center gap-3">
-        <button type="button" onClick={searchArea} className="rounded bg-forest px-3 py-1.5 text-offwhite">
+        <button type="button" onClick={searchArea} className="rounded-btn bg-forest px-3 py-1.5 text-offwhite">
           {texts.searchArea}
         </button>
         <p className="text-sm text-muted">{texts.searchAreaHint}</p>

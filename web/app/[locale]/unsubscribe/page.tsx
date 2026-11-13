@@ -29,7 +29,7 @@ export default async function UnsubscribePage(props: Props) {
           <input type="hidden" name="lang" value={locale} />
           <input type="hidden" name="t" value={token} />
           <p>{t("intro")}</p>
-          <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
+          <button type="submit" className="justify-self-start rounded-btn bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
         </form>
       ) : (
         <p role="alert" className="mt-4">{t("missing")}</p>

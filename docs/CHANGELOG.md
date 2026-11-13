@@ -9,13 +9,15 @@ Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannt
 
 - **Wackelige Datenbank-Tests:** `08_storage` zählt jetzt in allen Buckets nur Dateien in den Ordnern der eigenen Testnutzer (vorher scheiterte er an Resten aus E2E- oder Messläufen). `57_qa_m9b_nachpruefung` Test 4 sortiert über die Meldungs-IDs statt über `created_at`, weil alle Meldungen in einer Transaktion denselben Zeitstempel haben.
 - Bekannt: `02`, `04`, `26`, `31`, `32` setzen eine Datenbank ohne fremde öffentliche Anzeigen voraus und werden rot, solange z. B. die Demo-Anzeigen aus Schritt 7 lokal liegen. In der CI (frische Datenbank) grün.
+- **Tokens statt fester Werte** (QA F3): Schriftgrößen (`text-micro`, `text-meta`, `text-compact`, `text-price`, `text-title`, `text-logo-sub`), Laufweiten, Seitenverhältnisse (`aspect-photo`, `aspect-hero`), Radien der Chat-Blase, Schatten und Farbe der Kartenmarker, Kartengrund und Rahmen der Suchleiste als Tokens in `globals.css`; 73-mal `rounded` durch `rounded-btn` ersetzt (gleicher Wert). Pixelgleich (Kopfzeile vor/nach verglichen). Verbleibende Klammerwerte sind Layout und in `DESIGN.md` („Tokens“) begründet.
 
 ### Entscheidungen
-- **Keine Kategorie-Navigation im Kopf** (QA F1, Entscheidung 2026-11-13): bewusste Abweichung von der SPEC. Offen bleibt: Filter mobil als Blatt von unten.
+- **Keine Kategorie-Navigation im Kopf** (QA F1, Entscheidung 2026-11-13): bewusste Abweichung von der SPEC. Filter mobil bleibt ein aufklappbarer Bereich, kein Blatt von unten (Entscheidung 2026-11-13).
 
 ### Testen
 - Per Docker wie in der CI: `deno task check && deno lint && deno task test` in `send-chat-notifications` und `send-search-notifications`
 - `cd web && npx vitest run`
+- `cd web && npx playwright test e2e/m10a-text.spec.ts`
 - `supabase test db supabase/tests/08_storage.test.sql supabase/tests/57_qa_m9b_nachpruefung.test.sql` (mehrfach, auch mit Demo-Daten)
 
 ## M10a GUI/UX-Design (Web), Schritt 8: Prüfung – 2026-11-13

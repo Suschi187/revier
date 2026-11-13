@@ -9,6 +9,11 @@ import { MAP_STYLE_VERSION, MAP_WORKER_URL } from "@/lib/map/assets";
 export type Bounds = [number, number, number, number];
 export type MapApi = { map: MapLibreMap; maplibre: typeof import("maplibre-gl") };
 
+/** Landfarbe aus dem Token --color-map-land (globals.css); MapLibre braucht einen festen Farbwert. */
+function landColor(): string {
+  return getComputedStyle(document.documentElement).getPropertyValue("--color-map-land").trim() || "#eceee6";
+}
+
 /**
  * Kartengrund (ADR 016). Nur im Browser geladen (dynamic, ssr: false, Review A9). Worker als eigene Datei
  * (worker-src 'self'), Kacheln von der eigenen Origin, Attribution immer sichtbar (A10). Ohne Kartendatei zeigt
@@ -23,7 +28,7 @@ export default function MapCanvas({
   failedText,
   maxZoom = 13,
   onReady,
-  className = "h-[28rem] w-full",
+  className = "h-112 w-full",
 }: {
   tilesUrl: string | null;
   locale: string;
@@ -70,7 +75,7 @@ export default function MapCanvas({
           (style.sources.protomaps as { url: string }).url = `pmtiles://${window.location.origin}${tilesUrl}`;
         } else {
           style.sources = {};
-          style.layers = [{ id: "background", type: "background", paint: { "background-color": "#eceee6" } }];
+          style.layers = [{ id: "background", type: "background", paint: { "background-color": landColor() } }];
         }
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const options: MapOptions = {
@@ -109,6 +114,6 @@ export default function MapCanvas({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tilesUrl, locale]);
 
-  if (failed) return <p role="alert" className="rounded border border-sand p-4">{failedText}</p>;
-  return <div ref={container} className={`${className} rounded border border-sand`} role="region" aria-label={label} />;
+  if (failed) return <p role="alert" className="rounded-btn border border-sand p-4">{failedText}</p>;
+  return <div ref={container} className={`${className} rounded-btn border border-sand`} role="region" aria-label={label} />;
 }

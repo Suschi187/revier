@@ -80,8 +80,36 @@
   --radius-card: 8px;
   --radius-pill: 40px;
 
-  --tracking-eyebrow: 0.13em;
+  --radius-bubble: 1rem;
+  /* Spitze der Chat-Blase zur Absenderseite */
+  --radius-tail: 0.125rem;
+
+  /* Schriftgrößen zwischen den Tailwind-Stufen (Werte aus design/Design_Master.png) */
+  --text-logo-sub: 0.5625rem;
+  --text-micro: 0.6875rem;
+  --text-meta: 0.8125rem;
+  --text-compact: 0.9375rem;
+  --text-price: 1.0625rem;
+  --text-title: 1.75rem;
+
+  --tracking-wordmark: 0.02em;
   --tracking-caps: 0.06em;
+  --tracking-claim: 0.1em;
+  --tracking-eyebrow: 0.13em;
+  --tracking-logo-sub: 0.2em;
+  /* Einmalcode im Login: Ziffern deutlich getrennt */
+  --tracking-code: 0.3em;
+
+  --aspect-photo: 4 / 3;
+  --aspect-hero: 16 / 10;
+
+  --shadow-marker: 0 1px 3px rgb(0 0 0 / 0.4);
+}
+
+/* Werte, die keine Tailwind-Klasse erzeugen: Linienstärke der Suchleiste, Landfarbe der Karte ohne Kacheln */
+:root {
+  --stroke-strong: 1.5px;
+  --color-map-land: #eceee6;
 }
 
 @layer base {
@@ -124,10 +152,10 @@
   border-radius: 9999px;
   border: 2px solid var(--color-surface);
   background: var(--color-forest);
-  color: #fff;
+  color: var(--color-surface);
   font: 600 0.75rem/1 var(--font-sans);
   cursor: pointer;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.4);
+  box-shadow: var(--shadow-marker);
 }
 .map-cluster {
   min-width: 2.25rem;
@@ -135,7 +163,7 @@
   background: var(--color-olive);
 }
 .map-district {
-  border-radius: 0.25rem;
+  border-radius: var(--radius-btn);
   background: var(--color-muted);
 }
 .map-chosen {

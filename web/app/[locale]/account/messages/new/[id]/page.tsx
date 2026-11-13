@@ -46,7 +46,7 @@ export default async function NewConversationPage(props: Props) {
           ) : (
             <>
               <p className="mt-4">{t("new.intro")}</p>
-              <p className="mt-4 rounded border border-notice bg-notice-soft p-3 text-sm">{t("safety")}</p>
+              <p className="mt-4 rounded-btn border border-notice bg-notice-soft p-3 text-sm">{t("safety")}</p>
               <Composer action={startConversationAction} id={listing.id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} />
             </>
           )}

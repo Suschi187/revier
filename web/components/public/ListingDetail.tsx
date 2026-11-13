@@ -74,7 +74,7 @@ export async function ListingDetail({
                   {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
                   <img src={photoUrl(first.id, "full")} fetchPriority="high" alt={first.altText || tp("photoAlt", { title: listing.title, n: 1, m: listing.photos.length })}
                     width={first.width ?? firstSize.width} height={first.height ?? firstSize.height}
-                    className="aspect-[16/10] w-full bg-olive object-cover" />
+                    className="aspect-hero w-full bg-olive object-cover" />
                 </a>
                 {listing.photos.length > 1 && (
                   <ul className="mt-2.5 grid grid-cols-4 gap-2 sm:grid-cols-6">
@@ -86,7 +86,7 @@ export async function ListingDetail({
                           <a href={photoUrl(photo.id, "full")} className="block overflow-hidden rounded-btn">
                             {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
                             <img src={photoUrl(photo.id, "thumb")} alt={alt} width={size.width} height={size.height} loading={i < 5 ? "eager" : "lazy"}
-                              className="aspect-[4/3] w-full object-cover" />
+                              className="aspect-photo w-full object-cover" />
                           </a>
                         </li>
                       );
@@ -95,19 +95,19 @@ export async function ListingDetail({
                 )}
               </>
             ) : (
-              <div className="flex aspect-[16/10] items-center justify-center rounded-btn bg-sand text-olive" aria-hidden="true">
+              <div className="flex aspect-hero items-center justify-center rounded-btn bg-sand text-olive" aria-hidden="true">
                 <KindIcon kind={listing.kind} size={96} accent={false} />
               </div>
             )}
           </section>
 
           <article className={`${ui.card} flex flex-col gap-3 px-5 py-5 sm:px-6`}>
-            <p className="text-[0.8125rem] text-muted">
+            <p className="text-meta text-muted">
               {t(`directions.${listing.direction}`)} · {t(`kinds.${listing.kind}`)} · {tp("published")}{" "}
               {format.dateTime(new Date(listing.publishedAt), { dateStyle: "medium", timeZone: "Europe/Berlin" })}
             </p>
-            <h1 className="text-2xl font-bold leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-[1.75rem]" lang={listing.contentLanguage}>{listing.title}</h1>
-            <p className="font-display text-[1.75rem] font-extrabold">{price}</p>
+            <h1 className="text-2xl font-bold leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-title" lang={listing.contentLanguage}>{listing.title}</h1>
+            <p className="font-display text-title font-extrabold">{price}</p>
             <p className="flex items-center gap-1.5">
               <Icon name="pin" size={18} />
               {district ? `${district.name}, ${district.stateName}` : null}
@@ -173,7 +173,7 @@ export async function ListingDetail({
           </section>
         </div>
 
-        <aside aria-label={tp("provider")} className="flex flex-col gap-3 lg:sticky lg:top-4 lg:w-[22rem]">
+        <aside aria-label={tp("provider")} className="flex flex-col gap-3 lg:sticky lg:top-4 lg:w-88">
           <section aria-labelledby="provider-heading" className={`${ui.card} flex flex-col gap-3.5 p-5`}>
             <h2 id="provider-heading" className="sr-only">{tp("provider")}</h2>
             {provider ? (
@@ -183,7 +183,7 @@ export async function ListingDetail({
                 </span>
                 <p className="flex min-w-0 flex-col">
                   <a href={publicPath({ route: "provider", id: provider.id }, locale)} className="font-semibold text-forest [overflow-wrap:anywhere]">{providerName}</a>
-                  <span className="text-[0.8125rem] text-muted">{tProfile(`accountTypes.${provider.account_type}`)}</span>
+                  <span className="text-meta text-muted">{tProfile(`accountTypes.${provider.account_type}`)}</span>
                 </p>
               </div>
             ) : null}
@@ -201,7 +201,7 @@ export async function ListingDetail({
               <FavoriteButton listingId={listing.id} active={favorites.ids.has(listing.id)} signedIn={favorites.signedIn} back={favorites.back}
                 locale={locale} title={listing.title} />
             )}
-            <p className="text-[0.8125rem] text-muted">{tp("contactPrivate")}</p>
+            <p className="text-meta text-muted">{tp("contactPrivate")}</p>
           </section>
           <section aria-labelledby="safety-heading" className="rounded-card bg-sand px-5 py-4">
             <h2 id="safety-heading" className={sectionHeading}>{tp("safety")}</h2>
@@ -231,7 +231,7 @@ async function Contact({ listing, locale }: { listing: PublicListing; locale: Ap
   const [tp, user] = await Promise.all([getTranslations("Public.detail"), getSessionUser()]);
   if (user?.id === listing.ownerId) return <p className="text-sm">{tp("ownListing")}</p>;
   return (
-    <a href={`/${locale}/account/messages/new/${listing.id}`} className={`${ui.btnPrimaryText} min-h-12 w-full text-[0.9375rem]`}>
+    <a href={`/${locale}/account/messages/new/${listing.id}`} className={`${ui.btnPrimaryText} min-h-12 w-full text-compact`}>
       <Icon name="message" size={18} />
       {user ? tp("contact") : tp("contactLogin")}
     </a>

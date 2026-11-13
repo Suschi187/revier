@@ -23,10 +23,10 @@ export const ui = {
   input: "w-full rounded-card border border-field bg-surface px-3 py-2.5 text-forest placeholder:text-muted",
   label: "mb-1 block text-sm font-semibold",
   card: "rounded-card border border-sand bg-surface",
-  eyebrow: "font-display text-[0.8125rem] font-bold uppercase tracking-eyebrow text-brand-ink",
+  eyebrow: "font-display text-meta font-bold uppercase tracking-eyebrow text-brand-ink",
   /** Abschnittsüberschrift im Markenstil: Großbuchstaben, Punkt am Ende steht im Text. */
   headingCaps: "font-display font-extrabold uppercase",
-  chip: "inline-flex items-center gap-1 rounded-pill bg-sand px-2.5 py-1 text-[0.8125rem]",
+  chip: "inline-flex items-center gap-1 rounded-pill bg-sand px-2.5 py-1 text-meta",
   muted: "text-muted",
   link: "font-semibold text-forest underline underline-offset-2 hover:text-brand-ink",
 } as const;

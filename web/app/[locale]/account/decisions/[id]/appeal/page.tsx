@@ -57,10 +57,10 @@ export default async function AppealPage(props: Props) {
           <label htmlFor="appeal-text" className="block font-medium">{t("text")}</label>
           <textarea id="appeal-text" name="text" rows={6} minLength={APPEAL_MIN} maxLength={APPEAL_MAX} required
             aria-describedby={`appeal-hint${error ? " appeal-error" : ""}`} aria-invalid={error === "text" || undefined}
-            className="w-full rounded border border-field px-2 py-1.5" />
+            className="w-full rounded-btn border border-field px-2 py-1.5" />
           <p id="appeal-hint" className="text-sm text-muted">{t("textHint")}</p>
         </div>
-        <button type="submit" className="justify-self-start rounded bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
+        <button type="submit" className="justify-self-start rounded-btn bg-forest px-4 py-2 text-offwhite">{t("submit")}</button>
       </form>
     </main>
   );

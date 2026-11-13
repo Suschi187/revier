@@ -51,13 +51,13 @@ export async function PhotosStep({
           {photos.map((photo, index) => {
             const label = t("photos.photoLabel", { n: index + 1, total: photos.length });
             return (
-              <li key={photo.id} className="flex flex-col gap-3 rounded border border-sand p-3 sm:flex-row">
+              <li key={photo.id} className="flex flex-col gap-3 rounded-btn border border-sand p-3 sm:flex-row">
                 <div className="w-full shrink-0 sm:w-40">
                   {thumbnails[photo.id] ? (
                     // eslint-disable-next-line @next/next/no-img-element -- signierte URL aus privatem Bucket, kein Optimizer
-                    <img src={thumbnails[photo.id]} alt={photo.altText ?? (photos.length > 1 ? t("photos.altFallback", { title, n: index + 1, total: photos.length }) : title)} className="aspect-[4/3] w-full rounded object-cover" />
+                    <img src={thumbnails[photo.id]} alt={photo.altText ?? (photos.length > 1 ? t("photos.altFallback", { title, n: index + 1, total: photos.length }) : title)} className="aspect-photo w-full rounded-btn object-cover" />
                   ) : (
-                    <p className="flex aspect-[4/3] items-center justify-center rounded bg-sand p-2 text-center text-sm">
+                    <p className="flex aspect-photo items-center justify-center rounded-btn bg-sand p-2 text-center text-sm">
                       {t("photos.unprocessed")}
                     </p>
                   )}
@@ -82,7 +82,7 @@ export async function PhotosStep({
                       <p id={`alt-${photo.id}-hint`} className="text-xs text-muted">
                         {t("photos.altTextHint")}
                       </p>
-                      <button type="submit" className="self-start rounded border border-field px-3 py-1.5 text-sm">
+                      <button type="submit" className="self-start rounded-btn border border-field px-3 py-1.5 text-sm">
                         {t("photos.saveAltText")}
                       </button>
                     </form>
@@ -91,7 +91,7 @@ export async function PhotosStep({
                     {index > 0 && (
                       <form action={action}>
                         {hidden(photo, "up")}
-                        <button type="submit" className="rounded border border-field px-3 py-1.5 text-sm">
+                        <button type="submit" className="rounded-btn border border-field px-3 py-1.5 text-sm">
                           {t("photos.moveUp")}
                           <span className="sr-only">: {label}</span>
                         </button>
@@ -100,7 +100,7 @@ export async function PhotosStep({
                     {index < photos.length - 1 && (
                       <form action={action}>
                         {hidden(photo, "down")}
-                        <button type="submit" className="rounded border border-field px-3 py-1.5 text-sm">
+                        <button type="submit" className="rounded-btn border border-field px-3 py-1.5 text-sm">
                           {t("photos.moveDown")}
                           <span className="sr-only">: {label}</span>
                         </button>
@@ -108,7 +108,7 @@ export async function PhotosStep({
                     )}
                     <form action={action}>
                       {hidden(photo, "remove")}
-                      <button type="submit" className="rounded border border-error px-3 py-1.5 text-sm text-error">
+                      <button type="submit" className="rounded-btn border border-error px-3 py-1.5 text-sm text-error">
                         {t("photos.remove")}
                         <span className="sr-only">: {label}</span>
                       </button>

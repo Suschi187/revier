@@ -39,7 +39,7 @@ export default async function BlockedPage(props: Props) {
       {blocks && blocks.length > 0 && (
         <ul className="mt-6 grid gap-3">
           {blocks.map((person) => (
-            <li key={person.id} className="flex flex-wrap items-center justify-between gap-3 rounded border border-sand p-3">
+            <li key={person.id} className="flex flex-wrap items-center justify-between gap-3 rounded-btn border border-sand p-3">
               <span className="min-w-0">
                 <span className="block font-semibold [overflow-wrap:anywhere]">{person.name ?? t("unknown")}</span>
                 <span className="block text-sm text-muted">{t("since", { date: format.dateTime(new Date(person.since), { dateStyle: "medium" }) })}</span>
@@ -47,7 +47,7 @@ export default async function BlockedPage(props: Props) {
               <form action={unblockUserAction}>
                 <input type="hidden" name="locale" value={locale} />
                 <input type="hidden" name="blocked" value={person.id} />
-                <button type="submit" className="rounded border border-field px-3 py-1">{t("unblock")}</button>
+                <button type="submit" className="rounded-btn border border-field px-3 py-1">{t("unblock")}</button>
               </form>
             </li>
           ))}

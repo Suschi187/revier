@@ -65,7 +65,7 @@ export default async function DecisionsPage(props: Props) {
             const key = actionKey(d.action);
             const code = codeLabel(d.action, d.code);
             return (
-              <li key={d.id} className="rounded border border-sand p-3">
+              <li key={d.id} className="rounded-btn border border-sand p-3">
                 <p className="font-medium">{key ? t(`actions.${key}`) : d.action}</p>
                 <p className="text-sm text-muted">{date(d.createdAt)}</p>
                 {d.targetLabel && (

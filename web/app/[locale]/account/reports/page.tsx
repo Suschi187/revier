@@ -38,7 +38,7 @@ export default async function MyReportsPage(props: Props) {
       ) : (
         <ul className="mt-6 flex flex-col gap-3">
           {reports.map((r) => (
-            <li key={r.id} className="rounded border border-sand p-3">
+            <li key={r.id} className="rounded-btn border border-sand p-3">
               <p className="font-medium">{t(`targets.${r.targetType}`)} · {t(`reasons.${r.reason}`)}</p>
               <p className="text-sm text-muted">{t("reportedOn", { date: date(r.createdAt) })}</p>
               <p className="mt-1">

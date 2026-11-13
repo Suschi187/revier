@@ -9,7 +9,7 @@ import { Constants } from "@/lib/supabase/database.types";
 const E = Constants.public.Enums;
 const UNITS = E.price_unit.filter((u) => u !== "on_request");
 const input = ui.input;
-const legend = "mb-1 font-display text-[0.8125rem] font-extrabold uppercase tracking-caps";
+const legend = "mb-1 font-display text-meta font-extrabold uppercase tracking-caps";
 
 /**
  * Filter als GET-Formular (ohne JavaScript bedienbar, ADR 015, Review A12). Werte aus dem Pfad (Art, Region)
@@ -99,7 +99,7 @@ export async function FilterForm({
         <div className="mt-1 grid grid-cols-2 gap-x-3 lg:grid-cols-1">
           {species.map((s) => (
             <label key={s.code} className="flex min-h-9 items-center gap-2.5">
-              <input type="checkbox" className="size-[18px] accent-forest" name={`${PARAM_NAMES.species}`} value={s.code} defaultChecked={filters.species?.includes(s.code)} />
+              <input type="checkbox" className="accent-forest" name={`${PARAM_NAMES.species}`} value={s.code} defaultChecked={filters.species?.includes(s.code)} />
               {s.name}
             </label>
           ))}
@@ -167,7 +167,7 @@ export async function FilterForm({
 
       <div className="grid gap-4">
         <label className="flex min-h-9 items-center gap-2.5">
-          <input type="checkbox" className="size-[18px] accent-forest" name={PARAM_NAMES.verified_only} value="1" defaultChecked={filters.verified_only === true} />
+          <input type="checkbox" className="accent-forest" name={PARAM_NAMES.verified_only} value="1" defaultChecked={filters.verified_only === true} />
           {t("verifiedOnly")}
         </label>
         <div>

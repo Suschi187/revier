@@ -35,7 +35,7 @@ export async function BasicsStep({
 
       {typeLocked && (
         <>
-          <p id="type-locked" className="rounded bg-sand p-3 text-sm">
+          <p id="type-locked" className="rounded-btn bg-sand p-3 text-sm">
             {t("wizard.typeLockedNote")}
           </p>
           <input type="hidden" name="kind" value={values.kind ?? ""} />
@@ -160,7 +160,7 @@ export async function CountrySwitch({ country, countries, hidden }: { country: s
           ))}
         </select>
       </div>
-      <button type="submit" className="rounded border border-field px-3 py-2">
+      <button type="submit" className="rounded-btn border border-field px-3 py-2">
         {t("wizard.countryApply")}
       </button>
     </form>

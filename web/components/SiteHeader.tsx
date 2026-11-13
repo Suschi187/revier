@@ -56,7 +56,7 @@ export function SiteHeader() {
 
 async function TopBarText() {
   const tb = await getTranslations("Brand");
-  return <p className="hidden font-display font-semibold uppercase tracking-[0.1em] sm:block">{tb("claim")}</p>;
+  return <p className="hidden font-display font-semibold uppercase tracking-claim sm:block">{tb("claim")}</p>;
 }
 
 async function ShopLink() {
@@ -101,7 +101,7 @@ async function HeaderSearch() {
       action={publicPath({ route: "search" }, locale)}
       method="get"
       role="search"
-      className="order-last flex w-full overflow-hidden rounded-card border-[1.5px] border-forest bg-surface lg:order-none lg:w-auto lg:flex-1"
+      className="order-last flex w-full overflow-hidden rounded-card border-(length:--stroke-strong) border-forest bg-surface lg:order-none lg:w-auto lg:flex-1"
     >
       <div className="flex min-w-40 flex-[2] items-center gap-2 px-3">
         <Icon name="search" size={18} className="shrink-0 text-muted" />
@@ -121,7 +121,7 @@ async function HeaderSearch() {
           ))}
         </select>
       </div>
-      <button type="submit" className="bg-forest px-5 font-display text-[0.8125rem] font-bold uppercase tracking-caps text-offwhite hover:bg-forest-hover">
+      <button type="submit" className="bg-forest px-5 font-display text-meta font-bold uppercase tracking-caps text-offwhite hover:bg-forest-hover">
         {t("searchButton")}
       </button>
     </form>
