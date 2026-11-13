@@ -3,9 +3,10 @@
 import { useTranslations } from "next-intl";
 import { useActionState, useSyncExternalStore } from "react";
 import type { ConfirmState, EnrollState } from "@/app/[locale]/admin/mfa/actions";
+import { ui } from "@/components/ui/styles";
 
-const input = "mt-1 w-40 rounded border border-field px-3 py-2 text-lg tracking-widest";
-const button = "self-start rounded bg-forest px-4 py-2 font-medium text-offwhite";
+const input = `mt-1 w-40 rounded-card border border-field bg-surface px-3 py-2.5 text-lg tracking-widest`;
+const button = `self-start ${ui.btnDark}`;
 
 const noSubscription = () => () => {};
 
@@ -29,7 +30,7 @@ export function CodeForm({
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="factorId" value={factorId} />
       <input type="hidden" name="next" value={next} />
-      <label htmlFor="totp-code" className="font-medium">
+      <label htmlFor="totp-code" className="font-semibold">
         {t("codeLabel")}
       </label>
       <input
@@ -99,9 +100,9 @@ export function EnrollTotp({
   return (
     <div className="mt-6 flex flex-col gap-3">
       {/* eslint-disable-next-line @next/next/no-img-element -- SVG als data:-URL von Supabase, kein Optimizer */}
-      <img src={state.enrollment.qrCode} alt={t("qrAlt")} width={200} height={200} className="rounded border border-sand bg-surface p-2" />
+      <img src={state.enrollment.qrCode} alt={t("qrAlt")} width={200} height={200} className={`${ui.card} p-2`} />
       <p>{t("secretLabel")}</p>
-      <code className="w-fit select-all rounded bg-sand px-2 py-1 font-mono break-all">{state.enrollment.secret}</code>
+      <code className="w-fit select-all rounded-btn bg-sand px-2 py-1 font-mono break-all">{state.enrollment.secret}</code>
       <CodeForm action={confirmAction} locale={locale} factorId={state.enrollment.factorId} next={next} error={confirmState.error === "code"} />
     </div>
   );

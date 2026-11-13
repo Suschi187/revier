@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
 import { getVerificationQueue, VERIFICATION_QUEUE_PAGE } from "@/lib/services/admin-verifications";
+import { ui } from "@/components/ui/styles";
 
 // Verifizierungen zur Prüfung (ADR 020), älteste Einreichung zuerst. Status und CSP setzt der Proxy (ADR 014).
 export const instant = false;
@@ -38,9 +39,9 @@ export default async function VerificationQueuePage({ searchParams }: Props) {
   const last = items.at(-1);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin" className="underline">
-        {t("back")}
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin" className="text-sm underline underline-offset-2">
+        ← {t("back")}
       </Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {notice && (
@@ -53,9 +54,9 @@ export default async function VerificationQueuePage({ searchParams }: Props) {
       ) : (
         <ol className="mt-6 flex flex-col gap-4">
           {items.map((item) => (
-            <li key={item.id} className="rounded border border-sand p-4">
+            <li key={item.id} className={`${ui.card} p-4`}>
               <h2 className="font-display text-lg font-bold break-words">
-                <Link href={`/admin/verifications/${item.id}`} className="underline">
+                <Link href={`/admin/verifications/${item.id}`} className={ui.link}>
                   {t("itemTitle", { type: tv(`documentTypes.${item.documentType}`), name: item.displayName })}
                 </Link>
               </h2>
@@ -65,13 +66,13 @@ export default async function VerificationQueuePage({ searchParams }: Props) {
               <p className="mt-1 text-sm">
                 {t("waiting", { time: format.relativeTime(new Date(item.submittedAt)) })} · {t("previous", { count: item.previousRequests })}
               </p>
-              {item.isOwn && <p className="mt-1 w-fit rounded bg-notice-soft px-2 py-0.5 text-sm text-notice">{t("own")}</p>}
+              {item.isOwn && <p className="mt-1 w-fit rounded-pill bg-notice-soft px-2.5 py-0.5 text-sm text-notice">{t("own")}</p>}
             </li>
           ))}
         </ol>
       )}
       {items.length === VERIFICATION_QUEUE_PAGE && last && (
-        <Link href={`/admin/verifications?after=${encodeURIComponent(last.submittedAt)}&afterId=${last.id}`} className="mt-6 inline-block underline">
+        <Link href={`/admin/verifications?after=${encodeURIComponent(last.submittedAt)}&afterId=${last.id}`} className={`mt-6 inline-block ${ui.link}`}>
           {t("more")}
         </Link>
       )}

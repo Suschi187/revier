@@ -14,6 +14,10 @@ export const ui = {
   btnPrimaryText: `${btnShape} bg-brand text-center text-forest hover:bg-brand-hover hover:text-forest`,
   /** Bestätigen und Suchen: Waldgrün. */
   btnDark: `${btnBase} bg-forest text-offwhite hover:bg-forest-hover hover:text-offwhite`,
+  /** Endgültige Aktion (Sperren, Löschen, Ablehnen): Fehlerrot, nie Orange. */
+  btnDanger: `${btnBase} bg-error text-offwhite hover:opacity-90`,
+  /** Endgültige Nebenaktion: Rahmen in Fehlerrot. */
+  btnDangerOutline: `${btnBase} border border-error bg-surface text-error hover:bg-error-soft`,
   /** Nebenaktion: Rahmen in Waldgrün. */
   btnSecondary: `${btnBase} border border-forest bg-surface text-forest hover:bg-sand hover:text-forest`,
   input: "w-full rounded-card border border-field bg-surface px-3 py-2.5 text-forest placeholder:text-muted",

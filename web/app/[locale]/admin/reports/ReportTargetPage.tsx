@@ -7,6 +7,7 @@ import { publicPath } from "@/lib/public/paths";
 import { ACCOUNT_CODES, OUTCOMES_BY_TARGET, REPORT_NOTE_MAX, type ReportTarget } from "@/lib/reports";
 import { getReportTarget, readReportedMessage } from "@/lib/services/admin-reports";
 import { resolveReportsAction } from "./actions";
+import { ui } from "@/components/ui/styles";
 
 const ERRORS = ["changed", "code", "note", "forbidden", "adminRole", "notFound", "failed"] as const;
 
@@ -35,8 +36,8 @@ export async function ReportTargetPage({ locale, type, id, query }: { locale: Ap
   const radio = "flex items-center gap-2";
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin/reports" className="underline">{t("back")}</Link>
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin/reports" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{tr(`targets.${type}`)}: {target.label ?? t("noLabel")}</h1>
       {target.gone && <p className="mt-2 font-medium">{t("goneHint")}</p>}
 
@@ -44,45 +45,45 @@ export async function ReportTargetPage({ locale, type, id, query }: { locale: Ap
         <p className="mt-2">
           {tl(`status.${target.listing.status}`)} ·{" "}
           {target.listing.status === "pending_review" ? (
-            <Link href={`/admin/listings/${target.listing.id}`} className="underline">{t("reviewLink")}</Link>
+            <Link href={`/admin/listings/${target.listing.id}`} className={ui.link}>{t("reviewLink")}</Link>
           ) : target.listing.isPublic ? (
-            <a href={publicPath({ route: "listing", id: target.listing.id }, locale)} className="underline">{t("publicLink")}</a>
+            <a href={publicPath({ route: "listing", id: target.listing.id }, locale)} className={ui.link}>{t("publicLink")}</a>
           ) : null}
         </p>
       )}
 
       {target.account && (
-        <section className="mt-4 rounded border border-sand p-3 text-sm" aria-labelledby="h-account">
+        <section className={`${ui.card} mt-4 p-3 text-sm`} aria-labelledby="h-account">
           <h2 id="h-account" className="font-semibold">{t("account")}</h2>
           <p>
-            <Link href={`/admin/users/${target.account.id}`} className="underline">{target.account.displayName}</Link> · {ta(`accountTypes.${target.account.accountType}`)} ·{" "}
+            <Link href={`/admin/users/${target.account.id}`} className={ui.link}>{target.account.displayName}</Link> · {ta(`accountTypes.${target.account.accountType}`)} ·{" "}
             {tp(`countries.${target.account.country}`)} · {t("listings", { count: target.account.listingCount })}
           </p>
           <p>{t("memberSince", { date: format.dateTime(new Date(target.account.memberSince), { dateStyle: "medium" }) })}</p>
           {target.account.isBlocked && <p className="font-medium text-error">{t("blocked")}</p>}
-          {target.account.hasRole && <p className="font-medium">{t("hasRole")}</p>}
-          {target.account.isOwn && <p className="font-medium">{t("own")}</p>}
+          {target.account.hasRole && <p className="font-semibold">{t("hasRole")}</p>}
+          {target.account.isOwn && <p className="font-semibold">{t("own")}</p>}
         </section>
       )}
 
       <section className="mt-6" aria-labelledby="h-open">
-        <h2 id="h-open" className="font-display text-xl font-bold">{t("openReports", { count: target.open.length })}</h2>
+        <h2 id="h-open" className={`${ui.headingCaps} text-lg`}>{t("openReports", { count: target.open.length })}</h2>
         {target.handledCount > 0 && <p className="text-sm text-muted">{t("handledBefore", { count: target.handledCount })}</p>}
         <ul className="mt-2 flex flex-col gap-2">
           {target.open.map((r) => (
-            <li key={r.id} className="rounded border border-sand p-3">
-              <p className="font-medium">{tr(`reasons.${r.reason}`)} · <span className="font-normal text-muted">{date(r.createdAt)}</span></p>
+            <li key={r.id} className={`${ui.card} p-3`}>
+              <p className="font-semibold">{tr(`reasons.${r.reason}`)} · <span className="font-normal text-muted">{date(r.createdAt)}</span></p>
               {r.note && <p className="mt-1 whitespace-pre-wrap [overflow-wrap:anywhere]">{r.note}</p>}
               {type === "message" && (
                 shown === r.id && message ? (
-                  <figure className="mt-2 rounded bg-sand p-2">
+                  <figure className="mt-2 rounded-card bg-sand p-2">
                     <figcaption className="text-xs text-muted">{t("messageCaption", { sender: message.sender ?? "–", date: date(message.messageCreatedAt) })}</figcaption>
                     <blockquote className="mt-1 whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</blockquote>
                   </figure>
                 ) : (
                   <form method="get" className="mt-2">
                     <input type="hidden" name="show" value={r.id} />
-                    <button type="submit" className="rounded border border-field px-3 py-1 text-sm">{t("showMessage")}</button>
+                    <button type="submit" className={ui.btnSecondary}>{t("showMessage")}</button>
                     <span className="ml-2 text-xs text-muted">{t("showMessageHint")}</span>
                   </form>
                 )
@@ -92,17 +93,17 @@ export async function ReportTargetPage({ locale, type, id, query }: { locale: Ap
         </ul>
       </section>
 
-      {error && <p id="r-error" role="alert" className="mt-6 rounded bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
+      {error && <p id="r-error" role="alert" className="mt-6 rounded-card border border-error bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
 
       {target.open.length > 0 && (
-        <form action={resolveReportsAction} id="decision" className="mt-6 flex flex-col gap-4 rounded border border-field p-4">
+        <form action={resolveReportsAction} id="decision" className={`${ui.card} mt-6 flex flex-col gap-4 p-5`}>
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="type" value={type} />
           <input type="hidden" name="id" value={id} />
           <input type="hidden" name="version" value={target.listing?.version ?? ""} />
           <input type="hidden" name="accountId" value={target.account?.id ?? ""} />
           <fieldset className="flex flex-col gap-2" aria-describedby={error ? "r-error" : undefined}>
-            <legend className="font-medium">{t("measure")}</legend>
+            <legend className="font-semibold">{t("measure")}</legend>
             {outcomes.map((o) => (
               <label key={o} className={radio}>
                 <input type="radio" name="outcome" value={o} required disabled={(o === "account_warned" || o === "account_blocked") && (!target.account || target.account.hasRole || target.account.isOwn)} />
@@ -113,27 +114,27 @@ export async function ReportTargetPage({ locale, type, id, query }: { locale: Ap
           {/* QA M9b F5: getrennte Auswahl je Gruppe, damit ohne JavaScript kein unpassender Code ankommt. */}
           {type === "listing" && (
             <div>
-              <label htmlFor="r-code-listing" className="font-medium">{t("codeListing")}</label>
-              <select id="r-code-listing" name="codeListing" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className="mt-1 w-full rounded border border-field px-3 py-2">
+              <label htmlFor="r-code-listing" className="font-semibold">{t("codeListing")}</label>
+              <select id="r-code-listing" name="codeListing" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className={`mt-1 ${ui.input}`}>
                 <option value="">{t("codeNone")}</option>
                 {REJECT_CODES.map((code) => <option key={code} value={code}>{tm(`reasons.${code}`)}</option>)}
               </select>
             </div>
           )}
           <div>
-            <label htmlFor="r-code-account" className="font-medium">{t("codeAccount")}</label>
-            <select id="r-code-account" name="codeAccount" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className="mt-1 w-full rounded border border-field px-3 py-2">
+            <label htmlFor="r-code-account" className="font-semibold">{t("codeAccount")}</label>
+            <select id="r-code-account" name="codeAccount" defaultValue="" aria-invalid={error === "code" || undefined} aria-describedby="r-code-hint" className={`mt-1 ${ui.input}`}>
               <option value="">{t("codeNone")}</option>
               {ACCOUNT_CODES.map((code) => <option key={code} value={code}>{tm(`accountCodes.${code}`)}</option>)}
             </select>
             <p id="r-code-hint" className="text-xs text-muted">{t("codeHint")}</p>
           </div>
           <div>
-            <label htmlFor="r-note" className="font-medium">{t("note")}</label>
-            <textarea id="r-note" name="note" rows={3} maxLength={REPORT_NOTE_MAX} aria-describedby="r-note-hint" aria-invalid={error === "note" || undefined} className="mt-1 w-full rounded border border-field px-3 py-2" />
+            <label htmlFor="r-note" className="font-semibold">{t("note")}</label>
+            <textarea id="r-note" name="note" rows={3} maxLength={REPORT_NOTE_MAX} aria-describedby="r-note-hint" aria-invalid={error === "note" || undefined} className={`mt-1 ${ui.input}`} />
             <p id="r-note-hint" className="text-xs text-muted">{t("noteHint")}</p>
           </div>
-          <button type="submit" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">{t("submit")}</button>
+          <button type="submit" className={`self-start ${ui.btnDark}`}>{t("submit")}</button>
         </form>
       )}
     </main>

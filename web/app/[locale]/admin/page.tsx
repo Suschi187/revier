@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { Icon, type IconName } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
@@ -28,36 +30,49 @@ export default async function AdminPage() {
     countOpenAppeals(),
     countStuckDeletions(),
   ]);
+  // Kacheln mit offenen Vorgängen; was wartet, ist orange umrandet. Hängende Löschungen nur als Anzahl (ADR 019).
+  const queues: [string, IconName, string, string, number][] = [
+    ["/admin/listings", "list", t("queueLink"), t("pending", { count: pending }), pending],
+    ["/admin/verifications", "shield", t("verificationsLink"), t("verificationsPending", { count: verifications }), verifications],
+    ["/admin/reports", "flag", t("reportsLink"), t("reportsOpen", { count: reports }), reports],
+    ["/admin/appeals", "scale", t("appealsLink"), t("appealsOpen", { count: appeals }), appeals],
+  ];
+  const tools: [string, IconName, string][] = [
+    ["/admin/users", "user", t("usersLink")],
+    ["/admin/audit", "edit", t("auditLink")],
+    ["/admin/admins", "lock", t("adminsLink")],
+  ];
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
-      <p className="mt-4">{t("pending", { count: pending })}</p>
-      {/* Hängende Löschungen nur als Anzahl, ohne Identität (ADR 019). */}
-      {stuck !== null && stuck > 0 && <p className="mt-2 font-medium text-error" role="status">{t("stuckDeletions", { count: stuck })}</p>}
-      <Link href="/admin/listings" className="mt-2 block underline">
-        {t("queueLink")}
-      </Link>
-      <p className="mt-6">{t("verificationsPending", { count: verifications })}</p>
-      <Link href="/admin/verifications" className="mt-2 block underline">
-        {t("verificationsLink")}
-      </Link>
-      <p className="mt-6">{t("reportsOpen", { count: reports })}</p>
-      <Link href="/admin/reports" className="mt-2 block underline">
-        {t("reportsLink")}
-      </Link>
-      <p className="mt-6">{t("appealsOpen", { count: appeals })}</p>
-      <Link href="/admin/appeals" className="mt-2 block underline">
-        {t("appealsLink")}
-      </Link>
-      <Link href="/admin/users" className="mt-6 block underline">
-        {t("usersLink")}
-      </Link>
-      <Link href="/admin/audit" className="mt-2 block underline">
-        {t("auditLink")}
-      </Link>
-      <Link href="/admin/admins" className="mt-2 block underline">
-        {t("adminsLink")}
-      </Link>
+      {stuck !== null && stuck > 0 && (
+        <p className="mt-4 rounded-card border border-error bg-error-soft p-3 font-semibold text-error" role="status">{t("stuckDeletions", { count: stuck })}</p>
+      )}
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+        {queues.map(([href, icon, label, text, count]) => (
+          <li key={href}>
+            <Link href={href} className={`${ui.card} flex h-full items-start gap-4 p-5 no-underline hover:bg-sand/40 ${count > 0 ? "border-brand" : ""}`}>
+              <span aria-hidden="true" className={`flex size-11 shrink-0 items-center justify-center rounded-full ${count > 0 ? "bg-brand text-forest" : "bg-sand text-forest"}`}>
+                <Icon name={icon} size={22} />
+              </span>
+              <span className="min-w-0">
+                <span className="block font-display font-bold text-forest underline underline-offset-2 [overflow-wrap:anywhere]">{label}</span>
+                <span className="mt-1 block text-sm text-forest">{text}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <ul className={`${ui.card} mt-6 divide-y divide-sand`}>
+        {tools.map(([href, icon, label]) => (
+          <li key={href}>
+            <Link href={href} className="flex min-h-11 items-center gap-3 px-5 py-3 font-semibold text-forest no-underline hover:bg-sand/40">
+              <Icon name={icon} size={20} />
+              <span className="underline underline-offset-2">{label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }

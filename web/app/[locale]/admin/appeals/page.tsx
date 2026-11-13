@@ -5,6 +5,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { actionKey } from "@/lib/reports";
 import { requireAdmin } from "@/lib/services/admin";
 import { getAppealQueue, REPORT_QUEUE_PAGE } from "@/lib/services/admin-reports";
+import { ui } from "@/components/ui/styles";
 
 // Offene Beschwerden, älteste zuerst (ADR 020). Status und CSP setzt der Proxy (ADR 014).
 export const instant = false;
@@ -29,8 +30,8 @@ export default async function AdminAppealsPage({ searchParams }: Props) {
   const notice = NOTICES.find((n) => n === query.notice);
   const last = items.at(-1);
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin" className="underline">{t("back")}</Link>
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {notice && <p role="status" className="mt-4 text-success">{t(`notices.${notice}`)}</p>}
       {items.length === 0 ? (
@@ -40,19 +41,19 @@ export default async function AdminAppealsPage({ searchParams }: Props) {
           {items.map((item) => {
             const key = actionKey(item.decisionAction);
             return (
-              <li key={item.id} className="rounded border border-sand p-4">
+              <li key={item.id} className={`${ui.card} p-4`}>
                 <h2 className="font-display text-lg font-bold break-words">
-                  <Link href={`/admin/appeals/${item.id}`} className="underline">{t("itemTitle", { action: key ? td(`actions.${key}`) : item.decisionAction, name: item.displayName })}</Link>
+                  <Link href={`/admin/appeals/${item.id}`} className={ui.link}>{t("itemTitle", { action: key ? td(`actions.${key}`) : item.decisionAction, name: item.displayName })}</Link>
                 </h2>
                 <p className="text-sm text-muted">{t("waiting", { time: format.relativeTime(new Date(item.createdAt)) })}</p>
-                {item.sameReviewerOnly && <p className="mt-1 w-fit rounded bg-notice-soft px-2 py-0.5 text-sm text-notice">{t("byMe")}</p>}
+                {item.sameReviewerOnly && <p className="mt-1 w-fit rounded-pill bg-notice-soft px-2.5 py-0.5 text-sm text-notice">{t("byMe")}</p>}
               </li>
             );
           })}
         </ol>
       )}
       {items.length === REPORT_QUEUE_PAGE && last && (
-        <Link href={`/admin/appeals?after=${encodeURIComponent(last.createdAt)}&afterId=${last.id}`} className="mt-6 inline-block underline">{t("more")}</Link>
+        <Link href={`/admin/appeals?after=${encodeURIComponent(last.createdAt)}&afterId=${last.id}`} className={`mt-6 inline-block ${ui.link}`}>{t("more")}</Link>
       )}
     </main>
   );

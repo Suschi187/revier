@@ -10,6 +10,7 @@ import { requireAdmin } from "@/lib/services/admin";
 import { getListingForReview } from "@/lib/services/moderation";
 import { listRegions, listSpecies } from "@/lib/services/regions";
 import { decideListing } from "./actions";
+import { ui } from "@/components/ui/styles";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
 // Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
@@ -44,9 +45,9 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
   ]);
   if (!review.version) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <Link href="/admin/listings" className="underline">
-          {t("back")}
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+        <Link href="/admin/listings" className="text-sm underline underline-offset-2">
+          ← {t("back")}
         </Link>
         <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{review.listing.title}</h1>
         <p className="mt-4">{t("notPending", { status: tl(`status.${review.listing.status}`) })}</p>
@@ -61,9 +62,9 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
   const radio = "flex items-center gap-2";
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin/listings" className="underline">
-        {t("back")}
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin/listings" className="text-sm underline underline-offset-2">
+        ← {t("back")}
       </Link>
       <div className="mt-4 flex flex-col gap-6">
         <ListingSummary
@@ -88,12 +89,12 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
           <p>{t("previousRejections", { count: review.previousRejections })}</p>
         </section>
 
-        <form action={decideListing} id="decision" className="flex flex-col gap-4 rounded border border-field p-4">
+        <form action={decideListing} id="decision" className={`${ui.card} flex flex-col gap-4 p-5`}>
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="id" value={listing.id} />
           <input type="hidden" name="version" value={review.version} />
           {error && (
-            <div id="r-error" role="alert" className="rounded bg-error-soft p-3 text-error">
+            <div id="r-error" role="alert" className="rounded-card border border-error bg-error-soft p-3 text-error">
               <p>{t(`errors.${error}`)}</p>
               {missing.length > 0 && (
                 <ul className="mt-1 list-disc pl-5">
@@ -105,7 +106,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
             </div>
           )}
           <fieldset className="flex flex-col gap-2" aria-describedby={error ? "r-error" : undefined}>
-            <legend className="font-medium">{t("decision")}</legend>
+            <legend className="font-semibold">{t("decision")}</legend>
             {DECISIONS.map((decision) => (
               <label key={decision} className={radio}>
                 <input type="radio" name="decision" value={decision} required />
@@ -114,7 +115,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
             ))}
           </fieldset>
           <div>
-            <label htmlFor="r-code" className="font-medium">
+            <label htmlFor="r-code" className="font-semibold">
               {t("reason")}
             </label>
             <select
@@ -123,7 +124,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               defaultValue=""
               aria-describedby={error === "code" ? "r-code-hint r-error" : "r-code-hint"}
               aria-invalid={error === "code" || undefined}
-              className="mt-1 w-full rounded border border-field px-3 py-2"
+              className={`mt-1 ${ui.input}`}
             >
               <option value="">{t("reasonNone")}</option>
               {REJECT_CODES.map((code) => (
@@ -137,7 +138,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
             </p>
           </div>
           <div>
-            <label htmlFor="r-note" className="font-medium">
+            <label htmlFor="r-note" className="font-semibold">
               {t("note")}
             </label>
             <textarea
@@ -147,13 +148,13 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
               maxLength={NOTE_MAX}
               aria-describedby={error === "note" ? "r-note-hint r-error" : "r-note-hint"}
               aria-invalid={error === "note" || undefined}
-              className="mt-1 w-full rounded border border-field px-3 py-2"
+              className={`mt-1 ${ui.input}`}
             />
             <p id="r-note-hint" className="text-xs text-muted">
               {t("noteHint")}
             </p>
           </div>
-          <button type="submit" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">
+          <button type="submit" className={`self-start ${ui.btnDark}`}>
             {t("submit")}
           </button>
         </form>

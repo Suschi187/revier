@@ -5,6 +5,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
 import { getReviewQueue, QUEUE_PAGE } from "@/lib/services/moderation";
 import { listRegions } from "@/lib/services/regions";
+import { ui } from "@/components/ui/styles";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
 // Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
@@ -37,9 +38,9 @@ export default async function ReviewQueuePage({ searchParams }: Props) {
   const last = items.at(-1);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin" className="underline">
-        {t("back")}
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin" className="text-sm underline underline-offset-2">
+        ← {t("back")}
       </Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {notice && (
@@ -52,9 +53,9 @@ export default async function ReviewQueuePage({ searchParams }: Props) {
       ) : (
         <ol className="mt-6 flex flex-col gap-4">
           {items.map((item) => (
-            <li key={item.id} className="rounded border border-sand p-4">
+            <li key={item.id} className={`${ui.card} p-4`}>
               <h2 className="font-display text-lg font-bold break-words">
-                <Link href={`/admin/listings/${item.id}`} className="underline">
+                <Link href={`/admin/listings/${item.id}`} className={ui.link}>
                   {item.title}
                 </Link>
               </h2>
@@ -66,7 +67,7 @@ export default async function ReviewQueuePage({ searchParams }: Props) {
                 {item.ownerName && <> · {t("owner", { name: item.ownerName })}</>}
               </p>
               {item.hintCount > 0 && (
-                <p className="mt-1 w-fit rounded bg-notice-soft px-2 py-0.5 text-sm text-notice">{t("hints", { count: item.hintCount })}</p>
+                <p className="mt-1 w-fit rounded-pill bg-notice-soft px-2.5 py-0.5 text-sm text-notice">{t("hints", { count: item.hintCount })}</p>
               )}
               {(item.listingRejections > 0 || item.ownerRejections > 0) && (
                 <p className="mt-1 text-sm text-error">{t("rejections", { listing: item.listingRejections, owner: item.ownerRejections })}</p>
@@ -78,7 +79,7 @@ export default async function ReviewQueuePage({ searchParams }: Props) {
       {items.length === QUEUE_PAGE && last && (
         <Link
           href={`/admin/listings?after=${encodeURIComponent(last.submittedAt)}&afterId=${last.id}`}
-          className="mt-6 inline-block underline"
+          className={`mt-6 inline-block ${ui.link}`}
         >
           {t("more")}
         </Link>

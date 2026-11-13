@@ -7,6 +7,7 @@ import { ACCOUNT_CODES, REPORT_NOTE_MAX } from "@/lib/reports";
 import { requireAdmin } from "@/lib/services/admin";
 import { findAccount } from "@/lib/services/admin-reports";
 import { accountAction } from "../actions";
+import { ui } from "@/components/ui/styles";
 
 // Konto im Admin (ADR 020): Sperren, Entsperren, Verwarnen mit Code und Begründung für den Betroffenen (H9). Jede
 // Ansicht zählt als Suche (Limit, Audit `user.looked_up`). Konten mit Rolle lassen sich nicht sperren.
@@ -38,8 +39,8 @@ export default async function AdminUserPage(props: Props) {
   ]);
   if (!result.ok) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <Link href="/admin/users" className="underline">{t("back")}</Link>
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+        <Link href="/admin/users" className="text-sm underline underline-offset-2">← {t("back")}</Link>
         <p role="alert" className="mt-4 text-error">{t(`errors.${result.error}`)}</p>
       </main>
     );
@@ -50,35 +51,35 @@ export default async function AdminUserPage(props: Props) {
   const notice = NOTICES.find((n) => n === query.notice);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin/users" className="underline">{t("back")}</Link>
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin/users" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{account.displayName}</h1>
       {notice && <p role="status" className="mt-4 text-success">{t(`notices.${notice}`)}</p>}
       <dl className="mt-4 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-1 text-sm">
-        <dt className="font-medium">{t("accountType")}</dt>
+        <dt className="font-semibold">{t("accountType")}</dt>
         <dd>{ta(`accountTypes.${account.accountType}`)}</dd>
-        <dt className="font-medium">{t("country")}</dt>
+        <dt className="font-semibold">{t("country")}</dt>
         <dd>{tp(`countries.${account.country}`)}</dd>
-        <dt className="font-medium">{t("memberSince")}</dt>
+        <dt className="font-semibold">{t("memberSince")}</dt>
         <dd>{format.dateTime(new Date(account.memberSince), { dateStyle: "medium" })}</dd>
-        <dt className="font-medium">{t("verification")}</dt>
+        <dt className="font-semibold">{t("verification")}</dt>
         <dd>{ta(`verificationStatus.${account.verificationStatus}`)}</dd>
-        <dt className="font-medium">{t("listings")}</dt>
+        <dt className="font-semibold">{t("listings")}</dt>
         <dd>{account.listingCount}</dd>
-        <dt className="font-medium">{t("openReports")}</dt>
+        <dt className="font-semibold">{t("openReports")}</dt>
         <dd>{account.openReports}</dd>
-        <dt className="font-medium">{t("status")}</dt>
+        <dt className="font-semibold">{t("status")}</dt>
         <dd className={account.isBlocked ? "font-medium text-error" : undefined}>{account.isBlocked ? t("blocked") : t("active")}</dd>
       </dl>
-      {account.hasRole && <p className="mt-4 font-medium">{t("hasRole")}</p>}
-      {error && <p role="alert" id="a-error" className="mt-6 rounded bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
+      {account.hasRole && <p className="mt-4 font-semibold">{t("hasRole")}</p>}
+      {error && <p role="alert" id="a-error" className="mt-6 rounded-card border border-error bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
 
       {!account.hasRole && (
-        <form action={accountAction} className="mt-6 flex flex-col gap-4 rounded border border-field p-4">
+        <form action={accountAction} className={`${ui.card} mt-6 flex flex-col gap-4 p-5`}>
           <input type="hidden" name="locale" value={locale} />
           <input type="hidden" name="id" value={account.id} />
           <fieldset className="flex flex-col gap-2" aria-describedby={error ? "a-error" : undefined}>
-            <legend className="font-medium">{t("action")}</legend>
+            <legend className="font-semibold">{t("action")}</legend>
             {account.isBlocked ? (
               <label className="flex items-center gap-2"><input type="radio" name="action" value="unblock" required />{t("actions.unblock")}</label>
             ) : (
@@ -89,18 +90,18 @@ export default async function AdminUserPage(props: Props) {
             )}
           </fieldset>
           <div>
-            <label htmlFor="a-code" className="font-medium">{t("code")}</label>
-            <select id="a-code" name="code" defaultValue="" className="mt-1 w-full rounded border border-field px-3 py-2">
+            <label htmlFor="a-code" className="font-semibold">{t("code")}</label>
+            <select id="a-code" name="code" defaultValue="" className={`mt-1 ${ui.input}`}>
               <option value="">{t("codeNone")}</option>
               {ACCOUNT_CODES.map((code) => <option key={code} value={code}>{tm(`accountCodes.${code}`)}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="a-note" className="font-medium">{t("note")}</label>
-            <textarea id="a-note" name="note" rows={3} maxLength={REPORT_NOTE_MAX} aria-describedby="a-note-hint" className="mt-1 w-full rounded border border-field px-3 py-2" />
+            <label htmlFor="a-note" className="font-semibold">{t("note")}</label>
+            <textarea id="a-note" name="note" rows={3} maxLength={REPORT_NOTE_MAX} aria-describedby="a-note-hint" className={`mt-1 ${ui.input}`} />
             <p id="a-note-hint" className="text-xs text-muted">{t("noteHint")}</p>
           </div>
-          <button type="submit" className="self-start rounded bg-error px-4 py-2 font-medium text-offwhite">{t("submit")}</button>
+          <button type="submit" className={`self-start ${ui.btnDanger}`}>{t("submit")}</button>
         </form>
       )}
     </main>

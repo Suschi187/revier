@@ -7,6 +7,7 @@ import { actionKey, REPORT_NOTE_MAX } from "@/lib/reports";
 import { requireAdmin } from "@/lib/services/admin";
 import { getAppeal } from "@/lib/services/admin-reports";
 import { decideAppealAction } from "../actions";
+import { ui } from "@/components/ui/styles";
 
 // Beschwerde mit der ursprünglichen Entscheidung (ADR 020). Nie die Identität des ursprünglichen Admins, nur der
 // Hinweis „deine eigene Entscheidung“. Status und CSP setzt der Proxy (ADR 014).
@@ -36,12 +37,12 @@ export default async function AdminAppealPage(props: Props) {
   const d = appeal.decision;
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin/appeals" className="underline">{t("back")}</Link>
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin/appeals" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("itemTitle", { action: key ? td(`actions.${key}`) : appeal.decisionAction, name: appeal.user.displayName })}</h1>
       <p className="mt-1 text-sm text-muted">{t("submitted", { date: date(appeal.createdAt) })}</p>
 
-      <section className="mt-6 rounded border border-sand p-3" aria-labelledby="h-decision">
+      <section className={`${ui.card} mt-6 p-3`} aria-labelledby="h-decision">
         <h2 id="h-decision" className="font-semibold">{t("decision")}</h2>
         {d ? (
           <>
@@ -49,8 +50,8 @@ export default async function AdminAppealPage(props: Props) {
             {d.outcome && <p className="text-sm">{tr(`targets.${d.targetType}`)} · {tr(`outcomes.${d.outcome}`)}</p>}
             {d.code && <p className="text-sm">{t("code")}: {d.code}</p>}
             {d.reason && <p className="mt-1 whitespace-pre-wrap [overflow-wrap:anywhere]">{d.reason}</p>}
-            {d.targetType === "listing" && <Link href={`/admin/reports/listing/${d.targetId}`} className="text-sm underline">{t("targetLink")}</Link>}
-            {d.byMe && <p className="mt-2 w-fit rounded bg-notice-soft px-2 py-0.5 text-sm text-notice">{t("byMe")}</p>}
+            {d.targetType === "listing" && <Link href={`/admin/reports/listing/${d.targetId}`} className={`text-sm ${ui.link}`}>{t("targetLink")}</Link>}
+            {d.byMe && <p className="mt-2 w-fit rounded-pill bg-notice-soft px-2.5 py-0.5 text-sm text-notice">{t("byMe")}</p>}
           </>
         ) : (
           <p className="text-sm">{t("decisionGone")}</p>
@@ -59,29 +60,29 @@ export default async function AdminAppealPage(props: Props) {
 
       <section className="mt-4" aria-labelledby="h-text">
         <h2 id="h-text" className="font-semibold">{t("text")}</h2>
-        <blockquote className="mt-1 whitespace-pre-wrap rounded bg-sand p-3 [overflow-wrap:anywhere]">{appeal.text}</blockquote>
+        <blockquote className="mt-1 whitespace-pre-wrap rounded-card bg-sand p-3 [overflow-wrap:anywhere]">{appeal.text}</blockquote>
       </section>
 
       {appeal.status !== "open" ? (
         <p className="mt-6">{t(`status.${appeal.status}`)}{appeal.decisionNote ? `: ${appeal.decisionNote}` : ""}{appeal.sameReviewer ? ` (${t("sameReviewer")})` : ""}</p>
       ) : (
         <>
-          {error && <p role="alert" id="ap-error" className="mt-6 rounded bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
-          <form action={decideAppealAction} className="mt-6 flex flex-col gap-4 rounded border border-field p-4">
+          {error && <p role="alert" id="ap-error" className="mt-6 rounded-card border border-error bg-error-soft p-3 text-error">{t(`errors.${error}`)}</p>}
+          <form action={decideAppealAction} className={`${ui.card} mt-6 flex flex-col gap-4 p-5`}>
             <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={appeal.id} />
             <input type="hidden" name="userId" value={appeal.user.id} />
             <fieldset className="flex flex-col gap-2" aria-describedby={error ? "ap-error" : undefined}>
-              <legend className="font-medium">{t("outcome")}</legend>
+              <legend className="font-semibold">{t("outcome")}</legend>
               <label className="flex items-center gap-2"><input type="radio" name="outcome" value="upheld" required />{t("outcomes.upheld")}</label>
               <label className="flex items-center gap-2"><input type="radio" name="outcome" value="reversed" required />{t("outcomes.reversed")}</label>
             </fieldset>
             <div>
-              <label htmlFor="ap-note" className="font-medium">{t("note")}</label>
-              <textarea id="ap-note" name="note" rows={3} required maxLength={REPORT_NOTE_MAX} aria-describedby="ap-note-hint" className="mt-1 w-full rounded border border-field px-3 py-2" />
+              <label htmlFor="ap-note" className="font-semibold">{t("note")}</label>
+              <textarea id="ap-note" name="note" rows={3} required maxLength={REPORT_NOTE_MAX} aria-describedby="ap-note-hint" className={`mt-1 ${ui.input}`} />
               <p id="ap-note-hint" className="text-xs text-muted">{t("noteHint")}</p>
             </div>
-            <button type="submit" className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite">{t("submit")}</button>
+            <button type="submit" className={`self-start ${ui.btnDark}`}>{t("submit")}</button>
           </form>
         </>
       )}

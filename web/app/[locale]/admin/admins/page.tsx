@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { candidateProfile, listAdmins, requireAdmin, roleRules } from "@/lib/services/admin";
 import { changeRole, findAdminCandidate } from "./actions";
+import { ui } from "@/components/ui/styles";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
 // Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
@@ -18,9 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const NOTICES = ["granted", "revoked"] as const;
 const ERRORS = ["notFound", "code", "stepUp", "waiting", "limit", "lastAdmin", "lookup", "forbidden", "failed"] as const;
-const input = "mt-1 block w-full max-w-md rounded border border-field px-3 py-2";
-const codeInput = "mt-1 block w-40 rounded border border-field px-3 py-2 tracking-widest";
-const button = "rounded bg-forest px-4 py-2 font-medium text-offwhite";
+const input = `mt-1 block max-w-md ${ui.input}`;
+const codeInput = "mt-1 block w-40 rounded-card border border-field bg-surface px-3 py-2.5 tracking-widest";
+const button = `self-start ${ui.btnDark}`;
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
@@ -50,9 +51,9 @@ export default async function AdminsPage({ searchParams }: Props) {
   );
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/admin" className="underline">
-        {t("back")}
+    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin" className="text-sm underline underline-offset-2">
+        ← {t("back")}
       </Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
@@ -67,7 +68,7 @@ export default async function AdminsPage({ searchParams }: Props) {
         </p>
       )}
       {error && (
-        <p role="alert" className="mt-4 rounded bg-error-soft p-3 text-error">
+        <p role="alert" className="mt-4 rounded-card border border-error bg-error-soft p-3 text-error">
           {error === "waiting" && rules
             ? until
               ? t("errors.waiting", { date: date(until), days: rules.waitingDays })
@@ -77,15 +78,15 @@ export default async function AdminsPage({ searchParams }: Props) {
       )}
 
       <section className="mt-8" aria-labelledby="admins-list">
-        <h2 id="admins-list" className="font-display text-xl font-bold">
+        <h2 id="admins-list" className={`${ui.headingCaps} text-lg`}>
           {t("listTitle")}
         </h2>
         <ul className="mt-3 flex flex-col gap-3">
           {admins.map((entry) => {
             const name = entry.displayName ?? entry.userId.slice(0, 8);
             return (
-              <li key={entry.userId} className="rounded border border-sand p-3">
-                <p className="font-medium">
+              <li key={entry.userId} className={`${ui.card} p-3`}>
+                <p className="font-semibold">
                   {name} {entry.userId === me.id && t("you")}
                 </p>
                 <p className="text-sm">
@@ -96,11 +97,11 @@ export default async function AdminsPage({ searchParams }: Props) {
                   <summary className="cursor-pointer underline">{t("revoke")}</summary>
                   <form action={changeRole} className="mt-2 flex flex-col gap-2">
                     {hidden("revoke", entry.userId)}
-                    <label htmlFor={`code-${entry.userId}`} className="text-sm font-medium">
+                    <label htmlFor={`code-${entry.userId}`} className="text-sm font-semibold">
                       {t("revokeCode", { name })}
                     </label>
                     <input id={`code-${entry.userId}`} name="code" inputMode="numeric" autoComplete="one-time-code" required className={codeInput} />
-                    <button type="submit" className="self-start rounded border border-error px-3 py-1.5 text-error">
+                    <button type="submit" className={`self-start ${ui.btnDangerOutline}`}>
                       {t("revokeConfirm", { name })}
                     </button>
                   </form>
@@ -112,12 +113,12 @@ export default async function AdminsPage({ searchParams }: Props) {
       </section>
 
       <section className="mt-8" aria-labelledby="admins-find">
-        <h2 id="admins-find" className="font-display text-xl font-bold">
+        <h2 id="admins-find" className={`${ui.headingCaps} text-lg`}>
           {t("findTitle")}
         </h2>
         <form action={findAdminCandidate} className="mt-3 flex flex-col gap-2">
           <input type="hidden" name="locale" value={locale} />
-          <label htmlFor="admin-email" className="font-medium">
+          <label htmlFor="admin-email" className="font-semibold">
             {t("email")}
           </label>
           <input id="admin-email" name="email" type="email" autoComplete="off" required className={input} />
@@ -127,14 +128,14 @@ export default async function AdminsPage({ searchParams }: Props) {
         </form>
 
         {candidate && candidateId && (
-          <div className="mt-4 rounded border border-field p-4">
-            <p className="font-medium">{t("candidate", { name: candidate.displayName, date: date(candidate.memberSince) })}</p>
+          <div className={`${ui.card} mt-4 p-4`}>
+            <p className="font-semibold">{t("candidate", { name: candidate.displayName, date: date(candidate.memberSince) })}</p>
             {isAdmin ? (
               <p className="mt-2">{t("alreadyAdmin")}</p>
             ) : (
               <form action={changeRole} className="mt-3 flex flex-col gap-2">
                 {hidden("grant", candidateId)}
-                <label htmlFor="grant-code" className="font-medium">
+                <label htmlFor="grant-code" className="font-semibold">
                   {t("code")}
                 </label>
                 <input id="grant-code" name="code" inputMode="numeric" autoComplete="one-time-code" required className={codeInput} />

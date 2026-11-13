@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireAdmin } from "@/lib/services/admin";
 import { AUDIT_ACTIONS, AUDIT_PAGE, getAuditLog } from "@/lib/services/audit";
+import { ui } from "@/components/ui/styles";
 
 // `instant = false` nimmt die Seite aus der Instant-Navigation-Prüfung, damit sie die Session ohne
 // Suspense-Grenze liest. Den Status (403, Login) setzt der Proxy; die Prüfung hier autorisiert nur und kann
@@ -52,19 +53,19 @@ export default async function AuditPage({ searchParams }: Props) {
   const filters = new URLSearchParams({ ...(action ? { action } : {}), ...(targetId ? { target: targetId } : {}) });
 
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-12">
-      <Link href="/admin" className="underline">
-        {t("back")}
+    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/admin" className="text-sm underline underline-offset-2">
+        ← {t("back")}
       </Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
 
       <form method="get" className="mt-6 flex flex-wrap items-end gap-4">
         {/* min-w-0/max-w-full: lange Aktions-Labels (M9b, z. B. pl) dürfen die Seite bei 360 px nicht verbreitern. */}
         <div className="min-w-0 max-w-full">
-          <label htmlFor="a-action" className="font-medium">
+          <label htmlFor="a-action" className="font-semibold">
             {t("filterAction")}
           </label>
-          <select id="a-action" name="action" defaultValue={action ?? ""} className="mt-1 block w-full max-w-full rounded border border-field px-3 py-2">
+          <select id="a-action" name="action" defaultValue={action ?? ""} className={`mt-1 block max-w-full ${ui.input}`}>
             <option value="">{t("filterAll")}</option>
             {AUDIT_ACTIONS.map((a) => (
               <option key={a} value={a}>
@@ -74,12 +75,12 @@ export default async function AuditPage({ searchParams }: Props) {
           </select>
         </div>
         <div>
-          <label htmlFor="a-target" className="font-medium">
+          <label htmlFor="a-target" className="font-semibold">
             {t("filterTarget")}
           </label>
-          <input id="a-target" name="target" defaultValue={targetId ?? ""} className="mt-1 block w-80 max-w-full rounded border border-field px-3 py-2 font-mono text-sm" />
+          <input id="a-target" name="target" defaultValue={targetId ?? ""} className={`mt-1 block w-80 max-w-full ${ui.input} font-mono text-sm`} />
         </div>
-        <button type="submit" className="rounded bg-forest px-4 py-2 font-medium text-offwhite">
+        <button type="submit" className={ui.btnDark}>
           {t("filter")}
         </button>
       </form>
@@ -87,36 +88,36 @@ export default async function AuditPage({ searchParams }: Props) {
       {entries.length === 0 ? (
         <p className="mt-6">{t("empty")}</p>
       ) : (
-        <div className="mt-6 overflow-x-auto">
+        <div className={`${ui.card} mt-6 overflow-x-auto`}>
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-field">
-                <th scope="col" className="py-2 pr-4">{t("time")}</th>
-                <th scope="col" className="py-2 pr-4">{t("action")}</th>
-                <th scope="col" className="py-2 pr-4">{t("actor")}</th>
-                <th scope="col" className="py-2 pr-4">{t("target")}</th>
-                <th scope="col" className="py-2">{t("details")}</th>
+              <tr className="bg-sand">
+                <th scope="col" className="px-3 py-2">{t("time")}</th>
+                <th scope="col" className="px-3 py-2">{t("action")}</th>
+                <th scope="col" className="px-3 py-2">{t("actor")}</th>
+                <th scope="col" className="px-3 py-2">{t("target")}</th>
+                <th scope="col" className="px-3 py-2">{t("details")}</th>
               </tr>
             </thead>
             <tbody>
               {entries.map((entry) => (
-                <tr key={entry.id} className="border-b border-sand align-top">
-                  <td className="py-2 pr-4 whitespace-nowrap">{format.dateTime(new Date(entry.createdAt), { dateStyle: "short", timeStyle: "medium" })}</td>
-                  <td className="py-2 pr-4">{label(entry.action)}</td>
-                  <td className="py-2 pr-4">{entry.actorName ?? t("system")}</td>
-                  <td className="py-2 pr-4 font-mono text-xs">
+                <tr key={entry.id} className="border-t border-sand align-top">
+                  <td className="px-3 py-2 whitespace-nowrap">{format.dateTime(new Date(entry.createdAt), { dateStyle: "short", timeStyle: "medium" })}</td>
+                  <td className="px-3 py-2">{label(entry.action)}</td>
+                  <td className="px-3 py-2">{entry.actorName ?? t("system")}</td>
+                  <td className="px-3 py-2 font-mono text-xs">
                     {entry.targetType}{" "}
-                    <Link href={`/admin/audit?target=${entry.targetId}`} className="underline">
+                    <Link href={`/admin/audit?target=${entry.targetId}`} className={ui.link}>
                       {entry.targetId.slice(0, 8)}
                     </Link>
                   </td>
-                  <td className="py-2">
+                  <td className="px-3 py-2">
                     <dl className="grid grid-cols-[max-content_1fr] gap-x-2">
                       {Object.entries(entry.details)
                         .filter(([, value]) => value !== null && value !== undefined)
                         .map(([key, value]) => (
                           <div key={key} className="contents">
-                            <dt className="font-medium">{detailKey(key)}</dt>
+                            <dt className="font-semibold">{detailKey(key)}</dt>
                             <dd className="break-words">{detailValue(key, value)}</dd>
                           </div>
                         ))}
@@ -131,7 +132,7 @@ export default async function AuditPage({ searchParams }: Props) {
       {entries.length === AUDIT_PAGE && last && (
         <Link
           href={`/admin/audit?${filters.toString()}${filters.size ? "&" : ""}before=${encodeURIComponent(last.createdAt)}&beforeId=${last.id}`}
-          className="mt-6 inline-block underline"
+          className={`mt-6 inline-block ${ui.link}`}
         >
           {t("more")}
         </Link>
