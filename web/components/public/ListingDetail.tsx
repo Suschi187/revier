@@ -1,4 +1,5 @@
 import { getFormatter, getTranslations } from "next-intl/server";
+import { SpeciesIcon } from "@/components/brand/SpeciesIcon";
 import { AttributeRow } from "@/components/listings/ListingSummary";
 import { KindIcon } from "@/components/brand/KindIcon";
 import { DetailMap } from "@/components/map/DetailMap";
@@ -131,7 +132,13 @@ export async function ListingDetail({
               {listing.species.length > 0 && (
                 <>
                   <dt>{t("fields.species")}</dt>
-                  <dd>{listing.species.map((code) => species[code] ?? code).join(", ")}</dd>
+                  <dd>
+                    <ul className="flex flex-wrap gap-1.5">
+                      {listing.species.map((code) => (
+                        <li key={code} className={ui.chip}><SpeciesIcon code={code} size={20} />{species[code] ?? code}</li>
+                      ))}
+                    </ul>
+                  </dd>
                 </>
               )}
               {Object.entries(listing.attributes).map(([key, value]) => (

@@ -8,6 +8,8 @@ import { describeFilters, extendWindow, NAME_MAX, resultsHref, SAVED_SEARCH_LIMI
 import { filterTexts } from "@/lib/saved-searches/texts";
 import { requireSessionUser } from "@/lib/services/auth";
 import { listSavedSearches, type SavedSearch } from "@/lib/services/saved-searches";
+import { ConfirmPanel } from "@/components/ui/ConfirmPanel";
+import { ui } from "@/components/ui/styles";
 import { changeSavedSearchAction } from "./actions";
 
 // Suchaufträge verwalten (ADR 018). Ohne Suspense, damit Liste und Formulare ohne JavaScript im HTML stehen (QA M3
@@ -162,12 +164,13 @@ async function SavedSearchItem({ item, locale, confirmDelete }: { item: SavedSea
 
       {/* Löschen zweistufig ohne confirm(): Der Link zeigt die Rückfrage, erst der Button löscht (POST). */}
       {confirmDelete ? (
-        <div role="group" aria-labelledby={`delete-${item.id}`} className="mt-3 rounded-btn border border-error bg-error-soft p-3">
-          <p id={`delete-${item.id}`} className="font-medium text-error">{t("actions.deleteConfirm", { name: item.name })}</p>
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <ActionForm locale={locale} id={item.id} op="delete" label={t("actions.deleteYes")} className="rounded-btn bg-error px-3 py-1 text-offwhite" />
-            <a href={`/${locale}/account/searches#search-${item.id}`} className="underline">{t("actions.cancel")}</a>
-          </div>
+        <div className="mt-3">
+          <ConfirmPanel
+            id={`delete-${item.id}`}
+            title={t("actions.deleteConfirm", { name: item.name })}
+            cancel={<a href={`/${locale}/account/searches#search-${item.id}`} className={ui.btnSecondary}>{t("actions.cancel")}</a>}
+            action={<ActionForm locale={locale} id={item.id} op="delete" label={t("actions.deleteYes")} className={ui.btnDanger} />}
+          />
         </div>
       ) : (
         <p className="mt-3">

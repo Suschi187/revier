@@ -1801,6 +1801,27 @@
     "headingSample": "Find your hunting ground.",
     "bodySample": "A lease, a hunting permit or a stand on a driven hunt. Directly from hunter to hunter. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
     "consent": "Cookie banner (template)",
-    "consentNote": "Not active: it only appears once an optional cookie is added (ADR 021)."
+    "consentNote": "Not active: it only appears once an optional cookie is added (ADR 021).",
+    "dialogs": "Dialogs",
+    "dialogTitle": "Delete listing?",
+    "dialogText": "The listing will be deleted permanently. Conversations stay readable for your chat partner.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "navigation": "Tabs, toggle, paging",
+    "wizard": "Listing wizard",
+    "chat": "Chat",
+    "chatIn": "Hi, the hunting permit is still available. When would you like to see the hunting ground?",
+    "chatOut": "Saturday morning would suit me. Is there a high seat at the edge of the field?",
+    "chatNotice": "The listing is no longer available. You can keep writing.",
+    "mapPopup": "Map popup",
+    "species": "Game species",
+    "speciesNote": "Own drawings in the line style of the logo. Always shown together with the name.",
+    "dog": "Dog handlers, tracking",
+    "loading": "Loading",
+    "loadingLabel": "Listings are loading"
+  },
+  "Offline": {
+    "title": "No connection.",
+    "text": "You are seeing the last loaded state. Sending works again once you are online."
   }
 }

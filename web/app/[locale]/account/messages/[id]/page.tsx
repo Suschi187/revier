@@ -9,6 +9,7 @@ import { publicPath } from "@/lib/public/paths";
 import { conversationInfo, conversationMessages, markRead } from "@/lib/services/chat";
 import { requireSessionUser } from "@/lib/services/auth";
 import { getLegalStatus } from "@/lib/services/legal";
+import { ChatBubble } from "@/components/chat/ChatBubble";
 import { blockAction, sendMessageAction, unblockAction } from "../actions";
 
 // Chat-Ansicht (ADR 017). Fremde, unbekannte und ungültige IDs ergeben dieselbe Seite „nicht gefunden“ (noindex,
@@ -114,22 +115,26 @@ export default async function ConversationPage(props: Props) {
       <div role="log" aria-label={t("conversation.messagesLabel")} className="mt-4 rounded-card bg-sand/50 p-3 sm:p-4">
       <ol className="grid grid-cols-[minmax(0,1fr)] gap-3">
         {(page?.items ?? []).map((message, index, all) => (
-          <li
+          <ChatBubble
             key={message.id}
             id={index === all.length - 1 ? "latest" : undefined}
-            className={`max-w-[85%] rounded-bubble px-3.5 py-2.5 ${message.mine ? "justify-self-end rounded-br-tail bg-forest text-offwhite" : "justify-self-start rounded-bl-tail border border-sand bg-surface"}`}
+            mine={message.mine}
+            meta={
+              <>
+                <time dateTime={message.created_at}>{format.dateTime(new Date(message.created_at), { dateStyle: "short", timeStyle: "short" })}</time>
+                {message.mine && <> · {message.read_at ? t("conversation.read") : t("conversation.sent")}</>}
+              </>
+            }
+            footer={
+              !message.mine && (
+                <Link href={`/account/messages/${id}/report?message=${message.id}`} prefetch={false} className="mt-1 inline-block text-xs underline">
+                  {t("menu.reportMessage")}
+                </Link>
+              )
+            }
           >
-            <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</p>
-            <p className={`mt-1 text-xs ${message.mine ? "text-offwhite" : "text-muted"}`}>
-              <time dateTime={message.created_at}>{format.dateTime(new Date(message.created_at), { dateStyle: "short", timeStyle: "short" })}</time>
-              {message.mine && <> · {message.read_at ? t("conversation.read") : t("conversation.sent")}</>}
-            </p>
-            {!message.mine && (
-              <Link href={`/account/messages/${id}/report?message=${message.id}`} prefetch={false} className="mt-1 inline-block text-xs underline">
-                {t("menu.reportMessage")}
-              </Link>
-            )}
-          </li>
+            {message.body}
+          </ChatBubble>
         ))}
       </ol>
       </div>

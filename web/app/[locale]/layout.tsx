@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { preload } from "react-dom";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { OfflineNotice } from "@/components/ui/OfflineNotice";
+import { ui } from "@/components/ui/styles";
 import { routing } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
 import "../globals.css";
@@ -33,6 +35,7 @@ export default async function LocaleLayout({
   // Die Teilmenge inter-czech (2 KB) steht wegen „Čeština“ in der Sprachwahl auf jeder Seite (ADR 022, K1).
   // Dateinamen sind versioniert (.v1), weil /static/fonts ein Jahr unveränderlich gecacht wird (ADR 022, S1).
   const fonts = ["montserrat-latin", "inter-latin", "inter-czech", ...(locale === "cs" || locale === "pl" ? ["montserrat-latin-ext", "inter-latin-ext"] : [])];
+  const tOffline = await getTranslations("Offline");
   for (const font of fonts) preload(`/static/fonts/${font}-wght-normal.v1.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (
@@ -41,6 +44,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           {/* Sprachwahl und Konto stehen im Kopf hinter Suspense: Bei dynamischen Routen ist der Pfad erst zur Anfrage bekannt. */}
           <SiteHeader />
+          <OfflineNotice title={tOffline("title")} text={tOffline("text")} className={`${ui.container} mt-3`} />
           {children}
           <SiteFooter />
         </NextIntlClientProvider>

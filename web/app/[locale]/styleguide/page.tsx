@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
+import { ChatBubble, ChatNotice } from "@/components/chat/ChatBubble";
 import { KindIcon } from "@/components/brand/KindIcon";
+import { SpeciesIcon } from "@/components/brand/SpeciesIcon";
+import { StepNav } from "@/components/listings/WizardChrome";
+import { ConfirmPanel } from "@/components/ui/ConfirmPanel";
+import { ErrorState } from "@/components/ui/ErrorState";
+import { OfflineNotice } from "@/components/ui/OfflineNotice";
+import { Pager } from "@/components/ui/Pager";
+import { SkeletonCard } from "@/components/ui/Skeleton";
+import { SegmentLinks, TabLinks } from "@/components/ui/Tabs";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { Logo, LogoMark } from "@/components/brand/Logo";
 import { ListingCard } from "@/components/public/ListingCard";
@@ -12,7 +21,7 @@ import type { AppLocale } from "@/i18n/routing";
 import { regionFromSlugs } from "@/lib/public/regions";
 import { siteIndexable } from "@/lib/public/robots";
 import type { ListingCard as Card } from "@/lib/services/public-listings";
-import { regionNames } from "@/lib/services/regions";
+import { listSpecies, regionNames } from "@/lib/services/regions";
 import { LISTING_KINDS } from "@/lib/validation/listing";
 
 // Interne Bibliothek (SPEC M10a Schritt 3): nur lokal und in Staging, nie indexiert. In Prod antwortet schon der
@@ -40,7 +49,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 export default async function StyleguidePage() {
   if (siteIndexable()) notFound();
   const locale = (await getLocale()) as AppLocale;
-  const [t, th, tf, tl, tlist, tfav, tp, names] = await Promise.all([
+  const [t, th, tf, tl, tlist, tfav, tp, names, tm, tnf, tg, toff, species] = await Promise.all([
     getTranslations("Styleguide"),
     getTranslations("Header"),
     getTranslations("Public.filters"),
@@ -49,6 +58,11 @@ export default async function StyleguidePage() {
     getTranslations("Favorites"),
     getTranslations("Public.detail"),
     regionNames(locale),
+    getTranslations("Map"),
+    getTranslations("NotFound"),
+    getTranslations("Public.gone"),
+    getTranslations("Offline"),
+    listSpecies(locale),
   ]);
   const district = regionFromSlugs("bayern", "rosenheim-landkreis");
   const state = regionFromSlugs("bayern");
@@ -186,6 +200,87 @@ export default async function StyleguidePage() {
         </ul>
       </Section>
 
+      <Section id="sg-species" title={t("species")}>
+        <p className="text-sm text-muted">{t("speciesNote")}</p>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {[...species.map((s) => ({ code: s.code, name: s.name })), { code: "dog", name: t("dog") }].map((s) => (
+            <li key={s.code} className={`${ui.card} flex flex-col gap-2 p-3`}>
+              <span className="flex items-end gap-3">
+                <SpeciesIcon code={s.code} size={40} />
+                <SpeciesIcon code={s.code} size={24} />
+                <span className="on-dark ml-auto flex size-11 items-center justify-center rounded-btn bg-forest text-offwhite"><SpeciesIcon code={s.code} size={30} /></span>
+              </span>
+              <span className="text-sm font-semibold">{s.name}</span>
+              <code className="text-xs text-muted">{s.code}</code>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section id="sg-dialogs" title={t("dialogs")}>
+        <div className="max-w-md">
+          <ConfirmPanel
+            id="sg-confirm"
+            title={t("dialogTitle")}
+            text={t("dialogText")}
+            cancel={<a href="#sg-dialogs" className={ui.btnSecondary}>{t("cancel")}</a>}
+            action={<button type="button" className={ui.btnDanger}>{t("delete")}</button>}
+          />
+        </div>
+      </Section>
+
+      <Section id="sg-navigation" title={t("navigation")}>
+        <div className="flex flex-wrap items-center gap-4">
+          <TabLinks
+            label={tl("fields.direction")}
+            items={[
+              { key: "all", label: tf("any"), href: "#sg-navigation", active: false },
+              { key: "offer", label: tl("directions.offer"), href: "#sg-navigation", active: true },
+              { key: "wanted", label: tl("directions.wanted"), href: "#sg-navigation", active: false },
+            ]}
+          />
+          <SegmentLinks
+            label={tm("viewLabel")}
+            items={[
+              { key: "list", label: tm("viewList"), href: "#sg-navigation", active: true },
+              { key: "map", label: tm("viewMap"), href: "#sg-navigation", active: false },
+            ]}
+          />
+        </div>
+        <Pager label={tlist("paging")} first={{ href: "#sg-navigation", text: tlist("first") }} next={{ href: "#sg-navigation", text: tlist("next") }} />
+      </Section>
+
+      <Section id="sg-wizard" title={t("wizard")}>
+        <StepNav listingId={null} current="location" />
+      </Section>
+
+      <Section id="sg-chat" title={t("chat")}>
+        <div className="max-w-xl rounded-card bg-sand/50 p-3 sm:p-4">
+          <ol className="grid grid-cols-[minmax(0,1fr)] gap-3">
+            <ChatBubble mine={false} meta="09:42">{t("chatIn")}</ChatBubble>
+            <ChatBubble mine meta="09:51">{t("chatOut")}</ChatBubble>
+            <ChatNotice>{t("chatNotice")}</ChatNotice>
+          </ol>
+        </div>
+      </Section>
+
+      <Section id="sg-map" title={t("mapPopup")}>
+        <div className="flex h-56 max-w-xl items-start justify-center rounded-card bg-(--color-map-land) p-6">
+          <div className="maplibregl-popup-content w-72 bg-surface">
+            <div className="map-popup" role="group" aria-label={t("sampleTitle")}>
+              <ul>
+                <li>
+                  <a href="#sg-map">{t("sampleTitle")}</a>
+                  <p>{tl("kinds.permit")} · {tl("directions.offer")}</p>
+                  <p>{district ? names[district.code] : ""}</p>
+                </li>
+              </ul>
+              <button type="button">{tm("close")}</button>
+            </div>
+          </div>
+        </div>
+      </Section>
+
       <Section id="sg-consent" title={t("consent")}>
         <p className="text-sm text-muted">{t("consentNote")}</p>
         <div className="overflow-hidden rounded-card">
@@ -194,10 +289,29 @@ export default async function StyleguidePage() {
       </Section>
 
       <Section id="sg-states" title={t("states")}>
-        <div className={`${ui.card} flex flex-col items-center gap-3 p-8 text-center`}>
-          <span className="flex size-16 items-center justify-center rounded-full bg-sand text-olive"><Icon name="search" size={30} /></span>
-          <p className="max-w-md">{tlist("empty")}</p>
-          <a href="#sg-states" className={ui.btnSecondary}>{tf("reset")}</a>
+        <div className="grid gap-4 md:grid-cols-3">
+          <SkeletonCard label={t("loadingLabel")} />
+          <div className={`${ui.card} flex flex-col items-center gap-3 p-8 text-center`}>
+            <span className="flex size-16 items-center justify-center rounded-full bg-sand text-olive"><Icon name="search" size={30} /></span>
+            <p className="max-w-md">{tlist("empty")}</p>
+            <a href="#sg-states" className={ui.btnSecondary}>{tf("reset")}</a>
+          </div>
+          <div role="alert" className="flex gap-3 self-start rounded-card border border-error bg-error-soft p-4 text-error">
+            <Icon name="alert" size={22} className="shrink-0" />
+            <div className="flex flex-col items-start gap-2">
+              <p className="font-semibold">{tlist("failed")}</p>
+              <button type="button" className={ui.btnSecondary}>{tm("retry")}</button>
+            </div>
+          </div>
+        </div>
+        <OfflineNotice preview title={toff("title")} text={toff("text")} />
+        <div className="grid gap-4 md:grid-cols-2">
+          <ErrorState code="410" title={<p className={`${ui.headingCaps} text-xl`}>{tg("title")}</p>} text={<p className="text-muted">{tg("text")}</p>}>
+            <a href="#sg-states" className={ui.btnDark}>{tg("toSearch")}</a>
+          </ErrorState>
+          <ErrorState code="404" title={<p className={`${ui.headingCaps} text-xl`}>{tnf("title")}</p>}>
+            <a href="#sg-states" className={ui.btnPrimary}>{tnf("backHome")}</a>
+          </ErrorState>
         </div>
       </Section>
     </main>

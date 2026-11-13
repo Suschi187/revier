@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { signOut } from "@/app/[locale]/auth/actions";
 import { Icon, type IconName } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
 import { getSessionUser } from "@/lib/services/auth";
 import { UnreadRefresh } from "@/components/chat/UnreadRefresh";
@@ -15,7 +16,7 @@ function NavItem({ href, icon, label, ariaLabel, badge }: { href: string; icon: 
       <Icon name={icon} size={22} />
       <span>{label}</span>
       {badge ? (
-        <span aria-hidden="true" className="absolute right-1 top-0 min-w-5 rounded-pill bg-brand px-1 text-center text-micro font-bold text-forest">{badge}</span>
+        <span aria-hidden="true" className={`absolute right-1 top-0 ${ui.countBadge}`}>{badge}</span>
       ) : null}
     </Link>
   );

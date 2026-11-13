@@ -1801,6 +1801,27 @@
     "headingSample": "Najdi si svůj revír.",
     "bodySample": "Pronájem honitby, povolenka k lovu nebo místo na naháňce. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
     "consent": "Banner o souborech cookie (šablona)",
-    "consentNote": "Neaktivní: Zobrazí se až po přidání volitelného souboru cookie (ADR 021)."
+    "consentNote": "Neaktivní: Zobrazí se až po přidání volitelného souboru cookie (ADR 021).",
+    "dialogs": "Dialogy",
+    "dialogTitle": "Smazat inzerát?",
+    "dialogText": "Inzerát bude trvale smazán. Konverzace zůstanou pro tvého partnera v chatu čitelné.",
+    "cancel": "Zrušit",
+    "delete": "Smazat",
+    "navigation": "Záložky, přepínač, stránkování",
+    "wizard": "Průvodce inzerátem",
+    "chat": "Chat",
+    "chatIn": "Ahoj, povolenka k lovu je ještě volná. Kdy by sis chtěl prohlédnout honitbu?",
+    "chatOut": "Rád v sobotu dopoledne. Je na okraji pole posed?",
+    "chatNotice": "Inzerát už není k dispozici. Můžete si dál psát.",
+    "mapPopup": "Okno na mapě",
+    "species": "Druhy zvěře",
+    "speciesNote": "Vlastní kresby v liniovém stylu loga. Vždy spolu s názvem.",
+    "dog": "Vůdci psů, dohledávka",
+    "loading": "Načítání",
+    "loadingLabel": "Inzeráty se načítají"
+  },
+  "Offline": {
+    "title": "Žádné připojení.",
+    "text": "Vidíš naposledy načtený stav. Odesílání bude znovu fungovat, jakmile budeš online."
   }
 }

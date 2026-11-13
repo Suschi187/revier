@@ -9,31 +9,39 @@ import { fieldIdOf, fieldMessageKey, stepOfField, WIZARD_STEPS, type WizardStep 
 export async function StepNav({ listingId, current }: { listingId: string | null; current: WizardStep }) {
   const t = await getTranslations("Listings.wizard");
   const index = WIZARD_STEPS.indexOf(current);
-  const chip = "inline-flex min-h-9 items-center rounded-pill px-3 text-sm";
+  // Styleguide „Assistent“: ein Balken je Schritt (erledigt Waldgrün, aktuell Orange, offen Sand). Die Namen stehen
+  // ab sm unter den Balken; mobil nennt die Zeile darüber den aktuellen Schritt.
+  const bar = (i: number) => `h-1 rounded-pill ${i < index ? "bg-forest" : i === index ? "bg-brand" : "bg-sand"}`;
+  const name = "text-meta leading-tight max-sm:sr-only [overflow-wrap:anywhere] hyphens-auto";
   return (
     <nav aria-label={t("stepsLabel")} className="mt-4">
-      <p className="text-sm font-semibold">{t("progress", { current: index + 1, total: WIZARD_STEPS.length })}</p>
-      <div aria-hidden="true" className="mt-2 h-1.5 overflow-hidden rounded-pill bg-sand">
-        <div className="h-full rounded-pill bg-brand" style={{ width: `${((index + 1) / WIZARD_STEPS.length) * 100}%` }} />
-      </div>
-      <ol className="mt-3 flex flex-wrap gap-2">
+      <p className="text-sm font-semibold">
+        {t("progress", { current: index + 1, total: WIZARD_STEPS.length })}
+        <span className="sm:hidden"> · {t(`steps.${current}`)}</span>
+      </p>
+      <ol className="mt-2 grid grid-cols-6 gap-2">
         {WIZARD_STEPS.map((step, i) => {
           const label = `${i + 1}. ${t(`steps.${step}`)}`;
           if (step === current) {
             return (
-              <li key={step} aria-current="step" className={`${chip} bg-forest font-semibold text-offwhite`}>
-                {label}
+              <li key={step} aria-current="step" className="flex min-h-11 flex-col gap-1.5">
+                <span aria-hidden="true" className={bar(i)} />
+                <span className={`${name} font-semibold`}>{label}</span>
               </li>
             );
           }
           return (
-            <li key={step}>
+            <li key={step} className="flex flex-col">
               {listingId ? (
-                <Link href={`/account/listings/${listingId}/edit?step=${step}`} className={`${chip} border border-sand bg-surface text-forest underline underline-offset-2`}>
-                  {label}
+                <Link href={`/account/listings/${listingId}/edit?step=${step}`} className="flex min-h-11 flex-col gap-1.5 text-forest underline-offset-2 hover:underline">
+                  <span aria-hidden="true" className={bar(i)} />
+                  <span className={name}>{label}</span>
                 </Link>
               ) : (
-                <span className={`${chip} border border-sand text-muted`}>{label}</span>
+                <span className="flex min-h-11 flex-col gap-1.5 text-muted">
+                  <span aria-hidden="true" className={bar(i)} />
+                  <span className={name}>{label}</span>
+                </span>
               )}
             </li>
           );

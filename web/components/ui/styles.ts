@@ -27,6 +27,8 @@ export const ui = {
   /** Abschnittsüberschrift im Markenstil: Großbuchstaben, Punkt am Ende steht im Text. */
   headingCaps: "font-display font-extrabold uppercase",
   chip: "inline-flex items-center gap-1 rounded-pill bg-sand px-2.5 py-1 text-meta",
+  /** Zähler (ungelesene Nachrichten, aktive Filter): Orange mit Waldgrün. */
+  countBadge: "min-w-5 rounded-pill bg-brand px-1 text-center text-micro font-bold leading-5 text-forest",
   muted: "text-muted",
   link: "font-semibold text-forest underline underline-offset-2 hover:text-brand-ink",
 } as const;

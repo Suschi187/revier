@@ -80,6 +80,29 @@ Seiten verwenden nur Tokens oder Tailwind-Stufen, keine festen Werte in eckigen 
 
 Erlaubte feste Werte, weil sie Layout und keine Gestaltung sind: Spaltenaufteilungen (`grid-cols-[…]`), `max-w-[85%]` (Chat-Blase), `max-h-[80vh]` (Dokumentvorschau im Admin), `flex-[2]` (Suchfeld neben der Regionswahl), `[overflow-wrap:anywhere]` (lange Wörter in cs/pl). Größen für Karte, Seitenleiste und Tabellen kommen aus der Abstandsskala (`h-112`, `w-88`, `min-w-160`).
 
+### Bausteine (`web/components`, Styleguide `/[locale]/styleguide`)
+
+Vorschlag freigegeben 2026-11-13 (Zeichenfläche: https://claude.ai/artifact/FucY7ECVcTrRrV7AaopEk7).
+
+| Baustein | Komponente | Regel |
+|---|---|---|
+| Rückfrage („Dialog“) | `ui/ConfirmPanel` | Ohne JavaScript als eigene Ansicht nach einem Link. Titel als Frage, ein Satz zur Folge, „Abbrechen“ links, Aktion rechts in Fehlerrot. |
+| Reiter | `ui/Tabs` → `TabLinks` | Aktive Lasche mit 3 px Orange darunter, Text bleibt Waldgrün. |
+| Umschalter | `ui/Tabs` → `SegmentLinks` | Pille, aktive Wahl in Waldgrün (Liste/Karte). |
+| Blättern | `ui/Pager` | Cursor-Suche, daher „Zum Anfang“ und „Weiter“ statt Seitenzahlen; Kacheln ab 44 px. |
+| Assistent | `listings/WizardChrome` → `StepNav` | Ein Balken je Schritt: erledigt Waldgrün, aktuell Orange, offen Sand. Namen ab `sm`, mobil nur der aktuelle. |
+| Chat | `chat/ChatBubble`, `ChatNotice` | Eigene rechts in Waldgrün, fremde links weiß; Radius 16 px, Spitze 2 px. Systemhinweise mittig ohne Blase. |
+| Zähler | `ui.countBadge` | Orange mit Waldgrün, 11 px fett. |
+| Kartenpopup | `.map-popup` (`globals.css`) | Nur Landkreis, Radius 8 px, Schatten `--shadow-popup`, Schließen-Knopf für Tastatur. |
+| Laden | `ui/Skeleton` → `SkeletonCard` | Flächen in Sand, Pulsieren nur ohne reduzierte Bewegung. |
+| Offline | `ui/OfflineNotice` | Band unter dem Kopf, solange der Browser offline ist. |
+| Fehlerseiten | `ui/ErrorState` | Code groß in `brand-ink`, Titel, Wege zurück (404, 410). |
+| Wildarten | `brand/SpeciesIcon` | Raster 40, Linie 2, eckige Enden, Akzent in `brand-ink` (auf `.on-dark` Marken-Orange). Immer mit Namen. |
+
+Wildarten-Icons: 13 Zeichnungen für 15 Wildarten. Sikawild nutzt Rotwild, „Sonstiges Raubwild“ den Fuchs, „Sonstiges Niederwild“ den Hasen; `dog` steht für Hundeführer und Nachsuche. Rehwild in Variante C (Gehörn aus der Bildmarke abgeleitet, gewählt 2026-11-13). iOS übernimmt die Pfade aus `SpeciesIcon.tsx`.
+
+Noch nicht umgesetzt aus dem Vorschlag: Filterleiste mit entfernbaren Chips der aktiven Filter und Zähler am Filter-Knopf.
+
 ## 4. Logo: L1 Geweih-Pin (gewählt 2026-11-12)
 
 Kartenmarker in Marken-Orange `#FF914D` mit ausgespartem Geweih und Kopf. Die Wortmarke REVIRO ist in Montserrat Black gesetzt (Waldgrün, auf Dunkel Offwhite), darunter steht „BY DIE JAGDBRÜDER“ in Montserrat Bold mit 0.2em Laufweite (Oliv, auf Dunkel Orange).
@@ -96,7 +119,7 @@ Zeichenfläche (privat): https://claude.ai/artifact/QanVEqfRCxRaD4f1DuuBk3
 3. Suchergebnis: Filter links, Angebote/Gesuche, Sortierung, Liste/Karte, Suche speichern, Listenzeilen mit Bild links und Preis rechts
 4. Anzeigen-Detail: Galerie, Eckdaten, Beschreibung, ungefähre Lage, Kontaktbox mit Verifizierung, Sicherheitshinweise, Melden
 
-Alle Fotos und Wildarten-Icons sind Platzhalter.
+Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe „Bausteine“).
 
 ## 6. Offene Punkte (Mensch)
 

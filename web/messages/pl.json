@@ -1801,6 +1801,27 @@
     "headingSample": "Znajdź swoje tereny łowieckie.",
     "bodySample": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
     "consent": "Baner dotyczący plików cookie (szablon)",
-    "consentNote": "Nieaktywne: pojawia się dopiero po dodaniu opcjonalnego pliku cookie (ADR 021)."
+    "consentNote": "Nieaktywne: pojawia się dopiero po dodaniu opcjonalnego pliku cookie (ADR 021).",
+    "dialogs": "Okna dialogowe",
+    "dialogTitle": "Usunąć ogłoszenie?",
+    "dialogText": "Ogłoszenie zostanie trwale usunięte. Rozmowy pozostaną czytelne dla twojego rozmówcy.",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "navigation": "Zakładki, przełącznik, stronicowanie",
+    "wizard": "Kreator ogłoszenia",
+    "chat": "Czat",
+    "chatIn": "Cześć, zezwolenie na polowanie jest jeszcze dostępne. Kiedy chcesz obejrzeć obwód?",
+    "chatOut": "Chętnie w sobotę przed południem. Czy na skraju pola jest ambona?",
+    "chatNotice": "Ogłoszenie nie jest już dostępne. Możecie dalej pisać.",
+    "mapPopup": "Okienko na mapie",
+    "species": "Gatunki zwierzyny",
+    "speciesNote": "Własne rysunki w liniowym stylu logo. Zawsze razem z nazwą.",
+    "dog": "Przewodnicy psów, poszukiwanie postrzałków",
+    "loading": "Ładowanie",
+    "loadingLabel": "Ogłoszenia się ładują"
+  },
+  "Offline": {
+    "title": "Brak połączenia.",
+    "text": "Widzisz ostatnio wczytany stan. Wysyłanie zadziała ponownie, gdy będziesz online."
   }
 }

@@ -14,6 +14,8 @@ import { listSpecies, regionGeo, regionNames } from "@/lib/services/regions";
 import { Breadcrumbs, type Crumb } from "./Breadcrumbs";
 import { FilterForm } from "./FilterForm";
 import { ListingList } from "./ListingCard";
+import { Pager } from "@/components/ui/Pager";
+import { SegmentLinks, TabLinks } from "@/components/ui/Tabs";
 
 export type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -104,8 +106,6 @@ export async function ListingsPage({
     { key: "offer", label: tl("directions.offer"), value: "offer" as const },
     { key: "wanted", label: tl("directions.wanted"), value: "wanted" as const },
   ];
-  const segment = (active: boolean) =>
-    `flex min-h-10 items-center px-4 text-sm font-semibold no-underline ${active ? "bg-forest text-offwhite hover:text-offwhite" : "bg-surface text-forest"}`;
   let mapBounds: Bounds = DEFAULT_BOUNDS;
   if (mapView) {
     const regionCode = filters.region;
@@ -145,18 +145,18 @@ export async function ListingsPage({
 
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           <div className="flex flex-wrap items-center gap-2.5">
-            <nav aria-label={tl("fields.direction")} className="flex overflow-hidden rounded-card border border-forest">
-              {directions.map((d) => {
-                const active = filters.direction === d.value;
-                return (
-                  <a key={d.key} href={directionHref(d.value)} aria-current={active ? "page" : undefined} className={segment(active)}>{d.label}</a>
-                );
-              })}
-            </nav>
-            <nav aria-label={tm("viewLabel")} className="flex gap-1.5 lg:ml-auto">
-              <a href={listHref} aria-current={mapView ? undefined : "page"} className={`${segment(!mapView)} rounded-card border border-forest`}>{tm("viewList")}</a>
-              <a href={mapHref} aria-current={mapView ? "page" : undefined} className={`${segment(mapView)} rounded-card border border-forest`}>{tm("viewMap")}</a>
-            </nav>
+            <TabLinks
+              label={tl("fields.direction")}
+              items={directions.map((d) => ({ key: d.key, label: d.label, href: directionHref(d.value), active: filters.direction === d.value }))}
+            />
+            <SegmentLinks
+              label={tm("viewLabel")}
+              className="lg:ml-auto"
+              items={[
+                { key: "list", label: tm("viewList"), href: listHref, active: !mapView },
+                { key: "map", label: tm("viewMap"), href: mapHref, active: mapView },
+              ]}
+            />
           </div>
 
           {/* Suchauftrag aus der Suche, Liste und Karte (ADR 018, Plan M8 5). */}
@@ -207,12 +207,11 @@ export async function ListingsPage({
                   {result.page.totalCapped ? t("countCapped") : t("count", { count: result.page.total ?? result.page.items.length })}
                 </p>
                 <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} favorites={favorites} eager={3} />
-                {(nextHref || firstHref) && (
-                  <nav aria-label={t("paging")} className="mt-6 flex flex-wrap justify-center gap-2">
-                    {firstHref && <a href={firstHref} className={ui.btnSecondary}>{t("first")}</a>}
-                    {nextHref && <a href={nextHref} rel="next" className={ui.btnSecondary}>{t("next")} →</a>}
-                  </nav>
-                )}
+                <Pager
+                  label={t("paging")}
+                  first={firstHref ? { href: firstHref, text: t("first") } : null}
+                  next={nextHref ? { href: nextHref, text: t("next") } : null}
+                />
               </>
             ) : (
               <p className="mt-2 rounded-card bg-error-soft p-3 text-error" role="alert">{t(result.error === "invalid" ? (result.key === "q" ? "queryTooLong" : "invalid") : "failed")}</p>

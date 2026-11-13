@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { SpeciesIcon } from "@/components/brand/SpeciesIcon";
 import { ui } from "@/components/ui/styles";
 import type { AppLocale } from "@/i18n/routing";
 import { allRegionRefs } from "@/lib/public/regions";
@@ -100,6 +101,7 @@ export async function FilterForm({
           {species.map((s) => (
             <label key={s.code} className="flex min-h-9 items-center gap-2.5">
               <input type="checkbox" className="accent-forest" name={`${PARAM_NAMES.species}`} value={s.code} defaultChecked={filters.species?.includes(s.code)} />
+              <SpeciesIcon code={s.code} size={22} className="shrink-0" />
               {s.name}
             </label>
           ))}

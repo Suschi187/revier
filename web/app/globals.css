@@ -104,6 +104,8 @@
   --aspect-hero: 16 / 10;
 
   --shadow-marker: 0 1px 3px rgb(0 0 0 / 0.4);
+  --shadow-dialog: 0 12px 32px rgb(0 0 0 / 0.18);
+  --shadow-popup: 0 6px 18px rgb(0 0 0 / 0.2);
 }
 
 /* Werte, die keine Tailwind-Klasse erzeugen: Linienstärke der Suchleiste, Landfarbe der Karte ohne Kacheln */
@@ -133,6 +135,10 @@
   }
   .on-dark :focus-visible {
     outline-color: var(--color-brand);
+  }
+  /* Akzentlinien der Icons: auf Waldgrün im hellen Marken-Orange */
+  .on-dark {
+    --color-accent-line: var(--color-brand);
   }
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -185,8 +191,13 @@
   text-decoration: underline;
 }
 .map-popup p {
-  font-size: 0.8rem;
+  font-size: var(--text-meta);
   color: var(--color-muted);
+}
+.maplibregl-popup-content:has(.map-popup) {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-popup);
+  padding: 0.75rem;
 }
 .map-popup button {
   margin-top: 0.5rem;

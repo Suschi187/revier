@@ -20,6 +20,9 @@ const PATHS = {
   scale: <><path d="M12 4v16M7 20h10M5 8h14" /><path d="M5 8l-2 6h4zM19 8l-2 6h4z" /></>,
   edit: <><path d="M4 20h4L19 9l-4-4L4 16z" /><path d="M13 7l4 4" /></>,
   chevron: <path d="M9 6l6 6-6 6" />,
+  offline: <path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0M12 19.5v.5M3 3l18 18" />,
+  alert: <><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16.5v.5" /></>,
+  close: <path d="M6 6l12 12M18 6L6 18" />,
   shieldAdmin: <><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" /><path d="M12 8v5M12 16v.5" /></>,
 } as const;
 
