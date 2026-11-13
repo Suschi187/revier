@@ -136,7 +136,7 @@ test("anonym: Seiten, Redirects, Fehlerseiten und APIs setzen nichts außerhalb 
   expect(root.headers()["vary"]).toMatch(/Accept-Language/);
   expect(root.headers()["cache-control"]).toMatch(/private/);
   for (const path of ["/", "/de/", "/api/sources/postal-codes", "/api/map?bbox=12,50,13,51&lang=de", `/api/photos/${crypto.randomUUID()}`,
-    "/api/unsubscribe?t=" + "0".repeat(64), "/sitemap/de.xml", "/robots.txt", "/de/anzeige/00000000-0000-4000-8000-000000000000"]) {
+    "/api/unsubscribe?t=" + "0".repeat(64), "/api/locale?to=pl", "/sitemap/de.xml", "/robots.txt", "/de/anzeige/00000000-0000-4000-8000-000000000000"]) {
     await collector.api(await request.get(path, { maxRedirects: 0 }));
   }
   expect(collector.violations()).toEqual([]);

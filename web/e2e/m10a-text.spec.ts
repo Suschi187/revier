@@ -71,6 +71,7 @@ test.describe("M10a Schritt 5 und 8: Textlängen bei 360 px, axe, Bildschirmfoto
         publicPath({ route: "listing", id: listing }, locale),
         publicPath({ route: "provider", id: user.id }, locale),
         `/${locale}/login`,
+        `/${locale}/imprint`,
         `/${locale}/privacy`,
         `/${locale}/terms`,
         `/${locale}/guidelines`,

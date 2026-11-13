@@ -30,8 +30,10 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   // Schriften vorladen (M10a Schritt 7): Überschriften (Montserrat) und Text (Inter) sind das LCP der Startseite.
   // cs/pl brauchen dazu die Latin-Extended-Dateien; die übrigen lädt der Browser nach unicode-range.
-  const fonts = ["montserrat-latin", "inter-latin", ...(locale === "cs" || locale === "pl" ? ["montserrat-latin-ext", "inter-latin-ext"] : [])];
-  for (const font of fonts) preload(`/static/fonts/${font}-wght-normal.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
+  // Die Teilmenge inter-czech (2 KB) steht wegen „Čeština“ in der Sprachwahl auf jeder Seite (ADR 022, K1).
+  // Dateinamen sind versioniert (.v1), weil /static/fonts ein Jahr unveränderlich gecacht wird (ADR 022, S1).
+  const fonts = ["montserrat-latin", "inter-latin", "inter-czech", ...(locale === "cs" || locale === "pl" ? ["montserrat-latin-ext", "inter-latin-ext"] : [])];
+  for (const font of fonts) preload(`/static/fonts/${font}-wght-normal.v1.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (
     <html lang={locale} className="h-full antialiased">

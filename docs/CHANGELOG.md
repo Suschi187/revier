@@ -2,6 +2,29 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a GUI/UX-Design (Web), Schritt 8: Prüfung – 2026-11-13
+
+Berichte: `docs/QA-REPORT.md` Abschnitt „M10a – Abnahme (Akzeptanz)“ (qa), `docs/adr/022-schriften-drittanfragen-header.md` (architect). Beide ohne blockierenden Befund.
+
+### Geändert
+- **Prüftest** `e2e/m10a-text.spec.ts`: 27 Kernseiten in de/en/cs/pl mit axe (WCAG 2 A/AA), Überbreite, abgeschnittenem Text und rohen Schlüsseln; läuft in der CI mit. `M10A_SCREENS=1` erzeugt Bildschirmfotos in 360/768/1280 px unter `web/test-results/m10a-screens/` (mit `index.html` zum Durchsehen; nicht im Repo).
+- **Restliche Sie-Formen im Tschechischen** (Zkuste, Vyberte, Zvolte, Přihlaste) und Kopfzeile mit Länderkürzeln; als Override gesichert.
+- **Schriften** (ADR 022 S1, K1): versionierte Dateinamen `*.v1.woff2`, ein Jahr `immutable` gecacht; Teilmenge Č č Š š vorgeladen und mit vollständigen Namensangaben neu geschnitten.
+- **Tests** (ADR 022 S2, K5): `58_killed_game.test.sql` führt `resolve_reports` aus und prüft Rechte und `search_path`; `/api/locale` in der Cookie-Inventur; Impressum im Prüftest.
+- **DESIGN.md:** Lizenzen ergänzt (Teilmenge mit Befehl, App-Icon, Noto Sans, MapLibre, Kartendaten, `design/`).
+
+### Testen
+- `cd web && npx playwright test e2e/m10a-text.spec.ts` (mit `M10A_SCREENS=1` für Bildschirmfotos)
+- `supabase test db supabase/tests/58_killed_game.test.sql`
+
+### Offen (aus den Berichten, nicht in diesem Schritt)
+- **Mensch:** Vergleich mit dem Webshop, Ähnlichkeitsprüfung gegen fremde Portale, VoiceOver-Durchgang, cs/pl durch Muttersprachler.
+- **Gestaltung (QA F1, F2):** Hauptnavigation der Kategorien in Großbuchstaben im Kopf fehlt; Filter mobil als aufklappbarer Bereich statt Blatt von unten; Claim in der Leiste. Abweichung begründen oder umsetzen.
+- **Bibliothek (QA F3–F6):** 32 Einzelwerte ohne Token (u. a. `text-[0.8125rem]`), zusammengesetzte Überschriften, Chat-Blase und Badges als Einzelbauten; im Styleguide fehlen Filterleiste, Dialoge, Tabs, Paginierung, Assistenten-Fortschritt, Chat-Blasen, Kartenpopup, Fehler-/Offline-Zustände und Wildarten-Icons.
+- **DESIGN.md (QA F11):** Typografie-Skala, Radien, Abstände, Icon-Größen, Tippflächen und Zuordnung für iOS fehlen.
+- **Performance:** Liste 89 (Ziel 90), Detail 79 (Ziel 85) bis zur mittleren Bildgröße (Schritt 7).
+- **ADR 022:** S3 eine Quelle für die Grund-Codes, K6 Header (COOP, `browsing-topics`, HSTS-preload), K7.
+
 ## M10a GUI/UX-Design (Web), Schritt 7: Performance – 2026-11-13
 
 Messung: Lighthouse 12.8 (einmalig per `npx`, keine Projekt-Abhängigkeit), Handy-Profil mit simuliertem 4G, Produktions-Build lokal (`next start`), je Seite Median aus 3 Läufen. Demo-Daten: 6 Anzeigen mit je 3 Fotos in Pipeline-Größe (voll 2048 px, ca. 410 KB; Vorschau 480 px, ca. 15 KB), Konto `demo-perf@test.local`, nur lokal.

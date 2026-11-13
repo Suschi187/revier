@@ -1,5 +1,98 @@
 # QA-Bericht
 
+## M10a – Abnahme (Akzeptanz) 2026-11-13
+
+Geprüfter Stand: `72c0d81` (main), Commits `21f9ae7`…`72c0d81` (M10a Schritt 4.3 bis Schritt 8). Grundlagen: SPEC M10a (verbindliche Vorgaben, Leitprinzip, Schritte 1–8, Liste „Akzeptanz“), `docs/DESIGN.md`, CHANGELOG „M10a …“ vom 2026-11-12 und 2026-11-13, CLAUDE.md. Umgebung: macOS, Node 24, Tailwind 4.3.3, Dev-Server auf Port 3000 (parallel genutzt, deshalb kein E2E-Gesamtlauf), lokales Supabase. Menschliche Prüfungen (Vergleich mit dem Webshop, Ähnlichkeit zu fremden Portalen, VoiceOver) sind als **Mensch** markiert.
+
+### Prüfläufe
+
+| Lauf | Ergebnis |
+|---|---|
+| Vitest (`npx vitest run`) | 37 Dateien, **679/679** grün |
+| `e2e/m10a-text.spec.ts` (26 Seiten × 4 Sprachen, 360 px, axe WCAG 2 A/AA) | laut Auftrag heute grün; von mir nicht wiederholt (Dev-Server) |
+| Probe Drittanfragen (Playwright-Skript im Scratchpad, 360 px): `/de`, `/cs`, `/de/jagdpacht`, `/de/suche?q=revier`, `/de/jagdpacht?view=map`, `/pl/login`, `/de/imprint`, eine Detailseite | 281 Anfragen, **0** an fremde Hosts |
+| Probe axe und Überbreite auf Seiten, die der Prüftest nicht abdeckt: `/{de,en,cs,pl}/imprint`, `/styleguide`, `/unsubscribe` bei 360 px; `/de`, `/pl`, `/de/jagdpacht` bei 768 und 1280 px | alle ohne axe-Befund, `scrollWidth` = Fensterbreite |
+| Probe Fokus (Tab auf `/de`) | Fokusrahmen 3 px solid, auf Dunkel `#FF914D`, auf Hell `brand-ink` `#9A4410` |
+| Kontraste aller Token-Paare nachgerechnet (WCAG-Formel) | stimmen mit `docs/DESIGN.md` §2 überein (z. B. Waldgrün auf Orange 6,57, `brand-ink` auf Sand 5,11, `muted` auf Sand 4,69, `field` auf Offwhite 3,62) |
+| Code-Suche Farben und Einzelwerte in `web/app`, `web/components` | siehe „Einzelfarben und Einzelwerte“ |
+
+### Akzeptanz (SPEC M10a)
+
+| # | Kriterium | Ergebnis | Nachweis |
+|---|---|---|---|
+| a | Farben, Schriften, Header, Logo und Bildsprache entsprechen den Vorgaben; Abweichungen in `docs/DESIGN.md` begründet | **teilweise** | Farben und Schriften erfüllt (`globals.css` `@theme`, Montserrat/Inter selbst gehostet, DESIGN §2–3). Logo: eigenes L1 statt Hirschkopf, in DESIGN §1 und §4 begründet (Hirschkopf bleibt der Dachmarke, vom Menschen gewählt 2026-11-12). Nicht begründet: Header ohne Hauptnavigation in Großbuchstaben (F1), Claim in der Leiste ist kein Markenclaim und fehlt mobil (F2). Bildsprache: keine Markenfotos, Banner gezeichnet; als offen in DESIGN §6.1 vermerkt, Kopfbereich als „kompakter Markenbanner“ in DESIGN §5 freigegeben. Ob es wie dieselbe Marke wirkt: **Mensch** |
+| b | Kernseiten nutzen nur Tokens und Bibliotheks-Komponenten; keine Einzelfarben oder Einzelabstände | **teilweise** | Keine Tailwind-Standardpaletten, kein `bg-white`/`text-black`, keine Hex-Werte im Seitencode bis auf `MapCanvas.tsx:73`. Aber 32 Fundstellen mit Einzelwerten für Schriftgröße, Laufweite, Abstand und Rahmen ohne Begründung (F3), Großbuchstaben-Überschrift an 48 Stellen von Hand statt als Baustein (F4), Chat-Blase und Badges nicht in der Bibliothek (F5). Die Bibliothek (`components/ui/styles.ts`, Styleguide) deckt die Bausteine aus Schritt 3 nicht vollständig ab (F6) |
+| c | Aufbau folgt den Marktplatz-Mustern (Suche oben, Kategorie-Kacheln, Listenkarten, Kontaktbox) | **erfüllt**, Rest offen | Kopf-Suche „Was?/Wo?“ (`SiteHeader.tsx` `HeaderSearch`), Kategorie-Kacheln, neueste Anzeigen, Länder, Vertrauensbox (`app/[locale]/page.tsx:109–166`), Filter links, Liste/Karte, Angebote/Gesuche, Suche speichern (`ListingsPage.tsx`), Listenkarte mit Foto, Preis, Merken (`ListingCard.tsx`), Kontaktbox rechts bzw. mobil unten (`ListingDetail.tsx`). Offen laut CHANGELOG: Teilen-Button auf der Detailseite (F7); Filter mobil als aufklappbarer Kasten statt Blatt von unten (`ListingsPage.tsx:138`), nicht in DESIGN begründet (niedrig, in F1 aufgenommen) |
+| d | Nichts von fremden Portalen übernommen; Lizenzen und Bildrechte in `docs/DESIGN.md` vollständig | **teilweise** / **Mensch** | Ähnlichkeitsprüfung: **Mensch**. Lizenztabelle DESIGN §7: Montserrat und Inter mit OFL-Text (`public/static/fonts/*-OFL.txt`) vorhanden, eigene Icons und Logo genannt. Es fehlen Noto Sans (Kartenschrift, `public/static/map/fonts/OFL.txt`), MapLibre GL (BSD-3, `public/static/map/maplibre-6.15.0/LICENSE.txt`), Kartendaten/Stil (OSM ODbL, Protomaps) und App-Icon `app/icon.svg` (F8). Markenfotos: Nutzungsrecht offen (DESIGN §6.1, §7) |
+| e | Keine Anfragen an Dritte beim Seitenaufruf | **erfüllt** | Probe: 0 fremde Hosts auf 8 Seiten inkl. Karte. CSP `font-src 'self'`, `connect-src 'self'` + eigenes Supabase (`lib/security/csp.ts:20–21`), Kartenstil mit `glyphs` unter `/static/map/fonts`, Kacheln über `TILES_URL` der eigenen Origin. Der Shop-Link ist ein normaler Link, keine Anfrage. Gegenprüfung im Netzwerk-Tab eines echten Browsers (inkl. Prod-Supabase-Domain): **Mensch**/`architect` |
+| f | AA-Kontraste gemessen und erreicht; sichtbarer Fokus; automatischer Test ohne schwere Befunde | **erfüllt** (VoiceOver: **Mensch**) | DESIGN §2 Messwerte, nachgerechnet; Orange-Text nur auf Waldgrün (`text-brand` nur in `page.tsx:132`, `SiteFooter.tsx:27`, `Logo.tsx:29`, Hover in der Leiste). Fokus: `globals.css` `:focus-visible`, Probe oben. axe in `m10a-text.spec.ts:39–40` (alle Befunde, nicht nur schwere, führen zum Fehler), läuft in der CI (`.github/workflows/web.yml:107`, `test:e2e` mit lokalem Supabase). Lighthouse Accessibility 100 auf Start, Liste, Detail (CHANGELOG Schritt 7). Lücken im Umfang des Prüftests siehe F9 |
+| g | Kein abgeschnittener oder überlaufender Text in de/en/cs/pl bei 360 px | **erfüllt** mit Lücke im Umfang | `m10a-text.spec.ts` (26 Seiten je Sprache: Überbreite, Elemente außerhalb, rohe Schlüssel); meine Probe ergänzt Impressum, Styleguide, Abbestellen. `truncate` nur in der Nachrichtenvorschau (`account/messages/page.tsx:62`, Nutzertext, gewollt) und in Kartenzuständen. Nicht abgedeckt: Unterhaltung, Assistent ab Schritt 2, Melden-Formulare, Admin (F9). cs/pl-Texte selbst ungeprüft (CHANGELOG Schritt 5): **Mensch** |
+| h | Lighthouse o. ä. mit vorab festgelegten Zielwerten auf Start, Liste, Detail | **teilweise** | Messung und Zielwerte im CHANGELOG Schritt 7. Erreicht: Start 93 (Ziel ≥ 90), CLS 0 überall. Nicht erreicht: Liste 89 (Ziel ≥ 90), Detail 79 (Ziel ≥ 85), LCP 3,2–5,6 s (Richtwert 2,5 s, gilt für Prod). Detail-LCP bekannt offen (mittlere Bildgröße fehlt). Ob die Zielwerte „vorab“ festgelegt wurden, ist nicht nachweisbar: sie stehen erst im selben Eintrag wie die Messung (F10) |
+| i | `docs/DESIGN.md` vollständig, Tokens für iOS übernehmbar | **offen** | Farben vollständig mit Hex und Kontrast. Es fehlen: Typografie-Skala (Größen, Zeilenhöhen; SPEC Schritt 1), Radien (`--radius-btn/card/pill` stehen nur in `globals.css`), Laufweiten, Abstandsraster, Icon-Größen und Tippflächen (44 px), eine Zuordnung für iOS (Asset-Katalog-Namen, Dynamic-Type-Stufen, Schriftdateien), die Abweichungen aus F1/F2, Lizenzen aus F8. Kopfzeile `DESIGN.md:3` ist veraltet („Offen: Styleguide-Seite …, 4.5 bis 4.10“) (F11) |
+
+### Einzelfarben und Einzelwerte (Suche in `web/app`, `web/components`)
+
+- **Tailwind-Standardpaletten** (`text-gray-500`, `bg-red-600` …), `bg-white`, `text-black`, Verläufe: **keine Treffer**.
+- **Hex/rgb im TS/TSX:** `components/map/MapCanvas.tsx:73` `"background-color": "#eceee6"` (Ersatzhintergrund ohne Kacheln, kein Token, kein Kommentar). `app/icon.svg` mit `#202b23`/`#ff914d` ist eine statische Datei, die keine CSS-Variablen kennt: begründet. In `globals.css` außerhalb `@theme`: `.map-marker` `color: #fff` und `box-shadow: … rgb(0 0 0 / 0.4)` (Zeilen der Kartenmarker), kein Token, nicht begründet.
+- **Inline-Style:** nur `components/listings/WizardChrome.tsx:17` (Breite des Fortschrittsbalkens, berechnet): begründet.
+- **Einzelwerte in eckigen Klammern** (ohne Regex-Treffer `-[0-9a-f]` in Routen/Actions), keiner mit Begründungskommentar:
+  - Schriftgröße: `text-[0.8125rem]` ×10 (`ui/styles.ts:26,29`, `SiteHeader.tsx:124`, `public/FilterForm.tsx:12`, `public/ListingCard.tsx:85,100`, `public/ListingDetail.tsx:105,186,204`, `app/[locale]/page.tsx:132`), `text-[0.6875rem]` ×2 (`auth/AuthNav.tsx:10,18`), `text-[0.5625rem]` (`brand/Logo.tsx:29`), `text-[0.9375rem]` ×2 (`ListingCard.tsx:86`, `ListingDetail.tsx:234`), `text-[1.0625rem]` (`ListingCard.tsx:87`), `text-[1.75rem]`/`sm:text-[1.75rem]` (`ListingDetail.tsx:109,110`)
+  - Laufweite: `tracking-[0.1em]` (`SiteHeader.tsx:59`), `tracking-[0.02em]`, `tracking-[0.2em]` (`Logo.tsx:26,29`), `tracking-[0.3em]` (`auth/LoginForm.tsx:120`); Tokens gibt es nur für `eyebrow` und `caps`
+  - Maße/Abstände: `size-[18px]` ×2 (`FilterForm.tsx:102,170`, entspricht `size-4.5`), `lg:w-[22rem]` (`ListingDetail.tsx:176`, = `w-88`), `h-[28rem]` ×2 (`map/MapCanvas.tsx:26`, `map/ListingsMap.tsx:15`, = `h-112`), `min-w-[40rem]` (`cookies/page.tsx:29`), `max-w-[85%]` (`account/messages/[id]/page.tsx:120`), `max-h-[80vh]` (`admin/verifications/[id]/page.tsx:131`), `border-[1.5px]` (`SiteHeader.tsx:104`), `flex-[2]` (`SiteHeader.tsx:106`)
+  - Seitenverhältnis und Rasterspalten (Layout, keine Farbe/kein Abstand, als vertretbar gewertet): `aspect-[4/3]` ×6, `aspect-[16/10]` ×2, `grid-cols-[…]` ×17 (u. a. `ListingCard.tsx:94,143`, `ListingDetail.tsx:60`, `account/page.tsx:51,61`, `styleguide/page.tsx:169`)
+  - Beliebige Eigenschaften: `[overflow-wrap:anywhere]` ×83 in 53 Dateien (Tailwind 4.3 hat dafür `wrap-anywhere`), `[content-visibility:visible]` (`ListingsPage.tsx:138`, Workaround für `<details>` auf Desktop)
+- **Radien:** neben den Tokens (`rounded-btn` 17, `rounded-card` 41, `rounded-pill` 12) wird 141-mal `rounded` (Tailwind-Standard 4 px), 12-mal `rounded-full`, 1-mal `rounded-2xl` und `rounded-br-sm`/`rounded-bl-sm` (Chat-Blase) verwendet.
+
+### Befunde
+
+**F1 – mittel: Header ohne Hauptnavigation in Großbuchstaben; nicht als Abweichung begründet.**
+SPEC M10a (Tabelle „Header“, Schritt 4.1) verlangt im Kopf eine Hauptnavigation in Großbuchstaben (Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäen- und Gastjagden, Jagdhelfer). `components/SiteHeader.tsx:27–52` enthält Logo, Suche, Konto-Links und „Anzeige aufgeben“, aber keine Kategorienavigation; die Kategorien gibt es nur als Kacheln auf der Startseite. `docs/DESIGN.md` §1 beschreibt das Kleinanzeigen-Muster, nennt das Weglassen aber nicht als Abweichung. Dasselbe gilt für den mobilen Filter als aufklappbaren Kasten statt Blatt von unten (`ListingsPage.tsx:138`).
+Repro: `curl -s localhost:3000/de` und die Links bis `</header>` auflisten: Shop, 4 Sprachen, `/de`, `/de/account`, `/de/account/listings/new`, keine Kategorie.
+Erwartung: Navigation ergänzen oder die Abweichung in DESIGN.md begründen (Mensch entscheidet).
+
+**F2 – niedrig: Leiste oben ohne Markenclaim, mobil ganz ohne Claim.**
+Die dunkelgrüne Leiste zeigt `Brand.claim` = „Jagdgelegenheiten in DE · AT · CH · CZ · PL“ (SPEC: Claim im Stil des Shops, z. B. „Klare Linien. Wilde Freiheit.“) und blendet ihn unter `sm` aus (`SiteHeader.tsx:59` `hidden … sm:block`). Bei 360 px steht in der Leiste nur Shop-Link und Sprachwahl. Nicht in DESIGN.md begründet.
+Repro: `/de` bei 360 px öffnen, Leiste ansehen.
+
+**F3 – mittel: 32 Einzelwerte für Schriftgröße, Laufweite, Maße und Rahmen im Seitencode, ohne Token und ohne Begründung.**
+Fundstellen siehe Liste oben. Häufigster Fall: `text-[0.8125rem]` (13 px Eyebrow/Chip/Meta) zehnmal; dafür fehlt ein Token (z. B. `--text-eyebrow` in `@theme`), ebenso für 11 px (Badge, Konto-Icons) und 9 px (Lockup). Vier Laufweiten ohne Token. `size-[18px]`, `w-[22rem]`, `h-[28rem]` haben Entsprechungen im Tailwind-Raster. Dazu `#eceee6` in `MapCanvas.tsx:73` und `#fff`/`rgb(0 0 0 / 0.4)` in `globals.css` (`.map-marker`). Widerspricht dem Kommentar in `globals.css:4` („Seitencode nutzt nur diese Namen, keine Einzelfarben“) und `ui/styles.ts:2–3`.
+Repro: `cd web && grep -rnoE "[a-z0-9:/-]*-\[[^]\"' ]+\]" app components --include='*.tsx' --include='*.ts' | grep -v -- "-\[0-9a-f\]"`.
+
+**F4 – niedrig: Seitenüberschrift an 48 Stellen von Hand zusammengesetzt statt als Baustein.**
+Muster `font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl` (z. B. `app/[locale]/guidelines/page.tsx:19`) steht an 48 Stellen; `ui.headingCaps` enthält nur einen Teil davon. Ebenso ist die Eyebrow auf Dunkel in `app/[locale]/page.tsx:132` neu geschrieben statt `ui.eyebrow` mit Variante. Gefahr: Änderungen an der Überschrift (Größe, Umbruch) treffen nicht alle Seiten.
+
+**F5 – niedrig: Chat-Blase, Zähler-Badges und Kreis-Icons nicht in der Bibliothek.**
+`account/messages/[id]/page.tsx:120` (Blase mit `rounded-2xl`, `rounded-br-sm`, `max-w-[85%]`), `account/messages/page.tsx:68` und `auth/AuthNav.tsx:18` (orange Zähler), `admin/page.tsx:55` (Kreis-Icon) sind Einzelbauten. SPEC Schritt 3 nennt Chat-Blasen ausdrücklich als Bibliotheksbaustein.
+
+**F6 – mittel: Styleguide unvollständig gegenüber SPEC Schritt 3.**
+`app/[locale]/styleguide/page.tsx` hat Abschnitte Logo, Farben, Typografie, Buttons, Felder, Badges, Hinweise, Karten, Icons, Cookie-Banner, Zustände. Es fehlen Filterleiste, Dialoge, Tabs, Paginierung, Assistenten-Fortschritt, Chat-Blasen, Kartenpopup; bei den Zuständen nur „Leer“ (`:196–201`), nicht Laden, Fehler, Offline, 410, 404. Die Wildarten-Icons (Rehwild, Rotwild, Schwarzwild, Damwild, Gamswild, Muffelwild, Federwild, Hund) gibt es nicht (`components/ui/Icon.tsx`, `components/brand/KindIcon.tsx` haben nur UI- und Anzeigenart-Symbole). Seiten ohne `loading.tsx`/`error.tsx` (CHANGELOG nennt die 500-Seite als Lücke).
+Repro: `/de/styleguide` öffnen, Abschnitte mit der Liste aus SPEC M10a Schritt 3 vergleichen.
+
+**F7 – niedrig: Teilen-Button auf der Detailseite fehlt** (SPEC Schritt 4.4; im CHANGELOG Teil 1 als Lücke vermerkt). Repro: beliebige Anzeige öffnen, Kontaktbox: Nachricht, Merken, Melden, kein Teilen.
+
+**F8 – mittel: Lizenztabelle in DESIGN.md unvollständig.**
+SPEC Leitprinzip: „Lizenz jeder Schrift, jedes Icons und jedes Bildes steht in `docs/DESIGN.md`“. DESIGN §7 nennt nur Montserrat, Inter, Logo, Hirschkopf, Markenfotos, eigene Icons. Es fehlen die mit ausgelieferte Kartenschrift Noto Sans (OFL, `web/public/static/map/fonts/OFL.txt`), MapLibre GL JS (`web/public/static/map/maplibre-6.15.0/LICENSE.txt`), Kartendaten und -stil (OpenStreetMap ODbL, Protomaps; bisher nur in ADR 016 und auf `/sources`), App-Icon `web/app/icon.svg`. Die Shop-Beispielbilder in `design/` (im Repo versioniert) haben keinen Rechtevermerk; die Frage, ob `design/` ins Repo gehört, ist offen (DESIGN §6.2).
+
+**F9 – mittel: Prüftest deckt nicht alle Kernseiten ab.**
+`e2e/m10a-text.spec.ts:66–89` prüft Impressum nicht (`/imprint`, laut CLAUDE.md von jeder Seite erreichbar; meine Probe: ohne Befund), keine geöffnete Unterhaltung (`/account/messages/[id]`, Chat ist Kernflow), den Assistenten nur in Schritt 1, keine Melden-Formulare, keine Detailseite ohne Foto, kein Admin. Bildschirmfotos 768/1280 px entstehen nur mit `M10A_SCREENS=1`, nicht in der CI; axe läuft nur bei 360 px.
+Repro: Seitenliste im Test lesen.
+
+**F10 – niedrig: Lighthouse-Ziele für Liste und Detail verfehlt, „vorab“ nicht belegt.**
+CHANGELOG Schritt 7: Liste 89 (Ziel ≥ 90), Detail 79 (Ziel ≥ 85), LCP Detail 5,6 s. Bekannt und als eigener Schritt vor M10 geplant (mittlere Bildgröße). Zielwerte stehen erst im Messeintrag; für M10 die Ziele in `docs/WEB-RELEASE.md` vorab festschreiben.
+
+**F11 – mittel: DESIGN.md nicht vollständig, Tokens für iOS nicht übernehmbar beschrieben.**
+`docs/DESIGN.md:3` nennt einen veralteten Stand. Es fehlen Typografie-Skala (SPEC Schritt 1: Größen, Gewichte, Zeilenhöhen je Stufe), Radien (4/8/40 px), Laufweiten (0.13em, 0.06em), Abstandsraster, Schatten (keine; sollte so dastehen), Icon-Stil und -Größen, Tippflächen 44 px, Fokusregel, `prefers-reduced-motion`, und eine iOS-Zuordnung (Farbnamen für den Asset-Katalog, Dynamic-Type-Stufen statt fester px, Einbindung der Schriftdateien, Hinweis auf Tschechisch/Polnisch-Zeichen). Ohne diese Angaben müsste iOS die Werte aus `globals.css` und `styles.ts` ablesen.
+
+### Lokalisierung
+
+- Rohe Schlüssel: keine (Prüftest, 4 Sprachen).
+- cs/pl per DeepL, Du-Anrede, muttersprachlich **ungeprüft** (CHANGELOG Schritt 5): **Mensch**. Tschechische Mails siezen noch (bekannte Lücke).
+- Schriften: Latin Extended für cs/pl selbst gehostet; Č/Š-Teilmenge für die Sprachwahl auf de/en.
+
+### Zusammenfassung
+
+Erfüllt: c (bis auf Teilen), e, f, g. Teilweise: a, b, d, h. Offen: i. Mensch: Markenwirkung (a), Ähnlichkeitsprüfung (d), VoiceOver (f), cs/pl-Freigabe (g). Kein blockierender Befund; vor dem Abschluss von M10a sollten F1 (entscheiden oder begründen), F3, F6, F8, F11 erledigt sein.
+
 ## M0 – 2026-10-29
 
 Geprüfter Stand: `679fe80` (main, Arbeitsbaum sauber). Umgebung: macOS, Node 24.22.1, npm 11.19.1, lokales Supabase (CLI), Google Chrome headless.

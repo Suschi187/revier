@@ -56,7 +56,7 @@ Logos sind von den Kontrastregeln ausgenommen (WCAG 1.4.3), deshalb bleibt der P
 ## 3. Typografie
 
 Montserrat (Überschriften und Buttons, 700 bis 900, Großbuchstaben, Überschriften mit Punkt am Ende) und Inter (Fließtext, Formulare, 400 bis 600).
-Fließtext mindestens 16 px. Eyebrow 13 px, Laufweite 0.13em. Beide Schriften werden selbst gehostet (Latin und Latin Extended-A für cs/pl). Dazu kommt `inter-czech-wght-normal.woff2` (2 KB, nur Č č Š š, mit fonttools aus der Latin-Extended-Datei geschnitten, SIL OFL erlaubt Teilmengen): Die Sprachwahl zeigt „Čeština“ auf jeder Seite, ohne dass de/en-Seiten die 84 KB große Latin-Extended-Datei laden. Montserrat und Inter (Latin) werden vorgeladen, auf cs/pl auch Latin Extended.
+Fließtext mindestens 16 px. Eyebrow 13 px, Laufweite 0.13em. Beide Schriften werden selbst gehostet (Latin und Latin Extended-A für cs/pl). Dateinamen tragen eine Version (`.v1`), weil `/static/fonts` ein Jahr unveränderlich gecacht wird; bei jeder Änderung hochzählen. Dazu kommt `inter-czech-wght-normal.v1.woff2` (2 KB, nur Č č Š š, mit fonttools aus der Latin-Extended-Datei geschnitten, SIL OFL erlaubt Teilmengen): Die Sprachwahl zeigt „Čeština“ auf jeder Seite, ohne dass de/en-Seiten die 84 KB große Latin-Extended-Datei laden. Montserrat und Inter (Latin) werden vorgeladen, auf cs/pl auch Latin Extended.
 
 ## 4. Logo: L1 Geweih-Pin (gewählt 2026-11-12)
 
@@ -94,3 +94,9 @@ Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Ansprache „Du“ in D
 | Hirschkopf Die Jagdbrüder | Die Jagdbrüder | Eigentum der Marke | nur Referenz, nicht im Reviro-Logo |
 | Markenfotos | Die Jagdbrüder | Nutzungsrecht klären | ausstehend |
 | Höhenlinien-Muster, Kategorie- und UI-Icons | eigene Zeichnung | Projekt | umgesetzt |
+| Inter-Teilmenge `inter-czech-wght-normal.v1.woff2` | aus Inter (Latin Extended) geschnitten | SIL OFL 1.1 (kein Reserved Font Name) | `pyftsubset inter-latin-ext-wght-normal.v1.woff2 --unicodes="U+010C-010D,U+0160-0161" --flavor=woff2 --layout-features='*' --name-IDs='*'` (fonttools 4.55) |
+| App-Icon `web/app/icon.svg` | eigene Gestaltung (Logo L1) | Projekt | umgesetzt |
+| Kartenschrift Noto Sans | Google / Protomaps basemaps-assets | SIL OFL 1.1 | Seite „Datenquellen“ |
+| MapLibre GL JS | MapLibre-Community | BSD-3-Clause | npm-Abhängigkeit, Lizenz im Paket |
+| Kartendaten | OpenStreetMap-Mitwirkende, Protomaps | ODbL 1.0 / BSD-3-Clause | Seite „Datenquellen“, Vermerk in der Karte |
+| Markenunterlagen in `design/` | Die Jagdbrüder | Eigentum der Marke, nur interne Referenz | nicht ausgeliefert, nicht im Web verwendet |
