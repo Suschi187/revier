@@ -34,7 +34,7 @@ export async function ProviderPage({
       </p>
       <section aria-labelledby="provider-listings" className="mt-8">
         <h2 id="provider-listings" className="font-display text-xl font-bold">{t("listings")}</h2>
-        <ListingList items={listings.items} locale={locale} regions={regions} empty={t("empty")} favorites={favorites} />
+        <ListingList items={listings.items} locale={locale} regions={regions} empty={t("empty")} favorites={favorites} eager={3} />
         {(listings.nextCursor || cursor) && (
           <nav aria-label={t("paging")} className="mt-6 flex gap-4">
             {cursor && <a href={path} className="underline">{t("first")}</a>}

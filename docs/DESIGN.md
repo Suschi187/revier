@@ -56,7 +56,7 @@ Logos sind von den Kontrastregeln ausgenommen (WCAG 1.4.3), deshalb bleibt der P
 ## 3. Typografie
 
 Montserrat (Überschriften und Buttons, 700 bis 900, Großbuchstaben, Überschriften mit Punkt am Ende) und Inter (Fließtext, Formulare, 400 bis 600).
-Fließtext mindestens 16 px. Eyebrow 13 px, Laufweite 0.13em. Beide Schriften werden selbst gehostet (Latin und Latin Extended-A für cs/pl).
+Fließtext mindestens 16 px. Eyebrow 13 px, Laufweite 0.13em. Beide Schriften werden selbst gehostet (Latin und Latin Extended-A für cs/pl). Dazu kommt `inter-czech-wght-normal.woff2` (2 KB, nur Č č Š š, mit fonttools aus der Latin-Extended-Datei geschnitten, SIL OFL erlaubt Teilmengen): Die Sprachwahl zeigt „Čeština“ auf jeder Seite, ohne dass de/en-Seiten die 84 KB große Latin-Extended-Datei laden. Montserrat und Inter (Latin) werden vorgeladen, auf cs/pl auch Latin Extended.
 
 ## 4. Logo: L1 Geweih-Pin (gewählt 2026-11-12)
 

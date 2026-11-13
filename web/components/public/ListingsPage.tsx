@@ -206,7 +206,7 @@ export async function ListingsPage({
                 <p className="text-sm font-semibold" aria-live="polite">
                   {result.page.totalCapped ? t("countCapped") : t("count", { count: result.page.total ?? result.page.items.length })}
                 </p>
-                <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} favorites={favorites} />
+                <ListingList items={result.page.items} locale={locale} regions={names} empty={t("empty")} favorites={favorites} eager={3} />
                 {(nextHref || firstHref) && (
                   <nav aria-label={t("paging")} className="mt-6 flex flex-wrap justify-center gap-2">
                     {firstHref && <a href={firstHref} className={ui.btnSecondary}>{t("first")}</a>}

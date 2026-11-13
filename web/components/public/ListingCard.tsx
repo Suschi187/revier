@@ -21,12 +21,15 @@ export async function ListingCard({
   regions,
   favorites,
   layout = "row",
+  priority = "lazy",
 }: {
   card: Card;
   locale: AppLocale;
   regions: Record<string, string>;
   favorites?: FavoriteContext;
   layout?: CardLayout;
+  /** Ladeverhalten des Fotos (M10a Schritt 7): oberste Treffer sofort, der erste mit hoher Priorität (LCP). */
+  priority?: "high" | "eager" | "lazy";
 }) {
   const [t, tp, format] = await Promise.all([getTranslations("Listings"), getTranslations("Public.card"), getFormatter()]);
   const href = publicPath({ route: "listing", id: card.id }, locale);
@@ -51,7 +54,8 @@ export async function ListingCard({
       alt={card.photo.alt_text || tp("photoAlt", { title: card.title })}
       width={size.width}
       height={size.height}
-      loading="lazy"
+      loading={priority === "lazy" ? "lazy" : "eager"}
+      fetchPriority={priority === "high" ? "high" : undefined}
       className="size-full object-cover"
     />
   ) : (
@@ -123,6 +127,7 @@ export async function ListingList({
   empty,
   favorites,
   layout = "row",
+  eager = 0,
 }: {
   items: Card[];
   locale: AppLocale;
@@ -130,13 +135,16 @@ export async function ListingList({
   empty: string;
   favorites?: FavoriteContext;
   layout?: CardLayout;
+  /** So viele oberste Treffer laden ihr Foto sofort; der erste davon mit hoher Priorität (LCP der Trefferliste). */
+  eager?: number;
 }) {
   if (items.length === 0) return <p className="mt-4">{empty}</p>;
   return (
     <ul className={layout === "grid" ? "mt-4 grid grid-cols-[repeat(auto-fill,minmax(13.5rem,1fr))] gap-4" : "mt-4 grid grid-cols-[minmax(0,1fr)] gap-3"}>
-      {items.map((card) => (
+      {items.map((card, index) => (
         <li key={card.id} className="min-w-0">
-          <ListingCard card={card} locale={locale} regions={regions} favorites={favorites} layout={layout} />
+          <ListingCard card={card} locale={locale} regions={regions} favorites={favorites} layout={layout}
+            priority={index === 0 && eager > 0 ? "high" : index < eager ? "eager" : "lazy"} />
         </li>
       ))}
     </ul>

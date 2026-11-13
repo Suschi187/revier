@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { locale as rootLocale } from "next/root-params";
 import { notFound } from "next/navigation";
+import { preload } from "react-dom";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { routing } from "@/i18n/routing";
@@ -27,6 +28,10 @@ export default async function LocaleLayout({
 }: LayoutProps<"/[locale]">) {
   const locale = await rootLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
+  // Schriften vorladen (M10a Schritt 7): Überschriften (Montserrat) und Text (Inter) sind das LCP der Startseite.
+  // cs/pl brauchen dazu die Latin-Extended-Dateien; die übrigen lädt der Browser nach unicode-range.
+  const fonts = ["montserrat-latin", "inter-latin", ...(locale === "cs" || locale === "pl" ? ["montserrat-latin-ext", "inter-latin-ext"] : [])];
+  for (const font of fonts) preload(`/static/fonts/${font}-wght-normal.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (
     <html lang={locale} className="h-full antialiased">

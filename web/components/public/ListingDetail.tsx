@@ -72,7 +72,7 @@ export async function ListingDetail({
               <>
                 <a href={photoUrl(first.id, "full")} className="block overflow-hidden rounded-btn">
                   {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
-                  <img src={photoUrl(first.id, "full")} alt={first.altText || tp("photoAlt", { title: listing.title, n: 1, m: listing.photos.length })}
+                  <img src={photoUrl(first.id, "full")} fetchPriority="high" alt={first.altText || tp("photoAlt", { title: listing.title, n: 1, m: listing.photos.length })}
                     width={first.width ?? firstSize.width} height={first.height ?? firstSize.height}
                     className="aspect-[16/10] w-full bg-olive object-cover" />
                 </a>

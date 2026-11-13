@@ -20,6 +20,19 @@
   src: url("/static/fonts/inter-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/*
+ * Nur Č č Š š (2 KB, Teilmenge der Latin-Extended-Datei, M10a Schritt 7): Die Sprachwahl zeigt „Čeština“ auf jeder
+ * Seite und lud dafür sonst die ganze Latin-Extended-Datei (84 KB). Steht zuletzt, damit sie bei überlappendem
+ * unicode-range gewinnt; auf cs/pl-Seiten lädt die große Datei wegen der übrigen Zeichen weiterhin.
+ */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/static/fonts/inter-czech-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+010C-010D, U+0160-0161;
+}
 @font-face {
   font-family: "Montserrat";
   font-style: normal;

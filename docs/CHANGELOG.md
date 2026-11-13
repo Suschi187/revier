@@ -2,6 +2,36 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a GUI/UX-Design (Web), Schritt 7: Performance – 2026-11-13
+
+Messung: Lighthouse 12.8 (einmalig per `npx`, keine Projekt-Abhängigkeit), Handy-Profil mit simuliertem 4G, Produktions-Build lokal (`next start`), je Seite Median aus 3 Läufen. Demo-Daten: 6 Anzeigen mit je 3 Fotos in Pipeline-Größe (voll 2048 px, ca. 410 KB; Vorschau 480 px, ca. 15 KB), Konto `demo-perf@test.local`, nur lokal.
+
+| Seite | Performance vorher → nachher | LCP | CLS | Gewicht |
+|---|---|---|---|---|
+| Start `/de` | 81 → 93 | 4,6 → 3,2 s | 0 → 0 | 638 → 558 KB |
+| Liste `/de/jagdhelfer` | 87 → 89 | 4,0 → 3,7 s | 0,001 → 0 | 641 → 561 KB |
+| Detail `/de/anzeige/…` | 75 → 79 | 6,2 → 5,6 s | 0,002 → 0 | 985 → 905 KB |
+| Start `/cs` (nachher) | 87 | 4,1 s | 0 | 714 KB |
+
+Accessibility und Best Practices 100 auf allen drei Seiten; SEO lokal 69 nur wegen `noindex` außerhalb von Prod (`is-crawlable`).
+
+**Zielwerte (Handy, Lighthouse):** Performance ≥ 90 auf Start und Liste, ≥ 85 auf Detail; LCP ≤ 2,5 s als Richtwert für Prod mit CDN; CLS ≤ 0,1. Erreicht: Start, CLS. Offen: Liste knapp, Detail (siehe Lücken).
+
+### Geändert
+- **Schriften vorladen** (`react-dom` `preload` im Layout): Montserrat und Inter Latin, auf cs/pl auch Latin Extended.
+- **Teilmenge `inter-czech-wght-normal.woff2`** (2 KB, Č č Š š): „Čeština“ in der Sprachwahl lud auf jeder Seite die 84 KB große Latin-Extended-Datei von Inter; de/en-Seiten laden sie jetzt nicht mehr.
+- **Listen:** die obersten 3 Treffer laden ihr Foto sofort, der erste mit `fetchpriority="high"` (war `loading="lazy"` und das LCP-Element).
+- **Detail:** erstes Foto mit `fetchpriority="high"`.
+- Kein `next/image` für Anzeigenfotos: Die Foto-Route prüft die Sichtbarkeit bei jedem Abruf (`no-cache`, ADR 015), der Bild-Optimierer würde Kopien stundenlang zwischenspeichern und ein entferntes Foto weiter ausliefern.
+
+### Testen
+- `npm run build && npx next start -p 3100`, dann `npx --yes lighthouse@12.8.2 http://localhost:3100/de --only-categories=performance`
+- E2E `public.spec.ts`, `m10a-text.spec.ts`, `cookie-inventory.spec.ts`, `qa-m5.spec.ts`
+
+### Lücken
+- **Detail-LCP:** Das erste Foto ist auch auf dem Handy die 2048-px-Fassung (410 KB). Lösung: dritte, mittlere Größe (ca. 1024 px) und WebP in `process-listing-photo`, dazu `srcset`. Berührt Edge Function, 6 Migrationen (Löschjobs, Karte, Suche), Storage-Regeln und die Neuverarbeitung bestehender Fotos; als eigener Schritt mit `backend`/`database` vor M10.
+- Messung lokal ohne CDN und HTTP/2; die Prod-Messung gehört in `docs/WEB-RELEASE.md` (M10).
+
 ## M10a GUI/UX-Design (Web), Schritt 6: Sensible Inhalte – 2026-11-13
 
 Entscheidung des Nutzers: keine Fotos von erlegtem Wild; solche Anzeigen lehnt der Admin ab (SPEC M10a Schritt 6, Nachtrag ADR 014).
