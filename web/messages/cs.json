@@ -21,7 +21,7 @@
     "endorsement": "by Die Jagdbrüder",
     "tagline": "Honitby & povolenky k lovu",
     "homeLabel": "Reviro od Die Jagdbrüder, na úvodní stránku",
-    "claim": "Lovecké příležitosti v Německu · Rakousku · Švýcarsku · České republice · Polsku",
+    "claim": "Lovecké příležitosti v DE · AT · CH · CZ · PL",
     "shop": "Obchod Die Jagdbrüder",
     "shopLabel": "Obchod Die Jagdbrüder (externí stránka)"
   },
@@ -58,7 +58,7 @@
       "verifying": "Probíhá kontrola …",
       "codeInvalid": "Kód je neplatný nebo jeho platnost vypršela.",
       "otherEmail": "Použij jinou e-mailovou adresu nebo si vyžádej nový e-mail",
-      "networkError": "Není k dispozici připojení. Zkuste to prosím znovu.",
+      "networkError": "Není k dispozici připojení. Zkus to prosím znovu.",
       "termsHint": "Nová uživatelská účty po prvním přihlášení souhlasí s podmínkami použití.",
       "apple": "Přihlásit se přes Apple",
       "privacyHint": "Informace o tom, jak zpracováváme tvou e-mailovou adresu, najdeš v zásadách <link>ochrany osobních údajů</link>."
@@ -94,7 +94,7 @@
     "errors": {
       "required": "Vyplň prosím toto pole.",
       "tooLong": "Zadaný text je příliš dlouhý.",
-      "invalid": "Vyberte prosím platnou možnost."
+      "invalid": "Vyber prosím platnou možnost."
     }
   },
   "Welcome": {
@@ -105,7 +105,7 @@
     "acceptRequired": "Chceš-li pokračovat, souhlas prosím s podmínkami použití.",
     "submit": "Uložit a pokračovat",
     "errors": {
-      "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
+      "failed": "Uložení se nezdařilo. Zkus to prosím znovu.",
       "outdated": "Právní texty byly právě aktualizovány. Přečti si je prosím a znovu potvrď.",
       "blocked": "Tvůj účet je zablokovaný. Nemůžeš upravit svůj profil."
     },
@@ -347,7 +347,7 @@
       "back": "Zpět na Můj účet",
       "submit": "Uložit",
       "saved": "Tvůj profil byl uložen.",
-      "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
+      "failed": "Uložení se nezdařilo. Zkus to prosím znovu.",
       "blocked": "Tvůj účet je zablokovaný. Nemůžeš upravit svůj profil."
     },
     "myListings": "Moje inzeráty",
@@ -545,21 +545,21 @@
       "postal_format": "PSČ nemá formát používaný v daném spolkovém státě.",
       "attributes_legal_ack": "Potvrď prosím, že jsi se seznámil s právními podmínkami.",
       "attributes_event_date_past": "Datum se vztahuje k minulosti.",
-      "attributes_lease_type": "Vyberte prosím druh pronájmu.",
+      "attributes_lease_type": "Vyber prosím druh pronájmu.",
       "attributes_revier_type": "Vyber prosím alespoň jeden typ honitby.",
       "area_hectares": "Uveď prosím plochu v hektarech.",
       "area_invalid": "Uveď prosím hodnotu větší než 0 s nejvýše dvěma desetinnými místy.",
-      "attributes_permit_scope": "Zvolte prosím rozsah povolenky k lovu.",
+      "attributes_permit_scope": "Zvol prosím rozsah povolenky k lovu.",
       "attributes_paid": "Uveď prosím, zda je povolenka k lovu placená.",
       "attributes_event_date": "Uveď prosím datum lovu.",
       "attributes_spots_available": "Uveď prosím počet volných míst (1 až 500).",
       "attributes_tasks": "Uveď prosím alespoň jeden úkol.",
-      "species": "Vyberte prosím alespoň jeden druh zvěře.",
+      "species": "Vyber prosím alespoň jeden druh zvěře.",
       "photos_unprocessed": "Některé fotografie se ještě zpracovávají. Prosím, chvíli počkej nebo je odstraň.",
       "attributes_unknown": "Některé údaje neodpovídají charakteru inzerátu.",
       "attributes_invalid": "Zkontroluj prosím údaje o typu inzerátu.",
       "title": "Název musí mít 3 až 100 znaků.",
-      "district": "Vyberte prosím okres.",
+      "district": "Vyber prosím okres.",
       "price_required": "Uveď prosím částku.",
       "price_invalid": "Částku prosím uveď jako číslo, například 1500 nebo 1 500,50.",
       "price_negative": "Částka nesmí být záporná.",
@@ -571,7 +571,7 @@
       "form": "Zkontroluj prosím své údaje.",
       "place_point_small_district": "V tomto kruhu není možné umístit bod na mapě: je tak malý, že by bod příliš přesně prozradil jeho polohu. Mapa zobrazuje střed kruhu.",
       "place_point_too_far": "Místo se nenachází ve zvoleném okrese.",
-      "place_point_invalid": "Tento bod je neplatný. Zkuste ho prosím umístit znovu na mapu."
+      "place_point_invalid": "Tento bod je neplatný. Zkus ho prosím umístit znovu na mapu."
     },
     "preview": {
       "privateBadge": "pouze pro tebe a moderátory",
@@ -622,7 +622,7 @@
         "limit": "Maximálně 8 fotografií na jeden inzerát.",
         "dailyLimit": "Dnes jsi už nahrál/a opravdu hodně fotek. Zkus to prosím zítra znovu.",
         "attempts": "Na tuto fotografii bylo provedeno příliš mnoho pokusů. Vyber ji prosím znovu.",
-        "network": "Není k dispozici připojení. Zkuste to prosím znovu.",
+        "network": "Není k dispozici připojení. Zkus to prosím znovu.",
         "failed": "Fotografii se nepodařilo zpracovat. Vyber ji prosím znovu."
       }
     }
@@ -646,8 +646,8 @@
       "verify": "Potvrdit",
       "noscript": "Tato funkce vyžaduje JavaScript: Klíč se vygeneruje pouze jednou a ihned se zobrazí. Prosím, aktivuj JavaScript pro tuto stránku.",
       "errors": {
-        "code": "Kód je nesprávný nebo jeho platnost vypršela. Zkuste to prosím znovu.",
-        "setup": "Nastavení se nezdařilo. Zkuste to prosím znovu."
+        "code": "Kód je nesprávný nebo jeho platnost vypršela. Zkus to prosím znovu.",
+        "setup": "Nastavení se nezdařilo. Zkus to prosím znovu."
       }
     },
     "overview": {
@@ -693,7 +693,7 @@
       "notPending": "Tento inzerát nečeká na schválení (stav: {status}).",
       "decision": "Rozhodnutí",
       "reason": "Důvod",
-      "reasonNone": "– Vyberte důvod –",
+      "reasonNone": "– Vyber důvod –",
       "reasonHint": "Povinné při volbách „Vyžádat úpravy“ a „Zamítnout“. Inzerent uvidí důvod ve svém jazyce.",
       "note": "Poznámka pro inzerenty (volitelné)",
       "noteHint": "Povinné v případě „Jiný důvod“. Inzerent to vidí přesně tak, maximálně 1000 znaků.",
@@ -704,7 +704,7 @@
         "note": "V poli „Jiný důvod“ prosím uveď vysvětlení.",
         "notReady": "Inzerát nelze schválit, protože některé údaje chybí nebo jsou neplatné:",
         "forbidden": "O tomto inzerátu nemůžeš rozhodovat.",
-        "failed": "Rozhodnutí se nepodařilo uložit. Zkuste to prosím znovu."
+        "failed": "Rozhodnutí se nepodařilo uložit. Zkus to prosím znovu."
       }
     },
     "audit": {
@@ -794,7 +794,7 @@
         "stepUp": "Potvrď prosím ještě jednou pomocí nového kódu.",
         "waiting": "Role můžeš měnit až od {date} ({days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování).",
         "waitingNoDate": "Role můžeš měnit až {days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování.",
-        "limit": "V krátkém časovém úseku došlo k příliš mnoha změnám role nebo vyhledáváním. Zkuste to prosím později znovu.",
+        "limit": "V krátkém časovém úseku došlo k příliš mnoha změnám role nebo vyhledáváním. Zkus to prosím později znovu.",
         "lastAdmin": "Posledního správce nelze odstranit.",
         "lookup": "Nejdřív prosím vyhledej účet podle e-mailové adresy (platí 1 hodinu).",
         "forbidden": "To nesmíš.",
@@ -854,7 +854,7 @@
           "note": "Prosím, zdůvodni své rozhodnutí (maximálně 1000 znaků).",
           "forbidden": "To nejde (vlastní účet nebo chybí dvoufaktorové přihlášení).",
           "notFound": "Žádost již neexistuje.",
-          "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+          "failed": "Uložení se nezdařilo. Zkus to prosím znovu."
         },
         "documentErrors": {
           "mismatch": "Obsah souboru neodpovídá žádnému povolenému formátu (JPEG, PNG, PDF). Soubor se nezobrazí. Žádost zamítni.",
@@ -912,7 +912,7 @@
         "forbidden": "To nejde (vlastní účet nebo chybí dvoufaktorové přihlášení).",
         "adminRole": "Účty s rolí nelze varovat ani zablokovat.",
         "notFound": "Tento obsah již neexistuje.",
-        "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+        "failed": "Uložení se nezdařilo. Zkus to prosím znovu."
       },
       "codeListing": "Důvod u inzerátu",
       "codeAccount": "Důvod u účtu"
@@ -928,7 +928,7 @@
         "empty": "Zadej prosím e-mailovou adresu nebo ID účtu.",
         "notFound": "Účet nebyl nalezen.",
         "limit": "V poslední hodině bylo provedeno příliš mnoho vyhledávání.",
-        "failed": "Vyhledávání se nezdařilo. Zkuste to prosím znovu.",
+        "failed": "Vyhledávání se nezdařilo. Zkus to prosím znovu.",
         "code": "Vyber prosím důvod.",
         "note": "Prosím, zdůvodni své rozhodnutí (maximálně 1000 znaků).",
         "forbidden": "To nejde (vlastní účet nebo chybí dvoufaktorové přihlášení).",
@@ -1001,7 +1001,7 @@
         "note": "Prosím, zdůvodni své rozhodnutí (1 až 1000 znaků).",
         "forbidden": "Rozhodnout musí jiný správce: Ty jsi učinil původní rozhodnutí.",
         "notFound": "Tato stížnost již neexistuje.",
-        "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
+        "failed": "Uložení se nezdařilo. Zkus to prosím znovu."
       }
     }
   },
@@ -1044,7 +1044,7 @@
       "countrySoon": "{country} (brzy)",
       "newestHeading": "Nejnovější inzeráty.",
       "newestEmpty": "Zatím nebyly zveřejněny žádné inzeráty.",
-      "newestError": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
+      "newestError": "Inzeráty se nepodařilo načíst. Zkus to prosím později.",
       "loading": "Načítání inzerátů…",
       "allListings": "Všechny inzeráty",
       "crumb": "Úvod",
@@ -1077,7 +1077,7 @@
       "first": "Na první stránku",
       "next": "Další stránka",
       "invalid": "Filtry nejsou platné. Zkontroluj prosím své zadání.",
-      "failed": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
+      "failed": "Inzeráty se nepodařilo načíst. Zkus to prosím později.",
       "metaDescription": "{title}: aktuální nabídky a poptávky na Revier.",
       "queryTooLong": "Hledaný výraz je příliš dlouhý. Použij prosím méně slov."
     },
@@ -1149,7 +1149,7 @@
     "unavailable": "{count, plural, one {# uložený inzerát již není k dispozici} few {# uložené inzeráty již nejsou k dispozici} other {# uložených inzerátů již není k dispozici}}.",
     "removeUnavailable": "Odstranit nedostupné",
     "removedNotice": "Oblíbené položky, které již nejsou k dispozici, byly odstraněny.",
-    "failed": "To se nepodařilo. Zkuste to prosím znovu.",
+    "failed": "To se nepodařilo. Zkus to prosím znovu.",
     "limit": "Můžeš si uložit maximálně 500 inzerátů.",
     "loadFailed": "Tvé oblíbené položky se nepodařilo načíst. Zkus to prosím později znovu."
   },
@@ -1164,7 +1164,7 @@
     "loading": "Načítání inzerátů…",
     "loadFailed": "Inzeráty pro mapu se nepodařilo načíst.",
     "retry": "Zkusit to znovu",
-    "truncated": "Pro tento výřez je příliš mnoho inzerátů. Prosím, přibližte si obrázek.",
+    "truncated": "Pro tento výřez je příliš mnoho inzerátů. Přibliž prosím mapu.",
     "searchArea": "Hledat v této oblasti",
     "searchAreaHint": "Inzeráty bez vlastního bodu se počítají podle středu jejich kruhu.",
     "stack": "{count} Inzeráty na tomto místě",
@@ -1246,7 +1246,7 @@
       "rateUnanswered": "Než napíšeš další zprávy, počkej prosím na odpověď.",
       "rateConversations": "Dnes jsi již zahájil mnoho konverzací. Zkus to prosím později znovu.",
       "unavailable": "Do této konverzace již nelze psát.",
-      "failed": "Zprávu se nepodařilo odeslat. Zkuste to prosím znovu."
+      "failed": "Zprávu se nepodařilo odeslat. Zkus to prosím znovu."
     },
     "blockedByMe": "Tuto osobu jsi zablokoval.",
     "cannotWrite": "Do této konverzace již nelze psát.",
@@ -1291,7 +1291,7 @@
       "errors": {
         "reason": "Vyber prosím důvod.",
         "limit": "Dnes jsi již odeslal mnoho nahlášení. Zkus to prosím zítra znovu.",
-        "failed": "Nahlášení se nepodařilo odeslat. Zkuste to prosím znovu.",
+        "failed": "Nahlášení se nepodařilo odeslat. Zkus to prosím znovu.",
         "duplicate": "To už jsi nahlásil. Tvé nahlášení se prověřuje."
       }
     },
@@ -1315,7 +1315,7 @@
       "hint": "Nanejvýš jeden e-mail každých 15 minut, bez textu zprávy. E-maily jsou zasílány na adresu, na kterou se přihlásíš.",
       "save": "Uložit nastavení",
       "saved": "Tvé nastavení oznámení je uloženo.",
-      "failed": "Nastavení se nepodařilo uložit. Zkuste to prosím znovu."
+      "failed": "Nastavení se nepodařilo uložit. Zkus to prosím znovu."
     },
     "legalRequired": "Chceš-li psát, nejdřív prosím souhlas s aktuálními podmínkami použití. Blokování a nahlášení zůstávají možné.",
     "legalLink": "K podmínkám použití"
@@ -1335,7 +1335,7 @@
       "runtime": "Uložené hledání platí 6 týdnů. V posledních 14 dnech jej můžeš ve svém účtu prodloužit.",
       "submit": "Vytvořit uložené hledání",
       "saving": "Ukládá se …",
-      "signIn": "Přihláste se, abyste si toto vyhledávání uložili"
+      "signIn": "Přihlas se a ulož si toto hledání"
     },
     "fields": {
       "name": "Název",
@@ -1400,7 +1400,7 @@
       "legal": "Nejprve prosím souhlas s aktuálními podmínkami použití a zásadami ochrany osobních údajů.",
       "extendNotYet": "Toto uložené hledání zatím nelze prodloužit.",
       "unavailable": "To nejde: Uložené hledání již neexistuje nebo je tvůj účet zablokovaný.",
-      "failed": "To se nepodařilo. Zkuste to prosím později znovu."
+      "failed": "To se nepodařilo. Zkus to prosím později znovu."
     },
     "page": {
       "metaTitle": "Uložená hledání",
@@ -1544,10 +1544,10 @@
     "download": "Stáhnout data (JSON)",
     "deletionPending": "Tvůj účet bude smazán. Stažení již není možné.",
     "errors": {
-      "rateLimited": "Limit byl dosažen. Zkuste to prosím později znovu.",
+      "rateLimited": "Limit byl dosažen. Zkus to prosím později znovu.",
       "rateLimitedUntil": "Limit byl dosažen. Od {time} si můžeš svá data znovu stáhnout.",
       "notAllowed": "Pro tento účet není stahování možné.",
-      "failed": "Stahování se nezdařilo. Zkuste to prosím později znovu."
+      "failed": "Stahování se nezdařilo. Zkus to prosím později znovu."
     }
   },
   "AccountDelete": {
@@ -1584,7 +1584,7 @@
       "step_up": "Prosím, potvrď to navíc kódem z tvé aplikace Authenticator.",
       "admin_role": "Účty s rolí správce nelze smazat. Nejdříve si prosím nech tuto roli odebrat.",
       "confirm": "Potvrď prosím, že jsi smazání pochopil.",
-      "failed": "Vymazání se nepodařilo spustit. Zkuste to prosím později znovu."
+      "failed": "Vymazání se nepodařilo spustit. Zkus to prosím později znovu."
     },
     "reauth": {
       "intro": "Pro tvou bezpečnost ti zašleme kód na adresu {email}.",
@@ -1596,7 +1596,7 @@
       "verify": "Potvrdit",
       "done": "Přihlášení potvrzeno. Nyní můžeš svůj účet smazat (krok 2).",
       "errors": {
-        "network": "Připojení se nezdařilo. Zkuste to prosím znovu.",
+        "network": "Připojení se nezdařilo. Zkus to prosím znovu.",
         "codeInvalid": "Kód je neplatný nebo jeho platnost vypršela.",
         "mismatch": "Tento kód patří k jinému účtu. Byl jsi odhlášen.",
         "totpInvalid": "Kód z aplikace Authenticator je neplatný.",
@@ -1664,7 +1664,7 @@
       "withdrawn": "Tvá žádost byla stažena."
     },
     "errors": {
-      "fileType": "Vyberte prosím soubor ve formátu JPEG, PNG nebo PDF.",
+      "fileType": "Vyber prosím soubor ve formátu JPEG, PNG nebo PDF.",
       "fileSize": "Soubor je větší než 10 MB.",
       "fileEmpty": "Vyber prosím soubor.",
       "open": "Tvá žádost je již ve schvalování.",
@@ -1673,7 +1673,7 @@
       "legal": "Nejprve prosím souhlas s aktuálními podmínkami použití.",
       "type": "Tento typ dokumentu není pro tvůj účet k dispozici.",
       "notAllowed": "Tvůj účet momentálně nemůže podat žádost.",
-      "upload": "Nahrávání se nezdařilo. Zkuste to prosím znovu.",
+      "upload": "Nahrávání se nezdařilo. Zkus to prosím znovu.",
       "missingFile": "Dokument chybí. Nahraj jej prosím znovu.",
       "submitted": "Tento návrh již byl podán.",
       "notFound": "Žádost již neexistuje. Obnov prosím stránku.",
