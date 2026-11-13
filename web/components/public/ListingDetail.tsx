@@ -72,8 +72,10 @@ export async function ListingDetail({
             {first && firstSize ? (
               <>
                 <a href={photoUrl(first.id, "full")} className="block overflow-hidden rounded-btn">
+                  {/* Handy und Desktop laden die mittlere Größe (1024 px), erst hochauflösende breite Bildschirme das große Bild. */}
                   {/* eslint-disable-next-line @next/next/no-img-element -- eigene Foto-Route (prüft Sichtbarkeit je Abruf) */}
-                  <img src={photoUrl(first.id, "full")} fetchPriority="high" alt={first.altText || tp("photoAlt", { title: listing.title, n: 1, m: listing.photos.length })}
+                  <img src={photoUrl(first.id, "medium")} srcSet={`${photoUrl(first.id, "medium")} 1024w, ${photoUrl(first.id, "full")} 2048w`}
+                    sizes="(min-width: 1024px) 56rem, 100vw" fetchPriority="high" alt={first.altText || tp("photoAlt", { title: listing.title, n: 1, m: listing.photos.length })}
                     width={first.width ?? firstSize.width} height={first.height ?? firstSize.height}
                     className="aspect-hero w-full bg-olive object-cover" />
                 </a>

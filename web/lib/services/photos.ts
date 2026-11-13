@@ -20,12 +20,12 @@ export async function reorderPhotos(listingId: string, photoIds: string[]): Prom
 }
 
 /**
- * Entfernt ein Foto: erst die Dateien (Bild und Thumbnail), dann die Zeile. Ein noch liegender Eingang
+ * Entfernt ein Foto: erst die Dateien (Bild, mittlere Größe und Thumbnail), dann die Zeile. Ein noch liegender Eingang
  * ist für den Besitzer nicht löschbar; den räumt der Job in M9 ab (ADR 011).
  */
 export async function removePhoto(listingId: string, photo: OwnPhoto): Promise<PhotoResult> {
   const supabase = await createSupabaseServerClient();
-  if (photo.processed) await supabase.storage.from("listing-photos").remove([photo.storagePath, photo.thumbPath]);
+  if (photo.processed) await supabase.storage.from("listing-photos").remove([photo.storagePath, photo.mediumPath, photo.thumbPath].filter((p): p is string => Boolean(p)));
   const { data, error } = await supabase.from("listing_photos").delete().eq("id", photo.id).eq("listing_id", listingId).select("id");
   return error || !data?.length ? "failed" : "ok";
 }

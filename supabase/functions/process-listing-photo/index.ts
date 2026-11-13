@@ -1,5 +1,5 @@
 // Edge Function process-listing-photo (ADR 011): verarbeitet ein hochgeladenes Original aus dem privaten Eingang
-// `listing-uploads` zu Bild und Thumbnail ohne Metadaten in `listing-photos`.
+// `listing-uploads` zu Bild, mittlerer Größe und Thumbnail ohne Metadaten in `listing-photos`.
 // Aufruf: POST { "photo_id": "<uuid>" } mit dem Access Token des Besitzers (verify_jwt = true).
 // Antworten (JSON): 200 { status: "processed", width, height } oder { error: <code> } mit
 //   400 bad_request, 401 unauthorized, 404 not_found (unbekannt und fremd gleich), 409 not_uploaded,
@@ -80,7 +80,7 @@ async function handle(request: Request, started: number): Promise<Response> {
   // Versuch erst nach dem Download zählen: Ein noch nicht hochgeladenes Foto kostet keinen Versuch.
   const { data: claims, error: claimError } = await admin.rpc("claim_photo_processing", { p_photo_id: photoId, p_user_id: userId });
   if (claimError) throw claimError;
-  const claim = (claims as { state: string; storage_path: string; thumb_path: string }[])[0];
+  const claim = (claims as { state: string; storage_path: string; thumb_path: string; medium_path: string }[])[0];
   if (claim.state === "processed") return reply("processed", photoId, started);
   if (claim.state === "exhausted") return reply("attempts_exhausted", photoId, started);
   if (claim.state !== "claimed") {
@@ -96,7 +96,7 @@ async function handle(request: Request, started: number): Promise<Response> {
   }
 
   const photos = admin.storage.from("listing-photos");
-  for (const [path, bytes] of [[claim.storage_path, result.full], [claim.thumb_path, result.thumb]] as const) {
+  for (const [path, bytes] of [[claim.storage_path, result.full], [claim.medium_path, result.medium], [claim.thumb_path, result.thumb]] as const) {
     const { error } = await photos.upload(path, bytes, { contentType: "image/jpeg", upsert: true, cacheControl: "31536000" });
     if (error) throw error;
   }
@@ -106,7 +106,7 @@ async function handle(request: Request, started: number): Promise<Response> {
   if (completeError) throw completeError;
   if (state === "gone") {
     // Foto während der Verarbeitung gelöscht: eigene Ausgaben wieder entfernen.
-    await photos.remove([claim.storage_path, claim.thumb_path]);
+    await photos.remove([claim.storage_path, claim.medium_path, claim.thumb_path]);
     await removeInput();
     return reply("not_found", photoId, started);
   }

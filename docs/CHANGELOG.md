@@ -2,6 +2,32 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeit: mittlere Bildgröße – 2026-11-13
+
+### Geändert
+- **Dritte Bildgröße** (1024 px lange Seite, JPEG Qualität 80): `process-listing-photo` schreibt jetzt Bild (2048), mittlere Größe und Thumbnail; das Thumbnail entsteht aus der mittleren Größe. Migration `20261113140000_listing_photo_medium.sql`: Spalte `medium_path` (vom Pfad-Trigger gesetzt, nur Server änderbar), `claim_photo_processing` liefert den Pfad, Storage-Lesefreigabe und Aufräumjob kennen die Datei.
+- **Web:** `/api/photos/<id>/medium` (gleiche Sichtbarkeitsprüfung je Abruf); fehlt die Datei noch, liefert die Route das große Bild. Detailseite lädt das erste Foto als `medium` mit `srcset` (1024w/2048w). Löschen von Foto und Entwurf entfernt auch die mittlere Größe. `og:image` bleibt das große Bild.
+- **Nachberechnen** für Fotos von vorher: `supabase/functions/process-listing-photo/backfill_medium.ts` (wiederholbar, überspringt vorhandene Dateien; Aufruf im Dateikopf). Lokal 18 Dateien erzeugt, zweiter Lauf 0. **Vor dem nächsten Deploy auf Staging/Prod einmal ausführen.**
+- Tests: `59_photo_medium.test.sql` (Pfad, Spaltenrecht, Claim, Lesen nur verarbeitet, fremdes Löschen, Aufräumen), Pipeline-Tests für 1024 px und das Nachberechnen, E2E Detailseite (`src`/`srcset`) und sofortiges Verschwinden auch der mittleren Größe.
+
+### Messung (wie Schritt 7: Lighthouse 12.8.2, Handy, `next start`, Median aus 3)
+| Seite | Performance | LCP | Gewicht |
+|---|---|---|---|
+| Detail | 79 → 87 | 5,6 → 4,1 s | 905 → 625 KB |
+| Liste | 89 → 89 | 3,8 s | 567 KB |
+
+Detail erreicht das Ziel (≥ 85). Das erste Foto wiegt 126 statt 410 KB.
+
+### Nicht umgesetzt
+- **WebP:** Der vendorte Codec kann nur JPEG. WebP bräuchte einen zusätzlichen WASM-Encoder in der Edge Function (neue Abhängigkeit, mehr CPU-Zeit je Upload) oder die kostenpflichtige Bildtransformation von Supabase. Nach dem Messwert oben nicht nötig; Entscheidung offen.
+- **iOS:** noch keine App; sie soll für Detailbilder ebenfalls `medium` laden.
+- Liste bleibt bei 89 (Ziel 90), nicht Teil dieses Schritts.
+
+### Testen
+- `supabase migration up`, dann `supabase test db supabase/tests/59_photo_medium.test.sql`
+- Edge Function per Docker: `deno task check && deno lint && deno task test` in `process-listing-photo`
+- `cd web && npx playwright test e2e/public.spec.ts`
+
 ## M10a Nacharbeiten – 2026-11-13
 
 ### Geändert

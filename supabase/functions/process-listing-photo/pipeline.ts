@@ -8,10 +8,13 @@ import { downscale, orient, rgbaOf } from "./pixels.ts";
 export const LIMITS: Limits = { maxSide: 4096, maxPixels: 8_000_000, maxProgressivePixels: 5_000_000, maxScans: 16 };
 export const FULL_LONG_SIDE = 2048;
 export const THUMB_LONG_SIDE = 480;
+// Detailseite auf dem Handy (M10a Nacharbeit): halbiert die Bytes des Hauptbilds gegenüber 2048 px.
+export const MEDIUM_LONG_SIDE = 1024;
 const FULL_QUALITY = 82;
 const THUMB_QUALITY = 80;
+const MEDIUM_QUALITY = 80;
 
-export type Processed = { ok: true; full: Uint8Array; thumb: Uint8Array; width: number; height: number };
+export type Processed = { ok: true; full: Uint8Array; medium: Uint8Array; thumb: Uint8Array; width: number; height: number };
 export type ProcessResult = Processed | { ok: false; error: HeaderError };
 
 export function processJpeg(input: Uint8Array, limits: Limits = LIMITS): ProcessResult {
@@ -35,9 +38,29 @@ export function processJpeg(input: Uint8Array, limits: Limits = LIMITS): Process
   }
   if (!image) return { ok: false, error: "corrupt" };
 
-  const thumbImage = downscale(rgbaOf(image), THUMB_LONG_SIDE);
+  const mediumImage = downscale(rgbaOf(image), MEDIUM_LONG_SIDE);
+  const thumbImage = downscale(rgbaOf(mediumImage), THUMB_LONG_SIDE);
   const full = codec.encode(image.rgba, image.width, image.height, FULL_QUALITY);
+  const medium = codec.encode(mediumImage.rgba, mediumImage.width, mediumImage.height, MEDIUM_QUALITY);
   const thumb = codec.encode(thumbImage.rgba, thumbImage.width, thumbImage.height, THUMB_QUALITY);
-  if (!isCleanJpeg(full) || !isCleanJpeg(thumb)) throw new Error("encoder output failed the marker allowlist");
-  return { ok: true, full, thumb, width: image.width, height: image.height };
+  if (!isCleanJpeg(full) || !isCleanJpeg(medium) || !isCleanJpeg(thumb)) throw new Error("encoder output failed the marker allowlist");
+  return { ok: true, full, medium, thumb, width: image.width, height: image.height };
+}
+
+/**
+ * Mittlere Größe aus einem schon verarbeiteten Bild (Nachberechnen für Fotos von vor der mittleren Größe). Das
+ * Bild ist bereits gedreht und ohne Metadaten; kleine Bilder werden unverändert übernommen.
+ */
+export function mediumFromProcessed(full: Uint8Array): Uint8Array {
+  const parsed = parseJpeg(full, LIMITS);
+  if (!parsed.ok) throw new Error(`processed image rejected: ${parsed.error}`);
+  if (Math.max(parsed.header.width, parsed.header.height) <= MEDIUM_LONG_SIDE) {
+    if (!isCleanJpeg(full)) throw new Error("processed image failed the marker allowlist");
+    return full;
+  }
+  const codec = new JpegCodec();
+  const image = codec.decode(full, (decoded) => downscale({ ...decoded, data: decoded.pixels }, MEDIUM_LONG_SIDE));
+  const medium = codec.encode(image.rgba, image.width, image.height, MEDIUM_QUALITY);
+  if (!isCleanJpeg(medium)) throw new Error("encoder output failed the marker allowlist");
+  return medium;
 }

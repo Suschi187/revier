@@ -257,14 +257,14 @@ isOneToOne: false
                   ]
                 },"listing_photos": {
                   Row: {
-                    "alt_text": string | null,"created_at": string,"height": number | null,"id": string,"listing_id": string,"processed_at": string | null,"processing_attempts": number,"sort_order": number,"storage_path": string,"thumb_path": string | null,"upload_path": string | null,"width": number | null
+                    "alt_text": string | null,"created_at": string,"height": number | null,"id": string,"listing_id": string,"medium_path": string | null,"processed_at": string | null,"processing_attempts": number,"sort_order": number,"storage_path": string,"thumb_path": string | null,"upload_path": string | null,"width": number | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "alt_text"?: string | null,"created_at"?: string,"height"?: number | null,"id"?: string,"listing_id": string,"processed_at"?: string | null,"processing_attempts"?: number,"sort_order": number,"storage_path"?: string,"thumb_path"?: string | null,"upload_path"?: string | null,"width"?: number | null
+                    "alt_text"?: string | null,"created_at"?: string,"height"?: number | null,"id"?: string,"listing_id": string,"medium_path"?: string | null,"processed_at"?: string | null,"processing_attempts"?: number,"sort_order": number,"storage_path"?: string,"thumb_path"?: string | null,"upload_path"?: string | null,"width"?: number | null
                   }
                   Update: {
-                    "alt_text"?: string | null,"created_at"?: string,"height"?: number | null,"id"?: string,"listing_id"?: string,"processed_at"?: string | null,"processing_attempts"?: number,"sort_order"?: number,"storage_path"?: string,"thumb_path"?: string | null,"upload_path"?: string | null,"width"?: number | null
+                    "alt_text"?: string | null,"created_at"?: string,"height"?: number | null,"id"?: string,"listing_id"?: string,"medium_path"?: string | null,"processed_at"?: string | null,"processing_attempts"?: number,"sort_order"?: number,"storage_path"?: string,"thumb_path"?: string | null,"upload_path"?: string | null,"width"?: number | null
                   }
                   Relationships: [
                     {
@@ -777,7 +777,7 @@ isOneToOne: false
                            },
 "claim_photo_processing":
 { Args: { "p_photo_id": string,"p_user_id": string }; Returns: {
-              "state": string,"storage_path": string,"thumb_path": string,"upload_path": string
+              "medium_path": string,"state": string,"storage_path": string,"thumb_path": string,"upload_path": string
             }[]
                            },
 "claim_search_notifications":

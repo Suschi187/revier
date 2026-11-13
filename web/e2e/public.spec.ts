@@ -231,13 +231,14 @@ test.describe("Öffentliche Seiten (M5)", () => {
     // Ab M7 ein fester Link auf „Nachricht schreiben“; ohne Login leitet der Proxy zum Login (ADR 017).
     await expect(main.getByRole("link", { name: /Anbieter kontaktieren/ })).toHaveAttribute("href", `/de/account/messages/new/${ids.muc}`);
     await expect(main.getByRole("link", { name: "M5 Privat" })).toHaveAttribute("href", `/de/anbieter/${private_.id}`);
-    // Großes erstes Foto in voller Größe (M10a), weitere als Vorschaubild; beides über die eigene Route.
+    // Erstes Foto in mittlerer Größe, große Fassung per srcset (M10a Nacharbeit); alles über die eigene Route.
     const img = main.locator("img").first();
-    await expect(img).toHaveAttribute("src", `/api/photos/${ids.photo}/full`);
+    await expect(img).toHaveAttribute("src", `/api/photos/${ids.photo}/medium`);
+    await expect(img).toHaveAttribute("srcset", `/api/photos/${ids.photo}/medium 1024w, /api/photos/${ids.photo}/full 2048w`);
     const html = await page.content();
     expect(html).not.toContain("listing-photos");
     expect(html).not.toMatch(/\b\d{5}\b Testort/);
-    expect((await request.get(`/api/photos/${ids.photo}/thumb`)).status()).toBe(200);
+    for (const variant of ["thumb", "medium", "full"]) expect((await request.get(`/api/photos/${ids.photo}/${variant}`)).status()).toBe(200);
     for (const ld of await page.locator('script[type="application/ld+json"]').allTextContents()) {
       expect(() => JSON.parse(ld)).not.toThrow();
     }
@@ -331,7 +332,7 @@ test.describe("Sofortige Wirkung (Nutzer-Entscheidung 2026-10-31)", () => {
       await expect(page.getByRole("link", { name: title, exact: true })).toBeVisible();
       await page.goto("/de");
       await expect(page.getByRole("link", { name: title, exact: true })).toBeVisible();
-      expect((await request.get(`/api/photos/${photoId}/thumb`)).status()).toBe(200);
+      for (const variant of ["thumb", "medium"]) expect((await request.get(`/api/photos/${photoId}/${variant}`)).status()).toBe(200);
 
       const service = admin();
       if (action === "entfernen") await service.from("listings").update({ status: "removed" }).eq("id", id);
@@ -347,7 +348,7 @@ test.describe("Sofortige Wirkung (Nutzer-Entscheidung 2026-10-31)", () => {
       await page.goto("/de");
       await expect(page.getByRole("link", { name: title, exact: true })).toHaveCount(0);
       expect((await request.get(`/de/anzeige/${id}`)).status()).toBe(action === "löschen" ? 404 : 410);
-      expect((await request.get(`/api/photos/${photoId}/thumb`)).status()).toBe(404);
+      for (const variant of ["thumb", "medium"]) expect((await request.get(`/api/photos/${photoId}/${variant}`)).status()).toBe(404);
     });
   }
 });

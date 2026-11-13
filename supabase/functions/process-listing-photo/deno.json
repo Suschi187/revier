@@ -4,7 +4,7 @@
   },
   "lock": { "frozen": true },
   "tasks": {
-    "check": "deno check index.ts tests/*.ts",
+    "check": "deno check index.ts backfill_medium.ts tests/*.ts",
     "test": "deno test --allow-read=. tests/"
   }
 }

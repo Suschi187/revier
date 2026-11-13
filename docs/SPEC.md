@@ -94,7 +94,7 @@ Alle Tabellen: `id uuid pk default gen_random_uuid()`, `created_at timestamptz d
 **listing_photos** (v0.5, ADR 011)
 - `listing_id`, `sort_order` (0–7, max 8 pro Anzeige, unique je Anzeige)
 - `upload_path` – Eingang im privaten Bucket `listing-uploads` (nur JPEG, vom Server vergeben, nach der Verarbeitung gelöscht)
-- `storage_path`, `thumb_path` – verarbeitete Dateien in `listing-photos` (ohne Metadaten, lange Seite ≤ 2048 bzw. Thumbnail), nur vom Server gesetzt
+- `storage_path`, `medium_path`, `thumb_path` – verarbeitete Dateien in `listing-photos` (ohne Metadaten, lange Seite ≤ 2048, 1024 bzw. 480), nur vom Server gesetzt
 - `processed_at`, `width`, `height`, `processing_attempts` (höchstens 3) – nur Server
 - `alt_text` text null (1–200 Zeichen; ohne Angabe „Titel, Foto n von m“)
 - Ablauf: Client legt die Zeile an, lädt in den Eingang, ruft die Edge Function `process-listing-photo`; öffentlich sind nur verarbeitete Fotos aktiver Anzeigen.

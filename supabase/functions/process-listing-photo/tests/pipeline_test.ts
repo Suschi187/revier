@@ -2,7 +2,7 @@ import { deepStrictEqual, ok, strictEqual } from "./assert.ts";
 import { JpegCodec, wasmBytes } from "../codec.ts";
 import { JPEG_WASM_SHA256 } from "../../_shared/imagescript-jpeg/jpeg_wasm.ts";
 import { type Bitmap, downscale, orient, rgbaOf } from "../pixels.ts";
-import { processJpeg } from "../pipeline.ts";
+import { mediumFromProcessed, processJpeg } from "../pipeline.ts";
 import {
   bitmap, COMMENT, contains, encode, exifSegment, gpsRationalBytes, quadrants, QUADRANTS, type Rgb, withMetadata,
   XMP_MARKER, ZIP_SIGNATURE,
@@ -35,7 +35,7 @@ Deno.test("Metadaten und Anhang verschwinden, Ausgabe ist sauber", () => {
   }
   const result = processJpeg(input);
   ok(result.ok);
-  for (const output of [result.full, result.thumb]) {
+  for (const output of [result.full, result.medium, result.thumb]) {
     for (const needle of [ascii("Exif"), ascii("http://ns.adobe.com"), ascii(COMMENT), ZIP_SIGNATURE, gpsRationalBytes()]) {
       strictEqual(contains(output, needle), false);
     }
@@ -91,7 +91,7 @@ Deno.test("orient() ist für 1–8 eine Bijektion der Pixel", () => {
   }
 });
 
-Deno.test("Verkleinern: lange Seite 2048 bzw. 480, Flächenmittel statt Nearest Neighbor", () => {
+Deno.test("Verkleinern: lange Seite 2048, 1024 bzw. 480, Flächenmittel statt Nearest Neighbor", () => {
   const stripes = bitmap(3000, 1000, (x) => (x % 2 ? [255, 255, 255] : [0, 0, 0]));
   const small = downscale(rgbaOf(stripes), 1500);
   deepStrictEqual([small.width, small.height], [1500, 500]);
@@ -100,11 +100,14 @@ Deno.test("Verkleinern: lange Seite 2048 bzw. 480, Flächenmittel statt Nearest 
   const result = processJpeg(encode(quadrants(2600, 1300)));
   ok(result.ok);
   deepStrictEqual([result.width, result.height], [2048, 1024]);
+  const medium = decode(result.medium);
+  deepStrictEqual([medium.width, medium.height], [1024, 512]);
   const thumb = decode(result.thumb);
   deepStrictEqual([thumb.width, thumb.height], [480, 240]);
   const tiny = processJpeg(encode(quadrants(300, 200)));
   ok(tiny.ok);
   deepStrictEqual([tiny.width, tiny.height], [300, 200]);
+  deepStrictEqual([decode(tiny.medium).width, decode(tiny.medium).height], [300, 200]);
 });
 
 Deno.test("Graustufen-JPEG wird verarbeitet", () => {
@@ -121,4 +124,14 @@ Deno.test("Fehler: abgeschnittene Bilddaten ergeben corrupt, fremde Formate unsu
   deepStrictEqual(processJpeg(good, { maxSide: 32, maxPixels: 8_000_000, maxProgressivePixels: 5_000_000, maxScans: 16 }), { ok: false, error: "too_large" });
   // EXIF-Segment allein reicht nicht für ein Bild
   deepStrictEqual(processJpeg(new Uint8Array([0xff, 0xd8, ...exifSegment({ orientation: 6 }), 0xff, 0xd9])), { ok: false, error: "corrupt" });
+});
+
+Deno.test("Nachberechnen: mittlere Größe aus dem verarbeiteten Bild, kleine Bilder unverändert", () => {
+  const result = processJpeg(encode(quadrants(2600, 1300)));
+  ok(result.ok);
+  const medium = decode(mediumFromProcessed(result.full));
+  deepStrictEqual([medium.width, medium.height], [1024, 512]);
+  const tiny = processJpeg(encode(quadrants(300, 200)));
+  ok(tiny.ok);
+  strictEqual(mediumFromProcessed(tiny.full), tiny.full);
 });

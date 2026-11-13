@@ -6,10 +6,20 @@ import { publicEnv } from "@/lib/env";
 // entferntes, gesperrtes oder gelöschtes Foto sofort nicht mehr abrufbar ist, auch unter gespeicherter URL.
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const VARIANTS = { thumb: "thumb_path", full: "storage_path" } as const;
+// medium (1024 px) für die Detailseite; Fotos von vor der mittleren Größe liefern bis zum Nachberechnen das große Bild.
+const VARIANTS = { thumb: "thumb_path", medium: "medium_path", full: "storage_path" } as const;
 
 function status(code: 404 | 502, cache: string): Response {
   return new Response(null, { status: code, headers: { "Cache-Control": cache, "X-Content-Type-Options": "nosniff" } });
+}
+
+function fetchObject(path: string): Promise<Response> {
+  const base = publicEnv.NEXT_PUBLIC_SUPABASE_URL;
+  const key = publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return fetch(`${base}/storage/v1/object/authenticated/listing-photos/${path.split("/").map(encodeURIComponent).join("/")}`, {
+    headers: { apikey: key },
+    cache: "no-store",
+  });
 }
 
 export async function GET(request: Request, ctx: RouteContext<"/api/photos/[id]/[variant]">): Promise<Response> {
@@ -21,7 +31,7 @@ export async function GET(request: Request, ctx: RouteContext<"/api/photos/[id]/
   const client = anonClient();
   const { data: photo, error } = await client
     .from("listing_photos")
-    .select("storage_path, thumb_path, processed_at")
+    .select("storage_path, thumb_path, medium_path, processed_at")
     .eq("id", id)
     .not("processed_at", "is", null)
     .maybeSingle();
@@ -38,12 +48,8 @@ export async function GET(request: Request, ctx: RouteContext<"/api/photos/[id]/
   if (request.headers.get("if-none-match") === etag) return new Response(null, { status: 304, headers });
 
   // Storage-RLS prüft erneut (nur verarbeitete Fotos sichtbarer Anzeigen); der Inhalt wird gestreamt.
-  const base = publicEnv.NEXT_PUBLIC_SUPABASE_URL;
-  const key = publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const file = await fetch(`${base}/storage/v1/object/authenticated/listing-photos/${path.split("/").map(encodeURIComponent).join("/")}`, {
-    headers: { apikey: key },
-    cache: "no-store",
-  });
+  let file = await fetchObject(path);
+  if ((file.status === 400 || file.status === 404) && variant === "medium" && photo.storage_path) file = await fetchObject(photo.storage_path);
   if (file.status === 400 || file.status === 404) return status(404, "public, max-age=60");
   if (!file.ok || !file.body) return status(502, "no-store");
   return new Response(file.body, {

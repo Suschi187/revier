@@ -60,6 +60,8 @@ export type OwnPhoto = {
   uploadPath: string;
   storagePath: string;
   thumbPath: string;
+  /** Null bei Fotos, die vor der mittleren Größe angelegt wurden und noch keinen Pfad haben. */
+  mediumPath: string | null;
   processed: boolean;
   attempts: number;
 };
@@ -97,7 +99,7 @@ export async function loadListing(id: string, ownerId: string | null): Promise<O
       "id, title, kind, direction, status, reject_code, reject_reason, expires_at, created_at, description, content_language, country, region_id, " +
         "price_minor, currency, price_unit, area_hectares, start_date, end_date, attributes, " +
         "listing_species(species_code), listing_places(postal_code, place_name), " +
-        "listing_photos(id, sort_order, alt_text, upload_path, storage_path, thumb_path, processed_at, processing_attempts)",
+        "listing_photos(id, sort_order, alt_text, upload_path, storage_path, thumb_path, medium_path, processed_at, processing_attempts)",
     )
     .eq("id", id);
   if (ownerId) query = query.eq("owner_id", ownerId);
@@ -106,7 +108,7 @@ export async function loadListing(id: string, ownerId: string | null): Promise<O
   const row = data as unknown as Database["public"]["Tables"]["listings"]["Row"] & {
     listing_species: { species_code: string }[];
     listing_places: { postal_code: string | null; place_name: string | null } | null;
-    listing_photos: { id: string; sort_order: number; alt_text: string | null; upload_path: string; storage_path: string; thumb_path: string; processed_at: string | null; processing_attempts: number }[];
+    listing_photos: { id: string; sort_order: number; alt_text: string | null; upload_path: string; storage_path: string; thumb_path: string; medium_path: string | null; processed_at: string | null; processing_attempts: number }[];
   };
   return {
     id: row.id,
@@ -139,6 +141,7 @@ export async function loadListing(id: string, ownerId: string | null): Promise<O
         uploadPath: p.upload_path,
         storagePath: p.storage_path,
         thumbPath: p.thumb_path,
+        mediumPath: p.medium_path,
         processed: p.processed_at !== null,
         attempts: p.processing_attempts,
       }))
@@ -268,12 +271,12 @@ export async function deleteDraft(id: string): Promise<Result> {
   // verlangt zum Löschen eine bearbeitbare Anzeige.
   const { data: draft } = await supabase
     .from("listings")
-    .select("listing_photos(storage_path, thumb_path)")
+    .select("listing_photos(storage_path, thumb_path, medium_path)")
     .eq("id", id)
     .eq("status", "draft")
     .maybeSingle();
   if (!draft) return fail(null);
-  const paths = draft.listing_photos.flatMap((p) => [p.storage_path, p.thumb_path]).filter((p): p is string => Boolean(p));
+  const paths = draft.listing_photos.flatMap((p) => [p.storage_path, p.thumb_path, p.medium_path]).filter((p): p is string => Boolean(p));
   if (paths.length) await supabase.storage.from("listing-photos").remove(paths);
   const { data, error } = await supabase.from("listings").delete().eq("id", id).eq("status", "draft").select("id");
   if (error || !data?.length) return fail(error);

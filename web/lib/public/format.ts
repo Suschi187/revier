@@ -22,6 +22,6 @@ export function thumbSize(width: number | null, height: number | null): { width:
   return { width: Math.round(width * scale), height: Math.round(height * scale) };
 }
 
-export function photoUrl(photoId: string, variant: "thumb" | "full"): string {
+export function photoUrl(photoId: string, variant: "thumb" | "medium" | "full"): string {
   return `/api/photos/${photoId}/${variant}`;
 }
