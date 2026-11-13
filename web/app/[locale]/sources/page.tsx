@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { localeAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
+import { ui } from "@/components/ui/styles";
 
 // Datenquellen (ADR 007, 012, 016; Review H5): Pflichtvermerke der Referenz- und Kartendaten. Kein Rechtstext,
 // deshalb indexierbar. Neue Quellen kommen hier und in die SOURCES.md des Datensatzes.
@@ -23,29 +24,29 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SourcesPage() {
   const t = await getTranslations("Sources");
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-4">{t("intro")}</p>
       {SOURCES.map((source) => (
-        <section key={source.id} className="mt-8">
-          <h2 className="font-display text-xl font-bold">{t(`items.${source.id}.title`)}</h2>
+        <section key={source.id} className={`${ui.card} mt-4 p-5`}>
+          <h2 className={`${ui.headingCaps} text-base sm:text-lg`}>{t(`items.${source.id}.title`)}</h2>
           <p className="mt-2">{t(`items.${source.id}.usage`)}</p>
-          <p className="mt-2 font-medium">{t(`items.${source.id}.notice`)}</p>
+          <p className="mt-2 font-semibold">{t(`items.${source.id}.notice`)}</p>
           <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
-            <a href={source.url} className="underline" rel="noopener noreferrer">
+            <a href={source.url} className={ui.link} rel="noopener noreferrer">
               {t("website")}
             </a>
-            <a href={source.license} className="underline" rel="license noopener noreferrer">
+            <a href={source.license} className={ui.link} rel="license noopener noreferrer">
               {t("licenseLink", { license: t(`items.${source.id}.license`) })}
             </a>
           </p>
         </section>
       ))}
-      <section className="mt-10">
-        <h2 className="font-display text-xl font-bold">{t("postal.title")}</h2>
+      <section className={`${ui.card} mt-4 p-5`}>
+        <h2 className={`${ui.headingCaps} text-base sm:text-lg`}>{t("postal.title")}</h2>
         <p className="mt-2">{t("postal.text")}</p>
         <p className="mt-2">
-          <a href="/api/sources/postal-codes" className="underline" download>
+          <a href="/api/sources/postal-codes" className={ui.link} download>
             {t("postal.download")}
           </a>
         </p>

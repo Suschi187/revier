@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { KindIcon } from "@/components/brand/KindIcon";
+import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { Logo, LogoMark } from "@/components/brand/Logo";
 import { ListingCard } from "@/components/public/ListingCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -183,6 +184,13 @@ export default async function StyleguidePage() {
         <ul className="flex flex-wrap gap-4">
           {ICONS.map((name) => <li key={name} className="flex flex-col items-center gap-1 text-xs text-muted"><Icon name={name} size={24} className="text-forest" /><code>{name}</code></li>)}
         </ul>
+      </Section>
+
+      <Section id="sg-consent" title={t("consent")}>
+        <p className="text-sm text-muted">{t("consentNote")}</p>
+        <div className="overflow-hidden rounded-card">
+          <ConsentBanner preview />
+        </div>
       </Section>
 
       <Section id="sg-states" title={t("states")}>

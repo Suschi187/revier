@@ -1,4 +1,6 @@
 import { getTranslations } from "next-intl/server";
+import { Icon } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 
 export type OutlineSection = { title: string; points: string[] };
 
@@ -6,8 +8,9 @@ export type OutlineSection = { title: string; points: string[] };
 export async function PlaceholderNote() {
   const t = await getTranslations("Legal");
   return (
-    <p role="note" className="mt-4 rounded border border-notice bg-notice-soft p-3 text-notice">
-      {t("placeholder")}
+    <p role="note" className="mt-4 flex items-start gap-2 rounded-card border border-notice bg-notice-soft p-3 text-notice">
+      <Icon name="scale" size={20} className="mt-0.5 shrink-0" />
+      <span>{t("placeholder")}</span>
     </p>
   );
 }
@@ -19,9 +22,9 @@ export async function LegalOutline({ sections }: { sections: OutlineSection[] })
     <>
       <p className="mt-4 text-sm text-muted">{t("outlineNote")}</p>
       {sections.map((section) => (
-        <section key={section.title} className="mt-8">
-          <h2 className="font-display text-xl font-bold">{section.title}</h2>
-          <ul className="mt-2 list-disc space-y-1 pl-6">
+        <section key={section.title} className={`${ui.card} mt-4 p-5`}>
+          <h2 className={`${ui.headingCaps} text-base [overflow-wrap:anywhere] sm:text-lg`}>{section.title}</h2>
+          <ul className="mt-2 list-disc space-y-1 pl-5 marker:text-brand-ink">
             {section.points.map((point) => (
               <li key={point}>{point}</li>
             ))}

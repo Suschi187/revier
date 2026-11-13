@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { LogoMark } from "@/components/brand/Logo";
+import { ui } from "@/components/ui/styles";
 import { routing } from "@/i18n/routing";
 import "./globals.css";
 
@@ -27,25 +29,30 @@ export default async function GlobalNotFound() {
 
   return (
     <html lang={routing.defaultLocale} className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
-        <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-          <p className="text-5xl font-semibold" aria-hidden="true">
+      <body className="min-h-full flex flex-col bg-offwhite text-forest">
+        <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
+          <div className={`${ui.card} flex flex-col items-center px-5 py-10 text-center sm:px-10`}>
+          <a href={`/${routing.defaultLocale}`} aria-label="Reviro">
+            <LogoMark size={48} />
+          </a>
+          <p className="mt-3 font-display text-6xl font-extrabold leading-none text-brand-ink" aria-hidden="true">
             404
           </p>
           {sections.map(({ locale, title, backHome }, index) => (
-            <section key={locale} lang={locale} className="mt-8">
+            <section key={locale} lang={locale} className={index === 0 ? "mt-4" : "mt-6 w-full border-t border-sand pt-5"}>
               {index === 0 ? (
-                <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{title}</h1>
+                <h1 className={`${ui.headingCaps} text-2xl leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl`}>{title}</h1>
               ) : (
-                <h2 className="font-display text-xl font-bold">{title}</h2>
+                <h2 className="font-display text-lg font-bold">{title}</h2>
               )}
-              <a href={`/${locale}`} hrefLang={locale} className="mt-2 inline-block underline">
+              <a href={`/${locale}`} hrefLang={locale} className={index === 0 ? `mt-4 ${ui.btnPrimary}` : `mt-2 inline-block ${ui.link}`}>
                 {backHome}
               </a>
             </section>
           ))}
+          </div>
         </main>
-        <footer className="mt-auto border-t border-sand p-4">
+        <footer className="on-dark mt-auto bg-forest p-4 text-offwhite">
           <nav aria-label={legal("footerLabel")}>
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
               {legalLinks.map(({ href, label }) => (

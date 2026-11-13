@@ -1466,7 +1466,13 @@
         "duration": "Niczego nie zapisuje"
       }
     },
-    "noThirdParties": "Strona nie ładuje żadnych treści od podmiotów trzecich: żadnych reklam, analityki, zewnętrznych czcionek ani map."
+    "noThirdParties": "Strona nie ładuje żadnych treści od podmiotów trzecich: żadnych reklam, analityki, zewnętrznych czcionek ani map.",
+    "banner": {
+      "title": "Pliki cookie w Reviro",
+      "text": "Oprócz pamięci niezbędnej do działania usługi chcielibyśmy używać opcjonalnych plików cookie. Działają one wyłącznie za Twoją zgodą. Swój wybór możesz w każdej chwili zmienić w ustawieniach plików cookie.",
+      "reject": "Odrzuć wszystkie",
+      "accept": "Akceptuj wszystkie"
+    }
   },
   "Sources": {
     "title": "Źródła danych",
@@ -1789,6 +1795,8 @@
     "disabled": "Nieaktywny",
     "sampleTitle": "Odstrzał w obwodzie polnym, sarna i dzik",
     "headingSample": "Znajdź swój obwód.",
-    "bodySample": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
+    "bodySample": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
+    "consent": "Baner plików cookie (szablon)",
+    "consentNote": "Nieaktywny: pojawi się dopiero po dodaniu opcjonalnego pliku cookie (ADR 021)."
   }
 }

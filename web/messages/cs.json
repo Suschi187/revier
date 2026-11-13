@@ -1466,7 +1466,13 @@
         "duration": "Nic neukládá"
       }
     },
-    "noThirdParties": "Web nenačítá žádný obsah od třetích stran: žádnou reklamu, žádnou analytiku, žádná cizí písma ani mapy."
+    "noThirdParties": "Web nenačítá žádný obsah od třetích stran: žádnou reklamu, žádnou analytiku, žádná cizí písma ani mapy.",
+    "banner": {
+      "title": "Cookies na Reviro",
+      "text": "Kromě nezbytně nutných úložišť bychom rádi používali volitelné cookies. Používají se jen s vaším souhlasem. Svou volbu můžete kdykoli změnit v nastavení cookies.",
+      "reject": "Odmítnout vše",
+      "accept": "Přijmout vše"
+    }
   },
   "Sources": {
     "title": "Zdroje dat",
@@ -1789,6 +1795,8 @@
     "disabled": "Neaktivní",
     "sampleTitle": "Povolenka k lovu v polní honitbě, srnčí a černá zvěř",
     "headingSample": "Najděte svůj revír.",
-    "bodySample": "Pronájem honitby, povolenka k lovu nebo místo na naháňce. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
+    "bodySample": "Pronájem honitby, povolenka k lovu nebo místo na naháňce. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
+    "consent": "Cookie lišta (šablona)",
+    "consentNote": "Není aktivní: zobrazí se, až přibude volitelný cookie (ADR 021)."
   }
 }

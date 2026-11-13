@@ -4,6 +4,7 @@ import { LegalOutline, PlaceholderNote, type OutlineSection } from "@/components
 import { Link } from "@/i18n/navigation";
 import { localeAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
+import { ui } from "@/components/ui/styles";
 
 // Platzhalter, bis der Anwalt liefert (CLAUDE.md, SPEC 7.2). Deshalb noindex. Gliederung nach Plan M9 2.
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,12 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivacyPage() {
   const t = await getTranslations("Legal");
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("privacy.title")}</h1>
       <PlaceholderNote />
       <LegalOutline sections={t.raw("privacy.sections") as OutlineSection[]} />
-      <p className="mt-8">
-        <Link href="/cookies" className="underline">
+      <p className="mt-6">
+        <Link href="/cookies" className={ui.link}>
           {t("cookies.title")}
         </Link>
       </p>

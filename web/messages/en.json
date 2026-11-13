@@ -1466,7 +1466,13 @@
         "duration": "Stores nothing"
       }
     },
-    "noThirdParties": "The website loads no content from third parties: no advertising, no analytics, no external fonts or maps."
+    "noThirdParties": "The website loads no content from third parties: no advertising, no analytics, no external fonts or maps.",
+    "banner": {
+      "title": "Cookies on Reviro",
+      "text": "Besides the strictly necessary storage, we would like to use optional cookies. They only run with your consent. You can change your choice at any time in the cookie settings.",
+      "reject": "Reject all",
+      "accept": "Accept all"
+    }
   },
   "Sources": {
     "title": "Data sources",
@@ -1789,6 +1795,8 @@
     "disabled": "Disabled",
     "sampleTitle": "Hunting permit in farmland, roe deer and boar",
     "headingSample": "Find your hunting ground.",
-    "bodySample": "A lease, a hunting permit or a stand on a driven hunt. Directly from hunter to hunter. Příliš žluťoučký kůň · Zażółć gęślą jaźń"
+    "bodySample": "A lease, a hunting permit or a stand on a driven hunt. Directly from hunter to hunter. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
+    "consent": "Cookie banner (template)",
+    "consentNote": "Not active: it only appears once an optional cookie is added (ADR 021)."
   }
 }
