@@ -4,6 +4,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useId, useState, useSyncExternalStore } from "react";
 import { finishVerification, startVerification } from "@/app/[locale]/account/verification/actions";
+import { ui } from "@/components/ui/styles";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { checkDocumentFile, DOCUMENT_MIME_TYPES, type DocumentType } from "@/lib/verification";
 
@@ -60,13 +61,13 @@ export function VerificationUpload({ types }: { types: readonly DocumentType[] }
   const retry = error?.retryAfter && !Number.isNaN(Date.parse(error.retryAfter)) ? new Date(error.retryAfter) : null;
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4 rounded border border-field p-4" aria-busy={status.kind === "working"}>
-      <h2 className="font-display text-xl font-bold">{t("newRequest")}</h2>
+    <form onSubmit={onSubmit} className={`${ui.card} flex flex-col gap-4 p-5`} aria-busy={status.kind === "working"}>
+      <h2 className={`${ui.headingCaps} text-lg`}>{t("newRequest")}</h2>
       <div>
-        <label htmlFor={typeId} className="font-medium">
+        <label htmlFor={typeId} className={ui.label}>
           {t("documentType")}
         </label>
-        <select id={typeId} name="type" required disabled={!ready} className="mt-1 w-full rounded border border-field px-3 py-2">
+        <select id={typeId} name="type" required disabled={!ready} className={ui.input}>
           {types.map((type) => (
             <option key={type} value={type}>
               {t(`documentTypes.${type}`)}
@@ -75,7 +76,7 @@ export function VerificationUpload({ types }: { types: readonly DocumentType[] }
         </select>
       </div>
       <div>
-        <label htmlFor={fileId} className="font-medium">
+        <label htmlFor={fileId} className={ui.label}>
           {t("file")}
         </label>
         <input
@@ -87,7 +88,7 @@ export function VerificationUpload({ types }: { types: readonly DocumentType[] }
           accept={DOCUMENT_MIME_TYPES.join(",")}
           aria-describedby={`${fileId}-hint${error ? ` ${fileId}-error` : ""}`}
           aria-invalid={error && error.error.startsWith("file") ? true : undefined}
-          className="mt-1 block w-full"
+          className="mt-1 block w-full text-sm file:mr-3 file:min-h-11 file:cursor-pointer file:rounded-btn file:border file:border-forest file:bg-surface file:px-4 file:font-display file:text-sm file:font-bold file:text-forest hover:file:bg-sand"
         />
         <p id={`${fileId}-hint`} className="text-sm text-muted">
           {t("fileHint")}
@@ -99,7 +100,7 @@ export function VerificationUpload({ types }: { types: readonly DocumentType[] }
         </p>
       )}
       {status.kind === "working" && <p role="status">{t("working")}</p>}
-      <button type="submit" disabled={!ready || status.kind === "working"} className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
+      <button type="submit" disabled={!ready || status.kind === "working"} className={`self-start ${ui.btnPrimaryText}`}>
         {t("submit")}
       </button>
     </form>

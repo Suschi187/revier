@@ -18,6 +18,7 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - **Inserieren-Assistent:** Fortschrittsbalken, Schritte als Chips, Felder und Hauptaktion aus der Bibliothek.
 - **Konto-Übersicht:** Profilkarte, Kacheln für Anzeigen, Nachrichten, Favoriten, Suchaufträge, Liste für Verifizierung bis Konto löschen.
 - **Chat und Nachrichten (Schritt 4.7):** Konversationsliste und Unterhaltung im Kartenstil, Kopf mit Initialen-Avatar und Anzeigenlink, Chat-Blasen (eigene Waldgrün rechts, fremde hell links), Eingabefeld und Senden-Button aus der Bibliothek, Blockieren und Melden als Buttons mit 44 px Tippfläche; Funktionen unverändert.
+- **Anmeldung, Profil, Verifizierung (Schritt 4.8):** Anmelden, Bestätigen und Willkommen als Karte mit Logo, Felder und Hauptaktion aus der Bibliothek, Code-Feld groß und gesperrt; Profil und Benachrichtigungen als Karten; Verifizierung mit Statuskarte (Schild-Symbol, grün wenn verifiziert), Antrag als Karte mit gestaltetem Datei-Button, Verlauf als Liste. Keine neuen Texte, Funktionen unverändert.
 - **Sprachwahl und Konto ohne JavaScript (behoben, `qa-m5.spec.ts:483`):** Ist eine Seite schneller fertig als die Suspense-Grenzen im Kopf (z. B. `/de/jagdpacht/bayern?cur=EUR`), kamen Sprachwahl und Konto-Links nur gestreamt und blieben ohne JavaScript verborgen. Beide Grenzen haben jetzt Platzhalter im ersten HTML: Die Sprachlinks zeigen auf `/api/locale?to=…` (303 auf die passende Seite aus dem Referer, nur Pfad und Query, immer eigener Pfad, `noindex`, `no-store`; ohne Referer zur Startseite), der Konto-Platzhalter auf „Mein Reviro“. Ziel-Logik gemeinsam in `lib/public/locale-switch.ts`. Die E2E-Probe prüft das Ziel statt des `href`; `qa-m3.spec.ts:282` sucht den Absenden-Button nur noch im Hauptbereich (sonst traf `.last()` bei gestreamten Konto-Links „Abmelden“).
 - **Tests:** E2E an Kopf-Suche, doppelten Link „Anzeige aufgeben“, „Mein Reviro“ und das große Detailfoto angepasst.
 
@@ -27,8 +28,8 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - Sichtprüfung: `/de`, `/de/suche`, eine Anzeige, je in 360 und 1280 px; Netzwerk-Tab ohne Drittanfragen
 
 ### Lücken
-- Anmeldung, Rechtsseiten und Admin nutzen Tokens und Schriften, aber noch kein eigenes Layout (Schritt 4.8 bis 4.10).
-- Mails nennen die Plattform noch „Revier“; Umbenennung zusammen mit der Namensfreigabe (SPEC 7.1).
+- Rechtsseiten, Hilfe, Fehlerseiten und Admin nutzen Tokens und Schriften, aber noch kein eigenes Layout (Schritt 4.9 und 4.10).
+- Mails und die Willkommensseite („Willkommen bei Revier“) nennen die Plattform noch „Revier“; Umbenennung zusammen mit der Namensfreigabe (SPEC 7.1).
 - Teilen-Button auf der Detailseite fehlt noch (braucht JavaScript oder einen Link-Fallback).
 - Keine Markenfotos: Banner und Platzhalter sind gezeichnet.
 - iOS übernimmt die Tokens ab I1.

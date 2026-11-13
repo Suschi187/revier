@@ -7,6 +7,7 @@ import { useState, type FormEvent } from "react";
 import type { AppLocale } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { ui } from "@/components/ui/styles";
 
 type Step = { kind: "email" } | { kind: "code"; email: string };
 
@@ -68,8 +69,8 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
 
   if (step.kind === "email") {
     return (
-      <form onSubmit={requestCode} className="mt-6 flex flex-col gap-3" noValidate={false}>
-        <label htmlFor="email" className="font-medium">
+      <form onSubmit={requestCode} className="mt-6 flex flex-col gap-4" noValidate={false}>
+        <label htmlFor="email" className={ui.label}>
           {t("emailLabel")}
         </label>
         <input
@@ -78,9 +79,9 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
           type="email"
           required
           autoComplete="email"
-          className="rounded border border-field px-3 py-2"
+          className={ui.input}
         />
-        <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
+        <button type="submit" disabled={pending} className={ui.btnPrimaryText}>
           {pending ? t("sending") : t("submit")}
         </button>
         {errorText && (
@@ -91,7 +92,7 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
         {publicEnv.NEXT_PUBLIC_AUTH_APPLE_ENABLED && (
           <a
             href={`/${locale}/auth/apple?next=${encodeURIComponent(next)}`}
-            className="rounded border border-forest px-4 py-2 text-center font-medium"
+            className={ui.btnSecondary}
           >
             {t("apple")}
           </a>
@@ -103,10 +104,10 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
 
   return (
     <div className="mt-6 flex flex-col gap-3">
-      <h2 className="font-display text-xl font-bold">{t("sentTitle")}</h2>
+      <h2 className={`${ui.headingCaps} text-lg`}>{t("sentTitle")}</h2>
       <p role="status">{t("sentText", { email: step.email })}</p>
       <form onSubmit={verifyCode} className="flex flex-col gap-3">
-        <label htmlFor="code" className="font-medium">
+        <label htmlFor="code" className={ui.label}>
           {t("codeLabel")}
         </label>
         <input
@@ -116,9 +117,9 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
           autoComplete="one-time-code"
           pattern="[0-9 ]{6,7}"
           required
-          className="rounded border border-field px-3 py-2 tracking-widest"
+          className={`${ui.input} text-center text-lg tracking-[0.3em]`}
         />
-        <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
+        <button type="submit" disabled={pending} className={ui.btnPrimaryText}>
           {pending ? t("verifying") : t("codeSubmit")}
         </button>
         {errorText && (
@@ -127,7 +128,7 @@ export function LoginForm({ locale, next }: { locale: AppLocale; next: string })
           </p>
         )}
       </form>
-      <button type="button" onClick={() => setStep({ kind: "email" })} className="self-start underline">
+      <button type="button" onClick={() => setStep({ kind: "email" })} className={`self-start text-left ${ui.link}`}>
         {t("otherEmail")}
       </button>
     </div>

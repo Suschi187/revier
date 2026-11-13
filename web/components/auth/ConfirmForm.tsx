@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { confirmSignIn, type ConfirmState } from "@/app/[locale]/auth/actions";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
+import { ui } from "@/components/ui/styles";
 
 type Props = { locale: AppLocale; tokenHash: string; redirectTo: string };
 
@@ -18,7 +19,7 @@ export function ConfirmForm({ locale, tokenHash, redirectTo }: Props) {
         <p role="alert" className="text-error">
           {t("invalid")}
         </p>
-        <Link href="/login" className="underline">
+        <Link href="/login" className={ui.link}>
           {t("backToLogin")}
         </Link>
       </div>
@@ -30,7 +31,7 @@ export function ConfirmForm({ locale, tokenHash, redirectTo }: Props) {
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="token_hash" value={tokenHash} />
       <input type="hidden" name="redirect_to" value={redirectTo} />
-      <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
+      <button type="submit" disabled={pending} className={ui.btnPrimaryText}>
         {t("submit")}
       </button>
     </form>

@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Constants } from "@/lib/supabase/database.types";
+import { ui } from "@/components/ui/styles";
 import type { ProfileFieldErrors } from "@/lib/validation/profile";
 
 export type ProfileValues = {
@@ -14,7 +15,7 @@ export type ProfileValues = {
 };
 
 const { account_type, country_code, language_code } = Constants.public.Enums;
-const inputClass = "rounded border border-field px-3 py-2";
+const inputClass = ui.input;
 
 function FieldError({ id, code }: { id: string; code?: string }) {
   const t = useTranslations("Profile.errors");
@@ -35,7 +36,7 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
   return (
     <>
       <div className="flex flex-col gap-1">
-        <label htmlFor="displayName" className="font-medium">
+        <label htmlFor="displayName" className="font-semibold">
           {t("displayName")}
         </label>
         <input
@@ -56,9 +57,9 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
       </div>
 
       <fieldset className="flex flex-col gap-1">
-        <legend className="font-medium">{t("accountType")}</legend>
+        <legend className="font-semibold">{t("accountType")}</legend>
         {account_type.map((type) => (
-          <label key={type} className="flex items-center gap-2">
+          <label key={type} className="flex min-h-11 items-center gap-2">
             <input
               type="radio"
               name="accountType"
@@ -74,7 +75,7 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
 
       {accountType === "business" && (
         <div className="flex flex-col gap-1">
-          <label htmlFor="businessName" className="font-medium">
+          <label htmlFor="businessName" className="font-semibold">
             {t("businessName")}
           </label>
           <input
@@ -93,7 +94,7 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
       )}
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="country" className="font-medium">
+        <label htmlFor="country" className="font-semibold">
           {t("country")}
         </label>
         <select
@@ -113,7 +114,7 @@ export function ProfileFields({ values, errors }: { values: ProfileValues; error
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="preferredLanguage" className="font-medium">
+        <label htmlFor="preferredLanguage" className="font-semibold">
           {t("preferredLanguage")}
         </label>
         <select

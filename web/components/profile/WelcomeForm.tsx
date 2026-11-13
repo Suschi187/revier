@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { completeOnboarding } from "@/app/[locale]/welcome/actions";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
+import { ui } from "@/components/ui/styles";
 import { initialProfileFormState, type ProfileFormState } from "@/lib/forms";
 import { ProfileFields, type ProfileValues } from "./ProfileFields";
 
@@ -34,7 +35,7 @@ export function WelcomeForm({ locale, next, initial, termsVersion, privacyVersio
       <ProfileFields values={values} errors={state.fieldErrors} />
 
       <div className="flex flex-col gap-1">
-        <label className="flex items-start gap-2">
+        <label className="flex items-start gap-2 rounded-card bg-sand/50 p-3">
           <input
             type="checkbox"
             name="accept"
@@ -46,12 +47,12 @@ export function WelcomeForm({ locale, next, initial, termsVersion, privacyVersio
           <span>
             {t.rich("accept", {
               terms: (chunks) => (
-                <Link href="/terms" className="underline" target="_blank">
+                <Link href="/terms" className={ui.link} target="_blank">
                   {chunks}
                 </Link>
               ),
               privacy: (chunks) => (
-                <Link href="/privacy" className="underline" target="_blank">
+                <Link href="/privacy" className={ui.link} target="_blank">
                   {chunks}
                 </Link>
               ),
@@ -70,7 +71,7 @@ export function WelcomeForm({ locale, next, initial, termsVersion, privacyVersio
           {t(`errors.${state.formError}`)}
         </p>
       )}
-      <button type="submit" disabled={pending} className="self-start rounded bg-forest px-4 py-2 font-medium text-offwhite disabled:opacity-60">
+      <button type="submit" disabled={pending} className={ui.btnPrimaryText}>
         {t("submit")}
       </button>
     </form>

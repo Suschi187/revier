@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { VerificationUpload } from "@/components/account/VerificationUpload";
+import { Icon } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { requireOnboardedUser } from "@/lib/services/gate";
@@ -43,9 +45,9 @@ export default async function VerificationPage(props: Props) {
   const verified = profile.verificationStatus === "verified";
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-      <Link href="/account" className="underline">
-        {t("back")}
+    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+      <Link href="/account" className="text-sm underline underline-offset-2">
+        ← {t("back")}
       </Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2">{t("intro")}</p>
@@ -64,10 +66,15 @@ export default async function VerificationPage(props: Props) {
         </p>
       )}
 
-      <section className="mt-6 flex flex-col gap-2" aria-labelledby="v-status">
-        <h2 id="v-status" className="font-display text-xl font-bold">
-          {t("status")}: {ta(`verificationStatus.${profile.verificationStatus}`)}
-        </h2>
+      <section className={`${ui.card} mt-6 flex flex-col gap-2 p-5`} aria-labelledby="v-status">
+        <div className="flex items-center gap-3">
+          <span aria-hidden="true" className={`flex size-11 shrink-0 items-center justify-center rounded-full ${verified ? "bg-forest text-offwhite" : "bg-sand text-forest"}`}>
+            <Icon name="shield" size={22} />
+          </span>
+          <h2 id="v-status" className={`${ui.headingCaps} text-lg [overflow-wrap:anywhere]`}>
+            {t("status")}: {ta(`verificationStatus.${profile.verificationStatus}`)}
+          </h2>
+        </div>
         <p>{t(`statusText.${profile.verificationStatus}`)}</p>
         {!verified && last?.revokedAt && (
           <p>
@@ -84,7 +91,7 @@ export default async function VerificationPage(props: Props) {
       </section>
 
       {open && (
-        <section className="mt-6 flex flex-col gap-2 rounded border border-sand p-4" aria-labelledby="v-open">
+        <section className={`${ui.card} mt-6 flex flex-col gap-2 p-5`} aria-labelledby="v-open">
           <h2 id="v-open" className="font-display text-lg font-bold">
             {t(`documentTypes.${open.documentType}`)}
           </h2>
@@ -92,7 +99,7 @@ export default async function VerificationPage(props: Props) {
           <form action={withdrawVerificationAction}>
             <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={open.id} />
-            <button type="submit" className="rounded border border-field px-4 py-2">
+            <button type="submit" className={ui.btnSecondary}>
               {t("withdraw")}
             </button>
             <p className="mt-1 text-sm text-muted">{t("withdrawHint")}</p>
@@ -111,12 +118,12 @@ export default async function VerificationPage(props: Props) {
 
       {decided.length > 0 && (
         <section className="mt-8" aria-labelledby="v-history">
-          <h2 id="v-history" className="font-display text-xl font-bold">
+          <h2 id="v-history" className={`${ui.headingCaps} text-lg`}>
             {t("history")}
           </h2>
-          <ul className="mt-2 list-disc space-y-1 pl-6">
+          <ul className={`${ui.card} mt-3 divide-y divide-sand`}>
             {decided.map((r) => (
-              <li key={r.id}>
+              <li key={r.id} className="px-4 py-3 text-sm">
                 {t("historyItem", {
                   date: date(r.revokedAt ?? r.decidedAt ?? r.createdAt),
                   type: t(`documentTypes.${r.documentType}`),

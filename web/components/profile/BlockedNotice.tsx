@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 export async function BlockedNotice() {
   const t = await getTranslations("Account.profile");
   return (
-    <p role="alert" className="mt-6 rounded border border-error bg-error-soft p-3 text-error">
+    <p role="alert" className="rounded-card border border-error bg-error-soft p-3 text-error">
       {t("blocked")}
     </p>
   );

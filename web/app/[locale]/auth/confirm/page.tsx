@@ -3,6 +3,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { ConfirmForm } from "@/components/auth/ConfirmForm";
 import type { AppLocale } from "@/i18n/routing";
+import { LogoMark } from "@/components/brand/Logo";
+import { ui } from "@/components/ui/styles";
 
 // noindex; Referrer-Policy no-referrer kommt aus next.config.ts (ADR 010).
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,12 +16,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ConfirmPage({ searchParams }: PageProps<"/[locale]/auth/confirm">) {
   const t = await getTranslations("Auth.confirm");
   return (
-    <main className="mx-auto w-full max-w-md flex-1 px-4 py-12">
-      <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
+    <main className="mx-auto w-full max-w-md flex-1 px-4 py-8 sm:py-12">
+      <div className={`${ui.card} p-5 sm:p-8`}>
+      <LogoMark size={44} />
+      <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("text")}</p>
       <Suspense fallback={null}>
         <ConfirmFormWithParams searchParams={searchParams} />
       </Suspense>
+      </div>
     </main>
   );
 }
