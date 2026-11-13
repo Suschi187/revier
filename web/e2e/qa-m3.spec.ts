@@ -288,7 +288,8 @@ test("360 px in Polnisch: keine horizontale Überbreite in Assistent und „Mein
   await page.locator("input[name=direction][value=offer]").check();
   await page.locator("#f-title").fill("Długi tytuł ogłoszenia o pomocy przy polowaniu zbiorowym w Saksonii");
   await page.locator("#f-district").selectOption({ label: "Dresden" });
-  await page.locator("form button[type=submit]").last().click();
+  // Nur im Hauptbereich: Kommen die Konto-Links gestreamt, stünde „Abmelden“ sonst als letzter Button im Dokument.
+  await page.getByRole("main").locator("form button[type=submit]").last().click();
   await expect(page).toHaveURL(/step=location/);
   const id = page.url().match(/listings\/([0-9a-f-]{36})\/edit/)![1];
 
