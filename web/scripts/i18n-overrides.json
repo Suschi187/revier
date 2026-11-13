@@ -76,6 +76,7 @@
     "Admin.audit.actions.verification_revoked": "Ověření odvoláno",
     "Admin.audit.actions.verification_document_viewed": "Ověřovací dokument zobrazen",
     "Admin.audit.actions.report_handled": "Nahlášení vyřízeno",
+    "Decisions.actions.report_handled": "Rozhodnutí o tvém nahlášení",
     "Admin.audit.actions.report_reopened": "Nahlášení znovu otevřeno",
     "Admin.audit.detailKeys.code": "Šablona důvodu",
     "Admin.audit.detailKeys.role": "Role",

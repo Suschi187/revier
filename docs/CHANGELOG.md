@@ -2,6 +2,18 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeiten – 2026-11-13
+
+### Geändert
+- **Tschechische Mails duzen** (Anrede Du laut Entscheidung 2026-11-13): Gruß „Ahoj,“ statt „Dobrý den,“, „tvůj/tvoje/tvém“ statt „váš/vaše/vašem“, Verben in der 2. Person Singular. Betrifft `send-chat-notifications/texts.ts`, `send-search-notifications/texts.ts` und `account_texts.ts`. Das gemeinsame Label `Decisions.actions.report_handled` ist im Web, im Fixture `supabase/tests/fixtures/mail_labels.json` und als Override angepasst.
+
+### Entscheidungen
+- **Keine Kategorie-Navigation im Kopf** (QA F1, Entscheidung 2026-11-13): bewusste Abweichung von der SPEC. Offen bleibt: Filter mobil als Blatt von unten.
+
+### Testen
+- Per Docker wie in der CI: `deno task check && deno lint && deno task test` in `send-chat-notifications` und `send-search-notifications`
+- `cd web && npx vitest run`
+
 ## M10a GUI/UX-Design (Web), Schritt 8: Prüfung – 2026-11-13
 
 Berichte: `docs/QA-REPORT.md` Abschnitt „M10a – Abnahme (Akzeptanz)“ (qa), `docs/adr/022-schriften-drittanfragen-header.md` (architect). Beide ohne blockierenden Befund.
