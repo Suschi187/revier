@@ -1,11 +1,11 @@
 {
   "Metadata": {
     "siteName": "Reviro",
-    "siteDescription": "Tržiště loveckých příležitostí v Německu, Rakousku, Švýcarsku, Česku a Polsku."
+    "siteDescription": "Tržiště s loveckými příležitostmi v Německu, Rakousku, Švýcarsku, České republice a Polsku."
   },
   "HomePage": {
     "metaTitle": "Lovecké příležitosti ve střední Evropě",
-    "title": "Najděte svůj revír."
+    "title": "Najdi si svůj revír."
   },
   "LocaleSwitcher": {
     "label": "Jazyk",
@@ -19,20 +19,20 @@
   "Brand": {
     "name": "REVIRO",
     "endorsement": "by Die Jagdbrüder",
-    "tagline": "Hunting Marketplace",
-    "homeLabel": "Reviro by Die Jagdbrüder, úvodní stránka",
-    "claim": "Příležitosti k lovu v DE · AT · CH · CZ · PL",
+    "tagline": "Honitby & povolenky k lovu",
+    "homeLabel": "Reviro od Die Jagdbrüder, na úvodní stránku",
+    "claim": "Lovecké příležitosti v Německu · Rakousku · Švýcarsku · České republice · Polsku",
     "shop": "Obchod Die Jagdbrüder",
     "shopLabel": "Obchod Die Jagdbrüder (externí stránka)"
   },
   "Header": {
-    "searchWhat": "Co hledáte?",
+    "searchWhat": "Co hledáš?",
     "searchWhere": "Kde?",
     "searchWhereAny": "Všechny regiony",
-    "searchButton": "Hledat",
+    "searchButton": "Najít",
     "create": "Podat inzerát",
     "favorites": "Uložené",
-    "account": "Můj Reviro",
+    "account": "Moje Reviro",
     "messages": "Zprávy",
     "signIn": "Přihlásit se",
     "signOut": "Odhlásit se",
@@ -40,41 +40,41 @@
     "accountNav": "Účet"
   },
   "NotFound": {
-    "title": "Stránka nenalezena",
-    "backHome": "Zpět na úvodní stránku"
+    "title": "Stránka nebyla nalezena",
+    "backHome": "Na úvodní stránku"
   },
   "Auth": {
     "login": {
       "metaTitle": "Přihlásit se",
-      "title": "Přihlásit se nebo zaregistrovat",
-      "intro": "Zadejte svou e-mailovou adresu. Pošleme vám odkaz a přihlašovací kód. Heslo nepotřebujete.",
+      "title": "Přihlášení nebo registrace",
+      "intro": "Zadej svou e-mailovou adresu. Zašleme ti odkaz a přihlašovací kód. Heslo nepotřebuješ.",
       "emailLabel": "E-mailová adresa",
       "submit": "Poslat přihlašovací e-mail",
-      "sending": "Odesílá se…",
-      "sentTitle": "Zkontrolujte svou schránku",
-      "sentText": "Pokud lze adresu {email} použít, poslali jsme vám e-mail. Klikněte na odkaz v něm nebo zadejte šestimístný kód.",
+      "sending": "Odesílá se …",
+      "sentTitle": "Podívej se do své schránky",
+      "sentText": "Pokud lze použít adresu {email}, poslali jsme ti e-mail. Klikni na odkaz v něm obsažený nebo zadej šestimístný kód.",
       "codeLabel": "Přihlašovací kód",
       "codeSubmit": "Přihlásit se",
-      "verifying": "Ověřuje se…",
+      "verifying": "Probíhá kontrola …",
       "codeInvalid": "Kód je neplatný nebo jeho platnost vypršela.",
-      "otherEmail": "Použít jinou e-mailovou adresu nebo vyžádat nový e-mail",
-      "networkError": "Žádné připojení. Zkuste to prosím znovu.",
-      "termsHint": "Nové účty po prvním přihlášení souhlasí s podmínkami použití.",
+      "otherEmail": "Použij jinou e-mailovou adresu nebo si vyžádej nový e-mail",
+      "networkError": "Není k dispozici připojení. Zkuste to prosím znovu.",
+      "termsHint": "Nová uživatelská účty po prvním přihlášení souhlasí s podmínkami použití.",
       "apple": "Přihlásit se přes Apple",
-      "privacyHint": "Jak zpracováváme vaši e-mailovou adresu, se dozvíte v <link>zásadách ochrany osobních údajů</link>."
+      "privacyHint": "Informace o tom, jak zpracováváme tvou e-mailovou adresu, najdeš v zásadách <link>ochrany osobních údajů</link>."
     },
     "confirm": {
       "metaTitle": "Potvrdit přihlášení",
       "title": "Potvrdit přihlášení",
-      "text": "Přihlášení dokončíte potvrzením tlačítkem.",
+      "text": "Potvrď stisknutím tlačítka, abys dokončil přihlášení.",
       "submit": "Potvrdit přihlášení",
-      "invalid": "Tento odkaz je neplatný nebo jeho platnost vypršela. Zadejte kód z e-mailu nebo si vyžádejte nový e-mail.",
+      "invalid": "Tento odkaz je neplatný nebo jeho platnost vypršela. Zadej kód z e-mailu nebo si vyžádej nový e-mail.",
       "backToLogin": "Zpět k přihlášení"
     }
   },
   "Profile": {
     "displayName": "Zobrazované jméno",
-    "displayNameHint": "Zobrazuje se veřejně u vašich inzerátů a v chatu.",
+    "displayNameHint": "Zobrazuje se veřejně u tvých inzerátů a v chatu.",
     "accountType": "Typ účtu",
     "accountTypes": {
       "private": "Soukromý",
@@ -86,78 +86,78 @@
       "DE": "Německo",
       "AT": "Rakousko",
       "CH": "Švýcarsko",
-      "CZ": "Česko",
+      "CZ": "Česká republika",
       "PL": "Polsko"
     },
-    "preferredLanguage": "Jazyk e-mailů",
-    "preferredLanguageHint": "Přihlašovací e-maily a oznámení dostanete v tomto jazyce.",
+    "preferredLanguage": "Jazyk pro e-maily",
+    "preferredLanguageHint": "E-maily pro přihlášení a oznámení jsou zasílány v tomto jazyce.",
     "errors": {
-      "required": "Vyplňte prosím toto pole.",
+      "required": "Vyplň prosím toto pole.",
       "tooLong": "Zadaný text je příliš dlouhý.",
       "invalid": "Vyberte prosím platnou možnost."
     }
   },
   "Welcome": {
-    "metaTitle": "Vítejte",
-    "title": "Vítejte v Revieru",
-    "intro": "Než budete pokračovat, nastavte si profil.",
-    "accept": "Souhlasím s <terms>podmínkami použití</terms> a přečetl(a) jsem si <privacy>zásady ochrany osobních údajů</privacy>.",
-    "acceptRequired": "Chcete-li pokračovat, souhlaste prosím s podmínkami použití.",
+    "metaTitle": "Vítej",
+    "title": "Vítej v Revieru",
+    "intro": "Než budeš pokračovat, nastav si svůj profil.",
+    "accept": "Souhlasím s <terms>podmínkami použití</terms> a seznámil/a jsem se s <privacy>zásadami ochrany osobních údajů</privacy>.",
+    "acceptRequired": "Chceš-li pokračovat, souhlas prosím s podmínkami použití.",
     "submit": "Uložit a pokračovat",
     "errors": {
       "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
-      "outdated": "Právní texty byly právě aktualizovány. Přečtěte si je a potvrďte znovu.",
-      "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
+      "outdated": "Právní texty byly právě aktualizovány. Přečti si je prosím a znovu potvrď.",
+      "blocked": "Tvůj účet je zablokovaný. Nemůžeš upravit svůj profil."
     },
-    "accountLinks": "Vaše data",
+    "accountLinks": "Tvá data",
     "dataExport": "Stáhnout moje data",
     "deleteAccount": "Smazat účet"
   },
   "Legal": {
-    "placeholder": "Zástupný text: konečné znění dodá před spuštěním advokát.",
+    "placeholder": "Zástupný text: Konečné znění textu dodá před spuštěním webové stránky právník.",
     "terms": {
       "title": "Podmínky použití",
       "sections": [
         {
-          "title": "Rozsah",
+          "title": "Rozsah platnosti",
           "points": [
-            "Platforma zprostředkovává lovecké příležitosti: pronájem honitby, povolenky k lovu, společné hony, trofejové / hostovské lovy a pomocníky při lovu, vždy jako nabídku nebo poptávku.",
+            "Platforma zprostředkovává lovecké příležitosti: pronájem honitby, povolenky k lovu, společný hon, lovy na trofeje/hostující lovy a lovecké pomocníky/spolulovce, a to vždy jako nabídku nebo poptávku.",
             "Žádný prodej zbraní ani střeliva."
           ]
         },
         {
           "title": "Účet",
           "points": [
-            "Jeden účet na osobu, s pravdivými údaji.",
-            "Používání vyžaduje souhlas s podmínkami použití a zásadami ochrany osobních údajů."
+            "Jednoduchý účet na osobu, s pravdivými údaji.",
+            "Používání předpokládá souhlas s podmínkami použití a s zásadami ochrany osobních údajů."
           ]
         },
         {
           "title": "Inzeráty",
           "points": [
-            "Inzeráty se před zveřejněním kontrolují.",
-            "Kontaktní údaje nepatří do textu inzerátu. Kontakt probíhá po přihlášení přes chat.",
+            "Inzeráty jsou před zveřejněním zkontrolovány.",
+            "Kontaktní údaje nepatří do textu inzerátu. Kontakt probíhá po přihlášení prostřednictvím chatu.",
             "Inzeráty vyprší a lze je prodloužit."
           ]
         },
         {
-          "title": "Moderace",
+          "title": "Moderování",
           "points": [
-            "Inzeráty mohou být zamítnuty, vráceny k úpravě nebo odstraněny. Obdržíte odůvodnění.",
-            "Účty mohou být při závažném nebo opakovaném porušení zablokovány.",
-            "Proti rozhodnutím se můžete odvolat: zástupný text."
+            "Inzeráty mohou být zamítnuty, vráceny k úpravě nebo odstraněny. Důvod ti bude sdělen.",
+            "V případě závažných nebo opakovaných porušení pravidel mohou být účty zablokovány.",
+            "Proti rozhodnutím můžeš podat stížnost: zástupný text."
           ]
         },
         {
           "title": "Nahlašování",
           "points": [
-            "Inzeráty, profily a zprávy lze nahlásit. Co není povoleno, popisují pravidla obsahu."
+            "Inzeráty, profily a zprávy lze nahlásit. Pravidla obsahu popisují, co není povoleno."
           ]
         },
         {
           "title": "Ukončení používání",
           "points": [
-            "Účet můžete kdykoli smazat."
+            "Svůj účet můžeš kdykoli smazat."
           ]
         },
         {
@@ -172,18 +172,18 @@
       "title": "Zásady ochrany osobních údajů",
       "sections": [
         {
-          "title": "Správce a kontakt",
+          "title": "Správce a kontaktní údaje",
           "points": [
-            "Jméno a adresa provozovatele: zástupný text, viz Právní informace.",
-            "Kontakt pro dotazy k ochraně osobních údajů: zástupný text."
+            "Jméno a adresa provozovatele: zástupný text, viz právní informace.",
+            "Kontakt pro dotazy týkající se ochrany osobních údajů: zástupný text."
           ]
         },
         {
           "title": "Účet a přihlášení",
           "points": [
-            "E-mailová adresa, přihlašovací kódy a případně „Přihlásit se přes Apple“.",
-            "Cookie relace vás udržuje přihlášené (viz Nastavení cookies).",
-            "Nikdy nepotvrzené účty se po 7 dnech smažou."
+            "E-mailová adresa, přihlašovací kódy a, pokud se používá, „Přihlásit se přes Apple“.",
+            "Díky relačnímu souboru cookie se přihlásíš (viz nastavení cookies).",
+            "Nepotvrzené účty budou po 7 dnech smazány."
           ]
         },
         {
@@ -191,14 +191,14 @@
           "points": [
             "Zobrazované jméno, typ účtu, název firmy, země a jazyk.",
             "Inzeráty s texty, cenami, druhy zvěře a fotografiemi.",
-            "Fotografie se na našem serveru znovu zakódují. Tím zmizí metadata, například souřadnice GPS."
+            "Fotografie jsou na našem serveru překódovány. Při tom dochází ke ztrátě metadat, jako jsou GPS souřadnice."
           ]
         },
         {
           "title": "Poloha",
           "points": [
-            "Veřejné stránky ukazují jen region či okres nebo záměrně posunutý bod.",
-            "PSČ a přesná poloha honitby nejsou nikdy veřejně viditelné."
+            "Veřejné stránky zobrazují pouze region či okres, případně záměrně posunutý bod.",
+            "PSČ a přesná poloha loveckého revíru nejsou nikdy veřejně viditelné."
           ]
         },
         {
@@ -206,64 +206,64 @@
           "points": [
             "Zprávy mezi uživateli se ukládají pro konverzaci a doručují se v reálném čase.",
             "E-mailová upozornění na nové zprávy lze vypnout.",
-            "Zablokované osoby vám nemohou psát."
+            "Zablokované osoby ti nemohou psát."
           ]
         },
         {
           "title": "Uložená hledání",
           "points": [
-            "Filtry, četnost a výsledky vašich uložených hledání. Běží 6 týdnů, pokud je neprodloužíte.",
-            "Každý e-mail obsahuje odkaz pro odhlášení odběru jedním kliknutím, platný 90 dní."
+            "Filtry, frekvence a výsledky tvých uložených hledání. Jsou platné po dobu 6 týdnů, pokud je neprodloužíš.",
+            "Každý e-mail obsahuje odkaz pro odhlášení odběru jedním kliknutím, který je platný po dobu 90 dnů."
           ]
         },
         {
           "title": "Mapa",
           "points": [
-            "Mapa se načítá z našeho vlastního serveru. Žádné požadavky nejdou k cizím poskytovatelům map.",
-            "Mapa ve vašem prohlížeči nic neukládá."
+            "Mapa pochází z našeho vlastního serveru. Nejsou odesílány žádné dotazy externím poskytovatelům map.",
+            "Mapa neukládá žádné údaje do tvého prohlížeče."
           ]
         },
         {
           "title": "Ověření",
           "points": [
-            "Dobrovolné: nahraný lovecký lístek nebo podobný doklad je uložen soukromě a vidíte ho jen vy a administrátoři.",
-            "Doklad se smaže 30 dní po rozhodnutí."
+            "Dobrovolné: Nahraný lovecký lístek nebo podobný dokument je soukromý a viditelný pouze pro tebe a pro administrátory.",
+            "Dokument bude smazán 30 dní po rozhodnutí."
           ]
         },
         {
-          "title": "Nahlášení a moderace",
+          "title": "Nahlášení a moderování",
           "points": [
-            "Nahlášení, rozhodnutí moderace a jejich odůvodnění.",
-            "Kopie nahlášených zpráv zůstávají 12 měsíců po vyřízení nahlášení.",
-            "Záznam rozhodnutí administrátorů zůstává pseudonymizovaně 24 měsíců."
+            "Nahlášení, rozhodnutí moderátorů a jejich odůvodnění.",
+            "Kopie nahlášených zpráv zůstávají uloženy po dobu 12 měsíců od vyřízení nahlášení.",
+            "Záznamy o rozhodnutích správců zůstávají v pseudonymizované podobě po dobu 24 měsíců."
           ]
         },
         {
           "title": "Smazání účtu",
           "points": [
-            "Účet můžete kdykoli smazat po opětovném přihlášení.",
-            "Profil, inzeráty, fotografie, zprávy, uložená hledání a doklady se smažou okamžitě.",
-            "Zůstanou jen pseudonymizované údaje moderace a nahlášení týkající se účtu, a to do uplynutí jejich lhůty."
+            "Svůj účet můžeš kdykoli smazat po opětovném přihlášení.",
+            "Profily, inzeráty, fotografie, zprávy, uložená hledání a dokumenty budou ihned smazány.",
+            "Zůstávají pouze pseudonymizované údaje o moderování a nahlášení týkající se účtu až do uplynutí jejich lhůty."
           ]
         },
         {
           "title": "Export dat",
           "points": [
-            "Všechna svá data si můžete v účtu stáhnout jako soubor JSON."
+            "Všechny své datumy z účtu si můžeš stáhnout jako soubor JSON."
           ]
         },
         {
-          "title": "Hosting a zpracovatelé",
+          "title": "Hosting a zpracovatelé údajů",
           "points": [
             "Databáze, úložiště souborů a přihlášení: Supabase, region EU (Frankfurt).",
-            "Odesílání e-mailů: poskytovatel bude uveden.",
-            "Zálohy a logy u poskytovatele hostingu a e-mailů zůstávají do uplynutí jejich lhůt (budou uvedeny)."
+            "Rozesílání e-mailů: Inzerent bude ještě uveden.",
+            "Zálohy a protokoly u poskytovatele hostingu a e-mailových služeb zůstávají uloženy až do uplynutí jejich lhůty (bude ještě upřesněno)."
           ]
         },
         {
-          "title": "Vaše práva",
+          "title": "Tvá práva",
           "points": [
-            "Přístup, oprava, výmaz, omezení, přenositelnost, námitka a stížnost u dozorového úřadu: zástupný text."
+            "Právo na informace, opravu, výmaz, omezení zpracování, přenositelnost údajů, vznesení námitky a podání stížnosti u dozorového úřadu: zástupný text."
           ]
         }
       ]
@@ -271,46 +271,46 @@
     "imprint": {
       "title": "Právní informace"
     },
-    "footerLabel": "Právní informace",
-    "outlineNote": "Tato osnova uvádí, co platforma skutečně zpracovává. Nejde o právní text.",
+    "footerLabel": "Právní odkazy",
+    "outlineNote": "Tato struktura uvádí, jaké údaje platforma skutečně zpracovává. Nejedná se o právní text.",
     "guidelines": {
       "title": "Pravidla obsahu",
-      "intro": "Tato pravidla platí pro všechny inzeráty, profily a zprávy. Porušení vede k zamítnutí nebo odstranění a při opakování k zablokování účtu.",
+      "intro": "Tato pravidla platí pro všechny inzeráty, profily a zprávy. Jejich porušení vede k zamítnutí nebo odstranění a v případě opakovaného porušení k zablokování účtu.",
       "sections": [
         {
-          "title": "Jen lovecké příležitosti",
+          "title": "Pouze lovecké příležitosti",
           "points": [
-            "Každý inzerát musí odpovídat jedné z kategorií.",
-            "Žádný prodej, nákup ani výměna zbraní, střeliva nebo jejich částí."
+            "Každý inzerát musí spadat do jedné z kategorií.",
+            "Žádný prodej, nákup ani výměna zbraní, střeliva nebo součástí zbraní."
           ]
         },
         {
-          "title": "Zakázaný obsah",
+          "title": "Zakázané obsahy",
           "points": [
-            "Žádný protiprávní, diskriminační, výhružný ani sexuální obsah.",
-            "Žádné nabídky, které porušují myslivecké právo, například lov v době hájení.",
-            "Žádné texty zkopírované z jiných webů a žádné fotografie, ke kterým nemáte práva."
+            "Žádné protiprávní, diskriminační, výhružné nebo sexuální obsahy.",
+            "Žádné nabídky, které porušují lovecké předpisy, například lov v období hájení.",
+            "Žádné texty zkopírované z jiných webů a žádné fotky, k nimž nemáš vlastní práva."
           ]
         },
         {
-          "title": "Pravdivě a úplně",
+          "title": "Pravdivé a úplné",
           "points": [
             "Údaje musí být úplné a věrohodné.",
-            "Žádné duplicitní inzeráty na tutéž příležitost."
+            "Žádné duplicitní inzeráty pro stejnou příležitost."
           ]
         },
         {
-          "title": "Kontakt a soukromí",
+          "title": "Kontakt a ochrana osobních údajů",
           "points": [
-            "Žádná telefonní čísla, e-mailové adresy ani odkazy v textu inzerátu. Kontakt probíhá přes chat.",
-            "Žádné přesné souřadnice honiteb a žádné osobní údaje jiných osob."
+            "V textu inzerátu neuváděj telefonní čísla, e-mailové adresy ani odkazy. Kontakt probíhá přes chat.",
+            "Neuváděj přesné souřadnice honiteb ani osobní údaje jiných osob."
           ]
         },
         {
           "title": "Zprávy",
           "points": [
-            "Žádný spam, obtěžování ani pokusy o podvod.",
-            "Zprávy můžete nahlásit a osoby zablokovat."
+            "Žádný spam, žádné obtěžování, žádné pokusy o podvod.",
+            "Můžeš nahlásit zprávy a zablokovat uživatele."
           ]
         }
       ]
@@ -335,7 +335,7 @@
     "verification": "Ověření",
     "verificationStatus": {
       "none": "Neověřeno",
-      "pending": "Probíhá kontrola",
+      "pending": "Ve schvalování",
       "verified": "Ověřeno",
       "rejected": "Zamítnuto"
     },
@@ -345,12 +345,12 @@
       "title": "Upravit profil",
       "back": "Zpět na Můj účet",
       "submit": "Uložit",
-      "saved": "Váš profil byl uložen.",
+      "saved": "Tvůj profil byl uložen.",
       "failed": "Uložení se nezdařilo. Zkuste to prosím znovu.",
-      "blocked": "Váš účet je zablokovaný. Profil nemůžete měnit."
+      "blocked": "Tvůj účet je zablokovaný. Nemůžeš upravit svůj profil."
     },
     "myListings": "Moje inzeráty",
-    "favorites": "Oblíbené",
+    "favorites": "Uložené inzeráty",
     "savedSearches": "Uložená hledání",
     "dataExport": "Stáhnout moje data",
     "deleteAccount": "Smazat účet",
@@ -383,38 +383,38 @@
       "metaTitle": "Moje inzeráty",
       "title": "Moje inzeráty",
       "back": "Zpět na Můj účet",
-      "empty": "Zatím nemáte žádné inzeráty.",
+      "empty": "Ještě nemáš žádné inzeráty.",
       "create": "Podat inzerát",
       "statusLabel": "Stav",
       "rejectReason": "Důvod moderace: {reason}",
-      "moderationNote": "Poznámka moderace: „{note}“",
-      "changesRequested": "Moderace žádá o úpravy. Poté můžete inzerát znovu odeslat.",
+      "moderationNote": "Poznámka moderátora: „{note}“",
+      "changesRequested": "Moderátoři požádají o úpravy. Poté můžeš inzerát odeslat znovu.",
       "expiresAt": "Viditelné do {date}",
-      "createdAt": "Vytvořeno {date}",
-      "reviewHint": "Moderátoři váš inzerát zkontrolují, než bude zveřejněn."
+      "createdAt": "Vytvořeno dne {date}",
+      "reviewHint": "Moderátoři tvůj inzerát zkontrolují, než bude zveřejněn."
     },
     "actions": {
       "edit": "Upravit",
       "withdraw": "Stáhnout ze schvalování",
       "pause": "Pozastavit",
-      "resume": "Obnovit",
+      "resume": "Pokračovat",
       "delete": "Smazat koncept",
       "deleteConfirm": "Trvale smazat",
-      "deleteQuestion": "Trvale smazat „{title}“? Tuto akci nelze vrátit."
+      "deleteQuestion": "„{title}“ trvale smazat? Tuto akci nelze vrátit zpět."
     },
     "notices": {
-      "withdrawn": "Inzerát je opět konceptem.",
-      "paused": "Inzerát je pozastaven a již není veřejný.",
+      "withdrawn": "Inzerát je opět ve fázi konceptu.",
+      "paused": "Inzerát je pozastaveno a již není veřejně přístupný.",
       "resumed": "Inzerát je opět veřejný.",
-      "resumedReview": "Inzerát se od schválení změnil a vrací se ke schválení.",
+      "resumedReview": "Inzerát byl od schválení změněn a vrací se zpět do schvalování.",
       "deleted": "Koncept byl smazán.",
-      "submitted": "Děkujeme! Váš inzerát se nyní schvaluje."
+      "submitted": "Děkujeme! Tvé inzeráty jsou nyní ve schvalování."
     },
     "errors": {
-      "failed": "Nepodařilo se. Obnovte prosím stránku a zkuste to znovu.",
-      "legal": "Nejprve prosím přijměte aktuální podmínky použití.",
-      "rateLimited": "Dosáhli jste denního limitu nových inzerátů. Další můžete podat od {time}.",
-      "rateLimitedNoTime": "Dosáhli jste denního limitu nových inzerátů. Zkuste to prosím zítra."
+      "failed": "To se nepodařilo. Obnov prosím stránku a zkus to znovu.",
+      "legal": "Nejprve prosím souhlas s aktuálními podmínkami použití.",
+      "rateLimited": "Dosáhl jsi denního limitu pro nové inzeráty. Další můžeš podat až po {time}.",
+      "rateLimitedNoTime": "Dosáhl jsi denního limitu pro nové inzeráty. Zkus to prosím zítra znovu."
     },
     "wizard": {
       "newMetaTitle": "Podat inzerát",
@@ -427,7 +427,7 @@
         "basics": "Základní údaje",
         "location": "Místo",
         "details": "Podrobnosti",
-        "price": "Cena a termín",
+        "price": "Cena a období",
         "preview": "Náhled a odeslání",
         "photos": "Fotografie"
       },
@@ -435,45 +435,45 @@
       "create": "Vytvořit koncept",
       "back": "Zpět na Moje inzeráty",
       "saved": "Uloženo.",
-      "publishedNote": "Tento inzerát je zveřejněn. Každá změna jej vrátí ke schválení.",
-      "lockedNote": "Tento inzerát odstranila moderace a nelze jej již měnit.",
-      "typeLockedNote": "U odeslaných a zveřejněných inzerátů již nelze měnit druh a směr (nabídka/poptávka). Vytvořte prosím nový inzerát.",
-      "errorSummary": "Zkontrolujte prosím tyto údaje:",
-      "draftHint": "Váš koncept se ukládá po každém kroku. Vidíte jej jen vy.",
+      "publishedNote": "Tento inzerát je zveřejněn. Jakákoli změna vede zpět do schvalování.",
+      "lockedNote": "Tento inzerát byl odstraněn moderátory a již jej nelze upravit.",
+      "typeLockedNote": "U již odeslaných a zveřejněných inzerátů už nelze měnit druh ani zaměření. V takovém případě prosím podej nový inzerát.",
+      "errorSummary": "Prosím, zkontroluj tyto údaje:",
+      "draftHint": "Tvůj koncept se ukládá po každém kroku. Vidíš ho pouze ty.",
       "countryApply": "Změnit zemi",
       "continue": "Pokračovat"
     },
     "fields": {
-      "kind": "Druh inzerátu",
+      "kind": "Typ inzerátu",
       "direction": "Nabídka nebo poptávka",
       "title": "Název",
       "titleHint": "3 až 100 znaků.",
       "language": "Jazyk textu",
       "country": "Země",
       "district": "Okres",
-      "choose": "Vyberte prosím",
-      "postalCode": "PSČ honitby",
-      "postalCodeWanted": "PSČ hledané oblasti (nepovinné)",
-      "placeName": "Obec honitby",
-      "placeNameWanted": "Obec hledané oblasti (nepovinné)",
-      "placePrivate": "PSČ a obec vidíte jen vy a moderace. Veřejně se zobrazí jen okres a první dvě číslice PSČ.",
-      "postalCodeSource": "Data PSČ: © přispěvatelé OpenStreetMap (ODbL), © GeoBasis-DE / BKG, zdroj dat: Statistik Austria",
-      "postalCodeReport": "Je PSČ přesto správné? Napište nám přes kontakt v právních informacích, přiřazení prověříme.",
+      "choose": "Vyber prosím",
+      "postalCode": "PSČ loveckého revíru",
+      "postalCodeWanted": "PSČ hledané oblasti (volitelné)",
+      "placeName": "Umístění revíru",
+      "placeNameWanted": "Umístění hledané oblasti (volitelné)",
+      "placePrivate": "PSČ a město vidíš pouze ty a moderátoři. Veřejně se zobrazuje pouze okres a první dvě číslice PSČ.",
+      "postalCodeSource": "Údaje o PSČ: © přispěvatelé OpenStreetMap (ODbL), © GeoBasis-DE / BKG, zdroje dat: Statistik Austria",
+      "postalCodeReport": "Je PSČ přesto správné? Dej nám vědět přes kontaktní údaje v právních informacích, přiřazení ověříme.",
       "description": "Popis",
-      "descriptionHint": "30 až 5000 znaků. Neuvádějte přesnou polohu ani kontakt; kontakt probíhá přes chat.",
-      "area": "Výměra v hektarech",
+      "descriptionHint": "30 až 5 000 znaků. Neuváděj přesnou polohu ani kontaktní údaje; kontakt probíhá přes chat.",
+      "area": "Plocha v hektarech",
       "species": "Druhy zvěře",
-      "speciesHint": "U nabídek pronájmu, povolenky a trofejového lovu je povinný alespoň jeden druh.",
-      "kindDetails": "Údaje k: {kind}",
+      "speciesHint": "U nabídek týkajících se pronájmu, povolenky k lovu a lovu trofejí je povinné uvést alespoň jeden druh zvěře.",
+      "kindDetails": "Údaje k {kind}",
       "price": "Cena",
       "priceNone": "Bez ceny",
       "priceOnRequest": "Na dotaz",
       "priceAmount": "Uvést částku",
       "amount": "Částka",
-      "amountHint": "Například 1500 nebo 1 500,50",
+      "amountHint": "Například 1 500 nebo 1 500,50",
       "currency": "Měna",
       "unit": "Jednotka",
-      "period": "Období (nepovinné)",
+      "period": "Období (volitelné)",
       "startDate": "Od",
       "endDate": "Do",
       "yes": "Ano",
@@ -487,7 +487,7 @@
       "submission_deadline": "Termín podání",
       "lease_duration_years": "Doba pronájmu v letech",
       "shooting_plan": "Plán lovu",
-      "hunting_hut": "K dispozici myslivecká chata",
+      "hunting_hut": "K dispozici je myslivecká chata",
       "co_lessee_slots": "Místa pro spolunájemce",
       "paid": "Placené",
       "permit_scope": "Rozsah",
@@ -496,8 +496,8 @@
       "event_date": "Datum",
       "spots_available": "Volná místa",
       "meeting_point_description": "Místo srazu",
-      "dogs_required": "Psi nutní",
-      "legal_ack": "Znám právní požadavky na trofeje, zbraně a dovoz/vývoz.",
+      "dogs_required": "Vyžadováni psi",
+      "legal_ack": "Znám právní předpisy týkající se trofejí, zbraní a jejich dovozu a vývozu.",
       "trophy_details": "Podrobnosti o trofeji",
       "includes_accommodation": "S ubytováním",
       "import_export_note": "Poznámka k dovozu a vývozu",
@@ -505,8 +505,8 @@
       "tasks": "Úkoly"
     },
     "attributeHints": {
-      "tasks": "Jeden úkol na řádek, například stavba posedu.",
-      "legal_ack": "Povinné u trofejových a hostovských lovů."
+      "tasks": "Jedna úloha na každý řádek, například stavba lovecké pozorovatelny.",
+      "legal_ack": "Povinné u trofejních a hostovských lovů."
     },
     "options": {
       "lease_type": {
@@ -536,72 +536,72 @@
       "per_animal": "za kus zvěře"
     },
     "fieldErrors": {
-      "description_length": "Napište prosím popis o délce alespoň 30 znaků.",
-      "place_postal_code_required": "Zadejte prosím PSČ honitby.",
-      "place_place_name_required": "Zadejte prosím obec honitby.",
+      "description_length": "Napiš prosím popis o délce minimálně 30 znaků.",
+      "place_postal_code_required": "Uveď prosím PSČ loveckého revíru.",
+      "place_place_name_required": "Uveď prosím místo loveckého revíru.",
       "place_postal_code_unknown": "Toto PSČ neznáme.",
-      "place_postal_code_region_mismatch": "PSČ nepatří do zvoleného okresu.",
-      "postal_format": "PSČ nemá formát dané země.",
-      "attributes_legal_ack": "Potvrďte prosím, že znáte právní požadavky.",
-      "attributes_event_date_past": "Datum je v minulosti.",
+      "place_postal_code_region_mismatch": "PSČ nepatří do vybraného okresu.",
+      "postal_format": "PSČ nemá formát používaný v daném spolkovém státě.",
+      "attributes_legal_ack": "Potvrď prosím, že jsi se seznámil s právními podmínkami.",
+      "attributes_event_date_past": "Datum se vztahuje k minulosti.",
       "attributes_lease_type": "Vyberte prosím druh pronájmu.",
-      "attributes_revier_type": "Vyberte prosím alespoň jeden typ honitby.",
-      "area_hectares": "Zadejte prosím výměru v hektarech.",
-      "area_invalid": "Zadejte prosím výměru větší než 0 s nejvýše dvěma desetinnými místy.",
-      "attributes_permit_scope": "Vyberte prosím rozsah povolenky.",
-      "attributes_paid": "Uveďte prosím, zda je povolenka placená.",
-      "attributes_event_date": "Zadejte prosím datum lovu.",
-      "attributes_spots_available": "Zadejte prosím počet volných míst (1 až 500).",
-      "attributes_tasks": "Uveďte prosím alespoň jeden úkol.",
+      "attributes_revier_type": "Vyber prosím alespoň jeden typ honitby.",
+      "area_hectares": "Uveď prosím plochu v hektarech.",
+      "area_invalid": "Uveď prosím hodnotu větší než 0 s nejvýše dvěma desetinnými místy.",
+      "attributes_permit_scope": "Zvolte prosím rozsah povolenky k lovu.",
+      "attributes_paid": "Uveď prosím, zda je povolenka k lovu placená.",
+      "attributes_event_date": "Uveď prosím datum lovu.",
+      "attributes_spots_available": "Uveď prosím počet volných míst (1 až 500).",
+      "attributes_tasks": "Uveď prosím alespoň jeden úkol.",
       "species": "Vyberte prosím alespoň jeden druh zvěře.",
-      "photos_unprocessed": "Některé fotografie se ještě zpracovávají. Chvíli počkejte nebo je odstraňte.",
-      "attributes_unknown": "Některé údaje neodpovídají druhu inzerátu.",
-      "attributes_invalid": "Zkontrolujte prosím údaje k druhu inzerátu.",
+      "photos_unprocessed": "Některé fotografie se ještě zpracovávají. Prosím, chvíli počkej nebo je odstraň.",
+      "attributes_unknown": "Některé údaje neodpovídají charakteru inzerátu.",
+      "attributes_invalid": "Zkontroluj prosím údaje o typu inzerátu.",
       "title": "Název musí mít 3 až 100 znaků.",
       "district": "Vyberte prosím okres.",
-      "price_required": "Zadejte prosím částku.",
-      "price_invalid": "Zadejte prosím částku jako číslo, například 1500 nebo 1 500,50.",
+      "price_required": "Uveď prosím částku.",
+      "price_invalid": "Částku prosím uveď jako číslo, například 1500 nebo 1 500,50.",
       "price_negative": "Částka nesmí být záporná.",
-      "price_tooManyDecimals": "Použijte prosím nejvýše dvě desetinná místa.",
-      "price_zero": "Zadejte prosím částku větší než 0 nebo zvolte „Na dotaz“.",
+      "price_tooManyDecimals": "Prosím, maximálně dvě desetinná místa.",
+      "price_zero": "Zadej prosím částku větší než 0 nebo vyber možnost „Na vyžádání“.",
       "price_tooLarge": "Částka je příliš vysoká.",
-      "price_conflict": "Zadali jste částku. Zvolte „Uvést částku“ nebo pole „Částka“ vymažte.",
-      "dates": "Konec je před začátkem.",
-      "form": "Zkontrolujte prosím své údaje.",
-      "place_point_small_district": "V tomto okrese není bod na mapě možný: je tak malý, že by bod prozradil polohu příliš přesně. Mapa zobrazuje střed okresu.",
-      "place_point_too_far": "Bod neleží ve zvoleném okrese.",
-      "place_point_invalid": "Bod je neplatný. Nastavte ho prosím znovu na mapě."
+      "price_conflict": "Zadal(a) jsi částku. Vyber možnost „Uvést částku“ nebo vyprázdni pole „Částka“.",
+      "dates": "Konec je ještě před začátkem.",
+      "form": "Zkontroluj prosím své údaje.",
+      "place_point_small_district": "V tomto kruhu není možné umístit bod na mapě: je tak malý, že by bod příliš přesně prozradil jeho polohu. Mapa zobrazuje střed kruhu.",
+      "place_point_too_far": "Místo se nenachází ve zvoleném okrese.",
+      "place_point_invalid": "Tento bod je neplatný. Zkuste ho prosím umístit znovu na mapu."
     },
     "preview": {
-      "privateBadge": "jen pro vás a moderaci",
-      "privateBadgeModerator": "neveřejné",
+      "privateBadge": "pouze pro tebe a moderátory",
+      "privateBadgeModerator": "není veřejné",
       "missing": "Před odesláním ještě chybí:",
       "ready": "Vše je připraveno k odeslání.",
-      "submit": "Odeslat ke schválení",
-      "fix": "Opravit v kroku „{step}“",
-      "notSubmittable": "Tento inzerát se schvaluje nebo je zveřejněn. Změny se ukládají přímo.",
+      "submit": "Odeslat ke schvalování",
+      "fix": "V kroku „{step}“ opravit",
+      "notSubmittable": "Tento inzerát je ve schvalování nebo již byl zveřejněn. Změny se ukládají okamžitě.",
       "weaponsTitle": "Upozornění: zbraně a střelivo",
-      "weaponsText": "Revier zprostředkovává pouze příležitosti k lovu. Zbraně a střelivo se nesmí nabízet. Zkontrolujte prosím tato místa:",
+      "weaponsText": "Revier zprostředkovává pouze lovecké příležitosti. Nabídka zbraní nebo střeliva nesmí být provedena. Zkontroluj prosím tyto body:",
       "weaponsMatch": "{field}: „{term}“",
-      "weaponsSubmit": "Inzerát můžete přesto odeslat; moderace jej zkontroluje.",
-      "altText": "Alternativní text fotografie",
+      "weaponsSubmit": "I tak můžeš inzerát odeslat; moderátoři jej zkontrolují.",
+      "altText": "Alternativní text k fotografii",
       "onRequest": "Na dotaz",
       "noPrice": "Cena neuvedena"
     },
     "photos": {
       "choose": "Vybrat fotografie",
-      "intro": "Až 8 fotografií (JPEG, PNG nebo WebP). Fotografie se před nahráním zmenší; server odstraní všechna metadata, například polohu GPS.",
-      "limit": "Tento inzerát už má 8 fotografií.",
-      "uploading": "Nahrává se {name} …",
+      "intro": "Až 8 fotografií (JPEG, PNG nebo WebP). Fotografie se před nahráním zmenší; server odstraní veškerá metadata, jako je například GPS poloha.",
+      "limit": "Tento inzerát již obsahuje 8 fotografií.",
+      "uploading": "{name} se nahrává …",
       "done": "{count, plural, one {Nahrána # fotografie.} few {Nahrány # fotografie.} other {Nahráno # fotografií.}}",
       "skipped": "{count, plural, one {# fotka nebyla nahrána} few {# fotky nebyly nahrány} other {# fotek nebylo nahráno}}: nejvýše 8 fotek na inzerát.",
       "empty": "Zatím žádné fotografie.",
-      "noscript": "Nahrávání fotografií vyžaduje JavaScript.",
-      "unprocessed": "Zatím nezpracováno. Pokud to tak zůstane, fotografii odstraňte a nahrajte znovu.",
+      "noscript": "K nahrávání fotografií je zapotřebí JavaScript.",
+      "unprocessed": "Zatím nezpracováno. Pokud to tak zůstane, odstraň fotografii a nahraj ji znovu.",
       "photoLabel": "Fotografie {n} z {total}",
-      "altFallback": "{title}, fotka {n} z {total}",
-      "altText": "Alternativní text (nepovinné)",
-      "altTextHint": "Stručně popište, co je vidět. Bez něj se použije název.",
+      "altFallback": "{title}, fotografie {n} z {total}",
+      "altText": "Alternativní text (volitelný)",
+      "altTextHint": "Stručně popiš, co je na fotce vidět. Když nic neuvedeš, použije se název fotky.",
       "saveAltText": "Uložit alternativní text",
       "moveUp": "Posunout dopředu",
       "moveDown": "Posunout dozadu",
@@ -613,53 +613,53 @@
         "remove": "Fotografie odstraněna."
       },
       "errors": {
-        "heic": "Formát HEIC není podporován. Exportujte prosím fotografii jako JPEG.",
-        "unsupported": "Tento formát není podporován. Povoleny jsou JPEG, PNG a WebP.",
+        "heic": "Formát HEIC není podporován. Exportuj prosím fotografii ve formátu JPEG.",
+        "unsupported": "Tento formát není podporován. Povoleny jsou formáty JPEG, PNG a WebP.",
         "tooLarge": "Fotografie je příliš velká.",
-        "corrupt": "Soubor je poškozený nebo to není obrázek.",
-        "limit": "Nejvýše 8 fotografií na inzerát.",
-        "dailyLimit": "Dnes jste nahráli velmi mnoho fotografií. Zkuste to prosím zítra.",
-        "attempts": "Příliš mnoho pokusů pro tuto fotografii. Vyberte ji prosím znovu.",
-        "network": "Bez připojení. Zkuste to prosím znovu.",
-        "failed": "Fotografii se nepodařilo zpracovat. Vyberte ji prosím znovu."
+        "corrupt": "Soubor je poškozený nebo neobsahuje obrázek.",
+        "limit": "Maximálně 8 fotografií na jeden inzerát.",
+        "dailyLimit": "Dnes jsi už nahrál/a opravdu hodně fotek. Zkus to prosím zítra znovu.",
+        "attempts": "Na tuto fotografii bylo provedeno příliš mnoho pokusů. Vyber ji prosím znovu.",
+        "network": "Není k dispozici připojení. Zkuste to prosím znovu.",
+        "failed": "Fotografii se nepodařilo zpracovat. Vyber ji prosím znovu."
       }
     }
   },
   "Admin": {
     "forbidden": {
-      "metaTitle": "Přístup odepřen",
-      "title": "Přístup odepřen",
-      "text": "Tato oblast je vyhrazena moderátorům.",
-      "backHome": "Zpět na úvodní stránku"
+      "metaTitle": "Žádný přístup",
+      "title": "Žádný přístup",
+      "text": "Tato sekce je vyhrazena pro moderátory.",
+      "backHome": "Na úvodní stránku"
     },
     "mfa": {
       "metaTitle": "Dvoufázové ověření",
       "title": "Dvoufázové ověření",
-      "intro": "Administrace vyžaduje druhý faktor. Použijte ověřovací aplikaci (například v telefonu).",
-      "setupIntro": "Pro váš účet zatím není nastavena ověřovací aplikace.",
-      "setupButton": "Nastavit ověřovací aplikaci",
-      "qrAlt": "QR kód pro ověřovací aplikaci",
-      "secretLabel": "Nebo zadejte tento klíč ručně:",
+      "intro": "Administrátorská část vyžaduje dvoufaktorové ověření. K tomu použij autentizační aplikaci (například v mobilu).",
+      "setupIntro": "Pro tvůj účet ještě není nastaven žádný autentifikátor.",
+      "setupButton": "Nastavit autentifikátor",
+      "qrAlt": "QR kód pro aplikaci Authenticator",
+      "secretLabel": "Nebo zadej tento klíč ručně:",
       "codeLabel": "Šestimístný kód z aplikace",
       "verify": "Potvrdit",
-      "noscript": "Nastavení vyžaduje JavaScript: klíč se vytvoří jen jednou a hned se zobrazí. Povolte prosím pro tuto stránku JavaScript.",
+      "noscript": "Tato funkce vyžaduje JavaScript: Klíč se vygeneruje pouze jednou a ihned se zobrazí. Prosím, aktivuj JavaScript pro tuto stránku.",
       "errors": {
-        "code": "Kód není správný nebo vypršel. Zkuste to prosím znovu.",
-        "setup": "Nastavení se nezdařilo. Začněte prosím znovu."
+        "code": "Kód je nesprávný nebo jeho platnost vypršela. Zkuste to prosím znovu.",
+        "setup": "Nastavení se nezdařilo. Zkuste to prosím znovu."
       }
     },
     "overview": {
-      "metaTitle": "Administrace",
-      "title": "Administrace",
+      "metaTitle": "Administrační rozhraní",
+      "title": "Administrační rozhraní",
       "pending": "{count, plural, =0 {Žádné inzeráty ke schválení.} one {# inzerát ke schválení.} few {# inzeráty ke schválení.} other {# inzerátů ke schválení.}}",
-      "queueLink": "Otevřít frontu",
+      "queueLink": "Otevřít frontu ke schválení",
       "auditLink": "Protokol auditu",
-      "adminsLink": "Spravovat administrátory",
+      "adminsLink": "Správa administrátorů",
       "stuckDeletions": "{count, plural, one {# smazání účtu se zaseklo} few {# smazání účtů se zasekla} other {# smazání účtů se zaseklo}} (opakuje se automaticky).",
       "verificationsPending": "{count, plural, =0 {Žádné žádosti o ověření ke kontrole.} one {# žádost o ověření ke kontrole.} few {# žádosti o ověření ke kontrole.} other {# žádostí o ověření ke kontrole.}}",
-      "verificationsLink": "Kontrolovat ověření",
+      "verificationsLink": "Zkontrolovat ověření",
       "reportsOpen": "{count, plural, =0 {Žádná otevřená nahlášení.} one {# otevřené nahlášení.} few {# otevřená nahlášení.} other {# otevřených nahlášení.}}",
-      "reportsLink": "Prověřit nahlášení",
+      "reportsLink": "Zkontrolovat nahlášení",
       "appealsOpen": "{count, plural, =0 {Žádné otevřené stížnosti.} one {# otevřená stížnost.} few {# otevřené stížnosti.} other {# otevřených stížností.}}",
       "appealsLink": "Prověřit stížnosti",
       "usersLink": "Vyhledat účet"
@@ -673,48 +673,48 @@
       "hints": "{count, plural, one {# výraz týkající se zbraní} few {# výrazy týkající se zbraní} other {# výrazů týkajících se zbraní}}",
       "rejections": "Dříve zamítnuto: inzerát {listing}, inzerent {owner}",
       "more": "Další stránka",
-      "back": "Zpět do administrace",
+      "back": "Zpět do administrátorské sekce",
       "notices": {
         "approved": "Inzerát byl schválen.",
-        "returned": "Inzerát byl vrácen k úpravám.",
+        "returned": "Inzerát byl vrácen k úpravě.",
         "rejected": "Inzerát byl zamítnut.",
-        "decided": "O tomto inzerátu již rozhodl jiný administrátor."
+        "decided": "O tomto inzerátu již rozhodl jiný správce."
       }
     },
     "review": {
-      "metaTitle": "Kontrola inzerátu",
-      "back": "Zpět na frontu",
+      "metaTitle": "Zkontrolovat inzerát",
+      "back": "Zpět do fronty",
       "owner": "Inzerent: {name}, členem od {date}",
       "previousRejections": "{count, plural, =0 {Dosud nikdy nezamítnuto.} one {Dosud zamítnuto #krát.} few {Dosud zamítnuto #krát.} other {Dosud zamítnuto #krát.}}",
       "contentLanguage": "Jazyk inzerátu: {language}",
       "notPending": "Tento inzerát nečeká na schválení (stav: {status}).",
       "decision": "Rozhodnutí",
       "reason": "Důvod",
-      "reasonNone": "– zvolte důvod –",
-      "reasonHint": "Povinné u „Vyžádat úpravy“ a „Zamítnout“. Inzerent uvidí důvod ve svém jazyce.",
-      "note": "Poznámka pro inzerenta (nepovinné)",
-      "noteHint": "Povinné u „Jiný důvod“. Inzerent ji uvidí přesně takto, nejvýše 1000 znaků.",
+      "reasonNone": "– Vyberte důvod –",
+      "reasonHint": "Povinné při volbách „Vyžádat úpravy“ a „Zamítnout“. Inzerent uvidí důvod ve svém jazyce.",
+      "note": "Poznámka pro inzerenty (volitelné)",
+      "noteHint": "Povinné v případě „Jiný důvod“. Inzerent to vidí přesně tak, maximálně 1000 znaků.",
       "submit": "Uložit rozhodnutí",
       "errors": {
-        "changed": "Inzerent mezitím inzerát změnil. Zkontrolujte prosím aktuální verzi.",
-        "code": "Zvolte prosím důvod.",
-        "note": "U „Jiný důvod“ prosím doplňte poznámku.",
-        "notReady": "Inzerát nelze schválit, protože chybí nebo jsou neplatné některé údaje:",
-        "forbidden": "O tomto inzerátu nemůžete rozhodnout.",
+        "changed": "Inzerent mezitím změnil inzerát. Zkontroluj prosím aktuální stav.",
+        "code": "Vyber prosím důvod.",
+        "note": "V poli „Jiný důvod“ prosím uveď vysvětlení.",
+        "notReady": "Inzerát nelze schválit, protože některé údaje chybí nebo jsou neplatné:",
+        "forbidden": "O tomto inzerátu nemůžeš rozhodovat.",
         "failed": "Rozhodnutí se nepodařilo uložit. Zkuste to prosím znovu."
       }
     },
     "audit": {
       "metaTitle": "Protokol auditu",
       "title": "Protokol auditu",
-      "back": "Zpět do administrace",
+      "back": "Zpět do administrátorské sekce",
       "filterAction": "Akce",
       "filterAll": "Všechny akce",
       "filterTarget": "ID cíle",
       "filter": "Filtrovat",
       "time": "Čas",
       "action": "Akce",
-      "actor": "Kdo",
+      "actor": "Od",
       "target": "Cíl",
       "details": "Podrobnosti",
       "system": "Systém/SQL",
@@ -726,21 +726,21 @@
         "listing_rejected": "Inzerát zamítnut",
         "listing_removed": "Inzerát odstraněn",
         "listing_point_removed": "Bod na mapě odstraněn",
-        "role_granted": "Jmenován administrátor",
-        "role_revoked": "Odebrána role administrátora",
-        "user_looked_up": "Vyhledán účet",
+        "role_granted": "Jmenován správce",
+        "role_revoked": "Odebrána role správce",
+        "user_looked_up": "Účet vyhledán",
         "profile_blocked": "Účet zablokován",
         "profile_unblocked": "Účet odblokován",
         "verification_verified": "Ověření potvrzeno",
         "verification_rejected": "Ověření zamítnuto",
-        "report_handled": "Hlášení vyřízeno",
+        "report_handled": "Nahlášení vyřízeno",
         "verification_revoked": "Ověření odvoláno",
-        "verification_document_viewed": "Doklad k ověření zobrazen",
-        "profile_warned": "Účet napomenut",
+        "verification_document_viewed": "Ověřovací dokument zobrazen",
+        "profile_warned": "Účet dostal varování",
         "report_reopened": "Nahlášení znovu otevřeno",
-        "report_message_viewed": "Nahlášená zpráva zobrazena",
+        "report_message_viewed": "Zobrazena nahlášená zpráva",
         "appeal_upheld": "Stížnost zamítnuta",
-        "appeal_reversed": "Stížnosti vyhověno"
+        "appeal_reversed": "Stížnosti bylo vyhověno"
       },
       "detailKeys": {
         "from": "Předtím",
@@ -753,184 +753,184 @@
         "status": "Stav",
         "outcome": "Výsledek",
         "note": "Odůvodnění",
-        "same_reviewer": "Stejný admin",
+        "same_reviewer": "Stejný správce",
         "decision_action": "Rozhodnutí"
       },
       "via": {
-        "ui": "Administrace",
-        "sql": "SQL (runbook)"
+        "ui": "Administrační rozhraní",
+        "sql": "SQL (Runbook)"
       }
     },
     "admins": {
-      "metaTitle": "Administrátoři",
-      "title": "Administrátoři",
-      "back": "Zpět do administrace",
-      "intro": "Administrátoři kontrolují inzeráty a jmenují nebo odebírají další administrátory. Každá změna vyžaduje nový kód z ověřovací aplikace a zapisuje se do protokolu auditu.",
-      "listTitle": "Současní administrátoři",
-      "since": "Administrátorem od {date}",
+      "metaTitle": "Správci",
+      "title": "Správci",
+      "back": "Zpět do administrátorské sekce",
+      "intro": "Správci kontrolují inzeráty a jmenují nebo odvolávají další správce. Každá změna vyžaduje nový kód z tvé aplikace Authenticator a je zaznamenána v protokolu auditu.",
+      "listTitle": "Aktuální správci",
+      "since": "Správce od {date}",
       "inactive": "zablokován nebo smazán",
-      "you": "(vy)",
-      "revoke": "Odebrat roli administrátora",
+      "you": "(ty)",
+      "revoke": "Odebrat roli správce",
       "revokeConfirm": "Odebrat pro {name}",
-      "findTitle": "Jmenovat administrátora",
+      "findTitle": "Jmenovat správce",
       "email": "Přesná e-mailová adresa účtu",
       "find": "Vyhledat účet",
-      "candidate": "{name}, členem od {date}",
-      "alreadyAdmin": "Tento účet už je administrátorem.",
-      "grant": "Jmenovat administrátorem",
-      "code": "Aktuální kód z ověřovací aplikace",
-      "revokeCode": "Aktuální kód z ověřovací aplikace pro odebrání role administrátora uživateli {name}",
+      "candidate": "{name}, člen od {date}",
+      "alreadyAdmin": "Tento účet již má oprávnění správce.",
+      "grant": "Jmenovat správcem",
+      "code": "Aktuální kód z tvé aplikace Authenticator",
+      "revokeCode": "Aktuální kód z tvé aplikace Authenticator, který slouží k odebrání role správce {name}",
       "rules": "Noví administrátoři mohou ihned kontrolovat inzeráty, role ale sami mění až po {days, plural, one {# dni} few {# dnech} many {# dne} other {# dnech}}. Nejvýše {perAdmin, plural, one {# změna role} few {# změny rolí} many {# změny role} other {# změn rolí}} na administrátora a {total} celkem za 24 hodin.",
       "notices": {
-        "granted": "Účet je nyní administrátorem. Před první akcí si nový administrátor nastaví dvoufázové ověření.",
-        "revoked": "Role administrátora byla odebrána."
+        "granted": "Účet má nyní status správce. Před provedením první akce nový správce nastaví dvoufázové ověření.",
+        "revoked": "Role správce byla odebrána."
       },
       "errors": {
-        "notFound": "Žádný aktivní potvrzený účet s přesně touto e-mailovou adresou.",
-        "code": "Kód není správný nebo vypršel.",
-        "stepUp": "Potvrďte to prosím znovu novým kódem.",
-        "waiting": "Role můžete měnit až od {date} ({days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování).",
-        "waitingNoDate": "Role můžete měnit až {days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování.",
-        "limit": "Příliš mnoho změn rolí nebo vyhledávání v krátké době. Zkuste to prosím později.",
-        "lastAdmin": "Posledního administrátora nelze odebrat.",
-        "lookup": "Nejprve prosím vyhledejte účet podle e-mailové adresy (platí 1 hodinu).",
-        "forbidden": "K tomu nemáte oprávnění.",
-        "failed": "Změnu se nepodařilo uložit. Zkuste to prosím znovu."
+        "notFound": "Neexistuje žádný aktivní, ověřený účet s přesně touto e-mailovou adresou.",
+        "code": "Kód je nesprávný nebo jeho platnost vypršela.",
+        "stepUp": "Potvrď prosím ještě jednou pomocí nového kódu.",
+        "waiting": "Role můžeš měnit až od {date} ({days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování).",
+        "waitingNoDate": "Role můžeš měnit až {days, plural, one {# den} few {# dny} many {# dne} other {# dní}} po vlastním jmenování.",
+        "limit": "V krátkém časovém úseku došlo k příliš mnoha změnám role nebo vyhledáváním. Zkuste to prosím později znovu.",
+        "lastAdmin": "Posledního správce nelze odstranit.",
+        "lookup": "Nejdřív prosím vyhledej účet podle e-mailové adresy (platí 1 hodinu).",
+        "forbidden": "To nesmíš.",
+        "failed": "Změnu se nepodařilo uložit. Zkus to prosím znovu."
       }
     },
     "verifications": {
       "metaTitle": "Ověření",
-      "title": "Ověření ke kontrole",
-      "back": "Zpět do administrace",
+      "title": "Ověření k posouzení",
+      "back": "Zpět do administrátorské sekce",
       "empty": "Žádné žádosti ke kontrole.",
-      "itemTitle": "{type} od {name}",
-      "waiting": "Podáno {time}",
+      "itemTitle": "{type} z {name}",
+      "waiting": "Odesláno {time}",
       "previous": "{count, plural, =0 {první žádost} one {# dřívější žádost} few {# dřívější žádosti} other {# dřívějších žádostí}}",
-      "own": "Vaše vlastní žádost: rozhodne jiný admin.",
+      "own": "Tvůj vlastní návrh: Rozhodne o něm jiný správce.",
       "more": "Další žádosti",
       "notices": {
         "verified": "Účet ověřen.",
         "rejected": "Žádost zamítnuta.",
         "revoked": "Ověření odvoláno.",
-        "decided": "O této žádosti už bylo rozhodnuto."
+        "decided": "O této žádosti již bylo rozhodnuto."
       },
       "detail": {
-        "metaTitle": "Kontrola ověření",
+        "metaTitle": "Zkontrolovat ověření",
         "back": "Zpět na seznam",
-        "title": "{type} od {name}",
+        "title": "{type} z {name}",
         "status": "Stav",
-        "submitted": "Podáno",
+        "submitted": "Odesláno",
         "accountType": "Typ účtu",
         "country": "Země",
         "memberSince": "Členem od",
-        "profileStatus": "Stav v profilu",
+        "profileStatus": "Stav profilu",
         "blocked": "Tento účet je zablokovaný.",
-        "own": "Vaše vlastní žádost: rozhodne jiný admin.",
-        "history": "Dřívější žádosti",
-        "historyEmpty": "Žádné dřívější žádosti.",
-        "documentTitle": "Doklad",
-        "documentHint": "Každé zobrazení se zaznamená do auditního protokolu. Doklad se nikdy neukládá do mezipaměti.",
-        "documentShow": "Zobrazit doklad",
-        "documentAgain": "Zobrazit znovu",
-        "documentMissing": "Doklad už byl smazán (lhůta uchování).",
+        "own": "Tvůj vlastní návrh: Rozhodne o něm jiný správce.",
+        "history": "Předchozí žádosti",
+        "historyEmpty": "Žádné předchozí žádosti.",
+        "documentTitle": "Dokument",
+        "documentHint": "Každé vyvolání stránky se zaznamenává do protokolu auditu. Dokument se nikdy neukládá do mezipaměti.",
+        "documentShow": "Zobrazit dokument",
+        "documentAgain": "Zobrazit znovu inzeráty",
+        "documentMissing": "Dokument již byl smazán (doba uchovávání).",
         "pdfLink": "Stáhnout PDF",
-        "imageAlt": "Nahraný doklad: {type}",
+        "imageAlt": "Nahraný dokument: {type}",
         "decision": "Rozhodnutí",
         "verify": "Ověřit",
         "reject": "Zamítnout",
         "reason": "Důvod",
-        "reasonNone": "Vyberte důvod",
+        "reasonNone": "Vyber důvod",
         "note": "Odůvodnění pro uživatele",
-        "noteHint": "Uživatel ho uvidí jako odůvodnění, povinné u „Jiný důvod“. Žádné interní poznámky.",
+        "noteHint": "Uživatel je vnímá jako odůvodnění, povinnost u položky „Jiný důvod“. Žádné interní poznámky.",
         "submit": "Uložit rozhodnutí",
         "revokeTitle": "Odvolat ověření",
-        "revokeHint": "Okamžitě odstraní odznak. Uživatel se to dozví e-mailem s odůvodněním.",
+        "revokeHint": "Odznak se okamžitě odebere. Uživatel dostane e-mail s odůvodněním.",
         "revokeSubmit": "Odvolat",
         "errors": {
-          "code": "Vyberte prosím důvod.",
-          "note": "Odůvodněte prosím rozhodnutí (nejvýše 1000 znaků).",
-          "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
-          "notFound": "Žádost už neexistuje.",
+          "code": "Vyber prosím důvod.",
+          "note": "Prosím, zdůvodni své rozhodnutí (maximálně 1000 znaků).",
+          "forbidden": "To nejde (vlastní účet nebo chybí dvoufaktorové přihlášení).",
+          "notFound": "Žádost již neexistuje.",
           "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
         },
         "documentErrors": {
-          "mismatch": "Obsah souboru neodpovídá žádnému povolenému typu (JPEG, PNG, PDF). Nezobrazí se. Žádost zamítněte.",
-          "missing": "Doklad již není k dispozici.",
-          "forbidden": "Tento doklad nemůžete zobrazit (vlastní žádost nebo chybí dvoufázové přihlášení)."
+          "mismatch": "Obsah souboru neodpovídá žádnému povolenému formátu (JPEG, PNG, PDF). Soubor se nezobrazí. Žádost zamítni.",
+          "missing": "Tento dokument již není k dispozici.",
+          "forbidden": "Tento dokument si nemůžeš prohlédnout (vlastní žádost nebo chybí dvoufaktorové přihlášení)."
         }
       }
     },
     "reports": {
       "metaTitle": "Nahlášení",
       "title": "Otevřená nahlášení",
-      "back": "Zpět do administrace",
+      "back": "Zpět do administrátorské sekce",
       "empty": "Žádná otevřená nahlášení.",
-      "noLabel": "(bez názvu)",
+      "noLabel": "(bez uvedení jména)",
       "count": "{count, plural, one {# nahlášení} few {# nahlášení} other {# nahlášení}}",
       "oldest": "nejstarší {time}",
       "gone": "Obsah již není k dispozici",
       "more": "Další nahlášení",
       "notices": {
-        "resolved": "Nahlášení vyřízena a opatření provedeno.",
-        "decided": "Tato nahlášení již byla vyřízena."
+        "resolved": "Nahlášení vyřízeno a opatření provedeno.",
+        "decided": "Tyto nahlášení jsou již vyřízeny."
       },
-      "detailMetaTitle": "Prověřit nahlášení",
-      "goneHint": "Obsah již neexistuje. Při vyřízení se zaznamená „Obsah již není k dispozici“.",
-      "reviewLink": "Otevřít ve frontě ke schválení",
+      "detailMetaTitle": "Zkontrolovat nahlášení",
+      "goneHint": "Obsah již neexistuje. Při vyřízení se zaznamená „Obsah již neexistuje“.",
+      "reviewLink": "Otevřít ve frontě ke kontrole",
       "publicLink": "Veřejná stránka",
       "account": "Dotčený účet",
       "listings": "{count, plural, one {# inzerát} few {# inzeráty} other {# inzerátů}}",
       "memberSince": "Členem od {date}",
       "blocked": "Účet je zablokovaný.",
-      "hasRole": "Účet má roli: žádné napomenutí ani blokace (nejprve odeberte roli).",
-      "own": "Váš vlastní účet: rozhodne jiný admin.",
+      "hasRole": "Účet má určitou roli: žádné varování ani zablokování (nejprve odebrat roli).",
+      "own": "Tvůj vlastní účet: Rozhoduje jiný správce.",
       "openReports": "{count, plural, =0 {Žádná otevřená nahlášení} one {# otevřené nahlášení} few {# otevřená nahlášení} other {# otevřených nahlášení}}",
       "handledBefore": "{count, plural, one {# dřívější nahlášení již vyřízeno} few {# dřívější nahlášení již vyřízena} other {# dřívějších nahlášení již vyřízeno}}",
       "showMessage": "Zobrazit nahlášenou zprávu",
-      "showMessageHint": "Každé zobrazení se zaznamená do auditního protokolu.",
+      "showMessageHint": "Každý náhled se zaznamenává do protokolu auditu.",
       "messageCaption": "Od {sender}, odesláno {date}",
       "measure": "Rozhodnutí",
       "measures": {
-        "no_action": "Bez opatření",
+        "no_action": "Žádné opatření",
         "content_removed": "Odstranit inzerát",
         "point_removed": "Odstranit bod na mapě",
-        "account_warned": "Napomenout účet",
+        "account_warned": "Varovat účet",
         "account_blocked": "Zablokovat účet"
       },
-      "codeNone": "Vyberte důvod",
-      "codeHint": "Odstranění inzerátu nebo bodu na mapě používá důvod pro inzerát, napomenutí a blokace důvod pro účet.",
-      "note": "Odůvodnění pro dotčené",
-      "noteHint": "Dotčený účet ho uvidí jako odůvodnění; povinné při odstranění a u „Jiný důvod“. Oznamovatelé se dozví jen výsledek. Žádné interní poznámky.",
+      "codeNone": "Vyber důvod",
+      "codeHint": "Odstranění inzerátu nebo bodu na mapě odstraňuje důvod pro inzerát, varování a zablokování odstraňuje důvod pro existenci účtu.",
+      "note": "Odůvodnění pro dotčené osoby",
+      "noteHint": "Jako důvod se uvádí dotčený účet; povinnost při odstranění a v případě „jiného důvodu“. Oznamovatelé se dozví pouze výsledek. Žádné interní poznámky.",
       "submit": "Vyřídit nahlášení",
       "errors": {
-        "changed": "Inzerát se od otevření změnil. Načtěte stránku znovu a zkontrolujte ho.",
-        "code": "Vyberte prosím důvod, který odpovídá opatření.",
-        "note": "Odůvodněte prosím rozhodnutí (nejvýše 1000 znaků).",
-        "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
-        "adminRole": "Účty s rolí nelze napomenout ani zablokovat.",
-        "notFound": "Tento obsah již není k dispozici.",
+        "changed": "Inzeráty se od otevření stránky změnily. Načti stránku znovu a zkontroluj je.",
+        "code": "Vyber prosím důvod, který odpovídá danému opatření.",
+        "note": "Prosím, zdůvodni své rozhodnutí (maximálně 1000 znaků).",
+        "forbidden": "To nejde (vlastní účet nebo chybí dvoufaktorové přihlášení).",
+        "adminRole": "Účty s rolí nelze varovat ani zablokovat.",
+        "notFound": "Tento obsah již neexistuje.",
         "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
       },
-      "codeListing": "Důvod pro inzerát",
-      "codeAccount": "Důvod pro účet"
+      "codeListing": "Důvod u inzerátu",
+      "codeAccount": "Důvod u účtu"
     },
     "users": {
       "metaTitle": "Účty",
       "title": "Vyhledat účet",
-      "back": "Zpět do administrace",
-      "intro": "Přesná e-mailová adresa nebo ID účtu. Každé hledání se zaznamená do auditního protokolu (bez adresy) a počítá se do hodinového limitu.",
+      "back": "Zpět do administrátorské sekce",
+      "intro": "Přesná e-mailová adresa nebo ID účtu. Každé vyhledávání se zaznamenává do protokolu auditu (bez adresy) a započítává se do hodinového limitu.",
       "query": "E-mailová adresa nebo ID účtu",
       "search": "Hledat",
       "errors": {
-        "empty": "Zadejte prosím e-mailovou adresu nebo ID účtu.",
-        "notFound": "Účet nenalezen.",
-        "limit": "Příliš mnoho hledání za poslední hodinu.",
-        "failed": "Hledání se nezdařilo. Zkuste to prosím znovu.",
-        "code": "Vyberte prosím důvod.",
-        "note": "Odůvodněte prosím rozhodnutí (nejvýše 1000 znaků).",
-        "forbidden": "To nejde (vlastní účet nebo chybí dvoufázové přihlášení).",
-        "adminRole": "Účty s rolí nelze napomenout ani zablokovat.",
-        "decided": "Účet už tento stav má."
+        "empty": "Zadej prosím e-mailovou adresu nebo ID účtu.",
+        "notFound": "Účet nebyl nalezen.",
+        "limit": "V poslední hodině bylo provedeno příliš mnoho vyhledávání.",
+        "failed": "Vyhledávání se nezdařilo. Zkuste to prosím znovu.",
+        "code": "Vyber prosím důvod.",
+        "note": "Prosím, zdůvodni své rozhodnutí (maximálně 1000 znaků).",
+        "forbidden": "To nejde (vlastní účet nebo chybí dvoufaktorové přihlášení).",
+        "adminRole": "Účty s rolí nelze varovat ani zablokovat.",
+        "decided": "Účet již tento status má."
       },
       "detailMetaTitle": "Účet",
       "accountType": "Typ účtu",
@@ -942,61 +942,61 @@
       "status": "Stav",
       "blocked": "Zablokovaný",
       "active": "Aktivní",
-      "hasRole": "Tento účet má roli. Před napomenutím nebo blokací roli odeberte.",
+      "hasRole": "Tento účet má přidělenou roli. Odejmi mu tuto roli, než mu udělíš varování nebo zablokuješ účet.",
       "action": "Opatření",
       "actions": {
-        "warn": "Napomenout",
+        "warn": "Upozornit",
         "block": "Zablokovat",
         "unblock": "Odblokovat"
       },
       "code": "Důvod",
-      "codeNone": "Vyberte důvod",
+      "codeNone": "Vyber důvod",
       "note": "Odůvodnění pro účet",
-      "noteHint": "Účet ho uvidí jako odůvodnění (povinné u „Jiný důvod“). Žádné interní poznámky.",
+      "noteHint": "Účet uvádí jako důvod (povinné při volbě „Jiný důvod“). Žádné interní poznámky.",
       "submit": "Provést",
       "notices": {
         "block": "Účet zablokován.",
         "unblock": "Účet odblokován.",
-        "warn": "Napomenutí odesláno."
+        "warn": "Varování odesláno."
       }
     },
     "appeals": {
       "metaTitle": "Stížnosti",
-      "title": "Otevřené stížnosti",
-      "back": "Zpět do administrace",
+      "title": "Nevyřízené stížnosti",
+      "back": "Zpět do administrátorské sekce",
       "empty": "Žádné otevřené stížnosti.",
       "itemTitle": "{action}: {name}",
-      "waiting": "Podáno {time}",
-      "byMe": "Vaše vlastní původní rozhodnutí",
+      "waiting": "Vloženo {time}",
+      "byMe": "Tvé vlastní původní rozhodnutí",
       "more": "Další stížnosti",
       "notices": {
-        "upheld": "Stížnost zamítnuta, rozhodnutí zůstává.",
-        "reversed": "Stížnosti vyhověno, opatření bylo vzato zpět.",
+        "upheld": "Stížnost byla zamítnuta, rozhodnutí zůstává v platnosti.",
+        "reversed": "Stížnosti bylo vyhověno, opatření bylo zrušeno.",
         "decided": "O této stížnosti již bylo rozhodnuto."
       },
       "detailMetaTitle": "Prověřit stížnost",
-      "submitted": "Podáno dne {date}",
+      "submitted": "Vloženo {date}",
       "decision": "Původní rozhodnutí",
-      "decisionGone": "Původní rozhodnutí již není uloženo (lhůta uchování).",
+      "decisionGone": "Původní rozhodnutí již není uloženo (doba uchovávání).",
       "code": "Kód",
       "targetLink": "Zobrazit nahlášení k tomuto inzerátu",
       "text": "Odůvodnění stížnosti",
       "status": {
         "upheld": "Zamítnuto",
-        "reversed": "Vyhověno"
+        "reversed": "Schváleno"
       },
-      "sameReviewer": "rozhodl stejný admin, jiný admin není k dispozici",
+      "sameReviewer": "rozhodl stejný správce, žádný jiný správce není k dispozici",
       "outcome": "Rozhodnutí",
       "outcomes": {
-        "upheld": "Zamítnout stížnost (rozhodnutí zůstává)",
-        "reversed": "Vyhovět stížnosti (vzít opatření zpět)"
+        "upheld": "Stížnost zamítnout (rozhodnutí zůstává v platnosti)",
+        "reversed": "Stížnosti vyhovět (opatření zrušit)"
       },
-      "note": "Odůvodnění pro osobu",
-      "noteHint": "Povinné. Osoba, která si stěžovala, ho uvidí. Žádné interní poznámky.",
+      "note": "Odůvodnění pro danou osobu",
+      "noteHint": "Povinnost. Osoba, která podala námitku, je uvidí. Žádné interní poznámky.",
       "submit": "Uložit rozhodnutí",
       "errors": {
-        "note": "Odůvodněte prosím rozhodnutí (1 až 1000 znaků).",
-        "forbidden": "Musí rozhodnout jiný admin: původní rozhodnutí jste učinili vy.",
+        "note": "Prosím, zdůvodni své rozhodnutí (1 až 1000 znaků).",
+        "forbidden": "Rozhodnout musí jiný správce: Ty jsi učinil původní rozhodnutí.",
         "notFound": "Tato stížnost již neexistuje.",
         "failed": "Uložení se nezdařilo. Zkuste to prosím znovu."
       }
@@ -1015,7 +1015,7 @@
     },
     "decisions": {
       "approve": "Schválit",
-      "request_changes": "Vyžádat úpravy",
+      "request_changes": "Vyžádat si úpravy",
       "reject": "Zamítnout"
     },
     "accountCodes": {
@@ -1031,78 +1031,78 @@
     "gone": {
       "metaTitle": "Již není k dispozici",
       "title": "Tato stránka již není k dispozici",
-      "text": "Inzerát nebo profil inzerenta již není veřejný.",
-      "toSearch": "Přejít na hledání"
+      "text": "Inzerát nebo profil poskytovatele již není veřejně přístupný.",
+      "toSearch": "K vyhledávání"
     },
     "home": {
       "kindsHeading": "Kategorie.",
       "countriesHeading": "Podle země.",
       "countrySoon": "{country} (brzy)",
       "newestHeading": "Nejnovější inzeráty.",
-      "newestEmpty": "Zatím nejsou zveřejněny žádné inzeráty.",
+      "newestEmpty": "Zatím nebyly zveřejněny žádné inzeráty.",
       "newestError": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
-      "loading": "Načítání inzerátů …",
+      "loading": "Načítání inzerátů…",
       "allListings": "Všechny inzeráty",
       "crumb": "Úvod",
-      "heroText": "Pronájem honitby, povolenka k lovu nebo místo na naháňce. Přímo od myslivce k myslivci.",
+      "heroText": "Pacht, povolenka k lovu nebo místo na hnacím honu. Přímo od lovce k lovci.",
       "heroCta": "Podat inzerát",
-      "trustHeading": "Bezpečně mezi myslivci.",
-      "trustVerified": "Ověření myslivci se zkontrolovaným loveckým lístkem",
-      "trustLocation": "Přesná poloha honitby zůstává chráněna",
-      "trustReview": "Každý inzerát před zveřejněním kontrolujeme"
+      "trustHeading": "Bezpečně mezi lovci.",
+      "trustVerified": "Ověření lovci s ověřeným loveckým lístečkem",
+      "trustLocation": "Přesná poloha revíru zůstává utajena",
+      "trustReview": "Každý inzerát je před zveřejněním zkontrolován"
     },
     "card": {
-      "photoAlt": "{title}, fotografie 1",
+      "photoAlt": "{title}, foto 1",
       "postalArea": "PSČ {prefix}…",
       "verified": "ověřený",
-      "published": "zveřejněno {date}",
+      "published": "zveřejněno dne {date}",
       "area": "{area} ha"
     },
     "search": {
-      "heading": "Hledat inzeráty",
-      "metaTitle": "Hledání"
+      "heading": "Vyhledat inzeráty",
+      "metaTitle": "Vyhledávání"
     },
     "list": {
-      "states": "Podle spolkové země nebo kraje",
+      "states": "Podle spolkové země nebo regionu",
       "districts": "Podle okresu",
       "results": "Výsledky",
       "count": "{count, plural, =0 {Žádné inzeráty} one {# inzerát} few {# inzeráty} other {# inzerátů}}",
       "countCapped": "Více než 1000 inzerátů",
-      "empty": "Žádné odpovídající inzeráty. Uvolněte filtry nebo hledejte v jiném regionu.",
+      "empty": "Žádné vhodné inzeráty. Uvolni filtry nebo zkus hledat v jiném regionu.",
       "paging": "Stránky",
       "first": "Na první stránku",
       "next": "Další stránka",
-      "invalid": "Filtry jsou neplatné. Zkontrolujte prosím zadání.",
+      "invalid": "Filtry nejsou platné. Zkontroluj prosím své zadání.",
       "failed": "Inzeráty se nepodařilo načíst. Zkuste to prosím později.",
       "metaDescription": "{title}: aktuální nabídky a poptávky na Revier.",
-      "queryTooLong": "Hledaný výraz je příliš dlouhý. Použijte prosím méně slov."
+      "queryTooLong": "Hledaný výraz je příliš dlouhý. Použij prosím méně slov."
     },
     "filters": {
       "heading": "Filtry",
       "q": "Hledaný výraz",
-      "any": "Vše",
-      "region": "Spolková země nebo kraj",
-      "priceHint": "Ceny se nepřepočítávají: s měnou se zobrazí jen inzeráty v této měně, inzeráty bez ceny a „na dotaz“ pak vypadnou.",
+      "any": "Všechny",
+      "region": "Spolková země nebo region",
+      "priceHint": "Ceny se nepřepočítávají: u dané měny se zobrazují pouze inzeráty v této měně, inzeráty bez uvedení ceny a s poznámkou „na vyžádání“ se pak nezobrazují.",
       "min": "od",
-      "max": "do",
+      "max": "až",
       "period": "Období",
-      "periodHint": "Inzeráty bez období vypadnou. U společných honů se počítá termín, pokud je zvolen tento druh.",
+      "periodHint": "Inzeráty bez uvedení časového období se vyřazují. U společných honů platí termín, jakmile je vybrán druh zvěře.",
       "from": "od",
-      "to": "do",
-      "verifiedOnly": "Jen ověření inzerenti",
-      "sort": "Řazení",
-      "sortHint": "Řazení podle ceny jen s měnou a jednotkou.",
+      "to": "až",
+      "verifiedOnly": "Pouze ověření inzerenti",
+      "sort": "Třídění",
+      "sortHint": "Třídění podle ceny je možné pouze podle měny a jednotky.",
       "apply": "Použít filtry",
-      "reset": "Zrušit filtry",
+      "reset": "Vynulovat filtry",
       "sorts": {
-        "newest": "Nejnovější",
+        "newest": "Nejnovější jako první",
         "price_asc": "Cena vzestupně",
         "price_desc": "Cena sestupně",
-        "relevance": "Relevance (s hledaným výrazem)"
+        "relevance": "Relevance (s vyhledávacím výrazem)"
       }
     },
     "detail": {
-      "breadcrumb": "Drobečková navigace",
+      "breadcrumb": "Navigační lišta",
       "gallery": "Fotografie",
       "photoAlt": "{title}, fotografie {n} z {m}",
       "postalArea": "Oblast PSČ {prefix}…",
@@ -1110,44 +1110,44 @@
       "published": "Zveřejněno",
       "provider": "Inzerent",
       "verified": "ověřený",
-      "contactLogin": "Kontaktovat inzerenta (nutné přihlášení)",
-      "ownListing": "Toto je váš inzerát.",
+      "contactLogin": "Kontaktovat inzerenta (nutné se přihlásit)",
+      "ownListing": "Toto je tvůj inzerát.",
       "contact": "Napsat zprávu",
       "report": "Nahlásit inzerát",
       "facts": "Základní údaje",
       "description": "Popis",
-      "safety": "Bezpečnostní tipy",
-      "safety1": "Nikdy neplaťte předem bez písemné smlouvy",
-      "safety2": "Prohlédněte si honitbu osobně",
-      "safety3": "Ověřte lovecký lístek a údaje inzerenta",
-      "contactPrivate": "Kontakt pouze přes chat. Telefon a e-mail zůstávají skryté."
+      "safety": "Bezpečnostní pokyny",
+      "safety1": "Žádná záloha bez písemné smlouvy",
+      "safety2": "Prohlídka loveckého revíru na místě",
+      "safety3": "Zkontroluj lovecký lístek a údaje inzerenta",
+      "contactPrivate": "Kontakt pouze prostřednictvím chatu. Telefonní číslo a e-mail zůstávají skryté."
     },
     "provider": {
-      "breadcrumb": "Drobečková navigace",
+      "breadcrumb": "Navigační lišta",
       "verified": "ověřený",
       "listings": "Aktivní inzeráty",
-      "empty": "Momentálně žádné aktivní inzeráty.",
+      "empty": "V současné době nejsou k dispozici žádné aktivní inzeráty.",
       "paging": "Stránky",
       "first": "Na první stránku",
       "next": "Další stránka",
-      "metaDescription": "Inzeráty od {name} na Revier.",
+      "metaDescription": "Inzeráty s obrázky {name} na stránkách Revier.",
       "report": "Nahlásit inzerenta"
     }
   },
   "Favorites": {
-    "metaTitle": "Oblíbené",
-    "title": "Oblíbené",
+    "metaTitle": "Uložené inzeráty",
+    "title": "Uložené inzeráty",
     "back": "Zpět na účet",
     "save": "Uložit",
     "saved": "Uloženo",
     "saveLabel": "Uložit „{title}“",
-    "empty": "Zatím jste si neuložili žádné inzeráty.",
+    "empty": "Ještě jsi si neuložil žádné inzeráty.",
     "unavailable": "{count, plural, one {# uložený inzerát již není k dispozici} few {# uložené inzeráty již nejsou k dispozici} other {# uložených inzerátů již není k dispozici}}.",
     "removeUnavailable": "Odstranit nedostupné",
-    "removedNotice": "Nedostupné oblíbené inzeráty byly odstraněny.",
-    "failed": "Nepodařilo se. Zkuste to prosím znovu.",
-    "limit": "Uložit můžete nejvýše 500 inzerátů.",
-    "loadFailed": "Vaše oblíbené inzeráty se nepodařilo načíst. Zkuste to prosím později."
+    "removedNotice": "Oblíbené položky, které již nejsou k dispozici, byly odstraněny.",
+    "failed": "To se nepodařilo. Zkuste to prosím znovu.",
+    "limit": "Můžeš si uložit maximálně 500 inzerátů.",
+    "loadFailed": "Tvé oblíbené položky se nepodařilo načíst. Zkus to prosím později znovu."
   },
   "Map": {
     "viewLabel": "Zobrazení",
@@ -1155,47 +1155,47 @@
     "viewMap": "Mapa",
     "label": "Mapa inzerátů",
     "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© přispěvatelé OpenStreetMap</a> · Protomaps",
-    "failed": "Mapu nelze v tomto prohlížeči zobrazit (chybí WebGL). Seznam níže ukazuje všechny inzeráty.",
-    "noscript": "Mapa potřebuje JavaScript. Seznam níže ukazuje všechny inzeráty.",
-    "loading": "Načítání inzerátů …",
+    "failed": "V tomto prohlížeči nelze mapu zobrazit (chybí WebGL). Seznam níže zobrazuje všechny inzeráty.",
+    "noscript": "Mapa vyžaduje JavaScript. Seznam níže zobrazuje všechny inzeráty.",
+    "loading": "Načítání inzerátů…",
     "loadFailed": "Inzeráty pro mapu se nepodařilo načíst.",
-    "retry": "Zkusit znovu",
-    "truncated": "Pro tento výřez je příliš mnoho inzerátů. Přibližte prosím mapu.",
+    "retry": "Zkusit to znovu",
+    "truncated": "Pro tento výřez je příliš mnoho inzerátů. Prosím, přibližte si obrázek.",
     "searchArea": "Hledat v této oblasti",
-    "searchAreaHint": "Inzeráty bez vlastního bodu se počítají se středem svého okresu.",
-    "stack": "{count} inzerátů na tomto místě",
+    "searchAreaHint": "Inzeráty bez vlastního bodu se počítají podle středu jejich kruhu.",
+    "stack": "{count} Inzeráty na tomto místě",
     "close": "Zavřít",
-    "count": "{count} inzerátů na mapě",
-    "areaActive": "Filtrováno podle oblasti mapy.",
-    "areaRemove": "Odstranit oblast",
-    "approxPoint": "Přibližná poloha (posunuto o 3–5 km)",
+    "count": "{count} Inzeráty na mapě",
+    "areaActive": "Filtrováno podle oblasti na mapě.",
+    "areaRemove": "Zrušit oblast",
+    "approxPoint": "Přibližná poloha (posun o 3–5 km)",
     "approxDistrict": "Poloha v okrese, bez přesného bodu",
-    "cluster": "{count} inzerátů, přiblížit",
+    "cluster": "Inzeráty: {count}, přiblížit",
     "locationHeading": "Poloha",
-    "detailPoint": "Přibližná poloha: bod na mapě je posunut o 3–5 km. Přesnou polohu sdělí inzerent v chatu.",
+    "detailPoint": "Přibližná poloha: Bod na mapě je posunut o 3–5 km. Přesnou polohu sdělí inzerent v chatu.",
     "detailDistrict": "Poloha v okrese {district}, bez přesného bodu. Přesnou polohu sdělí inzerent v chatu.",
     "showMap": "Zobrazit mapu",
     "detailLabel": "Mapa s přibližnou polohou",
-    "noscriptDetail": "Mapa potřebuje JavaScript.",
+    "noscriptDetail": "Mapa vyžaduje JavaScript.",
     "picker": {
-      "legend": "Bod na mapě (nepovinné)",
-      "hint": "Uloží se jen posunutý bod, 3–5 km od zvoleného. Posun zůstává stejný pro všechny vaše inzeráty v tomto okrese. Stačí přesnost na několik set metrů.",
-      "otherPoints": "V tomto okrese už máte inzerát s bodem na jiném místě. Více bodů v jednom okrese ukazuje, jak vaše honitby leží vůči sobě. Spolu s hranicí okresu to může polohu zúžit.",
-      "districtChange": "Změníte-li okres, bod se odstraní. Uložené kopie starých stránek mohou stále ukazovat předchozí bod.",
-      "noscript": "Bod lze nastavit jen s JavaScriptem. Bez bodu mapa ukazuje střed okresu.",
+      "legend": "Bod na mapě (volitelně)",
+      "hint": "Ukládá se pouze posunutý bod, který je odstraněn o vzdálenost 3–5 km od zvoleného místa. Pro všechny tvé inzeráty v tomto okruhu zůstává posunutý o stejnou vzdálenost. Přesnost na několik set metrů stačí.",
+      "otherPoints": "V tomto kruhu už máš jinde inzerát s tečkou. Více teček v jednom kruhu ukazuje, jak jsou tvá loviště vzájemně rozmístěna. Spolu s okrajem kruhu to může vymezit polohu.",
+      "districtChange": "Pokud změníš okres, bude tento bod odstraněn. Uložené kopie starších stránek mohou tento bod stále zobrazovat.",
+      "noscript": "Tuto tečku můžeš nastavit pouze pomocí JavaScriptu. Bez tečky mapa zobrazuje střed kruhu.",
       "label": "Mapa pro výběr bodu",
-      "setCentre": "Nastavit bod ve středu mapy",
+      "setCentre": "Umístit bod do středu mapy",
       "remove": "Odstranit bod",
       "discard": "Zrušit výběr",
-      "chosen": "Bod vybrán. Použije se při uložení.",
-      "removed": "Bod bude při uložení odstraněn.",
-      "publicMarker": "Jak se poloha zobrazí veřejně (posunutá)",
-      "chosenMarker": "Vybraný bod, zatím neuložený"
+      "chosen": "Položka vybrána. Bude převzata při uložení.",
+      "removed": "Tečka je při uložení odstraněna.",
+      "publicMarker": "Takto se situace jeví veřejnosti (zprostředkovaně)",
+      "chosenMarker": "Vybraný bod, dosud neuložen"
     },
     "controls": {
-      "zoomIn": "Přiblížit",
-      "zoomOut": "Oddálit",
-      "resetBearing": "Natočit k severu",
+      "zoomIn": "Zvětšit",
+      "zoomOut": "Zmenšit",
+      "resetBearing": "Zaměřit se na sever",
       "toggleAttribution": "Zobrazit nebo skrýt zdroje",
       "mapFeedback": "Zpětná vazba k mapě",
       "mapTitle": "Mapa",
@@ -1207,137 +1207,137 @@
     "metaTitle": "Zprávy",
     "title": "Zprávy",
     "back": "Zpět na účet",
-    "empty": "Zatím žádné konverzace. Napište nabízejícímu přímo z inzerátu.",
+    "empty": "Zatím žádné konverzace. Napiš inzerentovi přímo z inzerátu.",
     "loadFailed": "Konverzace se nepodařilo načíst.",
     "more": "Starší konverzace",
     "listingUnavailable": "Inzerát již není k dispozici",
     "listingDeleted": "Inzerát smazán",
     "accountUnavailable": "Účet již není k dispozici",
     "unread": "{count, plural, one {# nepřečtená zpráva} few {# nepřečtené zprávy} other {# nepřečtených zpráv}}",
-    "you": "Vy:",
-    "roleOwner": "K vašemu inzerátu",
+    "you": "Ty:",
+    "roleOwner": "K tvému inzerátu",
     "nav": "Zprávy",
-    "navUnread": "Zprávy, nepřečtené: {count}",
+    "navUnread": "Zprávy, {count} nepřečtené",
     "conversation": {
       "metaTitle": "Konverzace",
       "backToList": "Všechny zprávy",
-      "notFound": "Tato konverzace neexistuje nebo nepatří k vašemu účtu.",
+      "notFound": "Tato konverzace neexistuje, nebo nepatří k tvému účtu.",
       "older": "Načíst starší zprávy",
       "read": "Přečteno",
       "sent": "Odesláno",
-      "messagesLabel": "Zprávy v této konverzaci",
+      "messagesLabel": "Zprávy z této konverzace",
       "listingLink": "Zobrazit inzerát"
     },
     "composer": {
-      "label": "Vaše zpráva",
+      "label": "Tvá zpráva",
       "send": "Odeslat",
       "sending": "Odesílá se …",
       "count": "{count} z {max} znaků",
-      "shortcut": "Ctrl+Enter nebo Cmd+Enter zprávu odešle."
+      "shortcut": "Zprávu odešleš klávesami Ctrl+Enter nebo Cmd+Enter."
     },
     "errors": {
-      "body": "Zpráva je prázdná, příliš dlouhá nebo obsahuje nepovolené znaky.",
-      "legal": "Nejprve prosím odsouhlaste aktuální podmínky užívání.",
-      "rate": "V krátké době jste napsali mnoho zpráv. Zkuste to prosím později.",
-      "rateUnanswered": "Před dalšími zprávami prosím počkejte na odpověď.",
-      "rateConversations": "Dnes jste již zahájili mnoho konverzací. Zkuste to prosím později.",
+      "body": "Zpráva je prázdná, příliš dlouhá nebo obsahuje nepřípustné znaky.",
+      "legal": "Nejprve prosím souhlas s aktuálními podmínkami použití.",
+      "rate": "V krátké době jsi napsal/a mnoho zpráv. Zkus to prosím později znovu.",
+      "rateUnanswered": "Než napíšeš další zprávy, počkej prosím na odpověď.",
+      "rateConversations": "Dnes jsi již zahájil mnoho konverzací. Zkus to prosím později znovu.",
       "unavailable": "Do této konverzace již nelze psát.",
       "failed": "Zprávu se nepodařilo odeslat. Zkuste to prosím znovu."
     },
-    "blockedByMe": "Tuto osobu jste zablokovali.",
+    "blockedByMe": "Tuto osobu jsi zablokoval.",
     "cannotWrite": "Do této konverzace již nelze psát.",
-    "safety": "Bezpečnostní upozornění: nikdy neplaťte předem lidem, které neznáte, a nesdělujte hesla ani přístupy do bankovnictví. Podezřelé zprávy nahlaste.",
+    "safety": "Bezpečnostní upozornění: Nikdy neplať předem lidem, které neznáš, a nikomu nesděluj hesla ani přístupy do bankovnictví. Podezřelé zprávy nahlas.",
     "new": {
       "metaTitle": "Napsat zprávu",
       "title": "Zpráva k tomuto inzerátu",
-      "intro": "Vaše první zpráva půjde nabízejícímu. Kontaktní údaje si vyměňujete jen zde v chatu.",
-      "ownListing": "Toto je váš vlastní inzerát.",
-      "unavailable": "K tomuto inzerátu nemůžete napsat zprávu."
+      "intro": "Tvoje první zpráva jde inzerentovi. Kontaktní údaje si vyměníte jen tady v chatu.",
+      "ownListing": "Toto je tvůj vlastní inzerát.",
+      "unavailable": "K tomuto inzerátu nelze napsat zprávu."
     },
     "menu": {
       "label": "Akce",
-      "block": "Zablokovat tuto osobu",
+      "block": "Zablokovat osobu",
       "unblock": "Odblokovat",
       "reportProfile": "Nahlásit profil",
       "reportMessage": "Nahlásit zprávu"
     },
     "notices": {
-      "blocked": "Tuto osobu jste zablokovali. Už vám nemůže psát.",
-      "unblocked": "Blokování jste zrušili.",
-      "reported": "Děkujeme. Vaše hlášení dostala moderace.",
-      "failed": "Nepodařilo se. Zkuste to prosím znovu."
+      "blocked": "Tuto osobu jsi zablokoval. Už ti nemůže psát.",
+      "unblocked": "Odblokoval jsi.",
+      "reported": "Děkujeme. Tvé nahlášení bylo doručeno moderátorům.",
+      "failed": "To se nepodařilo. Zkus to prosím znovu."
     },
     "report": {
       "metaTitle": "Nahlásit",
       "titleMessage": "Nahlásit zprávu",
       "titleProfile": "Nahlásit profil",
       "reason": "Důvod",
-      "note": "Poznámka (nepovinné)",
-      "noteHint": "Nejvýše 1000 znaků. Nezadávejte hesla ani bankovní údaje.",
-      "submit": "Odeslat hlášení",
-      "cancel": "Zpět do konverzace",
+      "note": "Poznámka (volitelné)",
+      "noteHint": "Nejvýše 1000 znaků. Nezadávej hesla ani bankovní údaje.",
+      "submit": "Odeslat nahlášení",
+      "cancel": "Zpět ke konverzaci",
       "quoted": "Nahlášená zpráva",
       "reasons": {
-        "scam": "Podvod nebo platba předem",
+        "scam": "Podvod nebo podvod s platbou předem",
         "harassment": "Obtěžování nebo urážky",
         "illegal": "Protiprávní obsah",
         "weapons": "Nabídka zbraní nebo střeliva",
         "other": "Jiný důvod"
       },
       "errors": {
-        "reason": "Vyberte prosím důvod.",
-        "limit": "Dnes jste již odeslali mnoho hlášení. Zkuste to prosím zítra.",
-        "failed": "Hlášení se nepodařilo odeslat. Zkuste to prosím znovu.",
-        "duplicate": "Toto jste už nahlásili. Vaše nahlášení se prověřuje."
+        "reason": "Vyber prosím důvod.",
+        "limit": "Dnes jsi již odeslal mnoho nahlášení. Zkus to prosím zítra znovu.",
+        "failed": "Nahlášení se nepodařilo odeslat. Zkuste to prosím znovu.",
+        "duplicate": "To už jsi nahlásil. Tvé nahlášení se prověřuje."
       }
     },
     "blocked": {
       "metaTitle": "Zablokované osoby",
       "title": "Zablokované osoby",
-      "intro": "Zablokované osoby vám nemohou psát a vy nemůžete psát jim.",
-      "empty": "Nikoho jste nezablokovali.",
+      "intro": "Zablokované osoby ti nemohou psát a ty jim také nemůžeš psát.",
+      "empty": "Nikoho jsi nezablokoval.",
       "unblock": "Odblokovat",
       "unknown": "Účet již není k dispozici",
       "since": "Zablokováno od {date}",
       "link": "Zablokované osoby"
     },
     "hints": {
-      "contact": "Vaše zpráva obsahuje kontaktní údaje (telefon, e-mail nebo bankovní spojení). Sdílejte je jen tehdy, když druhé straně důvěřujete. Nikdy neplaťte předem.",
-      "location": "Vaše zpráva zřejmě obsahuje přesnou polohu. Kdo ji zná, může odvodit i přibližnou polohu vašich dalších inzerátů v tomto okrese."
+      "contact": "Tvá zpráva obsahuje kontaktní údaje (telefon, e-mail nebo bankovní údaje). Sdílej je pouze tehdy, pokud dané osobě důvěřuješ. Nikdy neplať předem.",
+      "location": "Tvá zpráva zřejmě obsahuje přesnou polohu. Kdo ji zná, může odvodit i přibližnou polohu tvých dalších inzerátů v tomto okrese."
     },
     "notifications": {
-      "title": "Upozornění",
+      "title": "Oznámení",
       "chatEmail": "E-mail při nových zprávách",
-      "hint": "Nejvýše jeden e-mail za 15 minut, bez textu zprávy. E-maily chodí na adresu, kterou používáte k přihlášení.",
+      "hint": "Nanejvýš jeden e-mail každých 15 minut, bez textu zprávy. E-maily jsou zasílány na adresu, na kterou se přihlásíš.",
       "save": "Uložit nastavení",
-      "saved": "Nastavení upozornění bylo uloženo.",
+      "saved": "Tvé nastavení oznámení je uloženo.",
       "failed": "Nastavení se nepodařilo uložit. Zkuste to prosím znovu."
     },
-    "legalRequired": "Abyste mohli psát, odsouhlaste nejprve aktuální podmínky užívání. Blokování a nahlášení zůstávají možné.",
-    "legalLink": "K podmínkám užívání"
+    "legalRequired": "Chceš-li psát, nejdřív prosím souhlas s aktuálními podmínkami použití. Blokování a nahlášení zůstávají možné.",
+    "legalLink": "K podmínkám použití"
   },
   "SavedSearches": {
     "quoted": "„{text}“",
-    "mapArea": "Výřez mapy",
+    "mapArea": "Výřez z mapy",
     "allListings": "Všechny inzeráty",
-    "legalLink": "Souhlasit s aktuálními podmínkami",
-    "manageLink": "Spravovat uložená hledání",
+    "legalLink": "Přijmout aktuální podmínky",
+    "manageLink": "Správa uložených hledání",
     "save": {
-      "open": "Uložit hledání",
-      "intro": "Pošleme vám e-mail, jakmile budou schváleny nové inzeráty odpovídající těmto filtrům.",
-      "summary": "Filtry tohoto hledání",
-      "noFilters": "Žádné filtry: odpovídá každý nový inzerát.",
-      "mapAreaHint": "Uloží se i výřez mapy: hlásí se jen inzeráty v této oblasti a „Zobrazit výsledky“ otevře mapu.",
-      "runtime": "Uložené hledání běží 6 týdnů. V posledních 14 dnech je můžete prodloužit ve svém účtu.",
+      "open": "Uložit vyhledávání",
+      "intro": "Jakmile budou schváleny nové inzeráty odpovídající těmto filtrům, zašleme ti e-mail.",
+      "summary": "Filtry tohoto uloženého hledání",
+      "noFilters": "Žádné filtry: Každý nový inzerát je vhodný.",
+      "mapAreaHint": "Úsek mapy se ukládá spolu s daty: Inzeráty v této oblasti se nahlásí a tlačítko „Zobrazit výsledky“ otevře mapu.",
+      "runtime": "Uložené hledání platí 6 týdnů. V posledních 14 dnech jej můžeš ve svém účtu prodloužit.",
       "submit": "Vytvořit uložené hledání",
       "saving": "Ukládá se …",
-      "signIn": "Přihlaste se a uložte toto hledání"
+      "signIn": "Přihláste se, abyste si toto vyhledávání uložili"
     },
     "fields": {
       "name": "Název",
-      "nameHint": "1 až 100 znaků. Název vidíte jen vy.",
+      "nameHint": "1 až 100 znaků. Jméno uvidíš jen ty.",
       "cadence": "Četnost e-mailů",
-      "notifyEmail": "E-mail při nových odpovídajících inzerátech",
+      "notifyEmail": "E-mail při nových vhodných inzerátech",
       "email": "E-mail",
       "lastNotified": "Poslední e-mail"
     },
@@ -1346,92 +1346,92 @@
       "daily": "Denně"
     },
     "cadenceHint": {
-      "instant": "Několik minut po schválení, více inzerátů v jednom e-mailu.",
-      "daily": "Jeden souhrnný e-mail ráno."
+      "instant": "Několik minut po schválení, několik inzerátů seskupených v jednom e-mailu.",
+      "daily": "Ráno hromadný e-mail."
     },
     "email": {
       "on": "Zapnuto",
       "off": "Vypnuto"
     },
     "status": {
-      "active": "Aktivní, běží do {date}",
-      "expiring": "Vyprší {date}",
-      "paused": "Pozastaveno, přesto vyprší {date}",
-      "pausedHint": "Pozastavení nezastaví dobu běhu. Inzeráty schválené během pozastavení se dodatečně nehlásí.",
-      "expired": "Vypršelo {date}. Pokud je neprodloužíte, bude {deleteDate} smazáno."
+      "active": "Aktivní, trvá do {date}",
+      "expiring": "Platnost vyprší {date}",
+      "paused": "Pozastaveno, přesto se přehrává na {date}",
+      "pausedHint": "Pozastavení nezastaví dobu trvání. Inzeráty, které budou schváleny během pozastavení, nebudou dodatečně zaznamenány.",
+      "expired": "Platnost vypršela {date}. Bude smazán {deleteDate}, pokud jej neprodloužíš."
     },
     "actions": {
       "results": "Zobrazit výsledky",
       "pause": "Pozastavit",
-      "resume": "Obnovit",
+      "resume": "Pokračovat",
       "extend": "Prodloužit o 6 týdnů",
-      "extendFrom": "Prodloužit je můžete od {date}.",
+      "extendFrom": "Prodloužit si můžeš od {date}.",
       "emailOn": "Zapnout e-mail",
       "emailOff": "Vypnout e-mail",
-      "toInstant": "Přepnout na ihned",
-      "toDaily": "Přepnout na denně",
+      "toInstant": "Přepnout na „ihned“",
+      "toDaily": "Přepnout na „denně“",
       "rename": "Přejmenovat",
       "renameSubmit": "Uložit název",
       "delete": "Smazat",
-      "deleteConfirm": "Smazat „{name}“? Tuto akci nelze vrátit.",
+      "deleteConfirm": "„{name}“ smazat? To nelze vrátit zpět.",
       "deleteYes": "Trvale smazat",
       "cancel": "Zrušit"
     },
     "notices": {
-      "created": "Vaše hledání bylo uloženo.",
+      "created": "Tvůj uložený hledání byl uložen.",
       "paused": "Uložené hledání je pozastaveno.",
       "resumed": "Uložené hledání je opět aktivní.",
-      "extended": "Uložené hledání nyní poběží dalších 6 týdnů.",
+      "extended": "Uložené hledání nyní potrvá dalších 6 týdnů.",
       "emailOn": "E-maily jsou zapnuté.",
       "emailOff": "E-maily jsou vypnuté.",
-      "cadence": "Četnost e-mailů byla změněna.",
-      "renamed": "Název byl uložen.",
+      "cadence": "Změnila se frekvence zasílání e-mailů.",
+      "renamed": "Jméno je uloženo.",
       "deleted": "Uložené hledání bylo smazáno."
     },
     "errors": {
-      "name": "Zadejte prosím název o délce 1 až 100 znaků.",
-      "invalid": "Tyto filtry nelze uložit. Zkontrolujte je prosím ve vyhledávání.",
-      "queryTooLong": "Hledaný výraz je pro uložení příliš dlouhý. Použijte prosím méně slov.",
-      "limit": "Můžete mít nejvýše 25 uložených hledání včetně vypršelých. Nejprve prosím jedno smažte.",
-      "legal": "Nejprve prosím souhlaste s aktuálními podmínkami užívání a zásadami ochrany osobních údajů.",
+      "name": "Zadej prosím jméno o délce 1 až 100 znaků.",
+      "invalid": "Tyto filtry nelze uložit. Zkontroluj je prosím při vyhledávání.",
+      "queryTooLong": "Vyhledávací výraz je příliš dlouhý na uložení. Použij prosím méně slov.",
+      "limit": "Můžeš mít maximálně 25 uložených hledání, včetně těch, jejichž platnost již vypršela. Nejprve prosím jeden smaž.",
+      "legal": "Nejprve prosím souhlas s aktuálními podmínkami použití a zásadami ochrany osobních údajů.",
       "extendNotYet": "Toto uložené hledání zatím nelze prodloužit.",
-      "unavailable": "To není možné: uložené hledání již neexistuje nebo je váš účet zablokován.",
-      "failed": "Nepodařilo se. Zkuste to prosím později."
+      "unavailable": "To nejde: Uložené hledání již neexistuje nebo je tvůj účet zablokovaný.",
+      "failed": "To se nepodařilo. Zkuste to prosím později znovu."
     },
     "page": {
       "metaTitle": "Uložená hledání",
       "title": "Uložená hledání",
       "back": "Zpět na účet",
-      "intro": "Dostanete e-mail, když bude schválen nový inzerát odpovídající některému z vašich uložených hledání. Každé uložené hledání běží 6 týdnů.",
-      "empty": "Zatím nemáte žádná uložená hledání.",
-      "toSearch": "Přejít na vyhledávání a jedno uložit",
-      "count": "Uložená hledání: {count} z {max}",
-      "loadFailed": "Vaše uložená hledání se nepodařilo načíst. Zkuste to prosím později.",
-      "invalidFilters": "Filtry tohoto uloženého hledání již nejsou platné. Uložte prosím hledání znovu."
+      "intro": "Dostaneš e-mail, jakmile bude schválen nový inzerát, který odpovídá jednomu z tvých uložených hledání. Každé uložené hledání platí 6 týdnů.",
+      "empty": "Ještě nemáš žádné uložené hledání.",
+      "toSearch": "Vyhledávání a uložení položky",
+      "count": "{count} z {max} uloženého hledání",
+      "loadFailed": "Tvá uložená hledání se nepodařilo načíst. Zkus to prosím později znovu.",
+      "invalidFilters": "Filtry tohoto uloženého hledání již nejsou platné. Ulož prosím hledání znovu."
     }
   },
   "Unsubscribe": {
     "metaTitle": "Odhlásit odběr",
-    "title": "Odhlásit odběr e-mailů",
-    "intro": "Potvrďte odhlášení e-mailů, ke kterým patří tento odkaz: u uložených hledání hledání z tohoto e-mailu, u chatu e-maily o nových zprávách.",
+    "title": "Odhlášení odběru e-mailů",
+    "intro": "Potvrď odhlášení e-mailů k tomuto odkazu: u uložených hledání jde o hledání z tohoto e-mailu, u chatu o e-maily o nových zprávách.",
     "submit": "Odhlásit odběr",
-    "missing": "Tento odkaz je neúplný. Otevřete prosím znovu odkaz z e-mailu.",
-    "done": "Hotovo. Pokud byl odkaz platný, tyto e-maily už nebudete dostávat.",
-    "settings": "Nastavení e-mailů můžete kdykoli změnit ve svém účtu:",
+    "missing": "Tento odkaz je neúplný. Otevři prosím odkaz z e-mailu znovu.",
+    "done": "Hotovo. Pokud byl odkaz platný, tyto e-maily už dostávat nebudeš.",
+    "settings": "Nastavení e-mailu můžeš kdykoli změnit ve svém účtu:",
     "searches": "Uložená hledání",
     "profile": "E-maily z chatu v profilu"
   },
   "Cookies": {
-    "intro": "Tato stránka uvádí každý soubor cookie a každé další úložiště, které web ve vašem prohlížeči používá.",
-    "onlyNecessary": "V současnosti používáme jen úložiště, která jsou pro poskytování služby nezbytně nutná. Proto se na souhlas neptáme.",
-    "optionalPresent": "Některé položky níže jsou volitelné a používají se jen s vaším souhlasem.",
-    "tableCaption": "Cookies a úložiště prohlížeče",
+    "intro": "Tato stránka vytvoří seznam všech souborů cookie a dalších úložišť, která webová stránka používá ve tvém prohlížeči.",
+    "onlyNecessary": "V současné době používáme pouze soubory cookie, které jsou pro fungování služby nezbytně nutné. Proto nepožadujeme souhlas.",
+    "optionalPresent": "Některé položky níže jsou volitelné a budou použity pouze s tvým souhlasem.",
+    "tableCaption": "Soubory cookie a paměť prohlížeče",
     "columns": {
       "name": "Název",
       "purpose": "Účel",
       "provider": "Poskytovatel",
       "duration": "Doba",
-      "kind": "Typ",
+      "kind": "Druh",
       "category": "Kategorie"
     },
     "categories": {
@@ -1440,50 +1440,50 @@
     },
     "kinds": {
       "cookie": "Cookie",
-      "localStorage": "Local Storage",
-      "sessionStorage": "Session Storage",
+      "localStorage": "Místní úložiště",
+      "sessionStorage": "Úložiště relace",
       "indexedDB": "IndexedDB",
-      "cache": "Cache Storage",
+      "cache": "Mezipaměť (Cache Storage)",
       "none": "Bez úložiště"
     },
     "entries": {
       "session": {
         "name": "Přihlašovací relace (sb-…-auth-token)",
-        "purpose": "Udržuje vás přihlášené. Nastaví se až při přihlášení.",
-        "provider": "Revier (vlastní služba provozovaná u Supabase v EU)",
-        "duration": "Až 400 dní; odstraní se při odhlášení"
+        "purpose": "Udržuje tě přihlášeného. Nastaví se až při přihlášení.",
+        "provider": "Revier (vlastní služba, provozovaná na platformě Supabase v EU)",
+        "duration": "Až 400 dní; při odhlášení se odstraní"
       },
       "pkce": {
-        "name": "Kontrola přihlášení (sb-…-code-verifier)",
-        "purpose": "Chrání přihlášení před manipulací (kontrolní hodnota pro každé přihlášení a seznam otevřených přihlášení).",
-        "provider": "Revier (vlastní služba provozovaná u Supabase v EU)",
-        "duration": "Odstraní se po dokončení přihlášení, nejpozději při odhlášení"
+        "name": "Ověření přihlášení (sb-…-code-verifier)",
+        "purpose": "Chrání přihlášení před neoprávněnými zásahy (kontrolní hodnota pro každý proces přihlášení a seznam otevřených procesů).",
+        "provider": "Revier (vlastní služba, provozovaná na platformě Supabase v EU)",
+        "duration": "Odstraněno po dokončení přihlášení, nejpozději při odhlášení"
       },
       "map": {
         "name": "Mapa",
-        "purpose": "Zobrazuje inzeráty na mapě. Mapová data se načítají z našeho vlastního serveru.",
+        "purpose": "Zobrazuje inzeráty na mapě. Mapové údaje pocházejí z našeho vlastního serveru.",
         "provider": "Revier (vlastní služba)",
         "duration": "Nic neukládá"
       }
     },
-    "noThirdParties": "Web nenačítá žádný obsah od třetích stran: žádnou reklamu, žádnou analytiku, žádná cizí písma ani mapy.",
+    "noThirdParties": "Webová stránka neobsahuje žádný obsah třetích stran: žádnou reklamu, žádné analytické údaje, žádné cizí fonty ani mapy.",
     "banner": {
       "title": "Cookies na Reviro",
-      "text": "Kromě nezbytně nutných úložišť bychom rádi používali volitelné cookies. Používají se jen s vaším souhlasem. Svou volbu můžete kdykoli změnit v nastavení cookies.",
+      "text": "Kromě nezbytně nutných souborů cookie bychom rádi používali i volitelné soubory cookie. Ty se spouštějí pouze s tvým souhlasem. Svou volbu můžeš kdykoli změnit v nastavení cookies.",
       "reject": "Odmítnout vše",
       "accept": "Přijmout vše"
     }
   },
   "Sources": {
     "title": "Zdroje dat",
-    "intro": "Referenční a mapová data, která Revier používá, s jejich licencemi a povinnými údaji.",
-    "website": "Web",
+    "intro": "Referenční a mapové údaje, které Revier využívá, včetně příslušných licencí a povinných poznámek.",
+    "website": "Webové stránky",
     "licenseLink": "Licence: {license}",
     "items": {
       "osm": {
         "title": "OpenStreetMap",
-        "usage": "Mapová data a oblasti PSČ v Německu.",
-        "notice": "© přispěvatelé OpenStreetMap",
+        "usage": "Mapové údaje a oblasti PSČ v Německu.",
+        "notice": "© Přispěvatelé OpenStreetMap",
         "license": "ODbL 1.0"
       },
       "protomaps": {
@@ -1494,135 +1494,135 @@
       },
       "bkg": {
         "title": "Spolkový úřad pro kartografii a geodézii (BKG)",
-        "usage": "Okresy a názvy obcí v Německu (VG250).",
-        "notice": "© GeoBasis-DE / BKG (2026)",
+        "usage": "Názvy okresů a obcí v Německu (VG250).",
+        "notice": "© GeoBasis-cs / BKG (2026)",
         "license": "dl-de/by-2-0"
       },
       "statistikAustria": {
         "title": "Statistik Austria",
-        "usage": "Okresy, obce a PSČ v Rakousku. Okres je odvozen z kódu obce.",
+        "usage": "Okresy, obce a poštovní směrovací čísla v Rakousku. Okres se odvozuje od identifikačního čísla obce.",
         "notice": "Zdroj dat: Statistik Austria",
         "license": "CC BY 4.0"
       },
       "fonts": {
         "title": "Noto Sans",
-        "usage": "Písmo popisků mapy.",
+        "usage": "Písmo použité pro popisky na mapách.",
         "notice": "Noto Sans, SIL Open Font License 1.1",
         "license": "OFL 1.1"
       }
     },
     "postal": {
       "title": "Tabulka PSČ",
-      "text": "Přiřazení PSČ k okresům a názvům obcí je databáze odvozená z OpenStreetMap. Je k dispozici pod licencí Open Database License (ODbL 1.0) a obsahuje také data BKG a Statistik Austria (údaje výše).",
+      "text": "Přiřazení poštovních směrovacích čísel k okresům a názvům obcí vychází z databáze odvozené z OpenStreetMap. Je k dispozici pod licencí Open Database License (ODbL 1.0) a obsahuje navíc data od BKG a Statistik Austria (poznámky výše).",
       "download": "Stáhnout tabulku PSČ (CSV)"
     }
   },
   "DataExport": {
     "metaTitle": "Stáhnout moje data",
     "title": "Stáhnout moje data",
-    "intro": "Obdržíte soubor JSON se všemi daty uloženými k vašemu účtu:",
+    "intro": "Obdržíš soubor JSON se všemi daty, která jsou uložena k tvému účtu:",
     "sections": {
-      "account": "Účet: e-mailová adresa, vytvoření, poslední přihlášení",
+      "account": "Účet: e-mailová adresa, založen, poslední přihlášení",
       "profile": "Profil a nastavení",
-      "listings": "Vaše inzeráty s druhy zvěře, místem a fotografiemi",
-      "conversations": "Konverzace se všemi zprávami (ostatní osoby jen se zobrazovaným jménem)",
-      "savedSearches": "Uložená hledání s výsledky",
+      "listings": "Tvé inzeráty s druhy zvěře, místem a fotografiemi",
+      "conversations": "Konverzace se všemi zprávami (ostatní osoby pouze pod zobrazovaným jménem)",
+      "savedSearches": "Uložená hledání s jejich výsledky",
       "favoritesBlocks": "Uložené inzeráty a zablokované osoby",
-      "reports": "Vaše nahlášení a jejich stav",
+      "reports": "Tvá nahlášení a jejich stav",
       "legal": "Souhlas s podmínkami použití a zásadami ochrany osobních údajů",
-      "verifications": "Žádosti o ověření (bez dokladu)",
-      "roles": "Role (například administrátor), pokud existují",
-      "reviews": "Hodnocení, která jste napsali a obdrželi (ostatní osoby jen se zobrazovaným jménem)",
-      "devices": "Registrovaná zařízení (platforma a jazyk, bez push tokenu)"
+      "verifications": "Žádosti o ověření (bez přiloženého dokumentu)",
+      "roles": "Role (například správce), jsou-li k dispozici",
+      "reviews": "Hodnocení, která jsi napsal a obdržel (ostatní osoby pouze s zobrazovaným jménem)",
+      "devices": "Přihlášená zařízení (platforma a jazyk, bez push tokenu)"
     },
-    "photos": "Fotografie jsou v souboru jako odkazy. Odkaz funguje jen tehdy, když jste přihlášeni.",
-    "limit": "Data si můžete stáhnout nejvýše 3krát za 24 hodin.",
+    "photos": "Fotografie jsou v souboru uvedeny jako odkazy. Odkaz funguje pouze tehdy, pokud se přihlásíš.",
+    "limit": "Své datumy si můžeš stáhnout až 3krát za 24 hodin.",
     "download": "Stáhnout data (JSON)",
-    "deletionPending": "Váš účet se maže. Stažení už není možné.",
+    "deletionPending": "Tvůj účet bude smazán. Stažení již není možné.",
     "errors": {
-      "rateLimited": "Limit dosažen. Zkuste to prosím později.",
-      "rateLimitedUntil": "Limit dosažen. Data si můžete znovu stáhnout od {time}.",
-      "notAllowed": "Pro tento účet není stažení možné.",
-      "failed": "Stažení se nezdařilo. Zkuste to prosím později."
+      "rateLimited": "Limit byl dosažen. Zkuste to prosím později znovu.",
+      "rateLimitedUntil": "Limit byl dosažen. Od {time} si můžeš svá data znovu stáhnout.",
+      "notAllowed": "Pro tento účet není stahování možné.",
+      "failed": "Stahování se nezdařilo. Zkuste to prosím později znovu."
     }
   },
   "AccountDelete": {
     "metaTitle": "Smazat účet",
     "title": "Smazat účet",
-    "intro": "Smazání je konečné a začne ihned po potvrzení. Nelze ho vrátit.",
-    "deletedTitle": "Co se smaže",
+    "intro": "Vymazání je definitivní a začíná hned po potvrzení. Nelze jej zrušit.",
+    "deletedTitle": "Co se maže",
     "deleted": {
-      "profile": "Váš profil a nastavení",
-      "listings": "Všechny vaše inzeráty a fotografie",
-      "messages": "Vaše konverzace a zprávy, i u druhé strany, pokud zpráva nebyla nahlášena",
-      "searches": "Uložená hledání, uložené inzeráty a blokování",
-      "documents": "Doklady k ověření",
-      "login": "Vaše přihlášení (e-mailová adresa a propojené přihlášení přes Apple)"
+      "profile": "Tvůj profil a nastavení",
+      "listings": "Všechny tvé inzeráty a fotografie",
+      "messages": "Tvé konverzace a zprávy, včetně těch od protistrany, s výjimkou případů, kdy byla zpráva nahlášena",
+      "searches": "Uložené hledání, uložené inzeráty a blokování",
+      "documents": "Ověřovací dokumenty",
+      "login": "Tvé přihlašovací údaje (e-mailová adresa a propojené přihlašovací údaje Apple)"
     },
-    "keptTitle": "Co zůstane (pseudonymizovaně)",
+    "keptTitle": "Co zůstává (pseudonymizováno)",
     "kept": {
-      "audit": "Záznamy o rozhodnutích moderace a administrátorů, bez vašeho jména a e-mailové adresy",
-      "reports": "Nahlášení týkající se vašeho účtu, do uplynutí jejich lhůty",
-      "snapshots": "Kopie nahlášených zpráv, do uplynutí lhůty nahlášení"
+      "audit": "Důkazy o rozhodnutích moderátorů a správců, bez uvedení tvého jména a e-mailové adresy",
+      "reports": "Nahlášení týkající se tvého účtu, a to až do uplynutí jejich lhůty",
+      "snapshots": "Kopie nahlášených zpráv až do uplynutí lhůty pro nahlášení"
     },
-    "exportHint": "Před smazáním si můžete stáhnout svá data.",
+    "exportHint": "Před smazáním si můžeš stáhnout svá data.",
     "exportLink": "Stáhnout moje data",
-    "step1": "1. Znovu se přihlásit",
+    "step1": "1. Znovu se přihlas",
     "step2": "2. Trvale smazat účet",
     "confirmLabel": "Rozumím, že můj účet a moje data budou trvale smazány.",
     "submit": "Trvale smazat účet",
-    "noEmail": "Tento účet nemá e-mailovou adresu. Před smazáním se prosím znovu přihlaste.",
-    "noscript": "Bez JavaScriptu: odhlaste se a znovu se přihlaste. Pak máte 10 minut na potvrzení smazání.",
-    "pending": "Váš účet se maže.",
-    "deletedNotice": "Váš účet se maže. Byli jste odhlášeni.",
+    "noEmail": "Tento účet nemá e-mailovou adresu. Před smazáním se prosím znovu přihlásíš.",
+    "noscript": "Bez JavaScriptu: Odhlásit se a znovu se přihlásit. Poté máš 10 minut na potvrzení smazání účtu.",
+    "pending": "Tvůj účet bude smazán.",
+    "deletedNotice": "Tvůj účet bude smazán. Odhlásil seš.",
     "errors": {
-      "reauth": "Nejprve se prosím znovu přihlaste (přihlášení smí být staré nejvýše 10 minut).",
-      "step_up": "Potvrďte prosím také kódem z autentizační aplikace.",
-      "admin_role": "Účty s rolí administrátora nelze smazat. Nechte si prosím nejprve roli odebrat.",
-      "confirm": "Potvrďte prosím, že smazání rozumíte.",
-      "failed": "Smazání se nepodařilo zahájit. Zkuste to prosím později."
+      "reauth": "Nejprve se prosím znovu přihlásit (přihlášení nesmí být starší než 10 minut).",
+      "step_up": "Prosím, potvrď to navíc kódem z tvé aplikace Authenticator.",
+      "admin_role": "Účty s rolí správce nelze smazat. Nejdříve si prosím nech tuto roli odebrat.",
+      "confirm": "Potvrď prosím, že jsi smazání pochopil.",
+      "failed": "Vymazání se nepodařilo spustit. Zkuste to prosím později znovu."
     },
     "reauth": {
-      "intro": "Pro vaši bezpečnost pošleme kód na {email}.",
-      "send": "Poslat kód",
+      "intro": "Pro tvou bezpečnost ti zašleme kód na adresu {email}.",
+      "send": "Odeslat kód",
       "sending": "Odesílá se …",
-      "sent": "Poslali jsme kód na {email}.",
+      "sent": "Odeslali jsme kód na adresu {email}.",
       "codeLabel": "Přihlašovací kód",
-      "totpLabel": "6místný kód z autentizační aplikace",
+      "totpLabel": "Šestimístný kód z tvé aplikace Authenticator",
       "verify": "Potvrdit",
-      "done": "Přihlášení potvrzeno. Nyní můžete účet smazat (krok 2).",
+      "done": "Přihlášení potvrzeno. Nyní můžeš svůj účet smazat (krok 2).",
       "errors": {
-        "network": "Připojení selhalo. Zkuste to prosím znovu.",
-        "codeInvalid": "Kód je neplatný nebo vypršel.",
-        "mismatch": "Tento kód patří k jinému účtu. Byli jste odhlášeni.",
-        "totpInvalid": "Kód z autentizační aplikace je neplatný.",
-        "tooSoon": "Před vyžádáním dalšího kódu chvíli počkejte."
+        "network": "Připojení se nezdařilo. Zkuste to prosím znovu.",
+        "codeInvalid": "Kód je neplatný nebo jeho platnost vypršela.",
+        "mismatch": "Tento kód patří k jinému účtu. Byl jsi odhlášen.",
+        "totpInvalid": "Kód z aplikace Authenticator je neplatný.",
+        "tooSoon": "Prosím, počkej chvíli, než si vyžádáš nový kód."
       }
     }
   },
   "Verification": {
     "metaTitle": "Ověření",
     "title": "Ověření",
-    "back": "Zpět na můj účet",
-    "intro": "Ověření je dobrovolné. Jakmile tým zkontroluje váš doklad, vaše inzeráty a stránka inzerenta zobrazí odznak „ověřený“ a objevíte se ve filtru „jen ověření“.",
-    "badgeNote": "[Předběžné upozornění] Odznak znamená pouze, že tým viděl doklad. Není zárukou totožnosti a nesleduje datum platnosti.",
-    "retention": "Váš doklad bude smazán 30 dní po rozhodnutí. Uchová se pouze rozhodnutí.",
+    "back": "Zpět na Můj účet",
+    "intro": "Ověření je dobrovolné. Jakmile tým prověří tvůj dokument, u tvých inzerátů a na tvé stránce poskytovatele se zobrazí značka „ověřený“ a objevíš se ve filtru „pouze ověřené“.",
+    "badgeNote": "[Předběžná poznámka] Odznak pouze znamená, že tým dokument zhlédl. Nejedná se o záruku identity a neověřuje datum platnosti.",
+    "retention": "Tvůj dokument bude smazán 30 dní po vydání rozhodnutí. Zůstane pouze samotné rozhodnutí.",
     "status": "Stav",
     "statusText": {
-      "none": "Nejste ověřeni.",
-      "pending": "Vaše žádost se kontroluje.",
-      "verified": "Váš účet je ověřený.",
-      "rejected": "Vaše poslední žádost byla zamítnuta. Můžete podat novou."
+      "none": "Nejsi ověřený.",
+      "pending": "Tvá žádost bude posouzena.",
+      "verified": "Tvůj účet je ověřený.",
+      "rejected": "Tvá poslední žádost byla zamítnuta. Můžeš podat novou."
     },
-    "rejected": "Zamítnuto dne {date}.",
-    "revoked": "Vaše ověření bylo odvoláno dne {date}.",
+    "rejected": "Zamítnuto {date}.",
+    "revoked": "Tvé ověření bylo odvoláno dne {date}.",
     "reasonLabel": "Důvod",
-    "inReview": "Podáno dne {date}. Tým kontroluje váš doklad.",
-    "unfinished": "Nahrávání nebylo dokončeno. Vyberte soubor znovu a žádost podejte.",
+    "inReview": "Odesláno dne {date}. Náš tým tvůj dokument zkontroluje.",
+    "unfinished": "Tvé nahrávání nebylo dokončeno. Zvol soubor znovu, abys mohl žádost odeslat.",
     "withdraw": "Stáhnout žádost",
-    "withdrawHint": "Žádost i nahraný doklad budou smazány.",
+    "withdrawHint": "Žádost a nahraný dokument budou smazány.",
     "newRequest": "Požádat o ověření",
-    "documentType": "Doklad",
+    "documentType": "Dokument",
     "documentTypes": {
       "jagdschein": "Lovecký lístek",
       "jagdkarte": "Lovecká karta",
@@ -1630,14 +1630,14 @@
       "gewerbe": "Doklad o podnikání"
     },
     "file": "Soubor",
-    "fileHint": "JPEG, PNG nebo PDF, nejvýše 10 MB. Fotky z iPhonu uložte prosím jako JPEG.",
-    "submit": "Nahrát a podat",
+    "fileHint": "JPEG, PNG nebo PDF, nejvýše 10 MB. Fotky z iPhonu prosím ukládej jako JPEG.",
+    "submit": "Nahrát a odeslat",
     "working": "Nahrává se …",
-    "noscript": "Nahrání dokladu vyžaduje JavaScript. Povolte prosím JavaScript pro tuto stránku.",
-    "history": "Dřívější žádosti",
+    "noscript": "K nahrání dokumentu je zapotřebí JavaScript. Prosím, aktivuj JavaScript pro tuto stránku.",
+    "history": "Předchozí žádosti",
     "historyItem": "{date}: {type} – {status}",
     "requestStatus": {
-      "pending": "Ve schvalování",
+      "pending": "Čeká na kontrolu",
       "verified": "Ověřeno",
       "rejected": "Zamítnuto",
       "revoked": "Odvoláno"
@@ -1656,25 +1656,25 @@
       "other": "Jiný důvod"
     },
     "notices": {
-      "submitted": "Děkujeme. Vaše žádost byla podána.",
-      "withdrawn": "Vaše žádost byla stažena."
+      "submitted": "Děkujeme. Tvá žádost byla odeslána.",
+      "withdrawn": "Tvá žádost byla stažena."
     },
     "errors": {
-      "fileType": "Vyberte prosím soubor JPEG, PNG nebo PDF.",
+      "fileType": "Vyberte prosím soubor ve formátu JPEG, PNG nebo PDF.",
       "fileSize": "Soubor je větší než 10 MB.",
-      "fileEmpty": "Vyberte prosím soubor.",
-      "open": "Už máte žádost, která se kontroluje.",
-      "rateLimited": "Dosáhli jste limitu 3 žádostí za 30 dní.",
-      "rateLimitedUntil": "Dosáhli jste limitu 3 žádostí za 30 dní. Zkuste to znovu po {time}.",
-      "legal": "Nejprve prosím odsouhlaste aktuální podmínky užívání.",
-      "type": "Tento typ dokladu není pro váš účet k dispozici.",
-      "notAllowed": "Váš účet teď nemůže podat žádost.",
+      "fileEmpty": "Vyber prosím soubor.",
+      "open": "Tvá žádost je již ve schvalování.",
+      "rateLimited": "Dosáhl jsi limitu 3 žádostí za 30 dní.",
+      "rateLimitedUntil": "Dosáhl jsi limitu 3 žádostí za 30 dní. Zkus to znovu po {time}.",
+      "legal": "Nejprve prosím souhlas s aktuálními podmínkami použití.",
+      "type": "Tento typ dokumentu není pro tvůj účet k dispozici.",
+      "notAllowed": "Tvůj účet momentálně nemůže podat žádost.",
       "upload": "Nahrávání se nezdařilo. Zkuste to prosím znovu.",
-      "missingFile": "Doklad chybí. Nahrajte ho prosím znovu.",
-      "submitted": "Tato žádost už byla podána.",
-      "notFound": "Žádost už neexistuje. Načtěte prosím stránku znovu.",
-      "failed": "Něco se pokazilo. Zkuste to prosím znovu.",
-      "withdraw": "Žádost se nepodařilo stáhnout. Načtěte prosím stránku znovu."
+      "missingFile": "Dokument chybí. Nahraj jej prosím znovu.",
+      "submitted": "Tento návrh již byl podán.",
+      "notFound": "Žádost již neexistuje. Obnov prosím stránku.",
+      "failed": "Něco se nepovedlo. Zkus to prosím znovu.",
+      "withdraw": "Žádost nebylo možné stáhnout. Obnov prosím stránku."
     }
   },
   "Report": {
@@ -1682,8 +1682,8 @@
     "title": "Nahlásit",
     "titleListing": "Nahlásit inzerát",
     "titleProfile": "Nahlásit inzerenta",
-    "intro": "Vaše nahlášení dostane tým. Dotčená osoba se nedozví, kdo nahlásil.",
-    "unavailable": "Tento obsah nelze (již) nahlásit.",
+    "intro": "Tvé nahlášení bude předáno týmu. Dotčená osoba se nedozví, kdo ji nahlásil.",
+    "unavailable": "Tento obsah již nelze nahlásit.",
     "myReports": "Moje nahlášení",
     "reason": "Důvod",
     "reasons": {
@@ -1691,35 +1691,35 @@
       "illegal": "Protiprávní obsah",
       "weapons": "Zbraně nebo střelivo",
       "harassment": "Obtěžování nebo urážky",
-      "wrong_category": "Nesprávná kategorie nebo nejde o příležitost k lovu",
+      "wrong_category": "Nesprávná kategorie nebo žádná lovecká příležitost",
       "other": "Jiný důvod"
     },
     "note": "Podrobnosti (nepovinné)",
-    "noteHint": "Nejvýše 1000 znaků. Neuvádějte prosím zbytečně osobní údaje jiných osob.",
+    "noteHint": "Nejvýše 1000 znaků. Neuváděj prosím osobní údaje jiných osob, pokud nejsou nutné.",
     "goodFaith": "[Předběžné znění] Potvrzuji, že údaje v tomto nahlášení jsou podle mého nejlepšího vědomí správné a úplné.",
     "submit": "Odeslat nahlášení",
     "errors": {
-      "reason": "Vyberte prosím důvod.",
-      "note": "Podrobnosti jsou příliš dlouhé (nejvýše 1000 znaků).",
-      "goodFaith": "Potvrďte prosím prohlášení.",
-      "duplicate": "Tento obsah jste už nahlásili. Vaše nahlášení se prověřuje.",
-      "limit": "Za posledních 24 hodin jste odeslali mnoho nahlášení. Zkuste to prosím později.",
-      "unavailable": "Tento obsah nelze (již) nahlásit.",
-      "failed": "Odeslání se nezdařilo. Zkuste to prosím znovu."
+      "reason": "Vyber prosím důvod.",
+      "note": "Údaje jsou příliš dlouhé (maximálně 1000 znaků).",
+      "goodFaith": "Potvrď prosím toto prohlášení.",
+      "duplicate": "Tento obsah jsi již nahlásil. Tvé nahlášení bude prověřeno.",
+      "limit": "Za posledních 24 hodin jsi odeslal mnoho nahlášení. Zkus to prosím později znovu.",
+      "unavailable": "Tento obsah již nelze nahlásit.",
+      "failed": "Odeslání se nezdařilo. Zkus to prosím znovu."
     },
     "listMetaTitle": "Moje nahlášení",
     "listTitle": "Moje nahlášení",
-    "sent": "Děkujeme. Vaše nahlášení bylo přijato a bude prověřeno.",
-    "empty": "Zatím jste nic nenahlásili.",
+    "sent": "Děkujeme. Tvé nahlášení bylo přijato a bude prověřeno.",
+    "empty": "Ještě jsi nic nenahlásil.",
     "targets": {
       "listing": "Inzerát",
       "profile": "Profil",
       "message": "Zpráva"
     },
     "reportedOn": "Nahlášeno dne {date}",
-    "statusOpen": "Prověřuje se",
-    "statusHandled": "Prověřeno dne {date}: {outcome}",
-    "outcomeUnknown": "Vyřízeno",
+    "statusOpen": "Probíhá kontrola",
+    "statusHandled": "Zkontrolováno dne {date}: {outcome}",
+    "outcomeUnknown": "Hotovo",
     "outcomes": {
       "no_action": "Bez opatření",
       "content_removed": "Obsah odstraněn",
@@ -1733,10 +1733,10 @@
   "Decisions": {
     "metaTitle": "Rozhodnutí a stížnosti",
     "title": "Rozhodnutí a stížnosti",
-    "intro": "Zde vidíte rozhodnutí moderace, která se týkají vás nebo vašich nahlášení, včetně odůvodnění. Ve lhůtě se proti rozhodnutí můžete ohradit.",
-    "remedies": "[Předběžné upozornění] Informace o mimosoudním řešení sporů a o opravných prostředcích budou doplněny.",
-    "appealed": "Vaše stížnost byla přijata. Tým ji prověří.",
-    "empty": "Nejsou žádná rozhodnutí, která by se vás týkala.",
+    "intro": "Zde najdeš rozhodnutí moderátorů, která se týkají tebe nebo tvých nahlášení, včetně odůvodnění. V rámci stanovené lhůty můžeš proti rozhodnutí ohradit se.",
+    "remedies": "[Předběžná poznámka] Informace o mimosoudním řešení sporů a o opravných prostředcích budou doplněny později.",
+    "appealed": "Tvá stížnost byla přijata. Tým ji prověří.",
+    "empty": "Nejsou zde žádná rozhodnutí, která by se tě týkala.",
     "actions": {
       "listing_rejected": "Inzerát zamítnut",
       "listing_draft": "Požadovány úpravy",
@@ -1752,33 +1752,33 @@
     "explanation": "Odůvodnění",
     "appealLink": "Ohradit se proti rozhodnutí",
     "appealUntil": "možné do {date}",
-    "appealClosed": "Lhůta pro stížnost uplynula.",
+    "appealClosed": "Lhůta pro podání stížnosti vypršela.",
     "appealStatus": {
-      "open": "Stížnost podána, prověřuje se",
-      "upheld": "Stížnost prověřena: rozhodnutí zůstává v platnosti",
-      "reversed": "Stížnost prověřena: rozhodnutí bylo zrušeno"
+      "open": "Stížnost podána, probíhá kontrola",
+      "upheld": "Stížnost byla posouzena: Rozhodnutí zůstává v platnosti",
+      "reversed": "Stížnost prošetřena: Rozhodnutí bylo zrušeno"
     }
   },
   "Appeal": {
     "metaTitle": "Ohradit se proti rozhodnutí",
     "title": "Ohradit se proti rozhodnutí",
-    "back": "Zpět na rozhodnutí",
-    "intro": "Vysvětlete, proč je podle vás rozhodnutí chybné. Prověří ho jiný člen týmu. Možné do {date}.",
-    "unavailable": "Proti tomuto rozhodnutí se (již) nelze ohradit.",
-    "alreadyAppealed": "Proti tomuto rozhodnutí jste se už ohradili.",
-    "text": "Vaše odůvodnění",
+    "back": "Zpět k rozhodnutím",
+    "intro": "Vysvětli, proč je toto rozhodnutí z tvého pohledu nesprávné. Zkontroluje ho jiný člen týmu. Lze provést do {date}.",
+    "unavailable": "Proti tomuto rozhodnutí již nelze ohradit se.",
+    "alreadyAppealed": "Toto rozhodnutí jsi již ohradil.",
+    "text": "Tvé zdůvodnění",
     "textHint": "10 až 2000 znaků.",
     "submit": "Podat stížnost",
     "errors": {
-      "text": "Napište prosím 10 až 2000 znaků.",
-      "notFound": "Proti tomuto rozhodnutí se (již) nelze ohradit.",
-      "failed": "Odeslání se nezdařilo. Zkuste to prosím znovu."
+      "text": "Prosím, napiš text v délce 10 až 2000 znaků.",
+      "notFound": "Proti tomuto rozhodnutí již nelze ohradit se.",
+      "failed": "Odeslání se nezdařilo. Zkus to prosím znovu."
     }
   },
   "Styleguide": {
-    "metaTitle": "Styleguide",
-    "title": "Styleguide.",
-    "intro": "Všechny prvky rozhraní v jejich stavech. Viditelné jen lokálně a na stagingu.",
+    "metaTitle": "Stylový průvodce",
+    "title": "Stylový průvodce.",
+    "intro": "Všechny prvky uživatelského rozhraní ve svých stavech. Viditelné pouze lokálně a ve stagingovém prostředí.",
     "colors": "Barvy",
     "typography": "Písmo",
     "buttons": "Tlačítka",
@@ -1791,12 +1791,12 @@
     "states": "Prázdné a chybové stavy",
     "fieldLabel": "Název inzerátu",
     "fieldHint": "3 až 100 znaků.",
-    "fieldError": "Zadejte prosím název.",
-    "disabled": "Neaktivní",
-    "sampleTitle": "Povolenka k lovu v polní honitbě, srnčí a černá zvěř",
-    "headingSample": "Najděte svůj revír.",
+    "fieldError": "Zadej prosím název.",
+    "disabled": "Deaktivováno",
+    "sampleTitle": "Povolenka k lovu v loveckém revíru, srnec a divočák",
+    "headingSample": "Najdi si svůj revír.",
     "bodySample": "Pronájem honitby, povolenka k lovu nebo místo na naháňce. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
-    "consent": "Cookie lišta (šablona)",
-    "consentNote": "Není aktivní: zobrazí se, až přibude volitelný cookie (ADR 021)."
+    "consent": "Banner o souborech cookie (šablona)",
+    "consentNote": "Neaktivní: Zobrazí se až po přidání volitelného souboru cookie (ADR 021)."
   }
 }

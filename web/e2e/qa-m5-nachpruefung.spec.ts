@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { admin, deleteTestUsers, local } from "./cleanup";
 import { uniqueEmail } from "./mailpit";
+import { msg } from "./messages";
 
 // QA M5 Nachprüfung (docs/QA-REPORT.md, Abschnitt „M5 – Nachprüfung 2026-11-01“): Proben zu den Fixes F1–F11
 // über qa-m5.spec.ts hinaus.
@@ -29,12 +30,7 @@ const LOCALES = ["de", "en", "cs", "pl"] as const;
 const PROVIDER = { de: "anbieter", en: "provider", cs: "inzerent", pl: "oglaszajacy" } as const;
 const SEARCH = { de: "suche", en: "search", cs: "hledani", pl: "szukaj" } as const;
 const LEASE = { de: "jagdpacht", en: "hunting-lease", cs: "pronajem-honitby", pl: "dzierzawa-obwodu" } as const;
-const TOO_LONG = {
-  de: "Der Suchbegriff ist zu lang.",
-  en: "The search term is too long.",
-  cs: "Hledaný výraz je příliš dlouhý.",
-  pl: "Szukana fraza jest za długa.",
-} as const;
+const TOO_LONG = Object.fromEntries(["de", "en", "cs", "pl"].map((l) => [l, msg(l, "Public.list.queryTooLong")])) as Record<"de" | "en" | "cs" | "pl", string>;
 
 function env(): Record<string, string> {
   const out = execFileSync("supabase", ["status", "-o", "env"], {

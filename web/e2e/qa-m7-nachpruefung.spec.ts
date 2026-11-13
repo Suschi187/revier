@@ -1,6 +1,7 @@
 import { expect, test, type Page, type Request } from "@playwright/test";
 import { admin, deleteTestUsers, local } from "./cleanup";
 import { createAccount, createPublicListing, signInAs, type TestAccount } from "./session";
+import { msg } from "./messages";
 
 // QA M7 Nachprüfung (docs/QA-REPORT.md „M7 – Nachprüfung“): Regressionen der Korrekturen F1 (Chat ohne Legal-Gate),
 // F2 (UnreadRefresh), F3 (WebSocket schließen). Neue Funde als test.fail mit Fund-Nummer. Konten auf @test.local.
@@ -162,11 +163,8 @@ test.describe("QA M7 Nachprüfung", () => {
 
   test("F1: Hinweis ohne Zustimmung in en, cs, pl übersetzt", async ({ page }) => {
     await signInAs(page.context(), interested);
-    const texts = {
-      en: "To write, please first accept the current terms of use.",
-      cs: "Abyste mohli psát, odsouhlaste nejprve aktuální podmínky užívání.",
-      pl: "Aby pisać, zaakceptuj najpierw aktualny regulamin.",
-    };
+    // Nur der erste Satz: Der Hinweis steht mit Link in einer Zeile.
+    const texts = Object.fromEntries(["en", "cs", "pl"].map((l) => [l, msg(l, "Chat.legalRequired").split(/(?<=\.)\s/)[0]]));
     await withoutConsent(interested, async () => {
       for (const [locale, text] of Object.entries(texts)) {
         await page.goto(`/${locale}/account/messages/${conversation}`);

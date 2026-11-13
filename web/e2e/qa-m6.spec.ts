@@ -7,6 +7,7 @@ import { admin, deleteTestUsers, local } from "./cleanup";
 import { uniqueEmail } from "./mailpit";
 import { parsePoint } from "../lib/map/geo";
 import { publicPath } from "../lib/public/paths";
+import { msg } from "./messages";
 
 // QA M6 (Abnahme): Standortschutz im Web (Eingabepunkt in keiner Antwort, URL, Spalte, Log), unverändertes Speichern
 // an einer aktiven Anzeige, Nachladen der Karte, Bereich über 30°, sofortige Wirkung auf Karte, Liste und Detail,
@@ -286,7 +287,8 @@ test.describe("QA M6", () => {
     await expect(page.getByRole("button", { name: "Vergrößern", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Verkleinern", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Zoom in", exact: true })).toHaveCount(0);
-    for (const [locale, path, zoomIn] of [["en", "search", "Zoom in"], ["cs", "hledani", "Přiblížit"], ["pl", "szukaj", "Przybliż"]]) {
+    for (const [locale, path] of [["en", "search"], ["cs", "hledani"], ["pl", "szukaj"]]) {
+      const zoomIn = msg(locale, "Map.controls.zoomIn");
       await page.goto(`/${locale}/${path}?view=map`);
       await expect(page.getByRole("button", { name: zoomIn, exact: true })).toBeVisible({ timeout: 20_000 });
     }

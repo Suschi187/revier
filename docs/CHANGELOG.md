@@ -2,6 +2,26 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a GUI/UX-Design (Web), Schritt 5: Texte und Mehrsprachigkeit – 2026-11-13
+
+### Geändert
+- **cs und pl per DeepL neu übersetzt** (`npm run i18n:deepl`, `web/scripts/translate-deepl.mjs`, ohne neue Abhängigkeit; Schlüssel `DEEPL_API_KEY` nur in `web/.env.local`). Anrede **Du** in beiden Sprachen (Entscheidung 2026-11-13). DeepL kann für Tschechisch keine Anrede wählen, deshalb cs aus dem deutschen Du-Text, pl aus en mit `formality: prefer_less`.
+- **Glossar** aus `docs/GLOSSARY.md` als DeepL-Glossar (ohne URL-Wörter), ergänzt um Anzeige, Meldung und Beschwerde; Glossar-Begriffe klein, damit sie mitten im Satz nicht groß stehen.
+- **Handkorrekturen** in `web/scripts/i18n-overrides.json` (cs 176, pl 168): Restliche Sie-Formen, falsche Wörter bei kurzen Labels (z. B. pl „Podsumowanie“ statt „Wznów“, cs „Nahlásit“ statt „Zobrazit inzerát“), „Meldung“ als cs „nahlášení“ und pl „zgłoszenie“, Anzeige als pl „ogłoszenie“, Lizenzkennung `dl-de/by-2-0`, Markenname „Die Jagdbrüder“. Das Skript wendet sie nach jedem Lauf an.
+- **Nicht übersetzt:** 20 Texte mit Pluralformen (cs/pl brauchen eigene Formen, geprüft), Markennamen, Sprachnamen, OSM-Vermerk und die Labels, die auch in Mails stehen (`supabase/tests/fixtures/mail_labels.json`).
+- **Namenszusatz je Sprache** (`Brand.tagline`, ≤ 30 Zeichen): Hunting leases & permits / Jagdpacht & Begehungsscheine / Honitby & povolenky k lovu / Dzierżawa obwodów i polowania.
+- **Formate** geprüft: Preise, Zahlen und Datum über `Intl` je Sprache (EUR, CHF, CZK, PLN).
+- **Tests:** neuer E2E `m10a-text.spec.ts` (alle 4 Sprachen, 360 px, 26 Seiten je Sprache: keine Überbreite, nichts ragt aus dem Bild, keine rohen Schlüssel); E2E lesen cs/pl-Texte jetzt über `e2e/messages.ts` statt fest eingetragener Sätze.
+
+### Testen
+- `cd web && npm test && npx playwright test e2e/m10a-text.spec.ts`
+- Neu übersetzen: `npm run i18n:deepl`, danach `git diff messages/` prüfen
+
+### Lücken
+- cs/pl bleiben **ungeprüft**, bis Muttersprachler sie freigeben (SPEC 7.6). Längere Sätze habe ich nur stichprobenartig gelesen.
+- Mails (Edge Functions) siezen auf Tschechisch noch („vašem“); ebenso das gemeinsame Label `Decisions.actions.report_handled`. Umstellen zusammen mit den Mail-Texten.
+- Der Kartentest „Entprellung“ (`qa-m6-nachpruefung.spec.ts:59`) war einmal rot (4 statt höchstens 2 Abrufe), in der Wiederholung grün; zeitabhängig.
+
 ## M10a GUI/UX-Design (Web), Teil 1: Marke, Tokens, Kopf, Start, Suche, Detail – 2026-11-12
 
 Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Reviro ist eine eigene Marke „by Die Jagdbrüder“; Bedienung wie ein Kleinanzeigen-Portal, Aussehen aus dem Designsystem der Marke.

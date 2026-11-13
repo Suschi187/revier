@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { admin, deleteTestUsers, local } from "./cleanup";
 import { createAccount, createPublicListing, signInAs, type TestAccount } from "./session";
+import { msg } from "./messages";
 
 // M8 Suchaufträge (ADR 018, Plan M8 5 und 7): Suche speichern aus Liste und Karte (mit Kartenausschnitt), anonym
 // zum Login, Konto-Seite (Takt, E-Mail, Pausieren/Fortsetzen, Umbenennen, Löschen zweistufig, Ergebnisse ansehen,
@@ -377,7 +378,7 @@ test.describe("Suchaufträge (M8)", () => {
       // Suche mit geöffnetem Formular (das längste Formular)
       const search = { de: "suche", en: "search", cs: "hledani", pl: "szukaj" }[locale];
       await page.goto(`/${locale}/${search}?q=${RUN}&kind=driven_hunt`);
-      const open = { de: "Suche speichern", en: "Save search", cs: "Uložit hledání", pl: "Zapisz wyszukiwanie" }[locale];
+      const open = msg(locale, "SavedSearches.save.open");
       await page.locator("summary").filter({ hasText: open }).click();
       await expect(page.locator('input[name="filters"]')).toHaveCount(1);
       await noOverflow(page, `${locale}/${search} Formular`);

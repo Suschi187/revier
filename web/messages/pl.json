@@ -1,11 +1,11 @@
 {
   "Metadata": {
     "siteName": "Reviro",
-    "siteDescription": "Platforma ogłoszeń łowieckich w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
+    "siteDescription": "Platforma z ofertami polowań w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
   },
   "HomePage": {
-    "metaTitle": "Możliwości polowań w Europie Środkowej",
-    "title": "Znajdź swój obwód."
+    "metaTitle": "Oferty polowań w Europie Środkowej",
+    "title": "Znajdź swoje tereny łowieckie."
   },
   "LocaleSwitcher": {
     "label": "Język",
@@ -19,9 +19,9 @@
   "Brand": {
     "name": "REVIRO",
     "endorsement": "by Die Jagdbrüder",
-    "tagline": "Hunting Marketplace",
-    "homeLabel": "Reviro by Die Jagdbrüder, strona główna",
-    "claim": "Okazje łowieckie w DE · AT · CH · CZ · PL",
+    "tagline": "Dzierżawa obwodów i polowania",
+    "homeLabel": "Reviro od Die Jagdbrüder, strona główna",
+    "claim": "Oferty myśliwskie w DE · AT · CH · CZ · PL",
     "shop": "Sklep Die Jagdbrüder",
     "shopLabel": "Sklep Die Jagdbrüder (strona zewnętrzna)"
   },
@@ -31,8 +31,8 @@
     "searchWhereAny": "Wszystkie regiony",
     "searchButton": "Szukaj",
     "create": "Dodaj ogłoszenie",
-    "favorites": "Obserwowane",
-    "account": "Mój Reviro",
+    "favorites": "Zapisane",
+    "account": "Moje Reviro",
     "messages": "Wiadomości",
     "signIn": "Zaloguj się",
     "signOut": "Wyloguj się",
@@ -47,35 +47,35 @@
     "login": {
       "metaTitle": "Zaloguj się",
       "title": "Zaloguj się lub zarejestruj",
-      "intro": "Podaj swój adres e-mail. Wyślemy Ci link i kod logowania. Hasło nie jest potrzebne.",
+      "intro": "Wpisz swój adres e-mail. Wyślemy ci link i kod logowania. Hasło nie jest potrzebne.",
       "emailLabel": "Adres e-mail",
-      "submit": "Wyślij e-mail logowania",
+      "submit": "Wyślij e-mail z linkiem do zalogowania",
       "sending": "Wysyłanie…",
-      "sentTitle": "Sprawdź skrzynkę",
-      "sentText": "Jeśli adresu {email} można użyć, wysłaliśmy Ci wiadomość. Kliknij zawarty w niej link lub wpisz 6-cyfrowy kod.",
+      "sentTitle": "Sprawdź swoją skrzynkę odbiorczą",
+      "sentText": "Jeśli możesz skorzystać z adresu {email}, wysłaliśmy ci e-mail. Kliknij link w wiadomości lub wpisz 6-cyfrowy kod.",
       "codeLabel": "Kod logowania",
       "codeSubmit": "Zaloguj się",
       "verifying": "Sprawdzanie…",
-      "codeInvalid": "Kod jest nieprawidłowy lub wygasł.",
-      "otherEmail": "Użyj innego adresu e-mail lub poproś o nową wiadomość",
-      "networkError": "Brak połączenia. Spróbuj ponownie.",
-      "termsHint": "Nowe konta po pierwszym logowaniu akceptują regulamin.",
+      "codeInvalid": "Kod jest nieprawidłowy lub wygasły.",
+      "otherEmail": "Użyj innego adresu e-mail lub poproś o nowy adres e-mail",
+      "networkError": "Brak połączenia. Spróbuj jeszcze raz.",
+      "termsHint": "Po pierwszym zalogowaniu na konto nowi użytkownicy są proszeni o zaakceptowanie regulaminu.",
       "apple": "Zaloguj się przez Apple",
-      "privacyHint": "Jak przetwarzamy Twój adres e-mail, wyjaśnia <link>polityka prywatności</link>."
+      "privacyHint": "Sposób, w jaki przetwarzamy twój adres e-mail, wyjaśniono w <link>polityce prywatności</link>."
     },
     "confirm": {
       "metaTitle": "Potwierdź logowanie",
       "title": "Potwierdź logowanie",
-      "text": "Aby dokończyć logowanie, potwierdź przyciskiem.",
+      "text": "Aby zalogować się, potwierdź, klikając przycisk.",
       "submit": "Potwierdź logowanie",
-      "invalid": "Ten link jest nieprawidłowy lub wygasł. Wpisz kod z wiadomości lub poproś o nową wiadomość.",
+      "invalid": "Ten link jest nieprawidłowy lub wygasły. Wpisz kod z e-maila albo poproś o nowy e-mail.",
       "backToLogin": "Powrót do logowania"
     }
   },
   "Profile": {
     "displayName": "Nazwa wyświetlana",
-    "displayNameHint": "Widoczna publicznie przy Twoich ogłoszeniach i w czacie.",
-    "accountType": "Typ konta",
+    "displayNameHint": "Wyświetlane publicznie obok twoich ogłoszeń i na czacie.",
+    "accountType": "Rodzaj konta",
     "accountTypes": {
       "private": "Prywatne",
       "business": "Firmowe"
@@ -90,74 +90,74 @@
       "PL": "Polska"
     },
     "preferredLanguage": "Język wiadomości e-mail",
-    "preferredLanguageHint": "E-maile logowania i powiadomienia otrzymasz w tym języku.",
+    "preferredLanguageHint": "E-maile z potwierdzeniem zalogowania i powiadomienia są wysyłane w tym języku.",
     "errors": {
       "required": "Wypełnij to pole.",
-      "tooLong": "Wpis jest za długi.",
+      "tooLong": "Ten wpis jest za długi.",
       "invalid": "Wybierz prawidłową opcję."
     }
   },
   "Welcome": {
-    "metaTitle": "Witamy",
-    "title": "Witamy w Revier",
+    "metaTitle": "Witaj",
+    "title": "Witaj w Revier",
     "intro": "Zanim przejdziesz dalej, skonfiguruj swój profil.",
-    "accept": "Akceptuję <terms>regulamin</terms> i zapoznałem(-am) się z <privacy>polityką prywatności</privacy>.",
+    "accept": "Akceptuję <terms>regulamin</terms> i zapoznałem się z <privacy>polityką prywatności</privacy>.",
     "acceptRequired": "Aby kontynuować, zaakceptuj regulamin.",
     "submit": "Zapisz i kontynuuj",
     "errors": {
-      "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
-      "outdated": "Teksty prawne zostały właśnie zaktualizowane. Przeczytaj je i potwierdź ponownie.",
-      "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
+      "failed": "Zapisanie nie powiodło się. Spróbuj jeszcze raz.",
+      "outdated": "Warunki właśnie zostały zaktualizowane. Przejrzyj je i potwierdź jeszcze raz.",
+      "blocked": "Twoje konto jest zablokowane. Nie możesz zmienić swojego profilu."
     },
     "accountLinks": "Twoje dane",
     "dataExport": "Pobierz moje dane",
     "deleteAccount": "Usuń konto"
   },
   "Legal": {
-    "placeholder": "Tekst zastępczy: ostateczną treść przed startem dostarczy prawnik.",
+    "placeholder": "Tekst zastępczy: ostateczna wersja tekstu zostanie ogłoszona przez prawnika przed uruchomieniem serwisu.",
     "terms": {
       "title": "Regulamin",
       "sections": [
         {
           "title": "Zakres",
           "points": [
-            "Platforma pośredniczy w okazjach łowieckich: dzierżawa obwodu łowieckiego, zezwolenia na polowanie, polowania zbiorowe, polowania trofeowe / gościnne i pomocnicy myśliwych, zawsze jako oferta lub poszukiwanie.",
-            "Żadnej sprzedaży broni ani amunicji."
+            "Platforma pośredniczy w ofertach związanych z polowaniami: dzierżawa obwodu łowieckiego, zezwolenia na polowanie, polowania zbiorowe, polowania na trofea i polowania dla gości oraz pomocnicy myśliwego – każda z tych opcji może być zarówno ofertą, jak i ogłoszeniem poszukującym pomocy.",
+            "Nie sprzedajemy broni ani amunicji."
           ]
         },
         {
           "title": "Konto",
           "points": [
             "Jedno konto na osobę, z prawdziwymi danymi.",
-            "Korzystanie wymaga akceptacji regulaminu i polityki prywatności."
+            "Korzystanie z platformy wymaga zaakceptowania regulaminu i polityki prywatności."
           ]
         },
         {
           "title": "Ogłoszenia",
           "points": [
-            "Ogłoszenia są sprawdzane przed publikacją.",
-            "Dane kontaktowe nie należą do tekstu ogłoszenia. Kontakt odbywa się po zalogowaniu przez czat.",
-            "Ogłoszenia wygasają i można je przedłużyć."
+            "Ogłoszenia są sprawdzane przed opublikowaniem.",
+            "Dane kontaktowe nie powinny pojawiać się w opisach ogłoszeń. Kontakt odbywa się przez czat po zalogowaniu.",
+            "Ogłoszenia tracą ważność, ale można je przedłużyć."
           ]
         },
         {
           "title": "Moderacja",
           "points": [
-            "Ogłoszenia mogą zostać odrzucone, zwrócone do poprawy lub usunięte. Otrzymasz uzasadnienie.",
-            "Konta mogą zostać zablokowane przy poważnych lub powtarzających się naruszeniach.",
-            "Od decyzji możesz się odwołać: tekst zastępczy."
+            "Ogłoszenia mogą zostać odrzucone, odesłane do poprawek lub usunięte. Otrzymasz informację o przyczynie.",
+            "Konta mogą zostać zablokowane za poważne lub powtarzające się naruszenia zasad.",
+            "Możesz odwołać się od decyzji: tekst zastępczy."
           ]
         },
         {
           "title": "Zgłaszanie",
           "points": [
-            "Ogłoszenia, profile i wiadomości można zgłaszać. Zasady treści opisują, co jest niedozwolone."
+            "Ogłoszenia, profile i wiadomości można zgłaszać. Zasady treści opisują, co jest zabronione."
           ]
         },
         {
-          "title": "Zakończenie korzystania",
+          "title": "Zakończenie użytkowania",
           "points": [
-            "Możesz w każdej chwili usunąć konto."
+            "W każdej chwili możesz usunąć swoje konto."
           ]
         },
         {
@@ -172,98 +172,98 @@
       "title": "Polityka prywatności",
       "sections": [
         {
-          "title": "Administrator i kontakt",
+          "title": "Administrator danych i dane kontaktowe",
           "points": [
-            "Nazwa i adres operatora: tekst zastępczy, zob. nota prawna.",
-            "Kontakt w sprawach ochrony danych: tekst zastępczy."
+            "Nazwa i adres operatora: tekst zastępczy, zobacz notę prawną.",
+            "Kontakt w sprawach dotyczących ochrony danych: tekst zastępczy."
           ]
         },
         {
-          "title": "Konto i logowanie",
+          "title": "Konto i zalogowanie",
           "points": [
-            "Adres e-mail, kody logowania oraz, jeśli używasz, „Zaloguj się przez Apple”.",
-            "Plik cookie sesji utrzymuje Twoje zalogowanie (zob. ustawienia plików cookie).",
-            "Konta, które nigdy nie zostały potwierdzone, są usuwane po 7 dniach."
+            "Adres e-mail, kody logowania oraz, jeśli jest dostępna, opcja „Zaloguj się przez Apple”.",
+            "Plik cookie sesji pozwala ci pozostać zalogowanym (zobacz ustawienia plików cookie).",
+            "Konta, która nigdy nie zostaną potwierdzone, są usuwane po 7 dniach."
           ]
         },
         {
           "title": "Profil i ogłoszenia",
           "points": [
-            "Nazwa wyświetlana, typ konta, nazwa firmy, kraj i język.",
-            "Ogłoszenia z tekstami, cenami, gatunkami zwierzyny i zdjęciami.",
-            "Zdjęcia są ponownie kodowane na naszym serwerze. Usuwa to metadane, np. współrzędne GPS."
+            "Wyświetlaj nazwę wyświetlaną, typ konta, nazwę firmy, kraj i język.",
+            "Ogłoszenia zawierające opisy, ceny, gatunki zwierzyny łownej i zdjęcia.",
+            "Zdjęcia są ponownie kodowane na naszym serwerze. Dzięki temu metadane, takie jak współrzędne GPS, są usuwane."
           ]
         },
         {
           "title": "Lokalizacja",
           "points": [
-            "Strony publiczne pokazują tylko region lub powiat albo celowo przesunięty punkt.",
-            "Kod pocztowy i dokładne położenie obwodu łowieckiego nigdy nie są publicznie widoczne."
+            "Na stronach publicznych pokazywany jest tylko region lub powiat albo celowo przesunięty punkt.",
+            "Kod pocztowy i dokładna lokalizacja terenu łowieckiego nigdy nie są publicznie ujawniane."
           ]
         },
         {
           "title": "Wiadomości",
           "points": [
-            "Wiadomości między użytkownikami są przechowywane na potrzeby rozmowy i dostarczane w czasie rzeczywistym.",
-            "Powiadomienia e-mail o nowych wiadomościach można wyłączyć.",
-            "Zablokowane osoby nie mogą do Ciebie pisać."
+            "Wiadomości między użytkownikami są zapisywane w ramach rozmowy i dostarczane w czasie rzeczywistym.",
+            "Powiadomienia e-mailowe o nowych wiadomościach można wyłączyć.",
+            "Osoby, które zablokowałeś, nie mogą do ciebie pisać."
           ]
         },
         {
           "title": "Zapisane wyszukiwania",
           "points": [
-            "Filtry, częstotliwość i wyniki Twoich zapisanych wyszukiwań. Działają 6 tygodni, chyba że je przedłużysz.",
-            "Każdy e-mail zawiera link do wypisania się jednym kliknięciem, ważny 90 dni."
+            "Filtry, częstotliwość i wyniki Twoich zapisanych wyszukiwań. Są aktywne przez 6 tygodni, chyba że je przedłużysz.",
+            "Każdy e-mail zawiera link do wypisania się z subskrypcji jednym kliknięciem, ważny przez 90 dni."
           ]
         },
         {
           "title": "Mapa",
           "points": [
-            "Mapa jest ładowana z naszego własnego serwera. Żadne zapytania nie trafiają do zewnętrznych dostawców map.",
-            "Mapa niczego nie zapisuje w Twojej przeglądarce."
+            "Mapa jest wyświetlana z naszego własnego serwera. Żadne zapytania nie są kierowane do zewnętrznych dostawców map.",
+            "Mapa nie zapisuje żadnych danych w twojej przeglądarce."
           ]
         },
         {
           "title": "Weryfikacja",
           "points": [
-            "Dobrowolnie: przesłana legitymacja myśliwska lub podobny dokument jest przechowywany prywatnie i widoczny tylko dla Ciebie i administratorów.",
-            "Dokument jest usuwany 30 dni po decyzji."
+            "Opcjonalnie: przesłana legitymacja myśliwska lub podobny dokument jest przechowywany prywatnie i widoczny tylko dla ciebie oraz administratorów.",
+            "Dokument zostanie usunięty 30 dni po podjęciu decyzji."
           ]
         },
         {
           "title": "Zgłoszenia i moderacja",
           "points": [
-            "Zgłoszenia, decyzje moderacji i ich uzasadnienia.",
-            "Kopie zgłoszonych wiadomości są przechowywane 12 miesięcy po rozpatrzeniu zgłoszenia.",
-            "Rejestr decyzji administratorów jest przechowywany w formie pseudonimizowanej przez 24 miesiące."
+            "Zgłoszenia, decyzje moderatorów i ich uzasadnienia.",
+            "Kopie zgłoszonych wiadomości są przechowywane przez 12 miesięcy od momentu rozpatrzenia zgłoszenia.",
+            "Rejestr decyzji administracyjnych jest przechowywany w formie zanonimizowanej przez 24 miesiące."
           ]
         },
         {
           "title": "Usunięcie konta",
           "points": [
-            "Możesz w każdej chwili usunąć konto po ponownym zalogowaniu.",
-            "Profil, ogłoszenia, zdjęcia, wiadomości, zapisane wyszukiwania i dokumenty są usuwane natychmiast.",
-            "Pozostają tylko pseudonimizowane dane moderacji i zgłoszenia dotyczące konta, do upływu ich terminów."
+            "Możesz usunąć swoje konto w dowolnym momencie po ponownym zalogowaniu się.",
+            "Profile, ogłoszenia, zdjęcia, wiadomości, zapisane wyszukiwania i dokumenty są natychmiast usuwane.",
+            "Tylko zanonimizowane zapisy moderacyjne i zgłoszenia dotyczące konta są przechowywane do upływu terminu ich ważności."
           ]
         },
         {
           "title": "Eksport danych",
           "points": [
-            "Wszystkie swoje dane możesz pobrać na koncie jako plik JSON."
+            "Wszystkie swoje dane możesz pobrać jako plik JSON ze swojego konta."
           ]
         },
         {
-          "title": "Hosting i podmioty przetwarzające",
+          "title": "Hosting i podmioty przetwarzające dane",
           "points": [
-            "Baza danych, przechowywanie plików i logowanie: Supabase, region UE (Frankfurt).",
+            "Baza danych, przechowywanie plików i zaloguj się: Supabase, region UE (Frankfurt).",
             "Wysyłka e-maili: dostawca zostanie wskazany.",
-            "Kopie zapasowe i logi u dostawcy hostingu i poczty są przechowywane do upływu ich terminów (zostaną wskazane)."
+            "Kopie zapasowe i logi u dostawców usług hostingowych i poczty e-mail są przechowywane do upływu terminów określonych przez tych dostawców (należy je podać)."
           ]
         },
         {
           "title": "Twoje prawa",
           "points": [
-            "Dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie danych, sprzeciw i skarga do organu nadzorczego: tekst zastępczy."
+            "Dostęp, sprostowanie, usunięcie, ograniczenie przetwarzania, przenoszenie danych, sprzeciw oraz prawo do złożenia skargi do organu nadzorczego: tekst zastępczy."
           ]
         }
       ]
@@ -272,45 +272,45 @@
       "title": "Nota prawna"
     },
     "footerLabel": "Informacje prawne",
-    "outlineNote": "Ten zarys wymienia, co platforma faktycznie przetwarza. Nie jest tekstem prawnym.",
+    "outlineNote": "Lista zarysów pokazuje, jakie dane faktycznie przetwarza platforma. Nie jest to tekst prawny.",
     "guidelines": {
       "title": "Zasady treści",
-      "intro": "Te zasady obowiązują dla wszystkich ogłoszeń, profili i wiadomości. Naruszenia prowadzą do odrzucenia lub usunięcia, a przy powtórzeniu do zablokowania konta.",
+      "intro": "Te zasady dotyczą wszystkich ogłoszeń, profili i wiadomości. Ich złamanie skutkuje odrzuceniem lub usunięciem treści, a w przypadku powtórzenia – zablokowaniem konta.",
       "sections": [
         {
-          "title": "Tylko okazje łowieckie",
+          "title": "Tylko oferty polowań",
           "points": [
-            "Każde ogłoszenie musi pasować do jednej z kategorii.",
-            "Żadnej sprzedaży, kupna ani wymiany broni, amunicji lub części broni."
+            "Każde ogłoszenie musi należeć do jednej z kategorii.",
+            "Zabrania się sprzedaży, kupna lub wymiany broni, amunicji oraz części do broni."
           ]
         },
         {
-          "title": "Treści zabronione",
+          "title": "Niedozwolone treści",
           "points": [
             "Żadnych treści niezgodnych z prawem, dyskryminujących, zawierających groźby ani o charakterze seksualnym.",
-            "Żadnych ofert naruszających prawo łowieckie, np. polowania w okresie ochronnym.",
-            "Żadnych tekstów skopiowanych z innych stron ani zdjęć, do których nie masz praw."
+            "Nie wolno zamieszczać ofert naruszających przepisy łowieckie, na przykład dotyczących polowań w okresie ochronnym.",
+            "Nie kopiuj tekstów z innych stron i nie używaj zdjęć, do których nie masz praw."
           ]
         },
         {
-          "title": "Prawdziwie i kompletnie",
+          "title": "Prawdziwe i kompletne",
           "points": [
-            "Dane muszą być kompletne i wiarygodne.",
-            "Żadnych zduplikowanych ogłoszeń dla tej samej okazji."
+            "Informacje muszą być kompletne i wiarygodne.",
+            "Nie dodawaj zduplikowanych ogłoszeń."
           ]
         },
         {
           "title": "Kontakt i prywatność",
           "points": [
-            "Żadnych numerów telefonów, adresów e-mail ani linków w tekście ogłoszenia. Kontakt odbywa się przez czat.",
-            "Żadnych dokładnych współrzędnych obwodów łowieckich ani danych osobowych innych osób."
+            "W opisach ogłoszeń nie podawaj numerów telefonów, adresów e-mail ani linków. Kontakt odbywa się przez czat.",
+            "Nie podawaj dokładnych współrzędnych terenów łowieckich ani danych osobowych innych osób."
           ]
         },
         {
           "title": "Wiadomości",
           "points": [
-            "Żadnego spamu, nękania ani prób oszustwa.",
-            "Możesz zgłaszać wiadomości i blokować osoby."
+            "Żadnego spamu, nękania ani prób oszustw.",
+            "Możesz zgłaszać wiadomości i zablokować osoby."
           ]
         }
       ]
@@ -327,36 +327,36 @@
     "title": "Moje konto",
     "signedInAs": "Zalogowano jako {email}",
     "displayName": "Nazwa wyświetlana",
-    "accountType": "Typ konta",
+    "accountType": "Rodzaj konta",
     "accountTypes": {
       "private": "Prywatne",
       "business": "Firmowe"
     },
     "verification": "Weryfikacja",
     "verificationStatus": {
-      "none": "Niezweryfikowane",
-      "pending": "W trakcie sprawdzania",
-      "verified": "Zweryfikowane",
+      "none": "Niezweryfikowany",
+      "pending": "W weryfikacji",
+      "verified": "Zweryfikowany",
       "rejected": "Odrzucone"
     },
     "editProfile": "Edytuj profil",
     "profile": {
       "metaTitle": "Edytuj profil",
       "title": "Edytuj profil",
-      "back": "Powrót do Moje konto",
+      "back": "Powrót do mojego konta",
       "submit": "Zapisz",
       "saved": "Twój profil został zapisany.",
-      "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie.",
-      "blocked": "Twoje konto jest zablokowane. Nie możesz zmieniać profilu."
+      "failed": "Zapisanie nie powiodło się. Spróbuj jeszcze raz.",
+      "blocked": "Twoje konto jest zablokowane. Nie możesz zmienić swojego profilu."
     },
     "myListings": "Moje ogłoszenia",
-    "favorites": "Ulubione",
+    "favorites": "Zapisane ogłoszenia",
     "savedSearches": "Zapisane wyszukiwania",
     "dataExport": "Pobierz moje dane",
     "deleteAccount": "Usuń konto",
     "verificationLink": "Weryfikacja",
     "myReports": "Moje zgłoszenia",
-    "decisions": "Decyzje i skargi"
+    "decisions": "Decyzje i odwołania"
   },
   "Listings": {
     "kinds": {
@@ -386,12 +386,12 @@
       "empty": "Nie masz jeszcze żadnych ogłoszeń.",
       "create": "Dodaj ogłoszenie",
       "statusLabel": "Status",
-      "rejectReason": "Powód moderacji: {reason}",
-      "moderationNote": "Uwaga moderacji: „{note}”",
-      "changesRequested": "Moderacja prosi o zmiany. Po edycji możesz ponownie przesłać ogłoszenie.",
+      "rejectReason": "Uzasadnienie moderatora: {reason}",
+      "moderationNote": "Uwaga od moderatorów: „{note}”",
+      "changesRequested": "Zespół moderatorów poprosił o wprowadzenie zmian. Po wprowadzeniu poprawek możesz ponownie opublikować ogłoszenie.",
       "expiresAt": "Widoczne do {date}",
       "createdAt": "Utworzono {date}",
-      "reviewHint": "Moderacja sprawdzi Twoje ogłoszenie przed publikacją."
+      "reviewHint": "Zespół moderatorów sprawdzi twoje ogłoszenie, zanim zostanie opublikowane."
     },
     "actions": {
       "edit": "Edytuj",
@@ -400,21 +400,21 @@
       "resume": "Wznów",
       "delete": "Usuń szkic",
       "deleteConfirm": "Usuń na stałe",
-      "deleteQuestion": "Usunąć „{title}” na stałe? Tej operacji nie można cofnąć."
+      "deleteQuestion": "Chcesz trwale usunąć „{title}”? Nie da się tego cofnąć."
     },
     "notices": {
-      "withdrawn": "Ogłoszenie jest ponownie szkicem.",
-      "paused": "Ogłoszenie jest wstrzymane i nie jest już publiczne.",
-      "resumed": "Ogłoszenie jest ponownie publiczne.",
-      "resumedReview": "Ogłoszenie zmieniło się od zatwierdzenia i wraca do weryfikacji.",
+      "withdrawn": "Ogłoszenie to znowu jest tylko szkicem.",
+      "paused": "Ogłoszenie zostało wstrzymane i nie jest już publiczne.",
+      "resumed": "Ogłoszenie znów jest publiczne.",
+      "resumedReview": "Ogłoszenie uległo zmianie od czasu zatwierdzenia i wraca do weryfikacji.",
       "deleted": "Szkic został usunięty.",
-      "submitted": "Dziękujemy! Twoje ogłoszenie jest teraz weryfikowane."
+      "submitted": "Dzięki! Twoje ogłoszenie jest teraz w weryfikacji."
     },
     "errors": {
-      "failed": "Nie udało się. Odśwież stronę i spróbuj ponownie.",
-      "legal": "Najpierw zaakceptuj aktualny regulamin.",
-      "rateLimited": "Osiągnięto dzienny limit nowych ogłoszeń. Kolejne możesz dodać od {time}.",
-      "rateLimitedNoTime": "Osiągnięto dzienny limit nowych ogłoszeń. Spróbuj ponownie jutro."
+      "failed": "To nie zadziałało. Odśwież stronę i spróbuj jeszcze raz.",
+      "legal": "Najpierw zaakceptuj aktualny regulamin serwisu.",
+      "rateLimited": "Osiągnąłeś dzienny limit nowych ogłoszeń. Kolejne możesz utworzyć z poziomu {time}.",
+      "rateLimitedNoTime": "Osiągnąłeś dzienny limit nowych ogłoszeń. Spróbuj ponownie jutro."
     },
     "wizard": {
       "newMetaTitle": "Dodaj ogłoszenie",
@@ -424,53 +424,53 @@
       "progress": "Krok {current} z {total}",
       "stepsLabel": "Kroki",
       "steps": {
-        "basics": "Podstawowe dane",
+        "basics": "Podstawy",
         "location": "Lokalizacja",
         "details": "Szczegóły",
-        "price": "Cena i termin",
+        "price": "Cena i terminy",
         "preview": "Podgląd i wysłanie",
         "photos": "Zdjęcia"
       },
-      "save": "Zapisz i dalej",
-      "create": "Utwórz szkic",
-      "back": "Powrót do Moich ogłoszeń",
+      "save": "Zapisz i kontynuuj",
+      "create": "Stwórz szkic",
+      "back": "Powrót do moich ogłoszeń",
       "saved": "Zapisano.",
-      "publishedNote": "To ogłoszenie jest opublikowane. Każda zmiana odsyła je do ponownej weryfikacji.",
-      "lockedNote": "To ogłoszenie zostało usunięte przez moderację i nie można go już zmieniać.",
-      "typeLockedNote": "W przesłanych i opublikowanych ogłoszeniach nie można już zmienić rodzaju ani kierunku (oferta/poszukiwanie). Dodaj w tym celu nowe ogłoszenie.",
-      "errorSummary": "Sprawdź następujące dane:",
-      "draftHint": "Szkic zapisuje się po każdym kroku. Widzisz go tylko Ty.",
+      "publishedNote": "To ogłoszenie zostało opublikowane. Każda zmiana powoduje, że wraca do weryfikacji.",
+      "lockedNote": "To ogłoszenie zostało usunięte przez zespół moderatorów i nie można go już edytować.",
+      "typeLockedNote": "Po przesłaniu lub opublikowaniu ogłoszenia nie można już zmienić jego typu ani treści oferty/zapytania. Zamiast tego dodaj nowe ogłoszenie.",
+      "errorSummary": "Sprawdź, proszę, następujące kwestie:",
+      "draftHint": "Twój szkic jest zapisywany po każdym kroku. Tylko ty możesz go zobaczyć.",
       "countryApply": "Zmień kraj",
-      "continue": "Dalej"
+      "continue": "Kontynuuj"
     },
     "fields": {
       "kind": "Rodzaj ogłoszenia",
-      "direction": "Oferta czy poszukiwanie",
+      "direction": "Oferta lub poszukiwanie",
       "title": "Tytuł",
       "titleHint": "Od 3 do 100 znaków.",
       "language": "Język tekstu",
       "country": "Kraj",
-      "district": "Powiat",
+      "district": "Okręg",
       "choose": "Wybierz",
-      "postalCode": "Kod pocztowy obwodu",
-      "postalCodeWanted": "Kod pocztowy szukanego obszaru (opcjonalnie)",
-      "placeName": "Miejscowość obwodu",
-      "placeNameWanted": "Miejscowość szukanego obszaru (opcjonalnie)",
-      "placePrivate": "Kod pocztowy i miejscowość widzisz tylko Ty i moderacja. Publicznie widoczny jest tylko powiat i pierwsze dwie cyfry kodu.",
-      "postalCodeSource": "Dane kodów pocztowych: © współtwórcy OpenStreetMap (ODbL), © GeoBasis-DE / BKG, źródło danych: Statistik Austria",
-      "postalCodeReport": "Kod jest jednak poprawny? Napisz do nas przez dane kontaktowe w nocie prawnej, sprawdzimy przypisanie.",
+      "postalCode": "Kod pocztowy terenu łowieckiego",
+      "postalCodeWanted": "Kod pocztowy obszaru, który cię interesuje (opcjonalnie)",
+      "placeName": "Lokalizacja terenu łowieckiego",
+      "placeNameWanted": "Lokalizacja obszaru, którego szukasz (opcjonalnie)",
+      "placePrivate": "Tylko ty i zespół moderatorów widzicie kod pocztowy i miejscowość. Publicznie wyświetlane są tylko dzielnica i dwie pierwsze cyfry kodu pocztowego.",
+      "postalCodeSource": "Dane dotyczące kodów pocztowych: © autorzy OpenStreetMap (ODbL), © GeoBasis-DE / BKG, źródła danych: Statistics Austria",
+      "postalCodeReport": "A czy ten kod pocztowy w ogóle jest poprawny? Daj nam znać, korzystając z danych kontaktowych w notie prawnej, a my sprawdzimy to zlecenie.",
       "description": "Opis",
       "descriptionHint": "Od 30 do 5000 znaków. Nie podawaj dokładnej lokalizacji ani danych kontaktowych; kontakt odbywa się przez czat.",
       "area": "Powierzchnia w hektarach",
-      "species": "Gatunki zwierzyny",
-      "speciesHint": "W ofertach dzierżawy, zezwolenia i polowania trofeowego wymagany jest co najmniej jeden gatunek.",
-      "kindDetails": "Szczegóły: {kind}",
+      "species": "Gatunki zwierzyny łownej",
+      "speciesHint": "W przypadku ofert dzierżawy obwodu łowieckiego, zezwoleń na polowanie i trofea trzeba podać co najmniej jeden gatunek.",
+      "kindDetails": "Szczegóły dotyczące {kind}",
       "price": "Cena",
-      "priceNone": "Bez ceny",
+      "priceNone": "Brak ceny",
       "priceOnRequest": "Na zapytanie",
-      "priceAmount": "Podaj kwotę",
+      "priceAmount": "Wpisz kwotę",
       "amount": "Kwota",
-      "amountHint": "Na przykład 1500 lub 1 500,50",
+      "amountHint": "Na przykład 1500 lub 1.500,50",
       "currency": "Waluta",
       "unit": "Jednostka",
       "period": "Okres (opcjonalnie)",
@@ -478,12 +478,12 @@
       "endDate": "Do",
       "yes": "Tak",
       "no": "Nie",
-      "notSpecified": "Nie podano",
+      "notSpecified": "Nie określono",
       "postalCodeReportLink": "Nota prawna"
     },
     "attributes": {
       "lease_type": "Rodzaj dzierżawy",
-      "revier_type": "Typ obwodu",
+      "revier_type": "Typ obwodu łowieckiego",
       "submission_deadline": "Termin składania ofert",
       "lease_duration_years": "Okres dzierżawy w latach",
       "shooting_plan": "Plan odstrzału",
@@ -496,17 +496,17 @@
       "event_date": "Data",
       "spots_available": "Wolne miejsca",
       "meeting_point_description": "Miejsce zbiórki",
-      "dogs_required": "Wymagane psy",
-      "legal_ack": "Znam wymogi prawne dotyczące trofeów, broni oraz przywozu i wywozu.",
+      "dogs_required": "Wymagane są psy",
+      "legal_ack": "Znam przepisy dotyczące trofeów, broni palnej oraz importu i eksportu.",
       "trophy_details": "Szczegóły trofeum",
-      "includes_accommodation": "Z zakwaterowaniem",
+      "includes_accommodation": "Zakwaterowanie w cenie",
       "import_export_note": "Uwagi dotyczące przywozu i wywozu",
       "experience_level": "Doświadczenie",
       "tasks": "Zadania"
     },
     "attributeHints": {
-      "tasks": "Jedno zadanie w wierszu, na przykład budowa ambony.",
-      "legal_ack": "Wymagane przy polowaniach trofeowych i gościnnych."
+      "tasks": "Jedno zadanie w każdym wierszu, na przykład budowa ambony.",
+      "legal_ack": "Wymagane w przypadku polowań na trofea i polowań dla gości."
     },
     "options": {
       "lease_type": {
@@ -536,92 +536,92 @@
       "per_animal": "za sztukę zwierzyny"
     },
     "fieldErrors": {
-      "description_length": "Napisz opis o długości co najmniej 30 znaków.",
-      "place_postal_code_required": "Podaj kod pocztowy obwodu.",
-      "place_place_name_required": "Podaj miejscowość obwodu.",
+      "description_length": "Napisz opis zawierający co najmniej 30 znaków.",
+      "place_postal_code_required": "Wpisz kod pocztowy terenu łowieckiego.",
+      "place_place_name_required": "Wpisz lokalizację terenu łowieckiego.",
       "place_postal_code_unknown": "Nie znamy tego kodu pocztowego.",
-      "place_postal_code_region_mismatch": "Kod pocztowy nie należy do wybranego powiatu.",
-      "postal_format": "Kod pocztowy nie ma formatu danego kraju.",
+      "place_postal_code_region_mismatch": "Ten kod pocztowy nie należy do wybranej dzielnicy.",
+      "postal_format": "Kod pocztowy nie ma formatu obowiązującego w danym kraju.",
       "attributes_legal_ack": "Potwierdź, że znasz wymogi prawne.",
-      "attributes_event_date_past": "Data jest w przeszłości.",
+      "attributes_event_date_past": "Data dotyczy przeszłości.",
       "attributes_lease_type": "Wybierz rodzaj dzierżawy.",
-      "attributes_revier_type": "Wybierz co najmniej jeden typ obwodu.",
-      "area_hectares": "Podaj powierzchnię w hektarach.",
-      "area_invalid": "Podaj powierzchnię większą od 0 z maksymalnie dwoma miejscami po przecinku.",
+      "attributes_revier_type": "Wybierz przynajmniej jeden typ obwodu.",
+      "area_hectares": "Wpisz powierzchnię w hektarach.",
+      "area_invalid": "Wpisz wartość większą od 0 z maksymalnie dwoma miejscami po przecinku.",
       "attributes_permit_scope": "Wybierz zakres zezwolenia.",
       "attributes_paid": "Podaj, czy zezwolenie jest odpłatne.",
-      "attributes_event_date": "Podaj datę polowania.",
-      "attributes_spots_available": "Podaj liczbę wolnych miejsc (od 1 do 500).",
-      "attributes_tasks": "Podaj co najmniej jedno zadanie.",
-      "species": "Wybierz co najmniej jeden gatunek zwierzyny.",
-      "photos_unprocessed": "Niektóre zdjęcia są jeszcze przetwarzane. Poczekaj chwilę lub je usuń.",
-      "attributes_unknown": "Niektóre dane nie pasują do rodzaju ogłoszenia.",
-      "attributes_invalid": "Sprawdź dane dotyczące rodzaju ogłoszenia.",
-      "title": "Tytuł musi mieć od 3 do 100 znaków.",
-      "district": "Wybierz powiat.",
-      "price_required": "Podaj kwotę.",
-      "price_invalid": "Podaj kwotę jako liczbę, na przykład 1500 lub 1 500,50.",
+      "attributes_event_date": "Wpisz datę polowania.",
+      "attributes_spots_available": "Wpisz liczbę wolnych miejsc (od 1 do 500).",
+      "attributes_tasks": "Podaj przynajmniej jedno zadanie.",
+      "species": "Wybierz przynajmniej jeden gatunek zwierzyny łownej.",
+      "photos_unprocessed": "Niektóre zdjęcia są wciąż w trakcie przetwarzania. Poczekaj chwilę albo je usuń.",
+      "attributes_unknown": "Niektóre szczegóły nie pasują do rodzaju ogłoszenia.",
+      "attributes_invalid": "Sprawdź szczegóły dotyczące tego typu ogłoszeń.",
+      "title": "Tytuł powinien mieć od 3 do 100 znaków.",
+      "district": "Wybierz okręg.",
+      "price_required": "Wpisz kwotę.",
+      "price_invalid": "Wpisz kwotę w postaci liczby, na przykład 1500 lub 1.500,50.",
       "price_negative": "Kwota nie może być ujemna.",
-      "price_tooManyDecimals": "Użyj maksymalnie dwóch miejsc po przecinku.",
-      "price_zero": "Podaj kwotę większą od 0 lub wybierz „Na zapytanie”.",
-      "price_tooLarge": "Kwota jest zbyt wysoka.",
-      "price_conflict": "Wpisano kwotę. Wybierz „Podaj kwotę” lub wyczyść pole „Kwota”.",
+      "price_tooManyDecimals": "Używaj maksymalnie dwóch miejsc po przecinku.",
+      "price_zero": "Wpisz kwotę większą niż 0 albo wybierz opcję „Na zapytanie”.",
+      "price_tooLarge": "To za dużo.",
+      "price_conflict": "Wpisałeś kwotę. Wybierz opcję „Wprowadź kwotę” albo wyczyść pole kwoty.",
       "dates": "Koniec jest przed początkiem.",
-      "form": "Sprawdź wprowadzone dane.",
-      "place_point_small_district": "W tym powiecie punkt na mapie nie jest możliwy: jest tak mały, że punkt zdradziłby lokalizację zbyt dokładnie. Mapa pokazuje środek powiatu.",
-      "place_point_too_far": "Punkt nie leży w wybranym powiecie.",
-      "place_point_invalid": "Punkt jest nieprawidłowy. Ustaw go ponownie na mapie."
+      "form": "Sprawdź swoje wpisy.",
+      "place_point_small_district": "W tej dzielnicy nie da się zaznaczyć punktu na mapie: jest tak mała, że punkt ten ujawniłby lokalizację zbyt dokładnie. Mapa pokazuje centrum dzielnicy.",
+      "place_point_too_far": "Nie chodzi o wybrany okręg.",
+      "place_point_invalid": "Ten punkt jest nieprawidłowy. Ustaw go ponownie na mapie."
     },
     "preview": {
-      "privateBadge": "tylko dla Ciebie i moderacji",
+      "privateBadge": "tylko dla ciebie i zespołu moderatorów",
       "privateBadgeModerator": "niepubliczne",
-      "missing": "Przed wysłaniem brakuje jeszcze:",
-      "ready": "Wszystko gotowe do wysłania.",
-      "submit": "Wyślij do weryfikacji",
+      "missing": "Przed wysłaniem brakuje jeszcze następujących elementów:",
+      "ready": "Wszystko jest gotowe do wysłania.",
+      "submit": "Prześlij do sprawdzenia",
       "fix": "Popraw w kroku „{step}”",
-      "notSubmittable": "To ogłoszenie jest w weryfikacji lub opublikowane. Zmiany zapisują się od razu.",
-      "weaponsTitle": "Uwaga: broń i amunicja",
-      "weaponsText": "Revier pośredniczy wyłącznie w okazjach łowieckich. Nie wolno oferować broni ani amunicji. Sprawdź te fragmenty:",
-      "weaponsMatch": "{field}: „{term}”",
-      "weaponsSubmit": "Mimo to możesz wysłać ogłoszenie; moderacja je sprawdzi.",
-      "altText": "Tekst alternatywny zdjęcia",
+      "notSubmittable": "To ogłoszenie jest w weryfikacji lub zostało opublikowane. Zmiany zapisują się od razu.",
+      "weaponsTitle": "Uwaga: broń palna i amunicja",
+      "weaponsText": "Reviro zajmuje się wyłącznie organizacją polowań. Nie wolno oferować broni palnej ani amunicji. Sprawdź te fragmenty:",
+      "weaponsMatch": "{field}: “{term}”",
+      "weaponsSubmit": "Nadal możesz zamieścić ogłoszenie; zespół moderatorów sprawdzi je.",
+      "altText": "Tekst alternatywny do zdjęcia",
       "onRequest": "Na zapytanie",
       "noPrice": "Nie podano ceny"
     },
     "photos": {
       "choose": "Wybierz zdjęcia",
-      "intro": "Do 8 zdjęć (JPEG, PNG lub WebP). Zdjęcia są zmniejszane przed wysłaniem; serwer usuwa wszystkie metadane, np. lokalizację GPS.",
+      "intro": "Maksymalnie 8 zdjęć (JPEG, PNG lub WebP). Zdjęcia są kompresowane przed przesłaniem; serwer usuwa wszystkie metadane, takie jak lokalizacja GPS.",
       "limit": "To ogłoszenie ma już 8 zdjęć.",
-      "uploading": "Wysyłanie {name} …",
+      "uploading": "Przesyłanie {name}…",
       "done": "{count, plural, one {Wysłano # zdjęcie.} few {Wysłano # zdjęcia.} other {Wysłano # zdjęć.}}",
       "skipped": "{count, plural, one {# zdjęcie nie zostało przesłane} few {# zdjęcia nie zostały przesłane} other {# zdjęć nie zostało przesłanych}}: maksymalnie 8 zdjęć na ogłoszenie.",
-      "empty": "Brak zdjęć.",
-      "noscript": "Wysyłanie zdjęć wymaga JavaScriptu.",
-      "unprocessed": "Jeszcze nie przetworzono. Jeśli tak zostanie, usuń zdjęcie i wyślij je ponownie.",
+      "empty": "Na razie nie ma zdjęć.",
+      "noscript": "Przesyłanie zdjęć wymaga JavaScriptu.",
+      "unprocessed": "Jeszcze nieprzetworzone. Jeśli tak zostanie, usunięte zdjęcie wrzuć ponownie.",
       "photoLabel": "Zdjęcie {n} z {total}",
       "altFallback": "{title}, zdjęcie {n} z {total}",
       "altText": "Tekst alternatywny (opcjonalnie)",
-      "altTextHint": "Krótko opisz, co widać. Bez opisu użyty zostanie tytuł.",
+      "altTextHint": "Krótko opisz, co widać na ekranie. Jeśli tego nie zrobisz, użyj tytułu.",
       "saveAltText": "Zapisz tekst alternatywny",
       "moveUp": "Przesuń do przodu",
       "moveDown": "Przesuń do tyłu",
       "remove": "Usuń",
       "notices": {
-        "alt": "Zapisano tekst alternatywny.",
-        "up": "Zapisano kolejność.",
-        "down": "Zapisano kolejność.",
-        "remove": "Usunięto zdjęcie."
+        "alt": "Tekst alternatywny zapisany.",
+        "up": "Kolejność zapisana.",
+        "down": "Kolejność zapisana.",
+        "remove": "Zdjęcie usunięte."
       },
       "errors": {
         "heic": "Format HEIC nie jest obsługiwany. Wyeksportuj zdjęcie jako JPEG.",
-        "unsupported": "Ten format nie jest obsługiwany. Dozwolone są JPEG, PNG i WebP.",
-        "tooLarge": "Zdjęcie jest zbyt duże.",
+        "unsupported": "Ten format nie jest obsługiwany. Dozwolone są formaty JPEG, PNG i WebP.",
+        "tooLarge": "Zdjęcie jest za duże.",
         "corrupt": "Plik jest uszkodzony lub nie jest obrazem.",
         "limit": "Maksymalnie 8 zdjęć na ogłoszenie.",
-        "dailyLimit": "Dziś wysłano już bardzo dużo zdjęć. Spróbuj ponownie jutro.",
-        "attempts": "Zbyt wiele prób dla tego zdjęcia. Wybierz je ponownie.",
-        "network": "Brak połączenia. Spróbuj ponownie.",
-        "failed": "Nie udało się przetworzyć zdjęcia. Wybierz je ponownie."
+        "dailyLimit": "Wrzuciłeś dzisiaj naprawdę dużo zdjęć. Spróbuj ponownie jutro.",
+        "attempts": "Za dużo prób zrobienia tego zdjęcia. Wybierz je jeszcze raz.",
+        "network": "Brak połączenia. Spróbuj jeszcze raz.",
+        "failed": "Nie udało się przetworzyć zdjęcia. Wybierz je jeszcze raz."
       }
     }
   },
@@ -629,30 +629,30 @@
     "forbidden": {
       "metaTitle": "Brak dostępu",
       "title": "Brak dostępu",
-      "text": "Ten obszar jest przeznaczony wyłącznie dla moderacji.",
-      "backHome": "Wróć na stronę główną"
+      "text": "Ta sekcja jest zarezerwowana dla zespołu moderatorów.",
+      "backHome": "Powrót do strony głównej"
     },
     "mfa": {
       "metaTitle": "Uwierzytelnianie dwuskładnikowe",
       "title": "Uwierzytelnianie dwuskładnikowe",
-      "intro": "Panel administracyjny wymaga drugiego składnika. Użyj aplikacji uwierzytelniającej (na przykład w telefonie).",
-      "setupIntro": "Dla Twojego konta nie skonfigurowano jeszcze aplikacji uwierzytelniającej.",
-      "setupButton": "Skonfiguruj aplikację uwierzytelniającą",
-      "qrAlt": "Kod QR dla aplikacji uwierzytelniającej",
-      "secretLabel": "Lub wpisz ten klucz ręcznie:",
+      "intro": "Panel administracyjny wymaga uwierzytelnienia dwuskładnikowego. Użyj aplikacji do uwierzytelniania (na przykład na telefonie).",
+      "setupIntro": "Na twoim koncie nie skonfigurowano jeszcze żadnego uwierzytelniacza.",
+      "setupButton": "Skonfiguruj uwierzytelniacz",
+      "qrAlt": "Kod QR do twojej aplikacji do uwierzytelniania",
+      "secretLabel": "Albo wpisz ten klucz ręcznie:",
       "codeLabel": "6-cyfrowy kod z aplikacji",
       "verify": "Potwierdź",
-      "noscript": "Konfiguracja wymaga JavaScriptu: klucz jest tworzony tylko raz i od razu wyświetlany. Włącz JavaScript dla tej strony.",
+      "noscript": "Konfiguracja wymaga włączenia JavaScript: klucz jest generowany tylko raz i wyświetlany od razu. Włącz JavaScript na tej stronie.",
       "errors": {
-        "code": "Kod jest nieprawidłowy lub wygasł. Spróbuj ponownie.",
-        "setup": "Konfiguracja nie powiodła się. Zacznij od nowa."
+        "code": "Kod jest nieprawidłowy lub wygasły. Spróbuj jeszcze raz.",
+        "setup": "Konfiguracja nie powiodła się. Spróbuj jeszcze raz."
       }
     },
     "overview": {
-      "metaTitle": "Panel administracyjny",
-      "title": "Panel administracyjny",
+      "metaTitle": "Panel administratora",
+      "title": "Panel administratora",
       "pending": "{count, plural, =0 {Brak ogłoszeń do zatwierdzenia.} one {# ogłoszenie do zatwierdzenia.} few {# ogłoszenia do zatwierdzenia.} other {# ogłoszeń do zatwierdzenia.}}",
-      "queueLink": "Otwórz kolejkę",
+      "queueLink": "Otwórz ogłoszenia do zatwierdzenia",
       "auditLink": "Dziennik audytu",
       "adminsLink": "Zarządzaj administratorami",
       "stuckDeletions": "{count, plural, one {# usunięcie konta utknęło} few {# usunięcia kont utknęły} many {# usunięć kont utknęło} other {# usunięcia kont utknęło}} (ponawiane automatycznie).",
@@ -661,59 +661,59 @@
       "reportsOpen": "{count, plural, =0 {Brak otwartych zgłoszeń.} one {# otwarte zgłoszenie.} few {# otwarte zgłoszenia.} other {# otwartych zgłoszeń.}}",
       "reportsLink": "Sprawdź zgłoszenia",
       "appealsOpen": "{count, plural, =0 {Brak otwartych skarg.} one {# otwarta skarga.} few {# otwarte skargi.} other {# otwartych skarg.}}",
-      "appealsLink": "Sprawdź skargi",
-      "usersLink": "Wyszukaj konto"
+      "appealsLink": "Sprawdź odwołania",
+      "usersLink": "Znajdź konto"
     },
     "queue": {
       "metaTitle": "Ogłoszenia do zatwierdzenia",
-      "title": "Ogłoszenia do zatwierdzenia",
-      "empty": "Żadne ogłoszenia nie czekają na zatwierdzenie.",
+      "title": "Ogłoszenia oczekujące na weryfikację",
+      "empty": "Nie ma żadnych ogłoszeń oczekujących na weryfikację.",
       "waiting": "Przesłano {time}",
-      "owner": "Od {name}",
+      "owner": "Autor: {name}",
       "hints": "{count, plural, one {# termin dotyczący broni} few {# terminy dotyczące broni} other {# terminów dotyczących broni}}",
-      "rejections": "Wcześniej odrzucono: ogłoszenie {listing}, ogłoszeniodawca {owner}",
+      "rejections": "Wcześniej odrzucono: ogłoszenie {listing}, właściciel {owner}",
       "more": "Następna strona",
-      "back": "Wróć do panelu administracyjnego",
+      "back": "Powrót do panelu administracyjnego",
       "notices": {
         "approved": "Ogłoszenie zostało zatwierdzone.",
-        "returned": "Ogłoszenie zostało zwrócone do poprawek.",
+        "returned": "Ogłoszenie zostało odesłane do poprawek.",
         "rejected": "Ogłoszenie zostało odrzucone.",
-        "decided": "O tym ogłoszeniu zdecydował już inny administrator."
+        "decided": "To ogłoszenie zostało już zatwierdzone przez innego administratora."
       }
     },
     "review": {
       "metaTitle": "Sprawdź ogłoszenie",
-      "back": "Wróć do kolejki",
-      "owner": "Ogłoszeniodawca: {name}, członek od {date}",
+      "back": "Powrót do ogłoszeń do zatwierdzenia",
+      "owner": "Reklamodawca: {name}, członek od {date}",
       "previousRejections": "{count, plural, =0 {Dotąd nigdy nie odrzucono.} one {Dotąd odrzucono # raz.} few {Dotąd odrzucono # razy.} other {Dotąd odrzucono # razy.}}",
       "contentLanguage": "Język ogłoszenia: {language}",
-      "notPending": "To ogłoszenie nie czeka na zatwierdzenie (status: {status}).",
+      "notPending": "To ogłoszenie nie czeka na weryfikację (status: {status}).",
       "decision": "Decyzja",
       "reason": "Powód",
       "reasonNone": "– wybierz powód –",
-      "reasonHint": "Wymagane przy „Poproś o poprawki” i „Odrzuć”. Ogłoszeniodawca zobaczy powód w swoim języku.",
+      "reasonHint": "Wymagane dla opcji „Poproś o poprawki” i „Odrzuć”. Ogłoszeniodawca widzi powód w swoim języku.",
       "note": "Uwaga dla ogłoszeniodawcy (opcjonalnie)",
-      "noteHint": "Wymagane przy „Inny powód”. Ogłoszeniodawca zobaczy ją dokładnie tak, maksymalnie 1000 znaków.",
+      "noteHint": "Wymagane w kategorii „Inny powód”. Widoczne dla ogłoszeniodawcy dokładnie w takiej formie, w jakiej zostało napisane, maksymalnie 1000 znaków.",
       "submit": "Zapisz decyzję",
       "errors": {
-        "changed": "Ogłoszeniodawca zmienił w międzyczasie ogłoszenie. Sprawdź aktualną wersję.",
+        "changed": "W międzyczasie reklamodawca zmienił ogłoszenie. Sprawdź aktualną wersję.",
         "code": "Wybierz powód.",
-        "note": "Przy „Inny powód” dodaj uwagę.",
-        "notReady": "Nie można zatwierdzić ogłoszenia, ponieważ brakuje danych lub są nieprawidłowe:",
+        "note": "Dodaj proszę adnotację „Inny powód”.",
+        "notReady": "Ogłoszenie nie może zostać zatwierdzone, bo brakuje informacji albo są one nieprawidłowe:",
         "forbidden": "Nie możesz podjąć decyzji w sprawie tego ogłoszenia.",
-        "failed": "Nie udało się zapisać decyzji. Spróbuj ponownie."
+        "failed": "Nie udało się zapisać decyzji. Spróbuj jeszcze raz."
       }
     },
     "audit": {
       "metaTitle": "Dziennik audytu",
       "title": "Dziennik audytu",
-      "back": "Wróć do panelu administracyjnego",
-      "filterAction": "Akcja",
-      "filterAll": "Wszystkie akcje",
+      "back": "Powrót do panelu administracyjnego",
+      "filterAction": "Działanie",
+      "filterAll": "Wszystkie działania",
       "filterTarget": "ID celu",
       "filter": "Filtruj",
       "time": "Czas",
-      "action": "Akcja",
+      "action": "Działanie",
       "actor": "Kto",
       "target": "Cel",
       "details": "Szczegóły",
@@ -726,25 +726,25 @@
         "listing_rejected": "Ogłoszenie odrzucone",
         "listing_removed": "Ogłoszenie usunięte",
         "listing_point_removed": "Punkt na mapie usunięty",
-        "role_granted": "Mianowano administratora",
-        "role_revoked": "Odebrano rolę administratora",
-        "user_looked_up": "Wyszukano konto",
+        "role_granted": "Wyznaczono administratora",
+        "role_revoked": "Odwołano uprawnienia administratora",
+        "user_looked_up": "Sprawdzono konto",
         "profile_blocked": "Konto zablokowane",
         "profile_unblocked": "Konto odblokowane",
         "verification_verified": "Weryfikacja potwierdzona",
         "verification_rejected": "Weryfikacja odrzucona",
         "report_handled": "Zgłoszenie rozpatrzone",
         "verification_revoked": "Weryfikacja cofnięta",
-        "verification_document_viewed": "Dokument weryfikacyjny wyświetlony",
-        "profile_warned": "Konto upomniane",
+        "verification_document_viewed": "Wyświetlono dokument dotyczący weryfikacji",
+        "profile_warned": "Ostrzeżenie dla konta",
         "report_reopened": "Zgłoszenie ponownie otwarte",
-        "report_message_viewed": "Zgłoszona wiadomość wyświetlona",
-        "appeal_upheld": "Skarga oddalona",
-        "appeal_reversed": "Skarga uwzględniona"
+        "report_message_viewed": "Zgłoszona wiadomość została wyświetlona",
+        "appeal_upheld": "Odwołanie odrzucone",
+        "appeal_reversed": "Odwołanie uwzględnione"
       },
       "detailKeys": {
-        "from": "Wcześniej",
-        "code": "Szablon powodu",
+        "from": "Przed",
+        "code": "Szablon uzasadnienia",
         "reason": "Tekst dowolny",
         "role": "Rola",
         "via": "Przez",
@@ -752,50 +752,50 @@
         "user_id": "Konto",
         "status": "Status",
         "outcome": "Wynik",
-        "note": "Uzasadnienie",
+        "note": "Wyjaśnienie",
         "same_reviewer": "Ten sam administrator",
         "decision_action": "Decyzja"
       },
       "via": {
-        "ui": "Panel administracyjny",
-        "sql": "SQL (runbook)"
+        "ui": "Panel administratora",
+        "sql": "SQL (podręcznik)"
       }
     },
     "admins": {
       "metaTitle": "Administratorzy",
       "title": "Administratorzy",
-      "back": "Wróć do panelu administracyjnego",
-      "intro": "Administratorzy sprawdzają ogłoszenia oraz mianują lub usuwają innych administratorów. Każda zmiana wymaga nowego kodu z aplikacji uwierzytelniającej i trafia do dziennika audytu.",
-      "listTitle": "Obecni administratorzy",
+      "back": "Powrót do panelu administracyjnego",
+      "intro": "Administratorzy mogą przeglądać ogłoszenia oraz mianować lub usuwać innych administratorów. Każda zmiana wymaga nowego kodu z aplikacji uwierzytelniającej i jest rejestrowana w dzienniku audytu.",
+      "listTitle": "Aktualni administratorzy",
       "since": "Administrator od {date}",
-      "inactive": "zablokowany lub usunięty",
-      "you": "(Ty)",
-      "revoke": "Odbierz rolę administratora",
-      "revokeConfirm": "Odbierz dla {name}",
-      "findTitle": "Mianuj administratora",
+      "inactive": "zablokowane lub usunięte",
+      "you": "(ty)",
+      "revoke": "Cofnij uprawnienia administratora",
+      "revokeConfirm": "Cofnij dla {name}",
+      "findTitle": "Wyznacz administratora",
       "email": "Dokładny adres e-mail konta",
       "find": "Znajdź konto",
       "candidate": "{name}, członek od {date}",
-      "alreadyAdmin": "To konto jest już administratorem.",
-      "grant": "Mianuj administratorem",
-      "code": "Aktualny kod z aplikacji uwierzytelniającej",
-      "revokeCode": "Aktualny kod z aplikacji uwierzytelniającej, aby odebrać rolę administratora użytkownikowi {name}",
+      "alreadyAdmin": "Konto ma już uprawnienia administratora.",
+      "grant": "Wyznacz jako administratora",
+      "code": "Aktualny kod z twojej aplikacji do uwierzytelniania",
+      "revokeCode": "Aktualny kod z twojej aplikacji uwierzytelniającej, żeby odebrać uprawnienia administratora z {name}",
       "rules": "Nowi administratorzy od razu sprawdzają ogłoszenia, ale role mogą zmieniać sami dopiero po {days, plural, one {# dniu} few {# dniach} many {# dniach} other {# dnia}}. Maksymalnie {perAdmin, plural, one {# zmiana roli} few {# zmiany ról} many {# zmian ról} other {# zmiany ról}} na administratora i {total} łącznie w ciągu 24 godzin.",
       "notices": {
-        "granted": "Konto jest teraz administratorem. Przed pierwszą czynnością nowy administrator konfiguruje uwierzytelnianie dwuskładnikowe.",
-        "revoked": "Rola administratora została odebrana."
+        "granted": "Konto ma teraz uprawnienia administratora. Nowy administrator musi skonfigurować uwierzytelnianie dwuskładnikowe, zanim zacznie działać.",
+        "revoked": "Uprawnienia administratora zostały cofnięte."
       },
       "errors": {
-        "notFound": "Brak aktywnego, potwierdzonego konta z dokładnie tym adresem e-mail.",
-        "code": "Kod jest nieprawidłowy lub wygasł.",
-        "stepUp": "Potwierdź ponownie nowym kodem.",
+        "notFound": "Nie ma aktywnego, potwierdzonego konta z tym konkretnym adresem e-mail.",
+        "code": "Kod jest nieprawidłowy lub wygasły.",
+        "stepUp": "Potwierdź to jeszcze raz, używając nowego kodu.",
         "waiting": "Role możesz zmieniać dopiero od {date} ({days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} po własnym mianowaniu).",
         "waitingNoDate": "Role możesz zmieniać dopiero {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} po własnym mianowaniu.",
-        "limit": "Zbyt wiele zmian ról lub wyszukiwań w krótkim czasie. Spróbuj ponownie później.",
-        "lastAdmin": "Nie można usunąć ostatniego administratora.",
-        "lookup": "Najpierw wyszukaj konto po adresie e-mail (ważne przez 1 godzinę).",
-        "forbidden": "Nie masz do tego uprawnień.",
-        "failed": "Nie udało się zapisać zmiany. Spróbuj ponownie."
+        "limit": "Za dużo zmian ról lub wyszukiwań w krótkim czasie. Spróbuj ponownie później.",
+        "lastAdmin": "Ostatniego administratora nie da się usunąć.",
+        "lookup": "Najpierw sprawdź konto na podstawie adresu e-mail (ważne przez 1 godzinę).",
+        "forbidden": "Nie wolno ci tego robić.",
+        "failed": "Nie udało się zapisać zmiany. Spróbuj jeszcze raz."
       }
     },
     "verifications": {
@@ -803,60 +803,60 @@
       "title": "Weryfikacje do sprawdzenia",
       "back": "Powrót do panelu administracyjnego",
       "empty": "Brak wniosków do sprawdzenia.",
-      "itemTitle": "{type} od {name}",
-      "waiting": "Złożono {time}",
+      "itemTitle": "{type} z {name}",
+      "waiting": "Przesłano {time}",
       "previous": "{count, plural, =0 {pierwszy wniosek} one {# wcześniejszy wniosek} few {# wcześniejsze wnioski} other {# wcześniejszych wniosków}}",
-      "own": "Twój własny wniosek: decyduje inny administrator.",
+      "own": "Twoja prośba: decyzję podejmuje inny administrator.",
       "more": "Więcej wniosków",
       "notices": {
         "verified": "Konto zweryfikowane.",
         "rejected": "Wniosek odrzucony.",
         "revoked": "Weryfikacja cofnięta.",
-        "decided": "W sprawie tego wniosku już zdecydowano."
+        "decided": "Ta prośba została już rozpatrzona."
       },
       "detail": {
-        "metaTitle": "Sprawdzanie weryfikacji",
-        "back": "Powrót do listy",
-        "title": "{type} od {name}",
+        "metaTitle": "Sprawdź weryfikację",
+        "back": "Powrót do listy ogłoszeń",
+        "title": "{type} z {name}",
         "status": "Status",
-        "submitted": "Złożono",
+        "submitted": "Przesłano",
         "accountType": "Rodzaj konta",
         "country": "Kraj",
         "memberSince": "Członek od",
-        "profileStatus": "Status w profilu",
-        "blocked": "To konto jest zablokowane.",
-        "own": "Twój własny wniosek: decyduje inny administrator.",
+        "profileStatus": "Status profilu",
+        "blocked": "Konto jest zablokowane.",
+        "own": "Twoja prośba: decyzję podejmuje inny administrator.",
         "history": "Wcześniejsze wnioski",
         "historyEmpty": "Brak wcześniejszych wniosków.",
         "documentTitle": "Dokument",
-        "documentHint": "Każde wyświetlenie jest zapisywane w dzienniku audytu. Dokument nigdy nie jest buforowany.",
+        "documentHint": "Każde wyświetlenie jest rejestrowane w dzienniku audytu. Dokument nigdy nie jest zapisywany w pamięci podręcznej.",
         "documentShow": "Pokaż dokument",
         "documentAgain": "Pokaż ponownie",
         "documentMissing": "Dokument został już usunięty (okres przechowywania).",
-        "pdfLink": "Pobierz PDF",
+        "pdfLink": "Pobierz plik PDF",
         "imageAlt": "Przesłany dokument: {type}",
         "decision": "Decyzja",
         "verify": "Zweryfikuj",
         "reject": "Odrzuć",
         "reason": "Powód",
         "reasonNone": "Wybierz powód",
-        "note": "Uzasadnienie dla użytkownika",
-        "noteHint": "Użytkownik zobaczy je jako uzasadnienie, wymagane przy „Inny powód”. Bez notatek wewnętrznych.",
+        "note": "Wyjaśnienie dla użytkownika",
+        "noteHint": "Wyświetlane użytkownikowi jako uzasadnienie, wymagane w przypadku opcji „Inny powód”. Bez notatek wewnętrznych.",
         "submit": "Zapisz decyzję",
         "revokeTitle": "Cofnij weryfikację",
-        "revokeHint": "Natychmiast usuwa odznakę. Użytkownik otrzyma e-mail z uzasadnieniem.",
+        "revokeHint": "Od razu odznaka jest usunięta. Użytkownik dostaje e-mail z wyjaśnieniem przyczyny.",
         "revokeSubmit": "Cofnij",
         "errors": {
           "code": "Wybierz powód.",
-          "note": "Uzasadnij decyzję (maksymalnie 1000 znaków).",
-          "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
-          "notFound": "Ten wniosek już nie istnieje.",
-          "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+          "note": "Wyjaśnij, dlaczego (maksymalnie 1000 znaków).",
+          "forbidden": "Nie możesz tego zrobić (brak konta lub brak logowania dwuskładnikowego).",
+          "notFound": "To zlecenie już nie istnieje.",
+          "failed": "Zapisanie nie powiodło się. Spróbuj jeszcze raz."
         },
         "documentErrors": {
-          "mismatch": "Zawartość pliku nie pasuje do żadnego dozwolonego typu (JPEG, PNG, PDF). Nie zostanie pokazany. Odrzuć wniosek.",
-          "missing": "Dokument nie jest już dostępny.",
-          "forbidden": "Nie możesz wyświetlić tego dokumentu (własny wniosek lub brak logowania dwuskładnikowego)."
+          "mismatch": "Zawartość pliku nie odpowiada dozwolonemu typowi (JPEG, PNG, PDF). Nie jest wyświetlana. Odrzuć zgłoszenie.",
+          "missing": "Dokument jest już niedostępny.",
+          "forbidden": "Nie możesz wyświetlić tego dokumentu (z własnej woli albo brakuje logowania dwuskładnikowego)."
         }
       }
     },
@@ -864,72 +864,72 @@
       "metaTitle": "Zgłoszenia",
       "title": "Otwarte zgłoszenia",
       "back": "Powrót do panelu administracyjnego",
-      "empty": "Brak otwartych zgłoszeń.",
-      "noLabel": "(bez nazwy)",
+      "empty": "Żadnych otwartych zgłoszeń.",
+      "noLabel": "(bez nazwiska)",
       "count": "{count, plural, one {# zgłoszenie} few {# zgłoszenia} other {# zgłoszeń}}",
       "oldest": "najstarsze {time}",
       "gone": "Treść już niedostępna",
       "more": "Więcej zgłoszeń",
       "notices": {
-        "resolved": "Zgłoszenia zamknięte, działanie wykonane.",
+        "resolved": "Zgłoszenia zamknięte, działania podjęte.",
         "decided": "Te zgłoszenia zostały już rozpatrzone."
       },
-      "detailMetaTitle": "Sprawdzanie zgłoszeń",
-      "goneHint": "Ta treść już nie istnieje. Przy zamknięciu zostanie zapisane „Treść już niedostępna”.",
-      "reviewLink": "Otwórz w kolejce do sprawdzenia",
+      "detailMetaTitle": "Sprawdź zgłoszenia",
+      "goneHint": "Treść już nie istnieje. Zamknij wpis z komunikatem „Treść już niedostępna”.",
+      "reviewLink": "Otwórz w ogłoszeniach do zatwierdzenia",
       "publicLink": "Strona publiczna",
       "account": "Konto, którego dotyczy",
       "listings": "{count, plural, one {# ogłoszenie} few {# ogłoszenia} other {# ogłoszeń}}",
       "memberSince": "Członek od {date}",
-      "blocked": "Konto jest zablokowane.",
-      "hasRole": "Konto ma rolę: bez upomnienia ani blokady (najpierw odbierz rolę).",
-      "own": "Twoje własne konto: decyduje inny administrator.",
+      "blocked": "Konto zostało zablokowane.",
+      "hasRole": "Konto ma przypisany status: brak ostrzeżenia ani blokady (najpierw usuń ten status).",
+      "own": "Twoje konto: o tym decyduje inny administrator.",
       "openReports": "{count, plural, =0 {Brak otwartych zgłoszeń} one {# otwarte zgłoszenie} few {# otwarte zgłoszenia} other {# otwartych zgłoszeń}}",
       "handledBefore": "{count, plural, one {# wcześniejsze zgłoszenie już rozpatrzone} few {# wcześniejsze zgłoszenia już rozpatrzone} other {# wcześniejszych zgłoszeń już rozpatrzonych}}",
       "showMessage": "Pokaż zgłoszoną wiadomość",
-      "showMessageHint": "Każde wyświetlenie zostanie zapisane w dzienniku audytu.",
+      "showMessageHint": "Każde wyświetlenie jest rejestrowane w dzienniku audytu.",
       "messageCaption": "Od {sender}, wysłano {date}",
       "measure": "Decyzja",
       "measures": {
         "no_action": "Brak działań",
         "content_removed": "Usuń ogłoszenie",
         "point_removed": "Usuń punkt na mapie",
-        "account_warned": "Upomnij konto",
+        "account_warned": "Ostrzeż konto",
         "account_blocked": "Zablokuj konto"
       },
       "codeNone": "Wybierz powód",
-      "codeHint": "Usunięcie ogłoszenia lub punktu na mapie używa powodu dla ogłoszenia, upomnienie i blokada powodu dla konta.",
-      "note": "Uzasadnienie dla osób, których dotyczy",
-      "noteHint": "Konto, którego dotyczy, zobaczy je jako uzasadnienie; wymagane przy usunięciu i przy „Inny powód”. Zgłaszający poznają tylko wynik. Bez notatek wewnętrznych.",
+      "codeHint": "Usunięcie ogłoszenia lub jego punktu na mapie odbywa się na podstawie powodu usunięcia ogłoszenia, ostrzeżeń oraz powodu zablokowania konta.",
+      "note": "Wyjaśnienie dla zainteresowanych",
+      "noteHint": "Wyświetlane jako powód dla danego konta; wymagane w przypadku usunięć i opcji „Inny powód”. Zgłaszający dowiadują się tylko o wyniku. Żadnych wewnętrznych notatek.",
       "submit": "Zamknij zgłoszenia",
       "errors": {
-        "changed": "Ogłoszenie zmieniło się od otwarcia. Odśwież stronę i sprawdź ponownie.",
-        "code": "Wybierz powód pasujący do działania.",
-        "note": "Uzasadnij decyzję (maksymalnie 1000 znaków).",
-        "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
-        "adminRole": "Kont z rolą nie można upominać ani blokować.",
+        "changed": "Ogłoszenie uległo zmianie od momentu jego opublikowania. Odśwież stronę i sprawdź jeszcze raz.",
+        "code": "Wybierz powód, który pasuje do danego działania.",
+        "note": "Wyjaśnij, dlaczego tak postanowiłeś (maksymalnie 1000 znaków).",
+        "forbidden": "Niemożliwe (brak konta lub brak logowania dwuskładnikowego).",
+        "adminRole": "Konta z przypisaną rolą nie mogą być ostrzegane ani zablokowane.",
         "notFound": "Ta treść jest już niedostępna.",
-        "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+        "failed": "Zapisanie nie powiodło się. Spróbuj jeszcze raz."
       },
-      "codeListing": "Powód dla ogłoszenia",
-      "codeAccount": "Powód dla konta"
+      "codeListing": "Powód dotyczący ogłoszenia",
+      "codeAccount": "Powód dotyczący konta"
     },
     "users": {
       "metaTitle": "Konta",
-      "title": "Wyszukaj konto",
+      "title": "Znajdź konto",
       "back": "Powrót do panelu administracyjnego",
-      "intro": "Dokładny adres e-mail lub identyfikator konta. Każde wyszukiwanie jest zapisywane w dzienniku audytu (bez adresu) i wlicza się do limitu godzinowego.",
+      "intro": "Dokładny adres e-mail lub identyfikator konta. Każde wyszukiwanie jest rejestrowane w dzienniku audytu (bez adresu) i wlicza się do limitu godzinowego.",
       "query": "Adres e-mail lub identyfikator konta",
       "search": "Szukaj",
       "errors": {
-        "empty": "Podaj adres e-mail lub identyfikator konta.",
+        "empty": "Wpisz adres e-mail lub identyfikator konta.",
         "notFound": "Nie znaleziono konta.",
-        "limit": "Zbyt wiele wyszukiwań w ostatniej godzinie.",
-        "failed": "Wyszukiwanie nie powiodło się. Spróbuj ponownie.",
+        "limit": "Za dużo wyszukiwań w ciągu ostatniej godziny.",
+        "failed": "Wyszukiwanie nie powiodło się. Spróbuj jeszcze raz.",
         "code": "Wybierz powód.",
-        "note": "Uzasadnij decyzję (maksymalnie 1000 znaków).",
-        "forbidden": "To niemożliwe (własne konto lub brak logowania dwuskładnikowego).",
-        "adminRole": "Kont z rolą nie można upominać ani blokować.",
+        "note": "Wyjaśnij, dlaczego tak postanowiłeś (maksymalnie 1000 znaków).",
+        "forbidden": "Niemożliwe (brak konta lub brak logowania dwuskładnikowego).",
+        "adminRole": "Konta z przypisaną rolą nie mogą być ostrzegane ani zablokowane.",
         "decided": "Konto ma już ten status."
       },
       "detailMetaTitle": "Konto",
@@ -940,65 +940,65 @@
       "listings": "Ogłoszenia",
       "openReports": "Otwarte zgłoszenia",
       "status": "Status",
-      "blocked": "Zablokowane",
+      "blocked": "Zablokowano",
       "active": "Aktywne",
-      "hasRole": "To konto ma rolę. Odbierz rolę przed upomnieniem lub blokadą.",
+      "hasRole": "Konto pełni określoną rolę. Usuń tę rolę przed wydaniem ostrzeżenia lub zablokowaniem konta.",
       "action": "Działanie",
       "actions": {
-        "warn": "Upomnij",
+        "warn": "Ostrzeż",
         "block": "Zablokuj",
         "unblock": "Odblokuj"
       },
       "code": "Powód",
       "codeNone": "Wybierz powód",
-      "note": "Uzasadnienie dla konta",
-      "noteHint": "Konto zobaczy je jako uzasadnienie (wymagane przy „Inny powód”). Bez notatek wewnętrznych.",
-      "submit": "Wykonaj",
+      "note": "Wyjaśnienie dotyczące konta",
+      "noteHint": "Wyświetlane na koncie jako powód (wymagane w przypadku opcji „Inny powód”). Żadnych wewnętrznych notatek.",
+      "submit": "Zastosuj",
       "notices": {
         "block": "Konto zablokowane.",
         "unblock": "Konto odblokowane.",
-        "warn": "Upomnienie wysłane."
+        "warn": "Ostrzeżenie wysłane."
       }
     },
     "appeals": {
-      "metaTitle": "Skargi",
-      "title": "Otwarte skargi",
+      "metaTitle": "Odwołania",
+      "title": "Otwarte odwołania",
       "back": "Powrót do panelu administracyjnego",
-      "empty": "Brak otwartych skarg.",
+      "empty": "Brak otwartych odwołań.",
       "itemTitle": "{action}: {name}",
-      "waiting": "Złożono {time}",
+      "waiting": "Przesłano {time}",
       "byMe": "Twoja własna pierwotna decyzja",
-      "more": "Więcej skarg",
+      "more": "Więcej odwołań",
       "notices": {
-        "upheld": "Skarga oddalona, decyzja pozostaje w mocy.",
-        "reversed": "Skarga uwzględniona, działanie zostało cofnięte.",
-        "decided": "W sprawie tej skargi już zdecydowano."
+        "upheld": "Odwołanie odrzucone, decyzja pozostaje w mocy.",
+        "reversed": "Odwołanie przyjęte, środek został cofnięty.",
+        "decided": "To odwołanie zostało już rozwiązane."
       },
-      "detailMetaTitle": "Rozpatrzenie skargi",
-      "submitted": "Złożono dnia {date}",
+      "detailMetaTitle": "Sprawdź odwołanie",
+      "submitted": "Wysłano {date}",
       "decision": "Pierwotna decyzja",
       "decisionGone": "Pierwotna decyzja nie jest już przechowywana (okres przechowywania).",
       "code": "Kod",
       "targetLink": "Zobacz zgłoszenia dotyczące tego ogłoszenia",
-      "text": "Uzasadnienie skargi",
+      "text": "Podane uzasadnienie",
       "status": {
-        "upheld": "Oddalono",
-        "reversed": "Uwzględniono"
+        "upheld": "Odrzucone",
+        "reversed": "Uwzględnione"
       },
-      "sameReviewer": "zdecydował ten sam administrator, brak innego dostępnego administratora",
+      "sameReviewer": "decyzja podjęta przez tego samego administratora, nie ma innego administratora",
       "outcome": "Decyzja",
       "outcomes": {
-        "upheld": "Oddal skargę (decyzja pozostaje)",
-        "reversed": "Uwzględnij skargę (cofnij działanie)"
+        "upheld": "Odrzuć odwołanie (decyzja pozostaje w mocy)",
+        "reversed": "Uwzględnij odwołanie (cofnij działanie)"
       },
-      "note": "Uzasadnienie dla osoby",
-      "noteHint": "Wymagane. Osoba składająca skargę je zobaczy. Bez notatek wewnętrznych.",
+      "note": "Powody dla tej osoby",
+      "noteHint": "Wymagane. Wyświetlane osobie, która złożyła odwołanie. Bez notatek wewnętrznych.",
       "submit": "Zapisz decyzję",
       "errors": {
-        "note": "Uzasadnij decyzję (od 1 do 1000 znaków).",
-        "forbidden": "Musi zdecydować inny administrator: to Ty podjąłeś pierwotną decyzję.",
-        "notFound": "Ta skarga już nie istnieje.",
-        "failed": "Zapisywanie nie powiodło się. Spróbuj ponownie."
+        "note": "Podaj powody (od 1 do 1000 znaków).",
+        "forbidden": "Decyzję musi podjąć inny administrator: to ty podjąłeś pierwotną decyzję.",
+        "notFound": "To odwołanie już nie istnieje.",
+        "failed": "Zapisanie nie powiodło się. Spróbuj jeszcze raz."
       }
     }
   },
@@ -1031,29 +1031,29 @@
     "gone": {
       "metaTitle": "Już niedostępne",
       "title": "Ta strona jest już niedostępna",
-      "text": "Ogłoszenie lub profil ogłaszającego nie jest już publiczny.",
+      "text": "Ogłoszenie lub profil dostawcy nie jest już publicznie dostępny.",
       "toSearch": "Przejdź do wyszukiwania"
     },
     "home": {
       "kindsHeading": "Kategorie.",
-      "countriesHeading": "Według kraju.",
+      "countriesHeading": "Według krajów.",
       "countrySoon": "{country} (wkrótce)",
       "newestHeading": "Najnowsze ogłoszenia.",
       "newestEmpty": "Nie opublikowano jeszcze żadnych ogłoszeń.",
-      "newestError": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
-      "loading": "Wczytywanie ogłoszeń …",
+      "newestError": "Nie udało się załadować ogłoszeń. Spróbuj ponownie później.",
+      "loading": "Ładowanie ogłoszeń…",
       "allListings": "Wszystkie ogłoszenia",
-      "crumb": "Start",
-      "heroText": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Bezpośrednio od myśliwego do myśliwego.",
+      "crumb": "Strona główna",
+      "heroText": "Dzierżawa obwodu łowieckiego, zezwolenie na polowanie albo miejsce na polowaniu zbiorowym. Bezpośrednio od myśliwego do myśliwego.",
       "heroCta": "Dodaj ogłoszenie",
-      "trustHeading": "Bezpiecznie wśród myśliwych.",
-      "trustVerified": "Zweryfikowani myśliwi ze sprawdzonymi uprawnieniami łowieckimi",
-      "trustLocation": "Dokładna lokalizacja obwodu pozostaje chroniona",
-      "trustReview": "Każde ogłoszenie sprawdzamy przed publikacją"
+      "trustHeading": "Bezpieczeństwo wśród myśliwych.",
+      "trustVerified": "Zweryfikowani myśliwi z potwierdzoną legitymacją myśliwską",
+      "trustLocation": "Dokładna lokalizacja terenu łowieckiego pozostaje poufna",
+      "trustReview": "Każde ogłoszenie jest sprawdzane przed opublikowaniem"
     },
     "card": {
       "photoAlt": "{title}, zdjęcie 1",
-      "postalArea": "Kod {prefix}…",
+      "postalArea": "Kod pocztowy {prefix}…",
       "verified": "zweryfikowany",
       "published": "opublikowano {date}",
       "area": "{area} ha"
@@ -1064,45 +1064,45 @@
     },
     "list": {
       "states": "Według kraju związkowego lub regionu",
-      "districts": "Według powiatu",
+      "districts": "Według powiatów",
       "results": "Wyniki",
       "count": "{count, plural, =0 {Brak ogłoszeń} one {# ogłoszenie} few {# ogłoszenia} many {# ogłoszeń} other {# ogłoszenia}}",
       "countCapped": "Ponad 1000 ogłoszeń",
-      "empty": "Brak pasujących ogłoszeń. Złagodź filtry lub szukaj w innym regionie.",
+      "empty": "Brak pasujących ogłoszeń. Rozluźnij filtry lub poszukaj w innym regionie.",
       "paging": "Strony",
-      "first": "Do pierwszej strony",
+      "first": "Przejdź do pierwszej strony",
       "next": "Następna strona",
-      "invalid": "Filtry są nieprawidłowe. Sprawdź wprowadzone dane.",
-      "failed": "Nie udało się wczytać ogłoszeń. Spróbuj ponownie później.",
-      "metaDescription": "{title}: aktualne oferty i poszukiwania w Revier.",
-      "queryTooLong": "Szukana fraza jest za długa. Użyj mniejszej liczby słów."
+      "invalid": "Filtry są nieprawidłowe. Sprawdź, co wpisałeś.",
+      "failed": "Nie udało się załadować ogłoszeń. Spróbuj ponownie później.",
+      "metaDescription": "{title}: aktualne oferty i zapytania na Revier.",
+      "queryTooLong": "Wyszukiwane hasło jest za długie. Użyj mniej słów."
     },
     "filters": {
       "heading": "Filtry",
-      "q": "Szukana fraza",
-      "any": "Wszystkie",
+      "q": "Słowo kluczowe",
+      "any": "Wszystko",
       "region": "Kraj związkowy lub region",
-      "priceHint": "Ceny nie są przeliczane: po wybraniu waluty widoczne są tylko ogłoszenia w tej walucie; ogłoszenia bez ceny i „do uzgodnienia” zostają pominięte.",
+      "priceHint": "Ceny nie są przeliczane: jeśli podano walutę, wyświetlane są tylko ogłoszenia w tej walucie; ogłoszenia bez ceny lub z adnotacją „na zapytanie” są wtedy pomijane.",
       "min": "od",
       "max": "do",
       "period": "Okres",
-      "periodHint": "Ogłoszenia bez okresu zostają pominięte. Przy polowaniach zbiorowych liczy się termin, jeśli wybrano ten rodzaj.",
+      "periodHint": "Ogłoszenia bez podanego okresu są pomijane. W przypadku polowań zbiorowych liczy się data, jeśli wybrano tę kategorię.",
       "from": "od",
       "to": "do",
-      "verifiedOnly": "Tylko zweryfikowani ogłoszający",
-      "sort": "Sortowanie",
-      "sortHint": "Sortowanie według ceny tylko z walutą i jednostką.",
+      "verifiedOnly": "Tylko zweryfikowani ogłaszający",
+      "sort": "Kolejność sortowania",
+      "sortHint": "Sortowanie według ceny wymaga podania waluty i jednostki miary.",
       "apply": "Zastosuj filtry",
       "reset": "Wyczyść filtry",
       "sorts": {
-        "newest": "Najnowsze",
+        "newest": "Najnowsze na początku",
         "price_asc": "Cena rosnąco",
-        "price_desc": "Cena malejąco",
-        "relevance": "Trafność (z frazą)"
+        "price_desc": "Cena malejąca",
+        "relevance": "Trafność (w odniesieniu do wyszukiwanego hasła)"
       }
     },
     "detail": {
-      "breadcrumb": "Ścieżka nawigacji",
+      "breadcrumb": "Ścieżka nawigacyjna",
       "gallery": "Zdjęcia",
       "photoAlt": "{title}, zdjęcie {n} z {m}",
       "postalArea": "Obszar kodu pocztowego {prefix}…",
@@ -1110,44 +1110,44 @@
       "published": "Opublikowano",
       "provider": "Ogłaszający",
       "verified": "zweryfikowany",
-      "contactLogin": "Skontaktuj się z ogłaszającym (wymagane logowanie)",
+      "contactLogin": "Skontaktuj się z ogłaszającym (wymagane zalogowanie)",
       "ownListing": "To jest twoje ogłoszenie.",
       "contact": "Napisz wiadomość",
-      "report": "Zgłoś ogłoszenie",
-      "facts": "Najważniejsze dane",
+      "report": "Zgłoś to ogłoszenie",
+      "facts": "Najważniejsze informacje",
       "description": "Opis",
-      "safety": "Wskazówki bezpieczeństwa",
-      "safety1": "Nie płać z góry bez pisemnej umowy",
-      "safety2": "Obejrzyj obwód na miejscu",
-      "safety3": "Sprawdź uprawnienia łowieckie i dane ogłoszeniodawcy",
-      "contactPrivate": "Kontakt tylko przez czat. Numer telefonu i e-mail pozostają ukryte."
+      "safety": "Wskazówki dotyczące bezpieczeństwa",
+      "safety1": "Nigdy nie płać z góry bez pisemnej umowy",
+      "safety2": "Odwiedź teren łowiecki osobiście",
+      "safety3": "Sprawdź legitymację myśliowską i dane ogłaszającego",
+      "contactPrivate": "Kontaktuj się wyłącznie przez czat. Numer telefonu i adres e-mail pozostają ukryte."
     },
     "provider": {
-      "breadcrumb": "Ścieżka nawigacji",
+      "breadcrumb": "Ścieżka nawigacyjna",
       "verified": "zweryfikowany",
       "listings": "Aktywne ogłoszenia",
-      "empty": "Obecnie brak aktywnych ogłoszeń.",
+      "empty": "W tej chwili nie ma żadnych aktywnych ogłoszeń.",
       "paging": "Strony",
-      "first": "Do pierwszej strony",
+      "first": "Przejdź do pierwszej strony",
       "next": "Następna strona",
-      "metaDescription": "Ogłoszenia od {name} w Revier.",
-      "report": "Zgłoś ogłaszającego"
+      "metaDescription": "Ogłoszenia na Revier, {name}.",
+      "report": "Zgłoś tego dostawcę"
     }
   },
   "Favorites": {
-    "metaTitle": "Ulubione",
-    "title": "Ulubione",
+    "metaTitle": "Zapisane ogłoszenia",
+    "title": "Zapisane ogłoszenia",
     "back": "Powrót do konta",
     "save": "Zapisz",
     "saved": "Zapisane",
     "saveLabel": "Zapisz „{title}”",
-    "empty": "Nie zapisano jeszcze żadnych ogłoszeń.",
+    "empty": "Nie zapisałeś jeszcze żadnych ogłoszeń.",
     "unavailable": "{count, plural, one {# zapisane ogłoszenie jest już niedostępne} few {# zapisane ogłoszenia są już niedostępne} many {# zapisanych ogłoszeń jest już niedostępnych} other {# zapisanego ogłoszenia jest już niedostępne}}.",
     "removeUnavailable": "Usuń niedostępne",
-    "removedNotice": "Niedostępne ulubione zostały usunięte.",
-    "failed": "Nie udało się. Spróbuj ponownie.",
+    "removedNotice": "Usunięto niedostępne zapisane ogłoszenia.",
+    "failed": "To nie zadziałało. Spróbuj jeszcze raz.",
     "limit": "Możesz zapisać maksymalnie 500 ogłoszeń.",
-    "loadFailed": "Nie udało się wczytać ulubionych. Spróbuj ponownie później."
+    "loadFailed": "Nie udało się załadować twoich zapisanych ogłoszeń. Spróbuj ponownie później."
   },
   "Map": {
     "viewLabel": "Widok",
@@ -1155,49 +1155,49 @@
     "viewMap": "Mapa",
     "label": "Mapa ogłoszeń",
     "attribution": "<a href=\"https://www.openstreetmap.org/copyright\">© współtwórcy OpenStreetMap</a> · Protomaps",
-    "failed": "Mapy nie można wyświetlić w tej przeglądarce (brak WebGL). Lista poniżej pokazuje wszystkie ogłoszenia.",
-    "noscript": "Mapa wymaga JavaScriptu. Lista poniżej pokazuje wszystkie ogłoszenia.",
-    "loading": "Wczytywanie ogłoszeń …",
-    "loadFailed": "Nie udało się wczytać ogłoszeń dla mapy.",
-    "retry": "Spróbuj ponownie",
-    "truncated": "Za dużo ogłoszeń dla tego widoku. Przybliż mapę.",
+    "failed": "W tej przeglądarce nie da się wyświetlić mapy (brakuje WebGL). Poniższa lista zawiera wszystkie ogłoszenia.",
+    "noscript": "Mapa wymaga obsługi JavaScript. Poniższa lista zawiera wszystkie ogłoszenia.",
+    "loading": "Ładowanie ogłoszeń…",
+    "loadFailed": "Nie udało się załadować ogłoszeń na mapie.",
+    "retry": "Spróbuj jeszcze raz",
+    "truncated": "Za dużo ogłoszeń na tym ekranie. Powiększ widok.",
     "searchArea": "Szukaj w tym obszarze",
-    "searchAreaHint": "Ogłoszenia bez własnego punktu liczą się ze środkiem swojego powiatu.",
-    "stack": "{count} ogłoszeń w tym miejscu",
+    "searchAreaHint": "Ogłoszenia bez własnego punktu są przypisane do centrum swojej dzielnicy.",
+    "stack": "{count} ogłoszenia w tym miejscu",
     "close": "Zamknij",
-    "count": "{count} ogłoszeń na mapie",
-    "areaActive": "Filtrowane według obszaru mapy.",
+    "count": "{count} ogłoszenia na mapie",
+    "areaActive": "Filtrowane według obszaru na mapie.",
     "areaRemove": "Usuń obszar",
-    "approxPoint": "Przybliżona lokalizacja (przesunięta o 3–5 km)",
-    "approxDistrict": "Lokalizacja w powiecie, bez dokładnego punktu",
-    "cluster": "{count} ogłoszeń, przybliż",
+    "approxPoint": "Przybliżona lokalizacja (z odchyleniem 3–5 km)",
+    "approxDistrict": "Lokalizacja w obrębie powiatu, bez podania dokładnego miejsca",
+    "cluster": "Ogłoszenia: {count}, powiększ",
     "locationHeading": "Lokalizacja",
-    "detailPoint": "Przybliżona lokalizacja: punkt na mapie jest przesunięty o 3–5 km. Dokładną lokalizację ogłaszający podaje na czacie.",
-    "detailDistrict": "Lokalizacja w powiecie {district}, bez dokładnego punktu. Dokładną lokalizację ogłaszający podaje na czacie.",
+    "detailPoint": "Przybliżona lokalizacja: punkt na mapie jest przesunięty o 3–5 km. Ogłaszający podaje dokładną lokalizację na czacie.",
+    "detailDistrict": "Lokalizacja w obrębie dzielnicy {district}, bez podawania dokładnego miejsca. Ogłaszający podaje dokładną lokalizację na czacie.",
     "showMap": "Pokaż mapę",
     "detailLabel": "Mapa z przybliżoną lokalizacją",
-    "noscriptDetail": "Mapa wymaga JavaScriptu.",
+    "noscriptDetail": "Mapa wymaga obsługi JavaScript.",
     "picker": {
-      "legend": "Punkt na mapie (opcjonalnie)",
-      "hint": "Zapisywany jest tylko przesunięty punkt, 3–5 km od wybranego. Przesunięcie jest takie samo dla wszystkich twoich ogłoszeń w tym powiecie. Wystarczy dokładność do kilkuset metrów.",
-      "otherPoints": "Masz już w tym powiecie ogłoszenie z punktem w innym miejscu. Kilka punktów w jednym powiecie pokazuje, jak twoje obwody leżą względem siebie. Razem z granicą powiatu może to zawęzić lokalizację.",
-      "districtChange": "Jeśli zmienisz powiat, punkt zostanie usunięty. Zapisane kopie starych stron mogą nadal pokazywać poprzedni punkt.",
-      "noscript": "Punkt można ustawić tylko z JavaScriptem. Bez punktu mapa pokazuje środek powiatu.",
-      "label": "Mapa do wyboru punktu",
+      "legend": "Wskaż miejsce na mapie (opcjonalnie)",
+      "hint": "Zapisywany jest tylko przesunięty punkt, oddalony o 3–5 km od wybranego przez ciebie. Przesunięcie to jest takie samo dla wszystkich twoich ogłoszeń w tej dzielnicy. Wystarczy dokładność rzędu kilkuset metrów.",
+      "otherPoints": "Masz już ogłoszenie z punktem w innym miejscu w tej dzielnicy. Kilka punktów w jednej dzielnicy pokazuje, jak twoje tereny łowieckie są ze sobą powiązane. W połączeniu z granicą dzielnicy pozwala to zawęzić lokalizację.",
+      "districtChange": "Jeśli zmienisz okręg, punkt zostanie usunięty. Zapisane kopie starych stron mogą nadal wyświetlać poprzedni punkt.",
+      "noscript": "Punkt możesz ustawić tylko za pomocą JavaScriptu. Bez punktu mapa pokazuje centrum powiatu.",
+      "label": "Mapa do wyboru lokalizacji",
       "setCentre": "Ustaw punkt w środku mapy",
       "remove": "Usuń punkt",
       "discard": "Odrzuć wybór",
-      "chosen": "Punkt wybrany. Zostanie zastosowany przy zapisie.",
-      "removed": "Punkt zostanie usunięty przy zapisie.",
-      "publicMarker": "Jak lokalizacja wyświetla się publicznie (przesunięta)",
-      "chosenMarker": "Wybrany punkt, jeszcze niezapisany"
+      "chosen": "Opcja wybrana. Zostanie zastosowana po zapisaniu.",
+      "removed": "Ta uwaga zostanie usunięta po zapisaniu.",
+      "publicMarker": "Jak lokalizacja wygląda publicznie (przesunięta)",
+      "chosenMarker": "Wybrany punkt, jeszcze nie zapisany"
     },
     "controls": {
-      "zoomIn": "Przybliż",
-      "zoomOut": "Oddal",
-      "resetBearing": "Obróć na północ",
-      "toggleAttribution": "Pokaż lub ukryj źródła",
-      "mapFeedback": "Uwagi do mapy",
+      "zoomIn": "Powiększ",
+      "zoomOut": "Pomniejsz",
+      "resetBearing": "Ustaw na północ",
+      "toggleAttribution": "Pokaż lub ukryj informacje o autorstwie",
+      "mapFeedback": "Opinie o mapě",
       "mapTitle": "Mapa",
       "marker": "Znacznik na mapie",
       "popupClose": "Zamknij"
@@ -1207,22 +1207,22 @@
     "metaTitle": "Wiadomości",
     "title": "Wiadomości",
     "back": "Powrót do konta",
-    "empty": "Nie masz jeszcze rozmów. Napisz do oferującego bezpośrednio z ogłoszenia.",
-    "loadFailed": "Nie udało się wczytać rozmów.",
+    "empty": "Na razie nie ma żadnych rozmów. Napisz do ogłaszającego z dowolnego ogłoszenia.",
+    "loadFailed": "Nie udało się załadować rozmów.",
     "more": "Starsze rozmowy",
-    "listingUnavailable": "Ogłoszenie nie jest już dostępne",
+    "listingUnavailable": "Ogłoszenie już niedostępne",
     "listingDeleted": "Ogłoszenie usunięte",
-    "accountUnavailable": "Konto nie jest już dostępne",
+    "accountUnavailable": "Konto już niedostępne",
     "unread": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}",
     "you": "Ty:",
-    "roleOwner": "Dotyczy Twojego ogłoszenia",
+    "roleOwner": "Dotyczy twojego ogłoszenia",
     "nav": "Wiadomości",
-    "navUnread": "Wiadomości, nieprzeczytane: {count}",
+    "navUnread": "Wiadomości, {count} nieprzeczytane",
     "conversation": {
       "metaTitle": "Rozmowa",
       "backToList": "Wszystkie wiadomości",
-      "notFound": "Ta rozmowa nie istnieje lub nie należy do Twojego konta.",
-      "older": "Wczytaj starsze wiadomości",
+      "notFound": "Ta rozmowa nie istnieje lub nie jest powiązana z twoim kontem.",
+      "older": "Załaduj starsze wiadomości",
       "read": "Przeczytano",
       "sent": "Wysłano",
       "messagesLabel": "Wiadomości w tej rozmowie",
@@ -1231,41 +1231,41 @@
     "composer": {
       "label": "Twoja wiadomość",
       "send": "Wyślij",
-      "sending": "Wysyłanie …",
+      "sending": "Wysyłanie…",
       "count": "{count} z {max} znaków",
-      "shortcut": "Ctrl+Enter lub Cmd+Enter wysyła wiadomość."
+      "shortcut": "Ctrl+Enter lub Cmd+Enter napisze wiadomość."
     },
     "errors": {
-      "body": "Wiadomość jest pusta, za długa lub zawiera niedozwolone znaki.",
-      "legal": "Najpierw zaakceptuj aktualny regulamin.",
-      "rate": "Napisałeś(-aś) wiele wiadomości w krótkim czasie. Spróbuj ponownie później.",
-      "rateUnanswered": "Poczekaj na odpowiedź, zanim wyślesz kolejne wiadomości.",
-      "rateConversations": "Rozpocząłeś(-ęłaś) dziś już wiele rozmów. Spróbuj ponownie później.",
-      "unavailable": "W tej rozmowie nie można już pisać.",
-      "failed": "Nie udało się wysłać wiadomości. Spróbuj ponownie."
+      "body": "Wiadomość jest pusta, za długa albo zawiera niedozwolone znaki.",
+      "legal": "Najpierw zaakceptuj aktualne warunki.",
+      "rate": "Wysłałeś wiele wiadomości w krótkim czasie. Spróbuj ponownie później.",
+      "rateUnanswered": "Zanim napiszesz kolejne wiadomości, poczekaj na odpowiedź.",
+      "rateConversations": "Dzisiaj zainicjowałeś wiele rozmów. Spróbuj ponownie później.",
+      "unavailable": "Nie możesz już pisać w tej rozmowie.",
+      "failed": "Nie udało się wysłać wiadomości. Spróbuj jeszcze raz."
     },
-    "blockedByMe": "Zablokowałeś(-aś) tę osobę.",
-    "cannotWrite": "W tej rozmowie nie można już pisać.",
-    "safety": "Wskazówka bezpieczeństwa: nigdy nie płać z góry osobom, których nie znasz, i nie podawaj haseł ani danych do bankowości. Zgłaszaj podejrzane wiadomości.",
+    "blockedByMe": "Zablokowałeś tę osobę.",
+    "cannotWrite": "Nie możesz już pisać w tej rozmowie.",
+    "safety": "Wskazówka bezpieczeństwa: nigdy nie płać z góry osobom, których nie znasz, i nie udostępniaj haseł ani danych logowania do banku. Zgłaszaj podejrzane wiadomości.",
     "new": {
       "metaTitle": "Napisz wiadomość",
-      "title": "Wiadomość do tego ogłoszenia",
-      "intro": "Twoja pierwsza wiadomość trafi do oferującego. Dane kontaktowe wymieniacie tylko tutaj na czacie.",
-      "ownListing": "To jest Twoje ogłoszenie.",
-      "unavailable": "Nie możesz napisać wiadomości do tego ogłoszenia."
+      "title": "Wiadomość w sprawie tego ogłoszenia",
+      "intro": "Twoja pierwsza wiadomość trafia do ogłaszającego. Dane kontaktowe wymienia się wyłącznie tutaj, na czacie.",
+      "ownListing": "To jest twoje własne ogłoszenie.",
+      "unavailable": "Nie możesz napisać wiadomości dotyczącej tego ogłoszenia."
     },
     "menu": {
-      "label": "Działania",
+      "label": "Czynności",
       "block": "Zablokuj tę osobę",
       "unblock": "Odblokuj",
       "reportProfile": "Zgłoś profil",
       "reportMessage": "Zgłoś wiadomość"
     },
     "notices": {
-      "blocked": "Zablokowałeś(-aś) tę osobę. Nie może już do Ciebie pisać.",
-      "unblocked": "Blokada została zniesiona.",
-      "reported": "Dziękujemy. Twoje zgłoszenie trafiło do moderacji.",
-      "failed": "To się nie udało. Spróbuj ponownie."
+      "blocked": "Zablokowałeś tę osobę. Nie może już do ciebie pisać.",
+      "unblocked": "Odblokowałeś tę osobę.",
+      "reported": "Dzięki. Twoje zgłoszenie zostało wysłane do zespołu moderatorów.",
+      "failed": "To nie zadziałało. Spróbuj jeszcze raz."
     },
     "report": {
       "metaTitle": "Zgłoś",
@@ -1273,71 +1273,71 @@
       "titleProfile": "Zgłoś profil",
       "reason": "Powód",
       "note": "Uwaga (opcjonalnie)",
-      "noteHint": "Maksymalnie 1000 znaków. Nie podawaj haseł ani danych bankowych.",
+      "noteHint": "Maksymalnie 1000 znaków. Nie wpisuj żadnych haseł ani danych bankowych.",
       "submit": "Wyślij zgłoszenie",
-      "cancel": "Powrót do rozmowy",
-      "quoted": "Zgłaszana wiadomość",
+      "cancel": "Wróć do rozmowy",
+      "quoted": "Zgłoszona wiadomość",
       "reasons": {
-        "scam": "Oszustwo lub przedpłata",
-        "harassment": "Nękanie lub obrażanie",
+        "scam": "Oszustwo lub przekupstwo związane z przedpłatą",
+        "harassment": "Nękanie lub obelgi",
         "illegal": "Treści niezgodne z prawem",
-        "weapons": "Oferta broni lub amunicji",
+        "weapons": "Oferowanie broni lub amunicji",
         "other": "Inny powód"
       },
       "errors": {
         "reason": "Wybierz powód.",
-        "limit": "Wysłałeś(-aś) dziś już wiele zgłoszeń. Spróbuj ponownie jutro.",
-        "failed": "Nie udało się wysłać zgłoszenia. Spróbuj ponownie.",
-        "duplicate": "To zostało już przez Ciebie zgłoszone. Twoje zgłoszenie jest sprawdzane."
+        "limit": "Wysłałeś dzisiaj sporo zgłoszeń. Spróbuj ponownie jutro.",
+        "failed": "Nie udało się wysłać zgłoszenia. Spróbuj jeszcze raz.",
+        "duplicate": "Już to zgłosiłeś. Twoje zgłoszenie jest właśnie sprawdzane."
       }
     },
     "blocked": {
-      "metaTitle": "Zablokowane osoby",
-      "title": "Zablokowane osoby",
-      "intro": "Zablokowane osoby nie mogą do Ciebie pisać, a Ty nie możesz pisać do nich.",
-      "empty": "Nikogo nie zablokowałeś(-aś).",
+      "metaTitle": "Zablokowani użytkownicy",
+      "title": "Zablokowani użytkownicy",
+      "intro": "Osoby zablokowane nie mogą do ciebie pisać, a ty nie możesz pisać do nich.",
+      "empty": "Nie zablokowałeś nikogo.",
       "unblock": "Odblokuj",
-      "unknown": "Konto nie jest już dostępne",
-      "since": "Zablokowano {date}",
-      "link": "Zablokowane osoby"
+      "unknown": "Konto już niedostępne",
+      "since": "Zablokowano od {date}",
+      "link": "Zablokowani użytkownicy"
     },
     "hints": {
-      "contact": "Twoja wiadomość zawiera dane kontaktowe (telefon, e-mail lub konto bankowe). Udostępniaj je tylko, jeśli ufasz drugiej osobie. Nigdy nie płać z góry.",
-      "location": "Twoja wiadomość wydaje się zawierać dokładną lokalizację. Kto ją zna, może też ustalić przybliżoną lokalizację Twoich innych ogłoszeń w tym powiecie."
+      "contact": "Twoja wiadomość zawiera dane kontaktowe (numer telefonu, adres e-mail lub dane bankowe). Podawaj je tylko wtedy, gdy ufasz drugiej osobie. Nigdy nie płać z góry.",
+      "location": "Wygląda na to, że w Twojej wiadomości podano dokładną lokalizację. Każdy, kto ją zna, może też ustalić przybliżoną lokalizację Twoich innych ogłoszeń w tej okolicy."
     },
     "notifications": {
       "title": "Powiadomienia",
-      "chatEmail": "E-mail o nowych wiadomościach",
-      "hint": "Najwyżej jeden e-mail co 15 minut, bez treści wiadomości. E-maile trafiają na adres, którego używasz do logowania.",
-      "save": "Zapisz ustawienie",
-      "saved": "Ustawienia powiadomień zostały zapisane.",
-      "failed": "Nie udało się zapisać ustawienia. Spróbuj ponownie."
+      "chatEmail": "Powiadom mnie e-mailem o nowych wiadomościach",
+      "hint": "Najwyżej jeden e-mail co 15 minut, bez treści wiadomości. Maile przychodzą na adres, którego używasz, aby się zalogować.",
+      "save": "Zapisz ustawienia",
+      "saved": "Twoje ustawienia powiadomień zostały zapisane.",
+      "failed": "Nie udało się zapisać ustawień. Spróbuj jeszcze raz."
     },
-    "legalRequired": "Aby pisać, zaakceptuj najpierw aktualny regulamin. Blokowanie i zgłaszanie pozostają możliwe.",
+    "legalRequired": "Zanim zaczniesz pisać, zaakceptuj najpierw aktualny regulamin. Nadal możesz zablokować i zgłosić treści.",
     "legalLink": "Przejdź do regulaminu"
   },
   "SavedSearches": {
-    "quoted": "„{text}”",
-    "mapArea": "Wycinek mapy",
+    "quoted": "“{text}”",
+    "mapArea": "Obszar na mapie",
     "allListings": "Wszystkie ogłoszenia",
-    "legalLink": "Zaakceptuj aktualne warunki",
+    "legalLink": "Zaakceptuj aktualny regulamin",
     "manageLink": "Zarządzaj zapisanymi wyszukiwaniami",
     "save": {
       "open": "Zapisz wyszukiwanie",
-      "intro": "Wyślemy ci e-mail, gdy zostaną zatwierdzone nowe ogłoszenia pasujące do tych filtrów.",
+      "intro": "Wyślemy ci e-mail, gdy pojawią się nowe ogłoszenia spełniające te kryteria, które zostały zatwierdzone.",
       "summary": "Filtry tego wyszukiwania",
-      "noFilters": "Brak filtrów: pasuje każde nowe ogłoszenie.",
-      "mapAreaHint": "Wycinek mapy też zostanie zapisany: zgłaszane są tylko ogłoszenia z tego obszaru, a „Pokaż wyniki” otwiera mapę.",
-      "runtime": "Zapisane wyszukiwanie działa 6 tygodni. W ostatnich 14 dniach możesz je przedłużyć na swoim koncie.",
+      "noFilters": "Brak filtrów: każde nowe ogłoszenie pasuje.",
+      "mapAreaHint": "Zapisano też obszar mapy: wyświetlane są tylko ogłoszenia z tego obszaru, a po kliknięciu „Zobacz wyniki” otwiera się mapa.",
+      "runtime": "Zapisane wyszukiwanie jest aktywne przez 6 tygodni. W ciągu ostatnich 14 dni możesz je przedłużyć na swoim koncie.",
       "submit": "Utwórz zapisane wyszukiwanie",
-      "saving": "Zapisywanie …",
-      "signIn": "Zaloguj się, aby zapisać to wyszukiwanie"
+      "saving": "Zapisywanie…",
+      "signIn": "Zaloguj się, żeby zapisać to wyszukiwanie"
     },
     "fields": {
       "name": "Nazwa",
-      "nameHint": "Od 1 do 100 znaków. Nazwę widzisz tylko ty.",
-      "cadence": "Częstotliwość e-maili",
-      "notifyEmail": "E-mail o nowych pasujących ogłoszeniach",
+      "nameHint": "Od 1 do 100 znaków. Tylko ty widzisz tę nazwę.",
+      "cadence": "Częstotliwość wysyłania e-maili",
+      "notifyEmail": "Pisz do mnie o nowych ogłoszeniach, które mogą cię zainteresować",
       "email": "E-mail",
       "lastNotified": "Ostatni e-mail"
     },
@@ -1346,155 +1346,155 @@
       "daily": "Codziennie"
     },
     "cadenceHint": {
-      "instant": "Kilka minut po zatwierdzeniu, kilka ogłoszeń w jednym e-mailu.",
-      "daily": "Jeden zbiorczy e-mail rano."
+      "instant": "Kilka minut po zatwierdzeniu otrzymasz kilka ogłoszeń w jednym e-mailu.",
+      "daily": "Jeden e-mail z podsumowaniem rano."
     },
     "email": {
       "on": "Włączone",
       "off": "Wyłączone"
     },
     "status": {
-      "active": "Aktywne, działa do {date}",
+      "active": "Aktywne, trwa do {date}",
       "expiring": "Wygasa {date}",
-      "paused": "Wstrzymane, mimo to wygasa {date}",
-      "pausedHint": "Wstrzymanie nie zatrzymuje czasu działania. Ogłoszenia zatwierdzone w czasie wstrzymania nie zostaną zgłoszone później.",
-      "expired": "Wygasło {date}. Zostanie usunięte {deleteDate}, jeśli go nie przedłużysz."
+      "paused": "Wstrzymane, ale termin ważności nadal upływa {date}",
+      "pausedHint": "Wstrzymanie działania nie zatrzymuje licznika czasu. Ogłoszenia zatwierdzone podczas wstrzymania nie są później zgłaszane.",
+      "expired": "Wygasłe {date}. Zostanie usunięte {deleteDate}, chyba że przedłużysz ważność."
     },
     "actions": {
-      "results": "Pokaż wyniki",
+      "results": "Zobacz wyniki",
       "pause": "Wstrzymaj",
       "resume": "Wznów",
       "extend": "Przedłuż o 6 tygodni",
-      "extendFrom": "Możesz je przedłużyć od {date}.",
-      "emailOn": "Włącz e-mail",
-      "emailOff": "Wyłącz e-mail",
-      "toInstant": "Przełącz na od razu",
-      "toDaily": "Przełącz na codziennie",
+      "extendFrom": "Możesz to przedłużyć od {date}.",
+      "emailOn": "Włącz e-maile",
+      "emailOff": "Wyłącz e-maile",
+      "toInstant": "Przełącz na „od razu”",
+      "toDaily": "Przełącz na „codziennie”",
       "rename": "Zmień nazwę",
       "renameSubmit": "Zapisz nazwę",
       "delete": "Usuń",
-      "deleteConfirm": "Usunąć „{name}”? Tego nie można cofnąć.",
-      "deleteYes": "Usuń na stałe",
+      "deleteConfirm": "Usunąć „{name}”? Nie da się tego cofnąć.",
+      "deleteYes": "Usuń na dobre",
       "cancel": "Anuluj"
     },
     "notices": {
       "created": "Twoje wyszukiwanie zostało zapisane.",
       "paused": "Zapisane wyszukiwanie jest wstrzymane.",
-      "resumed": "Zapisane wyszukiwanie znowu jest aktywne.",
-      "extended": "Zapisane wyszukiwanie działa teraz przez kolejne 6 tygodni.",
+      "resumed": "Zapisane wyszukiwanie znów jest aktywne.",
+      "extended": "Zapisane wyszukiwanie będzie teraz aktywne przez kolejne 6 tygodni.",
       "emailOn": "E-maile są włączone.",
       "emailOff": "E-maile są wyłączone.",
-      "cadence": "Częstotliwość e-maili została zmieniona.",
+      "cadence": "Zmieniono częstotliwość wysyłania e-maili.",
       "renamed": "Nazwa została zapisana.",
       "deleted": "Zapisane wyszukiwanie zostało usunięte."
     },
     "errors": {
-      "name": "Podaj nazwę o długości od 1 do 100 znaków.",
-      "invalid": "Tych filtrów nie można zapisać. Sprawdź je w wyszukiwarce.",
-      "queryTooLong": "Szukana fraza jest za długa, aby ją zapisać. Użyj mniejszej liczby słów.",
-      "limit": "Możesz mieć najwyżej 25 zapisanych wyszukiwań, wliczając wygasłe. Najpierw usuń jedno z nich.",
-      "legal": "Najpierw zaakceptuj aktualny regulamin i politykę prywatności.",
-      "extendNotYet": "Tego zapisanego wyszukiwania nie można jeszcze przedłużyć.",
-      "unavailable": "To niemożliwe: zapisane wyszukiwanie już nie istnieje albo twoje konto jest zablokowane.",
-      "failed": "Nie udało się. Spróbuj ponownie później."
+      "name": "Wpisz imię o długości od 1 do 100 znaków.",
+      "invalid": "Tych filtrów nie da się zapisać. Sprawdź je podczas wyszukiwania.",
+      "queryTooLong": "Wyszukiwane hasło jest za długie, żeby je zapisać. Użyj mniej słów.",
+      "limit": "Możesz zapisać maksymalnie 25 zapisanych wyszukiwań, wliczając te, które są wygasłe. Najpierw usuń jedno z nich.",
+      "legal": "Najpierw zaakceptuj aktualny regulamin serwisu i politykę prywatności.",
+      "extendNotYet": "Jest za wcześnie, żeby przedłużyć to zapisane wyszukiwanie.",
+      "unavailable": "To nie jest możliwe: zapisane wyszukiwanie już nie istnieje albo twoje konto jest zablokowane.",
+      "failed": "To nie zadziałało. Spróbuj ponownie później."
     },
     "page": {
       "metaTitle": "Zapisane wyszukiwania",
       "title": "Zapisane wyszukiwania",
-      "back": "Powrót do konta",
-      "intro": "Dostaniesz e-mail, gdy zostanie zatwierdzone nowe ogłoszenie pasujące do jednego z twoich zapisanych wyszukiwań. Każde zapisane wyszukiwanie działa 6 tygodni.",
-      "empty": "Nie masz jeszcze zapisanych wyszukiwań.",
-      "toSearch": "Przejdź do wyszukiwarki i zapisz jedno",
-      "count": "Zapisane wyszukiwania: {count} z {max}",
-      "loadFailed": "Nie udało się wczytać zapisanych wyszukiwań. Spróbuj ponownie później.",
-      "invalidFilters": "Filtry tego zapisanego wyszukiwania nie są już ważne. Zapisz wyszukiwanie ponownie."
+      "back": "Powrót do mojego konta",
+      "intro": "Otrzymasz e-mail, gdy pojawi się nowe ogłoszenie pasujące do jednego z twoich zapisanych wyszukiwań. Każde zapisane wyszukiwanie jest aktywne przez 6 tygodni.",
+      "empty": "Nie masz jeszcze żadnych zapisanych wyszukiwań.",
+      "toSearch": "Przejdź do wyszukiwania i zapisz jedną ofertę",
+      "count": "{count} z {max} zapisanych wyszukiwań",
+      "loadFailed": "Nie udało się załadować twoich zapisanych wyszukiwań. Spróbuj ponownie później.",
+      "invalidFilters": "Filtry tego zapisanego wyszukiwania straciły ważność. Zapisz wyszukiwanie jeszcze raz."
     }
   },
   "Unsubscribe": {
     "metaTitle": "Wypisz się",
     "title": "Wypisz się z e-maili",
-    "intro": "Potwierdź, aby wypisać się z e-maili, do których należy ten link: przy zapisanych wyszukiwaniach z wyszukiwań z tego e-maila, przy czacie z e-maili o nowych wiadomościach.",
+    "intro": "Potwierdź, że chcesz zrezygnować z e-maili, do których odnosi się ten link: w przypadku zapisanych wyszukiwań – z wyszukiwań zawartych w tym e-mailu; w przypadku czatu – z e-maili o nowych wiadomościach.",
     "submit": "Wypisz się",
-    "missing": "Ten link jest niekompletny. Otwórz ponownie link z e-maila.",
-    "done": "Gotowe. Jeśli link był ważny, nie będziesz już dostawać tych e-maili.",
-    "settings": "Ustawienia e-maili możesz w każdej chwili zmienić na swoim koncie:",
+    "missing": "Ten link jest niekompletny. Otwórz go jeszcze raz z wiadomości e-mail.",
+    "done": "Gotowe. Jeśli link był poprawny, nie będziesz już dostawać tych e-maili.",
+    "settings": "W każdej chwili możesz zmienić ustawienia e-maila na swoim koncie:",
     "searches": "Zapisane wyszukiwania",
-    "profile": "E-maile z czatu w profilu"
+    "profile": "Czatuj i wysyłaj e-maile w swoim profilu"
   },
   "Cookies": {
-    "intro": "Ta strona wymienia każdy plik cookie i każdą inną pamięć, z której strona korzysta w Twojej przeglądarce.",
-    "onlyNecessary": "Obecnie używamy wyłącznie pamięci niezbędnej do świadczenia usługi. Dlatego nie prosimy o zgodę.",
-    "optionalPresent": "Niektóre pozycje poniżej są opcjonalne i są używane tylko za Twoją zgodą.",
+    "intro": "Na tej stronie znajdziesz listę wszystkich plików cookie i innych elementów przechowywania danych, z których strona korzysta w twojej przeglądarce.",
+    "onlyNecessary": "W tej chwili korzystamy tylko z tych danych, które są absolutnie niezbędne do świadczenia usługi. Dlatego nie prosimy o zgodę.",
+    "optionalPresent": "Niektóre z poniższych pól są opcjonalne i będą wykorzystywane tylko za twoją zgodą.",
     "tableCaption": "Pliki cookie i pamięć przeglądarki",
     "columns": {
       "name": "Nazwa",
       "purpose": "Cel",
       "provider": "Dostawca",
-      "duration": "Okres",
-      "kind": "Rodzaj",
+      "duration": "Czas trwania",
+      "kind": "Typ",
       "category": "Kategoria"
     },
     "categories": {
-      "necessary": "Niezbędne",
+      "necessary": "Niezbędné",
       "optional": "Opcjonalne"
     },
     "kinds": {
-      "cookie": "Plik cookie",
-      "localStorage": "Local Storage",
-      "sessionStorage": "Session Storage",
+      "cookie": "Cookie",
+      "localStorage": "Lokalna pamięć",
+      "sessionStorage": "Pamięć sesji",
       "indexedDB": "IndexedDB",
-      "cache": "Cache Storage",
+      "cache": "Pamięć podręczna",
       "none": "Brak pamięci"
     },
     "entries": {
       "session": {
-        "name": "Sesja logowania (sb-…-auth-token)",
-        "purpose": "Utrzymuje Twoje zalogowanie. Ustawiany dopiero przy logowaniu.",
-        "provider": "Revier (własna usługa, działająca w Supabase w UE)",
-        "duration": "Do 400 dni; usuwany przy wylogowaniu"
+        "name": "Sesja zalogowania (sb-…-auth-token)",
+        "purpose": "Utrzymuje cię w systemie. Ustaw to tylko po zalogowaniu się.",
+        "provider": "Revier (nasza własna usługa, działająca na platformie Supabase w UE)",
+        "duration": "Do 400 dni; dane są usunięte po wylogowaniu"
       },
       "pkce": {
         "name": "Weryfikacja logowania (sb-…-code-verifier)",
-        "purpose": "Chroni logowanie przed manipulacją (wartość kontrolna dla każdego logowania i lista otwartych logowań).",
-        "provider": "Revier (własna usługa, działająca w Supabase w UE)",
-        "duration": "Usuwany po zakończeniu logowania, najpóźniej przy wylogowaniu"
+        "purpose": "Chroni logowanie przed manipulacją (weryfikator przy każdym logowaniu i lista aktywnych sesji).",
+        "provider": "Revier (nasza własna usługa, działająca na platformie Supabase w UE)",
+        "duration": "Usunięte po zalogowaniu, najpóźniej w momencie wylogowania"
       },
       "map": {
         "name": "Mapa",
-        "purpose": "Pokazuje ogłoszenia na mapie. Dane mapy są ładowane z naszego własnego serwera.",
-        "provider": "Revier (własna usługa)",
-        "duration": "Niczego nie zapisuje"
+        "purpose": "Wyświetla ogłoszenia na mapie. Dane mapy są ładowane z naszego własnego serwera.",
+        "provider": "Revier (nasza usługa)",
+        "duration": "Nie przechowuje żadnych danych"
       }
     },
-    "noThirdParties": "Strona nie ładuje żadnych treści od podmiotów trzecich: żadnych reklam, analityki, zewnętrznych czcionek ani map.",
+    "noThirdParties": "Strona nie ładuje żadnych treści od stron trzecich: żadnych reklam, żadnych narzędzi analitycznych, żadnych zewnętrznych czcionek ani map.",
     "banner": {
-      "title": "Pliki cookie w Reviro",
-      "text": "Oprócz pamięci niezbędnej do działania usługi chcielibyśmy używać opcjonalnych plików cookie. Działają one wyłącznie za Twoją zgodą. Swój wybór możesz w każdej chwili zmienić w ustawieniach plików cookie.",
+      "title": "Pliki cookie na Reviro",
+      "text": "Oprócz plików cookie niezbędnych do działania serwisu chcielibyśmy używać opcjonalnych plików cookie. Działają one tylko za twoją zgodą. W każdej chwili możesz zmienić swoje ustawienia w ustawieniach plików cookie.",
       "reject": "Odrzuć wszystkie",
       "accept": "Akceptuj wszystkie"
     }
   },
   "Sources": {
     "title": "Źródła danych",
-    "intro": "Dane referencyjne i mapowe, z których korzysta Revier, wraz z licencjami i wymaganymi informacjami.",
+    "intro": "Dane referencyjne i mapowe wykorzystywane przez Revier wraz z licencjami i wymaganymi informacjami.",
     "website": "Strona internetowa",
     "licenseLink": "Licencja: {license}",
     "items": {
       "osm": {
         "title": "OpenStreetMap",
-        "usage": "Dane mapy i obszary kodów pocztowych w Niemczech.",
-        "notice": "© współtwórcy OpenStreetMap",
+        "usage": "Dane mapowe i obszary kodów pocztowych w Niemczech.",
+        "notice": "© Autorzy OpenStreetMap",
         "license": "ODbL 1.0"
       },
       "protomaps": {
         "title": "Protomaps",
-        "usage": "Przygotowanie danych mapy i styl mapy.",
+        "usage": "Przygotowanie danych mapowych i stylu mapy.",
         "notice": "Protomaps",
         "license": "BSD 3-Clause"
       },
       "bkg": {
-        "title": "Federalny Urząd Kartografii i Geodezji (BKG)",
-        "usage": "Powiaty i nazwy gmin w Niemczech (VG250).",
+        "title": "Federalna Agencja Kartografii i Geodezji (BKG)",
+        "usage": "Nazwy powiatów i gmin w Niemczech (VG250).",
         "notice": "© GeoBasis-DE / BKG (2026)",
         "license": "dl-de/by-2-0"
       },
@@ -1506,97 +1506,97 @@
       },
       "fonts": {
         "title": "Noto Sans",
-        "usage": "Czcionka opisów na mapie.",
-        "notice": "Noto Sans, SIL Open Font License 1.1",
+        "usage": "Czcionka dla opisów na mapie.",
+        "notice": "Czcionka Noto Sans, licencja SIL Open Font License 1.1",
         "license": "OFL 1.1"
       }
     },
     "postal": {
       "title": "Tabela kodów pocztowych",
-      "text": "Przypisanie kodów pocztowych do powiatów i nazw miejscowości to baza danych pochodna od OpenStreetMap. Jest dostępna na licencji Open Database License (ODbL 1.0) i zawiera także dane BKG i Statistik Austria (informacje powyżej).",
+      "text": "Przyporządkowanie kodów pocztowych do okręgów i nazw miejscowości pochodzi z bazy danych opartej na OpenStreetMap. Jest ona dostępna na licencji Open Database License (ODbL 1.0) i zawiera również dane z BKG oraz Statistik Austria (uwagi powyżej).",
       "download": "Pobierz tabelę kodów pocztowych (CSV)"
     }
   },
   "DataExport": {
     "metaTitle": "Pobierz moje dane",
     "title": "Pobierz moje dane",
-    "intro": "Otrzymasz plik JSON ze wszystkimi danymi zapisanymi dla Twojego konta:",
+    "intro": "Otrzymasz plik JSON zawierający wszystkie dane dotyczące twojego konta:",
     "sections": {
-      "account": "Konto: adres e-mail, data utworzenia, ostatnie logowanie",
+      "account": "Konto: adres e-mail, data utworzenia, ostatnie zalogowanie",
       "profile": "Profil i ustawienia",
-      "listings": "Twoje ogłoszenia z gatunkami zwierzyny, miejscem i zdjęciami",
-      "conversations": "Rozmowy ze wszystkimi wiadomościami (inne osoby tylko z nazwą wyświetlaną)",
-      "savedSearches": "Zapisane wyszukiwania z wynikami",
-      "favoritesBlocks": "Zapisane ogłoszenia i zablokowane osoby",
+      "listings": "Twoje ogłoszenia z gatunkami zwierzyny łownej, miejscem i zdjęciami",
+      "conversations": "Rozmowy ze wszystkimi wiadomościami (inne osoby tylko pod nazwą wyświetlaną)",
+      "savedSearches": "Zapisane wyszukiwania wraz z wynikami",
+      "favoritesBlocks": "Zapisane ogłoszenia i zablokowani użytkownicy",
       "reports": "Twoje zgłoszenia i ich status",
       "legal": "Akceptacja regulaminu i polityki prywatności",
-      "verifications": "Wnioski o weryfikację (bez dokumentu)",
-      "roles": "Role (na przykład administrator), jeśli istnieją",
-      "reviews": "Oceny wystawione i otrzymane (inne osoby tylko z nazwą wyświetlaną)",
+      "verifications": "Wnioski o weryfikację (bez załączania dokumentu)",
+      "roles": "Role (np. admin), jeśli takie istnieją",
+      "reviews": "Opinie, które napisałeś i otrzymałeś (inne osoby tylko z nazwą wyświetlaną)",
       "devices": "Zarejestrowane urządzenia (platforma i język, bez tokenu push)"
     },
-    "photos": "Zdjęcia są w pliku jako linki. Link działa tylko wtedy, gdy jesteś zalogowany.",
-    "limit": "Dane możesz pobrać maksymalnie 3 razy w ciągu 24 godzin.",
+    "photos": "Zdjęcia są wyświetlane jako linki. Link działa tylko wtedy, gdy się zalogujesz.",
+    "limit": "Możesz pobrać swoje dane maksymalnie 3 razy w ciągu 24 godzin.",
     "download": "Pobierz dane (JSON)",
-    "deletionPending": "Twoje konto jest usuwane. Pobranie nie jest już możliwe.",
+    "deletionPending": "Twoje konto jest właśnie usuwane. Pobieranie plików nie jest już możliwe.",
     "errors": {
       "rateLimited": "Osiągnięto limit. Spróbuj ponownie później.",
-      "rateLimitedUntil": "Osiągnięto limit. Dane możesz ponownie pobrać od {time}.",
-      "notAllowed": "Dla tego konta pobranie nie jest możliwe.",
+      "rateLimitedUntil": "Osiągnięto limit. Możesz ponownie pobrać swoje dane z {time}.",
+      "notAllowed": "Pobieranie nie jest możliwe dla tego konta.",
       "failed": "Pobieranie nie powiodło się. Spróbuj ponownie później."
     }
   },
   "AccountDelete": {
     "metaTitle": "Usuń konto",
     "title": "Usuń konto",
-    "intro": "Usunięcie jest ostateczne i rozpoczyna się natychmiast po potwierdzeniu. Nie można go cofnąć.",
+    "intro": "Usunięcie jest ostateczne i zaczyna się od razu po potwierdzeniu. Nie da się tego cofnąć.",
     "deletedTitle": "Co zostanie usunięte",
     "deleted": {
       "profile": "Twój profil i ustawienia",
-      "listings": "Wszystkie Twoje ogłoszenia i zdjęcia",
-      "messages": "Twoje rozmowy i wiadomości, także u rozmówcy, chyba że wiadomość została zgłoszona",
+      "listings": "Wszystkie twoje ogłoszenia i zdjęcia",
+      "messages": "Twoje rozmowy i wiadomości są widoczne również dla drugiej osoby, chyba że wiadomość została zgłoszona",
       "searches": "Zapisane wyszukiwania, zapisane ogłoszenia i blokady",
       "documents": "Dokumenty weryfikacyjne",
-      "login": "Twoje logowanie (adres e-mail i powiązane logowanie przez Apple)"
+      "login": "Zaloguj się (adres e-mail i powiązane konto Apple)"
     },
     "keptTitle": "Co pozostaje (w formie pseudonimizowanej)",
     "kept": {
-      "audit": "Rejestry decyzji moderacji i administratorów, bez Twojego imienia i adresu e-mail",
-      "reports": "Zgłoszenia dotyczące Twojego konta, do upływu ich terminu",
+      "audit": "Zapisy dotyczące moderacji i decyzji administracyjnych, bez podawania twojego imienia ani adresu e-mail",
+      "reports": "Zgłoszenia dotyczące twojego konta, do upływu terminu ich ważności",
       "snapshots": "Kopie zgłoszonych wiadomości, do upływu terminu zgłoszenia"
     },
-    "exportHint": "Przed usunięciem możesz pobrać swoje dane.",
+    "exportHint": "Zanim coś usuniesz, możesz pobrać swoje dane.",
     "exportLink": "Pobierz moje dane",
     "step1": "1. Zaloguj się ponownie",
-    "step2": "2. Usuń konto na stałe",
+    "step2": "2. Trwale usuń konto",
     "confirmLabel": "Rozumiem, że moje konto i moje dane zostaną trwale usunięte.",
-    "submit": "Usuń konto na stałe",
-    "noEmail": "To konto nie ma adresu e-mail. Przed usunięciem zaloguj się ponownie.",
-    "noscript": "Bez JavaScriptu: wyloguj się i zaloguj ponownie. Potem masz 10 minut na potwierdzenie usunięcia.",
-    "pending": "Twoje konto jest usuwane.",
-    "deletedNotice": "Twoje konto jest usuwane. Zostałeś wylogowany.",
+    "submit": "Trwale usuń konto",
+    "noEmail": "Konto nie ma adresu e-mail. Zaloguj się jeszcze raz przed usunięciem.",
+    "noscript": "Jeśli nie masz włączonego JavaScriptu: wyloguj się i zaloguj się ponownie. Masz wtedy 10 minut na potwierdzenie usunięcia.",
+    "pending": "Twoje konto jest właśnie usuwane.",
+    "deletedNotice": "Twoje konto jest właśnie usuwane. Wyloguj się.",
     "errors": {
-      "reauth": "Najpierw zaloguj się ponownie (logowanie może mieć najwyżej 10 minut).",
-      "step_up": "Potwierdź także kodem z aplikacji uwierzytelniającej.",
-      "admin_role": "Kont z rolą administratora nie można usunąć. Najpierw poproś o odebranie roli.",
-      "confirm": "Potwierdź, że rozumiesz skutki usunięcia.",
+      "reauth": "Najpierw zaloguj się jeszcze raz (logowanie nie może być starsze niż 10 minut).",
+      "step_up": "Potwierdź to też kodem z aplikacji uwierzytelniającej.",
+      "admin_role": "Konto z uprawnieniami administratora nie można usunąć. Najpierw poproś o cofnięcie tych uprawnień.",
+      "confirm": "Potwierdź, że rozumiesz, o co chodzi z usunięciem.",
       "failed": "Nie udało się rozpocząć usuwania. Spróbuj ponownie później."
     },
     "reauth": {
-      "intro": "Dla Twojego bezpieczeństwa wyślemy kod na adres {email}.",
+      "intro": "Dla twojego bezpieczeństwa wysyłamy kod na adres {email}.",
       "send": "Wyślij kod",
-      "sending": "Wysyłanie …",
+      "sending": "Wysyłanie…",
       "sent": "Wysłaliśmy kod na adres {email}.",
       "codeLabel": "Kod logowania",
-      "totpLabel": "6-cyfrowy kod z aplikacji uwierzytelniającej",
+      "totpLabel": "6-cyfrowy kod z twojej aplikacji do uwierzytelniania",
       "verify": "Potwierdź",
-      "done": "Logowanie potwierdzone. Możesz teraz usunąć konto (krok 2).",
+      "done": "Zaloguj się. Teraz możesz usunąć swoje konto (krok 2).",
       "errors": {
-        "network": "Połączenie nie powiodło się. Spróbuj ponownie.",
-        "codeInvalid": "Kod jest nieprawidłowy lub wygasł.",
-        "mismatch": "Ten kod należy do innego konta. Zostałeś wylogowany.",
-        "totpInvalid": "Kod z aplikacji uwierzytelniającej jest nieprawidłowy.",
-        "tooSoon": "Odczekaj chwilę, zanim poprosisz o nowy kod."
+        "network": "Nie udało się nawiązać połączenia. Spróbuj jeszcze raz.",
+        "codeInvalid": "Kod jest nieprawidłowy lub wygasły.",
+        "mismatch": "Ten kod należy do innego konta. Wyloguj się.",
+        "totpInvalid": "Kod uwierzytelniający jest nieprawidłowy.",
+        "tooSoon": "Poczekaj chwilę, zanim poprosisz o kolejny kod."
       }
     }
   },
@@ -1604,24 +1604,24 @@
     "metaTitle": "Weryfikacja",
     "title": "Weryfikacja",
     "back": "Powrót do mojego konta",
-    "intro": "Weryfikacja jest dobrowolna. Gdy zespół sprawdzi Twój dokument, Twoje ogłoszenia i strona ogłaszającego pokażą odznakę „zweryfikowany”, a Ty pojawisz się w filtrze „tylko zweryfikowani”.",
-    "badgeNote": "[Wstępna informacja] Odznaka oznacza tylko, że zespół widział dokument. Nie jest gwarancją tożsamości i nie sprawdza daty ważności.",
-    "retention": "Twój dokument zostanie usunięty 30 dni po decyzji. Zachowana zostanie tylko decyzja.",
+    "intro": "Weryfikacja jest dobrowolna. Gdy zespół sprawdzi twój dokument, twoje ogłoszenia i strona ogłaszającego będą miały oznaczenie „Zweryfikowany”, a ty pojawisz się w filtrze „Tylko zweryfikowani”.",
+    "badgeNote": "[Uwaga wstępna] Odznaka oznacza jedynie, że zespół zapoznał się z dokumentem. Nie stanowi ona gwarancji tożsamości ani nie śledzi dat ważności.",
+    "retention": "Twój dokument zostanie usunięty 30 dni po wydaniu decyzji. Zachowana zostanie tylko sama decyzja.",
     "status": "Status",
     "statusText": {
-      "none": "Nie jesteś zweryfikowany.",
-      "pending": "Twój wniosek jest sprawdzany.",
-      "verified": "Twoje konto jest zweryfikowane.",
-      "rejected": "Twój ostatni wniosek został odrzucony. Możesz złożyć nowy."
+      "none": "Nie masz jeszcze zweryfikowanego konta.",
+      "pending": "Twoja prośba jest właśnie w weryfikacji.",
+      "verified": "Twoje konto zostało zweryfikowane.",
+      "rejected": "Twoje ostatnie zgłoszenie zostało odrzucone. Możesz złożyć nowe."
     },
-    "rejected": "Odrzucono dnia {date}.",
-    "revoked": "Twoja weryfikacja została cofnięta dnia {date}.",
+    "rejected": "Odrzucono {date}.",
+    "revoked": "Twoja weryfikacja została cofnięta na stronie {date}.",
     "reasonLabel": "Powód",
-    "inReview": "Złożono dnia {date}. Zespół sprawdza Twój dokument.",
-    "unfinished": "Przesyłanie nie zostało zakończone. Wybierz plik ponownie, aby złożyć wniosek.",
+    "inReview": "Przesłano {date}. Zespół sprawdzi twój dokument.",
+    "unfinished": "Przesyłanie nie doszło do skutku. Wybierz plik ponownie, żeby wysłać zgłoszenie.",
     "withdraw": "Wycofaj wniosek",
-    "withdrawHint": "Wniosek i przesłany dokument zostaną usunięte.",
-    "newRequest": "Złóż wniosek o weryfikację",
+    "withdrawHint": "Zgłoszenie i załączony dokument zostały usunięte.",
+    "newRequest": "Poproś o weryfikację",
     "documentType": "Dokument",
     "documentTypes": {
       "jagdschein": "Legitymacja myśliwska",
@@ -1630,16 +1630,16 @@
       "gewerbe": "Dowód działalności gospodarczej"
     },
     "file": "Plik",
-    "fileHint": "JPEG, PNG lub PDF, maksymalnie 10 MB. Zdjęcia z iPhone’a zapisz jako JPEG.",
-    "submit": "Prześlij i złóż",
-    "working": "Przesyłanie …",
-    "noscript": "Przesłanie dokumentu wymaga JavaScriptu. Włącz JavaScript dla tej strony.",
+    "fileHint": "Formaty JPEG, PNG lub PDF, maksymalnie 10 MB. Zdjęcia z iPhone’a zapisz w formacie JPEG.",
+    "submit": "Prześlij i wyślij",
+    "working": "Przesyłanie…",
+    "noscript": "Aby przesłać dokument, potrzebujesz JavaScript. Włącz JavaScript na tej stronie.",
     "history": "Wcześniejsze wnioski",
     "historyItem": "{date}: {type} – {status}",
     "requestStatus": {
-      "pending": "W weryfikacji",
-      "verified": "Zweryfikowano",
-      "rejected": "Odrzucono",
+      "pending": "W trakcie sprawdzania",
+      "verified": "Zweryfikowany",
+      "rejected": "Odrzucone",
       "revoked": "Cofnięto"
     },
     "reasons": {
@@ -1656,69 +1656,69 @@
       "other": "Inny powód"
     },
     "notices": {
-      "submitted": "Dziękujemy. Twój wniosek został złożony.",
-      "withdrawn": "Twój wniosek został wycofany."
+      "submitted": "Dzięki. Twoje zgłoszenie zostało wysłane.",
+      "withdrawn": "Twoje zgłoszenie zostało wycofane."
     },
     "errors": {
-      "fileType": "Wybierz plik JPEG, PNG lub PDF.",
-      "fileSize": "Plik jest większy niż 10 MB.",
+      "fileType": "Wybierz plik w formacie JPEG, PNG lub PDF.",
+      "fileSize": "Plik ma więcej niż 10 MB.",
       "fileEmpty": "Wybierz plik.",
-      "open": "Masz już wniosek w trakcie sprawdzania.",
-      "rateLimited": "Osiągnięto limit 3 wniosków w ciągu 30 dni.",
-      "rateLimitedUntil": "Osiągnięto limit 3 wniosków w ciągu 30 dni. Spróbuj ponownie po {time}.",
-      "legal": "Najpierw zaakceptuj aktualny regulamin.",
-      "type": "Ten rodzaj dokumentu nie jest dostępny dla Twojego konta.",
-      "notAllowed": "Twoje konto nie może teraz złożyć wniosku.",
-      "upload": "Przesyłanie nie powiodło się. Spróbuj ponownie.",
-      "missingFile": "Brakuje dokumentu. Prześlij go ponownie.",
-      "submitted": "Ten wniosek został już złożony.",
-      "notFound": "Ten wniosek już nie istnieje. Odśwież stronę.",
-      "failed": "Coś poszło nie tak. Spróbuj ponownie.",
-      "withdraw": "Nie udało się wycofać wniosku. Odśwież stronę."
+      "open": "Masz już zgłoszenie w trakcie weryfikacji.",
+      "rateLimited": "Osiągnąłeś limit 3 zapytań w ciągu 30 dni.",
+      "rateLimitedUntil": "Osiągnąłeś limit 3 zapytań w ciągu 30 dni. Spróbuj ponownie po {time}.",
+      "legal": "Najpierw zaakceptuj aktualne warunki.",
+      "type": "Ten typ dokumentu nie jest dostępny dla twojego konta.",
+      "notAllowed": "Twoje konto nie może w tej chwili wysłać zapytania.",
+      "upload": "Przesyłanie nie powiodło się. Spróbuj jeszcze raz.",
+      "missingFile": "Brakuje dokumentu. Prześlij go jeszcze raz.",
+      "submitted": "To zgłoszenie zostało już przesłane.",
+      "notFound": "To zapytanie już nie istnieje. Odśwież stronę.",
+      "failed": "Coś poszło nie tak. Spróbuj jeszcze raz.",
+      "withdraw": "Nie udało się cofnąć zlecenia. Odśwież stronę."
     }
   },
   "Report": {
     "metaTitle": "Zgłoś",
     "title": "Zgłoś",
     "titleListing": "Zgłoś ogłoszenie",
-    "titleProfile": "Zgłoś ogłaszającego",
-    "intro": "Twoje zgłoszenie trafi do zespołu. Osoba, której dotyczy, nie dowie się, kto zgłosił.",
-    "unavailable": "Tej treści nie można (już) zgłosić.",
+    "titleProfile": "Zgłoś dostawcę",
+    "intro": "Twoje zgłoszenie trafi do zespołu. Osoba, której to dotyczy, nie dowie się, kto zgłosił sprawę.",
+    "unavailable": "Tej treści nie można już zgłaszać.",
     "myReports": "Moje zgłoszenia",
     "reason": "Powód",
     "reasons": {
-      "scam": "Oszustwo lub próba oszustwa",
-      "illegal": "Treści niezgodne z prawem",
+      "scam": "Próba oszustwa lub wyłudzenia",
+      "illegal": "Nielegalne treści",
       "weapons": "Broń lub amunicja",
-      "harassment": "Nękanie lub obrażanie",
-      "wrong_category": "Niewłaściwa kategoria lub brak okazji łowieckiej",
+      "harassment": "Nękanie lub obelgi",
+      "wrong_category": "Niewłaściwa kategoria lub brak oferty polowań",
       "other": "Inny powód"
     },
     "note": "Szczegóły (opcjonalnie)",
-    "noteHint": "Maksymalnie 1000 znaków. Nie podawaj niepotrzebnie danych osobowych innych osób.",
-    "goodFaith": "[Wstępne brzmienie] Potwierdzam, że informacje w tym zgłoszeniu są zgodnie z moją najlepszą wiedzą prawdziwe i kompletne.",
+    "noteHint": "Maksymalnie 1000 znaków. Nie podawaj danych osobowych innych osób, jeśli nie są one konieczne.",
+    "goodFaith": "[Wstępna treść] Potwierdzam, że informacje zawarte w niniejszym raporcie są, zgodnie z moją najlepszą wiedzą, prawdziwe i kompletne.",
     "submit": "Wyślij zgłoszenie",
     "errors": {
       "reason": "Wybierz powód.",
-      "note": "Szczegóły są za długie (maksymalnie 1000 znaków).",
+      "note": "Opisy są za długie (maksymalnie 1000 znaków).",
       "goodFaith": "Potwierdź oświadczenie.",
-      "duplicate": "Ta treść została już przez Ciebie zgłoszona. Twoje zgłoszenie jest sprawdzane.",
-      "limit": "W ciągu ostatnich 24 godzin wysłano wiele zgłoszeń. Spróbuj ponownie później.",
-      "unavailable": "Tej treści nie można (już) zgłosić.",
-      "failed": "Wysyłanie nie powiodło się. Spróbuj ponownie."
+      "duplicate": "Już zgłosiłeś tę treść. Twoje zgłoszenie jest obecnie sprawdzane.",
+      "limit": "W ciągu ostatnich 24 godzin wysłałeś wiele zgłoszeń. Spróbuj ponownie później.",
+      "unavailable": "Tej treści nie można już zgłaszać.",
+      "failed": "Wysyłanie nie powiodło się. Spróbuj jeszcze raz."
     },
     "listMetaTitle": "Moje zgłoszenia",
     "listTitle": "Moje zgłoszenia",
-    "sent": "Dziękujemy. Twoje zgłoszenie zostało przyjęte i zostanie sprawdzone.",
-    "empty": "Nie masz jeszcze żadnych zgłoszeń.",
+    "sent": "Dzięki. Otrzymaliśmy twoje zgłoszenie i zajmiemy się nim.",
+    "empty": "Jeszcze nic nie zgłosiłeś.",
     "targets": {
       "listing": "Ogłoszenie",
       "profile": "Profil",
       "message": "Wiadomość"
     },
-    "reportedOn": "Zgłoszono dnia {date}",
+    "reportedOn": "Zgłoszono {date}",
     "statusOpen": "W trakcie sprawdzania",
-    "statusHandled": "Sprawdzono dnia {date}: {outcome}",
+    "statusHandled": "Sprawdzono {date}: {outcome}",
     "outcomeUnknown": "Zakończono",
     "outcomes": {
       "no_action": "Brak działań",
@@ -1728,15 +1728,15 @@
       "account_blocked": "Konto zablokowane",
       "target_gone": "Treść już niedostępna"
     },
-    "decisionsLink": "Decyzje i skargi"
+    "decisionsLink": "Decyzje i odwołania"
   },
   "Decisions": {
-    "metaTitle": "Decyzje i skargi",
-    "title": "Decyzje i skargi",
-    "intro": "Tutaj widzisz decyzje moderacji dotyczące Ciebie lub Twoich zgłoszeń wraz z uzasadnieniem. W wyznaczonym terminie możesz zakwestionować decyzję.",
-    "remedies": "[Wstępna informacja] Informacje o pozasądowym rozstrzyganiu sporów i o środkach prawnych zostaną uzupełnione.",
-    "appealed": "Twoja skarga została przyjęta. Zespół ją rozpatrzy.",
-    "empty": "Nie ma decyzji, które by Cię dotyczyły.",
+    "metaTitle": "Decyzje i odwołania",
+    "title": "Decyzje i odwołania",
+    "intro": "Tutaj możesz sprawdzić decyzje moderatorów dotyczące ciebie lub twoich zgłoszeń wraz z uzasadnieniem. Możesz zakwestionować decyzję w wyznaczonym terminie.",
+    "remedies": "[Uwaga wstępna] Informacje o pozasądowym rozstrzyganiu sporów i środkach prawnych pojawią się wkrótce.",
+    "appealed": "Otrzymaliśmy twoje odwołanie. Zespół je sprawdzi.",
+    "empty": "Nie ma tu żadnych decyzji, które by cię dotyczyły.",
     "actions": {
       "listing_rejected": "Ogłoszenie odrzucone",
       "listing_draft": "Prośba o poprawki",
@@ -1749,54 +1749,54 @@
       "report_handled": "Decyzja w sprawie Twojego zgłoszenia"
     },
     "reason": "Powód",
-    "explanation": "Uzasadnienie",
-    "appealLink": "Zakwestionuj decyzję",
+    "explanation": "Wyjaśnienie",
+    "appealLink": "Odwołaj się od tej decyzji",
     "appealUntil": "możliwe do {date}",
-    "appealClosed": "Termin na złożenie skargi upłynął.",
+    "appealClosed": "Termin zgłoszenia odwołania już minął.",
     "appealStatus": {
-      "open": "Skarga złożona, w trakcie rozpatrywania",
-      "upheld": "Skarga rozpatrzona: decyzja pozostaje w mocy",
-      "reversed": "Skarga rozpatrzona: decyzja została uchylona"
+      "open": "Odwołanie wysłane, w trakcie sprawdzania",
+      "upheld": "Rozpatrzono odwołanie: decyzja pozostaje bez zmian",
+      "reversed": "Odwołanie rozpatrzone: decyzja została uchylona"
     }
   },
   "Appeal": {
-    "metaTitle": "Zakwestionuj decyzję",
-    "title": "Zakwestionuj decyzję",
+    "metaTitle": "Odwołaj się od decyzji",
+    "title": "Odwołaj się od decyzji",
     "back": "Powrót do decyzji",
-    "intro": "Wyjaśnij, dlaczego Twoim zdaniem decyzja jest błędna. Rozpatrzy ją inny członek zespołu. Możliwe do {date}.",
-    "unavailable": "Tej decyzji nie można (już) zakwestionować.",
-    "alreadyAppealed": "Ta decyzja została już przez Ciebie zakwestionowana.",
-    "text": "Twoje uzasadnienie",
+    "intro": "Wyjaśnij, dlaczego uważasz, że ta decyzja jest błędna. Sprawdzi to inny członek zespołu. Możliwe do {date}.",
+    "unavailable": "Od tej decyzji nie ma już możliwości odwołania się.",
+    "alreadyAppealed": "Już zakwestionowałeś tę decyzję.",
+    "text": "Twoje powody",
     "textHint": "Od 10 do 2000 znaków.",
-    "submit": "Złóż skargę",
+    "submit": "Wyślij odwołanie",
     "errors": {
-      "text": "Napisz od 10 do 2000 znaków.",
-      "notFound": "Tej decyzji nie można (już) zakwestionować.",
-      "failed": "Wysyłanie nie powiodło się. Spróbuj ponownie."
+      "text": "Napisz tekst o długości od 10 do 2000 znaków.",
+      "notFound": "Od tej decyzji nie ma już możliwości odwołania się.",
+      "failed": "Wysyłanie nie powiodło się. Spróbuj jeszcze raz."
     }
   },
   "Styleguide": {
-    "metaTitle": "Przewodnik stylu",
-    "title": "Przewodnik stylu.",
-    "intro": "Wszystkie elementy interfejsu w ich stanach. Widoczne tylko lokalnie i na stagingu.",
+    "metaTitle": "Przewodnik stylistyczny",
+    "title": "Przewodnik stylistyczny.",
+    "intro": "Wszystkie elementy interfejsu w swoich stanach. Widoczne tylko lokalnie i na serwerze testowym.",
     "colors": "Kolory",
     "typography": "Typografia",
     "buttons": "Przyciski",
-    "fields": "Pola formularza",
+    "fields": "Pola wprowadzania danych",
     "badges": "Status i etykiety",
-    "notices": "Komunikaty",
+    "notices": "Informacje",
     "cards": "Karta ogłoszenia",
     "icons": "Ikony",
     "logo": "Logo",
-    "states": "Stany puste i błędów",
+    "states": "Stany puste i błędy",
     "fieldLabel": "Tytuł ogłoszenia",
     "fieldHint": "Od 3 do 100 znaków.",
     "fieldError": "Wpisz tytuł.",
-    "disabled": "Nieaktywny",
-    "sampleTitle": "Odstrzał w obwodzie polnym, sarna i dzik",
-    "headingSample": "Znajdź swój obwód.",
+    "disabled": "Wyłączone",
+    "sampleTitle": "Zezwolenie na polowanie na terenach rolniczych, na sarny i dziki",
+    "headingSample": "Znajdź swoje tereny łowieckie.",
     "bodySample": "Dzierżawa, odstrzał czy stanowisko na polowaniu zbiorowym. Příliš žluťoučký kůň · Zażółć gęślą jaźń",
-    "consent": "Baner plików cookie (szablon)",
-    "consentNote": "Nieaktywny: pojawi się dopiero po dodaniu opcjonalnego pliku cookie (ADR 021)."
+    "consent": "Baner dotyczący plików cookie (szablon)",
+    "consentNote": "Nieaktywne: pojawia się dopiero po dodaniu opcjonalnego pliku cookie (ADR 021)."
   }
 }

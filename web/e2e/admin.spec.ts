@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { admin, deleteTestUsers, local } from "./cleanup";
 import { latestMail, uniqueEmail } from "./mailpit";
 import { makeAdmin, nextTotpWindow, totp } from "../integration/totp";
+import { msg } from "./messages";
 
 // M4 (ADR 014): Zugang zum Admin-Bereich. Nicht-Admins bekommen einen echten HTTP-Status 403
 // (Akzeptanz c), Admins richten TOTP per POST ein (Review B3) und kommen danach mit aal2 hinein.
@@ -270,10 +271,10 @@ test("Besitzer sieht den Grund in seiner Sprache und im Assistenten (Akzeptanz b
   // Besitzer auf Polnisch: Vorlage übersetzt, Freitext unverändert
   await ownerPage.goto("/pl/account/listings");
   const rejected = ownerPage.getByRole("listitem").filter({ hasText: "Abgelehnt mit Grund" });
-  await expect(rejected.getByText("Powód moderacji: Dane kontaktowe w treści")).toBeVisible();
-  await expect(rejected.getByText("Uwaga moderacji: „Bitte ohne Telefonnummer.”")).toBeVisible();
+  await expect(rejected.getByText(msg("pl", "Listings.mine.rejectReason", { reason: msg("pl", "Moderation.reasons.contact_in_text") }))).toBeVisible();
+  await expect(rejected.getByText(msg("pl", "Listings.mine.moderationNote", { note: "Bitte ohne Telefonnummer." }))).toBeVisible();
   const returned = ownerPage.getByRole("listitem").filter({ hasText: "Zurück mit Grund" });
-  await expect(returned.getByText("Moderacja prosi o zmiany.")).toBeVisible();
+  await expect(returned.getByText(msg("pl", "Listings.mine.changesRequested"))).toBeVisible();
 
   // Im Assistenten steht der Grund oben, bis erneut abgesendet wird
   await ownerPage.goto(`/de/account/listings/${returnedId}/edit?step=preview`);

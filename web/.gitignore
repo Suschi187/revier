@@ -50,3 +50,4 @@ next-env.d.ts
 /.cache
 # MapLibre-Worker, kopiert vor dev/build aus node_modules (scripts/map-worker.mjs)
 /public/static/map/maplibre-*/
+scripts/.deepl-report.json

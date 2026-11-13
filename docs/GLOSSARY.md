@@ -3,6 +3,8 @@
 Fachbegriffe müssen in Web (`web/messages/*.json`) und iOS (`Localizable.xcstrings`) identisch übersetzt sein.
 en ist die Quellsprache. cs/pl-Begriffe sind **ungeprüft**, bis Muttersprachler sie freigegeben haben (SPEC 7.6).
 
+Web-Texte cs/pl sind seit 2026-11-13 per DeepL übersetzt (`web/scripts/translate-deepl.mjs`, cs aus de wegen der Du-Anrede, pl aus en) mit diesem Glossar; Handkorrekturen in `web/scripts/i18n-overrides.json`. Die URL-Wörter unten gehen nicht ins DeepL-Glossar.
+
 | Code | en | de | cs | pl | Status |
 |------|----|----|----|----|--------|
 | `lease` | Hunting lease | Jagdpacht | Pronájem honitby | Dzierżawa obwodu łowieckiego | ungeprüft |
@@ -169,8 +171,14 @@ Teil der URL, deshalb nur Kleinbuchstaben, ohne Diakritika. Änderungen brauchen
 
 | Schlüssel | en | de | cs | pl | Status |
 |------|----|----|----|----|--------|
-| favorite | Saved | Merken / Favoriten | Uložit / Oblíbené | Zapisz / Ulubione | ungeprüft |
+| favorite | Saved | Merken / Favoriten | Uložit / Uložené | Zapisz / Zapisane | ungeprüft |
 | provider | Provider | Anbieter | Inzerent | Ogłaszający | ungeprüft |
+| listing_noun | Listing | Anzeige | Inzerát | Ogłoszenie | ungeprüft |
+| listings_noun | Listings | Anzeigen | Inzeráty | Ogłoszenia | ungeprüft |
+| report_noun | Reports | Meldungen | Nahlášení | Zgłoszenia | ungeprüft |
+| report_noun_sg | Meldung (Substantiv) | Meldung | Nahlášení | Zgłoszenie | ungeprüft |
+| challenge | Challenge | Beschwerde | Stížnost | Odwołanie | ungeprüft |
+| challenges | Challenges | Beschwerden | Stížnosti | Odwołania | ungeprüft |
 | verified | Verified | verifiziert | ověřený | zweryfikowany | ungeprüft |
 | gone | No longer available | nicht mehr verfügbar | již není k dispozici | już niedostępne | ungeprüft |
 | postal_area | Postcode area | PLZ-Bereich | Oblast PSČ | Obszar kodu pocztowego | ungeprüft |

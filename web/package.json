@@ -20,7 +20,8 @@
     "map:style": "node scripts/map-style.mjs",
     "map:worker": "node scripts/map-worker.mjs",
     "predev": "node scripts/map-worker.mjs",
-    "prebuild": "node scripts/map-worker.mjs"
+    "prebuild": "node scripts/map-worker.mjs",
+    "i18n:deepl": "node --env-file-if-exists=.env.local scripts/translate-deepl.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
