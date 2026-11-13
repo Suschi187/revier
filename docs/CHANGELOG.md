@@ -7,12 +7,16 @@ Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannt
 ### Geändert
 - **Tschechische Mails duzen** (Anrede Du laut Entscheidung 2026-11-13): Gruß „Ahoj,“ statt „Dobrý den,“, „tvůj/tvoje/tvém“ statt „váš/vaše/vašem“, Verben in der 2. Person Singular. Betrifft `send-chat-notifications/texts.ts`, `send-search-notifications/texts.ts` und `account_texts.ts`. Das gemeinsame Label `Decisions.actions.report_handled` ist im Web, im Fixture `supabase/tests/fixtures/mail_labels.json` und als Override angepasst.
 
+- **Wackelige Datenbank-Tests:** `08_storage` zählt jetzt in allen Buckets nur Dateien in den Ordnern der eigenen Testnutzer (vorher scheiterte er an Resten aus E2E- oder Messläufen). `57_qa_m9b_nachpruefung` Test 4 sortiert über die Meldungs-IDs statt über `created_at`, weil alle Meldungen in einer Transaktion denselben Zeitstempel haben.
+- Bekannt: `02`, `04`, `26`, `31`, `32` setzen eine Datenbank ohne fremde öffentliche Anzeigen voraus und werden rot, solange z. B. die Demo-Anzeigen aus Schritt 7 lokal liegen. In der CI (frische Datenbank) grün.
+
 ### Entscheidungen
 - **Keine Kategorie-Navigation im Kopf** (QA F1, Entscheidung 2026-11-13): bewusste Abweichung von der SPEC. Offen bleibt: Filter mobil als Blatt von unten.
 
 ### Testen
 - Per Docker wie in der CI: `deno task check && deno lint && deno task test` in `send-chat-notifications` und `send-search-notifications`
 - `cd web && npx vitest run`
+- `supabase test db supabase/tests/08_storage.test.sql supabase/tests/57_qa_m9b_nachpruefung.test.sql` (mehrfach, auch mit Demo-Daten)
 
 ## M10a GUI/UX-Design (Web), Schritt 8: Prüfung – 2026-11-13
 

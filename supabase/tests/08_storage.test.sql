@@ -19,7 +19,7 @@ select tests.authenticate_as(:'a_id');
 select begin_verification('jagdschein') as ver \gset
 select (:'ver'::jsonb) ->> 'id' as ver_id, (:'ver'::jsonb) ->> 'path' as doc_a \gset
 insert into storage.objects (bucket_id, name, owner_id) values ('verification-docs', :'doc_a', :'a_id');
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'A lädt auf den Pfad des eigenen Antrags hoch und sieht ihn');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 1, 'A lädt auf den Pfad des eigenen Antrags hoch und sieht ihn');
 select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('verification-docs', %L) $$, :'b_id' || '/untergeschoben.jpg'),
   '42501', null, 'A lädt nicht in den Ordner von B hoch');
 select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('verification-docs', %L) $$, :'a_id' || '/anderer-name.jpg'),
@@ -27,20 +27,20 @@ select throws_ok(format($$ insert into storage.objects (bucket_id, name) values 
 select submit_verification(:'ver_id');
 
 select tests.authenticate_as(:'b_id');
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'B sieht den Jagdschein von A nicht');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'B sieht den Jagdschein von A nicht');
 select tests.as_anon();
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'anon sieht keine Dokumente');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'anon sieht keine Dokumente');
 select tests.authenticate_as(:'admin_id', 'aal1');
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Admin ohne 2FA sieht keine Dokumente');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'Admin ohne 2FA sieht keine Dokumente');
 select tests.authenticate_as(:'admin_id', 'aal2');
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Admin mit 2FA sieht das Dokument nicht ohne frisches Audit (B3)');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'Admin mit 2FA sieht das Dokument nicht ohne frisches Audit (B3)');
 select admin_open_verification_document(:'ver_id') is not null;
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 0, 'Auch nach admin_open_verification_document kein Zugriff über die Storage-API (QA M9b F6)');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'Auch nach admin_open_verification_document kein Zugriff über die Storage-API (QA M9b F6)');
 
 select tests.authenticate_as(:'a_id');
 delete from storage.objects where bucket_id = 'verification-docs';
 select tests.as_postgres();
-select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs'), 1, 'Nach dem Einreichen löscht nur der Server (Aufräumjob)');
+select is((select count(*)::int from storage.objects where bucket_id = 'verification-docs' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 1, 'Nach dem Einreichen löscht nur der Server (Aufräumjob)');
 
 -- Anzeigenfotos (ADR 011): Zeile anlegen → Original in den Eingang → Server verarbeitet -------
 select ok(not (select public from storage.buckets where id = 'listing-uploads'), 'listing-uploads (Eingang) ist privat');
@@ -72,7 +72,7 @@ select throws_ok(format($$ insert into storage.objects (bucket_id, name) values 
 select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('listing-uploads', %L) $$, :'b_id' || '/' || :'listing_b' || '/frei.jpg'),
   '42501', null, 'Eingang nur unter dem Pfad eines registrierten Fotos');
 insert into storage.objects (bucket_id, name, owner_id) values ('listing-uploads', :'upload_path', :'b_id');
-select is((select count(*)::int from storage.objects where bucket_id = 'listing-uploads'), 0, 'Original im Eingang ist auch für den Besitzer nicht lesbar');
+select is((select count(*)::int from storage.objects where bucket_id = 'listing-uploads' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'Original im Eingang ist auch für den Besitzer nicht lesbar');
 
 select tests.authenticate_as(:'a_id');
 select throws_ok(format($$ insert into storage.objects (bucket_id, name) values ('listing-uploads', %L) $$, :'upload_path'),
@@ -84,7 +84,7 @@ select throws_ok(format($$ insert into listing_photos (listing_id, sort_order) v
 
 -- Server verarbeitet (wie die Edge Function): Ausgaben schreiben, processed_at setzen
 select tests.as_postgres();
-select count(*)::int as uploads_before from storage.objects where bucket_id = 'listing-uploads' \gset
+select count(*)::int as uploads_before from storage.objects where bucket_id = 'listing-uploads' and (storage.foldername(name))[1] in (:'a_id', :'b_id') \gset
 select is(:uploads_before, 1, 'Original liegt im Eingang');
 insert into storage.objects (bucket_id, name, owner_id) values ('listing-photos', :'storage_path', :'b_id'), ('listing-photos', :'thumb_path', :'b_id');
 update listing_photos set processed_at = now(), width = 2048, height = 1365 where id = :'photo1';
@@ -97,9 +97,9 @@ select tests.as_postgres();
 insert into storage.objects (bucket_id, name, owner_id) values ('listing-photos', :'storage_path2', :'b_id');
 
 select tests.authenticate_as(:'a_id');
-select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos'), 0, 'A sieht Fotos eines fremden Entwurfs nicht');
+select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'A sieht Fotos eines fremden Entwurfs nicht');
 select tests.as_anon();
-select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos'), 0, 'anon sieht Fotos eines Entwurfs nicht');
+select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'anon sieht Fotos eines Entwurfs nicht');
 
 select tests.as_postgres();
 update listings set status = 'active', expires_at = now() + interval '30 days' where id = :'listing_b';
@@ -120,7 +120,7 @@ select is((select count(*)::int from storage.objects
 select tests.authenticate_as(:'b_id');
 delete from listing_photos where id = :'photo1';
 select tests.as_anon();
-select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos'), 0, 'Verwaiste Datei ist öffentlich nicht lesbar');
+select is((select count(*)::int from storage.objects where bucket_id = 'listing-photos' and (storage.foldername(name))[1] in (:'a_id', :'b_id')), 0, 'Verwaiste Datei ist öffentlich nicht lesbar');
 select tests.authenticate_as(:'b_id');
 delete from storage.objects where bucket_id = 'listing-photos' and name in (:'storage_path', :'thumb_path');
 select tests.as_postgres();

@@ -67,7 +67,9 @@ select submit_appeal(:'d2b', 'Waffen im Bild, bitte erneut prüfen.') as ap \gse
 select tests.authenticate_as(:'b', 'aal2');
 select is(decide_appeal(:'ap', 'reversed', 'Neu prüfen'), 'reversed', 'Beschwerde von Rolf: reversed');
 select tests.as_postgres();
-select is((select array_agg(status::text order by created_at) from reports where target_id = :'l'), array['handled', 'open', 'open'],
+-- Nach id, nicht nach created_at: in einer Transaktion haben alle Meldungen denselben Zeitstempel.
+select is((select array_agg(status::text order by array_position(array[:'c1', :'c2a', :'c2b']::uuid[], id)) from reports where target_id = :'l'),
+  array['handled', 'open', 'open'],
   'Beide Meldungen der angefochtenen Bearbeitung offen (auch die von Rita), Zyklus 1 bleibt erledigt');
 select ok((select bool_and(resolution_id is null and decision_audit_id is null) from reports where id in (:'c2a', :'c2b')),
   'Wiedereröffnet: resolution_id und Audit-Verweis zurückgesetzt');
