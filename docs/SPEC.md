@@ -300,6 +300,106 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
   - Sperre eines Kontos → Beschwerde des Betroffenen → Entsperrung durch einen anderen Admin
   - Ein Verifizierungsdokument ist ohne frischen Audit-Eintrag `verification.document_viewed` nicht lesbar, auch nicht für Admins über die Storage-API
 
+*M10a GUI/UX-Design (Web): Marktplatz im Markenauftritt von Die Jagdbrüder**
+
+Ziel: Reviro erscheint als Teil der Marke **Die Jagdbrüder** und fühlt sich wie der bestehende Webshop an (Authentisch. Modern. Naturverbunden.), bedient sich aber wie ein Marktplatz: suchen, vergleichen, inserieren, schreiben. Einheitliche Gestaltung, Barrierefreiheit und Lesbarkeit in allen vier Sprachen. Läuft nach M9 und vor dem Web-Release (M10). Die Ergebnisse dienen später als Vorlage für die iOS-App (I1 bis I7).
+
+Markenzeile: **REVIRO** mit Zusatz *Hunting Marketplace* und Label *by Die Jagdbrüder*. Claim-Kandidaten: *Klare Linien. Wilde Freiheit.* oder Überschriften im Stil des Shops (z. B. *FINDE DEIN REVIER.*). Namensrecherche (SPEC 7.1) ist Voraussetzung für Logo und Domain.
+
+**Verbindliche Designvorgaben (aus dem Webshop der Marke, vom Menschen bestätigt)**
+
+| Element | Festlegung |
+|---|---|
+| Markenpositionierung | Authentisch. Modern. Naturverbunden. (Shop: Hunting Streetwear × Outdoor Lifestyle; Reviro: Marktplatz für Jagdgelegenheiten) |
+| Logo | Original-Hirschkopf der Marke beibehalten, orange; Wortmarke dunkelgrün |
+| Header | Offwhite, Wortmarke dunkelgrün mit orangem Hirschkopf, Hauptnavigation in Großbuchstaben, schmale dunkelgrüne Leiste darüber mit Claim und Links |
+| Hauptfarben | Waldgrün, Sand, Offwhite |
+| Akzentfarbe | Orange (Hauptaktionen, kleine Überschriften, Icons) |
+| Schriftarten | Montserrat (Überschriften, Großbuchstaben, fett) und Inter (Fließtext, Bedienelemente) |
+| Bildsprache | Authentische Jagd, Outdoor, Landschaft, Revier; Fotos mit Atmosphäre (Dämmerung, Nebel, Hochsitz, Jagdhund) |
+| Designpriorität | Mobile First, handlungsstark (klare Hauptaktion), responsiv |
+| Nicht übernommen | Shop-Technik (Shopify), Warenkorb, Produktraster für Waren |
+
+*Konkrete Farbwerte (Hex), Schriftschnitte und das Logo als SVG liefert der Mensch aus dem Shop (Shopify-Theme-Einstellungen oder Markenunterlagen). Sie werden in `docs/DESIGN.md` festgehalten; nichts wird per Screenshot geschätzt.*
+
+*Voraussetzungen (vom Menschen zu liefern oder zu entscheiden, vor dem Start):*
+- Name freigegeben nach Markenrecherche (SPEC 7.1); bis dahin Arbeitsname
+- Logo (Hirschkopf) als SVG, Farbwerte, Schriftschnitte
+- Dunkelmodus: im ersten Stand **nein** (die Marke lebt von hellen Flächen mit dunkelgrünen Akzenten)
+- Ansprache: Marke spricht im Shop mit "Du"; für Reviro Du als Grundton in Deutsch vorgesehen; Tschechisch und Polnisch von Muttersprachlern festlegen lassen; bei Pacht, Rechtsseiten und Hinweisen sachlich formulieren
+- Nutzungsrechte der Markenfotos (auch KI-generierte Bilder) und Vermeidung erkennbarer Fremdmarken im Bild (z. B. Fahrzeugschriftzug)
+
+**Leitprinzip**
+Der Auftritt kommt aus der eigenen Marke. Bei den Marktplatz-Bedienmustern (Suchfeld oben, Listenkarten, Kontaktbox) orientieren wir uns an allgemein üblichen Mustern, übernehmen aber **nicht** Farben, Logo, Schrift, Icons, Bilder oder Texte fremder Portale (insbesondere Kleinanzeigen, eBay). Ein Mensch prüft Startseite, Liste und Detailseite vor Abschluss auf zu große Ähnlichkeit. Lizenz jeder Schrift, jedes Icons und jedes Bildes steht in `docs/DESIGN.md` (Montserrat und Inter sind offen lizenziert, SIL OFL; trotzdem Lizenztext ablegen).
+
+**Schritt 1: Brand-Übertragung statt Entwurfsvarianten**
+- `docs/DESIGN.md` mit den Vorgaben oben, Farbwerten, Typografie-Skala, Logo-Verwendung (Schutzraum, Mindestgröße, Verhalten auf dunklem und hellem Grund, Lockup *REVIRO by Die Jagdbrüder*)
+- Ein Entwurf der **Startseite** und der **Anzeigenkarte** im Markenstil; der Mensch gibt frei. Varianten nur für marktplatzspezifische Teile (z. B. Kategorie-Kacheln, Kontaktbox)
+- Stilmerkmale des Shops, die übertragen werden: dunkelgrüne Leiste oben, Offwhite-Header, Großbuchstaben-Überschriften mit Punkt am Ende, kleine orange Überschrift (Eyebrow) über dem Titel, vollflächiges Foto im Kopfbereich mit Text links und orangem Button mit Pfeil, Offwhite-Abschnitte, quadratische Bildkarten mit Name und Preis darunter, Link "Alle … →"
+- Bildsprache: Natur, Revier, Hochsitz, Jagdhund, Gemeinschaft; keine Trophäen- oder Schussbilder auf Start- und Kategorieseiten
+
+**Schritt 2: Design-Grundlagen (Tokens)**
+- Farben, Typografie, Abstände, Radien, Schatten, Icons als Tokens in der Tailwind-Konfiguration; Status- und Fehlerfarben ergänzen (Orange nicht für Fehler verwenden)
+- **Schriften selbst hosten** (Montserrat, Inter), keine Anfragen an Google Fonts oder andere Dienste (Datenschutz, siehe ADR zur Karte); Subsetting mit Latin-Extended für Tschechisch und Polnisch
+- **Kontrast prüfen:** Orange auf Offwhite und weiße Schrift auf Orange liegen nach Augenmaß unter dem AA-Wert von 4,5:1 für kleinen Text. Mit einem Kontrastwerkzeug messen; für kleine Texte und Buttons einen dunkleren Orangeton als Text-/Button-Variante definieren, das Marken-Orange bleibt für Flächen, Icons und große Schrift
+- Sichtbarer Fokus, Tippflächen mindestens 44 px, `prefers-reduced-motion` beachten
+- Tokens in `docs/DESIGN.md` dokumentiert, damit iOS später dieselbe Farb- und Typografiewelt nutzt
+
+**Schritt 3: Komponentenbibliothek**
+- Interne Styleguide-Seite (`/styleguide`, nur lokal und in Staging, `noindex`) mit allen Bausteinen in allen Zuständen: Buttons (Hauptaktion orange), Eingabefelder, Chips, Filterleiste, Anzeigenkarte, Status-Badges, Verifiziert-Badge, Dialoge, Hinweise, Tabs, Paginierung, Assistenten-Fortschritt, Chat-Blasen, Kartenpopup, Cookie-Banner
+- Zustände immer mitgestaltet: Laden, Leer, Fehler, Offline, nicht mehr verfügbar (410), nicht gefunden (404)
+- Platzhalterbild je Anzeigenart (im Stil der Marke), wenn keine Fotos vorhanden sind
+- Wildarten-Icons (Rehwild, Rotwild, Schwarzwild, Damwild, Gamswild, Muffelwild, Federwild, Hund) in der geometrischen Linienart des Hirschkopfs, orange oder dunkelgrün; eigene Zeichnungen oder offen lizenziert
+
+**Schritt 4: Seiten umsetzen** (je Seite ein Commit, mobil zuerst)
+1. **Kopfbereich auf allen Seiten:** dunkelgrüne Leiste mit Claim; Offwhite-Header mit Wortmarke und Hirschkopf links, Hauptnavigation in Großbuchstaben (Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäen- und Gastjagden, Jagdhelfer), rechts Suche, Konto, Nachrichten, Merkliste, Sprachwahl; auffälliger oranger Button "Anzeige aufgeben"
+2. **Startseite:** vollflächiges Foto mit großer Überschrift, kurzem Text und Hauptaktion; direkt darunter große Suche ("Was?" und "Wo?", optional Umkreis); Kategorie-Kacheln mit Fotos und Icons; neueste Anzeigen im Raster; Einstieg über Länder und Regionen; Vertrauensleiste (Verifizierung, Melden, Datenschutz); Hinweis auf die Gemeinschaft Die Jagdbrüder
+3. **Liste und Suche:** Filter links (Desktop) oder als Blatt von unten (mobil), Sortierung, Umschalter Angebote/Gesuche, Umschalter Liste/Karte, Trefferzahl, "Suche speichern"; Listenkarte mit Foto, Titel, hervorgehobenem Preis, Ort und Datum, Merken-Symbol
+4. **Anzeigen-Detail:** große Galerie, Preis und Titel, Eckdatenblock (Fläche, Wildarten, Zeitraum, Revierart, Fristen), Beschreibung, Karte mit verfremdetem Punkt; Kontaktbox rechts (Desktop) oder fest unten (mobil) mit Anbieterprofil und Verifiziert-Badge, "Nachricht schreiben", Merken, Teilen, Melden; Sicherheitshinweise
+5. **Inserieren-Assistent:** einspaltig, Fortschrittsanzeige, Hilfetexte, Fehlermeldungen am Feld, Entwurf sichtbar gespeichert, Vorschau wie die echte Anzeige
+6. **Dashboard:** Meine Anzeigen mit Status und Ablehnungsgrund, Nachrichten, Merkliste, Suchaufträge
+7. **Chat und Nachrichten**
+8. **Anmeldung, Profil, Einstellungen, Verifizierung**
+9. **Rechtsseiten, Hilfe, Fehlerseiten**
+10. **Admin-Bereich:** funktional und übersichtlich, geringerer Gestaltungsaufwand
+
+**Schritt 5: Texte und Mehrsprachigkeit**
+- Überschriften in Großbuchstaben: Länge und Schreibweise pro Sprache prüfen (deutsche Komposita, tschechische und polnische Sonderzeichen in Versalien, korrekte Darstellung von ą ę ł ś ż ź č ř š ž ů ě)
+- Textlängen-Test: nichts abschneiden oder überlaufen lassen
+- Microcopy-Durchgang in allen 4 Sprachen im Ton der Marke; Fachbegriffe laut `docs/GLOSSARY.md`; cs/pl von Muttersprachlern prüfen lassen
+- Zusatz zum Namen je Sprache (Entwurf, Prüfung durch Muttersprachler): EN *Hunting leases & permits*, DE *Jagdpacht & Begehungsscheine*, CS *Honitby & povolenky k lovu*, PL *Dzierżawa obwodów i polowania*; Zeichenlimit für App-Store-Texte beachten (30)
+- Zahlen, Datum und Währung je Sprache korrekt
+
+**Schritt 6: Sensible Inhalte**
+- Hinweis und Richtlinie für Anzeigenfotos (z. B. keine blutigen oder verstörenden Bilder)
+- Optional zu entscheiden: Fotos von erlegtem Wild in Listen standardmäßig verdeckt mit "Bild anzeigen"
+- Melden an jeder Anzeige und jeder Nachricht gut erreichbar
+
+**Schritt 7: Performance**
+- Core Web Vitals im Blick: große Kopfbild-Fotos als responsive, komprimierte Bilder (`next/image`), kein Layoutsprung, schlanke Schriften (nur benötigte Schnitte)
+- Messwerte vorher und nachher in `docs/CHANGELOG.md`
+
+**Schritt 8: Prüfung**
+- Playwright-Screenshots für Kernseiten in 360, 768 und 1280 px Breite in allen 4 Sprachen
+- Automatischer Barrierefreiheitstest (z. B. axe) in der CI, manueller Durchgang mit Tastatur und Screenreader (VoiceOver)
+- Vergleich mit dem Webshop durch den Menschen: wirkt es wie dieselbe Marke?
+- Ähnlichkeitsprüfung gegen fremde Portale (siehe Leitprinzip)
+- `qa`-Agent prüft die Akzeptanzkriterien, `architect` prüft Schriften, Drittanfragen und Sicherheitsheader
+
+*Akzeptanz:*
+- Farben, Schriften, Header, Logo und Bildsprache entsprechen den verbindlichen Vorgaben; Abweichungen sind in `docs/DESIGN.md` begründet
+- Alle Kernseiten nutzen ausschließlich Tokens und Komponenten aus der Bibliothek; keine Einzelfarben oder Einzelabstände im Seitencode
+- Aufbau folgt den Marktplatz-Bedienmustern aus Schritt 4 (Suche oben, Kategorie-Kacheln, Listenkarten, Kontaktbox)
+- Kein Element übernimmt Aussehen, Logo, Schrift, Icons, Bilder oder Wortlaut fremder Portale; Lizenzen und Bildrechte in `docs/DESIGN.md` vollständig
+- Keine Anfragen an Dritte beim Seitenaufruf (Schriften, Icons, Karte liegen bei uns), im Netzwerk-Tab geprüft
+- AA-Kontraste für Text und Buttons gemessen und erreicht; sichtbarer Fokus; automatischer Test ohne schwere Befunde
+- Kein abgeschnittener oder überlaufender Text in de, en, cs und pl bei 360 px Breite, auch bei Großbuchstaben-Überschriften
+- Lighthouse oder gleichwertige Messung mit vorab festgelegten Zielwerten auf Start-, Listen- und Detailseite
+- `docs/DESIGN.md` vollständig, Tokens für iOS übernehmbar
+
+*Nicht enthalten:* finales Reviro-Logo und App-Icon (eigener Auftrag, abhängig von Namensfreigabe), Anbindung an den Shop, Marketingseiten, iOS-Oberfläche (kommt in I1 bis I7).
+
+
 **M10 Web-Release**
 - Accessibility-Durchlauf, Performance (Core Web Vitals), Fehlerseiten, Monitoring, Backups, Domain/Deployment, Staging-Test mit echten Testnutzern
 - *Akzeptanz:* Checkliste in `docs/WEB-RELEASE.md` komplett abgehakt
