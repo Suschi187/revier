@@ -18,6 +18,7 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - **Inserieren-Assistent:** Fortschrittsbalken, Schritte als Chips, Felder und Hauptaktion aus der Bibliothek.
 - **Konto-Übersicht:** Profilkarte, Kacheln für Anzeigen, Nachrichten, Favoriten, Suchaufträge, Liste für Verifizierung bis Konto löschen.
 - **Chat und Nachrichten (Schritt 4.7):** Konversationsliste und Unterhaltung im Kartenstil, Kopf mit Initialen-Avatar und Anzeigenlink, Chat-Blasen (eigene Waldgrün rechts, fremde hell links), Eingabefeld und Senden-Button aus der Bibliothek, Blockieren und Melden als Buttons mit 44 px Tippfläche; Funktionen unverändert.
+- **Sprachwahl und Konto ohne JavaScript (behoben, `qa-m5.spec.ts:483`):** Ist eine Seite schneller fertig als die Suspense-Grenzen im Kopf (z. B. `/de/jagdpacht/bayern?cur=EUR`), kamen Sprachwahl und Konto-Links nur gestreamt und blieben ohne JavaScript verborgen. Beide Grenzen haben jetzt Platzhalter im ersten HTML: Die Sprachlinks zeigen auf `/api/locale?to=…` (303 auf die passende Seite aus dem Referer, nur Pfad und Query, immer eigener Pfad, `noindex`, `no-store`; ohne Referer zur Startseite), der Konto-Platzhalter auf „Mein Reviro“. Ziel-Logik gemeinsam in `lib/public/locale-switch.ts`. Die E2E-Probe prüft das Ziel statt des `href`; `qa-m3.spec.ts:282` sucht den Absenden-Button nur noch im Hauptbereich (sonst traf `.last()` bei gestreamten Konto-Links „Abmelden“).
 - **Tests:** E2E an Kopf-Suche, doppelten Link „Anzeige aufgeben“, „Mein Reviro“ und das große Detailfoto angepasst.
 
 ### Testen
@@ -31,7 +32,6 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - Teilen-Button auf der Detailseite fehlt noch (braucht JavaScript oder einen Link-Fallback).
 - Keine Markenfotos: Banner und Platzhalter sind gezeichnet.
 - iOS übernimmt die Tokens ab I1.
-- **Offener Testfehler:** `e2e/qa-m5.spec.ts:483` (ohne JavaScript, Sprachwahl auf `/de/jagdpacht/bayern?cur=EUR`). Auf dieser Seite ist der Seiteninhalt fertig, bevor `useSearchParams` in der Sprachwahl aufgelöst ist; Sprachwahl und Konto-Links kommen dann nur gestreamt und bleiben ohne JavaScript unsichtbar. Andere Listen-URLs sind nicht betroffen. Vor M10a lag das Rennen knapp auf der anderen Seite. Lösungsidee: Sprachwahl serverseitig aus einem vom Proxy gesetzten URL-Header rendern statt per `useSearchParams`.
 
 ## Nachtrag M9b: QA-Nachprüfung N1–N4 und H1 – 2026-11-12
 

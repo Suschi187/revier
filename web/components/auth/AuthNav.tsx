@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { signOut } from "@/app/[locale]/auth/actions";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -17,6 +18,19 @@ function NavItem({ href, icon, label, ariaLabel, badge }: { href: string; icon: 
         <span aria-hidden="true" className="absolute right-1 top-0 min-w-5 rounded-pill bg-brand px-1 text-center text-[0.6875rem] font-bold text-forest">{badge}</span>
       ) : null}
     </Link>
+  );
+}
+
+/**
+ * Platzhalter der Suspense-Grenze, ohne Session: steht immer im ersten HTML. Kommt AuthNav nur gestreamt (ohne
+ * JavaScript verborgen), bleibt so das Konto erreichbar; ohne Anmeldung leitet /account zur Anmeldung.
+ */
+export function AuthNavFallback() {
+  const t = useTranslations("Header");
+  return (
+    <nav aria-label={t("accountNav")} className="flex items-center">
+      <NavItem href="/account" icon="user" label={t("account")} />
+    </nav>
   );
 }
 

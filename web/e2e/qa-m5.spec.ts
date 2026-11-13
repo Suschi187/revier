@@ -484,15 +484,21 @@ test.describe("QA M5: Ohne JavaScript, Sprachen, 360 px, axe", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto(`/de/jagdpacht/bayern?cur=EUR`);
+    // Ziel statt href (M10a): Kommt die Sprachwahl nur gestreamt, steht ihr Platzhalter da (Links über /api/locale).
     const nav = page.getByRole("navigation", { name: "Sprache" });
-    await expect(nav.getByRole("link", { name: "Polski" })).toHaveAttribute("href", "/pl/dzierzawa-obwodu/bayern?cur=EUR");
+    await expect(page.getByRole("navigation", { name: "Konto", exact: true }).getByRole("link")).not.toHaveCount(0);
+    await nav.getByRole("link", { name: "Polski" }).click();
+    await expect(page).toHaveURL(/\/pl\/dzierzawa-obwodu\/bayern\?cur=EUR$/);
+    await page.goto(`/de/jagdpacht/bayern?cur=EUR`);
     await nav.getByRole("link", { name: "Čeština" }).click();
     await expect(page).toHaveURL(/\/cs\/pronajem-honitby\/bayern\?cur=EUR$/);
     await page.goto(`/de/anzeige/${id}`);
-    await expect(page.getByRole("navigation", { name: "Sprache" }).getByRole("link", { name: "English" })).toHaveAttribute("href", `/en/listing/${id}`);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Hochwildrevier");
+    await page.getByRole("navigation", { name: "Sprache" }).getByRole("link", { name: "English" }).click();
+    await expect(page).toHaveURL(new RegExp(`/en/listing/${id}$`));
     await page.goto(`/de/anbieter/${firm.id}`);
-    await expect(page.getByRole("navigation", { name: "Sprache" }).getByRole("link", { name: "English" })).toHaveAttribute("href", `/en/provider/${firm.id}`);
+    await page.getByRole("navigation", { name: "Sprache" }).getByRole("link", { name: "English" }).click();
+    await expect(page).toHaveURL(new RegExp(`/en/provider/${firm.id}$`));
     await page.goto("/de/suche");
     await page.getByLabel("Bundesland bzw. Region").selectOption("DE-BY");
     await page.getByLabel("Suchbegriff").fill(RUN);

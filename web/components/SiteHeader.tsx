@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { AuthNav } from "@/components/auth/AuthNav";
+import { AuthNav, AuthNavFallback } from "@/components/auth/AuthNav";
 import { Logo } from "@/components/brand/Logo";
-import { LocaleSwitcher } from "@/components/LocaleSwitcher";
+import { LocaleSwitcher, LocaleSwitcherFallback } from "@/components/LocaleSwitcher";
 import { Icon } from "@/components/ui/Icon";
 import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
@@ -19,8 +19,10 @@ const SHOP_URL = "https://www.jagdbrueder.de/";
  * (Bundesland, als GET-Formular ohne JavaScript), Konto-Links und die Hauptaktion „Anzeige aufgeben“.
  *
  * Bewusst synchron: Die Suspense-Grenzen (Sprachwahl liest den Query-String, Konto die Session) beginnen so
- * gleichzeitig mit der Seite und stehen fertig im ersten HTML, auch ohne JavaScript (QA M5). Läge eine Grenze in
- * einer async-Komponente, rendert sie erst nach deren `await` und käme nur noch gestreamt (verborgen ohne JS).
+ * gleichzeitig mit der Seite und stehen meist fertig im ersten HTML (QA M5). Läge eine Grenze in einer
+ * async-Komponente, rendert sie erst nach deren `await` und käme nur noch gestreamt (verborgen ohne JS).
+ * Ist die Seite schneller (z. B. `/de/jagdpacht/bayern?cur=EUR`), greifen die Platzhalter: Sie funktionieren
+ * ohne JavaScript (Sprachwechsel über `/api/locale`, Konto-Link).
  */
 export function SiteHeader() {
   return (
@@ -30,7 +32,7 @@ export function SiteHeader() {
           <TopBarText />
           <div className="ml-auto flex flex-wrap items-center gap-x-5">
             <ShopLink />
-            <Suspense fallback={null}>
+            <Suspense fallback={<LocaleSwitcherFallback />}>
               <LocaleSwitcher />
             </Suspense>
           </div>
@@ -41,7 +43,7 @@ export function SiteHeader() {
           <HomeLink />
           <HeaderSearch />
           <div className="ml-auto flex flex-wrap items-center justify-end gap-1 lg:ml-0">
-            <Suspense fallback={null}>
+            <Suspense fallback={<AuthNavFallback />}>
               <AuthNav />
             </Suspense>
             <CreateLink />

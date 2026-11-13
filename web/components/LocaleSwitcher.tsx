@@ -5,7 +5,17 @@ import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing, type AppLocale } from "@/i18n/routing";
-import { hasFilterQuery, parsePath, publicPath } from "@/lib/public/paths";
+import { switchLocaleHref } from "@/lib/public/locale-switch";
+import { parsePath } from "@/lib/public/paths";
+
+function linkProps(locale: AppLocale, current: AppLocale) {
+  return {
+    lang: locale,
+    hrefLang: locale,
+    "aria-current": locale === current ? ("page" as const) : undefined,
+    className: locale === current ? "font-semibold" : "underline",
+  };
+}
 
 /**
  * Öffentliche Seiten haben übersetzte URL-Wörter (ADR 015): Das Ziel kommt aus dem Pfad-Parser, Filter im
@@ -16,37 +26,49 @@ export function LocaleSwitcher() {
   const current = useLocale() as AppLocale;
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const parsed = parsePath(`/${current}${pathname === "/" ? "" : pathname}`);
+  const full = `/${current}${pathname === "/" ? "" : pathname}`;
+  const parsed = parsePath(full);
 
   return (
     <nav aria-label={t("label")}>
       <ul className="flex gap-3 text-sm">
-        {routing.locales.map((locale) => {
-          const props = {
-            lang: locale,
-            hrefLang: locale,
-            "aria-current": locale === current ? ("page" as const) : undefined,
-            className: locale === current ? "font-semibold" : "underline",
-          };
-          if (parsed.type === "public") {
-            const query = hasFilterQuery(parsed.page) ? searchParams.toString() : "";
-            const href = publicPath(parsed.page, locale) + (query ? `?${query}` : "");
-            return (
-              <li key={locale}>
-                <NextLink href={href} {...props}>
-                  {t(`names.${locale}`)}
-                </NextLink>
-              </li>
-            );
-          }
-          return (
-            <li key={locale}>
-              <Link href={pathname} locale={locale} {...props}>
+        {routing.locales.map((locale) => (
+          <li key={locale}>
+            {parsed.type === "public" ? (
+              <NextLink href={switchLocaleHref(full, searchParams.toString(), locale)} {...linkProps(locale, current)}>
+                {t(`names.${locale}`)}
+              </NextLink>
+            ) : (
+              <Link href={pathname} locale={locale} {...linkProps(locale, current)}>
                 {t(`names.${locale}`)}
               </Link>
-            </li>
-          );
-        })}
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+/**
+ * Platzhalter der Suspense-Grenze, ohne Pfad und Query: Er steht immer im ersten HTML. Kommt die Sprachwahl nur
+ * gestreamt (ohne JavaScript verborgen), wechseln diese Links über `/api/locale` und den Referer trotzdem auf
+ * die passende Seite. Mit JavaScript ersetzt die Sprachwahl oben den Platzhalter.
+ */
+export function LocaleSwitcherFallback() {
+  const t = useTranslations("LocaleSwitcher");
+  const current = useLocale() as AppLocale;
+
+  return (
+    <nav aria-label={t("label")}>
+      <ul className="flex gap-3 text-sm">
+        {routing.locales.map((locale) => (
+          <li key={locale}>
+            <a href={`/api/locale?to=${locale}`} rel="nofollow" {...linkProps(locale, current)}>
+              {t(`names.${locale}`)}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );
