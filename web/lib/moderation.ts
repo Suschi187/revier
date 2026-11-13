@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Moderation (ADR 014): Grund-Vorlagen und Entscheidungen. Die Liste spiegelt den Check auf
-// listings.reject_code (Migration moderation_fields); moderation.test.ts vergleicht beide.
+// listings.reject_code (zuletzt Migration reject_code_killed_game); moderation.test.ts vergleicht beide.
 
 export const REJECT_CODES = [
   "incomplete",
@@ -11,6 +11,7 @@ export const REJECT_CODES = [
   "duplicate",
   "contact_in_text",
   "implausible",
+  "killed_game",
   "other",
 ] as const;
 export type RejectCode = (typeof REJECT_CODES)[number];

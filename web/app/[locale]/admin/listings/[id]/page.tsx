@@ -88,6 +88,9 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
           )}
           <p>{t("previousRejections", { count: review.previousRejections })}</p>
         </section>
+        {review.photos.length > 0 && (
+          <p className="rounded-card border border-notice bg-notice-soft p-3 text-sm text-notice">{t("photoRule")}</p>
+        )}
 
         <form action={decideListing} id="decision" className={`${ui.card} flex flex-col gap-4 p-5`}>
           <input type="hidden" name="locale" value={locale} />

@@ -289,7 +289,8 @@
           "points": [
             "Żadnych treści niezgodnych z prawem, dyskryminujących, zawierających groźby ani o charakterze seksualnym.",
             "Nie wolno zamieszczać ofert naruszających przepisy łowieckie, na przykład dotyczących polowań w okresie ochronnym.",
-            "Nie kopiuj tekstów z innych stron i nie używaj zdjęć, do których nie masz praw."
+            "Nie kopiuj tekstów z innych stron i nie używaj zdjęć, do których nie masz praw.",
+            "Bez zdjęć upolowanej zwierzyny (na przykład pokotu po polowaniu albo trofeum na tuszy). Ogłoszenia z takimi zdjęciami odrzucamy."
           ]
         },
         {
@@ -591,6 +592,7 @@
     "photos": {
       "choose": "Wybierz zdjęcia",
       "intro": "Maksymalnie 8 zdjęć (JPEG, PNG lub WebP). Zdjęcia są kompresowane przed przesłaniem; serwer usuwa wszystkie metadane, takie jak lokalizacja GPS.",
+      "rule": "Bez zdjęć upolowanej zwierzyny. Ogłoszenia z takimi zdjęciami odrzucamy.",
       "limit": "To ogłoszenie ma już 8 zdjęć.",
       "uploading": "Przesyłanie {name}…",
       "done": "{count, plural, one {Wysłano # zdjęcie.} few {Wysłano # zdjęcia.} other {Wysłano # zdjęć.}}",
@@ -686,6 +688,7 @@
       "back": "Powrót do ogłoszeń do zatwierdzenia",
       "owner": "Reklamodawca: {name}, członek od {date}",
       "previousRejections": "{count, plural, =0 {Dotąd nigdy nie odrzucono.} one {Dotąd odrzucono # raz.} few {Dotąd odrzucono # razy.} other {Dotąd odrzucono # razy.}}",
+      "photoRule": "Sprawdź zdjęcia: jeśli któreś przedstawia upolowaną zwierzynę, odrzuć ogłoszenie z powodem „Zdjęcie przedstawia upolowaną zwierzynę”.",
       "contentLanguage": "Język ogłoszenia: {language}",
       "notPending": "To ogłoszenie nie czeka na weryfikację (status: {status}).",
       "decision": "Decyzja",
@@ -1011,6 +1014,7 @@
       "duplicate": "Zduplikowane ogłoszenie",
       "contact_in_text": "Dane kontaktowe w treści",
       "implausible": "Niewiarygodne informacje",
+      "killed_game": "Zdjęcie przedstawia upolowaną zwierzynę",
       "other": "Inny powód"
     },
     "decisions": {

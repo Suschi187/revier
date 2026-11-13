@@ -289,7 +289,8 @@
           "points": [
             "Keine rechtswidrigen, diskriminierenden, bedrohenden oder sexuellen Inhalte.",
             "Keine Angebote, die gegen das Jagdrecht verstoßen, zum Beispiel Jagd in der Schonzeit.",
-            "Keine von anderen Websites kopierten Texte und keine Fotos ohne eigene Rechte daran."
+            "Keine von anderen Websites kopierten Texte und keine Fotos ohne eigene Rechte daran.",
+            "Keine Fotos von erlegtem Wild (zum Beispiel Strecke oder Trophäe am Stück). Anzeigen mit solchen Fotos werden abgelehnt."
           ]
         },
         {
@@ -591,6 +592,7 @@
     "photos": {
       "choose": "Fotos auswählen",
       "intro": "Bis zu 8 Fotos (JPEG, PNG oder WebP). Fotos werden vor dem Hochladen verkleinert; der Server entfernt alle Metadaten wie den GPS-Standort.",
+      "rule": "Keine Fotos von erlegtem Wild. Anzeigen mit solchen Fotos werden abgelehnt.",
       "limit": "Diese Anzeige hat schon 8 Fotos.",
       "uploading": "{name} wird hochgeladen …",
       "done": "{count, plural, one {# Foto hochgeladen.} other {# Fotos hochgeladen.}}",
@@ -686,6 +688,7 @@
       "back": "Zurück zur Warteschlange",
       "owner": "Inserent: {name}, Mitglied seit {date}",
       "previousRejections": "{count, plural, =0 {Bisher nie abgelehnt.} one {Bisher # Mal abgelehnt.} other {Bisher # Mal abgelehnt.}}",
+      "photoRule": "Prüfe die Fotos: Zeigt eines erlegtes Wild, lehne die Anzeige mit dem Grund „Foto zeigt erlegtes Wild“ ab.",
       "contentLanguage": "Sprache der Anzeige: {language}",
       "notPending": "Diese Anzeige wartet nicht auf die Freigabe (Status: {status}).",
       "decision": "Entscheidung",
@@ -1011,6 +1014,7 @@
       "duplicate": "Doppelte Anzeige",
       "contact_in_text": "Kontaktdaten im Text",
       "implausible": "Unplausible Angaben",
+      "killed_game": "Foto zeigt erlegtes Wild",
       "other": "Anderer Grund"
     },
     "decisions": {

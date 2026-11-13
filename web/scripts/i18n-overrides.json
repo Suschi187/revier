@@ -176,7 +176,10 @@
     "Decisions.appealUntil": "možné do {date}",
     "Decisions.appealStatus.open": "Stížnost podána, probíhá kontrola",
     "Styleguide.cards": "Karta inzerátu",
-    "Styleguide.badges": "Stav a štítky"
+    "Styleguide.badges": "Stav a štítky",
+    "Listings.photos.rule": "Žádné fotky ulovené zvěře. Inzeráty s takovými fotkami zamítáme.",
+    "Admin.review.photoRule": "Zkontroluj fotky: pokud některá zobrazuje ulovenou zvěř, zamítni inzerát s důvodem „Fotografie zobrazuje ulovenou zvěř“.",
+    "Legal.guidelines.sections[1].points[3]": "Žádné fotky ulovené zvěře (například výřad po lovu nebo trofej na kusu). Inzeráty s takovými fotkami zamítáme."
   },
   "pl": {
     "Public.detail.safety1": "Nigdy nie płać z góry bez pisemnej umowy",
@@ -346,6 +349,9 @@
     "Public.filters.periodHint": "Ogłoszenia bez podanego okresu są pomijane. W przypadku polowań zbiorowych liczy się data, jeśli wybrano tę kategorię.",
     "Favorites.removedNotice": "Usunięto niedostępne zapisane ogłoszenia.",
     "Admin.appeals.outcomes.reversed": "Uwzględnij odwołanie (cofnij działanie)",
-    "Legal.privacy.sections[11].points[1]": "Wysyłka e-maili: dostawca zostanie wskazany."
+    "Legal.privacy.sections[11].points[1]": "Wysyłka e-maili: dostawca zostanie wskazany.",
+    "Listings.photos.rule": "Bez zdjęć upolowanej zwierzyny. Ogłoszenia z takimi zdjęciami odrzucamy.",
+    "Admin.review.photoRule": "Sprawdź zdjęcia: jeśli któreś przedstawia upolowaną zwierzynę, odrzuć ogłoszenie z powodem „Zdjęcie przedstawia upolowaną zwierzynę”.",
+    "Legal.guidelines.sections[1].points[3]": "Bez zdjęć upolowanej zwierzyny (na przykład pokotu po polowaniu albo trofeum na tuszy). Ogłoszenia z takimi zdjęciami odrzucamy."
   }
 }

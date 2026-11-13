@@ -61,11 +61,13 @@ export function PhotoUploader({ listingId, freeSlots }: { listingId: string; fre
         multiple
         disabled={!ready || freeSlots.length === 0 || status.kind === "working"}
         onChange={onChange}
-        aria-describedby={`${inputId}-hint`}
+        aria-describedby={`${inputId}-hint ${inputId}-rule`}
       />
       <p id={`${inputId}-hint`} className="text-sm text-muted">
         {freeSlots.length === 0 ? t("limit") : t("intro")}
       </p>
+      {/* Keine Fotos von erlegtem Wild (M10a Schritt 6); Admins lehnen sonst ab. */}
+      <p id={`${inputId}-rule`} className="rounded-card border border-notice bg-notice-soft p-3 text-sm text-notice">{t("rule")}</p>
       <p role="status" aria-live="polite" className="text-sm">
         {status.kind === "working" && t("uploading", { name: status.name })}
         {status.kind === "done" && t("done", { count: status.count })}

@@ -289,7 +289,8 @@
           "points": [
             "No illegal, discriminatory, threatening or sexual content.",
             "No offers that violate hunting law, for example hunting during closed seasons.",
-            "No texts copied from other websites and no photos you do not hold the rights to."
+            "No texts copied from other websites and no photos you do not hold the rights to.",
+            "No photos of killed game (for example the bag after a hunt or a trophy on the carcass). Listings with such photos are rejected."
           ]
         },
         {
@@ -591,6 +592,7 @@
     "photos": {
       "choose": "Choose photos",
       "intro": "Up to 8 photos (JPEG, PNG or WebP). Photos are reduced in size before uploading; the server removes all metadata such as the GPS location.",
+      "rule": "No photos of killed game. Listings with such photos are rejected.",
       "limit": "This listing already has 8 photos.",
       "uploading": "Uploading {name} …",
       "done": "{count, plural, one {# photo uploaded.} other {# photos uploaded.}}",
@@ -686,6 +688,7 @@
       "back": "Back to the review queue",
       "owner": "Advertiser: {name}, member since {date}",
       "previousRejections": "{count, plural, =0 {Never rejected before.} one {Rejected # time before.} other {Rejected # times before.}}",
+      "photoRule": "Check the photos: if one shows killed game, reject the listing with the reason “Photo shows killed game”.",
       "contentLanguage": "Language of the listing: {language}",
       "notPending": "This listing is not awaiting review (status: {status}).",
       "decision": "Decision",
@@ -1011,6 +1014,7 @@
       "duplicate": "Duplicate listing",
       "contact_in_text": "Contact details in the text",
       "implausible": "Implausible information",
+      "killed_game": "Photo shows killed game",
       "other": "Other reason"
     },
     "decisions": {

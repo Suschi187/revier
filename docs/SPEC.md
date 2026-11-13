@@ -372,7 +372,7 @@ Der Auftritt kommt aus der eigenen Marke. Bei den Marktplatz-Bedienmustern (Such
 
 **Schritt 6: Sensible Inhalte**
 - Hinweis und Richtlinie für Anzeigenfotos (z. B. keine blutigen oder verstörenden Bilder)
-- Optional zu entscheiden: Fotos von erlegtem Wild in Listen standardmäßig verdeckt mit "Bild anzeigen"
+- **Entschieden (2026-11-13):** Fotos von erlegtem Wild sind nicht erlaubt (weder in Listen noch auf der Detailseite). Zeigt ein Foto erlegtes Wild, lehnt der Admin die Anzeige mit dem Grund `killed_game` („Foto zeigt erlegtes Wild“) ab. Hinweis im Foto-Schritt, Regel in den Richtlinien, Prüfhinweis in der Admin-Prüfung. Ein Verdecken mit „Bild anzeigen“ entfällt damit.
 - Melden an jeder Anzeige und jeder Nachricht gut erreichbar
 
 **Schritt 7: Performance**

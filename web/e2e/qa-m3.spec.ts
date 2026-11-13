@@ -189,6 +189,7 @@ test("Fotos: GPS, EXIF, XMP und Kommentar sind in Bild und Thumbnail entfernt, E
   await signUp(page, "Foto QA");
   const id = await newHelperDraft(page, "Fotoprüfung Metadaten");
   await page.goto(`/de/account/listings/${id}/edit?step=photos`);
+  await expect(page.getByText("Keine Fotos von erlegtem Wild.")).toBeVisible();
   await page.waitForLoadState("networkidle"); // Uploader ist eine Client-Komponente: erst nach der Hydrierung bereit
 
   const jpeg = Buffer.from(withMetadata(encode(quadrants(1200, 800)), 6));

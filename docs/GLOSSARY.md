@@ -130,6 +130,7 @@ Quelle: ADR 014. cs/pl **ungeprüft**.
 | `duplicate` | Duplicate listing | Doppelte Anzeige | Duplicitní inzerát | Zduplikowane ogłoszenie | ungeprüft |
 | `contact_in_text` | Contact details in the text | Kontaktdaten im Text | Kontaktní údaje v textu | Dane kontaktowe w treści | ungeprüft |
 | `implausible` | Implausible information | Unplausible Angaben | Nevěrohodné údaje | Niewiarygodne informacje | ungeprüft |
+| `killed_game` | Photo shows killed game | Foto zeigt erlegtes Wild | Fotografie zobrazuje ulovenou zvěř | Zdjęcie przedstawia upolowaną zwierzynę | ungeprüft |
 | `other` | Other reason | Anderer Grund | Jiný důvod | Inny powód | ungeprüft |
 
 ## Konto und Anmeldung (M2)

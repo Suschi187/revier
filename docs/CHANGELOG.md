@@ -2,6 +2,28 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a GUI/UX-Design (Web), Schritt 6: Sensible Inhalte – 2026-11-13
+
+Entscheidung des Nutzers: keine Fotos von erlegtem Wild; solche Anzeigen lehnt der Admin ab (SPEC M10a Schritt 6, Nachtrag ADR 014).
+
+### Geändert
+- **Neuer Ablehnungsgrund `killed_game`** („Foto zeigt erlegtes Wild“): Migration `20261113100000_reject_code_killed_game.sql` (Check auf `listings.reject_code`, Code-Liste in `resolve_reports` gezielt ersetzt), `lib/moderation.ts`, Moderations-Mails (`send-search-notifications/texts.ts`, Fixture `mail_labels.json`), Glossar.
+- **Foto-Schritt:** Hinweis „Keine Fotos von erlegtem Wild. Anzeigen mit solchen Fotos werden abgelehnt.“, per `aria-describedby` am Datei-Feld.
+- **Admin-Prüfung:** Hinweis zur Fotoprüfung, sobald die Anzeige Fotos hat.
+- **Richtlinien:** neuer Punkt unter „Verbotene Inhalte“ (Platzhalter-Rechtstext).
+- Melden an jeder Anzeige und jeder Nachricht war schon vorhanden (Detailseite, Anbieterseite, Chat-Menü).
+- Neue Texte in de/en/cs/pl von Hand (cs/pl als Override, damit ein DeepL-Lauf sie nicht überschreibt).
+
+### Testen
+- `supabase test db` (neu: `58_killed_game.test.sql`), `cd web && npm test`
+- Edge Function per Docker wie in der CI: `send-search-notifications` (33 Tests)
+- `npx playwright test e2e/admin.spec.ts e2e/qa-m3.spec.ts` (Grund in der Auswahl, Hinweis im Foto-Schritt)
+
+### Lücken
+- Eine automatische Bilderkennung gibt es nicht; die Prüfung bleibt beim Admin.
+- iOS übernimmt Grund und Hinweis ab I3/I4.
+- Bekannt, nicht aus diesem Schritt: `08_storage.test.sql` Test 11 zählt alle Dokumente im Bucket und schlägt nach E2E-Läufen lokal fehl (Testdaten bleiben liegen); `57_qa_m9b_nachpruefung.test.sql` Test 4 sortiert nach gleichem `created_at` und ist dadurch gelegentlich rot.
+
 ## M10a GUI/UX-Design (Web), Schritt 5: Texte und Mehrsprachigkeit – 2026-11-13
 
 ### Geändert

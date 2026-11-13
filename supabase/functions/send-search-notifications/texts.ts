@@ -46,6 +46,7 @@ export type RejectCode =
   | "duplicate"
   | "contact_in_text"
   | "implausible"
+  | "killed_game"
   | "other";
 
 /** Moderation.reasons aus web/messages (Codes laut Check in 20261030110000_moderation_fields.sql). */
@@ -58,6 +59,7 @@ export const REJECT_REASONS: Record<Language, Record<RejectCode, string>> = {
     duplicate: "Duplicate listing",
     contact_in_text: "Contact details in the text",
     implausible: "Implausible information",
+    killed_game: "Photo shows killed game",
     other: "Other reason",
   },
   de: {
@@ -68,6 +70,7 @@ export const REJECT_REASONS: Record<Language, Record<RejectCode, string>> = {
     duplicate: "Doppelte Anzeige",
     contact_in_text: "Kontaktdaten im Text",
     implausible: "Unplausible Angaben",
+    killed_game: "Foto zeigt erlegtes Wild",
     other: "Anderer Grund",
   },
   cs: {
@@ -78,6 +81,7 @@ export const REJECT_REASONS: Record<Language, Record<RejectCode, string>> = {
     duplicate: "Duplicitní inzerát",
     contact_in_text: "Kontaktní údaje v textu",
     implausible: "Nevěrohodné údaje",
+    killed_game: "Fotografie zobrazuje ulovenou zvěř",
     other: "Jiný důvod",
   },
   pl: {
@@ -88,6 +92,7 @@ export const REJECT_REASONS: Record<Language, Record<RejectCode, string>> = {
     duplicate: "Zduplikowane ogłoszenie",
     contact_in_text: "Dane kontaktowe w treści",
     implausible: "Niewiarygodne informacje",
+    killed_game: "Zdjęcie przedstawia upolowaną zwierzynę",
     other: "Inny powód",
   },
 };

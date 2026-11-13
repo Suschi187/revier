@@ -289,7 +289,8 @@
           "points": [
             "Žádné protiprávní, diskriminační, výhružné nebo sexuální obsahy.",
             "Žádné nabídky, které porušují lovecké předpisy, například lov v období hájení.",
-            "Žádné texty zkopírované z jiných webů a žádné fotky, k nimž nemáš vlastní práva."
+            "Žádné texty zkopírované z jiných webů a žádné fotky, k nimž nemáš vlastní práva.",
+            "Žádné fotky ulovené zvěře (například výřad po lovu nebo trofej na kusu). Inzeráty s takovými fotkami zamítáme."
           ]
         },
         {
@@ -591,6 +592,7 @@
     "photos": {
       "choose": "Vybrat fotografie",
       "intro": "Až 8 fotografií (JPEG, PNG nebo WebP). Fotografie se před nahráním zmenší; server odstraní veškerá metadata, jako je například GPS poloha.",
+      "rule": "Žádné fotky ulovené zvěře. Inzeráty s takovými fotkami zamítáme.",
       "limit": "Tento inzerát již obsahuje 8 fotografií.",
       "uploading": "{name} se nahrává …",
       "done": "{count, plural, one {Nahrána # fotografie.} few {Nahrány # fotografie.} other {Nahráno # fotografií.}}",
@@ -686,6 +688,7 @@
       "back": "Zpět do fronty",
       "owner": "Inzerent: {name}, členem od {date}",
       "previousRejections": "{count, plural, =0 {Dosud nikdy nezamítnuto.} one {Dosud zamítnuto #krát.} few {Dosud zamítnuto #krát.} other {Dosud zamítnuto #krát.}}",
+      "photoRule": "Zkontroluj fotky: pokud některá zobrazuje ulovenou zvěř, zamítni inzerát s důvodem „Fotografie zobrazuje ulovenou zvěř“.",
       "contentLanguage": "Jazyk inzerátu: {language}",
       "notPending": "Tento inzerát nečeká na schválení (stav: {status}).",
       "decision": "Rozhodnutí",
@@ -1011,6 +1014,7 @@
       "duplicate": "Duplicitní inzerát",
       "contact_in_text": "Kontaktní údaje v textu",
       "implausible": "Nevěrohodné údaje",
+      "killed_game": "Fotografie zobrazuje ulovenou zvěř",
       "other": "Jiný důvod"
     },
     "decisions": {

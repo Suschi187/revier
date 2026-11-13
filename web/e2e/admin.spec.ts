@@ -258,6 +258,8 @@ test("Besitzer sieht den Grund in seiner Sprache und im Assistenten (Akzeptanz b
   await becomeAdmin(page, "Admin Gründe");
   await page.goto(`/de/admin/listings/${rejectedId}`);
   await page.getByLabel("Ablehnen").check();
+  // M10a Schritt 6: eigener Grund für Fotos von erlegtem Wild
+  await expect(page.getByLabel("Grund", { exact: true }).locator("option", { hasText: "Foto zeigt erlegtes Wild" })).toHaveCount(1);
   await page.getByLabel("Grund", { exact: true }).selectOption({ label: "Kontaktdaten im Text" });
   await page.getByLabel("Hinweis an den Inserenten (optional)").fill("Bitte ohne Telefonnummer.");
   await page.getByRole("button", { name: "Entscheidung speichern" }).click();

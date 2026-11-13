@@ -61,3 +61,8 @@ SPEC 5/6 M4: Admins geben Anzeigen frei, lehnen sie mit Grund ab oder fordern ei
 - DSA Art. 17 (Begründung, AGB-Bezug, Rechtsbehelf) klärt der Anwalt; die Grund-Codes zeigen später auf AGB-Klauseln.
 - iOS zeigt den Grund ab I4 mit denselben Glossar-Begriffen.
 - Cloud-Checkliste: TOTP aktiv und nach dem Deploy geprüft, `max_enrolled_factors`, MFA-Rate-Limits, Access Token Hook, Session-Timeouts, erster Admin per Runbook (ADR 005), Kaskade von MFA-Faktoren und Rollen beim Account löschen (M9-Test).
+
+## Nachtrag 2026-11-13: Grund `killed_game` (M10a Schritt 6)
+- Fotos von erlegtem Wild sind nicht erlaubt (Entscheidung des Nutzers). Neuer Grund-Code `killed_game` („Foto zeigt erlegtes Wild“) für `listings.reject_code` und `resolve_reports`, Migration `20261113100000_reject_code_killed_game.sql`.
+- Admins lehnen Anzeigen mit solchen Fotos ab; die Prüfseite zeigt den Hinweis, sobald Fotos vorhanden sind. Der Foto-Schritt und die Richtlinien nennen die Regel vorab.
+- Das Label steht wie alle Grund-Codes auch in den Moderations-Mails (`send-search-notifications/texts.ts`, Fixture `mail_labels.json`).

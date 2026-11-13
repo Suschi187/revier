@@ -8,7 +8,7 @@ const parse = (input: Record<string, unknown>) => decisionSchema.safeParse({ cod
 
 describe("Grund-Codes", () => {
   it("entsprechen dem Check in der Migration (ADR 014)", () => {
-    const sql = readFileSync(join(__dirname, "..", "..", "supabase", "migrations", "20261030110000_moderation_fields.sql"), "utf8");
+    const sql = readFileSync(join(__dirname, "..", "..", "supabase", "migrations", "20261113100000_reject_code_killed_game.sql"), "utf8");
     const check = /reject_code in \(([^)]*)\)/.exec(sql)![1];
     expect([...check.matchAll(/'([a-z_]+)'/g)].map((m) => m[1])).toEqual([...REJECT_CODES]);
   });
