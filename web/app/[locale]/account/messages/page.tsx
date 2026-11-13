@@ -26,9 +26,9 @@ export default async function MessagesPage(props: Props) {
   const [t, format, page] = await Promise.all([getTranslations("Chat"), getFormatter(), listConversations(cursor)]);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <ChatLive userId={user.id} />
-      <Link href="/account" className="underline">{t("back")}</Link>
+      <Link href="/account" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
       {page && page.items.length === 0 && <p className="mt-4">{t("empty")}</p>}
@@ -39,9 +39,13 @@ export default async function MessagesPage(props: Props) {
               <Link
                 href={`/account/messages/${item.id}`}
                 prefetch={false}
-                className="block min-w-0 rounded border border-sand p-3 hover:bg-sand"
+                className={`flex min-w-0 gap-3 rounded-card border bg-surface p-3.5 text-forest no-underline hover:border-forest ${item.unread > 0 ? "border-forest" : "border-sand"}`}
                 aria-label={item.unread > 0 ? `${counterpartName(item, t("accountUnavailable"))}, ${t("unread", { count: item.unread })}` : undefined}
               >
+                <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-olive font-semibold text-offwhite">
+                  {counterpartName(item, t("accountUnavailable")).slice(0, 2).toUpperCase()}
+                </span>
+                <span className="block min-w-0 flex-1">
                 <span className="flex flex-wrap items-baseline justify-between gap-2">
                   <span className="font-semibold [overflow-wrap:anywhere]">{counterpartName(item, t("accountUnavailable"))}</span>
                   {item.last_message_at && (
@@ -61,15 +65,16 @@ export default async function MessagesPage(props: Props) {
                   </span>
                 )}
                 {item.unread > 0 && (
-                  <span className="mt-1 inline-block rounded bg-forest px-2 py-0.5 text-sm text-offwhite">{t("unread", { count: item.unread })}</span>
+                  <span className="mt-1.5 inline-block rounded-pill bg-brand px-2.5 py-0.5 text-sm font-semibold text-forest">{t("unread", { count: item.unread })}</span>
                 )}
+                </span>
               </Link>
             </li>
           ))}
         </ul>
       )}
       {page?.nextCursor && (
-        <Link href={`/account/messages?cursor=${encodeURIComponent(page.nextCursor)}`} className="mt-6 inline-block underline">{t("more")}</Link>
+        <Link href={`/account/messages?cursor=${encodeURIComponent(page.nextCursor)}`} className="mt-6 inline-flex min-h-11 items-center rounded-btn border border-forest bg-surface px-4 text-sm font-semibold text-forest no-underline hover:bg-sand">{t("more")}</Link>
       )}
     </main>
   );

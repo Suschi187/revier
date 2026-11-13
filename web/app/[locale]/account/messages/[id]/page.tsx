@@ -40,8 +40,8 @@ export default async function ConversationPage(props: Props) {
 
   if (!info) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+        <Link href="/account/messages" className="text-sm underline underline-offset-2">← {t("conversation.backToList")}</Link>
         <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("conversation.metaTitle")}</h1>
         <p className="mt-4">{t("conversation.notFound")}</p>
       </main>
@@ -57,12 +57,15 @@ export default async function ConversationPage(props: Props) {
   const first = page?.items[0];
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <ChatLive userId={user.id} conversationId={id} />
-      <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
-      <header className="mt-4">
+      <Link href="/account/messages" className="text-sm underline underline-offset-2">← {t("conversation.backToList")}</Link>
+      <header className="mt-4 rounded-card border border-sand bg-surface p-4">
+        <div className="flex items-center gap-3">
+        <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-full bg-olive font-semibold text-offwhite">{name.slice(0, 2).toUpperCase()}</span>
+        <div className="min-w-0">
         <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{name}</h1>
-        <p className="mt-1 [overflow-wrap:anywhere]">
+        <p className="mt-1 text-sm [overflow-wrap:anywhere]">
           {info.listing?.public ? (
             <a href={publicPath({ route: "listing", id: info.listing.id }, locale)} className="underline">{info.listing.title}</a>
           ) : info.listing ? (
@@ -71,18 +74,20 @@ export default async function ConversationPage(props: Props) {
             <span>{t("listingUnavailable")}</span>
           )}
         </p>
+        </div>
+        </div>
         <details className="mt-3">
-          <summary className="cursor-pointer underline">{t("menu.label")}</summary>
+          <summary className="cursor-pointer text-sm underline underline-offset-2">{t("menu.label")}</summary>
           <div className="mt-2 flex flex-wrap gap-3">
             {!info.blocked_by_me && (
               <form action={blockAction}>
                 <input type="hidden" name="locale" value={locale} />
                 <input type="hidden" name="id" value={id} />
-                <button type="submit" className="rounded border border-field px-3 py-1">{t("menu.block")}</button>
+                <button type="submit" className="min-h-11 rounded-btn border border-forest bg-surface px-3 text-sm font-semibold hover:bg-sand">{t("menu.block")}</button>
               </form>
             )}
             {info.counterpart.profile && (
-              <Link href={`/account/messages/${id}/report?profile=1`} prefetch={false} className="rounded border border-field px-3 py-1">
+              <Link href={`/account/messages/${id}/report?profile=1`} prefetch={false} className="inline-flex min-h-11 items-center rounded-btn border border-forest bg-surface px-3 text-sm font-semibold text-forest no-underline hover:bg-sand">
                 {t("menu.reportProfile")}
               </Link>
             )}
@@ -93,7 +98,7 @@ export default async function ConversationPage(props: Props) {
         <p className="mt-4" role={notice === "failed" ? "alert" : "status"}>{t(`notices.${notice}`)}</p>
       )}
 
-      <p className="mt-4 rounded border border-notice bg-notice-soft p-3 text-sm">{t("safety")}</p>
+      <p className="mt-4 rounded-card border border-notice bg-notice-soft p-3 text-sm text-notice">{t("safety")}</p>
 
       {page?.hasMore && first && (
         <Link
@@ -106,13 +111,13 @@ export default async function ConversationPage(props: Props) {
       )}
 
       {/* Log-Rolle am Container: auf der Liste selbst nähme sie den Einträgen die Listen-Semantik (axe listitem). */}
-      <div role="log" aria-label={t("conversation.messagesLabel")} className="mt-4">
+      <div role="log" aria-label={t("conversation.messagesLabel")} className="mt-4 rounded-card bg-sand/50 p-3 sm:p-4">
       <ol className="grid grid-cols-[minmax(0,1fr)] gap-3">
         {(page?.items ?? []).map((message, index, all) => (
           <li
             key={message.id}
             id={index === all.length - 1 ? "latest" : undefined}
-            className={`max-w-[85%] rounded p-3 ${message.mine ? "justify-self-end bg-forest text-offwhite" : "justify-self-start border border-sand"}`}
+            className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 ${message.mine ? "justify-self-end rounded-br-sm bg-forest text-offwhite" : "justify-self-start rounded-bl-sm border border-sand bg-surface"}`}
           >
             <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">{message.body}</p>
             <p className={`mt-1 text-xs ${message.mine ? "text-offwhite" : "text-muted"}`}>
@@ -131,14 +136,14 @@ export default async function ConversationPage(props: Props) {
       {!page && <p className="mt-4" role="alert">{t("loadFailed")}</p>}
 
       {info.can_write && legal && !legal.accepted ? (
-        <p className="mt-6 rounded border border-field p-3" role="status">
+        <p className="mt-6 rounded-card border border-field bg-surface p-3" role="status">
           {t("legalRequired")}{" "}
           <a href={`/${locale}/welcome?next=${encodeURIComponent(path)}`} className="underline">{t("legalLink")}</a>
         </p>
       ) : info.can_write ? (
         <Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} owner={info.role === "owner"} />
       ) : (
-        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-field p-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded-card border border-field bg-surface p-3">
           <p>{info.blocked_by_me ? t("blockedByMe") : t("cannotWrite")}</p>
           {info.blocked_by_me && (
             <form action={unblockAction}>

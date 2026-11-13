@@ -17,6 +17,7 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - **Alle übrigen Seiten:** alte Farbklassen per Durchgang auf Tokens umgestellt (383 Stellen in 64 Dateien), Überschriften im Markenstil, Radio und Checkbox in Waldgrün, 410- und Abbestell-Seite in Markenfarben.
 - **Inserieren-Assistent:** Fortschrittsbalken, Schritte als Chips, Felder und Hauptaktion aus der Bibliothek.
 - **Konto-Übersicht:** Profilkarte, Kacheln für Anzeigen, Nachrichten, Favoriten, Suchaufträge, Liste für Verifizierung bis Konto löschen.
+- **Chat und Nachrichten (Schritt 4.7):** Konversationsliste und Unterhaltung im Kartenstil, Kopf mit Initialen-Avatar und Anzeigenlink, Chat-Blasen (eigene Waldgrün rechts, fremde hell links), Eingabefeld und Senden-Button aus der Bibliothek, Blockieren und Melden als Buttons mit 44 px Tippfläche; Funktionen unverändert.
 - **Tests:** E2E an Kopf-Suche, doppelten Link „Anzeige aufgeben“, „Mein Reviro“ und das große Detailfoto angepasst.
 
 ### Testen
@@ -25,7 +26,7 @@ Grundlage: `docs/DESIGN.md`, Entwurf auf der Zeichenfläche (freigegeben). Revir
 - Sichtprüfung: `/de`, `/de/suche`, eine Anzeige, je in 360 und 1280 px; Netzwerk-Tab ohne Drittanfragen
 
 ### Lücken
-- Styleguide-Seite (Schritt 3) fehlt noch. Chat, Anmeldung, Rechtsseiten und Admin nutzen Tokens und Schriften, aber noch kein eigenes Layout (Schritt 4.7 bis 4.10).
+- Anmeldung, Rechtsseiten und Admin nutzen Tokens und Schriften, aber noch kein eigenes Layout (Schritt 4.8 bis 4.10).
 - Mails nennen die Plattform noch „Revier“; Umbenennung zusammen mit der Namensfreigabe (SPEC 7.1).
 - Teilen-Button auf der Detailseite fehlt noch (braucht JavaScript oder einen Link-Fallback).
 - Keine Markenfotos: Banner und Platzhalter sind gezeichnet.

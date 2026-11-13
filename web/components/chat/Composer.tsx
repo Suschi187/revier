@@ -3,6 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useActionState, useRef, useState } from "react";
 import type { ComposerState } from "@/app/[locale]/account/messages/actions";
+import { Icon } from "@/components/ui/Icon";
+import { ui } from "@/components/ui/styles";
 import { errorParam, isErrorParam } from "@/lib/chat/errors";
 import { contactHints } from "@/lib/chat/contact-hints";
 import { bodyLength, MAX_BODY } from "@/lib/chat/rules";
@@ -30,10 +32,10 @@ export function Composer({ action, id, locale, initialError, owner = false }: Pr
   const form = useRef<HTMLFormElement>(null);
 
   return (
-    <form ref={form} action={formAction} className="mt-6 grid gap-2" aria-describedby="composer-shortcut">
+    <form ref={form} action={formAction} className="mt-4 grid gap-2 rounded-card border border-sand bg-surface p-4" aria-describedby="composer-shortcut">
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="locale" value={locale} />
-      <label htmlFor="composer-body" className="font-medium">{t("composer.label")}</label>
+      <label htmlFor="composer-body" className="font-semibold">{t("composer.label")}</label>
       <textarea
         id="composer-body"
         name="body"
@@ -43,7 +45,7 @@ export function Composer({ action, id, locale, initialError, owner = false }: Pr
         key={state.draft}
         aria-invalid={shown === "body" || undefined}
         aria-describedby={shown ? "composer-error composer-count" : "composer-count"}
-        className="w-full rounded border border-field px-2 py-1.5 whitespace-pre-wrap"
+        className={`${ui.input} whitespace-pre-wrap`}
         onChange={(event) => setText(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
@@ -56,15 +58,16 @@ export function Composer({ action, id, locale, initialError, owner = false }: Pr
         <p id="composer-count" className={`text-sm ${length > MAX_BODY ? "text-error" : "text-muted"}`}>
           {t("composer.count", { count: length, max: MAX_BODY })}
         </p>
-        <button type="submit" disabled={pending} className="rounded bg-forest px-4 py-2 text-offwhite disabled:opacity-60">
+        <button type="submit" disabled={pending} className={ui.btnPrimaryText}>
+          <Icon name="message" size={18} />
           {pending ? t("composer.sending") : t("composer.send")}
         </button>
       </div>
       <p id="composer-shortcut" className="text-sm text-muted">{t("composer.shortcut")}</p>
       {/* Nur Hinweise, Senden bleibt möglich (SPEC 7.8). Ohne JavaScript gilt der feste Sicherheitshinweis. */}
       <div aria-live="polite" className="grid gap-2">
-        {hints.contact && <p className="rounded border border-notice bg-notice-soft p-2 text-sm">{t("hints.contact")}</p>}
-        {owner && hints.location && <p className="rounded border border-notice bg-notice-soft p-2 text-sm">{t("hints.location")}</p>}
+        {hints.contact && <p className="rounded-btn border border-notice bg-notice-soft p-2 text-sm text-notice">{t("hints.contact")}</p>}
+        {owner && hints.location && <p className="rounded-btn border border-notice bg-notice-soft p-2 text-sm text-notice">{t("hints.location")}</p>}
       </div>
       {shown && (
         <p id="composer-error" role="alert" className="text-error">
