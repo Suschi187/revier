@@ -2,6 +2,19 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeit: DESIGN.md vollständig, Tokens für iOS übernehmbar (QA F11) – 2026-11-14
+
+### Geändert (nur Dokumentation)
+- **Typografie-Skala** mit Web-Klasse, Größe und Zeilenhöhe, Schrift und Gewicht, Verwendung und passender Dynamic-Type-Stufe für iOS.
+- **Abstände, Schatten, Icons, Tippflächen, Fokus und Bewegung:** 4-px-Raster mit den üblichen Stufen, Seitenbreite und Rand, Schatten nur für schwebende Elemente, Icon-Raster und -Größen je Familie, 44 px für Bedienelemente (Chips und Checkbox-Zeilen 36 px, WCAG 2.5.8), Fokusregel, `prefers-reduced-motion`.
+- **Abweichungen von der SPEC** (Abschnitt 8): keine Kategorie-Navigation im Kopf, Filter mobil aufklappbar (beide Entscheidung 2026-11-13, QA F1).
+- **Zuordnung für iOS** (Abschnitt 9): Farbnamen für den Asset-Katalog, Schriften als variable TTF mit vollem Zeichensatz und `relativeTo:` für Dynamic Type, Umrechnung der Laufweite von em in pt, Radien und Abstände in pt, Icons als Template-SVG, Tippflächen, Reduce Motion.
+- Veraltete Stand-Zeile ersetzt; Schatten-Tokens und Inter-Gewichte ergänzt.
+- **Offen (Mensch):** Claim in der Leiste oben (QA F2) als Punkt 4 unter „Offene Punkte“; ob der Filter auf iOS als Blatt von unten kommt, entscheidet sich in I2.
+
+### Testen
+- `docs/DESIGN.md` gegen `web/app/globals.css` (`@theme`) und `web/components/ui/styles.ts` lesen; Styleguide `/de/styleguide` zeigt die Stufen.
+
 ## M10a Nacharbeit: eine Quelle für die Ablehnungsgründe (ADR 022 S3) – 2026-11-14
 
 ### Geändert
