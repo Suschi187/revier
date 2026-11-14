@@ -229,7 +229,7 @@ export const SEARCH_TEXTS: Record<Language, SearchTexts> = {
   },
   pl: {
     subject: "Nowe ogłoszenia dla Twoich zapisanych wyszukiwań w Revier",
-    greeting: "Dzień dobry,",
+    greeting: "Cześć,",
     intro: "pojawiły się nowe ogłoszenia pasujące do Twoich zapisanych wyszukiwań:",
     untitled: "Ogłoszenie",
     region: "Region",
@@ -382,7 +382,7 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
       removed: "Twoje ogłoszenie w Revier zostało usunięte",
       point_removed: "Punkt na mapie Twojego ogłoszenia w Revier został usunięty",
     },
-    greeting: "Dzień dobry,",
+    greeting: "Cześć,",
     decision: {
       approved: (title) => `Twoje ogłoszenie „${title}” zostało zatwierdzone przez moderację.`,
       changes_requested: (title) => `moderacja prosi o poprawki w Twoim ogłoszeniu „${title}”. Jest ono ponownie szkicem.`,

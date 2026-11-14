@@ -53,7 +53,7 @@ export const TEXTS: Record<Language, Texts> = {
   },
   pl: {
     subject: "Nowe wiadomości w Revier",
-    greeting: "Dzień dobry,",
+    greeting: "Cześć,",
     intro: "masz nowe wiadomości:",
     item: (sender, listing) => (listing ? `${sender} w sprawie „${listing}”` : sender),
     unknownSender: "Konto, które nie jest już dostępne",

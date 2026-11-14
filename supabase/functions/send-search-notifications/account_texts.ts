@@ -186,7 +186,7 @@ export const ACCOUNT_TEXTS: Record<Language, AccountTexts> = {
       verification_rejected: "Twój wniosek o weryfikację w Revier został odrzucony",
       verification_revoked: "Twoja weryfikacja w Revier została cofnięta",
     },
-    greeting: "Dzień dobry,",
+    greeting: "Cześć,",
     body: {
       verification_verified: (type) => `Twój dokument (${type}) został sprawdzony. Twoje konto jest teraz zweryfikowane, a Twoje ogłoszenia pokazują odznakę „zweryfikowany”.`,
       verification_rejected: (type) => `Twój wniosek o weryfikację (${type}) został odrzucony.`,
