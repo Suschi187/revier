@@ -7,11 +7,14 @@ import { tilesUrl } from "@/lib/map/tiles";
 import type { AppLocale } from "@/i18n/routing";
 import { publicPath, type PublicRoute } from "@/lib/public/paths";
 import { regionByCode } from "@/lib/public/regions";
+import { filterChips } from "@/lib/search/chips";
 import { CURSOR_PARAM, filtersFromParams, paramsFromFilters, VIEW_PARAM, type Filters } from "@/lib/search/filters";
 import { favoriteContext } from "@/lib/services/favorites";
+import { filterTexts } from "@/lib/saved-searches/texts";
 import { cachedListings, cacheEpoch, regionCounts, searchListings, type SearchResult } from "@/lib/services/public-listings";
 import { listSpecies, regionGeo, regionNames } from "@/lib/services/regions";
 import { Breadcrumbs, type Crumb } from "./Breadcrumbs";
+import { FilterChips, FilterHeading } from "./FilterChips";
 import { FilterForm } from "./FilterForm";
 import { ListingList } from "./ListingCard";
 import { Pager } from "@/components/ui/Pager";
@@ -92,9 +95,9 @@ export async function ListingsPage({
   const listQuery = paramsFromFilters(filters, fixedKeys);
   const listHref = `${path}${listQuery.size ? `?${listQuery}` : ""}`;
   const mapHref = `${path}?${new URLSearchParams([...listQuery, [VIEW_PARAM, "map"]])}`;
-  const withoutArea = paramsFromFilters(filters, [...fixedKeys, "bbox"]);
-  if (mapView) withoutArea.set(VIEW_PARAM, "map");
-  const [tm, tl, tf] = await Promise.all([getTranslations("Map"), getTranslations("Listings"), getTranslations("Public.filters")]);
+  const [tm, tl, tf, texts] = await Promise.all([getTranslations("Map"), getTranslations("Listings"), getTranslations("Public.filters"), filterTexts(locale)]);
+  // Filterleiste (DESIGN.md „Bausteine“): Chips der aktiven Filter, Zähler am Filter-Knopf.
+  const active = filterChips(filters, fixedKeys, locale, texts, path, mapView ? { [VIEW_PARAM]: "map" } : {});
   // Umschalter Angebote/Gesuche als Links (ohne JavaScript, gleiche Filter wie das Formular).
   const directionHref = (direction: Filters["direction"]) => {
     const q = paramsFromFilters({ ...filters, direction }, fixedKeys);
@@ -137,7 +140,7 @@ export async function ListingsPage({
         {/* Mobil aufklappbar, ab Desktop immer offen (::details-content); ohne Unterstützung bleibt der Klick. */}
         <details className={`${ui.card} group shrink-0 lg:w-72 lg:[&::details-content]:[content-visibility:visible] lg:[&::details-content]:block`}>
           <summary className="flex min-h-12 cursor-pointer items-center justify-between px-4 font-display text-sm font-extrabold uppercase tracking-caps">
-            {tf("heading")}
+            <FilterHeading heading={tf("heading")} count={active.chips.length} countText={tf("activeCount", { count: active.chips.length })} />
             <span aria-hidden="true" className="transition-transform group-open:rotate-180 lg:hidden">▾</span>
           </summary>
           <FilterForm action={path} filters={filters} fixed={fixedKeys} locale={locale} species={species} regionNames={names} keep={mapView ? { [VIEW_PARAM]: "map" } : {}} />
@@ -158,6 +161,12 @@ export async function ListingsPage({
               ]}
             />
           </div>
+
+          <FilterChips
+            chips={active.chips}
+            clearAll={active.clearAll}
+            texts={{ label: tf("active"), remove: (label) => tf("remove", { label }), clearAll: tf("clearAll") }}
+          />
 
           {/* Suchauftrag aus der Suche, Liste und Karte (ADR 018, Plan M8 5). */}
           {page.route === "search" && (
@@ -192,11 +201,6 @@ export async function ListingsPage({
                 }}
               />
             </>
-          )}
-          {filters.bbox && (
-            <p className="text-sm">
-              {tm("areaActive")} <a href={`${path}${withoutArea.size ? `?${withoutArea}` : ""}`} className={ui.link}>{tm("areaRemove")}</a>
-            </p>
           )}
 
           <section aria-labelledby="results-heading">

@@ -143,25 +143,41 @@ export function describeFilters(filters: Filters, locale: AppLocale, texts: Filt
   if (filters.region) parts.push(texts.regionName(filters.region) ?? filters.region);
   if (filters.q) parts.push(`${labels.q}: ${texts.quoted(filters.q)}`);
   if (filters.species?.length) parts.push(`${labels.species}: ${filters.species.map((s) => texts.speciesName(s) ?? s).join(", ")}`);
+  const price = priceText(filters, locale, texts);
+  if (price) parts.push(price);
+  const area = areaText(filters, locale, texts);
+  if (area) parts.push(area);
+  const period = periodText(filters, locale, texts);
+  if (period) parts.push(period);
+  if (filters.verified_only) parts.push(texts.verifiedOnly);
+  if (filters.bbox) parts.push(texts.mapArea);
+  return parts;
+}
+
+/** „Preis: von 100 € bis 500 € pro Jahr“; null ohne Preisfilter. */
+export function priceText(filters: Filters, locale: AppLocale, texts: FilterTexts): string | null {
+  const { labels } = texts;
   if (filters.currency) {
     const money = (minor: number | undefined) => (minor === undefined ? null : formatPrice(minor, filters.currency!, locale));
     const amount = range(money(filters.price_min), money(filters.price_max), labels);
     const unit = filters.price_unit ? texts.unit(filters.price_unit) : null;
-    parts.push(`${labels.price}: ${[amount || filters.currency, unit].filter(Boolean).join(" ")}`);
-  } else if (filters.price_unit) {
-    parts.push(`${labels.price}: ${texts.unit(filters.price_unit)}`);
+    return `${labels.price}: ${[amount || filters.currency, unit].filter(Boolean).join(" ")}`;
   }
-  if (filters.area_min !== undefined || filters.area_max !== undefined) {
-    const number = new Intl.NumberFormat(locale);
-    const area = (value: number | undefined) => (value === undefined ? null : number.format(value));
-    parts.push(`${labels.area}: ${range(area(filters.area_min), area(filters.area_max), labels)}`);
-  }
-  if (filters.date_from || filters.date_to) {
-    const date = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "UTC" });
-    const day = (value: string | undefined) => (value ? date.format(new Date(`${value}T00:00:00Z`)) : null);
-    parts.push(`${labels.period}: ${range(day(filters.date_from), day(filters.date_to), labels)}`);
-  }
-  if (filters.verified_only) parts.push(texts.verifiedOnly);
-  if (filters.bbox) parts.push(texts.mapArea);
-  return parts;
+  return filters.price_unit ? `${labels.price}: ${texts.unit(filters.price_unit)}` : null;
+}
+
+/** „Fläche: von 100 bis 500“; null ohne Flächenfilter. */
+export function areaText(filters: Filters, locale: AppLocale, texts: FilterTexts): string | null {
+  if (filters.area_min === undefined && filters.area_max === undefined) return null;
+  const number = new Intl.NumberFormat(locale);
+  const area = (value: number | undefined) => (value === undefined ? null : number.format(value));
+  return `${texts.labels.area}: ${range(area(filters.area_min), area(filters.area_max), texts.labels)}`;
+}
+
+/** „Zeitraum: von 1. Okt. 2026 bis …“; null ohne Zeitraum. */
+export function periodText(filters: Filters, locale: AppLocale, texts: FilterTexts): string | null {
+  if (!filters.date_from && !filters.date_to) return null;
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "UTC" });
+  const day = (value: string | undefined) => (value ? date.format(new Date(`${value}T00:00:00Z`)) : null);
+  return `${texts.labels.period}: ${range(day(filters.date_from), day(filters.date_to), texts.labels)}`;
 }

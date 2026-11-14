@@ -125,10 +125,12 @@ test.describe("Karte (M6)", () => {
     await page.getByRole("button", { name: "In diesem Bereich suchen" }).click();
     await expect(page).toHaveURL(/bbox=/);
     await expect(page).toHaveURL(/view=map/);
-    await expect(page.getByText("Gefiltert nach Kartenbereich.")).toBeVisible();
+    const areaChip = page.getByRole("navigation", { name: "Aktive Filter" }).getByRole("link", { name: "Filter entfernen: Kartenausschnitt" });
+    await expect(areaChip).toBeVisible();
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-    await page.getByRole("link", { name: "Bereich entfernen" }).click();
+    await areaChip.click();
     await expect(page).not.toHaveURL(/bbox=/);
+    await expect(page).toHaveURL(/view=map/);
   });
 
   test("Nur eigene Origin, keine CSP-Verletzungen, keine Konsolenfehler", async ({ page }) => {

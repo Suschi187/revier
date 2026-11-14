@@ -13,12 +13,16 @@ import { SkeletonCard } from "@/components/ui/Skeleton";
 import { SegmentLinks, TabLinks } from "@/components/ui/Tabs";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { Logo, LogoMark } from "@/components/brand/Logo";
+import { FilterChips, FilterHeading } from "@/components/public/FilterChips";
 import { ListingCard } from "@/components/public/ListingCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { StatusBadge, type ListingStatus } from "@/components/ui/StatusBadge";
 import { ui } from "@/components/ui/styles";
 import type { AppLocale } from "@/i18n/routing";
 import { regionFromSlugs } from "@/lib/public/regions";
+import { filterTexts } from "@/lib/saved-searches/texts";
+import { filterChips } from "@/lib/search/chips";
+import { filtersFromParams } from "@/lib/search/filters";
 import { siteIndexable } from "@/lib/public/robots";
 import type { ListingCard as Card } from "@/lib/services/public-listings";
 import { listSpecies, regionNames } from "@/lib/services/regions";
@@ -64,6 +68,11 @@ export default async function StyleguidePage() {
     getTranslations("Offline"),
     listSpecies(locale),
   ]);
+  const self = `/${locale}/styleguide`;
+  const filterBar = filterChips(
+    filtersFromParams(new URLSearchParams("q=Rehbock&region=DE-BY&species=roe_deer,wild_boar&cur=EUR&pmax=800&unit=per_year&verified=1")),
+    [], locale, await filterTexts(locale), self,
+  );
   const district = regionFromSlugs("bayern", "rosenheim-landkreis");
   const state = regionFromSlugs("bayern");
   const sample = (kind: Card["kind"], direction: Card["direction"], price: number | null): Card => ({
@@ -161,6 +170,17 @@ export default async function StyleguidePage() {
             <label className="flex items-center gap-2"><input type="checkbox" defaultChecked />{tf("verifiedOnly")}</label>
           </fieldset>
         </div>
+      </Section>
+
+      <Section id="sg-filterbar" title={t("filterBar")}>
+        <p className={`${ui.card} flex min-h-12 max-w-72 items-center px-4 font-display text-sm font-extrabold uppercase tracking-caps`}>
+          <FilterHeading heading={tf("heading")} count={filterBar.chips.length} countText={tf("activeCount", { count: filterBar.chips.length })} />
+        </p>
+        <FilterChips
+          chips={filterBar.chips.map((chip) => ({ ...chip, href: self }))}
+          clearAll={self}
+          texts={{ label: tf("active"), remove: (label) => tf("remove", { label }), clearAll: tf("clearAll") }}
+        />
       </Section>
 
       <Section id="sg-badges" title={t("badges")}>

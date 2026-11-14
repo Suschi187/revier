@@ -2,6 +2,23 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeit: Filterleiste mit entfernbaren Chips – 2026-11-13
+
+### Geändert
+- **Filterleiste** über der Trefferliste (Suche, Kategorie, Region; Liste und Karte): je aktivem Filter ein Chip mit ×; der Chip ist ein Link auf dieselbe Suche ohne diesen Filter, also ohne JavaScript bedienbar. Preis (Währung, Betrag, Einheit), Fläche und Zeitraum fallen je als Gruppe weg, Wildarten einzeln. Danach wird neu geprüft, sodass eine Preis- oder Relevanz-Sortierung ohne Voraussetzung mit wegfällt. Ab zwei Chips „Alle entfernen“ (Angebot/Gesuch und Ansicht bleiben). Werte aus dem Pfad, Angebot/Gesuch (stehen in den Reitern) und die Sortierung bekommen keinen Chip.
+- **Zähler am Filter-Knopf** (`ui.countBadge`, für Screenreader „3 Filter aktiv“).
+- Der Hinweis „Gefiltert nach Kartenbereich. Bereich entfernen“ ist jetzt der Chip „Kartenausschnitt“; die Texte `Map.areaActive`/`areaRemove` sind entfernt.
+- Logik in `lib/search/chips.ts`, Beschriftungen aus den Texten der Suchaufträge (`priceText`, `areaText`, `periodText` aus `describeFilters` herausgelöst). Komponente `components/public/FilterChips.tsx`, im Styleguide unter „Filterleiste“. Neue Texte in 4 Sprachen (`Public.filters.active/remove/clearAll/activeCount`, `Styleguide.filterBar`).
+- Tests: `lib/search/chips.test.ts` (9), E2E „Filterleiste ohne JavaScript“ in `public.spec.ts`; `map.spec.ts` und `qa-m6.spec.ts` prüfen den Chip statt des alten Hinweises.
+
+### Nicht umgesetzt
+- **iOS:** noch keine App; dort soll der Filter-Bildschirm dieselben Gruppen als Chips zeigen.
+
+### Testen
+- `cd web && npx vitest run lib/search`
+- `cd web && npx playwright test e2e/public.spec.ts e2e/map.spec.ts e2e/qa-m6.spec.ts`
+- Von Hand: `/de/suche?q=Bock&region=DE-BY&species=roe_deer,wild_boar&cur=EUR&pmax=800&unit=per_year&sort=price_asc` öffnen, Chip „Preis“ entfernen (Sortierung fällt mit weg), dann „Alle entfernen“.
+
 ## M10a Nacharbeit: mittlere Bildgröße – 2026-11-13
 
 ### Geändert
@@ -37,7 +54,7 @@ Detail erreicht das Ziel (≥ 85). Das erste Foto wiegt 126 statt 410 KB.
 - Bekannt: `02`, `04`, `26`, `31`, `32` setzen eine Datenbank ohne fremde öffentliche Anzeigen voraus und werden rot, solange z. B. die Demo-Anzeigen aus Schritt 7 lokal liegen. In der CI (frische Datenbank) grün.
 - **Tokens statt fester Werte** (QA F3): Schriftgrößen (`text-micro`, `text-meta`, `text-compact`, `text-price`, `text-title`, `text-logo-sub`), Laufweiten, Seitenverhältnisse (`aspect-photo`, `aspect-hero`), Radien der Chat-Blase, Schatten und Farbe der Kartenmarker, Kartengrund und Rahmen der Suchleiste als Tokens in `globals.css`; 73-mal `rounded` durch `rounded-btn` ersetzt (gleicher Wert). Pixelgleich (Kopfzeile vor/nach verglichen). Verbleibende Klammerwerte sind Layout und in `DESIGN.md` („Tokens“) begründet.
 - **Styleguide vervollständigt** (QA F5, F6; Vorschlag freigegeben 2026-11-13): neue Bausteine `ConfirmPanel`, `TabLinks`/`SegmentLinks`, `Pager`, `ChatBubble`/`ChatNotice`, `SkeletonCard`, `OfflineNotice`, `ui.countBadge` und 13 eigene Wildarten-Icons (`SpeciesIcon`, Rehwild Variante C). Eingesetzt in Suche (Reiter Angebot/Gesuch, Umschalter Liste/Karte, Blättern), Chat, Löschen von Suchaufträgen, Assistent (Balken je Schritt), Kopf (Zähler), Filter und Detailseite (Wildarten mit Icon), Kartenpopup; Offline-Band im Layout. Styleguide zeigt Wildarten, Rückfrage, Navigation, Assistent, Chat, Kartenpopup sowie Laden, Fehler, Offline, 410 und 404. Neue Texte in 4 Sprachen (`Styleguide.*`, `Offline.*`). Übersicht in `DESIGN.md` („Bausteine“).
-- Offen aus dem Vorschlag: Filterleiste mit entfernbaren Chips der aktiven Filter.
+- Offen aus dem Vorschlag: Filterleiste mit entfernbaren Chips der aktiven Filter (erledigt, siehe oben).
 
 ### Entscheidungen
 - **Keine Kategorie-Navigation im Kopf** (QA F1, Entscheidung 2026-11-13): bewusste Abweichung von der SPEC. Filter mobil bleibt ein aufklappbarer Bereich, kein Blatt von unten (Entscheidung 2026-11-13).

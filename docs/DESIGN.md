@@ -93,6 +93,7 @@ Vorschlag freigegeben 2026-11-13 (Zeichenfläche: https://claude.ai/artifact/Fuc
 | Assistent | `listings/WizardChrome` → `StepNav` | Ein Balken je Schritt: erledigt Waldgrün, aktuell Orange, offen Sand. Namen ab `sm`, mobil nur der aktuelle. |
 | Chat | `chat/ChatBubble`, `ChatNotice` | Eigene rechts in Waldgrün, fremde links weiß; Radius 16 px, Spitze 2 px. Systemhinweise mittig ohne Blase. |
 | Zähler | `ui.countBadge` | Orange mit Waldgrün, 11 px fett. |
+| Filterleiste | `public/FilterChips` → `FilterChips`, `FilterHeading` | Über der Trefferliste je aktivem Filter ein Chip mit ×, Link auf dieselbe Suche ohne ihn (ohne JavaScript). Preis, Fläche, Zeitraum als Gruppe, Wildarten einzeln; Pfadwerte, Angebot/Gesuch (Reiter) und Sortierung ohne Chip. Ab zwei Chips „Alle entfernen“. Am Filter-Knopf der Zähler (`ui.countBadge`). Logik in `lib/search/chips.ts`. |
 | Kartenpopup | `.map-popup` (`globals.css`) | Nur Landkreis, Radius 8 px, Schatten `--shadow-popup`, Schließen-Knopf für Tastatur. |
 | Laden | `ui/Skeleton` → `SkeletonCard` | Flächen in Sand, Pulsieren nur ohne reduzierte Bewegung. |
 | Offline | `ui/OfflineNotice` | Band unter dem Kopf, solange der Browser offline ist. |
@@ -100,8 +101,6 @@ Vorschlag freigegeben 2026-11-13 (Zeichenfläche: https://claude.ai/artifact/Fuc
 | Wildarten | `brand/SpeciesIcon` | Raster 40, Linie 2, eckige Enden, Akzent in `brand-ink` (auf `.on-dark` Marken-Orange). Immer mit Namen. |
 
 Wildarten-Icons: 13 Zeichnungen für 15 Wildarten. Sikawild nutzt Rotwild, „Sonstiges Raubwild“ den Fuchs, „Sonstiges Niederwild“ den Hasen; `dog` steht für Hundeführer und Nachsuche. Rehwild in Variante C (Gehörn aus der Bildmarke abgeleitet, gewählt 2026-11-13). iOS übernimmt die Pfade aus `SpeciesIcon.tsx`.
-
-Noch nicht umgesetzt aus dem Vorschlag: Filterleiste mit entfernbaren Chips der aktiven Filter und Zähler am Filter-Knopf.
 
 ## 4. Logo: L1 Geweih-Pin (gewählt 2026-11-12)
 

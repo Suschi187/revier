@@ -278,7 +278,7 @@ test.describe("QA M6", () => {
     await zoomOut(page, 3);
     await page.getByRole("button", { name: "In diesem Bereich suchen" }).click();
     await expect(page).toHaveURL(/bbox=/);
-    await expect(page.getByText("Gefiltert nach Kartenbereich.")).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByRole("link", { name: "Filter entfernen: Kartenausschnitt" })).toBeVisible({ timeout: 10_000 });
   });
 
   test("F3 (behoben): Steuerelemente der Karte sind in der Seitensprache beschriftet", async ({ page }) => {

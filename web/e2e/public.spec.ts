@@ -269,6 +269,28 @@ test.describe("Öffentliche Seiten (M5)", () => {
     await context.close();
   });
 
+  test("Filterleiste ohne JavaScript: Chips der aktiven Filter entfernen einzeln oder alle, Zähler am Filter-Knopf", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    const q = encodeURIComponent(`M5 ${RUN}`);
+    await page.goto(`/de/suche?q=${q}&country=DE&cur=EUR&pmax=1000&unit=per_year&sort=price_asc&dir=offer`);
+    const bar = page.getByRole("navigation", { name: "Aktive Filter" });
+    await expect(bar.getByRole("link", { name: /^Filter entfernen:/ })).toHaveCount(3);
+    await expect(page.locator("summary").getByText("3 Filter aktiv")).toHaveCount(1);
+    expect(await titles(page)).toEqual([T("Begehung Dresden")]);
+
+    // Preis als Gruppe: Währung, Betrag, Einheit und die Preis-Sortierung fallen weg, Angebot/Gesuch bleibt.
+    await bar.getByRole("link", { name: /^Filter entfernen: Preis/ }).click();
+    const url = new URL(page.url());
+    expect([...url.searchParams.keys()].sort()).toEqual(["country", "dir", "q"]);
+    expect((await titles(page)).sort()).toEqual([T("Begehung Dresden"), T("Pacht München")]);
+
+    await bar.getByRole("link", { name: "Alle entfernen" }).click();
+    expect(new URL(page.url()).search).toBe("?dir=offer");
+    await expect(page.getByRole("navigation", { name: "Aktive Filter" })).toHaveCount(0);
+    await context.close();
+  });
+
   test("Merken: ohne Login zum Login mit Rücksprung, danach per Klick merken, Favoritenseite", async ({ page }) => {
     const fan = await owner("M5 Fan");
     await page.goto(`/de/anzeige/${ids.kb}`);
