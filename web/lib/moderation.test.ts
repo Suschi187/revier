@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { decisionSchema, REJECT_CODES } from "./moderation";
@@ -7,10 +7,16 @@ const version = "a".repeat(64);
 const parse = (input: Record<string, unknown>) => decisionSchema.safeParse({ code: null, note: "", version, ...input });
 
 describe("Grund-Codes", () => {
-  it("entsprechen dem Check in der Migration (ADR 014)", () => {
-    const sql = readFileSync(join(__dirname, "..", "..", "supabase", "migrations", "20261113100000_reject_code_killed_game.sql"), "utf8");
-    const check = /reject_code in \(([^)]*)\)/.exec(sql)![1];
-    expect([...check.matchAll(/'([a-z_]+)'/g)].map((m) => m[1])).toEqual([...REJECT_CODES]);
+  it("entsprechen der jüngsten Definition der Domain listing_reject_code (ADR 014, ADR 022 S3)", () => {
+    // Ein neuer Code ändert nur die Domain (create domain … bzw. alter domain … add constraint) in einer neuen Migration.
+    const dir = join(__dirname, "..", "..", "supabase", "migrations");
+    const definitions = readdirSync(dir)
+      .filter((name) => name.endsWith(".sql"))
+      .sort()
+      .flatMap((name) => [...readFileSync(join(dir, name), "utf8").matchAll(/domain public\.listing_reject_code[\s\S]*?check \(value in \(([^)]*)\)/g)])
+      .map((m) => m[1]);
+    expect(definitions.length).toBeGreaterThan(0);
+    expect([...definitions.at(-1)!.matchAll(/'([a-z_]+)'/g)].map((m) => m[1])).toEqual([...REJECT_CODES]);
   });
 });
 

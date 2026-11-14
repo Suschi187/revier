@@ -54,8 +54,8 @@ select ok((select proconfig @> array['search_path=""'] from pg_proc where oid = 
   'resolve_reports behält search_path leer');
 select ok(not has_function_privilege('anon', 'public.resolve_reports(report_target, uuid, text, text, text, text)', 'execute'),
   'anon darf resolve_reports nicht ausführen');
-select is((select count(*)::int from pg_constraint where conname = 'listings_reject_code_check'
-           and pg_get_constraintdef(oid) like '%killed_game%'), 1, 'Check auf listings.reject_code kennt killed_game');
+select is((select count(*)::int from pg_constraint where contypid = 'public.listing_reject_code'::regtype
+           and pg_get_constraintdef(oid) like '%killed_game%'), 1, 'Domain listing_reject_code kennt killed_game (ADR 022 S3)');
 select is(tests.state_of_58($$ update public.listings set reject_code = 'nonsense' where id = '$$ || :'l1' || $$' $$), '23514', 'Unbekannter Code bleibt verboten');
 
 select * from finish();

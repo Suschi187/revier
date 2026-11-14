@@ -2,6 +2,19 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeit: eine Quelle für die Ablehnungsgründe (ADR 022 S3) – 2026-11-14
+
+### Geändert
+- **Domain `public.listing_reject_code`** mit den 9 Codes. `listings.reject_code` und die Kopie in `private.moderation_notifications` nutzen sie; der doppelte Check an der Tabelle entfällt. Ein neuer Code ändert künftig nur die Domain (neue Migration mit `alter domain`) und `REJECT_CODES` in `web/lib/moderation.ts`.
+- **`resolve_reports`** vollständig in `20261114100000_listing_reject_code_domain.sql` (vorher verteilt auf zwei Migrationen), prüft gegen die Domain statt gegen eine eigene Liste. Fehlermeldung unverändert („Grund fehlt“, Feld `code`), Web und iOS brauchen keine Anpassung. Generierte Typen unverändert.
+- **Tests:** neu `60_listing_reject_code_domain.test.sql` (10 Prüfungen: Spaltentypen, keine zweite Liste, Codes der Domain, unbekannter und fehlender Code, gültiger Code). `58` prüft die Domain statt des alten Checks. `moderation.test.ts` liest die jüngste Domain-Definition aus allen Migrationen. Die Testhilfe setzt für ältere Kartenpunkt-Tests den gültigen Code `other` statt `test`.
+- **Test 55** zählt nur noch Dateien in den Ordnern der eigenen Testnutzer (eine verwaiste Datei aus einem E2E-Lauf machte ihn rot), wie zuvor bei `08`.
+
+### Testen
+- `supabase migration up`, dann `supabase test db` (alle 61 Dateien grün)
+- `cd web && npx vitest run lib/moderation.test.ts`
+- `cd web && npx playwright test e2e/admin-moderation.spec.ts e2e/reports.spec.ts e2e/qa-m9b.spec.ts e2e/qa-m9b-nachpruefung.spec.ts`
+
 ## Nacharbeit: polnische Mails duzen, Demo-Anzeigen entfernt – 2026-11-14
 
 ### Geändert

@@ -197,6 +197,7 @@ begin
 end;
 $$;
 
+-- Veraltet: gültige Fassung in 20261114100000_listing_reject_code_domain.sql (ADR 022 S3). Nicht von hier kopieren.
 create or replace function public.resolve_reports(p_target_type report_target, p_target_id uuid, p_outcome text, p_code text DEFAULT NULL::text, p_note text DEFAULT NULL::text, p_expected_version text DEFAULT NULL::text)
  RETURNS text
  LANGUAGE plpgsql
