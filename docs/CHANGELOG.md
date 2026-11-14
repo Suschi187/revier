@@ -2,15 +2,15 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
-## Nacharbeit: polnische Mails duzen, Demo-Anzeigen filterbar – 2026-11-14
+## Nacharbeit: polnische Mails duzen, Demo-Anzeigen entfernt – 2026-11-14
 
 ### Geändert
 - **Polnische Mails** beginnen mit „Cześć,“ statt „Dzień dobry,“ (Entscheidung 2026-11-14, passend zum Du). Die übrigen Texte duzen bereits („masz“, „Twój“, „możesz“). Betrifft `send-chat-notifications/texts.ts`, `send-search-notifications/texts.ts` (2×) und `account_texts.ts`.
-- **Demo-Anzeigen** (nur lokal, Konto `demo-perf@test.local`, bleiben laut Entscheidung 2026-11-14 erhalten): Alle sechs waren „Helfer, Gesuch“ in einem Landkreis ohne Preis, Wildarten, Fläche und Zeitraum und fielen deshalb bei jedem Filter weg. Jetzt passend zum Titel: Begehungsschein (Schmalkalden-Meiningen, 600 €/Jahr, 420 ha, Reh und Sau), Trophäenjagd (Kitzbühel, 850 €/Stück, Mai 2027), Gesellschaftsjagd (Uckermark, 250 €/Tag, 1800 ha, 28.11.2026) und drei Helfer-Gesuche in Sachsen, Groß-Gerau und Rosenheim, zwei davon mit Zeitraum. Keine Jagdpacht darunter. Nicht im Repo, nur in der lokalen Datenbank.
+- **Demo-Anzeigen** (nur lokal, Konto `demo-perf@test.local`): zuerst an ihre Titel angepasst (vorher alle „Helfer, Gesuch“ ohne Preis und Wildarten, daher bei jedem Filter weg), danach auf Wunsch samt 54 Fotos gelöscht (Entscheidung 2026-11-14). Damit sind `02`, `04`, `26`, `31`, `32` lokal wieder grün. Für neue Lighthouse-Messungen müssen Demo-Daten neu angelegt werden.
 
 ### Testen
 - Per Docker wie in der CI: `deno task check && deno lint && deno task test` in `send-chat-notifications` und `send-search-notifications`
-- Von Hand: `/de/suche?species=wild_boar`, `/de/suche?country=AT`, `/de/suche?from=2026-11-01&to=2026-12-31` zeigen Demo-Anzeigen
+- `supabase test db` mit `02`, `04`, `26`, `31`, `32` (lokal grün ohne Demo-Daten)
 
 ## M10a Nacharbeit: Filterleiste mit entfernbaren Chips – 2026-11-13
 
