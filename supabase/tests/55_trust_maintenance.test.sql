@@ -119,7 +119,9 @@ insert into storage.objects (bucket_id, name, owner_id, created_at) values
 
 select is(tests.err($$ select * from maintenance_storage_objects('falsch') $$), '42501', 'Kandidaten nur mit Secret');
 select is(
-  array(select name || ':' || reason from maintenance_storage_objects(:'msecret') where bucket_id = 'verification-docs' order by reason),
+  -- Nur Ordner der eigenen Testnutzer: Reste aus E2E-Läufen sind ebenfalls verwaist und würden sonst mitgezählt.
+  array(select name || ':' || reason from maintenance_storage_objects(:'msecret')
+        where bucket_id = 'verification-docs' and split_part(name, '/', 1) in (:'o', :'o2') order by reason),
   array[:'o2' || '/alt:verification_expired', :'o' || '/verwaist:verification_orphan'],
   'Abgelaufenes Dokument und Datei ohne Antrag, nicht die frische Datei');
 select is((private.run_trust_maintenance() ->> 'unsubmitted')::int, 1, 'Antrag ohne Einreichung nach 24 h gelöscht');
