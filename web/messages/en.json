@@ -45,6 +45,12 @@
     "title": "Page not found",
     "backHome": "Back to the home page"
   },
+  "ServerError": {
+    "title": "Something went wrong",
+    "text": "Please try again in a moment. If the problem persists, contact us (details in the legal notice).",
+    "retry": "Try again",
+    "digest": "Error code: {digest}"
+  },
   "Auth": {
     "login": {
       "metaTitle": "Sign in",

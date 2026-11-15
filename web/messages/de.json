@@ -45,6 +45,12 @@
     "title": "Seite nicht gefunden",
     "backHome": "Zur Startseite"
   },
+  "ServerError": {
+    "title": "Etwas ist schiefgelaufen",
+    "text": "Bitte versuche es gleich noch einmal. Wenn der Fehler bleibt, schreib uns (Kontakt im Impressum).",
+    "retry": "Erneut versuchen",
+    "digest": "Fehlernummer: {digest}"
+  },
   "Auth": {
     "login": {
       "metaTitle": "Anmelden",

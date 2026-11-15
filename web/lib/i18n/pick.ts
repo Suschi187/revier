@@ -25,5 +25,5 @@ export function pickMessages(messages: Messages, paths: readonly string[]): Mess
   return out;
 }
 
-/** Was das Layout an den Browser gibt: nur die Sprachwahl im Kopf. Alles andere über `ClientMessages`. */
-export const LAYOUT_CLIENT_NAMESPACES = ["LocaleSwitcher"] as const;
+/** Was das Layout an den Browser gibt: die Sprachwahl im Kopf und die Texte der Fehlerseite (`[locale]/error.tsx`, unter 1 KB). Alles andere über `ClientMessages`. */
+export const LAYOUT_CLIENT_NAMESPACES = ["LocaleSwitcher", "ServerError", "NotFound.backHome"] as const;

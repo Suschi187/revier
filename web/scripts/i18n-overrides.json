@@ -218,7 +218,11 @@
     "Brand.claim": "Jasné linie. Divoká svoboda.",
     "Header.skipToContent": "Přejít na obsah",
     "Metadata.ogImageAlt": "Logo Huntery před posedem v ranním světle, k tomu jelen, myslivec a pes",
-    "Public.provider.metaDescription": "Inzeráty uživatele {name} na Huntery."
+    "Public.provider.metaDescription": "Inzeráty uživatele {name} na Huntery.",
+    "ServerError.title": "Něco se pokazilo",
+    "ServerError.text": "Zkus to prosím za chvíli znovu. Pokud chyba trvá, napiš nám (kontakt v tiráži).",
+    "ServerError.retry": "Zkusit znovu",
+    "ServerError.digest": "Kód chyby: {digest}"
   },
   "pl": {
     "Public.detail.safety1": "Nigdy nie płać z góry bez pisemnej umowy",
@@ -393,6 +397,10 @@
     "Admin.review.photoRule": "Sprawdź zdjęcia: jeśli któreś przedstawia upolowaną zwierzynę, odrzuć ogłoszenie z powodem „Zdjęcie przedstawia upolowaną zwierzynę”.",
     "Legal.guidelines.sections[1].points[3]": "Bez zdjęć upolowanej zwierzyny (na przykład pokotu po polowaniu albo trofeum na tuszy). Ogłoszenia z takimi zdjęciami odrzucamy.",
     "Header.skipToContent": "Przejdź do treści",
-    "Metadata.ogImageAlt": "Logo Huntery na tle ambony o świcie, obok jeleń, myśliwy i pies"
+    "Metadata.ogImageAlt": "Logo Huntery na tle ambony o świcie, obok jeleń, myśliwy i pies",
+    "ServerError.title": "Coś poszło nie tak",
+    "ServerError.text": "Spróbuj ponownie za chwilę. Jeśli błąd nie znika, napisz do nas (kontakt w nocie prawnej).",
+    "ServerError.retry": "Spróbuj ponownie",
+    "ServerError.digest": "Kod błędu: {digest}"
   }
 }

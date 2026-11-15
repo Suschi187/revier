@@ -2,6 +2,15 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Paket 2: Fehlerseiten für Serverfehler – 2026-11-15
+
+### Neu
+- `app/[locale]/error.tsx`: 500 unterhalb des Layouts, Kopf und Fuß bleiben; Titel, Hinweis, „Erneut versuchen“ (`retry`), „Zur Startseite“; nur die Fehlernummer (`digest`), nie die Fehlermeldung. Texte `ServerError` in 4 Sprachen (cs/pl auch in den DeepL-Overrides), über das Layout an den Browser (`LAYOUT_CLIENT_NAMESPACES`, unter 1 KB).
+- `app/global-error.tsx`: 500 bei Fehlern im Root-Layout, eigenes Dokument mit allen 4 Sprachen wie die globale 404. Texte gespiegelt in `lib/i18n/global-error-texts.ts`, weil dort kein next-intl läuft.
+
+### Tests
+- `lib/i18n/global-error-texts.test.ts`: Spiegel gleich den Message-Dateien; beide Seiten gerendert, je Sprache Titel und Fehlernummer, Fehlermeldung nie im HTML. Unit-Tests gesamt 700 grün.
+
 ## M10 Web-Release: Plan und Checkliste – 2026-11-15
 
 ### Geändert (nur Dokumentation)

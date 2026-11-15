@@ -45,6 +45,12 @@
     "title": "Nie znaleziono strony",
     "backHome": "Powrót do strony głównej"
   },
+  "ServerError": {
+    "title": "Coś poszło nie tak",
+    "text": "Spróbuj ponownie za chwilę. Jeśli błąd nie znika, napisz do nas (kontakt w nocie prawnej).",
+    "retry": "Spróbuj ponownie",
+    "digest": "Kod błędu: {digest}"
+  },
   "Auth": {
     "login": {
       "metaTitle": "Zaloguj się",

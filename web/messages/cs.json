@@ -45,6 +45,12 @@
     "title": "Stránka nebyla nalezena",
     "backHome": "Na úvodní stránku"
   },
+  "ServerError": {
+    "title": "Něco se pokazilo",
+    "text": "Zkus to prosím za chvíli znovu. Pokud chyba trvá, napiš nám (kontakt v tiráži).",
+    "retry": "Zkusit znovu",
+    "digest": "Kód chyby: {digest}"
+  },
   "Auth": {
     "login": {
       "metaTitle": "Přihlásit se",
