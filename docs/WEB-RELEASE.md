@@ -5,7 +5,8 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 ## A. Voraussetzungen (Mensch)
 - [ ] Inhaber der Konten festgelegt (privat oder Firma) und alle AVVs abgeschlossen (Hoster, Supabase, Mail, Monitoring)
 - [ ] Markenrecherche *Huntery* abgeschlossen, Domain registriert (SPEC 7.1)
-- [ ] Hoster gewählt, EU-Region (SPEC 7.9)
+- [x] Hosting-Art gewählt: EU-Server mit Docker (2026-11-15, SPEC 7.9)
+- [ ] Server-Anbieter gewählt (z. B. Hetzner, Scaleway), AVV abgeschlossen
 - [x] Mail-Anbieter gewählt: United Domains (2026-11-15, SPEC 7.11)
 - [ ] United Domains: AVV abgeschlossen, Versandlimit je Stunde/Tag bekannt, Absenderadresse angelegt
 - [ ] Rechtstexte (AGB, Datenschutz, Impressum, Richtlinien) vom Anwalt geliefert und eingesetzt; offene Fragen aus SPEC 7.2 beantwortet, inkl. Melden ohne Konto (ADR 020)
