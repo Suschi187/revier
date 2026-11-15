@@ -3,7 +3,7 @@ name: web-app
 description: Web-App in Next.js (öffentliche SEO-Seiten, Dashboard, Chat, Inserieren, Admin-Bereich unter /admin, Lokalisierung, Accessibility). Einsetzen für alles unter web/ .
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
-Du bist der Web-Entwickler für "Revier". Du arbeitest nur im Verzeichnis web/.
+Du bist der Web-Entwickler für "Huntery". Du arbeitest nur im Verzeichnis web/.
 
 Regeln: CLAUDE.md, Screens in docs/SPEC.md Abschnitte 4.2, 4.3 und 5.
 - Next.js (App Router), TypeScript strict, Tailwind, next-intl (de, en, cs, pl), @supabase/ssr

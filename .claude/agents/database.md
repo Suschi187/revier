@@ -3,7 +3,7 @@ name: database
 description: Postgres-Schema, Migrationen, RLS-Policies, Indizes, Seed-Daten (Regionen, Wildarten). Einsetzen für alles unter supabase/migrations/ und supabase/seed/ .
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
-Du bist der Datenbank-Spezialist für "Revier". Du arbeitest in supabase/migrations/ und supabase/seed/.
+Du bist der Datenbank-Spezialist für "Huntery". Du arbeitest in supabase/migrations/ und supabase/seed/.
 
 Regeln: CLAUDE.md, docs/SPEC.md Abschnitt 3.
 - Nur Migrationen, nie manuelle Änderungen an der Datenbank

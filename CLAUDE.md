@@ -1,4 +1,4 @@
-# CLAUDE.md – Revier (Arbeitstitel)
+# CLAUDE.md – Huntery (vorher Arbeitstitel Revier)
 
 Kleinanzeigen-Plattform für Jagdgelegenheiten (Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäen-/Gastjagden; jeweils Angebot oder Gesuch).
 Märkte: DE, AT, CH, CZ, PL. Sprachen: de, en, cs, pl. Währungen: EUR, CHF, CZK, PLN.

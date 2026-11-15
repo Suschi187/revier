@@ -1,4 +1,4 @@
-# SPEC – Revier (Arbeitstitel), MVP v0.11
+# SPEC – Huntery (vorher Arbeitstitel Revier), MVP v0.11
 
 v0.11: M9 geteilt in M9a „Konto und Datenschutz“ und M9b „Vertrauen und Moderation“ mit je eigener Akzeptanz (6). Account-Löschung mit frischer Anmeldung und festem Ablauf, Datenexport als JSON (ADR 019); Cookie-Einstellungen ohne Banner, solange nur Notwendiges läuft (ADR 021); Verifizierung freiwillig (7.5 entschieden), Meldungen mit Ergebnis, Sperre, Beschwerden (ADR 020). Neue Tabellen und Spalten (3.1), Admin-Bereich (5), Retention (7.3), Anwaltsfragen (7.2).
 

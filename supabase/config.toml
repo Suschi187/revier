@@ -10,7 +10,7 @@ enabled = true
 port = 54321
 # Schemas to expose in your API. Tables, views and stored procedures in this schema will get API
 # endpoints. `public` and `graphql_public` schemas are included by default.
-# Revier: kein GraphQL (docs/adr/005). In der Cloud ebenso nur "public" exponieren.
+# Huntery: kein GraphQL (docs/adr/005). In der Cloud ebenso nur "public" exponieren.
 schemas = ["public"]
 # Extra schemas to add to the search_path of every request.
 extra_search_path = ["public", "extensions"]
@@ -21,7 +21,7 @@ max_rows = 1000
 # `postgres` are reachable through the Data API roles (`anon`, `authenticated`, `service_role`)
 # without explicit GRANTs, matching the cloud default. Set to `false` to require explicit GRANTs
 # instead. Left unset, a fresh project falls back to `true`.
-# Revier: nur explizite GRANTs (docs/adr/005, 009). In der Cloud ebenso einstellen.
+# Huntery: nur explizite GRANTs (docs/adr/005, 009). In der Cloud ebenso einstellen.
 auto_expose_new_tables = false
 
 [api.tls]
@@ -302,7 +302,7 @@ max_frequency = "5s"
 # uri = "pg-functions://postgres/auth/before-user-created-hook"
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
-# Revier: setzt den Claim app_role (docs/adr/005). In der Cloud ebenso aktivieren.
+# Huntery: setzt den Claim app_role (docs/adr/005). In der Cloud ebenso aktivieren.
 [auth.hook.custom_access_token]
 enabled = true
 uri = "pg-functions://postgres/private/custom_access_token_hook"
@@ -405,36 +405,36 @@ inspector_port = 8083
 # The Deno major version to use.
 deno_version = 2
 
-# Revier: Fotoverarbeitung (ADR 011). JWT-Prüfung am Gateway; die Function prüft zusätzlich den Besitz.
+# Huntery: Fotoverarbeitung (ADR 011). JWT-Prüfung am Gateway; die Function prüft zusätzlich den Besitz.
 [functions.process-listing-photo]
 enabled = true
 verify_jwt = true
 
-# Revier: Chat-Benachrichtigung (ADR 017). Aufruf von pg_cron ohne Nutzer-JWT; die Function prüft ein eigenes
+# Huntery: Chat-Benachrichtigung (ADR 017). Aufruf von pg_cron ohne Nutzer-JWT; die Function prüft ein eigenes
 # Geheimnis aus dem Vault über die RPC claim_chat_notifications.
 [functions.send-chat-notifications]
 enabled = true
 verify_jwt = false
 
-# Revier: Suchauftrags- und Moderations-Mails (ADR 018). Aufruf von pg_cron ohne Nutzer-JWT; die Function prüft ein
+# Huntery: Suchauftrags- und Moderations-Mails (ADR 018). Aufruf von pg_cron ohne Nutzer-JWT; die Function prüft ein
 # eigenes Geheimnis (Header x-search-notify-secret) aus dem Vault über die Claim-RPCs.
 [functions.send-search-notifications]
 enabled = true
 verify_jwt = false
 
-# Revier: Account-Löschung (ADR 019, Review A1). Aufruf aus der Datenbank (pg_net, pg_cron) ohne Nutzer-JWT; die
+# Huntery: Account-Löschung (ADR 019, Review A1). Aufruf aus der Datenbank (pg_net, pg_cron) ohne Nutzer-JWT; die
 # Function prüft ein eigenes Geheimnis (Header x-account-deletion-secret) aus dem Vault über account_deletion_claim.
 [functions.delete-account]
 enabled = true
 verify_jwt = false
 
-# Revier: Storage-Aufräumen (ADR 019). Stündlich von pg_cron ohne Nutzer-JWT; Geheimnis im Header
+# Huntery: Storage-Aufräumen (ADR 019). Stündlich von pg_cron ohne Nutzer-JWT; Geheimnis im Header
 # x-account-maintenance-secret aus dem Vault, geprüft in maintenance_storage_objects.
 [functions.account-maintenance]
 enabled = true
 verify_jwt = false
 
-# Revier: Verifizierungsdokument für Admins (ADR 020, QA M9b F6). Aufruf nur vom Web-Server mit dem Access Token des
+# Huntery: Verifizierungsdokument für Admins (ADR 020, QA M9b F6). Aufruf nur vom Web-Server mit dem Access Token des
 # Admins; Rechte und Audit prüft admin_open_verification_document, der Download läuft mit service_role.
 [functions.verification-document]
 enabled = true

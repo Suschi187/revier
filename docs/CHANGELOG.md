@@ -2,6 +2,13 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Name Huntery in internen Texten – 2026-11-15
+
+### Geändert (nur Dokumentation und Kommentare)
+- Überschrift von `CLAUDE.md` und `docs/SPEC.md`: „Huntery (vorher Arbeitstitel Revier)“.
+- Agentenbeschreibungen unter `.claude/agents/` und Kommentare in `supabase/config.toml` nennen „Huntery“.
+- Bewusst unverändert: bereits angewandte Migrationen, Repo- und Ordnername `revier`, Container-Namen (`supabase_db_revier`), Paketname `revier-web`; frühere Changelog-, QA- und Review-Einträge.
+
 ## Name Huntery in E-Mails – 2026-11-15
 
 ### Behoben
