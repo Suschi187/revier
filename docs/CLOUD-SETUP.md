@@ -37,7 +37,7 @@ Domain `huntery.de`, Absender `no-reply@huntery.de`. Platzhalter: `<domain>` (Pr
 ## 3. Vercel und Kartendatei (ADR 023)
 1. Kartendatei: in Supabase einen öffentlichen Bucket `tiles` anlegen (Dateigrenze über 1,2 GB, Plan prüfen), Datei per TUS hochladen (Name und SHA-256 laut `web/scripts/MAP-SOURCES.md`, `cacheControl` 31536000). Nachweis: `curl -sI -H "Range: bytes=0-99" https://<ref>.supabase.co/storage/v1/object/public/tiles/<datei>` → 206.
 2. Vercel-Projekt aus dem Repo, **Root Directory `web`**, Framework Next.js, Region aus `web/vercel.json` (fra1). Analytics, Speed Insights und Toolbar aus.
-3. Env je Umgebung (Production und Preview/Stage getrennt): `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (nur anon/publishable), `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`, `SITE_INDEXABLE` (nur Production `true`), `MAP_TILES_FILE=<datei>`, `MAP_TILES_ORIGIN=https://<ref>.supabase.co/storage/v1/object/public/tiles`.
+3. Env je Umgebung (Production und Preview/Stage getrennt): `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (nur anon/publishable), `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`, `SITE_INDEXABLE` (nur Production `true`), `MAP_TILES_FILE=<datei>`, `MAP_TILES_ORIGIN=https://<ref>.supabase.co/storage/v1/object/public/tiles`, `SENTRY_DSN` (Projekt in der EU-Region), `SENTRY_ENVIRONMENT` (`production` bzw. `stage`).
 4. Domain `huntery.de` und `www.huntery.de` (Weiterleitung auf die Hauptdomain); DNS bei United Domains auf die Werte aus Vercel.
 5. Stage: Preview-Umgebung mit eigener Supabase und Zugangsschutz (Vercel Deployment Protection), `SITE_INDEXABLE=false`.
 6. Nachweis nach dem Deploy:
@@ -51,6 +51,6 @@ Domain `huntery.de`, Absender `no-reply@huntery.de`. Platzhalter: `<domain>` (Pr
 1. Erster Admin nach ADR 005 (SQL im Studio, zurückdatiert), dann `/de/admin` mit TOTP. Runbook „Admin kompromittiert“ bereithalten.
 2. Nachweise ADR 014/019: Löschkaskade (MFA-Faktoren, Rollen) mit einem Testkonto; `amr`-Allowlist mit echtem Login (Code und Link).
 3. E2E gegen Stage: `cd web && QA_BASE_URL=https://stage.<domain> QA_SUPABASE_URL=https://<ref>.supabase.co npx playwright test e2e/release.spec.ts e2e/cookie-inventory.spec.ts` (nur anonyme Seiten; die übrigen Suiten brauchen lokale Service-Keys und laufen vor dem Deploy lokal und in der CI).
-4. Monitoring: Uptime-Check auf `/api/health` (Intervall 1–5 min), Alarm an eine feste Person; Fehler-Monitoring nach Entscheidung E7.
+4. Monitoring: Uptime-Check auf `/api/health` (Intervall 1–5 min), Alarm an eine feste Person. Sentry: Organisation in der **EU-Region**, AVV, IP-Speicherung im Projekt aus („Prevent Storing of IP Addresses“), Datenschutz-Scrubber an, Alarm bei neuen Fehlern. Nachweis: einen Testfehler auf Stage auslösen und im Ereignis prüfen, dass weder IP noch Query, Cookies oder Nutzer enthalten sind.
 5. Backups: eine Wiederherstellung auf Stage üben und mit Datum in `docs/WEB-RELEASE.md` vermerken.
 6. Lighthouse mobil gegen Stage (Start, Liste, Detail ≥ 90) und Werte ins CHANGELOG.

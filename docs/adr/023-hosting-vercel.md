@@ -10,7 +10,9 @@ SPEC 7.9 verlangt einen Anbieter mit EU-Region und AVV. Die Web-App ist Next.js 
 - **Kartendatei in Supabase Storage** (Frankfurt, öffentlicher Bucket `tiles`, Cache-Control ein Jahr). Vercel schreibt `/tiles/<name>.pmtiles` per Rewrite (`beforeFiles`) auf `MAP_TILES_ORIGIN` um (`web/lib/map/tiles-rewrite.ts`). Die Karte bleibt auf der eigenen Origin, CSP unverändert.
 - Ein Build je Umgebung (Preview/Stage, Production), weil `NEXT_PUBLIC_*`, CSP und Rewrites beim Build feststehen.
 - Vercel Analytics, Speed Insights und Toolbar bleiben aus (keine Drittanfragen ohne Einwilligung, ADR 021/022).
-- Fehler-Monitoring mit Sentry (EU-Datenregion), eigener Schritt.
+- **Fehler-Monitoring mit Sentry** (Entscheidung 2026-11-15), `@sentry/nextjs` 11.10.0, **nur serverseitig** (`web/instrumentation.ts`, `onRequestError`): kein Browser-SDK, also keine Anfragen an Dritte aus dem Browser, kein Consent, kein zusätzliches JavaScript. Aktiv nur mit `SENTRY_DSN` (EU-Region).
+  - Datensparsam: `dataCollection` schaltet Nutzer, Cookies, Header, Bodies, Query, Datenbankwerte und Variablen ab; `scrubEvent` (`web/lib/monitoring/scrub.ts`) entfernt zusätzlich Nutzer, Servername, Breadcrumbs und Query aus URL und Transaktion. Kein Tracing.
+  - Browserfehler, die nicht auf dem Server entstehen, werden nicht erfasst. Kommt der Bedarf, dann mit Tunnel über die eigene Origin und eigenem ADR.
 
 ## Alternativen
 - EU-Server mit Docker und Caddy: volle Kontrolle über Logs und Kartendatei, aber eigener Betrieb (Updates, TLS, Ausfälle). Verworfen zugunsten des geringeren Betriebsaufwands; Stand in Commit bc3b6f7.

@@ -2,6 +2,21 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Fehler-Monitoring mit Sentry (nur Server) – 2026-11-15
+
+### Neu
+- **Neue Abhängigkeit `@sentry/nextjs` 11.10.0** (exakt gepinnt). Begründung: Entscheidung des Menschen für Sentry (WEB-RELEASE E, Fehler-Monitoring); offizielles SDK für Next 16 (`onRequestError`).
+- `web/instrumentation.ts`: Sentry nur auf dem Server und nur mit `SENTRY_DSN`; erfasst Fehler aus Server Components, Route Handlern, Server Actions und Proxy. Kein Browser-SDK, kein Tracing.
+- Datensparsam: `dataCollection` aus für Nutzer, Cookies, Header, Bodies, Query, Datenbankwerte, Variablen; `web/lib/monitoring/scrub.ts` entfernt zusätzlich Nutzer, Servername, Breadcrumbs und Query.
+- ADR 023, `CLOUD-SETUP.md` (EU-Organisation, IP-Speicherung aus, Nachweis auf Stage), `.env.example` (`SENTRY_DSN`, `SENTRY_ENVIRONMENT`).
+
+### Tests
+- `lib/monitoring/scrub.test.ts`. Probe gegen einen lokalen Fake-Sentry mit derselben Konfiguration: Ereignis kommt an, Pfad ohne Query; IP, E-Mail, Login-Token und Cookie (zufällige Laufzeitwerte) nicht.
+- Produktions-Build mit `SENTRY_DSN` grün; das Browser-Bundle enthält kein Sentry-SDK.
+
+### Offen
+- Reine Browserfehler werden nicht erfasst (bewusst, siehe ADR 023).
+
 ## M10: Hosting auf Vercel, Domain huntery.de – 2026-11-15
 
 Entscheidungen des Menschen: Domain `huntery.de`, Hosting **Vercel** (ersetzt „EU-Server mit Docker“), Absender `no-reply@huntery.de`, Supabase-Konto vorhanden, Monitoring mit Sentry.

@@ -43,4 +43,4 @@ Weiter offen und nicht durch Code lösbar: Anwalt (SPEC 7.2, inkl. Melden ohne K
 16. Datenschutzerklärung (Platzhalter) um Hoster, Mail-Anbieter, Monitoring, Log- und Backup-Fristen ergänzen; Anwalt prüft.
 
 ## 3. Reihenfolge und Commits
-Pakete 1–4, 6–8 erledigt (2026-11-15). Als Nächstes Sentry (E7), dann 5 und 9–16 nach dem Anlegen von Stage. Ursprünglich: Pakete 1–4 und 8 sofort, je ein Commit mit Tests und CHANGELOG. 5–7 nach E3/E5. 9–16 nach dem Anlegen von Stage. Vor Paket 11 prüft der Architekt den Plan samt Runbook.
+Pakete 1–4, 6–8 erledigt (2026-11-15). Sentry (E7) erledigt. Als Nächstes 5 und 9–16 nach dem Anlegen von Stage. Ursprünglich: Pakete 1–4 und 8 sofort, je ein Commit mit Tests und CHANGELOG. 5–7 nach E3/E5. 9–16 nach dem Anlegen von Stage. Vor Paket 11 prüft der Architekt den Plan samt Runbook.

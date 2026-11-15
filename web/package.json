@@ -24,6 +24,7 @@
     "i18n:deepl": "node --env-file-if-exists=.env.local scripts/translate-deepl.mjs"
   },
   "dependencies": {
+    "@sentry/nextjs": "11.10.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "maplibre-gl": "6.15.0",
