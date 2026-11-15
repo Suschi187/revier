@@ -151,7 +151,7 @@ Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe 
 
 ## 6. Offene Punkte (Mensch)
 
-1. Markenfotos mit Nutzungsrechten (auch KI-Bilder), ohne erkennbare Fremdmarken (in den Shop-Beispielen ist z. B. ein Fahrzeugschriftzug zu sehen)
+1. Markenfotos: per KI-Bildgenerator durch den Menschen (Entscheidung 2026-11-15), Vorgaben und Prompts in `docs/BILDVORGABEN.md` (B1–B8). Ohne erkennbare Fremdmarken; Generator mit kommerzieller Nutzung.
 2. ~~Ob `design/` ins Repo soll (rund 14 MB PNG)~~ entschieden 2026-11-15: bleibt im Repo. Rechtevermerk für die Shop-Beispielbilder fehlt noch (QA F8).
 3. Name: *Huntroy* gewählt 2026-11-15 (Reviro vergeben); Markenrecherche und Domain offen (SPEC 7.1). cs/pl-Texte (Unterzeile, Claim) von Muttersprachlern prüfen.
 4. ~~Claim in der Leiste oben (QA F2)~~ entschieden 2026-11-15: „Klare Linien. Wilde Freiheit.“ (SPEC-Kandidat), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dort in eine zweite Zeile. Offen bleibt nur die Prüfung der cs/pl-Fassung durch Muttersprachler (mit Punkt 3).
@@ -168,7 +168,7 @@ Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Anrede „Du“ in de, 
 | Inter | Rasmus Andersson | SIL OFL 1.1 | `web/public/static/fonts/Inter-OFL.txt` |
 | Huntroy-Logo L1 | eigene Gestaltung im Projekt | Projekt / Die Jagdbrüder | umgesetzt, Reinzeichnung offen |
 | Hirschkopf Die Jagdbrüder | Die Jagdbrüder | Eigentum der Marke | nur Referenz, nicht im Huntroy-Logo |
-| Markenfotos | Die Jagdbrüder | Nutzungsrecht klären | ausstehend |
+| Markenfotos (KI) | Bildgenerator, erzeugt vom Menschen | laut Bedingungen des Generators (kommerzielle Nutzung erforderlich); je Bild Generator, Datum, Prompt eintragen | ausstehend, Vorgaben in `docs/BILDVORGABEN.md` |
 | Höhenlinien-Muster, Kategorie- und UI-Icons | eigene Zeichnung | Projekt | umgesetzt |
 | Inter-Teilmenge `inter-czech-wght-normal.v1.woff2` | aus Inter (Latin Extended) geschnitten | SIL OFL 1.1 (kein Reserved Font Name) | `pyftsubset inter-latin-ext-wght-normal.v1.woff2 --unicodes="U+010C-010D,U+0160-0161" --flavor=woff2 --layout-features='*' --name-IDs='*'` (fonttools 4.55) |
 | App-Icon `web/app/icon.svg` | eigene Gestaltung (Logo L1) | Projekt | umgesetzt |

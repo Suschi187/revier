@@ -2,6 +2,15 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Bildvorgaben für KI-Markenfotos – 2026-11-15
+
+### Geändert (nur Dokumentation)
+- Neu `docs/BILDVORGABEN.md`: Regeln für alle Bilder (Inhalt, Look, Rechte, Lieferung, Negativ-Prompt) und 8 Bilder mit Größe, Dateiname, Prompt und Alt-Text: Startseiten-Banner (breit und Handy), je ein Bild für die 5 Anzeigenarten, Platzhalter für Anzeigen ohne Foto, Vorschaubild für soziale Netzwerke.
+- `DESIGN.md`: offener Punkt Markenfotos und Lizenzzeile auf KI-Fotos umgestellt (Entscheidung 2026-11-15).
+
+### Offen
+- Bilder erzeugen (Mensch), danach Einbau (Claude, Ablauf am Ende von `BILDVORGABEN.md`).
+
 ## VoiceOver-Vorprüfung (Web) – 2026-11-15
 
 Automatisch geprüft, was ein Screenreader vorliest (axe mit WCAG 2.2 AA und Best Practice, Landmarks, Überschriften). Der Durchgang mit VoiceOver selbst bleibt beim Menschen (Checkliste `docs/DESIGN.md` Abschnitt 10).
