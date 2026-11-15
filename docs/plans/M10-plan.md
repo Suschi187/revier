@@ -32,7 +32,7 @@ Weiter offen und nicht durch Code lösbar: Anwalt (SPEC 7.2, inkl. Melden ohne K
 7. Deploy-Artefakt (E3): `output: "standalone"`, Dockerfile, `docker-compose.yml` mit Caddy (TLS, Header, `/tiles/` mit Range, Logs ohne IP), Build in der CI.
 8. Cloud-Runbook `docs/CLOUD-SETUP.md`: alle Cloud-Checklisten aus ADR 002, 005, 010, 011, 015–019, 021, 022 in Reihenfolge, mit Prüfbefehl je Punkt.
 9. Performance: Core Web Vitals gegen Stage (Lighthouse mobil ≥ 90 auf Start, Liste, Detail; LCP, INP, CLS), Messwerte ins CHANGELOG.
-10. E2E gegen Stage über `BASE_URL`/`QA_BASE_URL`: Cookie-Inventar, Header-Prüfung, Smoke der Kernflows.
+10. E2E gegen Stage über `QA_BASE_URL`: Cookie-Inventar, Header-Prüfung, Smoke der Kernflows.
 
 **Nach den Entscheidungen**
 11. Supabase Stage und Prod anlegen (Runbook 8), Migrationen, Vault-Secrets, Auth-Vorlagen, Redirect-URLs, MFA, Hook.

@@ -2,6 +2,12 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Paket 8: Runbook Cloud-Einrichtung – 2026-11-15
+
+### Neu
+- `docs/CLOUD-SETUP.md`: Reihenfolge für Stage und Prod (Supabase-Projekt, Auth, Edge Functions und Secrets, Probe Port 465, Server, Compose, Nachweise per `curl`, erster Admin, E2E gegen Stage, Monitoring, Backup-Übung), zusammengeführt aus den Cloud-Checklisten von ADR 002, 005, 006, 010, 011, 014–022.
+- `e2e/release.spec.ts` läuft mit `QA_BASE_URL` gegen Stage oder Prod (wie `cookie-inventory.spec.ts`).
+
 ## M10 Paket 6: Mail-Versand über United Domains (SMTPS) – 2026-11-15
 
 ### Geändert

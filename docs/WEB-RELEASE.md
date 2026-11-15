@@ -50,7 +50,7 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Backups aktiv; Wiederherstellung einmal auf Stage geübt und dokumentiert; Fristen in der Datenschutzerklärung (ADR 019)
 
 ## F. Qualität
-- [ ] Komplette E2E-Suite gegen Stage grün (`BASE_URL`), inkl. Cookie-Inventar mit Hosting- und CDN-Cookies (ADR 021)
+- [ ] Komplette E2E-Suite lokal und in der CI grün; gegen Stage mit `QA_BASE_URL`: `release.spec.ts` und Cookie-Inventar inkl. Hosting- und CDN-Cookies (ADR 021)
 - [ ] Barrierefreiheit: axe-Suite grün; VoiceOver-Durchgang von Hand nach DESIGN.md 10, Ergebnis in `docs/QA-REPORT.md`
 - [ ] Core Web Vitals gegen Stage mobil: Lighthouse ≥ 90 auf Start, Liste, Detail; LCP < 2,5 s, CLS < 0,1, INP < 200 ms
 - [ ] Staging-Test mit echten Testnutzern (alle 4 Sprachen): registrieren, inserieren, suchen, Chat, melden, Account löschen; Funde abgearbeitet
