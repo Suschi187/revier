@@ -2,6 +2,15 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Paket 4: Statement-Timeout nachgewiesen – 2026-11-15
+
+### Geändert
+- Keine Migration nötig: Supabase setzt je Rolle `statement_timeout` (anon 3 s, authenticated und authenticator 8 s), PostgREST wendet die Werte der Rolle an (ADR 015 Cloud-Checkliste).
+- Neu `supabase/tests/61_statement_timeout.test.sql` weist die Werte nach, lokal, in der CI und gegen Stage/Prod. Die Wirkung (Abbruch mit 57014) ist in pgTAP nicht prüfbar, weil der Abbruch auch die Testanweisung beendet.
+
+### Wie testen
+- `supabase test db supabase/tests/61_statement_timeout.test.sql`
+
 ## M10 Paket 3: Gesundheitsprüfung `/api/health` – 2026-11-15
 
 ### Neu
