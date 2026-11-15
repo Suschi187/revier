@@ -150,7 +150,7 @@ Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe 
 ## 6. Offene Punkte (Mensch)
 
 1. Markenfotos mit Nutzungsrechten (auch KI-Bilder), ohne erkennbare Fremdmarken (in den Shop-Beispielen ist z. B. ein Fahrzeugschriftzug zu sehen)
-2. Ob `design/` ins Repo soll (rund 14 MB PNG); sonst kommt `design/` in `.gitignore`
+2. ~~Ob `design/` ins Repo soll (rund 14 MB PNG)~~ entschieden 2026-11-15: bleibt im Repo. Rechtevermerk für die Shop-Beispielbilder fehlt noch (QA F8).
 3. Name: Freigabe nach Markenrecherche (SPEC 7.1)
 
 4. ~~Claim in der Leiste oben (QA F2)~~ entschieden 2026-11-15: „Klare Linien. Wilde Freiheit.“ (SPEC-Kandidat), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dort in eine zweite Zeile. Offen bleibt nur die Prüfung der cs/pl-Fassung durch Muttersprachler (mit Punkt 3).
