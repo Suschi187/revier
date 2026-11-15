@@ -22,7 +22,8 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Prod: `prepare.sql` vor den Migrationen, Migrationen eingespielt, `supabase db lint` ohne Fehler
 - [ ] Custom Access Token Hook an, nur Schema `public` exponiert, GraphQL aus, „Expose new tables“ aus (ADR 005)
 - [ ] TOTP-MFA an, asymmetrische Signing Keys, Session-Timeouts gesetzt, `enable_confirmations` (ADR 005, 010)
-- [ ] Auth: Site-URL und Redirect-URLs je Umgebung, Mail-Vorlagen und Betreff aus `supabase/config.toml` übernommen, SMTP von United Domains (Absender „Huntery“)
+- [x] Stage-Auth: SMTP United Domains, `supabase/cloud/config.sh stage push` (Site-URL, Redirects, Vorlagen, Hook, TOTP), Anmeldemail angenommen (2026-11-16)
+- [ ] Prod-Auth: dasselbe mit `prod.toml`
 - [x] Stage: 6 Edge Functions deployt (JWT-Prüfung wie `config.toml`), `SITE_URL`, Vault-URLs der 4 Jobs; Jobs rufen die Funktionen mit 200 auf (2026-11-15)
 - [ ] Prod: Edge Functions, `SITE_URL`, Vault-URLs, Jobs laufen
 - [ ] Function-Secrets für den Versand: `SMTP_HOST`, `SMTP_PORT=465`, `SMTP_TLS=true`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` (ADR 017 Nachtrag M10)
@@ -43,7 +44,7 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Sign in with Apple nur, wenn Apple-Konto steht; sonst `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`
 
 ## D. E-Mail
-- [ ] SMTPS-Adapter (United Domains, Port 465) hinter `Mailer`, aus einer Cloud-Function erfolgreich gesendet; Klartext-SMTP nur für Mailpit (ADR 017)
+- [x] SMTPS-Adapter (United Domains, `smtps.udag.de:465`) hinter `Mailer`, aus einer Edge Function in Stage erfolgreich gesendet (2026-11-16); Klartext-SMTP nur für Mailpit (ADR 017)
 - [ ] SPF, DKIM, DMARC; DKIM signiert `List-Unsubscribe` und `List-Unsubscribe-Post` (ADR 018)
 - [ ] Öffnungs- und Klick-Tracking beim Anbieter aus
 - [ ] Je Sprache Anmeldung, Chat-, Suchauftrags-, Moderations- und Konto-Mail auf Stage empfangen, Absender „Huntery“

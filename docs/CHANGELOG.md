@@ -2,6 +2,13 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Mails aus Stage nachgewiesen – 2026-11-16
+
+- Auth-Konfiguration nach Stage übertragen (`config.sh stage push`, 12 Eigenschaften; danach keine deklarierten Unterschiede).
+- Anmeldemail über Supabase Auth an `no-reply@huntery.de` angefordert und angenommen.
+- Edge Function → `smtps.udag.de:465` (implizites TLS, AUTH PLAIN): Probefunktion mit dem Mailer der App sendet erfolgreich; vorher ohne `SMTP_PASS` Antwort 530. Damit ist Port 465 aus der Supabase-Cloud offen, kein HTTP-Anbieter nötig (ADR 017 Nachtrag). Probefunktion danach gelöscht.
+- Offen: Versandlimit des Postfachs.
+
 ## M10: Mail-Secrets und Auth-Konfiguration für Stage – 2026-11-16
 
 ### Geändert
