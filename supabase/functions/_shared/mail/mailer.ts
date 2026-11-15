@@ -1,7 +1,7 @@
-// Versand (ADR 017, ADR 018, Review A7, B4): schmales Interface für alle Mail-Functions. SmtpMailer nur für Mailpit
-// lokal und in der CI (ohne TLS und ohne Anmeldung); Supabase Edge Functions in der Cloud verbinden nicht auf Port
-// 25/587, dort folgt in M10 ein HTTP-Adapter eines EU-Anbieters. Bewusst ohne SMTP-Bibliothek: kein fremder Code
-// für einen reinen Testpfad.
+// Versand (ADR 017, ADR 018, Review A7, B4): schmales Interface für alle Mail-Functions. SmtpMailer lokal und in der
+// CI gegen Mailpit (ohne TLS und ohne Anmeldung), in der Cloud gegen United Domains (M10, Entscheidung 2026-11-15)
+// mit implizitem TLS auf Port 465 und AUTH PLAIN: Supabase Edge Functions verbinden in der Cloud nicht auf Port
+// 25/587, STARTTLS ist deshalb nicht vorgesehen. Bewusst ohne SMTP-Bibliothek: wenige feste Befehle.
 
 /**
  * Zusätzliche Header, nur aus einer festen Liste und nur mit geprüften Werten (B4): Name und Form sind fest, es gibt
@@ -82,16 +82,39 @@ export function buildMessage(from: string, mail: Mail, now = new Date()): string
   ].join("\r\n");
 }
 
+export type SmtpOptions = {
+  /** Implizites TLS ab Verbindungsaufbau (SMTPS, Port 465). */
+  tls?: boolean;
+  /** AUTH PLAIN, nur zusammen mit TLS: Zugangsdaten nie im Klartext über das Netz. */
+  auth?: { user: string; pass: string };
+  /** Nur für Tests: eigene Zertifizierungsstelle. */
+  caCerts?: string[];
+};
+
+// Keine Zeilenumbrüche und keine NUL in Zugangsdaten: sonst ließen sich SMTP-Befehle anhängen.
+const CREDENTIAL = /^[^\r\n\0]{1,256}$/;
+
 export class SmtpMailer implements Mailer {
-  constructor(private readonly host: string, private readonly port: number, private readonly from: string) {
+  constructor(
+    private readonly host: string,
+    private readonly port: number,
+    private readonly from: string,
+    private readonly options: SmtpOptions = {},
+  ) {
     if (!validAddress(from)) throw new Error("invalid from");
+    if (options.auth) {
+      if (!options.tls) throw new Error("auth needs tls");
+      if (!CREDENTIAL.test(options.auth.user) || !CREDENTIAL.test(options.auth.pass)) throw new Error("invalid credentials");
+    }
   }
 
   async send(mail: Mail): Promise<void> {
     if (!validAddress(mail.to)) throw new Error("invalid recipient");
     // Vor dem Verbindungsaufbau: ein ungültiger Header bricht ohne SMTP-Verkehr ab.
     const message = buildMessage(this.from, mail);
-    const conn = await Deno.connect({ hostname: this.host, port: this.port });
+    const conn = this.options.tls
+      ? await Deno.connectTls({ hostname: this.host, port: this.port, caCerts: this.options.caCerts })
+      : await Deno.connect({ hostname: this.host, port: this.port });
     const decoder = new TextDecoder();
     const encoder = new TextEncoder();
     let buffer = "";
@@ -118,7 +141,12 @@ export class SmtpMailer implements Mailer {
     };
     try {
       await reply([220]);
-      await command("EHLO revier.local", [250]);
+      // Absenderdomain als Name: Anbieter prüfen ihn gegen DNS; ein fester lokaler Name wirkt wie Spam.
+      await command(`EHLO ${this.from.split("@")[1]}`, [250]);
+      if (this.options.auth) {
+        // Fehlermeldungen tragen nur den Code, nie die Zugangsdaten.
+        await command(`AUTH PLAIN ${base64(`\0${this.options.auth.user}\0${this.options.auth.pass}`)}`, [235]);
+      }
       await command(`MAIL FROM:<${this.from}>`, [250]);
       await command(`RCPT TO:<${mail.to}>`, [250, 251]);
       await command("DATA", [354]);
@@ -130,10 +158,19 @@ export class SmtpMailer implements Mailer {
   }
 }
 
-/** Mailer aus der Umgebung (lokal Mailpit laut config.toml); ohne SMTP_HOST oder MAIL_FROM kein Versand (503). */
+/**
+ * Mailer aus der Umgebung. Lokal Mailpit laut config.toml; in der Cloud United Domains mit SMTP_TLS=true,
+ * SMTP_USER und SMTP_PASS (Function-Secrets). Ohne SMTP_HOST oder MAIL_FROM kein Versand (503).
+ */
 export function mailerFromEnv(): Mailer | null {
   const host = Deno.env.get("SMTP_HOST");
   const from = Deno.env.get("MAIL_FROM");
   if (!host || !from || !validAddress(from)) return null;
-  return new SmtpMailer(host, Number(Deno.env.get("SMTP_PORT") ?? "1025"), from);
+  const tls = Deno.env.get("SMTP_TLS") === "true";
+  const user = Deno.env.get("SMTP_USER");
+  const pass = Deno.env.get("SMTP_PASS");
+  return new SmtpMailer(host, Number(Deno.env.get("SMTP_PORT") ?? (tls ? "465" : "1025")), from, {
+    tls,
+    auth: user && pass ? { user, pass } : undefined,
+  });
 }

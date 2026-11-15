@@ -1,5 +1,5 @@
 // Gemeinsamer Mailer (ADR 017, ADR 018 B4): Adressen, Nachrichtenaufbau, feste Zusatz-Header, SITE_URL, Token.
-import { buildMessage, encodeHeader, extraHeaderLines, type Mail, SmtpMailer, validAddress } from "../mailer.ts";
+import { buildMessage, encodeHeader, extraHeaderLines, type Mail, SmtpMailer, type SmtpOptions, validAddress } from "../mailer.ts";
 import { parseSiteUrl, unsubscribeHeaders, unsubscribePageUrl, unsubscribePostUrl, validToken } from "../site.ts";
 import { clean, language } from "../text.ts";
 
@@ -177,4 +177,124 @@ Deno.test("SmtpMailer: Zusatz-Header kommen an, ungültiger Header bricht vor de
     message = (error as Error).message;
   }
   assert(message === "header invalid", `vor der Verbindung: ${message}`);
+});
+
+// Nur für den Test: eigene CA und Serverzertifikat für 127.0.0.1, ohne Bezug zu echten Systemen.
+const TEST_CA = `-----BEGIN CERTIFICATE-----
+MIIBWzCCAQCgAwIBAgIUMWuInCi7kpdEeYOX3TdFXtOPfPwwCgYIKoZIzj0EAwIw
+EjEQMA4GA1UEAwwHVGVzdCBDQTAgFw0yNjExMTUyMTE5MjFaGA8yMTI2MTAyMjIx
+MTkyMVowEjEQMA4GA1UEAwwHVGVzdCBDQTBZMBMGByqGSM49AgEGCCqGSM49AwEH
+A0IABArLLKfxA4r4T06m/SAlJFPTrvUctMs/9SsTmKV5ZC1xDkpAVioJncF8IYGX
+5tUrjhV979QVMAQNnClutcOqo1ejMjAwMB0GA1UdDgQWBBQuD+ijY0OwzT99LivP
+CgNIBKkRKTAPBgNVHRMBAf8EBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQC7KtCk
+OIAKj0NhwLQyzjiZssDe/9qEOtKr8UTIjOT3SwIhAOfwEcmokKyAxQb13FdpoWqu
++MGWP3Uc9bqDvu9h7hMq
+-----END CERTIFICATE-----`;
+const TEST_CERT = `-----BEGIN CERTIFICATE-----
+MIIBaTCCARCgAwIBAgIUcp0cwizrjScs2QAFdqlikMM/2zYwCgYIKoZIzj0EAwIw
+EjEQMA4GA1UEAwwHVGVzdCBDQTAgFw0yNjExMTUyMTE5MjFaGA8yMTI2MTAyMjIx
+MTkyMVowFDESMBAGA1UEAwwJMTI3LjAuMC4xMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAE/W4+OWFPfP7uiPKq4H2XlIhA7uwO/BNmypz+7yzZuE2ivogWe3e+bAys
+Go4IQh+GS9ZD9P0y/YK5JvJoUhuxDqNAMD4wDwYDVR0RBAgwBocEfwAAATAJBgNV
+HRMEAjAAMAsGA1UdDwQEAwIHgDATBgNVHSUEDDAKBggrBgEFBQcDATAKBggqhkjO
+PQQDAgNHADBEAiAnPCiNd8ia4K4ctvgwHxnHYs2XaH/nufsQtwS5BD/A9wIgb29a
+OvqzkcUvmMp3VNtIa2Y7X3nswL2l8lw+fzXiYXI=
+-----END CERTIFICATE-----`;
+const TEST_KEY = `-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQglqnCRKcg772jW45K
+WAFYD1JbEUUb7WvwBirJvVUYfeuhRANCAAT9bj45YU98/u6I8qrgfZeUiEDu7A78
+E2bKnP7vLNm4TaK+iBZ7d75sDKwajghCH4ZL1kP0/TL9grkm8mhSG7EO
+-----END PRIVATE KEY-----`;
+
+/** SMTPS-Testserver: schreibt die Befehle mit und antwortet auf AUTH mit `authReply`. */
+function smtpsServer(authReply = "235 ok") {
+  const listener = Deno.listenTls({ hostname: "127.0.0.1", port: 0, cert: TEST_CERT, key: TEST_KEY });
+  const port = (listener.addr as Deno.NetAddr).port;
+  const commands: string[] = [];
+  const done = (async () => {
+    for await (const conn of listener) {
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+      await conn.write(encoder.encode("220 test\r\n"));
+      let buffer = "";
+      let data = false;
+      const chunk = new Uint8Array(65536);
+      while (true) {
+        const read = await conn.read(chunk).catch(() => null);
+        if (read === null) break;
+        buffer += decoder.decode(chunk.subarray(0, read));
+        let at: number;
+        while ((at = buffer.indexOf(data ? "\r\n.\r\n" : "\r\n")) >= 0) {
+          const line = buffer.slice(0, at);
+          buffer = buffer.slice(at + (data ? 5 : 2));
+          if (data) {
+            data = false;
+            await conn.write(encoder.encode("250 ok\r\n"));
+            continue;
+          }
+          commands.push(line);
+          if (line.startsWith("AUTH ")) await conn.write(encoder.encode(`${authReply}\r\n`));
+          else if (line === "DATA") {
+            data = true;
+            await conn.write(encoder.encode("354 go\r\n"));
+          } else if (line === "QUIT") await conn.write(encoder.encode("221 bye\r\n"));
+          else await conn.write(encoder.encode("250 ok\r\n"));
+        }
+      }
+      conn.close();
+      break;
+    }
+  })();
+  return { port, commands, done };
+}
+
+Deno.test("SmtpMailer mit TLS (United Domains, Port 465): EHLO mit Absenderdomain, AUTH PLAIN, Versand", async () => {
+  const server = smtpsServer();
+  const mailer = new SmtpMailer("127.0.0.1", server.port, "no-reply@huntery.example", {
+    tls: true,
+    auth: { user: "no-reply@huntery.example", pass: "geheim-ä" },
+    caCerts: [TEST_CA],
+  });
+  await mailer.send({ to: "x@example.de", subject: "S", text: "T" });
+  await server.done;
+  const auth = btoa(String.fromCharCode(...new TextEncoder().encode("\0no-reply@huntery.example\0geheim-ä")));
+  assert(server.commands[0] === "EHLO huntery.example", server.commands[0]);
+  assert(server.commands[1] === `AUTH PLAIN ${auth}`, "AUTH PLAIN mit UTF-8");
+  assert(server.commands.includes("MAIL FROM:<no-reply@huntery.example>"), "Absender");
+  assert(server.commands.at(-1) === "QUIT", "sauber beendet");
+});
+
+Deno.test("SmtpMailer mit TLS: abgelehnte Anmeldung meldet nur den Code, nie das Passwort", async () => {
+  const server = smtpsServer("535 authentication failed");
+  const mailer = new SmtpMailer("127.0.0.1", server.port, "no-reply@huntery.example", {
+    tls: true,
+    auth: { user: "u", pass: "geheim" },
+    caCerts: [TEST_CA],
+  });
+  let message = "";
+  try {
+    await mailer.send({ to: "x@example.de", subject: "S", text: "T" });
+  } catch (error) {
+    message = (error as Error).message;
+  }
+  await server.done;
+  assert(message === "smtp 535", message);
+  assert(!server.commands.some((c) => c.startsWith("MAIL FROM")), "kein Versand nach Fehlschlag");
+});
+
+Deno.test("SmtpMailer: Anmeldung nur mit TLS, Zugangsdaten ohne Zeilenumbrüche", () => {
+  const cases: [SmtpOptions, string][] = [
+    [{ auth: { user: "u", pass: "p" } }, "auth needs tls"],
+    [{ tls: true, auth: { user: "u\r\nRCPT TO:<a@b.c>", pass: "p" } }, "invalid credentials"],
+    [{ tls: true, auth: { user: "u", pass: "" } }, "invalid credentials"],
+  ];
+  for (const [options, expected] of cases) {
+    let message = "";
+    try {
+      new SmtpMailer("127.0.0.1", 465, "no-reply@huntery.example", options);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    assert(message === expected, `${expected}: ${message}`);
+  }
 });

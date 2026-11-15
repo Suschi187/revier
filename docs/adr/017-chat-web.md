@@ -153,3 +153,13 @@ Tabellen `blocks`, `conversations` und `messages` bestehen seit M1 (Review M1: `
   - Lesebestätigungen abschaltbar (später).
   - Spam-Erkennung über gleiche Texte (M9/M10).
   - SPEC 7.3 „Nachrichten beim Gegenüber“ nach Kontolöschung (Anwalt).
+
+## Nachtrag M10 (2026-11-15): Versand über United Domains
+- Entscheidung des Menschen: Mails gehen über United Domains (Postfach der Domain) statt über einen HTTP-Anbieter.
+- Supabase Auth (Anmeldecodes) nutzt dessen SMTP direkt (Einstellung im Projekt).
+- Die Edge Functions nutzen weiter den eigenen `SmtpMailer`, jetzt mit implizitem TLS (SMTPS, Port 465) und `AUTH PLAIN` (`SMTP_TLS=true`, `SMTP_USER`, `SMTP_PASS` als Function-Secrets). Port 25/587 sind in der Cloud gesperrt, STARTTLS entfällt deshalb. Anmeldung nur mit TLS; Zugangsdaten ohne Zeilenumbrüche; Fehler nennen nur den SMTP-Code. EHLO mit der Absenderdomain.
+- Vor dem Go-live prüfen (WEB-RELEASE D):
+  - Port 465 ist aus einer Cloud-Function erreichbar, sonst Rückfall auf einen HTTP-Anbieter hinter demselben `Mailer`.
+  - Versandlimit des Postfachs gegen die Taktung der Jobs (50 Empfänger je Minute, ADR 018).
+  - DKIM signiert `List-Unsubscribe`.
+  - AVV ist abgeschlossen.

@@ -18,8 +18,9 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Migrationen eingespielt, `supabase db lint` ohne Fehler, pgTAP-Suite gegen Stage grün
 - [ ] Custom Access Token Hook an, nur Schema `public` exponiert, GraphQL aus, „Expose new tables“ aus (ADR 005)
 - [ ] TOTP-MFA an, asymmetrische Signing Keys, Session-Timeouts gesetzt, `enable_confirmations` (ADR 005, 010)
-- [ ] Auth: Site-URL und Redirect-URLs je Umgebung, Mail-Vorlagen und Betreff aus `supabase/config.toml` übernommen, SMTP des Mail-Anbieters
+- [ ] Auth: Site-URL und Redirect-URLs je Umgebung, Mail-Vorlagen und Betreff aus `supabase/config.toml` übernommen, SMTP von United Domains (Absender „Huntery“)
 - [ ] Vault-Secrets und URLs für Chat-, Suchauftrags-, Lösch- und Wartungs-Jobs (ADR 017–019), Jobs laufen
+- [ ] Function-Secrets für den Versand: `SMTP_HOST`, `SMTP_PORT=465`, `SMTP_TLS=true`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` (ADR 017 Nachtrag M10)
 - [ ] Realtime nur private Kanäle, Grenze gleichzeitiger Verbindungen geprüft (ADR 017)
 - [ ] Statement-Timeout für `anon` (ADR 015), kein Logging von Statement-Parametern (ADR 006)
 - [ ] Fotoverarbeitung: Speicher-/Zeitgrenzen in eu-central-1 nachgemessen (ADR 011)

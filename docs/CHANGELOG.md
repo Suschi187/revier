@@ -2,6 +2,18 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Paket 6: Mail-Versand über United Domains (SMTPS) – 2026-11-15
+
+### Geändert
+- `_shared/mail/mailer.ts`: `SmtpMailer` kann implizites TLS (Port 465) und `AUTH PLAIN`; Anmeldung nur mit TLS, Zugangsdaten ohne Zeilenumbrüche/NUL, Fehler nur mit SMTP-Code. EHLO mit der Absenderdomain statt eines festen lokalen Namens. `mailerFromEnv` liest `SMTP_TLS`, `SMTP_USER`, `SMTP_PASS` (Standardport 465 mit TLS, sonst 1025 für Mailpit).
+- ADR 017 Nachtrag M10, WEB-RELEASE B/D um die Function-Secrets ergänzt.
+
+### Tests
+- `_shared/mail/tests/mail_test.ts`: SMTPS-Testserver mit eigener Test-CA (EHLO, AUTH PLAIN mit UTF-8, Versand), abgelehnte Anmeldung (nur Code, kein Versand), Anmeldung ohne TLS und Zeilenumbrüche in Zugangsdaten werden abgelehnt. Deno per Docker wie in der CI: `send-search-notifications` mit `_shared/mail` 36 grün, `send-chat-notifications` 4 grün; Mail-Integrationstests gegen Mailpit grün.
+
+### Offen
+- Echte Probe aus einer Cloud-Function gegen United Domains (Port 465 offen?), Versandlimit, DKIM.
+
 ## M10 Paket 7: Deploy mit Docker und Caddy – 2026-11-15
 
 Entscheidung 2026-11-15: EU-Server mit Docker.
