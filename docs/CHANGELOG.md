@@ -2,6 +2,12 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Edge Functions in Stage – 2026-11-15
+
+### Geändert (Cloud)
+- Stage (`cauwmmxoghnwgadmkgfz`): alle 6 Edge Functions deployt, `verify_jwt` wie in `config.toml` (an für `process-listing-photo`, `verification-document`); Secret `SITE_URL=https://stage.huntery.de`; Vault-URLs `chat_notifications_url`, `search_notifications_url`, `account_deletion_url`, `account_maintenance_url`. Nachweis: `net._http_response` zeigt 200 der Mail-Jobs (0 Empfänger), 12 Cron-Jobs angelegt.
+- Noch ohne Mail-Secrets (United Domains): Mails gehen erst danach raus.
+
 ## M10: Nächtliches Datenbank-Backup per GitHub Action – 2026-11-15
 
 Ersatz für die fehlenden Backups im Supabase-Free-Tarif (Entscheidung 2026-11-15).
