@@ -118,7 +118,7 @@ export async function ListingsPage({
   }
 
   return (
-    <main className={`${ui.container} flex-1 py-4 sm:py-6`}>
+    <main id="main" className={`${ui.container} flex-1 py-4 sm:py-6`}>
       <Breadcrumbs crumbs={crumbs} />
       <h1 className={`${ui.headingCaps} mt-2 text-2xl [overflow-wrap:anywhere] hyphens-auto`}>{heading}</h1>
 

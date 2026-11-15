@@ -22,7 +22,7 @@ export default async function UnsubscribePage(props: Props) {
   const token = parseToken(query.t);
 
   return (
-    <main className="mx-auto w-full max-w-md flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-md flex-1 px-4 py-12">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {token ? (
         <form action="/api/unsubscribe" method="post" className="mt-4 grid gap-4">

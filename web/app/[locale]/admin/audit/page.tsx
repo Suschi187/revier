@@ -53,7 +53,7 @@ export default async function AuditPage({ searchParams }: Props) {
   const filters = new URLSearchParams({ ...(action ? { action } : {}), ...(targetId ? { target: targetId } : {}) });
 
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/admin" className="text-sm underline underline-offset-2">
         ← {t("back")}
       </Link>

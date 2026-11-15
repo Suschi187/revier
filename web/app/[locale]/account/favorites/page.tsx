@@ -31,7 +31,7 @@ export default async function FavoritesPage(props: Props) {
   const unavailable = overview?.unavailable ?? 0;
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {query.notice === "removed" && <p className="mt-4" role="status">{t("removedNotice")}</p>}

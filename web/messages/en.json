@@ -26,6 +26,7 @@
     "shopLabel": "Die Jagdbrüder shop (external site)"
   },
   "Header": {
+    "skipToContent": "Skip to content",
     "searchWhat": "What are you looking for?",
     "searchWhere": "Where?",
     "searchWhereAny": "All regions",

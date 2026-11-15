@@ -45,7 +45,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
   ]);
   if (!review.version) {
     return (
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+      <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
         <Link href="/admin/listings" className="text-sm underline underline-offset-2">
           ← {t("back")}
         </Link>
@@ -62,7 +62,7 @@ export default async function ReviewListingPage({ params, searchParams }: Props)
   const radio = "flex items-center gap-2";
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/admin/listings" className="text-sm underline underline-offset-2">
         ← {t("back")}
       </Link>

@@ -36,7 +36,7 @@ export async function ReportTargetPage({ locale, type, id, query }: { locale: Ap
   const radio = "flex items-center gap-2";
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/admin/reports" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{tr(`targets.${type}`)}: {target.label ?? t("noLabel")}</h1>
       {target.gone && <p className="mt-2 font-medium">{t("goneHint")}</p>}

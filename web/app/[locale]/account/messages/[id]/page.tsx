@@ -42,7 +42,7 @@ export default async function ConversationPage(props: Props) {
 
   if (!info) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
         <Link href="/account/messages" className="text-sm underline underline-offset-2">← {t("conversation.backToList")}</Link>
         <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("conversation.metaTitle")}</h1>
         <p className="mt-4">{t("conversation.notFound")}</p>
@@ -59,7 +59,7 @@ export default async function ConversationPage(props: Props) {
   const first = page?.items[0];
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <ChatLive userId={user.id} conversationId={id} />
       <Link href="/account/messages" className="text-sm underline underline-offset-2">← {t("conversation.backToList")}</Link>
       <header className="mt-4 rounded-card border border-sand bg-surface p-4">

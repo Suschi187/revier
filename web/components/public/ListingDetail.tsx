@@ -64,7 +64,7 @@ export async function ListingDetail({
   const showFavorite = favorites.userId !== listing.ownerId;
 
   return (
-    <main className={`${ui.container} flex-1 pb-28 pt-4 sm:pt-6 lg:pb-12`}>
+    <main id="main" className={`${ui.container} flex-1 pb-28 pt-4 sm:pt-6 lg:pb-12`}>
       <Breadcrumbs crumbs={crumbs} />
 
       <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-start">

@@ -37,7 +37,7 @@ export default async function AdminAppealPage(props: Props) {
   const d = appeal.decision;
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/admin/appeals" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("itemTitle", { action: key ? td(`actions.${key}`) : appeal.decisionAction, name: appeal.user.displayName })}</h1>
       <p className="mt-1 text-sm text-muted">{t("submitted", { date: date(appeal.createdAt) })}</p>

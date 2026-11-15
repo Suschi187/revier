@@ -116,7 +116,7 @@ test.describe("QA M6 Nachprüfung", () => {
     await expect(page.getByRole("button", { name: /^QA7 Neu/ })).toBeVisible();
     await expect(page.getByRole("button", { name: /^QA7 Alt/ })).toHaveCount(0);
     await expect(page.getByText("1 Anzeigen auf der Karte")).toBeVisible();
-    await expect(page.locator('section[aria-label="Karte der Anzeigen"] [role=alert]')).toHaveCount(0);
+    await expect(page.locator("[data-listings-map] [role=alert]")).toHaveCount(0);
     expect(aborted.length).toBeGreaterThanOrEqual(1);
   });
 

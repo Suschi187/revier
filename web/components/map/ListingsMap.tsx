@@ -294,7 +294,7 @@ export function ListingsMap({
   }
 
   return (
-    <section aria-label={texts.label} className="mt-6">
+    <div data-listings-map className="mt-6">
       <MapCanvas tilesUrl={tilesUrl} locale={locale} bounds={bounds} label={texts.label} attribution={texts.attribution} failedText={texts.failed} onReady={onReady} />
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <button type="button" onClick={searchArea} className="rounded-btn bg-forest px-3 py-1.5 text-offwhite">
@@ -315,6 +315,6 @@ export function ListingsMap({
           </button>
         </p>
       )}
-    </section>
+    </div>
   );
 }

@@ -26,7 +26,7 @@ export default async function MessagesPage(props: Props) {
   const [t, format, page] = await Promise.all([getTranslations("Chat"), getFormatter(), listConversations(cursor)]);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <ChatLive userId={user.id} />
       <Link href="/account" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>

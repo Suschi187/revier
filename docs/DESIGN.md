@@ -153,9 +153,10 @@ Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe 
 
 1. Markenfotos mit Nutzungsrechten (auch KI-Bilder), ohne erkennbare Fremdmarken (in den Shop-Beispielen ist z. B. ein Fahrzeugschriftzug zu sehen)
 2. ~~Ob `design/` ins Repo soll (rund 14 MB PNG)~~ entschieden 2026-11-15: bleibt im Repo. Rechtevermerk für die Shop-Beispielbilder fehlt noch (QA F8).
-3. Name: Freigabe nach Markenrecherche (SPEC 7.1)
-
+3. Name: *Huntroy* gewählt 2026-11-15 (Reviro vergeben); Markenrecherche und Domain offen (SPEC 7.1). cs/pl-Texte (Unterzeile, Claim) von Muttersprachlern prüfen.
 4. ~~Claim in der Leiste oben (QA F2)~~ entschieden 2026-11-15: „Klare Linien. Wilde Freiheit.“ (SPEC-Kandidat), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dort in eine zweite Zeile. Offen bleibt nur die Prüfung der cs/pl-Fassung durch Muttersprachler (mit Punkt 3).
+
+5. VoiceOver-Durchgang von Hand (Checkliste in Abschnitt 10); die automatische Vorprüfung ist grün.
 
 Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Anrede „Du“ in de, cs und pl.
 
@@ -199,3 +200,21 @@ iOS übernimmt die Werte aus diesem Dokument, nicht aus dem Web-Code. Kein Dunke
 **Icons:** Pfade aus `web/components/ui/Icon.tsx`, `brand/SpeciesIcon.tsx` und `brand/KindIcon.tsx` als SVG in den Asset-Katalog, „Preserve Vector Data“, Darstellung „Template“, damit sie die Textfarbe annehmen. Keine SF Symbols für Marken-Icons (Wildarten, Kategorien, Logo); für allgemeine Systemaktionen (Teilen, Schließen) sind SF Symbols erlaubt, wenn sie zur Linienstärke passen. VoiceOver-Label trägt das Element, nicht das Icon.
 
 **Bedienung:** Tippflächen mindestens 44 × 44 pt. Fokus und Hervorhebung über die Systemmittel. `@Environment(\.accessibilityReduceMotion)` schaltet Animationen ab wie `prefers-reduced-motion` im Web. Bausteine wie in Abschnitt 3 („Bausteine“), Regeln gleich, Umsetzung nativ (z. B. Rückfrage als `confirmationDialog`). Ob der Filter auf iOS als Blatt von unten kommt (dort das übliche Muster), entscheidet der Mensch in I2; die Web-Entscheidung aus Abschnitt 8 gilt nur fürs Web.
+
+## 10. Barrierefreiheit: VoiceOver (Stand 2026-11-15)
+
+**Automatisch geprüft** (`web/e2e/voiceover.spec.ts`, `m10a-text.spec.ts`): axe mit WCAG 2.2 AA und Best Practice auf allen öffentlichen Seiten, Konto, Inserieren und Nachrichten in 4 Sprachen bei 360 px; je eine Landmark Banner (grüne Leiste und Kopf), Main und Contentinfo, nichts außerhalb; H1 ist die erste Überschrift; Sprunglink „Zum Inhalt springen“ als erstes Tab-Ziel (`<main id="main">` auf jeder Seite); die Karte ist nur einmal als Bereich benannt (Zeichenfläche); Tippflächen der Sprachlinks 32 px.
+
+**Von Hand mit VoiceOver** (Mensch; Mac: Safari, `Cmd+F5`; iPhone: Safari, Einstellungen › Bedienungshilfen › VoiceOver). Je Punkt: wird es verständlich angesagt, in sinnvoller Reihenfolge, ohne Doppelungen?
+1. Startseite: Sprunglink, Rotor › Landmarks (Banner, Navigation „Sprache“, Suche, Kategorien, Main, Contentinfo), Rotor › Überschriften (H1 „Finde dein Revier.“ zuerst).
+2. Suche: „Was?“/„Wo?“ ansagen lassen, absenden; Filter aufklappen („Filter, 2 aktiv“), Chip „Filter entfernen: …“.
+3. Liste: Treffer als Artikel mit Titel, Preis, Region; Foto-Alt-Text; Blättern.
+4. Kartenansicht: Karte wird einmal angesagt, Zoom-Buttons benannt, „In diesem Bereich suchen“, Statusmeldung (Anzahl) wird vorgelesen.
+5. Detailseite: Galerie, Merkmale, Wildarten (Icon stumm, Text gelesen), „Karte anzeigen“, Melden.
+6. Login: Code-Feld, Fehlermeldung wird sofort vorgelesen.
+7. Inserieren: Schrittanzeige („Schritt 2 von 6“), Pflichtfelder, Fehlerliste vor dem Absenden, Foto-Upload mit Statusmeldung.
+8. Chat: neue Nachricht wird angesagt, Sicherheitshinweis, Melden und Blockieren erreichbar.
+9. Cookie-Banner: erscheint als Dialog, Fokus darin, Auswahl ansagbar.
+10. Einmal auf Tschechisch oder Polnisch: Sprache der Ansage wechselt (`lang` je Seite und an den Sprachlinks).
+
+Ergebnis und Funde des Durchgangs gehören in `docs/QA-REPORT.md`.

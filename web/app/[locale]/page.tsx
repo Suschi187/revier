@@ -87,7 +87,7 @@ export default async function HomePage() {
   ] as const;
 
   return (
-    <main className={`${ui.container} flex flex-1 flex-col gap-10 py-6 sm:gap-12`}>
+    <main id="main" className={`${ui.container} flex flex-1 flex-col gap-10 py-6 sm:gap-12`}>
       <Suspense fallback={null}>
         <DeletedNotice text={ta("deletedNotice")} />
       </Suspense>
@@ -106,8 +106,8 @@ export default async function HomePage() {
         }}
       />
 
-      <nav aria-labelledby="home-kinds">
-        <h2 id="home-kinds" className="sr-only">{t("kindsHeading")}</h2>
+      {/* Name per aria-label statt versteckter H2: sonst stünde für VoiceOver eine H2 vor der H1 (axe heading-order). */}
+      <nav aria-label={t("kindsHeading")}>
         <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
           {LISTING_KINDS.map((kind) => (
             <li key={kind}>

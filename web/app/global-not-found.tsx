@@ -30,7 +30,7 @@ export default async function GlobalNotFound() {
   return (
     <html lang={routing.defaultLocale} className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-offwhite text-forest">
-        <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
+        <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
           <div className={`${ui.card} flex flex-col items-center px-5 py-10 text-center sm:px-10`}>
           <a href={`/${routing.defaultLocale}`} aria-label="Huntroy">
             <LogoMark size={48} />

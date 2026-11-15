@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 export default async function Forbidden() {
   const t = await getTranslations("Admin.forbidden");
   return (
-    <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
+    <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
       <ErrorState
         code="403"
         title={<h1 className={`${ui.headingCaps} text-2xl leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl`}>{t("title")}</h1>}

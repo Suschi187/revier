@@ -16,7 +16,7 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
   const shown = ERRORS.find((e) => e === error);
   if (!target) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
         <p className="mt-4">{t("unavailable")}</p>
         <Link href="/account/reports" className="mt-4 inline-block underline">{t("myReports")}</Link>
@@ -24,7 +24,7 @@ export async function ReportForm({ locale, type, target, error }: { locale: AppL
     );
   }
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t(type === "listing" ? "titleListing" : "titleProfile")}</h1>
       <p className="mt-2 font-medium [overflow-wrap:anywhere]">{target.label}</p>
       <p className="mt-2 text-sm text-muted">{t("intro")}</p>

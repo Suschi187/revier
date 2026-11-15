@@ -36,7 +36,7 @@ export default async function LocaleLayout({
   // Die Teilmenge inter-czech (2 KB) steht wegen „Čeština“ in der Sprachwahl auf jeder Seite (ADR 022, K1).
   // Dateinamen sind versioniert (.v1), weil /static/fonts ein Jahr unveränderlich gecacht wird (ADR 022, S1).
   const fonts = ["montserrat-latin", "inter-latin", "inter-czech", ...(locale === "cs" || locale === "pl" ? ["montserrat-latin-ext", "inter-latin-ext"] : [])];
-  const [tOffline, messages] = await Promise.all([getTranslations("Offline"), getMessages()]);
+  const [tOffline, tHeader, messages] = await Promise.all([getTranslations("Offline"), getTranslations("Header"), getMessages()]);
   for (const font of fonts) preload(`/static/fonts/${font}-wght-normal.v1.woff2`, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
 
   return (
@@ -45,6 +45,8 @@ export default async function LocaleLayout({
         {/* Nur die Sprachwahl; übrige Client-Texte über ClientMessages (ganze Datei wären ~70 KB je Seite, doppelt im HTML). */}
         <NextIntlClientProvider messages={pickMessages(messages as Messages, LAYOUT_CLIENT_NAMESPACES)}>
           {/* Sprachwahl und Konto stehen im Kopf hinter Suspense: Bei dynamischen Routen ist der Pfad erst zur Anfrage bekannt. */}
+          {/* Erstes Element für Tastatur und VoiceOver: überspringt Leiste und Kopf (WCAG 2.4.1); jede Seite hat <main id="main">. */}
+          <a href="#main" className={ui.skipLink}>{tHeader("skipToContent")}</a>
           <SiteHeader />
           <OfflineNotice title={tOffline("title")} text={tOffline("text")} className={`${ui.container} mt-3`} />
           {children}

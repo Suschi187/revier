@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LoginPage({ searchParams }: PageProps<"/[locale]/login">) {
   const t = await getTranslations("Auth.login");
   return (
-    <main className="mx-auto w-full max-w-md flex-1 px-4 py-8 sm:py-12">
+    <main id="main" className="mx-auto w-full max-w-md flex-1 px-4 py-8 sm:py-12">
       <div className={`${ui.card} p-5 sm:p-8`}>
       <LogoMark size={44} />
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>

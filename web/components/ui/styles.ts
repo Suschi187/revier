@@ -31,4 +31,6 @@ export const ui = {
   countBadge: "min-w-5 rounded-pill bg-brand px-1 text-center text-micro font-bold leading-5 text-forest",
   muted: "text-muted",
   link: "font-semibold text-forest underline underline-offset-2 hover:text-brand-ink",
+  /** „Zum Inhalt springen“: unsichtbar, bis der Link den Fokus hat; dann oben links über dem Kopf. */
+  skipLink: "sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-btn focus:bg-offwhite focus:px-4 focus:py-3 focus:font-semibold focus:text-forest focus:shadow-popup",
 } as const;

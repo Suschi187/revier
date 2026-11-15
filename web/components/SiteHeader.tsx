@@ -23,10 +23,13 @@ const SHOP_URL = "https://www.jagdbrueder.de/";
  * async-Komponente, rendert sie erst nach deren `await` und käme nur noch gestreamt (verborgen ohne JS).
  * Ist die Seite schneller (z. B. `/de/jagdpacht/bayern?cur=EUR`), greifen die Platzhalter: Sie funktionieren
  * ohne JavaScript (Sprachwechsel über `/api/locale`, Konto-Link).
+ *
+ * Leiste und Kopf stehen in einem `<header>` (Landmark „Banner“), sonst lägen Claim und Shop-Link außerhalb jeder
+ * Landmark und wären über den VoiceOver-Rotor nicht erreichbar (axe region).
  */
 export function SiteHeader() {
   return (
-    <>
+    <header>
       <div className="on-dark bg-forest text-xs text-offwhite">
         <div className={`${ui.container} flex flex-wrap items-center gap-x-5 gap-y-1 py-1.5`}>
           <TopBarText />
@@ -38,7 +41,7 @@ export function SiteHeader() {
           </div>
         </div>
       </div>
-      <header className="border-b border-sand bg-offwhite">
+      <div className="border-b border-sand bg-offwhite">
         <div className={`${ui.container} flex flex-wrap items-center gap-x-5 gap-y-3 py-3`}>
           <HomeLink />
           <HeaderSearch />
@@ -49,8 +52,8 @@ export function SiteHeader() {
             <CreateLink />
           </div>
         </div>
-      </header>
-    </>
+      </div>
+    </header>
   );
 }
 

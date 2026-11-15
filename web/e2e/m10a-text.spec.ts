@@ -37,7 +37,8 @@ async function check(page: Page, url: string) {
   expect(result.scroll, `${url}: Überbreite`).toBeLessThanOrEqual(360);
   expect(result.clipped, `${url}: Elemente ragen aus dem Bild`).toEqual([]);
   expect(result.text, `${url}: rohe Schlüssel`).not.toMatch(/\b[A-Z][a-zA-Z]+\.[a-z][a-zA-Z]+\.[a-z][a-zA-Z.]*\b/);
-  const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).exclude(".maplibregl-canvas").analyze();
+  // best-practice dazu (VoiceOver-Vorprüfung 2026-11-15): Landmarks eindeutig, nichts außerhalb, H1 zuerst.
+  const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa", "best-practice"]).exclude(".maplibregl-canvas").analyze();
   expect(axe.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).slice(0, 3).join(", ")}`), `${url}: axe`).toEqual([]);
   if (SCREENS) {
     const name = url.replace(/^\/(\w\w)/, "").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").slice(0, 60) || "start";

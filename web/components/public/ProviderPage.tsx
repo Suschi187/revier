@@ -25,7 +25,7 @@ export async function ProviderPage({
   const name = providerName(provider);
   const favorites = await favoriteContext(path);
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Breadcrumbs crumbs={[{ name: tHome("crumb"), href: publicPath({ route: "home" }, locale) }, { name, href: path }]} />
       <h1 className="mt-2 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{name}</h1>
       <p className="mt-1">

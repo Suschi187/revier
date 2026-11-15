@@ -32,7 +32,7 @@ export default async function NewConversationPage(props: Props) {
   const [t, listing] = await Promise.all([getTranslations("Chat"), cacheEpoch().then((epoch) => getPublicListing(id, epoch))]);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account/messages" className="underline">{t("conversation.backToList")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("new.title")}</h1>
       {!listing ? (

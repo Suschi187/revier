@@ -100,7 +100,7 @@ export default async function StyleguidePage() {
   });
 
   return (
-    <main className={`${ui.container} flex flex-1 flex-col gap-8 py-8`}>
+    <main id="main" className={`${ui.container} flex flex-1 flex-col gap-8 py-8`}>
       <div>
         <p className={ui.eyebrow}>M10a</p>
         <h1 className={`${ui.headingCaps} text-3xl`}>{t("title")}</h1>

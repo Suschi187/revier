@@ -32,7 +32,7 @@ export default async function ReportPage(props: Props) {
 
   if (!info || (!message && !profile)) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <Link href="/account/messages" className="underline">{tc("conversation.backToList")}</Link>
         <p className="mt-4">{tc("conversation.notFound")}</p>
       </main>
@@ -40,7 +40,7 @@ export default async function ReportPage(props: Props) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href={`/account/messages/${id}`} className="underline">{t("cancel")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{message ? t("titleMessage") : t("titleProfile")}</h1>
       <p className="mt-2 [overflow-wrap:anywhere]">{counterpartName(info, tc("accountUnavailable"))}</p>

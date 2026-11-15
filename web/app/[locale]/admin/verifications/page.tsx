@@ -39,7 +39,7 @@ export default async function VerificationQueuePage({ searchParams }: Props) {
   const last = items.at(-1);
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/admin" className="text-sm underline underline-offset-2">
         ← {t("back")}
       </Link>

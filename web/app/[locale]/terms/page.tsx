@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function TermsPage() {
   const t = await getTranslations("Legal");
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("terms.title")}</h1>
       <PlaceholderNote />
       <LegalOutline sections={t.raw("terms.sections") as OutlineSection[]} />

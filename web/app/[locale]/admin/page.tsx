@@ -43,7 +43,7 @@ export default async function AdminPage() {
     ["/admin/admins", "lock", t("adminsLink")],
   ];
   return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {stuck !== null && stuck > 0 && (
         <p className="mt-4 rounded-card border border-error bg-error-soft p-3 font-semibold text-error" role="status">{t("stuckDeletions", { count: stuck })}</p>

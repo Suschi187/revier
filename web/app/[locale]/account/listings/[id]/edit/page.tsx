@@ -36,7 +36,7 @@ type Props = { params: Promise<{ id: string }>; searchParams: Promise<Record<str
 export default async function EditListingPage(props: Props) {
   const t = await getTranslations("Listings.wizard");
   return (
-    <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
       <Link href="/account/listings" className="underline">
         {t("back")}
       </Link>

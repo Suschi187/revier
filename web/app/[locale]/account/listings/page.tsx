@@ -25,7 +25,7 @@ const ERRORS = ["failed", "legal"] as const;
 export default async function MyListingsPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const t = await getTranslations("Listings.mine");
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">
         {t("back")}
       </Link>

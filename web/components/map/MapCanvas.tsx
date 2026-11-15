@@ -115,5 +115,7 @@ export default function MapCanvas({
   }, [tilesUrl, locale]);
 
   if (failed) return <p role="alert" className="rounded-btn border border-sand p-4">{failedText}</p>;
-  return <div ref={container} className={`${className} rounded-btn border border-sand`} role="region" aria-label={label} />;
+  // Rolle und Name trägt nur die fokussierbare Zeichenfläche (MapLibre: role=region); ein zweiter Bereich mit gleichem
+  // Namen darum würde VoiceOver doppelt ansagen (axe landmark-unique).
+  return <div ref={container} className={`${className} rounded-btn border border-sand`} />;
 }

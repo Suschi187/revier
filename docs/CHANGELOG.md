@@ -2,6 +2,26 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## VoiceOver-Vorprüfung (Web) – 2026-11-15
+
+Automatisch geprüft, was ein Screenreader vorliest (axe mit WCAG 2.2 AA und Best Practice, Landmarks, Überschriften). Der Durchgang mit VoiceOver selbst bleibt beim Menschen (Checkliste `docs/DESIGN.md` Abschnitt 10).
+
+### Behoben
+- **Grüne Leiste außerhalb jeder Landmark** (Claim, Shop-Link): Leiste und Kopf stehen jetzt in einem `<header>` (Banner).
+- **H2 vor der H1** auf der Startseite: Die Kategorien-Navigation heißt per `aria-label` statt über eine versteckte H2.
+- **Karte dreimal als „Karte der Anzeigen“ benannt** (äußerer Bereich, Container, Zeichenfläche): nur die fokussierbare Zeichenfläche trägt Rolle und Namen.
+- **Sprachlinks zu klein** (20 px, WCAG 2.5.8 verlangt 24 px): jetzt 32 px wie der Shop-Link.
+- **Neu: „Zum Inhalt springen“** als erstes Tab-Ziel (unsichtbar bis zum Fokus), jede Seite hat `<main id="main">`. Text in 4 Sprachen (`Header.skipToContent`, cs/pl auch in den DeepL-Overrides).
+
+### Tests
+- Neu `web/e2e/voiceover.spec.ts`: Sprunglink (de, pl), je eine Landmark Banner/Main/Contentinfo, H1 als erste und einzige H1, axe mit Best Practice auf 7 Kernseiten inkl. Kartenansicht, Karte genau einmal benannt.
+- `m10a-text.spec.ts` prüft axe jetzt auch mit WCAG 2.1/2.2 AA und Best Practice (alle öffentlichen Seiten, Konto, Inserieren, Nachrichten, 4 Sprachen).
+- `qa-m6-nachpruefung.spec.ts` findet die Karte über `[data-listings-map]` statt über das entfernte `aria-label`.
+- Komplette E2E-Suite: 270 grün; der eine rote Test (`qa-m7.spec.ts` F2) war auch auf älteren Ständen rot und ist im eigenen Commit robuster gemacht, die Datei danach 19/19 grün.
+
+### iOS
+- Noch keine App. Dort gilt dasselbe: VoiceOver-Labels für alle Buttons und Bilder, Überschriften als `.isHeader`, Karte einmal benannt.
+
 ## Name Huntroy und Unterzeile je Sprache – 2026-11-15
 
 ### Geändert

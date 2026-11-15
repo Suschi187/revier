@@ -13,7 +13,8 @@ function linkProps(locale: AppLocale, current: AppLocale) {
     lang: locale,
     hrefLang: locale,
     "aria-current": locale === current ? ("page" as const) : undefined,
-    className: locale === current ? "font-semibold" : "underline",
+    // py-1.5 wie der Shop-Link: Tippfläche 32 px statt 20 px (WCAG 2.5.8, mindestens 24 px).
+    className: `inline-block py-1.5 ${locale === current ? "font-semibold" : "underline"}`,
   };
 }
 

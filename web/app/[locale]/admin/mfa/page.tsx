@@ -31,7 +31,7 @@ export default async function AdminMfaPage({ searchParams }: Props) {
 
   const [t, factor] = await Promise.all([getTranslations("Admin.mfa"), verifiedTotpFactor()]);
   return (
-    <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-xl flex-1 px-4 py-8 sm:px-6">
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
       {factor ? (

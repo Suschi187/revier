@@ -21,7 +21,7 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
 export default async function ProfilePage(props: Props) {
   const t = await getTranslations("Account");
   return (
-    <main className="mx-auto w-full max-w-xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/account" className="text-sm underline underline-offset-2">
         ← {t("profile.back")}
       </Link>

@@ -36,7 +36,7 @@ export default async function AccountDeletePage(props: Props) {
   const error = ERRORS.find((e) => e === query.error) ?? null;
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{tc("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       {pending ? (

@@ -24,7 +24,7 @@ export default async function AdminUsersPage({ searchParams }: Props) {
   const [t, query] = await Promise.all([getTranslations("Admin.users"), searchParams]);
   const error = ERRORS.find((e) => e === query.error);
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/admin" className="text-sm underline underline-offset-2">← {t("back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-2 text-sm text-muted">{t("intro")}</p>

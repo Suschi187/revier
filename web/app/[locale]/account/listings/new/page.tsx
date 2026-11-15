@@ -25,7 +25,7 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 export default async function NewListingPage({ searchParams }: { searchParams: SearchParams }) {
   const t = await getTranslations("Listings.wizard");
   return (
-    <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 py-12">
       <Link href="/account/listings" className="underline">
         {t("back")}
       </Link>

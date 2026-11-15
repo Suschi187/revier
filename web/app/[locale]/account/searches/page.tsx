@@ -37,7 +37,7 @@ export default async function SavedSearchesPage(props: Props) {
   const confirmDelete = typeof query.delete === "string" && UUID.test(query.delete) ? query.delete : null;
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
       <Link href="/account" className="underline">{t("page.back")}</Link>
       <h1 className="mt-4 font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("page.title")}</h1>
       <p className="mt-2">{t("page.intro")}</p>

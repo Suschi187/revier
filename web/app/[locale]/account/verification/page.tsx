@@ -46,7 +46,7 @@ export default async function VerificationPage(props: Props) {
   const verified = profile.verificationStatus === "verified";
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+    <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
       <Link href="/account" className="text-sm underline underline-offset-2">
         ← {t("back")}
       </Link>
