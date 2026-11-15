@@ -2,6 +2,14 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Paket 3: Gesundheitsprüfung `/api/health` – 2026-11-15
+
+### Neu
+- `GET /api/health` für den Uptime-Check: 200 mit `{"ok":true,"supabase":"ok"}`, wenn Next läuft und Supabase Auth mit dem öffentlichen Key antwortet (3 s Zeitlimit), sonst 503. `no-store`, `noindex`, keine Cookies, keine Versionen, Hosts oder Fehlermeldungen. Logik in `lib/services/health.ts`.
+
+### Tests
+- `lib/services/health.test.ts` (ok, Fehlerstatus, Netzfehler, Zeitüberschreitung), `e2e/release.spec.ts` (Status, Header, keine Cookies; läuft auch gegen Stage). Cookie-Inventar grün.
+
 ## M10 Paket 2: Fehlerseiten für Serverfehler – 2026-11-15
 
 ### Neu
