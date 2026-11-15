@@ -16,7 +16,7 @@ export function LogoMark({ size = 40, cutout = "var(--color-offwhite)" }: { size
   );
 }
 
-/** Lockup „HUNTROY by Die Jagdbrüder“; der Markenname ist in allen Sprachen gleich, steht aber in den Message-Dateien. */
+/** Lockup „HUNTERY by Die Jagdbrüder“; der Markenname ist in allen Sprachen gleich, steht aber in den Message-Dateien. */
 export async function Logo({ onDark = false, compact = false }: { onDark?: boolean; compact?: boolean }) {
   const t = await getTranslations("Brand");
   return (

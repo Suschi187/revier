@@ -1,8 +1,8 @@
 {
   "Metadata": {
-    "siteName": "Huntroy",
+    "siteName": "Huntery",
     "siteDescription": "Marktplatz für Jagdgelegenheiten in Deutschland, Österreich, der Schweiz, Tschechien und Polen.",
-    "ogImageAlt": "Huntroy-Logo vor einem Hochsitz im Morgenlicht, dazu Rothirsch, Jäger und Hund"
+    "ogImageAlt": "Huntery-Logo vor einem Hochsitz im Morgenlicht, dazu Rothirsch, Jäger und Hund"
   },
   "HomePage": {
     "metaTitle": "Jagdgelegenheiten in Mitteleuropa",
@@ -18,10 +18,10 @@
     }
   },
   "Brand": {
-    "name": "HUNTROY",
+    "name": "HUNTERY",
     "endorsement": "by Die Jagdbrüder",
     "tagline": "Dein Marktplatz für Jagdgelegenheiten",
-    "homeLabel": "Huntroy by Die Jagdbrüder, zur Startseite",
+    "homeLabel": "Huntery by Die Jagdbrüder, zur Startseite",
     "claim": "Klare Linien. Wilde Freiheit.",
     "shop": "Die Jagdbrüder Shop",
     "shopLabel": "Die Jagdbrüder Shop (externe Seite)"
@@ -34,7 +34,7 @@
     "searchButton": "Finden",
     "create": "Anzeige aufgeben",
     "favorites": "Merkliste",
-    "account": "Mein Huntroy",
+    "account": "Mein Huntery",
     "messages": "Nachrichten",
     "signIn": "Anmelden",
     "signOut": "Abmelden",
@@ -101,7 +101,7 @@
   },
   "Welcome": {
     "metaTitle": "Willkommen",
-    "title": "Willkommen bei Huntroy",
+    "title": "Willkommen bei Huntery",
     "intro": "Richte dein Profil ein, bevor es weitergeht.",
     "accept": "Ich stimme den <terms>Nutzungsbedingungen</terms> zu und habe die <privacy>Datenschutzerklärung</privacy> gelesen.",
     "acceptRequired": "Bitte stimme den Nutzungsbedingungen zu, um fortzufahren.",
@@ -584,7 +584,7 @@
       "fix": "Im Schritt „{step}“ beheben",
       "notSubmittable": "Diese Anzeige ist in Prüfung oder veröffentlicht. Änderungen werden direkt gespeichert.",
       "weaponsTitle": "Hinweis: Waffen und Munition",
-      "weaponsText": "Huntroy vermittelt nur Jagdgelegenheiten. Waffen und Munition dürfen nicht angeboten werden. Bitte prüfe diese Stellen:",
+      "weaponsText": "Huntery vermittelt nur Jagdgelegenheiten. Waffen und Munition dürfen nicht angeboten werden. Bitte prüfe diese Stellen:",
       "weaponsMatch": "{field}: „{term}“",
       "weaponsSubmit": "Du kannst trotzdem absenden; die Moderation prüft die Anzeige.",
       "altText": "Alt-Text eines Fotos",
@@ -1080,7 +1080,7 @@
       "next": "Nächste Seite",
       "invalid": "Die Filter sind ungültig. Bitte prüfe deine Eingaben.",
       "failed": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
-      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Huntroy.",
+      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Huntery.",
       "queryTooLong": "Der Suchbegriff ist zu lang. Bitte verwende weniger Wörter."
     },
     "filters": {
@@ -1140,7 +1140,7 @@
       "paging": "Seiten",
       "first": "Zur ersten Seite",
       "next": "Nächste Seite",
-      "metaDescription": "Anzeigen von {name} auf Huntroy.",
+      "metaDescription": "Anzeigen von {name} auf Huntery.",
       "report": "Anbieter melden"
     }
   },
@@ -1458,25 +1458,25 @@
       "session": {
         "name": "Anmeldesitzung (sb-…-auth-token)",
         "purpose": "Hält dich angemeldet. Wird erst bei der Anmeldung gesetzt.",
-        "provider": "Huntroy (eigener Dienst, betrieben bei Supabase in der EU)",
+        "provider": "Huntery (eigener Dienst, betrieben bei Supabase in der EU)",
         "duration": "Bis zu 400 Tage; beim Abmelden entfernt"
       },
       "pkce": {
         "name": "Anmeldeprüfung (sb-…-code-verifier)",
         "purpose": "Schützt eine Anmeldung vor Manipulation (Prüfwert je Anmeldevorgang und eine Liste offener Vorgänge).",
-        "provider": "Huntroy (eigener Dienst, betrieben bei Supabase in der EU)",
+        "provider": "Huntery (eigener Dienst, betrieben bei Supabase in der EU)",
         "duration": "Entfernt nach Abschluss der Anmeldung, spätestens beim Abmelden"
       },
       "map": {
         "name": "Karte",
         "purpose": "Zeigt Anzeigen auf einer Karte. Die Kartendaten kommen von unserem eigenen Server.",
-        "provider": "Huntroy (eigener Dienst)",
+        "provider": "Huntery (eigener Dienst)",
         "duration": "Speichert nichts"
       }
     },
     "noThirdParties": "Die Website lädt keine Inhalte von Dritten: keine Werbung, keine Analyse, keine fremden Schriften oder Karten.",
     "banner": {
-      "title": "Cookies bei Huntroy",
+      "title": "Cookies bei Huntery",
       "text": "Neben den unbedingt erforderlichen Speichern möchten wir optionale Cookies nutzen. Sie laufen nur mit deiner Einwilligung. Deine Wahl kannst du jederzeit in den Cookie-Einstellungen ändern.",
       "reject": "Alle ablehnen",
       "accept": "Alle akzeptieren"
@@ -1484,7 +1484,7 @@
   },
   "Sources": {
     "title": "Datenquellen",
-    "intro": "Referenz- und Kartendaten, die Huntroy nutzt, mit ihren Lizenzen und Pflichtvermerken.",
+    "intro": "Referenz- und Kartendaten, die Huntery nutzt, mit ihren Lizenzen und Pflichtvermerken.",
     "website": "Website",
     "licenseLink": "Lizenz: {license}",
     "items": {

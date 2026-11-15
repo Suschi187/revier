@@ -10,7 +10,7 @@ import "./globals.css";
 // je Sprache mit eigenem lang-Attribut, die Default-Locale zuerst.
 
 export const metadata: Metadata = {
-  title: "404 | Huntroy",
+  title: "404 | Huntery",
 };
 
 export default async function GlobalNotFound() {
@@ -32,7 +32,7 @@ export default async function GlobalNotFound() {
       <body className="min-h-full flex flex-col bg-offwhite text-forest">
         <main id="main" className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
           <div className={`${ui.card} flex flex-col items-center px-5 py-10 text-center sm:px-10`}>
-          <a href={`/${routing.defaultLocale}`} aria-label="Huntroy">
+          <a href={`/${routing.defaultLocale}`} aria-label="Huntery">
             <LogoMark size={48} />
           </a>
           <p className="mt-3 font-display text-6xl font-extrabold leading-none text-brand-ink" aria-hidden="true">

@@ -1,13 +1,13 @@
-# DESIGN – Huntroy by Die Jagdbrüder
+# DESIGN – Huntery by Die Jagdbrüder
 
 Stand 2026-11-14: M10a Schritte 1 bis 8 umgesetzt, alle Seiten im Markenstil, Styleguide unter `/[locale]/styleguide` (nur lokal und Staging). Werte für iOS siehe Abschnitt 9.
 Grundlage für Web und später iOS (I1 bis I7). Quellen: `design/` (Designsystem, Logo Die Jagdbrüder, Shop-Beispiele) und SPEC M10a.
 
 ## 1. Briefing
 
-**Marke:** Huntroy ist eine **eigene Marke mit eigenem Logo** aus der Markenfamilie **Die Jagdbrüder**. Absender immer sichtbar: *HUNTROY by Die Jagdbrüder*.
+**Marke:** Huntery ist eine **eigene Marke mit eigenem Logo** aus der Markenfamilie **Die Jagdbrüder**. Absender immer sichtbar: *HUNTERY by Die Jagdbrüder*.
 
-**Name (Entscheidung 2026-11-15):** *Huntroy* statt *Reviro* (Reviro ist vergeben). Der Name ist englisch und in allen Sprachen gleich; damit er in cs und pl verständlich ist, steht daneben eine Unterzeile je Sprache (`Brand.tagline`, Eyebrow im Kopfbereich der Startseite): de *Dein Marktplatz für Jagdgelegenheiten*, en *Hunting Opportunities & Classifieds*, cs *Lovecké nabídky a inzerce*, pl *Ogłoszenia i oferty łowieckie*. Markenrecherche und Domain für *Huntroy* sind Sache des Menschen (SPEC 7.1).
+**Name (Entscheidung 2026-11-15):** *Huntery* (zuerst *Reviro*, vergeben; dann kurz *Huntroy*, am selben Tag durch *Huntery* ersetzt). Der Name ist englisch und in allen Sprachen gleich; damit er in cs und pl verständlich ist, steht daneben eine Unterzeile je Sprache (`Brand.tagline`, Eyebrow im Kopfbereich der Startseite): de *Dein Marktplatz für Jagdgelegenheiten*, en *Hunting Opportunities & Classifieds*, cs *Lovecké nabídky a inzerce*, pl *Ogłoszenia i oferty łowieckie*. Markenrecherche und Domain für *Huntery* sind Sache des Menschen (SPEC 7.1).
 Vom Shop übernommen werden Farben, Schriften, Bildsprache und Tonalität (*Authentisch. Modern. Naturverbunden.*). Das Hirschkopf-Logo bleibt der Dachmarke vorbehalten.
 
 **Bedienung:** wie ein großes Kleinanzeigen-Portal. Suchfeld mit „Was?“ und „Wo?“ im Kopf, „Anzeige aufgeben“ immer sichtbar, Kategorien als Einstieg, Ergebnisliste mit Filtern links, Detailseite mit Kontaktbox rechts. Übernommen werden nur diese allgemein üblichen Bedienmuster. Farben, Logo, Icons, Schriften und Texte fremder Portale werden nicht übernommen. Vor Abschluss prüft ein Mensch auf zu große Ähnlichkeit (SPEC M10a, Leitprinzip).
@@ -133,7 +133,7 @@ Wildarten-Icons: 13 Zeichnungen für 15 Wildarten. Sikawild nutzt Rotwild, „So
 
 ## 4. Logo: L1 Geweih-Pin (gewählt 2026-11-12)
 
-Kartenmarker in Marken-Orange `#FF914D` mit ausgespartem Geweih und Kopf. Die Wortmarke HUNTROY ist in Montserrat Black gesetzt (Waldgrün, auf Dunkel Offwhite), darunter steht „BY DIE JAGDBRÜDER“ in Montserrat Bold mit 0.2em Laufweite (Oliv, auf Dunkel Orange).
+Kartenmarker in Marken-Orange `#FF914D` mit ausgespartem Geweih und Kopf. Die Wortmarke HUNTERY ist in Montserrat Black gesetzt (Waldgrün, auf Dunkel Offwhite), darunter steht „BY DIE JAGDBRÜDER“ in Montserrat Bold mit 0.2em Laufweite (Oliv, auf Dunkel Orange).
 - Umsetzung: `web/components/brand/Logo.tsx` (`LogoMark`, `Logo`), App-Icon `web/app/icon.svg` (Pin auf Waldgrün)
 - Die Aussparung nimmt die Hintergrundfarbe an (Offwhite auf hellem, Waldgrün auf dunklem Grund)
 - Mindestgröße: Bildmarke 24 px, Lockup 120 px breit. Schutzraum: halbe Pin-Breite rundum
@@ -153,7 +153,7 @@ Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe 
 
 1. ~~Markenfotos~~ entschieden 2026-11-15: eigene Illustrationen statt Fotos (Abschnitt 11). Jäger mit Büchse und Trophäen dürfen gezeigt werden.
 2. ~~Ob `design/` ins Repo soll (rund 14 MB PNG)~~ entschieden 2026-11-15: bleibt im Repo. Rechtevermerk für die Shop-Beispielbilder fehlt noch (QA F8).
-3. Name: *Huntroy* gewählt 2026-11-15 (Reviro vergeben); Markenrecherche und Domain offen (SPEC 7.1). cs/pl-Texte (Unterzeile, Claim) von Muttersprachlern prüfen.
+3. Name: *Huntery* gewählt 2026-11-15 (Reviro vergeben, Huntroy verworfen); Markenrecherche und Domain offen (SPEC 7.1). cs/pl-Texte (Unterzeile, Claim) von Muttersprachlern prüfen.
 4. ~~Claim in der Leiste oben (QA F2)~~ entschieden 2026-11-15: „Klare Linien. Wilde Freiheit.“ (SPEC-Kandidat), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dort in eine zweite Zeile. Offen bleibt nur die Prüfung der cs/pl-Fassung durch Muttersprachler (mit Punkt 3).
 
 5. VoiceOver-Durchgang von Hand (Checkliste in Abschnitt 10); die automatische Vorprüfung ist grün.
@@ -166,8 +166,8 @@ Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Anrede „Du“ in de, 
 |---|---|---|---|
 | Montserrat | Julieta Ulanovsky u. a. | SIL OFL 1.1 | `web/public/static/fonts/Montserrat-OFL.txt` |
 | Inter | Rasmus Andersson | SIL OFL 1.1 | `web/public/static/fonts/Inter-OFL.txt` |
-| Huntroy-Logo L1 | eigene Gestaltung im Projekt | Projekt / Die Jagdbrüder | umgesetzt, Reinzeichnung offen |
-| Hirschkopf Die Jagdbrüder | Die Jagdbrüder | Eigentum der Marke | nur Referenz, nicht im Huntroy-Logo |
+| Huntery-Logo L1 | eigene Gestaltung im Projekt | Projekt / Die Jagdbrüder | umgesetzt, Reinzeichnung offen |
+| Hirschkopf Die Jagdbrüder | Die Jagdbrüder | Eigentum der Marke | nur Referenz, nicht im Huntery-Logo |
 | Illustrationen (Banner, Kategoriebilder, Vorschaubild) | eigene Zeichnung, `web/scripts/illustrations.mjs` | Projekt | umgesetzt (Abschnitt 11) |
 | Höhenlinien-Muster, Kategorie- und UI-Icons | eigene Zeichnung | Projekt | umgesetzt |
 | Inter-Teilmenge `inter-czech-wght-normal.v1.woff2` | aus Inter (Latin Extended) geschnitten | SIL OFL 1.1 (kein Reserved Font Name) | `pyftsubset inter-latin-ext-wght-normal.v1.woff2 --unicodes="U+010C-010D,U+0160-0161" --flavor=woff2 --layout-features='*' --name-IDs='*'` (fonttools 4.55) |

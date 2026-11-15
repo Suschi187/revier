@@ -302,15 +302,15 @@ Jeder Schritt endet mit Build, Tests, Changelog-Eintrag. Die Reihenfolge ist **W
 
 *M10a GUI/UX-Design (Web): Marktplatz im Markenauftritt von Die Jagdbrüder**
 
-Ziel: Huntroy erscheint als Teil der Marke **Die Jagdbrüder** und fühlt sich wie der bestehende Webshop an (Authentisch. Modern. Naturverbunden.), bedient sich aber wie ein Marktplatz: suchen, vergleichen, inserieren, schreiben. Einheitliche Gestaltung, Barrierefreiheit und Lesbarkeit in allen vier Sprachen. Läuft nach M9 und vor dem Web-Release (M10). Die Ergebnisse dienen später als Vorlage für die iOS-App (I1 bis I7).
+Ziel: Huntery erscheint als Teil der Marke **Die Jagdbrüder** und fühlt sich wie der bestehende Webshop an (Authentisch. Modern. Naturverbunden.), bedient sich aber wie ein Marktplatz: suchen, vergleichen, inserieren, schreiben. Einheitliche Gestaltung, Barrierefreiheit und Lesbarkeit in allen vier Sprachen. Läuft nach M9 und vor dem Web-Release (M10). Die Ergebnisse dienen später als Vorlage für die iOS-App (I1 bis I7).
 
-Markenzeile: **HUNTROY** mit Unterzeile je Sprache (DESIGN.md 1) und Label *by Die Jagdbrüder*. Claim-Kandidaten: *Klare Linien. Wilde Freiheit.* oder Überschriften im Stil des Shops (z. B. *FINDE DEIN REVIER.*). Namensrecherche (SPEC 7.1) ist Voraussetzung für Logo und Domain.
+Markenzeile: **HUNTERY** mit Unterzeile je Sprache (DESIGN.md 1) und Label *by Die Jagdbrüder*. Claim-Kandidaten: *Klare Linien. Wilde Freiheit.* oder Überschriften im Stil des Shops (z. B. *FINDE DEIN REVIER.*). Namensrecherche (SPEC 7.1) ist Voraussetzung für Logo und Domain.
 
 **Verbindliche Designvorgaben (aus dem Webshop der Marke, vom Menschen bestätigt)**
 
 | Element | Festlegung |
 |---|---|
-| Markenpositionierung | Authentisch. Modern. Naturverbunden. (Shop: Hunting Streetwear × Outdoor Lifestyle; Huntroy: Marktplatz für Jagdgelegenheiten) |
+| Markenpositionierung | Authentisch. Modern. Naturverbunden. (Shop: Hunting Streetwear × Outdoor Lifestyle; Huntery: Marktplatz für Jagdgelegenheiten) |
 | Logo | Original-Hirschkopf der Marke beibehalten, orange; Wortmarke dunkelgrün |
 | Header | Offwhite, Wortmarke dunkelgrün mit orangem Hirschkopf, Hauptnavigation in Großbuchstaben, schmale dunkelgrüne Leiste darüber mit Claim und Links |
 | Hauptfarben | Waldgrün, Sand, Offwhite |
@@ -326,14 +326,14 @@ Markenzeile: **HUNTROY** mit Unterzeile je Sprache (DESIGN.md 1) und Label *by D
 - Name freigegeben nach Markenrecherche (SPEC 7.1); bis dahin Arbeitsname
 - Logo (Hirschkopf) als SVG, Farbwerte, Schriftschnitte
 - Dunkelmodus: im ersten Stand **nein** (die Marke lebt von hellen Flächen mit dunkelgrünen Akzenten)
-- Ansprache: Marke spricht im Shop mit "Du"; für Huntroy Du als Grundton in Deutsch vorgesehen; Tschechisch und Polnisch von Muttersprachlern festlegen lassen; bei Pacht, Rechtsseiten und Hinweisen sachlich formulieren
+- Ansprache: Marke spricht im Shop mit "Du"; für Huntery Du als Grundton in Deutsch vorgesehen; Tschechisch und Polnisch von Muttersprachlern festlegen lassen; bei Pacht, Rechtsseiten und Hinweisen sachlich formulieren
 - Nutzungsrechte der Markenfotos (auch KI-generierte Bilder) und Vermeidung erkennbarer Fremdmarken im Bild (z. B. Fahrzeugschriftzug)
 
 **Leitprinzip**
 Der Auftritt kommt aus der eigenen Marke. Bei den Marktplatz-Bedienmustern (Suchfeld oben, Listenkarten, Kontaktbox) orientieren wir uns an allgemein üblichen Mustern, übernehmen aber **nicht** Farben, Logo, Schrift, Icons, Bilder oder Texte fremder Portale (insbesondere Kleinanzeigen, eBay). Ein Mensch prüft Startseite, Liste und Detailseite vor Abschluss auf zu große Ähnlichkeit. Lizenz jeder Schrift, jedes Icons und jedes Bildes steht in `docs/DESIGN.md` (Montserrat und Inter sind offen lizenziert, SIL OFL; trotzdem Lizenztext ablegen).
 
 **Schritt 1: Brand-Übertragung statt Entwurfsvarianten**
-- `docs/DESIGN.md` mit den Vorgaben oben, Farbwerten, Typografie-Skala, Logo-Verwendung (Schutzraum, Mindestgröße, Verhalten auf dunklem und hellem Grund, Lockup *HUNTROY by Die Jagdbrüder*)
+- `docs/DESIGN.md` mit den Vorgaben oben, Farbwerten, Typografie-Skala, Logo-Verwendung (Schutzraum, Mindestgröße, Verhalten auf dunklem und hellem Grund, Lockup *HUNTERY by Die Jagdbrüder*)
 - Ein Entwurf der **Startseite** und der **Anzeigenkarte** im Markenstil; der Mensch gibt frei. Varianten nur für marktplatzspezifische Teile (z. B. Kategorie-Kacheln, Kontaktbox)
 - Stilmerkmale des Shops, die übertragen werden: dunkelgrüne Leiste oben, Offwhite-Header, Großbuchstaben-Überschriften mit Punkt am Ende, kleine orange Überschrift (Eyebrow) über dem Titel, vollflächiges Foto im Kopfbereich mit Text links und orangem Button mit Pfeil, Offwhite-Abschnitte, quadratische Bildkarten mit Name und Preis darunter, Link "Alle … →"
 - Bildsprache: Natur, Revier, Hochsitz, Jagdhund, Gemeinschaft; keine Trophäen- oder Schussbilder auf Start- und Kategorieseiten *(geändert 2026-11-15: eigene Illustrationen; Jäger mit Büchse und Trophäen erlaubt, siehe DESIGN.md 8 und 11)*
@@ -397,7 +397,7 @@ Der Auftritt kommt aus der eigenen Marke. Bei den Marktplatz-Bedienmustern (Such
 - Lighthouse oder gleichwertige Messung mit vorab festgelegten Zielwerten auf Start-, Listen- und Detailseite
 - `docs/DESIGN.md` vollständig, Tokens für iOS übernehmbar
 
-*Nicht enthalten:* finales Huntroy-Logo und App-Icon (eigener Auftrag, abhängig von Namensfreigabe), Anbindung an den Shop, Marketingseiten, iOS-Oberfläche (kommt in I1 bis I7).
+*Nicht enthalten:* finales Huntery-Logo und App-Icon (eigener Auftrag, abhängig von Namensfreigabe), Anbindung an den Shop, Marketingseiten, iOS-Oberfläche (kommt in I1 bis I7).
 
 
 **M10 Web-Release**
@@ -437,7 +437,7 @@ Der Auftritt kommt aus der eigenen Marke. Bei den Marktplatz-Bedienmustern (Such
 **Phase 2:** Bewertungen, bezahlte Hervorhebungen (Regeln für In-App-Käufe und Web-Zahlungen prüfen), CZ/PL-Regionendaten vollständig, CH, Anzeigen-Übersetzungshilfe, Browser-Push. **Android ist nicht geplant.**
 
 ## 7. Offene Entscheidungen (bitte vor M1/M3 klären)
-1. **Name und Domain** (Name *Huntroy* gewählt 2026-11-15, Reviro war vergeben; Markenrecherche und Domain offen), Bundle-ID, Entwickler-Account (Privatperson oder Firma). *Blockiert:* Sign in with Apple (Web ist eingebaut, aber ausgeschaltet) und das Supabase-Cloud-Projekt (ADR 002).
+1. **Name und Domain** (Name *Huntery* gewählt 2026-11-15, Reviro war vergeben, Huntroy verworfen; Markenrecherche und Domain offen), Bundle-ID, Entwickler-Account (Privatperson oder Firma). *Blockiert:* Sign in with Apple (Web ist eingebaut, aber ausgeschaltet) und das Supabase-Cloud-Projekt (ADR 002).
 2. **Anwaltliche Prüfung:** Zulässigkeit der Vermittlung je Land, besonders Trophäenjagd und Gastjagd in CZ/PL; Haftungsausschluss; Pflichtangaben je Anzeigenart; Impressumspflicht und DSA-Pflichten für die Web-Plattform Außerdem: ODbL der PLZ-Daten aus OpenStreetMap, ob die Produktdatenbank als Sammlung (Collective Database) gilt und die Anzeigen nicht unter Share-Alike fallen (ADR 012). Ebenso die Basiskarte aus OpenStreetMap (ODbL), die als Datei öffentlich abrufbar ist (ADR 016).
    - **Anbieterangaben gewerblicher Konten (DSA, v0.7):** Welche Angaben muss ein gewerblicher Anbieter nach DSA (Art. 30 Nachverfolgbarkeit, Art. 31) hinterlegen und öffentlich zeigen (Name, Anschrift, Kontakt, Register), und wie prüft die Plattform sie? Heute zeigt das Profil nur Firmenname, Land und das Badge.
    - **Begründung von Entfernungen per E-Mail (DSA Art. 17, v0.7):** Reicht die Begründung im Konto, oder muss jede Entfernung, Ablehnung und Sperre zusätzlich per E-Mail begründet werden (Inhalt, Frist, Hinweis auf Rechtsbehelf)?

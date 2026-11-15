@@ -24,8 +24,8 @@ if (!KEY) {
 const API = KEY.endsWith(":fx") ? "https://api-free.deepl.com" : "https://api.deepl.com";
 /** Ziel → Quelldatei und Glossarspalten (| Code | en | de | cs | pl | Status |). */
 const TARGETS = {
-  cs: { source: "de", from: 3, to: 4, context: "Oberfläche von Huntroy, einem Online-Marktplatz für Jagdgelegenheiten. Den Nutzer duzen (ty), nie siezen. Kurz halten. Rechts- und Sicherheitshinweise sachlich." },
-  pl: { source: "en", from: 2, to: 5, context: "User interface of Huntroy, an online marketplace for hunting opportunities. Address the user informally (ty). Keep texts short. Legal and safety notes stay factual." },
+  cs: { source: "de", from: 3, to: 4, context: "Oberfläche von Huntery, einem Online-Marktplatz für Jagdgelegenheiten. Den Nutzer duzen (ty), nie siezen. Kurz halten. Rechts- und Sicherheitshinweise sachlich." },
+  pl: { source: "en", from: 2, to: 5, context: "User interface of Huntery, an online marketplace for hunting opportunities. Address the user informally (ty). Keep texts short. Legal and safety notes stay factual." },
 };
 // Eigennamen, der Namenszusatz (SPEC M10a Schritt 5, je Sprache von Hand), Sprachnamen in eigener Sprache, Schriftproben
 // und der OSM-Pflichtvermerk (HTML) bleiben, wie sie sind.
@@ -148,7 +148,7 @@ for (const [target, config] of Object.entries(TARGETS)) {
 
   const entries = glossaryEntries(config);
   const glossary = entries
-    ? await deepl("/v2/glossaries", { name: `huntroy-${config.source}-${target}`, source_lang: config.source, target_lang: target, entries, entries_format: "tsv" })
+    ? await deepl("/v2/glossaries", { name: `huntery-${config.source}-${target}`, source_lang: config.source, target_lang: target, entries, entries_format: "tsv" })
     : null;
   let translated;
   try {

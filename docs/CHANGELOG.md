@@ -2,6 +2,20 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Name Huntery statt Huntroy – 2026-11-15
+
+Entscheidung des Menschen: Der Name lautet *Huntery*. Unterzeilen je Sprache, Claim und Logo bleiben.
+
+### Geändert
+- Alle Texte in de/en/cs/pl (Wortmarke, Seitentitel, „Mein Huntery“, Cookie-Banner, Vorschaubild-Alt-Text …), DeepL-Overrides und -Kontext, globale 404-Seite, E2E-Test, `DESIGN.md`, `SPEC.md`. Frühere Changelog-Einträge bleiben, wie sie waren.
+
+### Offen
+- Markenrecherche und Domain für *Huntery* (SPEC 7.1, Mensch).
+- E-Mail-Texte nennen noch „Revier“ (siehe Eintrag „Namensreste“).
+
+### Wie testen
+- Kopf, Fußzeile und Tab-Titel auf `/de`, `/cs`, `/pl` ansehen; `m10a-text.spec.ts` (360 px, keine Überbreite) grün.
+
 ## Namensreste „Revier“ im Web – 2026-11-15
 
 ### Behoben

@@ -1,8 +1,8 @@
 {
   "Metadata": {
-    "siteName": "Huntroy",
+    "siteName": "Huntery",
     "siteDescription": "Marketplace for hunting opportunities in Germany, Austria, Switzerland, Czechia and Poland.",
-    "ogImageAlt": "Huntroy logo in front of a high seat at sunrise with a red deer stag, a hunter and a dog"
+    "ogImageAlt": "Huntery logo in front of a high seat at sunrise with a red deer stag, a hunter and a dog"
   },
   "HomePage": {
     "metaTitle": "Hunting opportunities in Central Europe",
@@ -18,10 +18,10 @@
     }
   },
   "Brand": {
-    "name": "HUNTROY",
+    "name": "HUNTERY",
     "endorsement": "by Die Jagdbrüder",
     "tagline": "Hunting Opportunities & Classifieds",
-    "homeLabel": "Huntroy by Die Jagdbrüder, home",
+    "homeLabel": "Huntery by Die Jagdbrüder, home",
     "claim": "Clear lines. Wild freedom.",
     "shop": "Die Jagdbrüder shop",
     "shopLabel": "Die Jagdbrüder shop (external site)"
@@ -34,7 +34,7 @@
     "searchButton": "Search",
     "create": "Post a listing",
     "favorites": "Saved",
-    "account": "My Huntroy",
+    "account": "My Huntery",
     "messages": "Messages",
     "signIn": "Sign in",
     "signOut": "Sign out",
@@ -101,7 +101,7 @@
   },
   "Welcome": {
     "metaTitle": "Welcome",
-    "title": "Welcome to Huntroy",
+    "title": "Welcome to Huntery",
     "intro": "Set up your profile before you continue.",
     "accept": "I accept the <terms>terms of use</terms> and have read the <privacy>privacy policy</privacy>.",
     "acceptRequired": "Please accept the terms of use to continue.",
@@ -584,7 +584,7 @@
       "fix": "Fix in step “{step}”",
       "notSubmittable": "This listing is in review or published. Changes are saved directly.",
       "weaponsTitle": "Note: firearms and ammunition",
-      "weaponsText": "Huntroy only arranges hunting opportunities. Firearms and ammunition must not be offered. Please check these passages:",
+      "weaponsText": "Huntery only arranges hunting opportunities. Firearms and ammunition must not be offered. Please check these passages:",
       "weaponsMatch": "{field}: “{term}”",
       "weaponsSubmit": "You can still submit; the moderation team will check the listing.",
       "altText": "Alt text of a photo",
@@ -1080,7 +1080,7 @@
       "next": "Next page",
       "invalid": "The filters are invalid. Please check your input.",
       "failed": "The listings could not be loaded. Please try again later.",
-      "metaDescription": "{title}: current offers and requests on Huntroy.",
+      "metaDescription": "{title}: current offers and requests on Huntery.",
       "queryTooLong": "The search term is too long. Please use fewer words."
     },
     "filters": {
@@ -1140,7 +1140,7 @@
       "paging": "Pages",
       "first": "Go to first page",
       "next": "Next page",
-      "metaDescription": "Listings by {name} on Huntroy.",
+      "metaDescription": "Listings by {name} on Huntery.",
       "report": "Report this provider"
     }
   },
@@ -1458,25 +1458,25 @@
       "session": {
         "name": "Sign-in session (sb-…-auth-token)",
         "purpose": "Keeps you signed in. Set only when you sign in.",
-        "provider": "Huntroy (own service, operated on Supabase in the EU)",
+        "provider": "Huntery (own service, operated on Supabase in the EU)",
         "duration": "Up to 400 days; removed when you sign out"
       },
       "pkce": {
         "name": "Sign-in check (sb-…-code-verifier)",
         "purpose": "Protects a sign-in against tampering (verifier per sign-in and a list of open sign-ins).",
-        "provider": "Huntroy (own service, operated on Supabase in the EU)",
+        "provider": "Huntery (own service, operated on Supabase in the EU)",
         "duration": "Removed after the sign-in completes, at the latest when you sign out"
       },
       "map": {
         "name": "Map",
         "purpose": "Shows listings on a map. Map data is loaded from our own server.",
-        "provider": "Huntroy (own service)",
+        "provider": "Huntery (own service)",
         "duration": "Stores nothing"
       }
     },
     "noThirdParties": "The website loads no content from third parties: no advertising, no analytics, no external fonts or maps.",
     "banner": {
-      "title": "Cookies on Huntroy",
+      "title": "Cookies on Huntery",
       "text": "Besides the strictly necessary storage, we would like to use optional cookies. They only run with your consent. You can change your choice at any time in the cookie settings.",
       "reject": "Reject all",
       "accept": "Accept all"
@@ -1484,7 +1484,7 @@
   },
   "Sources": {
     "title": "Data sources",
-    "intro": "Reference and map data used by Huntroy, with their licences and required notices.",
+    "intro": "Reference and map data used by Huntery, with their licences and required notices.",
     "website": "Website",
     "licenseLink": "Licence: {license}",
     "items": {

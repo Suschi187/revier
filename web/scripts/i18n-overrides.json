@@ -3,7 +3,7 @@
   "cs": {
     "Auth.login.otherEmail": "Použij jinou e-mailovou adresu nebo si vyžádej nový e-mail",
     "Welcome.metaTitle": "Vítej",
-    "Welcome.title": "Vítej v Huntroy",
+    "Welcome.title": "Vítej v Huntery",
     "Welcome.acceptRequired": "Chceš-li pokračovat, souhlas prosím s podmínkami použití.",
     "Legal.guidelines.sections[3].points[0]": "V textu inzerátu neuváděj telefonní čísla, e-mailové adresy ani odkazy. Kontakt probíhá přes chat.",
     "Legal.guidelines.sections[3].points[1]": "Neuváděj přesné souřadnice honiteb ani osobní údaje jiných osob.",
@@ -153,7 +153,7 @@
     "Cookies.kinds.sessionStorage": "Úložiště relace",
     "Cookies.kinds.cache": "Mezipaměť (Cache Storage)",
     "Cookies.kinds.none": "Bez úložiště",
-    "Cookies.banner.title": "Cookies na Huntroy",
+    "Cookies.banner.title": "Cookies na Huntery",
     "Cookies.banner.reject": "Odmítnout vše",
     "Cookies.banner.accept": "Přijmout vše",
     "Sources.items.bkg.license": "dl-de/by-2-0",
@@ -217,8 +217,8 @@
     "SavedSearches.save.signIn": "Přihlas se a ulož si toto hledání",
     "Brand.claim": "Jasné linie. Divoká svoboda.",
     "Header.skipToContent": "Přejít na obsah",
-    "Metadata.ogImageAlt": "Logo Huntroy před posedem v ranním světle, k tomu jelen, myslivec a pes",
-    "Public.provider.metaDescription": "Inzeráty uživatele {name} na Huntroy."
+    "Metadata.ogImageAlt": "Logo Huntery před posedem v ranním světle, k tomu jelen, myslivec a pes",
+    "Public.provider.metaDescription": "Inzeráty uživatele {name} na Huntery."
   },
   "pl": {
     "Public.detail.safety1": "Nigdy nie płać z góry bez pisemnej umowy",
@@ -393,6 +393,6 @@
     "Admin.review.photoRule": "Sprawdź zdjęcia: jeśli któreś przedstawia upolowaną zwierzynę, odrzuć ogłoszenie z powodem „Zdjęcie przedstawia upolowaną zwierzynę”.",
     "Legal.guidelines.sections[1].points[3]": "Bez zdjęć upolowanej zwierzyny (na przykład pokotu po polowaniu albo trofeum na tuszy). Ogłoszenia z takimi zdjęciami odrzucamy.",
     "Header.skipToContent": "Przejdź do treści",
-    "Metadata.ogImageAlt": "Logo Huntroy na tle ambony o świcie, obok jeleń, myśliwy i pies"
+    "Metadata.ogImageAlt": "Logo Huntery na tle ambony o świcie, obok jeleń, myśliwy i pies"
   }
 }
