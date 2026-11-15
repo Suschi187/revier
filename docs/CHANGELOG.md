@@ -6,6 +6,7 @@ Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannt
 
 ### Geändert (nur Dokumentation)
 - Neu `docs/plans/M10-plan.md`: Entscheidungen E1–E9 (Inhaber, Domain, Hosting, Kartendatei, Mail-Anbieter, Supabase-Plan, Monitoring, Stage, Testnutzer) mit Vorschlag und Arbeitspakete 1–16.
+- Entschieden 2026-11-15: Mail über United Domains (SMTP, Edge Functions per SMTPS auf Port 465); Domain genannt „hunter.de“, Schreibweise offen.
 - Neu `docs/WEB-RELEASE.md`: Release-Checkliste (Akzeptanz M10) mit allen Cloud- und M10-Auflagen aus ADR 002, 005, 006, 010, 011, 014–022.
 
 ## Name Huntery in internen Texten – 2026-11-15

@@ -6,7 +6,8 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Inhaber der Konten festgelegt (privat oder Firma) und alle AVVs abgeschlossen (Hoster, Supabase, Mail, Monitoring)
 - [ ] Markenrecherche *Huntery* abgeschlossen, Domain registriert (SPEC 7.1)
 - [ ] Hoster gewählt, EU-Region (SPEC 7.9)
-- [ ] Mail-Anbieter gewählt, EU, HTTP-API, Tracking aus (SPEC 7.11)
+- [x] Mail-Anbieter gewählt: United Domains (2026-11-15, SPEC 7.11)
+- [ ] United Domains: AVV abgeschlossen, Versandlimit je Stunde/Tag bekannt, Absenderadresse angelegt
 - [ ] Rechtstexte (AGB, Datenschutz, Impressum, Richtlinien) vom Anwalt geliefert und eingesetzt; offene Fragen aus SPEC 7.2 beantwortet, inkl. Melden ohne Konto (ADR 020)
 - [ ] cs/pl-Texte von Muttersprachlern geprüft (Claim, Unterzeile, Glossar)
 - [ ] Markenfotos/Illustrationen: Rechte geklärt (DESIGN.md 7), Rechtevermerk für `design/` (QA F8)
@@ -35,7 +36,7 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Sign in with Apple nur, wenn Apple-Konto steht; sonst `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`
 
 ## D. E-Mail
-- [ ] HTTP-Adapter des Anbieters hinter `Mailer`, SMTP bleibt für Mailpit (ADR 017)
+- [ ] SMTPS-Adapter (United Domains, Port 465) hinter `Mailer`, aus einer Cloud-Function erfolgreich gesendet; Klartext-SMTP nur für Mailpit (ADR 017)
 - [ ] SPF, DKIM, DMARC; DKIM signiert `List-Unsubscribe` und `List-Unsubscribe-Post` (ADR 018)
 - [ ] Öffnungs- und Klick-Tracking beim Anbieter aus
 - [ ] Je Sprache Anmeldung, Chat-, Suchauftrags-, Moderations- und Konto-Mail auf Stage empfangen, Absender „Huntery“
