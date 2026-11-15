@@ -2,6 +2,16 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## ADR 022 K7: Sprachwechsel mit geprüfter Filter-Query – 2026-11-15
+
+### Geändert
+- Beim Sprachwechsel (Sprachwahl im Kopf und `/api/locale` ohne JavaScript) wird die Query nicht mehr roh übernommen, sondern aus den geprüften Filtern neu gebaut: `utm_*`, ungültige Werte und die Blätter-Position (`cursor`) fallen weg; Filter, die der Pfad festlegt (Art, Region), stehen nicht doppelt in der Query. Suchtext und Kartenansicht bleiben.
+
+### Testen
+- `cd web && npx vitest run lib/public/locale-switch.test.ts` (9)
+- `cd web && npx playwright test e2e/qa-m5.spec.ts e2e/cookie-inventory.spec.ts e2e/public.spec.ts e2e/map.spec.ts` (54 grün)
+- Von Hand: `/de/suche?q=Bock&utm_source=x&view=map` öffnen, auf „English“ wechseln → `/en/search?q=Bock&view=map`.
+
 ## ADR 022 K6: COOP und browsing-topics – 2026-11-15
 
 ### Geändert

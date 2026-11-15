@@ -15,6 +15,20 @@ describe("Ziel des Sprachwechsels (ADR 015)", () => {
     expect(switchLocaleHref("/de/jagdpacht", `?q=${"a".repeat(1001)}`, "en")).toBe(switchLocaleHref("/de/jagdpacht", "", "en"));
   });
 
+  it("baut die Query aus den geprüften Filtern neu (ADR 022, K7)", () => {
+    // Fremde Parameter und die Blätter-Position fallen weg, Suchtext und Kartenansicht bleiben.
+    expect(switchLocaleHref("/de/suche", "?utm_source=x&q=Bock&cursor=abc&view=map", "en")).toBe("/en/search?q=Bock&view=map");
+    // Ungültige Werte fallen weg wie auf der Liste selbst.
+    expect(switchLocaleHref("/de/jagdpacht", "?cur=XYZ&sort=quatsch", "en")).toBe("/en/hunting-lease");
+    // Was der Pfad festlegt, steht nicht in der Query.
+    expect(switchLocaleHref("/de/jagdpacht/bayern", "?kind=permit&region=DE-BY&cur=EUR", "pl")).toBe("/pl/dzierzawa-obwodu/bayern?cur=EUR");
+    expect(switchLocaleHref("/de/jagdpacht", "?kind=permit", "en")).toBe("/en/hunting-lease");
+  });
+
+  it("führt überlange Pfade zur Startseite (der Parser kennt nur kurze Pfade, eine eigene Grenze braucht es nicht)", () => {
+    expect(switchLocaleHref(`/de/account/${"a".repeat(2001)}`, "", "en")).toBe("/en");
+  });
+
   it("tauscht auf anderen Seiten nur das Präfix, ohne Query", () => {
     expect(switchLocaleHref("/de/account/messages", "?a=1", "pl")).toBe("/pl/account/messages");
   });
