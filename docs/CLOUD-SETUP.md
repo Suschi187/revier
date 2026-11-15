@@ -41,7 +41,7 @@ Domain `huntery.de`, Absender `no-reply@huntery.de`. Platzhalter: `<domain>` (Pr
 2. Vercel-Projekt aus dem Repo, **Root Directory `web`**, Framework Next.js, Region aus `web/vercel.json` (fra1). Analytics, Speed Insights und Toolbar aus.
 3. Env je Umgebung (Production und Preview/Stage getrennt): `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (nur anon/publishable), `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`, `SITE_INDEXABLE` (nur Production `true`), `MAP_TILES_FILE=<datei>`, `MAP_TILES_ORIGIN=https://<ref>.supabase.co/storage/v1/object/public/tiles`, `SENTRY_DSN` (Projekt in der EU-Region, für Production und Preview). Die Umgebung in Sentry kommt aus `VERCEL_ENV` (`production` bzw. `preview`); `SENTRY_ENVIRONMENT` nur setzen, wenn ein anderer Name nötig ist.
 4. Domain `huntery.de` und `www.huntery.de` (Weiterleitung auf die Hauptdomain); DNS bei United Domains auf die Werte aus Vercel.
-5. Stage: Preview-Umgebung mit eigener Supabase und Zugangsschutz (Vercel Deployment Protection), `SITE_INDEXABLE=false`.
+5. Stage (Entscheidung 2026-11-15: **ein** Vercel-Projekt): Umgebung *Preview* mit den Werten von Huntery Stage, *Production* mit denen von Huntery Prod. Fester Branch `stage` mit der Domain `stage.huntery.de` (*Settings → Domains → Git Branch*), Deployment Protection „Standard“ (nur Team-Mitglieder), `SITE_INDEXABLE=false`. Production baut nur aus `main`.
 6. Nachweis nach dem Deploy:
    - `curl -s https://huntery.de/api/health` → `{"ok":true,"supabase":"ok"}`
    - `curl -sI https://huntery.de/de` → CSP, HSTS, X-Frame-Options
