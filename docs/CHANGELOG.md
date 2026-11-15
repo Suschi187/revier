@@ -2,6 +2,12 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Web-Release: Plan und Checkliste – 2026-11-15
+
+### Geändert (nur Dokumentation)
+- Neu `docs/plans/M10-plan.md`: Entscheidungen E1–E9 (Inhaber, Domain, Hosting, Kartendatei, Mail-Anbieter, Supabase-Plan, Monitoring, Stage, Testnutzer) mit Vorschlag und Arbeitspakete 1–16.
+- Neu `docs/WEB-RELEASE.md`: Release-Checkliste (Akzeptanz M10) mit allen Cloud- und M10-Auflagen aus ADR 002, 005, 006, 010, 011, 014–022.
+
 ## Name Huntery in internen Texten – 2026-11-15
 
 ### Geändert (nur Dokumentation und Kommentare)
