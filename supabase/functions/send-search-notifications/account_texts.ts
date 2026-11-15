@@ -116,9 +116,9 @@ type AccountTexts = {
 export const ACCOUNT_TEXTS: Record<Language, AccountTexts> = {
   en: {
     subject: {
-      verification_verified: "Your account on Revier is verified",
-      verification_rejected: "Your verification request on Revier was rejected",
-      verification_revoked: "Your verification on Revier was revoked",
+      verification_verified: "Your account on Huntery is verified",
+      verification_rejected: "Your verification request on Huntery was rejected",
+      verification_revoked: "Your verification on Huntery was revoked",
     },
     greeting: "Hello,",
     body: {
@@ -138,9 +138,9 @@ export const ACCOUNT_TEXTS: Record<Language, AccountTexts> = {
   },
   de: {
     subject: {
-      verification_verified: "Dein Konto auf Revier ist verifiziert",
-      verification_rejected: "Dein Antrag auf Verifizierung bei Revier wurde abgelehnt",
-      verification_revoked: "Deine Verifizierung auf Revier wurde widerrufen",
+      verification_verified: "Dein Konto auf Huntery ist verifiziert",
+      verification_rejected: "Dein Antrag auf Verifizierung bei Huntery wurde abgelehnt",
+      verification_revoked: "Deine Verifizierung auf Huntery wurde widerrufen",
     },
     greeting: "Hallo,",
     body: {
@@ -160,9 +160,9 @@ export const ACCOUNT_TEXTS: Record<Language, AccountTexts> = {
   },
   cs: {
     subject: {
-      verification_verified: "Tvůj účet na Revier je ověřený",
-      verification_rejected: "Tvoje žádost o ověření na Revier byla zamítnuta",
-      verification_revoked: "Tvoje ověření na Revier bylo odvoláno",
+      verification_verified: "Tvůj účet na Huntery je ověřený",
+      verification_rejected: "Tvoje žádost o ověření na Huntery byla zamítnuta",
+      verification_revoked: "Tvoje ověření na Huntery bylo odvoláno",
     },
     greeting: "Ahoj,",
     body: {
@@ -182,9 +182,9 @@ export const ACCOUNT_TEXTS: Record<Language, AccountTexts> = {
   },
   pl: {
     subject: {
-      verification_verified: "Twoje konto w Revier jest zweryfikowane",
-      verification_rejected: "Twój wniosek o weryfikację w Revier został odrzucony",
-      verification_revoked: "Twoja weryfikacja w Revier została cofnięta",
+      verification_verified: "Twoje konto w Huntery jest zweryfikowane",
+      verification_rejected: "Twój wniosek o weryfikację w Huntery został odrzucony",
+      verification_revoked: "Twoja weryfikacja w Huntery została cofnięta",
     },
     greeting: "Cześć,",
     body: {
@@ -426,16 +426,16 @@ type TrustTexts = {
 export const TRUST_TEXTS: Record<Language, TrustTexts> = {
   en: {
     subject: {
-      account_blocked: "Your account on Revier has been blocked",
-      account_unblocked: "Your account on Revier has been unblocked",
-      account_warned: "A warning for your account on Revier",
-      report_resolved: "Your report on Revier has been reviewed",
-      appeal_decided: "Decision on your challenge on Revier",
-      draft_expiry_notice: "Your draft on Revier will be deleted soon",
+      account_blocked: "Your account on Huntery has been blocked",
+      account_unblocked: "Your account on Huntery has been unblocked",
+      account_warned: "A warning for your account on Huntery",
+      report_resolved: "Your report on Huntery has been reviewed",
+      appeal_decided: "Decision on your challenge on Huntery",
+      draft_expiry_notice: "Your draft on Huntery will be deleted soon",
     },
     blocked:
       "your account has been blocked. You can no longer publish listings or write messages. You can still sign in, download your data, delete your account and challenge this decision.",
-    unblocked: "your account has been unblocked. You can use Revier as usual again.",
+    unblocked: "your account has been unblocked. You can use Huntery as usual again.",
     warned: "the team has issued a warning for your account. Please follow the content guidelines.",
     guidelines: "Content guidelines:",
     report: (target) => `your report about ${target} has been reviewed.`,
@@ -453,16 +453,16 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
   },
   de: {
     subject: {
-      account_blocked: "Dein Konto auf Revier wurde gesperrt",
-      account_unblocked: "Dein Konto auf Revier ist wieder entsperrt",
-      account_warned: "Eine Verwarnung für dein Konto auf Revier",
-      report_resolved: "Deine Meldung auf Revier wurde geprüft",
-      appeal_decided: "Entscheidung über deine Beschwerde auf Revier",
-      draft_expiry_notice: "Dein Entwurf auf Revier wird bald gelöscht",
+      account_blocked: "Dein Konto auf Huntery wurde gesperrt",
+      account_unblocked: "Dein Konto auf Huntery ist wieder entsperrt",
+      account_warned: "Eine Verwarnung für dein Konto auf Huntery",
+      report_resolved: "Deine Meldung auf Huntery wurde geprüft",
+      appeal_decided: "Entscheidung über deine Beschwerde auf Huntery",
+      draft_expiry_notice: "Dein Entwurf auf Huntery wird bald gelöscht",
     },
     blocked:
       "dein Konto wurde gesperrt. Du kannst keine Anzeigen mehr veröffentlichen und keine Nachrichten schreiben. Anmelden, deine Daten herunterladen, dein Konto löschen und diese Entscheidung anfechten kannst du weiterhin.",
-    unblocked: "dein Konto wurde entsperrt. Du kannst Revier wieder wie gewohnt nutzen.",
+    unblocked: "dein Konto wurde entsperrt. Du kannst Huntery wieder wie gewohnt nutzen.",
     warned: "das Team hat dein Konto verwarnt. Bitte beachte die Richtlinien für Inhalte.",
     guidelines: "Richtlinien:",
     report: (target) => `deine Meldung zu ${target} wurde geprüft.`,
@@ -480,16 +480,16 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
   },
   cs: {
     subject: {
-      account_blocked: "Tvůj účet na Revier byl zablokován",
-      account_unblocked: "Tvůj účet na Revier byl odblokován",
-      account_warned: "Napomenutí pro tvůj účet na Revier",
-      report_resolved: "Tvoje nahlášení na Revier bylo prověřeno",
-      appeal_decided: "Rozhodnutí o tvé stížnosti na Revier",
-      draft_expiry_notice: "Tvůj koncept na Revier bude brzy smazán",
+      account_blocked: "Tvůj účet na Huntery byl zablokován",
+      account_unblocked: "Tvůj účet na Huntery byl odblokován",
+      account_warned: "Napomenutí pro tvůj účet na Huntery",
+      report_resolved: "Tvoje nahlášení na Huntery bylo prověřeno",
+      appeal_decided: "Rozhodnutí o tvé stížnosti na Huntery",
+      draft_expiry_notice: "Tvůj koncept na Huntery bude brzy smazán",
     },
     blocked:
       "tvůj účet byl zablokován. Už nemůžeš zveřejňovat inzeráty ani psát zprávy. Přihlásit se, stáhnout svá data, smazat účet a ohradit se proti tomuto rozhodnutí můžeš i nadále.",
-    unblocked: "tvůj účet byl odblokován. Revier můžeš opět používat jako obvykle.",
+    unblocked: "tvůj účet byl odblokován. Huntery můžeš opět používat jako obvykle.",
     warned: "tým ti udělil napomenutí. Dodržuj prosím pravidla obsahu.",
     guidelines: "Pravidla obsahu:",
     report: (target) => `tvoje nahlášení týkající se ${target} bylo prověřeno.`,
@@ -507,16 +507,16 @@ export const TRUST_TEXTS: Record<Language, TrustTexts> = {
   },
   pl: {
     subject: {
-      account_blocked: "Twoje konto w Revier zostało zablokowane",
-      account_unblocked: "Twoje konto w Revier zostało odblokowane",
-      account_warned: "Upomnienie dla Twojego konta w Revier",
-      report_resolved: "Twoje zgłoszenie w Revier zostało sprawdzone",
-      appeal_decided: "Decyzja w sprawie Twojej skargi w Revier",
-      draft_expiry_notice: "Twój szkic w Revier zostanie wkrótce usunięty",
+      account_blocked: "Twoje konto w Huntery zostało zablokowane",
+      account_unblocked: "Twoje konto w Huntery zostało odblokowane",
+      account_warned: "Upomnienie dla Twojego konta w Huntery",
+      report_resolved: "Twoje zgłoszenie w Huntery zostało sprawdzone",
+      appeal_decided: "Decyzja w sprawie Twojej skargi w Huntery",
+      draft_expiry_notice: "Twój szkic w Huntery zostanie wkrótce usunięty",
     },
     blocked:
       "Twoje konto zostało zablokowane. Nie możesz już publikować ogłoszeń ani pisać wiadomości. Nadal możesz się zalogować, pobrać swoje dane, usunąć konto i zakwestionować tę decyzję.",
-    unblocked: "Twoje konto zostało odblokowane. Możesz znów korzystać z Revier jak zwykle.",
+    unblocked: "Twoje konto zostało odblokowane. Możesz znów korzystać z Huntery jak zwykle.",
     warned: "zespół udzielił upomnienia dla Twojego konta. Przestrzegaj zasad dotyczących treści.",
     guidelines: "Zasady treści:",
     report: (target) => `Twoje zgłoszenie dotyczące ${target} zostało sprawdzone.`,

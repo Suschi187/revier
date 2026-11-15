@@ -256,11 +256,11 @@ otp_expiry = 600
 
 # Vorlagen in 4 Sprachen (ADR 010). Gelten nur lokal; die Cloud-Vorlagen pflegt die Checkliste.
 [auth.email.template.confirmation]
-subject = "Revier: Anmeldecode / Sign-in code / Přihlašovací kód / Kod logowania"
+subject = "Huntery: Anmeldecode / Sign-in code / Přihlašovací kód / Kod logowania"
 content_path = "./supabase/templates/confirmation.html"
 
 [auth.email.template.magic_link]
-subject = "Revier: Anmeldecode / Sign-in code / Přihlašovací kód / Kod logowania"
+subject = "Huntery: Anmeldecode / Sign-in code / Přihlašovací kód / Kod logowania"
 content_path = "./supabase/templates/magic_link.html"
 
 # Uncomment to customize email template

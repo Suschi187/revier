@@ -19,7 +19,7 @@ type Texts = {
 
 export const TEXTS: Record<Language, Texts> = {
   de: {
-    subject: "Neue Nachrichten auf Revier",
+    subject: "Neue Nachrichten auf Huntery",
     greeting: "Hallo,",
     intro: "du hast neue Nachrichten:",
     item: (sender, listing) => (listing ? `${sender} zu „${listing}“` : sender),
@@ -30,7 +30,7 @@ export const TEXTS: Record<Language, Texts> = {
     footer: "Diese Nachricht wurde automatisch versendet. Antworten auf diese E-Mail kommen nicht an.",
   },
   en: {
-    subject: "New messages on Revier",
+    subject: "New messages on Huntery",
     greeting: "Hello,",
     intro: "you have new messages:",
     item: (sender, listing) => (listing ? `${sender} about “${listing}”` : sender),
@@ -41,7 +41,7 @@ export const TEXTS: Record<Language, Texts> = {
     footer: "This message was sent automatically. Replies to this email are not delivered.",
   },
   cs: {
-    subject: "Nové zprávy na Revier",
+    subject: "Nové zprávy na Huntery",
     greeting: "Ahoj,",
     intro: "máš nové zprávy:",
     item: (sender, listing) => (listing ? `${sender} k inzerátu „${listing}“` : sender),
@@ -52,7 +52,7 @@ export const TEXTS: Record<Language, Texts> = {
     footer: "Tato zpráva byla odeslána automaticky. Odpovědi na tento e-mail nebudou doručeny.",
   },
   pl: {
-    subject: "Nowe wiadomości w Revier",
+    subject: "Nowe wiadomości w Huntery",
     greeting: "Cześć,",
     intro: "masz nowe wiadomości:",
     item: (sender, listing) => (listing ? `${sender} w sprawie „${listing}”` : sender),

@@ -62,7 +62,7 @@ describe.skipIf(!f)("Chat-Benachrichtigung per Mail", () => {
     expect(first.status).toBe(200);
     await expect.poll(async () => (await mails(owner.email)).length, { timeout: 10_000 }).toBe(1);
     const [mail] = await mails(owner.email);
-    expect(mail.Subject).toBe("Nové zprávy na Revier");
+    expect(mail.Subject).toBe("Nové zprávy na Huntery");
     const body = await text(mail.ID);
     expect(body).toContain("Pavel Posel");
     expect(body).toContain("Honitba Test");

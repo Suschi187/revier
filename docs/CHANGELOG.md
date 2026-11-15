@@ -2,6 +2,18 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Name Huntery in E-Mails – 2026-11-15
+
+### Behoben
+- E-Mails nannten die Plattform noch „Revier“. Jetzt „Huntery“ in: Absendername (`_shared/mail/mailer.ts`), Betreff der Anmelde-Mails (`supabase/config.toml`), Vorlagen `confirmation.html` und `magic_link.html`, allen Betreffzeilen und Texten von `send-search-notifications` (Suchaufträge, Moderation, Verifizierung, Konto) und `send-chat-notifications`, in 4 Sprachen.
+- Name des TOTP-Faktors in der Authenticator-App (Admin-MFA): „Huntery …“ statt „Revier …“.
+- Erwartungen in `web/integration/*` und `e2e/auth.spec.ts` angepasst. „Revier“ als Fachwort (Jagdrevier) und in Testdaten bleibt.
+
+### Wie testen
+- Lokale Supabase neu starten (`supabase stop && supabase start`), damit Betreff und Vorlagen greifen; Mails in Mailpit ansehen.
+- Deno per Docker wie in der CI: `send-chat-notifications` 4 grün, `send-search-notifications` mit `_shared/mail` 33 grün.
+- `npm run test:integration`: 282 grün; `integration/storage.test.ts` war im Gesamtlauf direkt nach dem Neustart einmal rot und einzeln 15/15 grün. `e2e/auth.spec.ts` 7 grün.
+
 ## Name Huntery statt Huntroy – 2026-11-15
 
 Entscheidung des Menschen: Der Name lautet *Huntery*. Unterzeilen je Sprache, Claim und Logo bleiben.

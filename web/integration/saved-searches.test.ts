@@ -269,7 +269,7 @@ describe.skipIf(!f)("Suchaufträge: Freigabe → Edge Function → Mailpit (M8)"
     await expect.poll(async () => (await mails(searcher.email)).length, { timeout: 10_000 }).toBe(1);
 
     const [mail] = await mails(searcher.email);
-    expect(mail.Subject).toBe("Neue Anzeigen zu deinen Suchaufträgen auf Revier");
+    expect(mail.Subject).toBe("Neue Anzeigen zu deinen Suchaufträgen auf Huntery");
     const h = await headers(mail.ID);
     const url = headerUrl(h);
     expect(url).toMatch(/^http:\/\/localhost:3000\/api\/unsubscribe\?t=[0-9a-f]{64}$/);
@@ -418,7 +418,7 @@ describe.skipIf(!f)("Suchaufträge: Freigabe → Edge Function → Mailpit (M8)"
       await runOk();
       await expect.poll(async () => (await mails(searcher.email)).length, { timeout: 10_000 }).toBe(1);
       const [mail] = await mails(searcher.email);
-      expect(mail.Subject).toBe("New listings for your saved searches on Revier");
+      expect(mail.Subject).toBe("New listings for your saved searches on Huntery");
       expect((await detail(mail.ID)).Text).toContain(`http://localhost:3000/en/listing/${first}`);
 
       // Zweite Anzeige am selben Tag: keine Mail, auch nicht nach dem Mindestabstand der Sofort-Mails.
@@ -651,10 +651,10 @@ describe.skipIf(!f)("Suchaufträge: Freigabe → Edge Function → Mailpit (M8)"
     const all = await mails(author.email);
     const bySubject = Object.fromEntries(await Promise.all(all.map(async (m) => [m.Subject, { ...(await detail(m.ID)), h: await headers(m.ID) }] as const)));
     expect(Object.keys(bySubject).sort()).toEqual([
-      "Deine Anzeige auf Revier ist freigegeben",
-      "Deine Anzeige auf Revier wurde abgelehnt",
-      "Deine Anzeige auf Revier wurde entfernt",
-      "Änderungen an deiner Anzeige auf Revier angefragt",
+      "Deine Anzeige auf Huntery ist freigegeben",
+      "Deine Anzeige auf Huntery wurde abgelehnt",
+      "Deine Anzeige auf Huntery wurde entfernt",
+      "Änderungen an deiner Anzeige auf Huntery angefragt",
     ].sort());
     for (const [subject, m] of Object.entries(bySubject)) {
       expect(m.h["List-Unsubscribe"], subject).toBeUndefined();
@@ -664,16 +664,16 @@ describe.skipIf(!f)("Suchaufträge: Freigabe → Edge Function → Mailpit (M8)"
       expect(m.Text, subject).not.toContain("Mirabella");
       expect(m.Text, subject).not.toContain("/unsubscribe");
     }
-    const approvedMail = bySubject["Deine Anzeige auf Revier ist freigegeben"].Text;
+    const approvedMail = bySubject["Deine Anzeige auf Huntery ist freigegeben"].Text;
     expect(approvedMail).toContain("Moderation frei");
     expect(approvedMail).not.toMatch(/Grund:/);
-    const changesMail = bySubject["Änderungen an deiner Anzeige auf Revier angefragt"].Text;
+    const changesMail = bySubject["Änderungen an deiner Anzeige auf Huntery angefragt"].Text;
     expect(changesMail).toContain("Angaben unvollständig");
     expect(changesMail).toContain("Fotos");
-    const rejectedMail = bySubject["Deine Anzeige auf Revier wurde abgelehnt"].Text;
+    const rejectedMail = bySubject["Deine Anzeige auf Huntery wurde abgelehnt"].Text;
     expect(rejectedMail).toContain("Kontaktdaten im Text");
     expect(rejectedMail).toContain("Telefonnummer entfernen");
-    const removedMail = bySubject["Deine Anzeige auf Revier wurde entfernt"].Text;
+    const removedMail = bySubject["Deine Anzeige auf Huntery wurde entfernt"].Text;
     expect(removedMail).toContain("Unzulässige Inhalte");
     expect(removedMail).toContain("Unzulässig laut Prüfung");
 

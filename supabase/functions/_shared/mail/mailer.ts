@@ -67,7 +67,7 @@ export function buildMessage(from: string, mail: Mail, now = new Date()): string
   const body = base64(mail.text).replace(/.{1,76}/g, "$&\r\n");
   const domain = from.split("@")[1] ?? "localhost";
   return [
-    `From: Revier <${from}>`,
+    `From: Huntery <${from}>`,
     `To: <${mail.to}>`,
     `Subject: ${encodeHeader(mail.subject)}`,
     `Date: ${now.toUTCString()}`,

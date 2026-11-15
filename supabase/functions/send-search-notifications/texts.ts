@@ -183,7 +183,7 @@ type SearchTexts = {
 
 export const SEARCH_TEXTS: Record<Language, SearchTexts> = {
   en: {
-    subject: "New listings for your saved searches on Revier",
+    subject: "New listings for your saved searches on Huntery",
     greeting: "Hello,",
     intro: "new listings match your saved searches:",
     untitled: "Listing",
@@ -198,7 +198,7 @@ export const SEARCH_TEXTS: Record<Language, SearchTexts> = {
     footer: "This message was sent automatically. Replies to this email are not delivered.",
   },
   de: {
-    subject: "Neue Anzeigen zu deinen Suchaufträgen auf Revier",
+    subject: "Neue Anzeigen zu deinen Suchaufträgen auf Huntery",
     greeting: "Hallo,",
     intro: "zu deinen Suchaufträgen gibt es neue Anzeigen:",
     untitled: "Anzeige",
@@ -213,7 +213,7 @@ export const SEARCH_TEXTS: Record<Language, SearchTexts> = {
     footer: "Diese Nachricht wurde automatisch versendet. Antworten auf diese E-Mail kommen nicht an.",
   },
   cs: {
-    subject: "Nové inzeráty k tvým uloženým hledáním na Revier",
+    subject: "Nové inzeráty k tvým uloženým hledáním na Huntery",
     greeting: "Ahoj,",
     intro: "k tvým uloženým hledáním jsou nové inzeráty:",
     untitled: "Inzerát",
@@ -228,7 +228,7 @@ export const SEARCH_TEXTS: Record<Language, SearchTexts> = {
     footer: "Tato zpráva byla odeslána automaticky. Odpovědi na tento e-mail nebudou doručeny.",
   },
   pl: {
-    subject: "Nowe ogłoszenia dla Twoich zapisanych wyszukiwań w Revier",
+    subject: "Nowe ogłoszenia dla Twoich zapisanych wyszukiwań w Huntery",
     greeting: "Cześć,",
     intro: "pojawiły się nowe ogłoszenia pasujące do Twoich zapisanych wyszukiwań:",
     untitled: "Ogłoszenie",
@@ -307,11 +307,11 @@ type ModerationTexts = {
 export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
   en: {
     subject: {
-      approved: "Your listing on Revier has been approved",
-      changes_requested: "Changes requested for your listing on Revier",
-      rejected: "Your listing on Revier has been rejected",
-      removed: "Your listing on Revier has been removed",
-      point_removed: "The map point of your listing on Revier has been removed",
+      approved: "Your listing on Huntery has been approved",
+      changes_requested: "Changes requested for your listing on Huntery",
+      rejected: "Your listing on Huntery has been rejected",
+      removed: "Your listing on Huntery has been removed",
+      point_removed: "The map point of your listing on Huntery has been removed",
     },
     greeting: "Hello,",
     decision: {
@@ -330,11 +330,11 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
   },
   de: {
     subject: {
-      approved: "Deine Anzeige auf Revier ist freigegeben",
-      changes_requested: "Änderungen an deiner Anzeige auf Revier angefragt",
-      rejected: "Deine Anzeige auf Revier wurde abgelehnt",
-      removed: "Deine Anzeige auf Revier wurde entfernt",
-      point_removed: "Der Kartenpunkt deiner Anzeige auf Revier wurde entfernt",
+      approved: "Deine Anzeige auf Huntery ist freigegeben",
+      changes_requested: "Änderungen an deiner Anzeige auf Huntery angefragt",
+      rejected: "Deine Anzeige auf Huntery wurde abgelehnt",
+      removed: "Deine Anzeige auf Huntery wurde entfernt",
+      point_removed: "Der Kartenpunkt deiner Anzeige auf Huntery wurde entfernt",
     },
     greeting: "Hallo,",
     decision: {
@@ -353,11 +353,11 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
   },
   cs: {
     subject: {
-      approved: "Tvůj inzerát na Revier byl schválen",
-      changes_requested: "K tvému inzerátu na Revier jsou požadovány úpravy",
-      rejected: "Tvůj inzerát na Revier byl zamítnut",
-      removed: "Tvůj inzerát na Revier byl odstraněn",
-      point_removed: "Bod na mapě u tvého inzerátu na Revier byl odstraněn",
+      approved: "Tvůj inzerát na Huntery byl schválen",
+      changes_requested: "K tvému inzerátu na Huntery jsou požadovány úpravy",
+      rejected: "Tvůj inzerát na Huntery byl zamítnut",
+      removed: "Tvůj inzerát na Huntery byl odstraněn",
+      point_removed: "Bod na mapě u tvého inzerátu na Huntery byl odstraněn",
     },
     greeting: "Ahoj,",
     decision: {
@@ -376,11 +376,11 @@ export const MODERATION_TEXTS: Record<Language, ModerationTexts> = {
   },
   pl: {
     subject: {
-      approved: "Twoje ogłoszenie w Revier zostało zatwierdzone",
-      changes_requested: "Prośba o poprawki w Twoim ogłoszeniu w Revier",
-      rejected: "Twoje ogłoszenie w Revier zostało odrzucone",
-      removed: "Twoje ogłoszenie w Revier zostało usunięte",
-      point_removed: "Punkt na mapie Twojego ogłoszenia w Revier został usunięty",
+      approved: "Twoje ogłoszenie w Huntery zostało zatwierdzone",
+      changes_requested: "Prośba o poprawki w Twoim ogłoszeniu w Huntery",
+      rejected: "Twoje ogłoszenie w Huntery zostało odrzucone",
+      removed: "Twoje ogłoszenie w Huntery zostało usunięte",
+      point_removed: "Punkt na mapie Twojego ogłoszenia w Huntery został usunięty",
     },
     greeting: "Cześć,",
     decision: {

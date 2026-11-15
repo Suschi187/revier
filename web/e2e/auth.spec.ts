@@ -55,7 +55,7 @@ test("Registrieren per Link, Profil bearbeiten, ausloggen, per Code wieder einlo
   await expect(page).toHaveURL("/de/login?next=%2Fde%2Faccount");
 
   const signup = await requestMail(page, email);
-  expect(signup.html).toContain("Willkommen bei Revier");
+  expect(signup.html).toContain("Willkommen bei Huntery");
 
   // Mail-Scanner: Ein GET auf den Link verbraucht das Token nicht.
   expect((await request.get(signup.link)).status()).toBe(200);
@@ -96,7 +96,7 @@ test("Registrieren per Link, Profil bearbeiten, ausloggen, per Code wieder einlo
 
   // Wieder einloggen per Code (Bestandsnutzer bekommt die Login-Vorlage).
   const login = await requestMail(page, email);
-  expect(login.html).toContain("Du möchtest dich bei Revier anmelden");
+  expect(login.html).toContain("Du möchtest dich bei Huntery anmelden");
   await page.getByLabel("Anmeldecode").fill("000000");
   await page.getByRole("button", { name: "Anmelden", exact: true }).click();
   await expect(page.getByText("Der Code ist ungültig oder abgelaufen.")).toBeVisible();

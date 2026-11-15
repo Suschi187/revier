@@ -280,7 +280,7 @@ describe.skipIf(!f)("QA M7: Edge Function send-chat-notifications", () => {
       ((await (await fetch(`${MAILPIT}/api/v1/search?query=${encodeURIComponent(query)}`)).json()) as { messages: Summary[] }).messages;
     await expect.poll(async () => (await search(`to:"${owner.email}"`)).length, { timeout: 10_000 }).toBe(1);
     const [mail] = await search(`to:"${owner.email}"`);
-    expect(mail.Subject).toBe("Neue Nachrichten auf Revier");
+    expect(mail.Subject).toBe("Neue Nachrichten auf Huntery");
     expect(mail.To.map((t) => t.Address)).toEqual([owner.email]);
     expect(mail.Bcc ?? []).toEqual([]);
     expect(await search('to:"qa7-bcc@test.local"')).toEqual([]);

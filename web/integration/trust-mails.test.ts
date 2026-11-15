@@ -86,7 +86,7 @@ describe.skipIf(!f)("Meldungen, Sperre und Beschwerde: Dienstmails über die Edg
     expect(body.moderation.sent).toBeGreaterThanOrEqual(1);
     expect(body.account.sent).toBeGreaterThanOrEqual(1);
 
-    const removed = await mail(owner.email, "Deine Anzeige auf Revier wurde entfernt");
+    const removed = await mail(owner.email, "Deine Anzeige auf Huntery wurde entfernt");
     expect(removed).toContain("„M9b Mailprobe“");
     expect(removed).toContain("Grund: Waffen oder Munition angeboten");
     expect(removed).toContain("Hinweis der Moderation: Im Text werden Patronen angeboten.");
@@ -94,7 +94,7 @@ describe.skipIf(!f)("Meldungen, Sperre und Beschwerde: Dienstmails über die Edg
     expect(removed).toContain("[Vorläufiger Hinweis]");
     expect(removed).not.toContain("/imprint");
 
-    const result = await mail(reporter.email, "Deine Meldung auf Revier wurde geprüft");
+    const result = await mail(reporter.email, "Deine Meldung auf Huntery wurde geprüft");
     expect(result).toContain("deine Meldung zu einer Anzeige wurde geprüft.");
     expect(result).toContain("Ergebnis: Inhalt entfernt");
     expect(result).toContain("/de/account/reports");
@@ -110,7 +110,7 @@ describe.skipIf(!f)("Meldungen, Sperre und Beschwerde: Dienstmails über die Edg
     });
     expect(blocked.error).toBeNull();
     await run();
-    const blockMail = await mail(owner.email, "Dein Konto auf Revier wurde gesperrt");
+    const blockMail = await mail(owner.email, "Dein Konto auf Huntery wurde gesperrt");
     expect(blockMail).toContain("Grund: Belästigung oder Beleidigung");
     expect(blockMail).toContain("Begründung: Beleidigende Nachrichten.");
     expect(blockMail).toContain("/de/account/decisions");
@@ -125,11 +125,11 @@ describe.skipIf(!f)("Meldungen, Sperre und Beschwerde: Dienstmails über die Edg
     expect((await service.from("profiles").select("is_blocked").eq("user_id", owner.id).single()).data?.is_blocked).toBe(false);
 
     await run();
-    const appealMail = await mail(owner.email, "Entscheidung über deine Beschwerde auf Revier");
+    const appealMail = await mail(owner.email, "Entscheidung über deine Beschwerde auf Huntery");
     expect(appealMail).toContain("deine Beschwerde gegen die Entscheidung „Konto gesperrt“ wurde geprüft. Die Entscheidung wurde aufgehoben.");
     expect(appealMail).toContain("Begründung: Keine Beleidigung erkennbar.");
-    const unblockMail = await mail(owner.email, "Dein Konto auf Revier ist wieder entsperrt");
-    expect(unblockMail).toContain("Du kannst Revier wieder wie gewohnt nutzen.");
+    const unblockMail = await mail(owner.email, "Dein Konto auf Huntery ist wieder entsperrt");
+    expect(unblockMail).toContain("Du kannst Huntery wieder wie gewohnt nutzen.");
     // Nie die Identität der Admins
     for (const m of [blockMail, appealMail, unblockMail]) {
       expect(m).not.toContain(modA.email);
