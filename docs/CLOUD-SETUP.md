@@ -15,15 +15,11 @@ Domain `huntery.de`, Absender `no-reply@huntery.de`. Platzhalter: `<domain>` (Pr
    - **Nie `supabase db reset --remote`:** Es leert nur die eigenen Schemas; Storage-Buckets, Vault-Secrets, Cron-Jobs und Realtime-Policies bleiben, das erneute Einspielen bricht ab. Ein misslungener Aufbau in einem leeren Projekt: Projekt löschen und neu anlegen.
    - pgTAP gegen das Projekt (nur Stage): einmal per Realtime verbinden (legt die Tagespartitionen von `realtime.messages` an), dann `supabase test db --remote`. Die Suite setzt ihre Testgrenzen selbst (`_helpers.psql`) und rollt alles zurück. Nachweis: alle Dateien grün.
 4. API (ADR 005, 009): nur Schema `public` exponiert, GraphQL aus, „Automatically expose new tables“ aus. Nachweis: `curl https://<ref>.supabase.co/graphql/v1` liefert keinen Dienst; eine neue Testtabelle ist über REST nicht sichtbar.
-5. Auth (ADR 005, 010):
-   - Custom Access Token Hook auf `private.custom_access_token_hook` (wie `supabase/config.toml`).
-   - TOTP-MFA an; asymmetrische JWT-Signing-Keys an.
-   - `enable_confirmations` an, Passwörter aus (ADR 010), Mindestlänge 10 nur für die Checkliste.
-   - Sessions: `inactivity_timeout` und `timebox` setzen (Werte mit dem Menschen festlegen).
-   - Site-URL `https://<domain>`, Redirect-URLs `https://<domain>/*/auth/confirm` (und Stage entsprechend).
-   - Mail-Vorlagen `confirmation` und `magic_link` aus `supabase/templates/`, Betreff wie in `config.toml`.
-   - SMTP: United Domains (Host und Port laut Anbieter, implizites TLS), Absender „Huntery“ `<mail>`.
-   - Nachweis: Registrierung und Login mit Code auf Stage, je Sprache eine Mail.
+5. Auth (ADR 005, 010), in dieser Reihenfolge:
+   1. **SMTP zuerst** (Dashboard *Authentication → Emails → SMTP Settings*, Inhaber, Passwort nie im Repo): Absender `no-reply@huntery.de`, Name „Huntery“, Host `smtps.udag.de`, Port 465, Benutzer `no-reply@huntery.de`. Ohne eigenes SMTP lehnt Supabase im Free-Tarif eigene Mail-Vorlagen ab.
+   2. Konfiguration übertragen: `supabase/cloud/config.sh <stage|prod> diff`, dann `… push` (Quelle `supabase/cloud/<umgebung>.toml`, Vorlagen aus `supabase/templates`). Setzt Site-URL, Redirect-URLs `https://<domain>/*/auth/confirm**` und `…/auth/callback**`, Code 6-stellig und 10 Minuten gültig, Betreff und Vorlagen, Custom Access Token Hook `private.custom_access_token_hook`, TOTP-MFA, Mindestlänge 10, nur Schema `public`. Nachweis: `diff` ohne deklarierte Unterschiede.
+   3. Im Dashboard prüfen: asymmetrische JWT-Signing-Keys an; Sessions `inactivity_timeout` und `timebox` (Werte mit dem Menschen festlegen).
+   4. Nachweis: Registrierung und Login mit Code auf Stage, je Sprache eine Mail.
 6. Logs (ADR 006): kein Logging von Statement-Parametern (`log_statement` nicht `all`).
 7. Realtime (ADR 017): nur private Kanäle („Allow public access“ aus). Grenze gleichzeitiger Verbindungen des Plans notieren.
 8. Auth-Audit (ADR 019, Review A13): prüfen, ob die Migrationsrolle auf `auth.audit_log_entries`, `auth.flow_state` und `realtime.messages` löschen darf; sonst das Auth-Audit in die Projektdatenbank abschalten.

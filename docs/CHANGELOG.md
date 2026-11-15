@@ -2,6 +2,13 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Mail-Secrets und Auth-Konfiguration für Stage – 2026-11-16
+
+### Geändert
+- Stage: Function-Secrets `SMTP_HOST=smtps.udag.de`, `SMTP_PORT=465`, `SMTP_TLS=true`, `SMTP_USER`/`MAIL_FROM=no-reply@huntery.de` (Angaben von United Domains); `SMTP_PASS` setzt der Inhaber.
+- Neu `supabase/cloud/stage.toml` (nur die Cloud-Eigenschaften, Stage-Adressen) und `supabase/cloud/config.sh <stage|prod> <diff|push>` (temporärer Arbeitsordner mit Kopie der Vorlagen, weil die CLI keine Pfade außerhalb annimmt). API-Schemas in Stage jetzt nur `public`.
+- Befund: Supabase lehnt eigene Mail-Vorlagen im Free-Tarif ohne eigenes SMTP ab; die Auth-Einstellungen folgen nach dem SMTP-Eintrag im Dashboard (Runbook 1.5).
+
 ## M10: Edge Functions in Stage – 2026-11-15
 
 ### Geändert (Cloud)
