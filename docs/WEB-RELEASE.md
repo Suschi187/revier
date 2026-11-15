@@ -16,7 +16,8 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Markenfotos/Illustrationen: Rechte geklärt (DESIGN.md 7), Rechtevermerk für `design/` (QA F8)
 
 ## B. Supabase Stage und Prod (Runbook `docs/CLOUD-SETUP.md`)
-- [ ] Projekte in eu-central-1, Plan mit täglichen Backups
+- [x] Projekte in eu-central-1 angelegt (2026-11-15): Stage `kzkhzzqjmdkvvkggniyy`, Prod `izgjhoctidupoqkpfmge`
+- [ ] Tarif mit täglichen Backups und Dateien über 1 GB (derzeit Free, Entscheidung 2026-11-15) – Pflicht vor dem Go-live
 - [ ] Migrationen eingespielt, `supabase db lint` ohne Fehler, pgTAP-Suite gegen Stage grün
 - [ ] Custom Access Token Hook an, nur Schema `public` exponiert, GraphQL aus, „Expose new tables“ aus (ADR 005)
 - [ ] TOTP-MFA an, asymmetrische Signing Keys, Session-Timeouts gesetzt, `enable_confirmations` (ADR 005, 010)

@@ -2,6 +2,12 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Supabase-Projekte in Frankfurt – 2026-11-15
+
+### Geändert (Cloud und Doku)
+- Die versehentlich in Irland (eu-west-1) angelegten leeren Projekte `Huntery Stage` und `Huntery Prod` gelöscht; neu angelegt per CLI in **eu-central-1**: Stage `kzkhzzqjmdkvvkggniyy`, Prod `izgjhoctidupoqkpfmge`. DB-Passwörter zufällig erzeugt und nur im macOS-Schlüsselbund abgelegt.
+- Vorerst Free-Tarif (Entscheidung des Menschen): ohne Backups, Pause nach 7 Tagen, Dateien bis 50 MB. Plan E6, WEB-RELEASE B und ADR 023 vermerken die Folgen; Pro oder Alternative ist Pflicht vor dem Go-live.
+
 ## M10: Fehler-Monitoring mit Sentry (nur Server) – 2026-11-15
 
 ### Neu

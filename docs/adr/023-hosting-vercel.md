@@ -22,5 +22,5 @@ SPEC 7.9 verlangt einen Anbieter mit EU-Region und AVV. Die Web-App ist Next.js 
 - Vercel ist ein US-Unternehmen: AVV mit Standardvertragsklauseln; Datenschutzerklärung nennt Vercel, Region und Log-Fristen (Anwalt, SPEC 7.2).
 - Logs: Laufzeit-Logs bei Vercel nur kurz aufbewahrt (planabhängig); keine eigenen Zugriffslogs mit Tokens oder Byte-Bereichen (ADR 016, 018). Für die Kartendatei gelten die Logs von Supabase Storage (Frist laut Plan) – im Release prüfen.
 - Rewrite auf Storage muss Range und `206` durchreichen; Nachweis gegen Stage (WEB-RELEASE C). Scheitert das, wird die Kartendatei über eine eigene Subdomain mit CORS ausgeliefert und die CSP erweitert (neues ADR).
-- Supabase Storage braucht für eine Datei über 50 MB einen Plan mit höherer Dateigrenze und Upload per TUS.
+- Supabase Storage braucht für eine Datei über 50 MB einen Plan mit höherer Dateigrenze und Upload per TUS. Stand 2026-11-15: Free-Tarif, die Kartendatei passt dort nicht; bis zur Entscheidung zeigt die Karte Punkte auf neutralem Grund (ohne `MAP_TILES_FILE`, ADR 016).
 - Rate-Limit über die Vercel-Firewall (Regeln für Suche, Foto-Route, `/api/map`, `/tiles/`).
