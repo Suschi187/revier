@@ -2,6 +2,21 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Nächtliches Datenbank-Backup per GitHub Action – 2026-11-15
+
+Ersatz für die fehlenden Backups im Supabase-Free-Tarif (Entscheidung 2026-11-15).
+
+### Neu
+- `.github/workflows/backup.yml`: jede Nacht 02:30 UTC und von Hand; ohne Secret `BACKUP_DB_URL` oder Variable `BACKUP_AGE_RECIPIENT` nur ein Hinweis, kein Fehler. Actions per SHA gepinnt (`upload-artifact` v7.0.2 neu).
+- `supabase/cloud/backup.sh`: drei Dumps (Rollen, Schema, Daten) über den Session-Pooler (IPv4), als tar.gz **nur verschlüsselt** mit age geschrieben; Klartext nur im temporären Ordner. Artefakt 14 Tage aufbewahrt (Löschfrist, ADR 019).
+- `CLOUD-SETUP.md` 4.5 (Schlüssel, Secret, Inhalt, Lücken, Wiederherstellung), `WEB-RELEASE.md` E.
+
+### Wie getestet
+- Lokal gegen Stage mit einem Test-Schlüsselpaar (age im Container): Sicherung 297 KB, mit dem privaten Schlüssel entschlüsselt, enthält `roles.sql`, `schema.sql`, `data.sql` mit 79 Tabellen aus `auth`, `private`, `public`, `storage`. YAML und Skript syntaktisch geprüft; der Lauf in GitHub folgt mit den echten Werten.
+
+### Offen
+- Nicht gesichert: Storage-Dateien, Vault-Secrets, Cron-Jobs (nach Wiederherstellung neu setzen). Wiederherstellung auf Stage üben.
+
 ## M10: Stage-Datenbank eingespielt, Cloud-Rechte angeglichen – 2026-11-15
 
 ### Befund

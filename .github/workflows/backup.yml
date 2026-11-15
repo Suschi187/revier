@@ -1,0 +1,54 @@
+# Nächtliche Datenbanksicherung der Produktion (M10, docs/CLOUD-SETUP.md 4.5). Solange der Supabase-Free-Tarif
+# keine eigenen Backups hat. Verschlüsselt mit age, bevor etwas hochgeladen wird; der private Schlüssel liegt nur
+# beim Inhaber. Ohne Secret und Variable endet der Lauf mit einem Hinweis (Prod noch nicht eingerichtet).
+#   Secret   BACKUP_DB_URL         Session-Pooler-URL der Prod-Datenbank (IPv4), mit Passwort
+#   Variable BACKUP_AGE_RECIPIENT  öffentlicher age-Schlüssel (age1…)
+name: backup
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BACKUP_DB_URL: ${{ secrets.BACKUP_DB_URL }}
+      BACKUP_AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+    steps:
+      - name: Konfiguration prüfen
+        id: config
+        run: |
+          if [ -z "$BACKUP_DB_URL" ] || [ -z "$BACKUP_AGE_RECIPIENT" ]; then
+            echo "::notice::Keine Sicherung: BACKUP_DB_URL oder BACKUP_AGE_RECIPIENT fehlt (Prod noch nicht eingerichtet)."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.config.outputs.ready == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - if: steps.config.outputs.ready == 'true'
+        uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
+        with:
+          version: 3.0.0
+      - if: steps.config.outputs.ready == 'true'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq age
+      - if: steps.config.outputs.ready == 'true'
+        run: supabase/cloud/backup.sh "$RUNNER_TEMP/backup"
+      - if: steps.config.outputs.ready == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: huntery-db-${{ github.run_id }}
+          path: ${{ runner.temp }}/backup/*.age
+          if-no-files-found: error
+          # Gelöschte Konten verschwinden spätestens nach 14 Tagen auch aus den Sicherungen (ADR 019).
+          retention-days: 14

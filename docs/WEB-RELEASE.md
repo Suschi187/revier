@@ -51,7 +51,10 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] 404 und 500 lokalisiert, ohne Fehlerdetails, auch ohne JavaScript lesbar (E2E)
 - [ ] `/api/health` vom Uptime-Check überwacht, Alarm an eine feste Person
 - [ ] Sentry (EU-Region `de.sentry.io`) ohne IP und ohne Nutzerdaten, AVV, Alarm bei neuen Fehlern
-- [ ] Backups aktiv; Wiederherstellung einmal auf Stage geübt und dokumentiert; Fristen in der Datenschutzerklärung (ADR 019)
+- [x] Nächtliches verschlüsseltes Backup per GitHub Action gebaut und gegen Stage getestet (2026-11-15)
+- [ ] Backup aktiv für Prod (`BACKUP_DB_URL`, `BACKUP_AGE_RECIPIENT`), privater age-Schlüssel sicher beim Inhaber
+- [ ] Wiederherstellung einmal auf Stage geübt und dokumentiert; Fristen (14 Tage) in der Datenschutzerklärung (ADR 019)
+- [ ] Sicherung der Storage-Dateien (Fotos, Dokumente) geklärt; mit Supabase Pro tägliche Backups des Anbieters
 
 ## F. Qualität
 - [ ] Komplette E2E-Suite lokal und in der CI grün; gegen Stage mit `QA_BASE_URL`: `release.spec.ts` und Cookie-Inventar inkl. Hosting- und CDN-Cookies (ADR 021)
