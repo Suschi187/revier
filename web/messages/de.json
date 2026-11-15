@@ -1,7 +1,8 @@
 {
   "Metadata": {
     "siteName": "Huntroy",
-    "siteDescription": "Marktplatz für Jagdgelegenheiten in Deutschland, Österreich, der Schweiz, Tschechien und Polen."
+    "siteDescription": "Marktplatz für Jagdgelegenheiten in Deutschland, Österreich, der Schweiz, Tschechien und Polen.",
+    "ogImageAlt": "Huntroy-Logo vor einem Hochsitz im Morgenlicht, dazu Rothirsch, Jäger und Hund"
   },
   "HomePage": {
     "metaTitle": "Jagdgelegenheiten in Mitteleuropa",

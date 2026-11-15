@@ -336,7 +336,7 @@ Der Auftritt kommt aus der eigenen Marke. Bei den Marktplatz-Bedienmustern (Such
 - `docs/DESIGN.md` mit den Vorgaben oben, Farbwerten, Typografie-Skala, Logo-Verwendung (Schutzraum, Mindestgröße, Verhalten auf dunklem und hellem Grund, Lockup *HUNTROY by Die Jagdbrüder*)
 - Ein Entwurf der **Startseite** und der **Anzeigenkarte** im Markenstil; der Mensch gibt frei. Varianten nur für marktplatzspezifische Teile (z. B. Kategorie-Kacheln, Kontaktbox)
 - Stilmerkmale des Shops, die übertragen werden: dunkelgrüne Leiste oben, Offwhite-Header, Großbuchstaben-Überschriften mit Punkt am Ende, kleine orange Überschrift (Eyebrow) über dem Titel, vollflächiges Foto im Kopfbereich mit Text links und orangem Button mit Pfeil, Offwhite-Abschnitte, quadratische Bildkarten mit Name und Preis darunter, Link "Alle … →"
-- Bildsprache: Natur, Revier, Hochsitz, Jagdhund, Gemeinschaft; keine Trophäen- oder Schussbilder auf Start- und Kategorieseiten
+- Bildsprache: Natur, Revier, Hochsitz, Jagdhund, Gemeinschaft; keine Trophäen- oder Schussbilder auf Start- und Kategorieseiten *(geändert 2026-11-15: eigene Illustrationen; Jäger mit Büchse und Trophäen erlaubt, siehe DESIGN.md 8 und 11)*
 
 **Schritt 2: Design-Grundlagen (Tokens)**
 - Farben, Typografie, Abstände, Radien, Schatten, Icons als Tokens in der Tailwind-Konfiguration; Status- und Fehlerfarben ergänzen (Orange nicht für Fehler verwenden)

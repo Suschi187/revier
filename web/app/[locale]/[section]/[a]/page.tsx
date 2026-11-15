@@ -6,6 +6,7 @@ import { ListingDetail } from "@/components/public/ListingDetail";
 import { providerName, ProviderPage } from "@/components/public/ProviderPage";
 import { publicAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
+import { OG_IMAGE } from "@/lib/public/brand-images";
 import { photoUrl } from "@/lib/public/format";
 import { listContext, listMetadata } from "@/lib/public/list-pages";
 import { parsePath, type PublicRoute } from "@/lib/public/paths";
@@ -47,7 +48,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
         title: listing.title,
         description,
         type: "website",
-        ...(image ? { images: [{ url: photoUrl(image.id, "full"), alt: image.altText ?? listing.title }] } : {}),
+        // Ohne Foto das Vorschaubild der Marke; ein eigenes openGraph ersetzt das des Layouts ganz.
+        images: image
+          ? [{ url: photoUrl(image.id, "full"), alt: image.altText ?? listing.title }]
+          : [{ ...OG_IMAGE, alt: (await getTranslations("Metadata"))("ogImageAlt") }],
       },
     };
   }

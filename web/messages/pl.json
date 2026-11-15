@@ -1,7 +1,8 @@
 {
   "Metadata": {
     "siteName": "Huntroy",
-    "siteDescription": "Platforma z ofertami polowań w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
+    "siteDescription": "Platforma z ofertami polowań w Niemczech, Austrii, Szwajcarii, Czechach i Polsce.",
+    "ogImageAlt": "Logo Huntroy na tle ambony o świcie, obok jeleń, myśliwy i pies"
   },
   "HomePage": {
     "metaTitle": "Oferty polowań w Europie Środkowej",

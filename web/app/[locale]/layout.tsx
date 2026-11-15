@@ -11,6 +11,7 @@ import { ui } from "@/components/ui/styles";
 import { routing } from "@/i18n/routing";
 import { LAYOUT_CLIENT_NAMESPACES, pickMessages, type Messages } from "@/lib/i18n/pick";
 import { publicEnv } from "@/lib/env";
+import { OG_IMAGE } from "@/lib/public/brand-images";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -23,6 +24,8 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(publicEnv.NEXT_PUBLIC_SITE_URL),
     title: { default: t("siteName"), template: `%s | ${t("siteName")}` },
     description: t("siteDescription"),
+    // Vorschaubild für alle Seiten ohne eigenes Foto (Unterseiten mit eigenem openGraph setzen es selbst).
+    openGraph: { siteName: t("siteName"), images: [{ ...OG_IMAGE, alt: t("ogImageAlt") }] },
   };
 }
 

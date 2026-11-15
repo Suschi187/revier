@@ -1,7 +1,8 @@
 {
   "Metadata": {
     "siteName": "Huntroy",
-    "siteDescription": "Tržiště s loveckými příležitostmi v Německu, Rakousku, Švýcarsku, České republice a Polsku."
+    "siteDescription": "Tržiště s loveckými příležitostmi v Německu, Rakousku, Švýcarsku, České republice a Polsku.",
+    "ogImageAlt": "Logo Huntroy před posedem v ranním světle, k tomu jelen, myslivec a pes"
   },
   "HomePage": {
     "metaTitle": "Lovecké příležitosti ve střední Evropě",

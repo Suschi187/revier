@@ -151,7 +151,7 @@ Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe 
 
 ## 6. Offene Punkte (Mensch)
 
-1. Markenfotos: per KI-Bildgenerator durch den Menschen (Entscheidung 2026-11-15), Vorgaben und Prompts in `docs/BILDVORGABEN.md` (B1–B8). Ohne erkennbare Fremdmarken; Generator mit kommerzieller Nutzung.
+1. ~~Markenfotos~~ entschieden 2026-11-15: eigene Illustrationen statt Fotos (Abschnitt 11). Jäger mit Büchse und Trophäen dürfen gezeigt werden.
 2. ~~Ob `design/` ins Repo soll (rund 14 MB PNG)~~ entschieden 2026-11-15: bleibt im Repo. Rechtevermerk für die Shop-Beispielbilder fehlt noch (QA F8).
 3. Name: *Huntroy* gewählt 2026-11-15 (Reviro vergeben); Markenrecherche und Domain offen (SPEC 7.1). cs/pl-Texte (Unterzeile, Claim) von Muttersprachlern prüfen.
 4. ~~Claim in der Leiste oben (QA F2)~~ entschieden 2026-11-15: „Klare Linien. Wilde Freiheit.“ (SPEC-Kandidat), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dort in eine zweite Zeile. Offen bleibt nur die Prüfung der cs/pl-Fassung durch Muttersprachler (mit Punkt 3).
@@ -168,7 +168,7 @@ Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Anrede „Du“ in de, 
 | Inter | Rasmus Andersson | SIL OFL 1.1 | `web/public/static/fonts/Inter-OFL.txt` |
 | Huntroy-Logo L1 | eigene Gestaltung im Projekt | Projekt / Die Jagdbrüder | umgesetzt, Reinzeichnung offen |
 | Hirschkopf Die Jagdbrüder | Die Jagdbrüder | Eigentum der Marke | nur Referenz, nicht im Huntroy-Logo |
-| Markenfotos (KI) | Bildgenerator, erzeugt vom Menschen | laut Bedingungen des Generators (kommerzielle Nutzung erforderlich); je Bild Generator, Datum, Prompt eintragen | ausstehend, Vorgaben in `docs/BILDVORGABEN.md` |
+| Illustrationen (Banner, Kategoriebilder, Vorschaubild) | eigene Zeichnung, `web/scripts/illustrations.mjs` | Projekt | umgesetzt (Abschnitt 11) |
 | Höhenlinien-Muster, Kategorie- und UI-Icons | eigene Zeichnung | Projekt | umgesetzt |
 | Inter-Teilmenge `inter-czech-wght-normal.v1.woff2` | aus Inter (Latin Extended) geschnitten | SIL OFL 1.1 (kein Reserved Font Name) | `pyftsubset inter-latin-ext-wght-normal.v1.woff2 --unicodes="U+010C-010D,U+0160-0161" --flavor=woff2 --layout-features='*' --name-IDs='*'` (fonttools 4.55) |
 | App-Icon `web/app/icon.svg` | eigene Gestaltung (Logo L1) | Projekt | umgesetzt |
@@ -182,6 +182,7 @@ Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Anrede „Du“ in de, 
 | SPEC M10a | Umsetzung | Grund |
 |---|---|---|
 | Hauptnavigation der Kategorien in Großbuchstaben im Kopf (Schritt 4.1) | keine Kategorie-Navigation im Kopf; Kategorien als Kacheln auf der Startseite, als eigene Seiten (`/de/jagdpacht` …) und als Feld im Filter | Entscheidung des Menschen 2026-11-13 (QA F1) |
+| Bildsprache: Fotos mit Atmosphäre; keine Trophäen- oder Schussbilder auf Start- und Kategorieseiten (Schritt 1) | eigene Illustrationen statt Fotos; Jäger mit geschulterter Büchse und Hirsch mit Trophäengeweih bzw. Geweih am Hüttengiebel sind erlaubt, Schussszenen und erlegtes Wild weiterhin nicht | Entscheidung des Menschen 2026-11-15 |
 | Filter mobil als Blatt von unten (Schritt 4.3) | aufklappbarer Bereich über der Trefferliste (`<details>`), ab Desktop immer offen; aktive Filter als Chips mit Zähler am Knopf | Entscheidung des Menschen 2026-11-13; funktioniert ohne JavaScript |
 
 ## 9. Zuordnung für iOS (I1 bis I7)
@@ -218,3 +219,17 @@ iOS übernimmt die Werte aus diesem Dokument, nicht aus dem Web-Code. Kein Dunke
 10. Einmal auf Tschechisch oder Polnisch: Sprache der Ansage wechselt (`lang` je Seite und an den Sprachlinks).
 
 Ergebnis und Funde des Durchgangs gehören in `docs/QA-REPORT.md`.
+
+## 11. Illustrationen (Stand 2026-11-15)
+
+Eigene Zeichnungen statt Fotos (Entscheidung des Menschen 2026-11-15): flache Silhouetten im Morgenlicht, nur Markenfarben (Waldgrün, Oliv, Sand, Offwhite, Orange als Sonne und Akzent), Höhenlinien als wiederkehrendes Muster. Motive: Hochsitz, Jäger mit geschulterter Büchse (von hinten oder seitlich, ohne Gesicht), Vorstehhund, Rothirsch mit Trophäengeweih, Jagdhütte, Jagdgesellschaft in Signalwesten. Nicht gezeigt: Schussszenen, angelegte Waffe, erlegtes Wild, Schrift im Bild.
+
+| Datei (`web/public/static/brand/`) | Format | Einsatz | Alt |
+|---|---|---|---|
+| `hero.v1.svg` | 1200 × 450 (8 : 3), dunkel | Startseiten-Banner: ab `sm` Hintergrund mit waldgrünem Verlauf links (Text bleibt AA), mobil als Streifen unter dem Text | `""` (dekorativ) |
+| `kind-{lease,permit,driven_hunt,trophy_hunt,helper}.v1.svg` | 1200 × 400 (3 : 1), hell | Kopfbild der Kategorieseite unter der H1 (3 : 1, ab `sm` 4 : 1, ab `lg` 5 : 1); nicht auf Bundesland- und Kreisseiten | `""` (die H1 nennt die Kategorie) |
+| `og-default.v1.png` | 1200 × 630 | `og:image` aller Seiten ohne eigenes Foto, auch Anzeigen ohne Foto; mit Bildmarke, ohne Schrift | `Metadata.ogImageAlt` (4 Sprachen) |
+
+- Erzeugen: `cd web && node scripts/illustrations.mjs` (deterministisch; das PNG rendert `sharp`, das mit Next installiert ist). Bei jeder Änderung die Version im Dateinamen und in `web/lib/public/brand-images.ts` hochzählen, weil `/static/brand` ein Jahr unveränderlich gecacht wird.
+- Anzeigen ohne Foto zeigen weiter das Kategorie-Icon auf Sand (ruhiger als eine Szene, verwechselt nicht mit einem echten Foto).
+- Lighthouse mobil nach dem Einbau: Start 93, Kategorie 93, Suche 94.

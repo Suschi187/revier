@@ -6,6 +6,7 @@ import { SaveSearch } from "@/components/saved-searches/SaveSearch";
 import { boundsAround, DEFAULT_BOUNDS, type Bounds } from "@/lib/map/bounds";
 import { tilesUrl } from "@/lib/map/tiles";
 import type { AppLocale } from "@/i18n/routing";
+import { kindImage } from "@/lib/public/brand-images";
 import { publicPath, type PublicRoute } from "@/lib/public/paths";
 import { regionByCode } from "@/lib/public/regions";
 import { filterChips } from "@/lib/search/chips";
@@ -34,6 +35,16 @@ export function hasQuery(searchParams: SearchParams): boolean {
  * Kategorie-, Regions- und Suchseite (ADR 015): feste Werte aus dem Pfad, Rest aus dem Query-String. Ohne
  * Query gecacht, mit Query oder Cursor ungecacht. Ohne Suspense, damit alles ohne JavaScript im HTML steht.
  */
+/** Kopfbild der Kategorieseite (eigene Illustration, docs/DESIGN.md 11); dekorativ, die H1 nennt die Kategorie. */
+function KindBanner({ kind }: { kind: Extract<PublicRoute, { route: "kind" }>["kind"] }) {
+  const image = kindImage(kind);
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- SVG aus public/static, kein Optimizer nötig
+    <img src={image.src} alt="" width={image.width} height={image.height}
+      className="mt-3 aspect-[3/1] w-full rounded-card bg-sand object-cover object-[50%_70%] sm:aspect-[4/1] lg:aspect-[5/1]" />
+  );
+}
+
 export async function ListingsPage({
   locale,
   page,
@@ -121,6 +132,7 @@ export async function ListingsPage({
     <main id="main" className={`${ui.container} flex-1 py-4 sm:py-6`}>
       <Breadcrumbs crumbs={crumbs} />
       <h1 className={`${ui.headingCaps} mt-2 text-2xl [overflow-wrap:anywhere] hyphens-auto`}>{heading}</h1>
+      {page.route === "kind" && <KindBanner kind={page.kind} />}
 
       {regionLinks.length > 0 && (
         <nav aria-labelledby="region-links" className="mt-4">

@@ -1,7 +1,8 @@
 {
   "Metadata": {
     "siteName": "Huntroy",
-    "siteDescription": "Marketplace for hunting opportunities in Germany, Austria, Switzerland, Czechia and Poland."
+    "siteDescription": "Marketplace for hunting opportunities in Germany, Austria, Switzerland, Czechia and Poland.",
+    "ogImageAlt": "Huntroy logo in front of a high seat at sunrise with a red deer stag, a hunter and a dog"
   },
   "HomePage": {
     "metaTitle": "Hunting opportunities in Central Europe",

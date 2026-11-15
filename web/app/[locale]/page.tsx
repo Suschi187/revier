@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/public/JsonLd";
 import { ListingList } from "@/components/public/ListingCard";
 import { publicAlternates } from "@/i18n/metadata";
 import type { AppLocale } from "@/i18n/routing";
+import { HERO_IMAGE } from "@/lib/public/brand-images";
 import { absoluteUrl } from "@/lib/public/json-ld";
 import { publicPath } from "@/lib/public/paths";
 import { favoriteContext } from "@/lib/services/favorites";
@@ -53,20 +54,6 @@ async function Newest({ locale }: { locale: AppLocale }) {
   ]);
   if (!result.ok) return <p className="mt-4" role="alert">{t("newestError")}</p>;
   return <ListingList items={result.page.items} locale={locale} regions={regions} empty={t("newestEmpty")} favorites={favorites} layout="grid" />;
-}
-
-/** Höhenlinien als dezentes Muster im Banner (eigene Zeichnung, docs/DESIGN.md 7). */
-function Contours() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 size-full opacity-20">
-      <g fill="none" stroke="var(--color-sand)">
-        <path d="M600 260 C 640 180, 820 150, 900 200 S 1100 260, 1200 230" />
-        <path d="M560 260 C 600 150, 830 100, 920 170 S 1110 230, 1200 190" />
-        <path d="M520 260 C 560 120, 840 50, 940 140 S 1120 200, 1200 150" />
-        <path d="M880 120 C 900 100, 950 100, 960 120 S 930 150, 905 145 S 870 140, 880 120" />
-      </g>
-    </svg>
-  );
 }
 
 export default async function HomePage() {
@@ -127,9 +114,8 @@ export default async function HomePage() {
         </ul>
       </nav>
 
-      <section aria-labelledby="home-title" className="on-dark relative flex min-h-64 items-center overflow-hidden rounded-card bg-forest text-offwhite">
-        <Contours />
-        <div className="relative max-w-2xl px-6 py-9 sm:px-10">
+      <section aria-labelledby="home-title" className="on-dark relative flex min-h-64 flex-col overflow-hidden rounded-card bg-forest text-offwhite sm:flex-row sm:items-center">
+        <div className="relative z-10 max-w-2xl px-6 pt-9 sm:px-10 sm:pb-9">
           <p className="mb-2.5 font-display text-meta font-bold uppercase tracking-eyebrow text-brand">{tb("tagline")}</p>
           <h1 id="home-title" className={`${ui.headingCaps} text-4xl leading-none tracking-tight sm:text-5xl`}>{th("title")}</h1>
           <p className="mb-6 mt-3 text-lg leading-relaxed">{t("heroText")}</p>
@@ -138,6 +124,12 @@ export default async function HomePage() {
             <Icon name="arrow" size={16} />
           </Link>
         </div>
+        {/* Eigene Illustration (docs/DESIGN.md 11), dekorativ. Mobil als Streifen unter dem Text, ab sm als Hintergrund
+            mit waldgrüner Abdunklung links, damit der Text bei AA bleibt. */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- SVG aus public/static, kein Optimizer nötig */}
+        <img src={HERO_IMAGE.src} alt="" width={HERO_IMAGE.width} height={HERO_IMAGE.height} fetchPriority="high"
+          className="mt-2 aspect-[3/2] w-full object-cover object-right-bottom sm:absolute sm:inset-0 sm:mt-0 sm:aspect-auto sm:size-full" />
+        <div aria-hidden="true" className="absolute inset-0 hidden bg-linear-to-r from-forest from-30% via-forest/70 via-55% to-transparent sm:block" />
       </section>
 
       <section aria-labelledby="home-newest">

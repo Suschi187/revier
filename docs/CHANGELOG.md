@@ -2,6 +2,23 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Eigene Illustrationen statt KI-Fotos – 2026-11-15
+
+Entscheidung des Menschen: Bilder selbst zeichnen; Jäger mit Büchse und Trophäen dürfen gezeigt werden (Abweichung von SPEC M10a Schritt 1, `DESIGN.md` 8).
+
+### Geändert
+- Neu `web/scripts/illustrations.mjs`: erzeugt 6 SVG-Illustrationen und das Vorschaubild unter `web/public/static/brand/` (Silhouetten in Markenfarben: Hochsitz, Jäger mit Büchse, Hund, Rothirsch, Jagdhütte mit Geweih, Gesellschaft in Signalwesten).
+- Startseite: Banner mit Illustration statt Höhenlinien-Muster; ab `sm` als Hintergrund mit waldgrünem Verlauf, mobil als Bildstreifen unter dem Text.
+- Kategorieseiten (`/de/jagdpacht` …): eigenes Kopfbild je Anzeigenart unter der H1.
+- `og:image` für alle Seiten ohne eigenes Foto, auch für Anzeigen ohne Foto; Alt-Text `Metadata.ogImageAlt` in 4 Sprachen (cs/pl auch in den DeepL-Overrides).
+- `/static/brand/*` ein Jahr unveränderlich gecacht (Dateinamen mit `.v1`).
+- `docs/BILDVORGABEN.md` entfällt; Doku in `DESIGN.md` 11, Lizenzzeile in `DESIGN.md` 7.
+
+### Wie testen
+- `/de`, `/de/trophaeenjagd`, `/de/begehungsschein` bei 360 und 1280 px ansehen.
+- `npx playwright test e2e/illustrations.spec.ts` (Bilder geladen, dekorativ, mobil unter dem Text, Kopfbild je Art, og:image inkl. Anzeige ohne Foto, Cache-Header).
+- Lighthouse mobil: Start 93, Kategorie 93, Suche 94.
+
 ## Bildvorgaben für KI-Markenfotos – 2026-11-15
 
 ### Geändert (nur Dokumentation)

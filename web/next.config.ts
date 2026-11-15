@@ -80,6 +80,8 @@ const nextConfig: NextConfig = {
       { source: "/static/map/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
       // Seitenschriften: Dateinamen mit Version (.v1), bei jeder Änderung hochzählen (ADR 022, S1).
       { source: "/static/fonts/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
+      // Illustrationen ebenso versioniert (lib/public/brand-images.ts).
+      { source: "/static/brand/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
       // Token im Query-String nie per Referer weitergeben (ADR 010).
       { source: "/:locale/auth/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
     ];

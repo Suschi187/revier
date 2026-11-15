@@ -216,7 +216,8 @@
     "Map.truncated": "Pro tento výřez je příliš mnoho inzerátů. Přibliž prosím mapu.",
     "SavedSearches.save.signIn": "Přihlas se a ulož si toto hledání",
     "Brand.claim": "Jasné linie. Divoká svoboda.",
-    "Header.skipToContent": "Přejít na obsah"
+    "Header.skipToContent": "Přejít na obsah",
+    "Metadata.ogImageAlt": "Logo Huntroy před posedem v ranním světle, k tomu jelen, myslivec a pes"
   },
   "pl": {
     "Public.detail.safety1": "Nigdy nie płać z góry bez pisemnej umowy",
@@ -390,6 +391,7 @@
     "Listings.photos.rule": "Bez zdjęć upolowanej zwierzyny. Ogłoszenia z takimi zdjęciami odrzucamy.",
     "Admin.review.photoRule": "Sprawdź zdjęcia: jeśli któreś przedstawia upolowaną zwierzynę, odrzuć ogłoszenie z powodem „Zdjęcie przedstawia upolowaną zwierzynę”.",
     "Legal.guidelines.sections[1].points[3]": "Bez zdjęć upolowanej zwierzyny (na przykład pokotu po polowaniu albo trofeum na tuszy). Ogłoszenia z takimi zdjęciami odrzucamy.",
-    "Header.skipToContent": "Przejdź do treści"
+    "Header.skipToContent": "Przejdź do treści",
+    "Metadata.ogImageAlt": "Logo Huntroy na tle ambony o świcie, obok jeleń, myśliwy i pies"
   }
 }
