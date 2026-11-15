@@ -2,11 +2,11 @@
 
 Reihenfolge für **Stage** und danach **Prod**, je mit eigenem Supabase-Projekt, eigenem Server und eigener `.env`. Jeder Schritt hat einen Nachweis; Ergebnis in `docs/WEB-RELEASE.md` abhaken. Quellen: ADR 002, 005, 006, 010, 011, 014–022, `docs/plans/M10-plan.md`.
 
-Platzhalter: `<domain>` (Stage z. B. `stage.<domain>`), `<ref>` (Supabase-Projekt), `<mail>` (Absender, z. B. `no-reply@<domain>`).
+Domain `huntery.de`, Absender `no-reply@huntery.de`. Platzhalter: `<domain>` (Prod `huntery.de`, Stage eigene Preview-Domain), `<ref>` (Supabase-Projekt), `<mail>` = `no-reply@huntery.de`.
 
 ## 0. Voraussetzungen
-- Inhaber der Konten, AVVs (Supabase, Server-Anbieter, United Domains), Domain registriert.
-- Lokal: Supabase CLI, Docker, Zugriff auf das Repo (Stand = getaggter Commit).
+- Inhaber der Konten, AVVs (Supabase, Vercel, United Domains, Sentry), Domain `huntery.de` registriert.
+- Lokal: Supabase CLI, Zugriff auf das Repo (Stand = getaggter Commit).
 
 ## 1. Supabase-Projekt
 1. Projekt in **eu-central-1 (Frankfurt)** anlegen, Plan mit täglichen Backups. Datenbank-Passwort nur im Passwortmanager.
@@ -34,19 +34,18 @@ Platzhalter: `<domain>` (Stage z. B. `stage.<domain>`), `<ref>` (Supabase-Projek
 4. **Probe Port 465** aus der Cloud: eine Chat-Nachricht auf Stage auslösen, Mail kommt an. Scheitert die Verbindung, Rückfall auf einen HTTP-Anbieter (ADR 017 Nachtrag) und den Menschen fragen.
 5. Fotoverarbeitung (ADR 011): 4,9-MP-Testbild hochladen, Laufzeit und Erfolg prüfen; bei Speicherfehlern Auswege laut ADR 011.
 
-## 3. Server und Web
-1. EU-Server (Docker, Firewall nur 22, 80, 443), SSH nur mit Schlüssel, automatische Sicherheitsupdates.
-2. DNS: `A`/`AAAA` für `<domain>` und `www.<domain>` auf den Server.
-3. Repo auf den Server (nur `web/` und `deploy/` nötig), `deploy/.env` aus `.env.example` füllen (nur anon-/publishable-Key; `SITE_INDEXABLE=true` nur in Prod).
-4. Kartendatei nach `deploy/tiles/` kopieren (Name und SHA-256 laut `web/scripts/MAP-SOURCES.md`), `MAP_TILES_FILE` setzen.
-5. `cd deploy && docker compose up -d --build`. Nachweis:
-   - `curl -s https://<domain>/api/health` → `{"ok":true,"supabase":"ok"}`
-   - `curl -sI https://<domain>/de` → CSP, HSTS, X-Frame-Options, kein `Server`/`Via`
-   - `curl -sI -H "Range: bytes=0-99" https://<domain>/tiles/<datei>` → 206, `immutable`
-   - `curl -sI http://www.<domain>/de` → Weiterleitung auf `https://<domain>/de`
-   - `docker compose logs caddy` enthält keine Zugriffszeilen
-6. Rate-Limit (ADR 015, 016): Caddy-Plugin oder Firewall-Regel für Suche, Foto-Route, `/api/map`, `/tiles/` (Entscheidung mit dem Server-Anbieter).
-7. Stage: Zugangsschutz (Basic Auth in Caddy) und `SITE_INDEXABLE=false`.
+## 3. Vercel und Kartendatei (ADR 023)
+1. Kartendatei: in Supabase einen öffentlichen Bucket `tiles` anlegen (Dateigrenze über 1,2 GB, Plan prüfen), Datei per TUS hochladen (Name und SHA-256 laut `web/scripts/MAP-SOURCES.md`, `cacheControl` 31536000). Nachweis: `curl -sI -H "Range: bytes=0-99" https://<ref>.supabase.co/storage/v1/object/public/tiles/<datei>` → 206.
+2. Vercel-Projekt aus dem Repo, **Root Directory `web`**, Framework Next.js, Region aus `web/vercel.json` (fra1). Analytics, Speed Insights und Toolbar aus.
+3. Env je Umgebung (Production und Preview/Stage getrennt): `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (nur anon/publishable), `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`, `SITE_INDEXABLE` (nur Production `true`), `MAP_TILES_FILE=<datei>`, `MAP_TILES_ORIGIN=https://<ref>.supabase.co/storage/v1/object/public/tiles`.
+4. Domain `huntery.de` und `www.huntery.de` (Weiterleitung auf die Hauptdomain); DNS bei United Domains auf die Werte aus Vercel.
+5. Stage: Preview-Umgebung mit eigener Supabase und Zugangsschutz (Vercel Deployment Protection), `SITE_INDEXABLE=false`.
+6. Nachweis nach dem Deploy:
+   - `curl -s https://huntery.de/api/health` → `{"ok":true,"supabase":"ok"}`
+   - `curl -sI https://huntery.de/de` → CSP, HSTS, X-Frame-Options
+   - `curl -sI -H "Range: bytes=0-99" https://huntery.de/tiles/<datei>` → 206 mit `Content-Range` (Rewrite reicht Range durch)
+   - `curl -sI https://www.huntery.de/de` → Weiterleitung auf `https://huntery.de/de`
+7. Rate-Limit: Regeln der Vercel-Firewall für `/*/suche*` bzw. Suchpfade, `/api/photos/*`, `/api/map`, `/tiles/*` (Werte mit dem Menschen festlegen).
 
 ## 4. Nach dem Deploy
 1. Erster Admin nach ADR 005 (SQL im Studio, zurückdatiert), dann `/de/admin` mit TOTP. Runbook „Admin kompromittiert“ bereithalten.

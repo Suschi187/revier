@@ -2,6 +2,22 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Hosting auf Vercel, Domain huntery.de – 2026-11-15
+
+Entscheidungen des Menschen: Domain `huntery.de`, Hosting **Vercel** (ersetzt „EU-Server mit Docker“), Absender `no-reply@huntery.de`, Supabase-Konto vorhanden, Monitoring mit Sentry.
+
+### Geändert
+- Neu ADR 023 „Hosting auf Vercel“; `web/vercel.json` mit Region fra1.
+- Kartendatei: in Stage/Prod in Supabase Storage (Frankfurt); `/tiles/<name>.pmtiles` per Rewrite (`beforeFiles`) auf `MAP_TILES_ORIGIN` (`web/lib/map/tiles-rewrite.ts`, nur https). Die Karte lädt weiter von der eigenen Origin, CSP unverändert. Lokal liefert `app/tiles` wie bisher.
+- Entfernt: `web/Dockerfile`, `web/.dockerignore`, `deploy/` und der Standalone-Schalter (Stand bleibt in Commit bc3b6f7).
+- Plan, `WEB-RELEASE.md` und `CLOUD-SETUP.md` (Abschnitt 3 jetzt Vercel und Kartendatei) angepasst; `.env.example` um `MAP_TILES_FILE` und `MAP_TILES_ORIGIN`.
+
+### Tests
+- `lib/map/tiles-rewrite.test.ts` (ohne Variable keine Umschreibung, Ziel ohne Schrägstrich, nur https ohne Query/Anmeldedaten). Lokale Kartendatei weiter 206.
+
+### Offen
+- Gegen Stage nachweisen, dass der Rewrite Range und 206 durchreicht (ADR 023 Folgen).
+
 ## M10 Paket 8: Runbook Cloud-Einrichtung – 2026-11-15
 
 ### Neu

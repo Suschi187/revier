@@ -4,7 +4,8 @@ import path from "node:path";
 
 // Kartendatei (ADR 016, Review A1): von der eigenen Origin unter /tiles/<name>.pmtiles. Den Namen liest der Server
 // zur Laufzeit (MAP_TILES_FILE), ein Build gilt für Stage und Prod. In der Entwicklung liegt die Datei unter
-// web/.cache/map (npm run map:download); in Prod liefert sie der Objektspeicher bzw. das CDN vor Next aus (M10).
+// web/.cache/map (npm run map:download); in Stage/Prod liegt sie in Supabase Storage, /tiles/ wird per Rewrite
+// dorthin umgeschrieben (ADR 023, lib/map/tiles-rewrite.ts).
 
 export const TILE_NAME_RE = /^[a-z0-9-]{1,64}\.pmtiles$/;
 

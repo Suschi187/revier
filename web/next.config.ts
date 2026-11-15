@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { publicEnv } from "./lib/env";
+import { tilesRewrites } from "./lib/map/tiles-rewrite";
 import { buildCsp } from "./lib/security/csp";
 
 // Basis-Header (docs/adr/002) und feste CSP (docs/adr/010); HSTS nur in Produktion. COOP und browsing-topics aus
@@ -28,9 +29,6 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // Nur im Docker-Build (web/Dockerfile, M10): eigenständiger Server ohne node_modules. Lokal und in der CI bleibt
-  // `next start` nutzbar, das mit "standalone" warnt.
-  ...(process.env.NEXT_OUTPUT === "standalone" ? { output: "standalone" as const } : {}),
   cacheComponents: true,
   // Öffentliche Anzeigendaten (ADR 015, Review B3): höchstens 5 Minuten alt, über alle Instanzen. `expire`
   // begrenzt auch das Ausliefern veralteter Einträge (stale-while-revalidate); das Preset `minutes` hätte 1 h.
@@ -88,6 +86,9 @@ const nextConfig: NextConfig = {
       // Token im Query-String nie per Referer weitergeben (ADR 010).
       { source: "/:locale/auth/:path*", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
     ];
+  },
+  async rewrites() {
+    return { beforeFiles: tilesRewrites(process.env.MAP_TILES_ORIGIN), afterFiles: [], fallback: [] };
   },
   turbopack: {
     rules: {

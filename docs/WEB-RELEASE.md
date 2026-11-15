@@ -4,9 +4,11 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 
 ## A. Voraussetzungen (Mensch)
 - [ ] Inhaber der Konten festgelegt (privat oder Firma) und alle AVVs abgeschlossen (Hoster, Supabase, Mail, Monitoring)
-- [ ] Markenrecherche *Huntery* abgeschlossen, Domain registriert (SPEC 7.1)
-- [x] Hosting-Art gewählt: EU-Server mit Docker (2026-11-15, SPEC 7.9)
-- [ ] Server-Anbieter gewählt (z. B. Hetzner, Scaleway), AVV abgeschlossen
+- [ ] Markenrecherche *Huntery* abgeschlossen (SPEC 7.1)
+- [x] Domain gewählt: `huntery.de` (2026-11-15)
+- [ ] `huntery.de` registriert, DNS bei United Domains auf Vercel
+- [x] Hosting gewählt: Vercel, Region fra1 (2026-11-15, SPEC 7.9, ADR 023)
+- [ ] Vercel: Team/Konto des Inhabers, AVV (DPA mit SCC) abgeschlossen
 - [x] Mail-Anbieter gewählt: United Domains (2026-11-15, SPEC 7.11)
 - [ ] United Domains: AVV abgeschlossen, Versandlimit je Stunde/Tag bekannt, Absenderadresse angelegt
 - [ ] Rechtstexte (AGB, Datenschutz, Impressum, Richtlinien) vom Anwalt geliefert und eingesetzt; offene Fragen aus SPEC 7.2 beantwortet, inkl. Melden ohne Konto (ADR 020)
@@ -28,13 +30,13 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Erster Admin per Runbook angelegt (ADR 005), Runbook „Admin kompromittiert“ bekannt
 
 ## C. Web Stage und Prod
-- [ ] Deploy reproduzierbar mit `deploy/docker-compose.yml` (je Umgebung ein Build aus demselben Commit, weil `NEXT_PUBLIC_*` und CSP beim Build eingesetzt werden), Env mit Zod validiert, kein Secret im Bundle (CI-Guard)
+- [ ] Vercel-Projekt mit Wurzel `web/`, Region fra1, Production nur aus `main`; je Umgebung eigene Env (Build aus demselben Commit, weil `NEXT_PUBLIC_*`, CSP und Rewrites beim Build feststehen); Analytics, Speed Insights und Toolbar aus; kein Secret im Bundle (CI-Guard)
 - [ ] `SITE_INDEXABLE=true` nur in Prod; Stage mit Zugangsschutz und `noindex`
 - [ ] Domain, TLS, Weiterleitung http→https und Nebendomains→Hauptdomain; HSTS gesetzt, Entscheidung zu `preload` (ADR 022)
 - [ ] Sicherheits-Header gegen Prod geprüft (`curl -I` auf Start, Detail, `/admin`, `/static/*`), CSP ohne Verstöße; Entscheidung zu CSP-Berichten (ADR 022)
-- [ ] Kartendatei in Prod: Range, stabiler ETag, `immutable`, EU mit AVV, Logs ohne IP oder ≤ 7 Tage (ADR 016)
-- [ ] Rate-Limit bzw. WAF für Suche, Foto-Route, `/api/map`, Kachelpfad (ADR 015, 016)
-- [ ] Access-Logs des Hosters: ohne IP oder kurze Frist, Abbestell-Token nicht dauerhaft gespeichert (ADR 018)
+- [ ] Kartendatei in Supabase Storage (Bucket `tiles`, öffentlich, ein Jahr Cache), `MAP_TILES_ORIGIN` gesetzt; über `https://huntery.de/tiles/…` liefert der Rewrite 206 mit `Content-Range` (ADR 016, 023); Log-Frist von Storage geprüft
+- [ ] Rate-Limit-Regeln der Vercel-Firewall für Suche, Foto-Route, `/api/map`, `/tiles/` (ADR 015, 016)
+- [ ] Logs bei Vercel: Aufbewahrung laut Plan kurz, Abbestell-Token nicht dauerhaft gespeichert (ADR 018); Log-Drains nur in die EU
 - [ ] Sign in with Apple nur, wenn Apple-Konto steht; sonst `NEXT_PUBLIC_AUTH_APPLE_ENABLED=false`
 
 ## D. E-Mail
@@ -46,7 +48,7 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 ## E. Fehlerseiten, Monitoring, Backups
 - [ ] 404 und 500 lokalisiert, ohne Fehlerdetails, auch ohne JavaScript lesbar (E2E)
 - [ ] `/api/health` vom Uptime-Check überwacht, Alarm an eine feste Person
-- [ ] Fehler-Monitoring ohne IP und ohne Nutzerdaten (EU), Alarm bei neuen Fehlern
+- [ ] Sentry (EU-Region `de.sentry.io`) ohne IP und ohne Nutzerdaten, AVV, Alarm bei neuen Fehlern
 - [ ] Backups aktiv; Wiederherstellung einmal auf Stage geübt und dokumentiert; Fristen in der Datenschutzerklärung (ADR 019)
 
 ## F. Qualität

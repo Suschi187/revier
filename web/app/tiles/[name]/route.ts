@@ -5,7 +5,7 @@ import { TILE_NAME_RE, tilesDir } from "@/lib/map/tiles";
 import { parseRange } from "@/lib/map/range";
 
 // Kartendatei mit Range-Requests (ADR 016, Review A1). Nur in der Entwicklung bzw. mit MAP_TILES_DIR aktiv; in Prod
-// liefert der Objektspeicher bzw. das CDN /tiles/ vor Next aus. Keine Zugriffsprotokolle mit Range-Headern: Die
+// schreibt ein Rewrite /tiles/ vor dieser Route auf Supabase Storage um (ADR 023). Keine Zugriffsprotokolle mit Range-Headern: Die
 // Bereiche verraten die betrachtete Kachel.
 
 function notFound(): Response {

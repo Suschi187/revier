@@ -38,5 +38,3 @@ DerivedData/
 ios/build/
 .build/
 
-# Deploy: Kartendatei liegt nur auf dem Server
-deploy/tiles/
