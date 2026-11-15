@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { ChatLive } from "@/components/chat/ChatLive";
 import { Composer } from "@/components/chat/Composer";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { counterpartName } from "@/lib/chat/names";
@@ -146,7 +147,7 @@ export default async function ConversationPage(props: Props) {
           <a href={`/${locale}/welcome?next=${encodeURIComponent(path)}`} className="underline">{t("legalLink")}</a>
         </p>
       ) : info.can_write ? (
-        <Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} owner={info.role === "owner"} />
+        <ClientMessages namespaces={["Chat"]}><Composer action={sendMessageAction} id={id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} owner={info.role === "owner"} /></ClientMessages>
       ) : (
         <div className="mt-6 flex flex-wrap items-center gap-3 rounded-card border border-field bg-surface p-3">
           <p>{info.blocked_by_me ? t("blockedByMe") : t("cannotWrite")}</p>

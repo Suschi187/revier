@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { ListingsMap } from "@/components/map/ListingsMap";
 import { ui } from "@/components/ui/styles";
 import { SaveSearch } from "@/components/saved-searches/SaveSearch";
@@ -178,28 +179,30 @@ export async function ListingsPage({
               <noscript>
                 <p className={`${ui.card} p-3`}>{tm("noscript")}</p>
               </noscript>
-              <ListingsMap
-                tilesUrl={tilesUrl()}
-                locale={locale}
-                bounds={mapBounds}
-                query={paramsFromFilters(filters, ["bbox"]).toString()}
-                path={path}
-                texts={{
-                  label: tm("label"),
-                  attribution: tm.raw("attribution") as string,
-                  failed: tm("failed"),
-                  loading: tm("loading"),
-                  loadFailed: tm("loadFailed"),
-                  retry: tm("retry"),
-                  truncated: tm("truncated"),
-                  searchArea: tm("searchArea"),
-                  searchAreaHint: tm("searchAreaHint"),
-                  stack: tm.raw("stack") as string,
-                  cluster: tm.raw("cluster") as string,
-                  close: tm("close"),
-                  count: tm.raw("count") as string,
-                }}
-              />
+              <ClientMessages namespaces={["Map.controls"]}>
+                <ListingsMap
+                  tilesUrl={tilesUrl()}
+                  locale={locale}
+                  bounds={mapBounds}
+                  query={paramsFromFilters(filters, ["bbox"]).toString()}
+                  path={path}
+                  texts={{
+                    label: tm("label"),
+                    attribution: tm.raw("attribution") as string,
+                    failed: tm("failed"),
+                    loading: tm("loading"),
+                    loadFailed: tm("loadFailed"),
+                    retry: tm("retry"),
+                    truncated: tm("truncated"),
+                    searchArea: tm("searchArea"),
+                    searchAreaHint: tm("searchAreaHint"),
+                    stack: tm.raw("stack") as string,
+                    cluster: tm.raw("cluster") as string,
+                    close: tm("close"),
+                    count: tm.raw("count") as string,
+                  }}
+                />
+              </ClientMessages>
             </>
           )}
 

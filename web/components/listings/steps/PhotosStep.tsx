@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import type { OwnPhoto } from "@/lib/services/listings";
@@ -39,7 +40,7 @@ export async function PhotosStep({
 
   return (
     <div className="mt-6 flex flex-col gap-6" id="f-photos">
-      <PhotoUploader listingId={listingId} freeSlots={freeSlots} />
+      <ClientMessages namespaces={["Listings.photos"]}><PhotoUploader listingId={listingId} freeSlots={freeSlots} /></ClientMessages>
       <noscript>
         <p className="text-sm">{t("photos.noscript")}</p>
       </noscript>

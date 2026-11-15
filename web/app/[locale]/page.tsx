@@ -71,12 +71,13 @@ function Contours() {
 
 export default async function HomePage() {
   const locale = (await getLocale()) as AppLocale;
-  const [t, th, tl, tc, tb] = await Promise.all([
+  const [t, th, tl, tc, tb, ta] = await Promise.all([
     getTranslations("Public.home"),
     getTranslations("HomePage"),
     getTranslations("Listings"),
     getTranslations("Profile.countries"),
     getTranslations("Brand"),
+    getTranslations("AccountDelete"),
   ]);
   const searchPath = publicPath({ route: "search" }, locale);
   const trust = [
@@ -88,7 +89,7 @@ export default async function HomePage() {
   return (
     <main className={`${ui.container} flex flex-1 flex-col gap-10 py-6 sm:gap-12`}>
       <Suspense fallback={null}>
-        <DeletedNotice />
+        <DeletedNotice text={ta("deletedNotice")} />
       </Suspense>
       <JsonLd
         data={{

@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { LogoMark } from "@/components/brand/Logo";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
@@ -42,5 +43,5 @@ export default async function LoginPage({ searchParams }: PageProps<"/[locale]/l
 async function LoginFormWithParams({ searchParams }: Pick<PageProps<"/[locale]/login">, "searchParams">) {
   const locale = (await getLocale()) as AppLocale;
   const { next } = await searchParams;
-  return <LoginForm locale={locale} next={safeNextPath(next, locale)} />;
+  return <ClientMessages namespaces={["Auth.login"]}><LoginForm locale={locale} next={safeNextPath(next, locale)} /></ClientMessages>;
 }

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import type { PostalCodeOption, Region } from "@/lib/services/regions";
@@ -129,24 +130,26 @@ export async function LocationStep({
               <noscript>
                 <p className="text-sm">{tm("noscript")}</p>
               </noscript>
-              <PointPicker
-                tilesUrl={point.tilesUrl}
-                locale={locale}
-                bounds={point.bounds}
-                publicPoint={point.publicPoint}
-                texts={{
-                  label: tm("label"),
-                  attribution: (await getTranslations("Map")).raw("attribution") as string,
-                  failed: (await getTranslations("Map"))("failed"),
-                  setCentre: tm("setCentre"),
-                  remove: tm("remove"),
-                  discard: tm("discard"),
-                  chosen: tm("chosen"),
-                  removed: tm("removed"),
-                  publicMarker: tm("publicMarker"),
-                  chosenMarker: tm("chosenMarker"),
-                }}
-              />
+              <ClientMessages namespaces={["Map.controls"]}>
+                <PointPicker
+                  tilesUrl={point.tilesUrl}
+                  locale={locale}
+                  bounds={point.bounds}
+                  publicPoint={point.publicPoint}
+                  texts={{
+                    label: tm("label"),
+                    attribution: (await getTranslations("Map")).raw("attribution") as string,
+                    failed: (await getTranslations("Map"))("failed"),
+                    setCentre: tm("setCentre"),
+                    remove: tm("remove"),
+                    discard: tm("discard"),
+                    chosen: tm("chosen"),
+                    removed: tm("removed"),
+                    publicMarker: tm("publicMarker"),
+                    chosenMarker: tm("chosenMarker"),
+                  }}
+                />
+              </ClientMessages>
               <FieldError codes={errors} fieldId="f-point" />
             </>
           )}

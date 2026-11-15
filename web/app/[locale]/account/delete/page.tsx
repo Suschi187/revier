@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ReauthForm } from "@/components/account/ReauthForm";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { deletionPending } from "@/lib/services/account";
@@ -55,7 +56,7 @@ export default async function AccountDeletePage(props: Props) {
           <section className="mt-8 rounded-btn border border-sand p-4">
             <h2 className="font-display text-xl font-bold">{t("step1")}</h2>
             <div className="mt-3">
-              {user.email ? <ReauthForm email={user.email} userId={user.id} locale={locale} /> : <p>{t("noEmail")}</p>}
+              {user.email ? <ClientMessages namespaces={["AccountDelete.reauth"]}><ReauthForm email={user.email} userId={user.id} locale={locale} /></ClientMessages> : <p>{t("noEmail")}</p>}
               <noscript><p className="mt-2">{t("noscript")}</p></noscript>
             </div>
           </section>

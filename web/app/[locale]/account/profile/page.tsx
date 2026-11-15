@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { BlockedNotice } from "@/components/profile/BlockedNotice";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { ui } from "@/components/ui/styles";
@@ -44,16 +45,18 @@ async function ProfileContent() {
   if (!profile) throw new Error("Profil nicht verfügbar");
   if (profile.isBlocked) return <BlockedNotice />;
   return (
-    <ProfileForm
-      locale={locale}
-      initial={{
-        displayName: profile.displayName,
-        accountType: profile.accountType,
-        businessName: profile.businessName ?? "",
-        country: profile.country,
-        preferredLanguage: profile.preferredLanguage,
-      }}
-    />
+    <ClientMessages namespaces={["Account.profile", "Profile", "LocaleSwitcher.names"]}>
+      <ProfileForm
+        locale={locale}
+        initial={{
+          displayName: profile.displayName,
+          accountType: profile.accountType,
+          businessName: profile.businessName ?? "",
+          country: profile.country,
+          preferredLanguage: profile.preferredLanguage,
+        }}
+      />
+    </ClientMessages>
   );
 }
 

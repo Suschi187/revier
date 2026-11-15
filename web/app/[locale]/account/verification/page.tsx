@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { VerificationUpload } from "@/components/account/VerificationUpload";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { Icon } from "@/components/ui/Icon";
 import { ui } from "@/components/ui/styles";
 import { Link } from "@/i18n/navigation";
@@ -109,7 +110,7 @@ export default async function VerificationPage(props: Props) {
 
       {(!open || !open.submittedAt) && !verified && !profile.isBlocked && (
         <div className="mt-6">
-          <VerificationUpload types={documentTypesFor(profile.accountType)} />
+          <ClientMessages namespaces={["Verification"]}><VerificationUpload types={documentTypesFor(profile.accountType)} /></ClientMessages>
           <noscript>
             <p className="mt-2 text-error">{t("noscript")}</p>
           </noscript>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { ConfirmForm } from "@/components/auth/ConfirmForm";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import type { AppLocale } from "@/i18n/routing";
 import { LogoMark } from "@/components/brand/Logo";
 import { ui } from "@/components/ui/styles";
@@ -33,5 +34,5 @@ async function ConfirmFormWithParams({ searchParams }: Pick<PageProps<"/[locale]
   const locale = (await getLocale()) as AppLocale;
   const params = await searchParams;
   const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value) ?? "";
-  return <ConfirmForm locale={locale} tokenHash={first(params.token_hash)} redirectTo={first(params.redirect_to)} />;
+  return <ClientMessages namespaces={["Auth.confirm"]}><ConfirmForm locale={locale} tokenHash={first(params.token_hash)} redirectTo={first(params.redirect_to)} /></ClientMessages>;
 }

@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import type { AppLocale } from "@/i18n/routing";
 import { safeNextPath } from "@/lib/auth/paths";
 import { isErrorParam } from "@/lib/saved-searches/errors";
@@ -44,15 +45,17 @@ export async function SaveSearch({
   delete saved.sort;
   const texts = await filterTexts(locale);
   return (
-    <SaveSearchForm
-      locale={locale}
-      filters={JSON.stringify(saved)}
-      view={mapView ? "map" : ""}
-      suggestedName={suggestName(saved, texts)}
-      summary={describeFilters(saved, locale, texts)}
-      hasMapArea={saved.bbox !== undefined}
-      legalHref={`/${locale}/welcome?next=${encodeURIComponent(safeNextPath(back, locale))}`}
-      initialError={isErrorParam(error) ? error : undefined}
-    />
+    <ClientMessages namespaces={["SavedSearches"]}>
+      <SaveSearchForm
+        locale={locale}
+        filters={JSON.stringify(saved)}
+        view={mapView ? "map" : ""}
+        suggestedName={suggestName(saved, texts)}
+        summary={describeFilters(saved, locale, texts)}
+        hasMapArea={saved.bbox !== undefined}
+        legalHref={`/${locale}/welcome?next=${encodeURIComponent(safeNextPath(back, locale))}`}
+        initialError={isErrorParam(error) ? error : undefined}
+      />
+    </ClientMessages>
   );
 }

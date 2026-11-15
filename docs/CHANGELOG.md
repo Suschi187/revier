@@ -2,6 +2,35 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeit: Listenseite ≥ 90 – Übersetzungen nur noch in Teilen an den Browser – 2026-11-15
+
+### Ursache
+Das Layout gab mit `NextIntlClientProvider` alle Übersetzungen (rund 70 KB) an den Browser, durch Partial Prerendering sogar zweimal im HTML. Die Listenseite war dadurch 299 KB groß (69 KB komprimiert), und das erste Vorschaubild (LCP) wurde entsprechend später geladen.
+
+### Geändert
+- **Layout** gibt nur noch `LocaleSwitcher` weiter (`LAYOUT_CLIENT_NAMESPACES` in `web/lib/i18n/pick.ts`).
+- **`ClientMessages`** (`web/components/i18n/ClientMessages.tsx`): Server-Komponenten legen diese Grenze mit den Namensräumen ihrer Client-Komponenten darum, an 15 Stellen (Suche speichern, Karten, Fotos und Punkt im Assistenten, Login, Bestätigen, Admin-2FA, Willkommen, Profil, Verifizierung, Konto löschen, Chat). Eine innere Grenze ersetzt die äußere, deshalb nennt sie alle Namensräume ihres Teilbaums.
+- `DeletedNotice` auf der Startseite bekommt seinen Satz als Eigenschaft und braucht keine Übersetzungen im Browser.
+- **Prüftest** `web/lib/i18n/client-messages.test.ts`: liest den Code und verlangt für jede Server-Datei, die eine übersetzte Client-Komponente einbindet (auch indirekt), dass deren Namensräume in ihrer Grenze bzw. im Layout stehen und existieren. `pickMessages` wirft bei unbekanntem Pfad (`pick.test.ts`).
+
+### Messung (Lighthouse 12.8.2, Handy, `next start`, 6 Demo-Anzeigen mit je 3 Fotos wie in Schritt 7)
+| Seite | Performance vorher → nachher | LCP | Gewicht |
+|---|---|---|---|
+| Liste `/de/jagdhelfer` (Median aus 5) | 89–90 → 91 | 3,7 → 3,6 s | 567 → 455 KB |
+| Start `/de` | 93 → 94 | 3,1 s | 558 → 449 KB |
+| Detail | 87 → 86 | 4,2 s | 625 → 558 KB |
+| Start `/cs` | 87 → 90 | 3,6 s | 714 → 603 KB |
+
+HTML der Liste: 299 → 145 KB (komprimiert 69 → 23 KB). Damit sind alle Ziele aus Schritt 7 erreicht (Start und Liste ≥ 90, Detail ≥ 85). Detail liegt im Rahmen der Messschwankung gleich. LCP bleibt über 2,5 s; das ist der Richtwert für Prod mit CDN und wird in M10 gemessen.
+
+### Testen
+- `cd web && npx vitest run lib/i18n`
+- Komplette E2E-Suite (274 grün, inkl. rohe Schlüssel in 4 Sprachen in `m10a-text.spec.ts` und `saved-searches.spec.ts`)
+- Messung: `npm run build && npx next start -p 3100`, dann `npx --yes lighthouse@12.8.2 http://localhost:3100/de/jagdhelfer --only-categories=performance`. Die Demo-Anzeigen (Konto `demo-perf@test.local`) liegen wieder lokal.
+
+### Hinweis für neue Client-Komponenten
+Wer `useTranslations` in einer Client-Komponente nutzt, muss den Namensraum an der Einbindestelle in `ClientMessages` nennen. Sonst schlägt der Prüftest fehl.
+
 ## M10a Nacharbeit: Claim in der Leiste oben (QA F2) – 2026-11-15
 
 ### Geändert

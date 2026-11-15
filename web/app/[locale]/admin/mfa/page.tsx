@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { CodeForm, EnrollTotp } from "@/components/admin/TotpForms";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import type { AppLocale } from "@/i18n/routing";
 import { safeNextPath } from "@/lib/auth/paths";
 import { requireAdminRole, verifiedTotpFactor } from "@/lib/services/admin";
@@ -34,9 +35,9 @@ export default async function AdminMfaPage({ searchParams }: Props) {
       <h1 className="font-display text-2xl font-extrabold uppercase leading-tight [overflow-wrap:anywhere] hyphens-auto sm:text-3xl">{t("title")}</h1>
       <p className="mt-3">{t("intro")}</p>
       {factor ? (
-        <CodeForm action={confirmTotp} locale={locale} factorId={factor.id} next={next} error={query.error === "code"} />
+        <ClientMessages namespaces={["Admin.mfa"]}><CodeForm action={confirmTotp} locale={locale} factorId={factor.id} next={next} error={query.error === "code"} /></ClientMessages>
       ) : (
-        <EnrollTotp start={startEnrollment} confirm={confirmEnrollment} locale={locale} next={next} />
+        <ClientMessages namespaces={["Admin.mfa"]}><EnrollTotp start={startEnrollment} confirm={confirmEnrollment} locale={locale} next={next} /></ClientMessages>
       )}
     </main>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Composer } from "@/components/chat/Composer";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { Link } from "@/i18n/navigation";
 import type { AppLocale } from "@/i18n/routing";
 import { publicPath } from "@/lib/public/paths";
@@ -47,7 +48,7 @@ export default async function NewConversationPage(props: Props) {
             <>
               <p className="mt-4">{t("new.intro")}</p>
               <p className="mt-4 rounded-btn border border-notice bg-notice-soft p-3 text-sm">{t("safety")}</p>
-              <Composer action={startConversationAction} id={listing.id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} />
+              <ClientMessages namespaces={["Chat"]}><Composer action={startConversationAction} id={listing.id} locale={locale} initialError={typeof query.error === "string" ? query.error : undefined} /></ClientMessages>
             </>
           )}
         </>

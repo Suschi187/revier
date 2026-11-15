@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { BlockedNotice } from "@/components/profile/BlockedNotice";
 import { WelcomeForm } from "@/components/profile/WelcomeForm";
 import { LogoMark } from "@/components/brand/Logo";
@@ -53,18 +54,20 @@ async function WelcomeContent({ searchParams }: Pick<PageProps<"/[locale]/welcom
   const displayName =
     profile.displayName === PLACEHOLDER_DISPLAY_NAME ? (user.metadataName ?? "") : profile.displayName;
   return (
-    <WelcomeForm
-      locale={locale}
-      next={next}
-      termsVersion={legal.termsVersion}
-      privacyVersion={legal.privacyVersion}
-      initial={{
-        displayName,
-        accountType: profile.accountType,
-        businessName: profile.businessName ?? "",
-        country: profile.country,
-        preferredLanguage: profile.preferredLanguage,
-      }}
-    />
+    <ClientMessages namespaces={["Welcome", "Profile", "LocaleSwitcher.names"]}>
+      <WelcomeForm
+        locale={locale}
+        next={next}
+        termsVersion={legal.termsVersion}
+        privacyVersion={legal.privacyVersion}
+        initial={{
+          displayName,
+          accountType: profile.accountType,
+          businessName: profile.businessName ?? "",
+          country: profile.country,
+          preferredLanguage: profile.preferredLanguage,
+        }}
+      />
+    </ClientMessages>
   );
 }

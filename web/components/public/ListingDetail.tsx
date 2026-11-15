@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 import { SpeciesIcon } from "@/components/brand/SpeciesIcon";
+import { ClientMessages } from "@/components/i18n/ClientMessages";
 import { AttributeRow } from "@/components/listings/ListingSummary";
 import { KindIcon } from "@/components/brand/KindIcon";
 import { DetailMap } from "@/components/map/DetailMap";
@@ -164,19 +165,21 @@ export async function ListingDetail({
                 <noscript>
                   <p className="mt-2 text-sm">{tm("noscriptDetail")}</p>
                 </noscript>
-                <DetailMap
-                  tilesUrl={tilesUrl()}
-                  locale={locale}
-                  point={listing.point}
-                  approx={listing.approx}
-                  texts={{
-                    show: tm("showMap"),
-                    label: tm("detailLabel"),
-                    attribution: tm.raw("attribution") as string,
-                    failed: tm("failed"),
-                    marker: listing.approx === "point" ? tm("approxPoint") : tm("approxDistrict"),
-                  }}
-                />
+                <ClientMessages namespaces={["Map.controls"]}>
+                  <DetailMap
+                    tilesUrl={tilesUrl()}
+                    locale={locale}
+                    point={listing.point}
+                    approx={listing.approx}
+                    texts={{
+                      show: tm("showMap"),
+                      label: tm("detailLabel"),
+                      attribution: tm.raw("attribution") as string,
+                      failed: tm("failed"),
+                      marker: listing.approx === "point" ? tm("approxPoint") : tm("approxDistrict"),
+                    }}
+                  />
+                </ClientMessages>
               </>
             )}
           </section>
