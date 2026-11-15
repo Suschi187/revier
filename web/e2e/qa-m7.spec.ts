@@ -299,11 +299,15 @@ test.describe("QA M7: Web-Proben", () => {
     await page.goto("/de");
     const before = await page.getByRole("link", { name: /^Nachrichten/ }).first().getAttribute("aria-label");
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Fokus 2" });
-    await page.evaluate(() => {
-      document.dispatchEvent(new Event("visibilitychange"));
-      window.dispatchEvent(new Event("focus"));
-    });
-    await expect.poll(async () => page.getByRole("link", { name: /^Nachrichten/ }).first().getAttribute("aria-label"), { timeout: 5000 }).not.toBe(before);
+    // Ereignisse in der Schleife wiederholen: Vor der Hydration gibt es noch keinen Zuhörer (unter Last wurde der Test
+    // sonst rot). Nach der ersten Wirkung sperrt UnreadRefresh 30 Sekunden, weitere Ereignisse ändern nichts.
+    await expect.poll(async () => {
+      await page.evaluate(() => {
+        document.dispatchEvent(new Event("visibilitychange"));
+        window.dispatchEvent(new Event("focus"));
+      });
+      return page.getByRole("link", { name: /^Nachrichten/ }).first().getAttribute("aria-label");
+    }, { timeout: 15_000 }).not.toBe(before);
     await context.close();
   });
 
