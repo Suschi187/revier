@@ -54,9 +54,10 @@ export function SiteHeader() {
   );
 }
 
+// Claim im Stil des Shops (SPEC 4.1, QA F2), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dann darunter.
 async function TopBarText() {
   const tb = await getTranslations("Brand");
-  return <p className="hidden font-display font-semibold uppercase tracking-claim sm:block">{tb("claim")}</p>;
+  return <p className="font-display font-semibold uppercase tracking-claim">{tb("claim")}</p>;
 }
 
 async function ShopLink() {

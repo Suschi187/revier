@@ -153,7 +153,7 @@ Alle Fotos sind Platzhalter. Die Wildarten-Icons sind eigene Zeichnungen (siehe 
 2. Ob `design/` ins Repo soll (rund 14 MB PNG); sonst kommt `design/` in `.gitignore`
 3. Name: Freigabe nach Markenrecherche (SPEC 7.1)
 
-4. Claim in der Leiste oben (QA F2): Die Leiste zeigt „Jagdgelegenheiten in DE · AT · CH · CZ · PL“ statt eines Claims im Stil des Shops und blendet ihn unter 640 px aus. Entscheidung offen.
+4. ~~Claim in der Leiste oben (QA F2)~~ entschieden 2026-11-15: „Klare Linien. Wilde Freiheit.“ (SPEC-Kandidat), auch bei 360 px sichtbar; Shop-Link und Sprachwahl rücken dort in eine zweite Zeile. Offen bleibt nur die Prüfung der cs/pl-Fassung durch Muttersprachler (mit Punkt 3).
 
 Entschieden laut SPEC: kein Dunkelmodus im ersten Stand; Anrede „Du“ in de, cs und pl.
 

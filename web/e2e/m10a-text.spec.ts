@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { deleteTestUsers, local } from "./cleanup";
+import { msg } from "./messages";
 import { createAccount, createPublicListing, signInAs, type TestAccount } from "./session";
 import { publicPath } from "../lib/public/paths";
 import { routing, type AppLocale } from "../i18n/routing";
@@ -80,6 +81,8 @@ test.describe("M10a Schritt 5 und 8: Textlängen bei 360 px, axe, Bildschirmfoto
         `/${locale}/gibt-es-nicht/a/b/c`,
       ];
       for (const url of pages) await check(page, url);
+      // QA F2: Claim der Leiste auch bei 360 px sichtbar.
+      await expect(page.getByText(msg(locale, "Brand.claim"), { exact: true })).toBeVisible();
     });
 
     test(`${locale}: Konto, Inserieren, Nachrichten`, async ({ page, context }) => {

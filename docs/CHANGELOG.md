@@ -2,6 +2,18 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10a Nacharbeit: Claim in der Leiste oben (QA F2) – 2026-11-15
+
+### Geändert
+- **Claim** „Klare Linien. Wilde Freiheit.“ statt „Jagdgelegenheiten in DE · AT · CH · CZ · PL“ (Entscheidung 2026-11-15, Kandidat aus SPEC 4.1). en „Clear lines. Wild freedom.“, cs „Jasné linie. Divoká svoboda.“, pl „Wyraźne linie. Dzika wolność.“; cs/pl auch in `web/scripts/i18n-overrides.json`, damit ein DeepL-Lauf sie nicht überschreibt.
+- Der Claim steht jetzt auch unter 640 px; bei 360 px rücken Shop-Link und Sprachwahl in eine zweite Zeile.
+
+### Testen
+- `npx playwright test e2e/m10a-text.spec.ts -g "öffentliche Seiten"`: je Sprache 14 Seiten bei 360 px ohne Überbreite, axe grün, Claim sichtbar.
+
+### Offen
+- cs/pl-Fassung von Muttersprachlern prüfen lassen (wie alle cs/pl-Texte).
+
 ## M10a Nacharbeit: DESIGN.md vollständig, Tokens für iOS übernehmbar (QA F11) – 2026-11-14
 
 ### Geändert (nur Dokumentation)
