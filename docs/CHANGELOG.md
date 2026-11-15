@@ -2,6 +2,19 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Name Huntroy und Unterzeile je Sprache – 2026-11-15
+
+### Geändert
+- **Name:** *Huntroy* statt *Reviro* (Reviro ist vergeben, Entscheidung 2026-11-15). Wortmarke HUNTROY, Seitentitel, „Mein Huntroy“, Startseiten-Label, Cookie-Banner, 404 ohne Sprache, DeepL-Kontext und Glossarname, `DESIGN.md`, `SPEC.md`.
+- **Unterzeile** (`Brand.tagline`, Eyebrow über der Startseiten-Überschrift): de „Dein Marktplatz für Jagdgelegenheiten“, en „Hunting Opportunities & Classifieds“, cs „Lovecké nabídky a inzerce“, pl „Ogłoszenia i oferty łowieckie“. Von Hand je Sprache, DeepL überspringt den Schlüssel.
+- Ältere Changelog-Einträge nennen weiter Reviro (Stand damals).
+
+### Testen
+- `cd web && npx playwright test e2e/m10a-text.spec.ts e2e/qa-m7-nachpruefung.spec.ts e2e/public.spec.ts` (43 grün, 360 px ohne Überbreite in 4 Sprachen)
+
+### Offen (Mensch)
+- Markenrecherche und Domain für *Huntroy* (SPEC 7.1), cs/pl-Unterzeile von Muttersprachlern prüfen.
+
 ## ADR 022 K7: Sprachwechsel mit geprüfter Filter-Query – 2026-11-15
 
 ### Geändert

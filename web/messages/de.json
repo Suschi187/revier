@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "siteName": "Reviro",
+    "siteName": "Huntroy",
     "siteDescription": "Marktplatz für Jagdgelegenheiten in Deutschland, Österreich, der Schweiz, Tschechien und Polen."
   },
   "HomePage": {
@@ -17,10 +17,10 @@
     }
   },
   "Brand": {
-    "name": "REVIRO",
+    "name": "HUNTROY",
     "endorsement": "by Die Jagdbrüder",
-    "tagline": "Jagdpacht & Begehungsscheine",
-    "homeLabel": "Reviro by Die Jagdbrüder, zur Startseite",
+    "tagline": "Dein Marktplatz für Jagdgelegenheiten",
+    "homeLabel": "Huntroy by Die Jagdbrüder, zur Startseite",
     "claim": "Klare Linien. Wilde Freiheit.",
     "shop": "Die Jagdbrüder Shop",
     "shopLabel": "Die Jagdbrüder Shop (externe Seite)"
@@ -32,7 +32,7 @@
     "searchButton": "Finden",
     "create": "Anzeige aufgeben",
     "favorites": "Merkliste",
-    "account": "Mein Reviro",
+    "account": "Mein Huntroy",
     "messages": "Nachrichten",
     "signIn": "Anmelden",
     "signOut": "Abmelden",
@@ -1474,7 +1474,7 @@
     },
     "noThirdParties": "Die Website lädt keine Inhalte von Dritten: keine Werbung, keine Analyse, keine fremden Schriften oder Karten.",
     "banner": {
-      "title": "Cookies bei Reviro",
+      "title": "Cookies bei Huntroy",
       "text": "Neben den unbedingt erforderlichen Speichern möchten wir optionale Cookies nutzen. Sie laufen nur mit deiner Einwilligung. Deine Wahl kannst du jederzeit in den Cookie-Einstellungen ändern.",
       "reject": "Alle ablehnen",
       "accept": "Alle akzeptieren"

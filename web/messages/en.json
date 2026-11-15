@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "siteName": "Reviro",
+    "siteName": "Huntroy",
     "siteDescription": "Marketplace for hunting opportunities in Germany, Austria, Switzerland, Czechia and Poland."
   },
   "HomePage": {
@@ -17,10 +17,10 @@
     }
   },
   "Brand": {
-    "name": "REVIRO",
+    "name": "HUNTROY",
     "endorsement": "by Die Jagdbrüder",
-    "tagline": "Hunting leases & permits",
-    "homeLabel": "Reviro by Die Jagdbrüder, home",
+    "tagline": "Hunting Opportunities & Classifieds",
+    "homeLabel": "Huntroy by Die Jagdbrüder, home",
     "claim": "Clear lines. Wild freedom.",
     "shop": "Die Jagdbrüder shop",
     "shopLabel": "Die Jagdbrüder shop (external site)"
@@ -32,7 +32,7 @@
     "searchButton": "Search",
     "create": "Post a listing",
     "favorites": "Saved",
-    "account": "My Reviro",
+    "account": "My Huntroy",
     "messages": "Messages",
     "signIn": "Sign in",
     "signOut": "Sign out",
@@ -1474,7 +1474,7 @@
     },
     "noThirdParties": "The website loads no content from third parties: no advertising, no analytics, no external fonts or maps.",
     "banner": {
-      "title": "Cookies on Reviro",
+      "title": "Cookies on Huntroy",
       "text": "Besides the strictly necessary storage, we would like to use optional cookies. They only run with your consent. You can change your choice at any time in the cookie settings.",
       "reject": "Reject all",
       "accept": "Accept all"

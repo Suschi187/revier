@@ -395,7 +395,7 @@ test.describe("QA M7 Nachprüfung", () => {
       await expect(page.getByRole("main").locator('[data-realtime="subscribed"]')).toBeAttached({ timeout: 15_000 });
     }
     // Client-Navigation aus dem Chat (Link „Alle Nachrichten“ wäre wieder Chat): Konto-Seite über die Kopfzeile
-    await a.getByRole("link", { name: "Mein Reviro", exact: true }).click();
+    await a.getByRole("link", { name: "Mein Huntroy", exact: true }).click();
     await expect(a).toHaveURL(/\/de\/account$/);
     await expect.poll(wsA.open, { timeout: 10_000 }).toBe(0);
     await owner.client.rpc("send_message", { p_conversation_id: conversation, p_body: "Nur Tab B" });

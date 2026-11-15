@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "siteName": "Reviro",
+    "siteName": "Huntroy",
     "siteDescription": "Platforma z ofertami polowań w Niemczech, Austrii, Szwajcarii, Czechach i Polsce."
   },
   "HomePage": {
@@ -17,10 +17,10 @@
     }
   },
   "Brand": {
-    "name": "REVIRO",
+    "name": "HUNTROY",
     "endorsement": "by Die Jagdbrüder",
-    "tagline": "Dzierżawa obwodów i polowania",
-    "homeLabel": "Reviro od Die Jagdbrüder, strona główna",
+    "tagline": "Ogłoszenia i oferty łowieckie",
+    "homeLabel": "Huntroy od Die Jagdbrüder, strona główna",
     "claim": "Wyraźne linie. Dzika wolność.",
     "shop": "Sklep Die Jagdbrüder",
     "shopLabel": "Sklep Die Jagdbrüder (strona zewnętrzna)"
@@ -32,7 +32,7 @@
     "searchButton": "Szukaj",
     "create": "Dodaj ogłoszenie",
     "favorites": "Zapisane",
-    "account": "Moje Reviro",
+    "account": "Moje Huntroy",
     "messages": "Wiadomości",
     "signIn": "Zaloguj się",
     "signOut": "Wyloguj się",
@@ -582,7 +582,7 @@
       "fix": "Popraw w kroku „{step}”",
       "notSubmittable": "To ogłoszenie jest w weryfikacji lub zostało opublikowane. Zmiany zapisują się od razu.",
       "weaponsTitle": "Uwaga: broń palna i amunicja",
-      "weaponsText": "Reviro zajmuje się wyłącznie organizacją polowań. Nie wolno oferować broni palnej ani amunicji. Sprawdź te fragmenty:",
+      "weaponsText": "Huntroy zajmuje się wyłącznie organizacją polowań. Nie wolno oferować broni palnej ani amunicji. Sprawdź te fragmenty:",
       "weaponsMatch": "{field}: “{term}”",
       "weaponsSubmit": "Nadal możesz zamieścić ogłoszenie; zespół moderatorów sprawdzi je.",
       "altText": "Tekst alternatywny do zdjęcia",
@@ -1474,7 +1474,7 @@
     },
     "noThirdParties": "Strona nie ładuje żadnych treści od stron trzecich: żadnych reklam, żadnych narzędzi analitycznych, żadnych zewnętrznych czcionek ani map.",
     "banner": {
-      "title": "Pliki cookie na Reviro",
+      "title": "Pliki cookie na Huntroy",
       "text": "Oprócz plików cookie niezbędnych do działania serwisu chcielibyśmy używać opcjonalnych plików cookie. Działają one tylko za twoją zgodą. W każdej chwili możesz zmienić swoje ustawienia w ustawieniach plików cookie.",
       "reject": "Odrzuć wszystkie",
       "accept": "Akceptuj wszystkie"
