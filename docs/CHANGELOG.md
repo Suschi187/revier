@@ -2,6 +2,17 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Namensreste „Revier“ im Web – 2026-11-15
+
+### Behoben
+- Der alte Arbeitstitel stand noch als Produktname in 7 bis 8 Texten je Sprache: Willkommensseite, Waffen-Hinweis beim Inserieren, Meta-Beschreibungen von Liste und Anbieter, Cookie-Tabelle, Datenquellen; dazu der Titel der globalen 404-Seite. Jetzt überall „Huntroy“. cs: Anbieter-Beschreibung ohne die Fehlübersetzung „s obrázky“ (auch in den DeepL-Overrides).
+
+### Offen
+- Backend-Texte nennen noch „Revier“: Betreff und Vorlagen der Anmelde-Mails (`supabase/config.toml`, `supabase/templates/*.html`), Mail-Texte der Edge Functions (`send-search-notifications`, `send-chat-notifications`, `_shared/mail`). Eigener Schritt mit Deno-Tests.
+
+### Wie testen
+- `/de/welcome`, `/de/cookies`, `/de/datenquellen` ansehen; `m10a-text.spec.ts` und `cookie-inventory.spec.ts` grün.
+
 ## Eigene Illustrationen statt KI-Fotos – 2026-11-15
 
 Entscheidung des Menschen: Bilder selbst zeichnen; Jäger mit Büchse und Trophäen dürfen gezeigt werden (Abweichung von SPEC M10a Schritt 1, `DESIGN.md` 8).

@@ -101,7 +101,7 @@
   },
   "Welcome": {
     "metaTitle": "Witaj",
-    "title": "Witaj w Revier",
+    "title": "Witaj w Huntroy",
     "intro": "Zanim przejdziesz dalej, skonfiguruj swój profil.",
     "accept": "Akceptuję <terms>regulamin</terms> i zapoznałem się z <privacy>polityką prywatności</privacy>.",
     "acceptRequired": "Aby kontynuować, zaakceptuj regulamin.",
@@ -1080,7 +1080,7 @@
       "next": "Następna strona",
       "invalid": "Filtry są nieprawidłowe. Sprawdź, co wpisałeś.",
       "failed": "Nie udało się załadować ogłoszeń. Spróbuj ponownie później.",
-      "metaDescription": "{title}: aktualne oferty i zapytania na Revier.",
+      "metaDescription": "{title}: aktualne oferty i zapytania na Huntroy.",
       "queryTooLong": "Wyszukiwane hasło jest za długie. Użyj mniej słów."
     },
     "filters": {
@@ -1140,7 +1140,7 @@
       "paging": "Strony",
       "first": "Przejdź do pierwszej strony",
       "next": "Następna strona",
-      "metaDescription": "Ogłoszenia na Revier, {name}.",
+      "metaDescription": "Ogłoszenia na Huntroy, {name}.",
       "report": "Zgłoś tego dostawcę"
     }
   },
@@ -1458,19 +1458,19 @@
       "session": {
         "name": "Sesja zalogowania (sb-…-auth-token)",
         "purpose": "Utrzymuje cię w systemie. Ustaw to tylko po zalogowaniu się.",
-        "provider": "Revier (nasza własna usługa, działająca na platformie Supabase w UE)",
+        "provider": "Huntroy (nasza własna usługa, działająca na platformie Supabase w UE)",
         "duration": "Do 400 dni; dane są usunięte po wylogowaniu"
       },
       "pkce": {
         "name": "Weryfikacja logowania (sb-…-code-verifier)",
         "purpose": "Chroni logowanie przed manipulacją (weryfikator przy każdym logowaniu i lista aktywnych sesji).",
-        "provider": "Revier (nasza własna usługa, działająca na platformie Supabase w UE)",
+        "provider": "Huntroy (nasza własna usługa, działająca na platformie Supabase w UE)",
         "duration": "Usunięte po zalogowaniu, najpóźniej w momencie wylogowania"
       },
       "map": {
         "name": "Mapa",
         "purpose": "Wyświetla ogłoszenia na mapie. Dane mapy są ładowane z naszego własnego serwera.",
-        "provider": "Revier (nasza usługa)",
+        "provider": "Huntroy (nasza usługa)",
         "duration": "Nie przechowuje żadnych danych"
       }
     },
@@ -1484,7 +1484,7 @@
   },
   "Sources": {
     "title": "Źródła danych",
-    "intro": "Dane referencyjne i mapowe wykorzystywane przez Revier wraz z licencjami i wymaganymi informacjami.",
+    "intro": "Dane referencyjne i mapowe wykorzystywane przez Huntroy wraz z licencjami i wymaganymi informacjami.",
     "website": "Strona internetowa",
     "licenseLink": "Licencja: {license}",
     "items": {

@@ -101,7 +101,7 @@
   },
   "Welcome": {
     "metaTitle": "Vítej",
-    "title": "Vítej v Revieru",
+    "title": "Vítej v Huntroy",
     "intro": "Než budeš pokračovat, nastav si svůj profil.",
     "accept": "Souhlasím s <terms>podmínkami použití</terms> a seznámil/a jsem se s <privacy>zásadami ochrany osobních údajů</privacy>.",
     "acceptRequired": "Chceš-li pokračovat, souhlas prosím s podmínkami použití.",
@@ -584,7 +584,7 @@
       "fix": "V kroku „{step}“ opravit",
       "notSubmittable": "Tento inzerát je ve schvalování nebo již byl zveřejněn. Změny se ukládají okamžitě.",
       "weaponsTitle": "Upozornění: zbraně a střelivo",
-      "weaponsText": "Revier zprostředkovává pouze lovecké příležitosti. Nabídka zbraní nebo střeliva nesmí být provedena. Zkontroluj prosím tyto body:",
+      "weaponsText": "Huntroy zprostředkovává pouze lovecké příležitosti. Nabídka zbraní nebo střeliva nesmí být provedena. Zkontroluj prosím tyto body:",
       "weaponsMatch": "{field}: „{term}“",
       "weaponsSubmit": "I tak můžeš inzerát odeslat; moderátoři jej zkontrolují.",
       "altText": "Alternativní text k fotografii",
@@ -1080,7 +1080,7 @@
       "next": "Další stránka",
       "invalid": "Filtry nejsou platné. Zkontroluj prosím své zadání.",
       "failed": "Inzeráty se nepodařilo načíst. Zkus to prosím později.",
-      "metaDescription": "{title}: aktuální nabídky a poptávky na Revier.",
+      "metaDescription": "{title}: aktuální nabídky a poptávky na Huntroy.",
       "queryTooLong": "Hledaný výraz je příliš dlouhý. Použij prosím méně slov."
     },
     "filters": {
@@ -1140,7 +1140,7 @@
       "paging": "Stránky",
       "first": "Na první stránku",
       "next": "Další stránka",
-      "metaDescription": "Inzeráty s obrázky {name} na stránkách Revier.",
+      "metaDescription": "Inzeráty uživatele {name} na Huntroy.",
       "report": "Nahlásit inzerenta"
     }
   },
@@ -1458,19 +1458,19 @@
       "session": {
         "name": "Přihlašovací relace (sb-…-auth-token)",
         "purpose": "Udržuje tě přihlášeného. Nastaví se až při přihlášení.",
-        "provider": "Revier (vlastní služba, provozovaná na platformě Supabase v EU)",
+        "provider": "Huntroy (vlastní služba, provozovaná na platformě Supabase v EU)",
         "duration": "Až 400 dní; při odhlášení se odstraní"
       },
       "pkce": {
         "name": "Ověření přihlášení (sb-…-code-verifier)",
         "purpose": "Chrání přihlášení před neoprávněnými zásahy (kontrolní hodnota pro každý proces přihlášení a seznam otevřených procesů).",
-        "provider": "Revier (vlastní služba, provozovaná na platformě Supabase v EU)",
+        "provider": "Huntroy (vlastní služba, provozovaná na platformě Supabase v EU)",
         "duration": "Odstraněno po dokončení přihlášení, nejpozději při odhlášení"
       },
       "map": {
         "name": "Mapa",
         "purpose": "Zobrazuje inzeráty na mapě. Mapové údaje pocházejí z našeho vlastního serveru.",
-        "provider": "Revier (vlastní služba)",
+        "provider": "Huntroy (vlastní služba)",
         "duration": "Nic neukládá"
       }
     },
@@ -1484,7 +1484,7 @@
   },
   "Sources": {
     "title": "Zdroje dat",
-    "intro": "Referenční a mapové údaje, které Revier využívá, včetně příslušných licencí a povinných poznámek.",
+    "intro": "Referenční a mapové údaje, které Huntroy využívá, včetně příslušných licencí a povinných poznámek.",
     "website": "Webové stránky",
     "licenseLink": "Licence: {license}",
     "items": {

@@ -10,7 +10,7 @@ import "./globals.css";
 // je Sprache mit eigenem lang-Attribut, die Default-Locale zuerst.
 
 export const metadata: Metadata = {
-  title: "404 | Revier",
+  title: "404 | Huntroy",
 };
 
 export default async function GlobalNotFound() {

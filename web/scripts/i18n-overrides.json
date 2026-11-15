@@ -3,7 +3,7 @@
   "cs": {
     "Auth.login.otherEmail": "Použij jinou e-mailovou adresu nebo si vyžádej nový e-mail",
     "Welcome.metaTitle": "Vítej",
-    "Welcome.title": "Vítej v Revieru",
+    "Welcome.title": "Vítej v Huntroy",
     "Welcome.acceptRequired": "Chceš-li pokračovat, souhlas prosím s podmínkami použití.",
     "Legal.guidelines.sections[3].points[0]": "V textu inzerátu neuváděj telefonní čísla, e-mailové adresy ani odkazy. Kontakt probíhá přes chat.",
     "Legal.guidelines.sections[3].points[1]": "Neuváděj přesné souřadnice honiteb ani osobní údaje jiných osob.",
@@ -217,7 +217,8 @@
     "SavedSearches.save.signIn": "Přihlas se a ulož si toto hledání",
     "Brand.claim": "Jasné linie. Divoká svoboda.",
     "Header.skipToContent": "Přejít na obsah",
-    "Metadata.ogImageAlt": "Logo Huntroy před posedem v ranním světle, k tomu jelen, myslivec a pes"
+    "Metadata.ogImageAlt": "Logo Huntroy před posedem v ranním světle, k tomu jelen, myslivec a pes",
+    "Public.provider.metaDescription": "Inzeráty uživatele {name} na Huntroy."
   },
   "pl": {
     "Public.detail.safety1": "Nigdy nie płać z góry bez pisemnej umowy",

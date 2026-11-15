@@ -101,7 +101,7 @@
   },
   "Welcome": {
     "metaTitle": "Willkommen",
-    "title": "Willkommen bei Revier",
+    "title": "Willkommen bei Huntroy",
     "intro": "Richte dein Profil ein, bevor es weitergeht.",
     "accept": "Ich stimme den <terms>Nutzungsbedingungen</terms> zu und habe die <privacy>Datenschutzerklärung</privacy> gelesen.",
     "acceptRequired": "Bitte stimme den Nutzungsbedingungen zu, um fortzufahren.",
@@ -584,7 +584,7 @@
       "fix": "Im Schritt „{step}“ beheben",
       "notSubmittable": "Diese Anzeige ist in Prüfung oder veröffentlicht. Änderungen werden direkt gespeichert.",
       "weaponsTitle": "Hinweis: Waffen und Munition",
-      "weaponsText": "Revier vermittelt nur Jagdgelegenheiten. Waffen und Munition dürfen nicht angeboten werden. Bitte prüfe diese Stellen:",
+      "weaponsText": "Huntroy vermittelt nur Jagdgelegenheiten. Waffen und Munition dürfen nicht angeboten werden. Bitte prüfe diese Stellen:",
       "weaponsMatch": "{field}: „{term}“",
       "weaponsSubmit": "Du kannst trotzdem absenden; die Moderation prüft die Anzeige.",
       "altText": "Alt-Text eines Fotos",
@@ -1080,7 +1080,7 @@
       "next": "Nächste Seite",
       "invalid": "Die Filter sind ungültig. Bitte prüfe deine Eingaben.",
       "failed": "Die Anzeigen konnten nicht geladen werden. Bitte später erneut versuchen.",
-      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Revier.",
+      "metaDescription": "{title}: aktuelle Angebote und Gesuche auf Huntroy.",
       "queryTooLong": "Der Suchbegriff ist zu lang. Bitte verwende weniger Wörter."
     },
     "filters": {
@@ -1140,7 +1140,7 @@
       "paging": "Seiten",
       "first": "Zur ersten Seite",
       "next": "Nächste Seite",
-      "metaDescription": "Anzeigen von {name} auf Revier.",
+      "metaDescription": "Anzeigen von {name} auf Huntroy.",
       "report": "Anbieter melden"
     }
   },
@@ -1458,19 +1458,19 @@
       "session": {
         "name": "Anmeldesitzung (sb-…-auth-token)",
         "purpose": "Hält dich angemeldet. Wird erst bei der Anmeldung gesetzt.",
-        "provider": "Revier (eigener Dienst, betrieben bei Supabase in der EU)",
+        "provider": "Huntroy (eigener Dienst, betrieben bei Supabase in der EU)",
         "duration": "Bis zu 400 Tage; beim Abmelden entfernt"
       },
       "pkce": {
         "name": "Anmeldeprüfung (sb-…-code-verifier)",
         "purpose": "Schützt eine Anmeldung vor Manipulation (Prüfwert je Anmeldevorgang und eine Liste offener Vorgänge).",
-        "provider": "Revier (eigener Dienst, betrieben bei Supabase in der EU)",
+        "provider": "Huntroy (eigener Dienst, betrieben bei Supabase in der EU)",
         "duration": "Entfernt nach Abschluss der Anmeldung, spätestens beim Abmelden"
       },
       "map": {
         "name": "Karte",
         "purpose": "Zeigt Anzeigen auf einer Karte. Die Kartendaten kommen von unserem eigenen Server.",
-        "provider": "Revier (eigener Dienst)",
+        "provider": "Huntroy (eigener Dienst)",
         "duration": "Speichert nichts"
       }
     },
@@ -1484,7 +1484,7 @@
   },
   "Sources": {
     "title": "Datenquellen",
-    "intro": "Referenz- und Kartendaten, die Revier nutzt, mit ihren Lizenzen und Pflichtvermerken.",
+    "intro": "Referenz- und Kartendaten, die Huntroy nutzt, mit ihren Lizenzen und Pflichtvermerken.",
     "website": "Website",
     "licenseLink": "Lizenz: {license}",
     "items": {
