@@ -126,12 +126,14 @@ test("Registrieren per Code, wieder einloggen per Link", async ({ page }) => {
   await expect(page).toHaveURL("/de/account/profile");
 });
 
-test("Sicherheits-Header: CSP, kein Einbetten", async ({ request }) => {
+test("Sicherheits-Header: CSP, kein Einbetten, kein fremder Opener", async ({ request }) => {
   const response = await request.get("/de/login");
   const csp = response.headers()["content-security-policy"] ?? "";
   expect(csp).toContain("frame-ancestors 'none'");
   expect(csp).toContain("object-src 'none'");
   expect(response.headers()["x-frame-options"]).toBe("DENY");
+  expect(response.headers()["cross-origin-opener-policy"]).toBe("same-origin");
+  expect(response.headers()["permissions-policy"]).toContain("browsing-topics=()");
 });
 
 test("Verbrauchter oder ungültiger Link zeigt den Ausweg über den Code", async ({ page }) => {

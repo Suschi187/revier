@@ -3,7 +3,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 import { publicEnv } from "./lib/env";
 import { buildCsp } from "./lib/security/csp";
 
-// Basis-Header (docs/adr/002) und feste CSP (docs/adr/010); HSTS nur in Produktion.
+// Basis-Header (docs/adr/002) und feste CSP (docs/adr/010); HSTS nur in Produktion. COOP und browsing-topics aus
+// ADR 022 K6: Es gibt keine Popups, die einen Opener bräuchten (fremde Links mit noopener); keine Topics-API.
 const securityHeaders = [
   {
     key: "Content-Security-Policy",
@@ -16,9 +17,10 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+    value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
   },
   ...(process.env.NODE_ENV === "production"
     ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]

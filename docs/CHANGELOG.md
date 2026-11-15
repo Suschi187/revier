@@ -2,6 +2,16 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## ADR 022 K6: COOP und browsing-topics – 2026-11-15
+
+### Geändert
+- Neuer Header `Cross-Origin-Opener-Policy: same-origin`; `Permissions-Policy` zusätzlich mit `browsing-topics=()`. Gilt überall, wo die Basis-Header gelten (auch Admin, Abbestellen, Foto-Links des Exports, Verifizierungsdokument).
+- Nicht umgesetzt (M10): CSP-Berichte an eine eigene Route, HSTS-`preload`.
+
+### Testen
+- `curl -sI localhost:3000/de/login | grep -i -E "opener|permissions"`
+- `cd web && npx playwright test e2e/auth.spec.ts e2e/qa-m8-nachpruefung.spec.ts e2e/qa-m9a-nachpruefung.spec.ts e2e/map.spec.ts e2e/admin.spec.ts` (37 grün)
+
 ## M10a Nacharbeit: Listenseite ≥ 90 – Übersetzungen nur noch in Teilen an den Browser – 2026-11-15
 
 ### Ursache

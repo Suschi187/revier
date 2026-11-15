@@ -26,7 +26,8 @@ test.afterAll(async () => {
 function expectBase(h: Record<string, string>) {
   expect(h["x-content-type-options"]).toBe("nosniff");
   expect(h["x-frame-options"]).toBe("DENY");
-  expect(h["permissions-policy"]).toBe("camera=(), microphone=(), geolocation=(), payment=(), usb=()");
+  expect(h["permissions-policy"]).toBe("camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()");
+  expect(h["cross-origin-opener-policy"]).toBe("same-origin");
   if (PROD) expect(h["strict-transport-security"]).toBe("max-age=63072000; includeSubDomains");
   else expect(h["strict-transport-security"]).toBeUndefined();
 }
