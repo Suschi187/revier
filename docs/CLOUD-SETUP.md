@@ -10,8 +10,10 @@ Domain `huntery.de`, Absender `no-reply@huntery.de`. Platzhalter: `<domain>` (Pr
 
 ## 1. Supabase-Projekt
 1. Projekt in **eu-central-1 (Frankfurt)** anlegen, Plan mit täglichen Backups. Datenbank-Passwort nur im Passwortmanager.
-2. Migrationen: `supabase link --project-ref <ref>` und `supabase db push`. Nachweis: `supabase migration list` ohne Abweichung.
-3. pgTAP gegen das Projekt (Stage): `supabase test db --linked`. Nachweis: alle Dateien grün, auch `61_statement_timeout`.
+2. **Vor den Migrationen** die Cloud-Standardrechte angleichen (sonst bekommen anon und authenticated Rechte auf jede neue Tabelle): `supabase link --project-ref <ref>`, dann `supabase db query --remote --yes -f supabase/cloud/prepare.sql`. Nachweis: `pg_default_acl` für `postgres` in `public` wie lokal (Tabellen `anon=m`, Sequenzen `anon=w`, Funktionen nur `postgres=X`).
+3. Migrationen: `supabase db push --remote` (CLI v3 zielt sonst auf die lokale Datenbank). Kein Seed. Nachweis: `supabase migration list --remote` ohne Abweichung.
+   - **Nie `supabase db reset --remote`:** Es leert nur die eigenen Schemas; Storage-Buckets, Vault-Secrets, Cron-Jobs und Realtime-Policies bleiben, das erneute Einspielen bricht ab. Ein misslungener Aufbau in einem leeren Projekt: Projekt löschen und neu anlegen.
+   - pgTAP gegen das Projekt (nur Stage): einmal per Realtime verbinden (legt die Tagespartitionen von `realtime.messages` an), dann `supabase test db --remote`. Die Suite setzt ihre Testgrenzen selbst (`_helpers.psql`) und rollt alles zurück. Nachweis: alle Dateien grün.
 4. API (ADR 005, 009): nur Schema `public` exponiert, GraphQL aus, „Automatically expose new tables“ aus. Nachweis: `curl https://<ref>.supabase.co/graphql/v1` liefert keinen Dienst; eine neue Testtabelle ist über REST nicht sichtbar.
 5. Auth (ADR 005, 010):
    - Custom Access Token Hook auf `private.custom_access_token_hook` (wie `supabase/config.toml`).

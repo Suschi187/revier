@@ -4,6 +4,14 @@
 create extension if not exists pgtap with schema extensions;
 create schema if not exists tests;
 
+-- Dieselben Testwerte wie supabase/seed.sql, damit die Suite auch gegen Stage läuft, wo kein Seed eingespielt wird
+-- (docs/CLOUD-SETUP.md 1.3). Nur in dieser Transaktion; Tests, die die echten Grenzen prüfen (17, 36), setzen sie
+-- danach ausdrücklich.
+update private.app_settings set value = '1000'
+where key in ('listing_create_daily_limit_new', 'listing_create_daily_limit',
+              'chat_new_conversations_daily', 'chat_new_conversations_daily_new', 'chat_messages_per_10min',
+              'chat_messages_per_10min_new', 'chat_unanswered_max');
+
 -- Legt einen Nutzer in auth.users an; der Profil-Trigger (ab M1 Schritt 3) erzeugt das Profil.
 -- `accepted`: hat den aktuellen Rechtstexten zugestimmt (Legal-Gate ab M3); false für Tests ohne Zustimmung.
 create or replace function tests.create_user(email text, display_name text default null, accepted boolean default true)

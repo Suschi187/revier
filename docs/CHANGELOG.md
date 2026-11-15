@@ -2,6 +2,21 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10: Stage-Datenbank eingespielt, Cloud-Rechte angeglichen – 2026-11-15
+
+### Befund
+- Die Cloud vergibt in `public` automatisch Rechte an neue Tabellen („Automatically expose new tables“): Nach dem ersten Einspielen hatten anon und authenticated Lese- und Schreibrechte auf jeder Tabelle (RLS blieb die einzige Schranke). Die Rechte-Tests (u. a. 01, 03, 05, 15) schlugen fehl. Lokal ist das per `auto_expose_new_tables = false` aus.
+- `supabase db reset --remote` lässt Storage-Buckets, Vault, Cron und Realtime-Policies stehen und bricht beim erneuten Einspielen ab.
+
+### Geändert
+- Neu `supabase/cloud/prepare.sql`: stellt die Standardrechte in `public` auf den lokalen Stand; läuft vor dem ersten `db push --remote` (Runbook 1.2).
+- Stage neu angelegt (`cauwmmxoghnwgadmkgfz`, Frankfurt), `prepare.sql`, 77 Migrationen, Realtime einmal verbunden (Tagespartitionen), **pgTAP gegen Stage: 62 Dateien, 1859 Tests grün**.
+- `supabase/tests/_helpers.psql` setzt dieselben Testgrenzen wie `seed.sql` (Anzeigen- und Chat-Limits) in der Test-Transaktion; damit läuft die Suite auch ohne Seed (Stage). Tests der echten Grenzen setzen ihre Werte weiter selbst.
+- `CLOUD-SETUP.md` 1.2–1.3: Reihenfolge, `--remote`, nie Remote-Reset, Realtime vor pgTAP.
+
+### Hinweis
+- Lokal schlägt `07_trust_audit` fehl, weil die lokale Datenbank Audit-Einträge aus den heutigen E2E- und Integrationsläufen enthält (der Test liest das ganze Audit-Log); unabhängig von dieser Änderung, auf Stage und in der CI (frische Datenbank) grün.
+
 ## M10: Supabase-Projekte in Frankfurt – 2026-11-15
 
 ### Geändert (Cloud und Doku)
