@@ -28,6 +28,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Nur im Docker-Build (web/Dockerfile, M10): eigenständiger Server ohne node_modules. Lokal und in der CI bleibt
+  // `next start` nutzbar, das mit "standalone" warnt.
+  ...(process.env.NEXT_OUTPUT === "standalone" ? { output: "standalone" as const } : {}),
   cacheComponents: true,
   // Öffentliche Anzeigendaten (ADR 015, Review B3): höchstens 5 Minuten alt, über alle Instanzen. `expire`
   // begrenzt auch das Ausliefern veralteter Einträge (stale-while-revalidate); das Preset `minutes` hätte 1 h.

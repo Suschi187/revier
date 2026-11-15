@@ -27,7 +27,7 @@ Akzeptanz von M10 (SPEC 6): alle Punkte abgehakt, je Punkt mit Nachweis (Befehl,
 - [ ] Erster Admin per Runbook angelegt (ADR 005), Runbook „Admin kompromittiert“ bekannt
 
 ## C. Web Stage und Prod
-- [ ] Deploy reproduzierbar (ein Build für Stage und Prod), Env mit Zod validiert, kein Secret im Bundle (CI-Guard)
+- [ ] Deploy reproduzierbar mit `deploy/docker-compose.yml` (je Umgebung ein Build aus demselben Commit, weil `NEXT_PUBLIC_*` und CSP beim Build eingesetzt werden), Env mit Zod validiert, kein Secret im Bundle (CI-Guard)
 - [ ] `SITE_INDEXABLE=true` nur in Prod; Stage mit Zugangsschutz und `noindex`
 - [ ] Domain, TLS, Weiterleitung http→https und Nebendomains→Hauptdomain; HSTS gesetzt, Entscheidung zu `preload` (ADR 022)
 - [ ] Sicherheits-Header gegen Prod geprüft (`curl -I` auf Start, Detail, `/admin`, `/static/*`), CSP ohne Verstöße; Entscheidung zu CSP-Berichten (ADR 022)

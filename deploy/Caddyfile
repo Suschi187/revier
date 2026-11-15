@@ -1,0 +1,36 @@
+# Huntery hinter Caddy (M10, docs/plans/M10-plan.md Paket 7). TLS automatisch (Let's Encrypt).
+# Keine Zugriffsprotokolle: Ohne `log`-Direktive schreibt Caddy keine Access-Logs, also keine IPs und keine
+# Byte-Bereiche der Kartendatei (ADR 016) oder Abbestell-Token (ADR 018). Fehler-Logs von Caddy bleiben.
+{
+	email {$ACME_EMAIL}
+}
+
+www.{$SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}
+
+{$SITE_DOMAIN} {
+	# Keine Hinweise auf die Software (Löschen wirkt in Caddy automatisch nach der Antwort des Proxys).
+	header {
+		-Server
+		-Via
+	}
+
+	# Kartendatei direkt vom Volume (ADR 016): Range und ETag liefert file_server, Name versioniert, daher immutable.
+	# Ohne Komprimierung, sonst passen die Byte-Bereiche nicht.
+	@tiles path_regexp ^/tiles/[a-z0-9-]{1,64}\.pmtiles$
+	handle @tiles {
+		root * /srv
+		header Cache-Control "public, max-age=31536000, immutable"
+		header X-Content-Type-Options nosniff
+		file_server
+	}
+	handle /tiles/* {
+		respond 404
+	}
+
+	handle {
+		encode zstd gzip
+		reverse_proxy web:3000
+	}
+}

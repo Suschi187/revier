@@ -2,6 +2,23 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## M10 Paket 7: Deploy mit Docker und Caddy – 2026-11-15
+
+Entscheidung 2026-11-15: EU-Server mit Docker.
+
+### Neu
+- `web/Dockerfile` (Node 24.22.1-alpine, mehrstufig, Next `output: "standalone"` nur bei `NEXT_OUTPUT=standalone`, läuft als eigener Nutzer, Healthcheck auf `/api/health`); `web/.dockerignore` hält Secrets, Caches und Tests heraus. Ein Build je Umgebung, weil `NEXT_PUBLIC_*` und die CSP beim Build eingesetzt werden; zur Laufzeit gelesen werden `SITE_INDEXABLE` und `MAP_TILES_FILE`. Beim Build muss Supabase erreichbar sein (Vorrendern).
+- Neuer Ordner `deploy/`: `docker-compose.yml` (Web und Caddy 2.10.2, Logs lokal begrenzt), `Caddyfile` (TLS automatisch, www → Hauptdomain, http → https, Kartendatei `/tiles/*.pmtiles` direkt vom Volume mit Range, ETag und `immutable`, sonst Proxy mit gzip/zstd; **keine Zugriffsprotokolle**, keine `Server`-/`Via`-Header), `.env.example`.
+- `.gitignore`: `deploy/tiles/`.
+
+### Wie testen (lokal so geprüft)
+- Image gegen die lokale Supabase bauen (`--build-arg NEXT_PUBLIC_SUPABASE_URL=http://host.docker.internal:54321` …), Web und Caddy (`SITE_DOMAIN=localhost`) in einem Netz starten: Start 200, `/api/health` ok, CSP/HSTS/X-Frame-Options gesetzt, Kartendatei 206 mit `Content-Range`, unbekannte Datei unter `/tiles/` 404, Fehlerseite 404, http → https 308, keine Access-Logs.
+- `caddy validate` und `caddy fmt` ohne Abweichung, `docker compose config` ok. Typecheck und Lint grün.
+
+### Offen
+- Rate-Limit (Paket 5): Caddy braucht dafür ein Plugin (eigener Build) oder der Server eine Firewall-Regel; Entscheidung mit dem Server-Anbieter.
+- Image-Build in der CI (braucht Supabase beim Build).
+
 ## M10 Paket 4: Statement-Timeout nachgewiesen – 2026-11-15
 
 ### Geändert
