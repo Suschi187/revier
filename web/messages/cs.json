@@ -122,56 +122,132 @@
     "deleteAccount": "Smazat účet"
   },
   "Legal": {
-    "placeholder": "Zástupný text: Konečné znění textu dodá před spuštěním webové stránky právník.",
+    "placeholder": "Koncept (stav k 25. 11. 2026), dosud neprošel právním posouzením. Závazná bude až posouzená verze. Údaje v hranatých závorkách budou doplněny před spuštěním.",
     "terms": {
       "title": "Podmínky použití",
       "sections": [
         {
-          "title": "Rozsah platnosti",
+          "title": "1. Rozsah platnosti a inzerent",
           "points": [
-            "Platforma zprostředkovává lovecké příležitosti: pronájem honitby, povolenky k lovu, společný hon, lovy na trofeje/hostující lovy a lovecké pomocníky/spolulovce, a to vždy jako nabídku nebo poptávku.",
-            "Žádný prodej zbraní ani střeliva."
+            "Tyto podmínky se vztahují na používání služby Huntery (huntery.cs a příslušná aplikace) mezi tebou a [provozovatelem, viz právní informace] („my“).",
+            "Huntery je online tržiště pro lovecké příležitosti: pronájem honitby, povolenky k lovu, společný hon, lov na trofeje a lov pro hosty, jakož i lovecké pomocníky a spolulovce, a to vždy jako nabídka nebo poptávka.",
+            "Tyto pravidla obsahu jsou nedílnou součástí těchto podmínek."
           ]
         },
         {
-          "title": "Účet",
+          "title": "2. Naše služby",
           "points": [
-            "Jednoduchý účet na osobu, s pravdivými údaji.",
-            "Používání předpokládá souhlas s podmínkami použití a s zásadami ochrany osobních údajů."
+            "Poskytujeme platformu, na které můžeš zveřejňovat inzeráty, vyhledávat a prostřednictvím chatu navazovat kontakt s ostatními uživateli. Využívání platformy je v současné době bezplatné.",
+            "Smlouvy o loveckých příležitostech, například smlouva o pronájmu loveckého revíru nebo povolenka k lovu, jsou uzavírány výhradně mezi uživateli. My se nestáváme smluvní stranou, neposkytujeme placené zprostředkovatelské služby a nepodílíme se na vyjednávání ani na vyřizování těchto smluv.",
+            "Před zveřejněním inzerátů kontrolujeme, zda neporušují tyto podmínky, nikoli však, zda jsou uvedené údaje správné, zda je inzerent oprávněn nebo zda lovecký revír má popsané vlastnosti.",
+            "Snažíme se o nepřetržitou dostupnost, nemůžeme ji však zaručit, například v případě údržby nebo poruch."
           ]
         },
         {
-          "title": "Inzeráty",
+          "title": "3. Účet",
           "points": [
-            "Inzeráty jsou před zveřejněním zkontrolovány.",
-            "Kontaktní údaje nepatří do textu inzerátu. Kontakt probíhá po přihlášení prostřednictvím chatu.",
-            "Inzeráty vyprší a lze je prodloužit."
+            "Pro inzeráty, chat, seznam oblíbených položek a uložené hledání potřebuješ účet. Musíš mít alespoň 18 let.",
+            "Tvé údaje musí být pravdivé. Na jednu osobu je povolen jeden účet. Kdo inzeruje jako podnik nebo v rámci podnikatelské činnosti, musí používat firemní účet s názvem firmy.",
+            "Zabezpečte přístup ke své e-mailové schránce; kdokoli k ní má přístup, může se přihlásit. V případě podezření na zneužití nás informujte."
           ]
         },
         {
-          "title": "Moderování",
+          "title": "4. Inzeráty",
           "points": [
-            "Inzeráty mohou být zamítnuty, vráceny k úpravě nebo odstraněny. Důvod ti bude sdělen.",
-            "V případě závažných nebo opakovaných porušení pravidel mohou být účty zablokovány.",
-            "Proti rozhodnutím můžeš podat stížnost: zástupný text."
+            "Za své inzeráty neseš odpovědnost. Musí odpovídat zvolenému typu inzerátu, být úplné a pravdivé a v souladu s pravidly obsahu.",
+            "Ceny uváděj v původní měně; my je nepřepočítáváme. Polohu zobrazujeme pouze jako region, okres nebo posunutý bod.",
+            "Inzeráty jsou před zveřejněním zkontrolovány a vyprší po uplynutí uvedené doby platnosti; můžeš je prodloužit, pozastavit nebo smazat.",
+            "K textům a fotografiím, které zveřejníš, nám uděluješ jednoduché, bezplatné právo, omezené na dobu trvání inzerátu, k jejich zobrazení na Huntery a v náhledech (například ve vyhledávačích nebo při sdílení odkazu) a k jejich technické úpravě za tímto účelem. Prohlašuješ, že disponuješ potřebnými právy."
           ]
         },
         {
-          "title": "Nahlašování",
+          "title": "5. Povinnosti vyplývající z loveckého práva",
           "points": [
-            "Inzeráty, profily a zprávy lze nahlásit. Pravidla obsahu popisují, co není povoleno."
+            "Jsi sám zodpovědný za to, aby nabídka a její vnímání byly v souladu s platnými předpisy o lovu, zbraních a ochraně zvířat, v Německu například s federálním loveckým zákonem a příslušným zemským loveckým zákonem, v zahraničí s právními předpisy dané země.",
+            "Zejména: Loveckým nájemcem se v Německu může stát pouze ten, kdo je držitelem ročního loveckého oprávnění po dobu nejméně tří let (§ 11 odst. 5 BJagdG); smlouvy o pronájmu honitby musí být uzavřeny písemně a je nutné je inzerovat na příslušném úřadu. Povolenka k lovu smí vydávat pouze osoba oprávněná k výkonu lovu.",
+            "Inzerenti musí být oprávněni k přidělení lovu. Zájemci musí mít potřebná povolení, například platný lovecký lístek. Před uzavřením smlouvy si vzájemně zkontrolujte dokumenty.",
+            "Obchod se zbraněmi, součástmi zbraní a střelivem není na Huntery povolen."
           ]
         },
         {
-          "title": "Ukončení používání",
+          "title": "6. Kontakt a zprávy",
           "points": [
-            "Svůj účet můžeš kdykoli smazat."
+            "Po přihlášení probíhá komunikace prostřednictvím chatu. Kontaktní údaje nepatří do inzerátů.",
+            "Zprávy smí sloužit pouze k navázání kontaktu a vyřízení dané lovecké příležitosti. Reklama, spam a obtěžování jsou zakázány.",
+            "Neplaťte předem neznámým osobám a před uzavřením smlouvy si lovecký revír prohlédněte. Pomohou vám při tom bezpečnostní pokyny uvedené v inzerátu."
           ]
         },
         {
-          "title": "Odpovědnost a změny",
+          "title": "7. Moderování",
           "points": [
-            "Zástupný text."
+            "Nové a upravené inzeráty před zveřejněním kontrolují naši pracovníci. Automatické upozornění (například na kontaktní údaje v textu nebo pojmy týkající se zbraní) slouží pouze jako podpora této kontroly. Nahlášené obsahy rovněž kontrolují naši pracovníci.",
+            "V případě porušení zákonů nebo těchto podmínek můžeme inzerát zamítnout, vrátit k úpravě, odstranit nebo odebrat body z vašeho účtu, udělit varování nebo účet zablokovat. Zvolíme nejmírnější vhodné opatření a zohledníme závažnost, četnost a úmysl.",
+            "Každé opatření ti zdůvodníme ve tvém účtu a e-mailem, s uvedením důvodu, skutečností a způsobu podání stížnosti (čl. 17 DSA).",
+            "Kdo opakovaně zveřejňuje zjevně protiprávní obsah nebo opakovaně podává zjevně neopodstatněná nahlášení, bude po varování na přiměřenou dobu zablokovaný (čl. 23 DSA)."
+          ]
+        },
+        {
+          "title": "8. Nahlásit",
+          "points": [
+            "Inzeráty, profily a zprávy můžeš nahlásit pomocí tlačítka „Nahlásit“ a uvést důvod. Potvrdíme přijetí, věc prošetříme v co nejkratší době, pečlivě a objektivně a sdělíme ti výsledek (čl. 16 DSA).",
+            "Bez účtu nás můžeš kontaktovat prostřednictvím kontaktního formuláře v právních informacích."
+          ]
+        },
+        {
+          "title": "9. Stížnosti a řešení sporů",
+          "points": [
+            "Proti rozhodnutí moderátora, včetně rozhodnutí ohledně tvého nahlášení, můžeš do šesti měsíců bezplatně podat stížnost ve svém účtu. O této stížnosti rozhoduje člověk, pokud možno jiný administrátor než ten, který vydal původní rozhodnutí, nikdy automatizovaně (čl. 20 DSA).",
+            "Můžeš se také obrátit na certifikovaný orgán pro mimosoudní řešení sporů podle čl. 21 DSA. Vždy máš možnost obrátit se na soud.",
+            "Stížnosti na nás můžeš také zaslat koordinátorovi pro digitální služby, v Německu je jím Spolková síťová agentura."
+          ]
+        },
+        {
+          "title": "10. Ověření",
+          "points": [
+            "Označení „ověřené“ je dobrovolné. Znamená pouze to, že jsme viděli nějaký doklad (například lovecký lístek) a že odpovídá danému účtu. Nejedná se o záruku totožnosti, oprávnění ani spolehlivosti."
+          ]
+        },
+        {
+          "title": "11. Pořadí inzerátů",
+          "points": [
+            "Výsledky vyhledávání standardně řadíme podle data zveřejnění, nejnovější jsou nahoře; můžeš je seřadit podle ceny a filtrovat. Neexistují žádné placené pozice; firemní i soukromé inzeráty jsou zacházeny stejně."
+          ]
+        },
+        {
+          "title": "12. Firemní poskytovatelé",
+          "points": [
+            "Firmy musí sami plnit zákonné povinnosti vůči spotřebitelům, například označení inzerenta a informační povinnosti.",
+            "Pokud omezíme nebo zablokujeme firemní účet, sdělíme důvody předem nebo nejpozději v okamžiku, kdy toto opatření nabude účinnosti. Řádné ukončení smlouvy oznámíme nejméně 30 dní předem. Stížnosti vyřizujeme prostřednictvím funkce „Stížnost“ v účtu; pro řešení sporů jmenujeme následující mediátory: [dva mediátoři podle čl. 12 nařízení P2B]."
+          ]
+        },
+        {
+          "title": "13. Odpovědnost",
+          "points": [
+            "Neseme neomezenou odpovědnost v případě úmyslu a hrubé nedbalosti, za škody způsobené ztrátou života, tělesným zraněním nebo poškozením zdraví a podle zákona o odpovědnosti za výrobky.",
+            "V případě lehké nedbalosti ručíme pouze za porušení podstatných povinností, na jejichž splnění se můžeš spolehnout, a to v rozsahu předvídatelné, typické škody.",
+            "Za obsahy zveřejněné uživateli a za smlouvy mezi uživateli neneseme odpovědnost. Pokud porušíš práva třetích osob, zbavuješ nás odpovědnosti za nároky z toho vyplývající, pokud za to neseš odpovědnost."
+          ]
+        },
+        {
+          "title": "14. Doba trvání a výpověď",
+          "points": [
+            "Svůj účet můžeš kdykoli smazat v sekci Účet.",
+            "Smlouvu o užívání můžeme vypovědět s 30denní výpovědní lhůtou. Právo na výpověď bez výpovědní lhůty z vážného důvodu, například v případě závažných nebo opakovaných porušení, zůstává nedotčeno."
+          ]
+        },
+        {
+          "title": "15. Změny těchto podmínek",
+          "points": [
+            "Tyto podmínky můžeme změnit, pokud dojde ke změnám v rámci služby Huntery nebo v právním prostředí. Změny oznámíme nejméně 15 dní předem. Pro další používání tě žádáme o souhlas s novou verzí; bez souhlasu můžeš svůj účet smazat."
+          ]
+        },
+        {
+          "title": "16. Závěrečná ustanovení",
+          "points": [
+            "Platí německé právo s vyloučením Úmluvy OSN o smlouvách o mezinárodní koupi zboží. Jsi-li spotřebitel, zůstává zachována ochrana vyplývající z imperativních předpisů tvého státu bydliště.",
+            "Jsi-li podnikatel, je místem soudní příslušnosti [sídlo provozovatele].",
+            "Tyto podmínky jsou k dispozici v němčině, angličtině, češtině a polštině; v případě rozporů platí německé znění.",
+            "Je-li některé ustanovení neplatné, zůstává zbytek v platnosti."
           ]
         }
       ]
@@ -180,146 +256,262 @@
       "title": "Zásady ochrany osobních údajů",
       "sections": [
         {
-          "title": "Správce a kontaktní údaje",
+          "title": "1. Na první pohled",
           "points": [
-            "Jméno a adresa provozovatele: zástupný text, viz právní informace.",
-            "Kontakt pro dotazy týkající se ochrany osobních údajů: zástupný text."
+            "Huntery je tržiště pro lovecké příležitosti. Zpracováváme pouze data, která potřebujeme pro vedení účtu, inzeráty, komunikaci prostřednictvím chatu a bezpečný provoz.",
+            "Nepoužíváme žádné reklamní ani analytické trackery, nepropojujeme sociální sítě a do tvého prohlížeče nestahujeme žádné fonty, mapy ani skripty z cizích serverů.",
+            "Přesné polohy revírů, PSČ a kontaktní údaje nejsou nikdy veřejně viditelné."
           ]
         },
         {
-          "title": "Účet a přihlášení",
+          "title": "2. Správce",
           "points": [
-            "E-mailová adresa, přihlašovací kódy a, pokud se používá, „Přihlásit se přes Apple“.",
-            "Díky relačnímu souboru cookie se přihlásíš (viz nastavení cookies).",
-            "Nepotvrzené účty budou po 7 dnech smazány."
+            "Za zpracování údajů odpovídá [provozovatel, adresa, viz právní informace].",
+            "Kontakt pro dotazy týkající se ochrany osobních údajů: [e-mailová adresa]. Máme pověřence pro ochranu osobních údajů [jméno a kontakt / není uveden, protože to není povinné]."
           ]
         },
         {
-          "title": "Profil a inzeráty",
+          "title": "3. Právní základy a doba uchovávání",
           "points": [
-            "Zobrazované jméno, typ účtu, název firmy, země a jazyk.",
-            "Inzeráty s texty, cenami, druhy zvěře a fotografiemi.",
-            "Fotografie jsou na našem serveru překódovány. Při tom dochází ke ztrátě metadat, jako jsou GPS souřadnice."
+            "Údaje zpracováváme za účelem plnění smlouvy o poskytování služeb (čl. 6 odst. 1 písm. b) GDPR), za účelem plnění zákonných povinností, zejména vyplývajících ze zákona o digitálních službách (písm. c), na základě oprávněných zájmů na bezpečném a bezzneužití provozu (písm. f) a, pokud o to požádáme, na základě tvého souhlasu (písm. a).",
+            "Údaje uchováváme pouze po dobu nezbytnou k danému účelu. Konkrétní lhůty jsou uvedeny u jednotlivých způsobů zpracování. Zákonné lhůty pro uchovávání údajů zůstávají nedotčeny."
           ]
         },
         {
-          "title": "Poloha",
+          "title": "4. Návštěva webových stránek",
           "points": [
-            "Veřejné stránky zobrazují pouze region či okres, případně záměrně posunutý bod.",
-            "PSČ a přesná poloha loveckého revíru nejsou nikdy veřejně viditelné."
+            "Při návštěvě stránky náš poskytovatel hostingu zpracovává technicky nezbytné údaje, jako je IP adresa, čas, navštívená adresa a identifikátor prohlížeče, aby mohl stránku zobrazit a odrazit útoky (lit. f). Tyto protokoly jsou uchovávány pouze krátkodobě [lhůta podle tarifu Vercel].",
+            "Spojení je vždy šifrováno protokolem TLS.",
+            "Písma, ilustrace a mapa dodáváme z našeho vlastního serveru."
           ]
         },
         {
-          "title": "Zprávy",
+          "title": "5. Soubory cookie a úložiště v prohlížeči",
           "points": [
-            "Zprávy mezi uživateli se ukládají pro konverzaci a doručují se v reálném čase.",
-            "E-mailová upozornění na nové zprávy lze vypnout.",
-            "Zablokované osoby ti nemohou psát."
+            "Používáme pouze nezbytně nutné soubory cookie: relaci udržující cookie, které tě udržuje přihlášeného, a dočasný soubor cookie pro bezpečný průběh procesu přihlášení. Právním základem je § 25 odst. 2 č. 2 TDDDG; souhlas k tomu není nutný.",
+            "Všechny soubory cookie s uvedením účelu a doby platnosti jsou uvedeny na stránce „Nastavení cookies“. Pokud v budoucnu začneme využívat služby, které vyžadují souhlas, požádáme tě o něj předem a svůj souhlas můžeš kdykoli odvolat."
           ]
         },
         {
-          "title": "Uložená hledání",
+          "title": "6. Účet a přihlášení",
           "points": [
-            "Filtry, frekvence a výsledky tvých uložených hledání. Jsou platné po dobu 6 týdnů, pokud je neprodloužíš.",
-            "Každý e-mail obsahuje odkaz pro odhlášení odběru jedním kliknutím, který je platný po dobu 90 dnů."
+            "Pro účely vedení účtu zpracováváme tvou e-mailovou adresu, přihlašovací kódy a údaje o relaci (lit. b). Heslo se nepoužívá. Funkci „Přihlásit se přes Apple“ začneme využívat až při nabídce; v takovém případě od společnosti Apple obdržíme pouze nezbytné údaje o účtu.",
+            "Ukládáme si, s kterou verzí podmínek použití a zásad ochrany osobních údajů jsi kdy souhlasil, a to jako důkaz (písm. c a f).",
+            "Účty, které nebyly nikdy potvrzeny, mažeme po 7 dnech."
           ]
         },
         {
-          "title": "Mapa",
+          "title": "7. Profil a inzeráty",
           "points": [
-            "Mapa pochází z našeho vlastního serveru. Nejsou odesílány žádné dotazy externím poskytovatelům map.",
-            "Mapa neukládá žádné údaje do tvého prohlížeče."
+            "Zpracováváme zobrazované jméno, typ účtu (soukromý nebo firemní), u firemních účtů název firmy, zemi a jazyk, jakož i vaše inzeráty s texty, cenami, druhy zvěře a fotografiemi (lit. b). Ostatní uživatelé vidí zobrazované jméno nebo název firmy, zemi a případně označení „ověřené“, nikdy však vaši e-mailovou adresu.",
+            "Fotografie překódováváme na našem serveru. Přitom dochází k odstranění metadat, jako jsou GPS souřadnice a údaje o fotoaparátu.",
+            "Veřejně uvádíme pouze region a okres nebo záměrně zkreslený bod na mapě. PSČ a místo loveckého revíru vidíš pouze ty a naši moderátoři.",
+            "Zveřejněné inzeráty jsou veřejně přístupné a mohou být indexovány vyhledávači. Koncepty, které 12 měsíců neupravíš, smažeme po 30denním předběžném upozornění."
           ]
         },
         {
-          "title": "Ověření",
+          "title": "8. Zprávy",
           "points": [
-            "Dobrovolné: Nahraný lovecký lístek nebo podobný dokument je soukromý a viditelný pouze pro tebe a pro administrátory.",
-            "Dokument bude smazán 30 dní po rozhodnutí."
+            "Zprávy mezi uživateli ukládáme za účelem vedení konverzace a jejich doručování v reálném čase (bod b). Zprávy čteme pouze v případě, že nám jsou nahlášeny.",
+            "Pokud zpráva obsahuje telefonní číslo, e-mail, bankovní údaje nebo souřadnice, zobrazí se před odesláním v chatu bezpečnostní upozornění. Kontrola probíhá automaticky a nic nezablokuje; o odeslání rozhoduješ ty.",
+            "O nových zprávách tě informujeme e-mailem bez textu zprávy. Tuto funkci můžeš deaktivovat v nastavení nebo pomocí odkazu v e-mailu.",
+            "Zablokované osoby ti již nemohou psát."
           ]
         },
         {
-          "title": "Nahlášení a moderování",
+          "title": "9. Uložené hledání a seznam oblíbených položek",
           "points": [
-            "Nahlášení, rozhodnutí moderátorů a jejich odůvodnění.",
-            "Kopie nahlášených zpráv zůstávají uloženy po dobu 12 měsíců od vyřízení nahlášení.",
-            "Záznamy o rozhodnutích správců zůstávají v pseudonymizované podobě po dobu 24 měsíců."
+            "Pro uložená hledání ukládáme filtry, frekvenci a již nahlášené výsledky a zasíláme ti nové vhodné inzeráty e-mailem (lit. b). Uložená hledání vyprší po 6 týdnech, pokud je neprodloužíš.",
+            "Každý e-mail obsahuje odkaz pro odhlášení odběru jedním kliknutím; jeho platnost je 90 dní.",
+            "Uložené inzeráty uchováváme ve tvém účtu, dokud je neodstraníš nebo svůj účet nezrušíš."
           ]
         },
         {
-          "title": "Smazání účtu",
+          "title": "10. Ověření",
           "points": [
-            "Svůj účet můžeš kdykoli smazat po opětovném přihlášení.",
-            "Profily, inzeráty, fotografie, zprávy, uložená hledání a dokumenty budou ihned smazány.",
-            "Zůstávají pouze pseudonymizované údaje o moderování a nahlášení týkající se účtu až do uplynutí jejich lhůty."
+            "Dobrovolně můžeš nahrát lovecký lístek, loveckou kartu nebo potvrzení o honitbě, abys získal označení „ověřené“ (bod a). Dokument je uložen v soukromém úložišti a je viditelný pouze pro tebe a pro administrátory; každé jeho vyvolání administrátory je zaznamenáno.",
+            "Tento dokument vymažeme 30 dní po rozhodnutí, v případě smazání tvého účtu hned. Samotné rozhodnutí zůstane uloženo až do smazání tvého účtu. Svůj souhlas můžeš kdykoli odvolat; označení pak zanikne."
           ]
         },
         {
-          "title": "Export dat",
+          "title": "11. Nahlášení a moderování",
           "points": [
-            "Všechny své datumy z účtu si můžeš stáhnout jako soubor JSON."
+            "Inzeráty před zveřejněním kontrolujeme a vyřizujeme nahlášení. Přitom zpracováváme hlášení, rozhodnutí, odůvodnění a stížnosti (písm. c ve spojení s čl. 16, 17 a 20 DSA, jakož i písm. f).",
+            "Oznamovatelé se dozví pouze výsledek, nikoli totožnost nahlášeného, a naopak.",
+            "Kopie nahlášených zpráv a nahlášení uchováváme 12 měsíců po jejich zpracování, protokol o rozhodnutích správce v pseudonymizované podobě 24 měsíců.",
+            "Nepřijímáme žádná výlučně automatizovaná rozhodnutí ve smyslu čl. 22 GDPR. Automatické upozornění, například na kontaktní údaje v textu inzerátu, slouží pouze jako podpora při kontrole prováděné lidmi."
           ]
         },
         {
-          "title": "Hosting a zpracovatelé údajů",
+          "title": "12. Ochrana před zneužitím",
           "points": [
-            "Databáze, úložiště souborů a přihlášení: Supabase, region EU (Frankfurt).",
-            "Rozesílání e-mailů: Inzerent bude ještě uveden.",
-            "Zálohy a protokoly u poskytovatele hostingu a e-mailových služeb zůstávají uloženy až do uplynutí jejich lhůty (bude ještě upřesněno)."
+            "Abychom zabránili spamu a zneužití, omezujeme počet nových inzerátů, konverzací a zpráv za dané období (lit. f). K tomu počítáme tvé akce, aniž bychom vyhodnocovali jejich obsah."
           ]
         },
         {
-          "title": "Tvá práva",
+          "title": "13. E-maily",
           "points": [
-            "Právo na informace, opravu, výmaz, omezení zpracování, přenositelnost údajů, vznesení námitky a podání stížnosti u dozorového úřadu: zástupný text."
+            "Zasíláme pouze zprávy související s účtem: přihlašovací kódy, informace o tvých inzerátech, rozhodnutí moderátorů, oznámení o zprávách a vyhledávacích zadáních. Reklamu nezasíláme.",
+            "Naše e-maily neobsahují žádné sledovací pixely ani sledování kliknutí."
+          ]
+        },
+        {
+          "title": "14. Smazání účtu a export dat",
+          "points": [
+            "Svůj účet můžeš kdykoli smazat po opětovném přihlášení. Profil, inzeráty, fotografie, zprávy, uložená hledání a dokumenty smažeme hned; zprávy, které nebyly nahlášeny, zmizí i u adresáta.",
+            "Zůstávají pouze pseudonymizovaný záznam rozhodnutí správce (24 měsíců), nahlášení týkající se tvého účtu a kopie nahlášených zpráv (12 měsíců po zpracování) sowie naše šifrované zálohy dat až do jejich vypršení po 14 dnech.",
+            "Všechny své datumy si můžeš stáhnout z účtu jako soubor JSON (čl. 20 GDPR)."
+          ]
+        },
+        {
+          "title": "15. Příjemci a zpracovatelé údajů",
+          "points": [
+            "Hosting webových stránek: Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA. Serverové funkce běží ve Frankfurtu nad Mohanem. Základem je smlouva o zpracování osobních údajů; pro předávání údajů do USA platí rozhodnutí o přiměřenosti v rámci rámce EU-USA pro ochranu osobních údajů a standardní smluvní doložky [ověřit certifikaci].",
+            "Databáze, přihlášení, úložiště souborů a funkce na pozadí: Supabase Inc., USA, s místem uložení ve Frankfurtu nad Mohanem (AWS eu-central-1), na základě smlouvy o zpracování osobních údajů a standardních smluvních doložek.",
+            "Odesílání e-mailů: společnost united-domains GmbH, Gautinger Straße 10, 82319 Starnberg, Německo, na základě smlouvy o zpracování osobních údajů.",
+            "Sledování chyb: Functional Software Inc. (Sentry), USA, s ukládáním dat v EU (Frankfurt). Předáváme pouze technické zprávy o chybách bez IP adresy, souborů cookie, identifikátoru uživatele nebo obsahu (lit. f), na základě smlouvy o zpracování osobních údajů a standardních smluvních doložek.",
+            "Zálohování dat: Databázi denně zálohujeme v zašifrované podobě a zálohy uchováváme po dobu 14 dnů [uveďte umístění].",
+            "Kromě toho předáváme data pouze v případě, že k tomu máme zákonnou povinnost, například orgánům činným v trestním řízení (čl. 18 DSA)."
+          ]
+        },
+        {
+          "title": "16. Tvá práva",
+          "points": [
+            "Máš právo na informace (čl. 15 GDPR), na opravu (čl. 16), vymazání (čl. 17), omezení zpracování (čl. 18), přenositelnost údajů (čl. 20) a vznesení námitky proti zpracování na základě oprávněných zájmů (čl. 21).",
+            "Souhlas můžeš kdykoli odvolat s účinkem do budoucna.",
+            "Můžeš podat stížnost u dozorového úřadu pro ochranu osobních údajů, zejména v zemi, kde máš bydliště. Pro nás je příslušný [dozorový úřad v místě sídla provozovatele].",
+            "Mnoho práv můžeš uplatnit přímo ve svém účtu: změnit data, exportovat je a smazat účet. Ve všech ostatních případech nám napiš na [e-mail pro ochranu osobních údajů]."
+          ]
+        },
+        {
+          "title": "17. Změny",
+          "points": [
+            "Toto prohlášení upravíme, pokud dojde ke změnám v Huntery nebo v právní situaci. Aktuální znění je k dispozici zde; v případě podstatných změn budeme informovat registrované uživatele."
           ]
         }
       ]
     },
     "imprint": {
-      "title": "Právní informace"
+      "title": "Právní informace",
+      "sections": [
+        {
+          "title": "Inzerent",
+          "points": [
+            "Údaje podle § 5 zákona o digitálních službách (DDG)",
+            "[Jméno nebo název společnosti a právní forma provozovatele]",
+            "[Ulice a číslo domu, PSČ a město, země]",
+            "Zastoupeno: [osoba (osoby) oprávněná k zastupování]",
+            "Huntery je nabídka značky Die Jagdbrüder."
+          ]
+        },
+        {
+          "title": "Kontakt",
+          "points": [
+            "E-mail: [kontaktní adresa, např. kontakt@huntery.de]",
+            "Telefon: [telefonní číslo]",
+            "Adresa no-reply@huntery.de slouží pouze k odesílání automatických zpráv a není sledována."
+          ]
+        },
+        {
+          "title": "Registrace a daň z přidané hodnoty",
+          "points": [
+            "Rejstříkový soud a číslo v rejstříku: [je-li k dispozici]",
+            "Identifikační číslo pro daň z obratu podle § 27a zákona o dani z obratu (UStG): [je-li k dispozici]"
+          ]
+        },
+        {
+          "title": "Odpovědný za obsah",
+          "points": [
+            "Odpovědná osoba podle § 18 odst. 2 Státní smlouvy o médiích: [jméno, adresa]",
+            "Za inzeráty, profily a zprávy odpovídají uživatelé, kteří je zveřejňují."
+          ]
+        },
+        {
+          "title": "Kontaktní místa podle zákona o digitálních službách (Digital Services Act)",
+          "points": [
+            "Centrální kontaktní místo pro orgány, Evropskou komisi a orgán pro digitální služby (čl. 11 DSA) i pro uživatele (čl. 12 DSA): [e-mailová adresa]. Jazyky: němčina a angličtina.",
+            "Nezákonný obsah nahlásíš nejrychleji přímo u inzerátu, v profilu nebo ve zprávě pomocí tlačítka „Nahlásit“."
+          ]
+        },
+        {
+          "title": "Řešení spotřebitelských sporů",
+          "points": [
+            "Nejsme ochotni ani povinni účastnit se řízení o urovnání sporů před spotřebitelským smírčím orgánem (§ 36 VSBG).",
+            "Pro rozhodnutí moderátorů existuje navíc možnost interní stížnosti a mimosoudního řešení sporů podle zákona o digitálních službách (viz podmínky použití)."
+          ]
+        },
+        {
+          "title": "Odpovědnost za obsah a odkazy",
+          "points": [
+            "Obsah těchto stránek připravujeme s náležitou péčí. Za obsah, který zveřejňují uživatelé, neseme podle zákonných předpisů odpovědnost teprve tehdy, jakmile se dozvíme o konkrétním porušení zákona. V takovém případě obsah neprodleně odstraníme.",
+            "Za obsah externích webových stránek, na které odkazujeme, odpovídají jejich provozovatelé. Jakmile se dozvíme o porušení práv, tyto odkazy odstraníme."
+          ]
+        },
+        {
+          "title": "Autorská práva",
+          "points": [
+            "Texty, grafické zpracování, logo a ilustrace společnosti Huntery jsou chráněny autorským právem. Jejich použití mimo platformu vyžaduje náš souhlas.",
+            "Mapové údaje: © přispěvatelé OpenStreetMap; další zdroje a licence jsou uvedeny na stránce „Zdroje dat“."
+          ]
+        }
+      ]
     },
     "footerLabel": "Právní odkazy",
-    "outlineNote": "Tato struktura uvádí, jaké údaje platforma skutečně zpracovává. Nejedná se o právní text.",
+    "outlineNote": "Tento text popisuje, jak Huntery ve skutečnosti funguje a jaké daty se při tom zpracovávají.",
     "guidelines": {
       "title": "Pravidla obsahu",
-      "intro": "Tato pravidla platí pro všechny inzeráty, profily a zprávy. Jejich porušení vede k zamítnutí nebo odstranění a v případě opakovaného porušení k zablokování účtu.",
+      "intro": "Tato pravidla platí pro všechny inzeráty, profily a zprávy a jsou součástí podmínek použití. Jejich porušení vede k zamítnutí nebo odstranění, v případě opakovaného porušení k varování nebo zablokování účtu.",
       "sections": [
         {
           "title": "Pouze lovecké příležitosti",
           "points": [
-            "Každý inzerát musí spadat do jedné z kategorií.",
-            "Žádný prodej, nákup ani výměna zbraní, střeliva nebo součástí zbraní."
+            "Každý inzerát musí spadat do jedné z následujících kategorií: pronájem honitby, povolenka k lovu, společný hon, lov na trofeje nebo lov pro hosty, lovecký pomocník nebo spolulovec, a to vždy jako nabídka nebo poptávka.",
+            "Žádný prodej, nákup ani výměna zbraní, součástí zbraní, střeliva nebo zvěřiny a žádná reklama na jiné zboží.",
+            "Vyber správný typ inzerátu a směr (nabídka nebo poptávka). Jeden inzerát popisuje přesně jednu příležitost."
           ]
         },
         {
-          "title": "Zakázané obsahy",
+          "title": "V souladu se zákonem a loveckými zvyklostmi",
           "points": [
-            "Žádné protiprávní, diskriminační, výhružné nebo sexuální obsahy.",
-            "Žádné nabídky, které porušují lovecké předpisy, například lov v období hájení.",
-            "Žádné texty zkopírované z jiných webů a žádné fotky, k nimž nemáš vlastní práva.",
-            "Žádné fotky ulovené zvěře (například výřad po lovu nebo trofej na kusu). Inzeráty s takovými fotkami zamítáme."
+            "Žádné nabídky, které porušují lovecké, zbrojní, přírodovědné nebo zvířecí ochranné předpisy, například lov v období hájení, lov chráněných druhů, lov bez plánu lovu nebo lov v ohradách, kde je to zakázáno.",
+            "Žádné povolenky k lovu ani nájemní smlouvy, k jejichž udělování nemáš oprávnění.",
+            "Lov v zahraničí pouze tehdy, je-li to v souladu s právními předpisy dané země."
           ]
         },
         {
           "title": "Pravdivé a úplné",
           "points": [
-            "Údaje musí být úplné a věrohodné.",
-            "Žádné duplicitní inzeráty pro stejnou příležitost."
+            "Údaje o rozloze, druzích zvěře, ceně, termínu a podmínkách musí být přesné a věrohodné. Uveď podstatná omezení, jako jsou spolulovci, kvóty na odlov nebo náklady na škody způsobené zvěří.",
+            "Žádné duplicitní inzeráty na stejnou příležitost a žádné neustálé opakované zveřejňování s cílem udržet se na vrcholu seznamu.",
+            "Používej vlastní fotografie nebo takové, k nimž máš práva. Žádné texty ani obrázky zkopírované z jiných webových stránek.",
+            "Žádné fotky ulovené zvěře (například výřad nebo celou trofejovou zvěř) v inzerátech."
           ]
         },
         {
           "title": "Kontakt a ochrana osobních údajů",
           "points": [
-            "V textu inzerátu neuváděj telefonní čísla, e-mailové adresy ani odkazy. Kontakt probíhá přes chat.",
-            "Neuváděj přesné souřadnice honiteb ani osobní údaje jiných osob."
+            "V textu inzerátu neuvádějte žádná telefonní čísla, e-mailové adresy, odkazy ani jména v komunikačních aplikacích. Kontakt probíhá prostřednictvím chatu.",
+            "Neuvádějte přesné souřadnice loveckých revírů ani loveckých posedů a žádné osobní údaje jiných osob, například jména loveckých společníků nebo nájemců, bez jejich souhlasu."
           ]
         },
         {
-          "title": "Zprávy",
+          "title": "Uctivé jednání",
           "points": [
-            "Žádný spam, žádné obtěžování, žádné pokusy o podvod.",
+            "Žádné urážlivé, diskriminační, výhružné, násilí oslavující nebo sexuální obsahy, a to ani v profilech a zprávách.",
+            "Žádný spam, žádné hromadné zprávy, žádné obtěžování a žádné pokusy o podvod, například požadavek na platbu předem za neexistující lovecký revír.",
             "Můžeš nahlásit zprávy a zablokovat uživatele."
+          ]
+        },
+        {
+          "title": "Firmy",
+          "points": [
+            "Kdo inzeruje komerčně, například jako organizátor loveckých zájezdů, lesní hospodářství nebo zprostředkovatel, používá firemní účet a sám plní zákonné informační povinnosti."
+          ]
+        },
+        {
+          "title": "Důsledky porušení pravidel",
+          "points": [
+            "V závislosti na závažnosti inzerátu jej zamítneme, vrátíme k úpravě, odstraníme jej nebo jeho polohu na mapě, udělíme varování nebo účet zablokujeme. Vždy obdržíš odůvodnění a můžeš podat stížnost (viz podmínky použití)."
           ]
         }
       ]

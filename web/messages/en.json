@@ -122,56 +122,132 @@
     "deleteAccount": "Delete account"
   },
   "Legal": {
-    "placeholder": "Placeholder: the final text will be provided by a lawyer before launch.",
+    "placeholder": "Draft (as of 25 Nov 2026), not yet reviewed by a lawyer. Only the reviewed version will be binding. Details in square brackets will be added before launch.",
     "terms": {
       "title": "Terms of use",
       "sections": [
         {
-          "title": "Scope",
+          "title": "1. Scope and provider",
           "points": [
-            "The platform brokers hunting opportunities: hunting leases, hunting permits, driven hunts, trophy and guest hunts and hunting helpers, each as an offer or a wanted listing.",
-            "No sale of weapons or ammunition."
+            "These terms govern the use of Huntery (huntery.de and the related app) between you and [operator, see Legal notice] (“we”).",
+            "Huntery is an online marketplace for hunting opportunities: hunting leases, hunting permits, driven hunts, trophy and guest hunts as well as hunting helpers and fellow hunters, each as an offer or a request.",
+            "The Guidelines form part of these terms."
           ]
         },
         {
-          "title": "Account",
+          "title": "2. Our service",
           "points": [
-            "One account per person, with truthful information.",
-            "Using the platform requires accepting the terms of use and the privacy policy."
+            "We provide the platform on which you can publish and search listings and contact other users via chat. Use is currently free of charge.",
+            "Contracts for a hunting opportunity, such as a hunting lease or a hunting permit, are concluded solely between users. We do not become a party to the contract, do not act as a paid broker and take no part in negotiation or performance.",
+            "We review listings before publication for breaches of these terms, but not whether details are accurate, whether a provider is entitled or whether a hunting ground has the described features.",
+            "We strive for constant availability but cannot guarantee it, for example during maintenance or outages."
           ]
         },
         {
-          "title": "Listings",
+          "title": "3. Account",
           "points": [
-            "Listings are reviewed before publication.",
-            "Contact details do not belong in listing texts. Contact runs through the chat after sign-in.",
-            "Listings expire and can be extended."
+            "You need an account for listings, chat, favourites and saved searches. You must be at least 18 years old.",
+            "Your details must be true. One account per person is allowed. Anyone offering as a business or as part of a commercial activity must use a business account with a company name.",
+            "Keep access to your email inbox secure; anyone with access can sign in. Tell us if you suspect misuse."
           ]
         },
         {
-          "title": "Moderation",
+          "title": "4. Listings",
           "points": [
-            "Listings can be rejected, sent back for changes or removed. You receive the reason.",
-            "Accounts can be blocked for serious or repeated violations.",
-            "You can appeal decisions: placeholder."
+            "You are responsible for your listings. They must match the selected listing type, be complete and true and comply with the Guidelines.",
+            "You state prices in the original currency; we do not convert them. We only show the location as a region, district or offset point.",
+            "Listings are reviewed before publication and expire after the displayed period; you can renew, pause or delete them.",
+            "For texts and photos you post, you grant us the simple, free right, limited to the duration of the listing, to display them on Huntery and in previews (for example in search engines or when a link is shared) and to process them technically for this purpose. You confirm that you hold the necessary rights."
           ]
         },
         {
-          "title": "Reporting",
+          "title": "5. Hunting law obligations",
           "points": [
-            "Listings, profiles and messages can be reported. The content guidelines describe what is not allowed."
+            "You are responsible for ensuring that an offer and taking it up comply with applicable hunting, weapons and animal welfare law, in Germany for example the Federal Hunting Act and the relevant state hunting act, abroad the law of the respective country.",
+            "In particular: in Germany only a person who has held an annual hunting licence for at least three years can lease a hunting ground (Section 11(5) BJagdG); hunting lease agreements must be in writing and notified to the authority. Hunting permits may only be issued by the person entitled to hunt.",
+            "Providers must be entitled to grant the opportunity. Interested parties must hold the necessary permits, such as a valid hunting licence. Check each other's documents before concluding a contract.",
+            "Trading in weapons, weapon parts and ammunition is not allowed on Huntery."
           ]
         },
         {
-          "title": "Ending use",
+          "title": "6. Contact and messages",
           "points": [
-            "You can delete your account at any time."
+            "Contact takes place via chat after signing in. Contact details do not belong in listings.",
+            "Messages may only serve to initiate and arrange the respective hunting opportunity. Advertising, spam and harassment are prohibited.",
+            "Do not pay strangers in advance and visit a hunting ground before concluding a contract. The safety tips on the listing help with this."
           ]
         },
         {
-          "title": "Liability and changes",
+          "title": "7. Moderation",
           "points": [
-            "Placeholder."
+            "People review new and changed listings before publication. Automatic hints (for example about contact details or weapon terms in the text) only support this review. Reported content is also reviewed by people.",
+            "If the law or these terms are breached, we may reject a listing, return it for editing, remove it or remove its map point, and warn or block an account. We choose the mildest suitable measure and take severity, frequency and intent into account.",
+            "We give you reasons for every measure in your account and by email, stating the ground, the facts and how to complain (Art. 17 DSA).",
+            "Anyone who repeatedly posts manifestly illegal content or repeatedly submits manifestly unfounded reports will be blocked for a reasonable period after a warning (Art. 23 DSA)."
+          ]
+        },
+        {
+          "title": "8. Reporting",
+          "points": [
+            "You can report listings, profiles and messages via “Report”, with a reason. We confirm receipt, review promptly, carefully and objectively and tell you the outcome (Art. 16 DSA).",
+            "Without an account you can reach us via the point of contact in the Legal notice."
+          ]
+        },
+        {
+          "title": "9. Complaints and dispute settlement",
+          "points": [
+            "You can lodge a free complaint in your account within six months against a moderation decision, including the decision on your report. A person decides on it, where possible a different admin from the original decision, never automatically (Art. 20 DSA).",
+            "You can also turn to a certified out-of-court dispute settlement body under Art. 21 DSA. Recourse to the courts always remains open to you.",
+            "You can also address complaints about us to the Digital Services Coordinator, in Germany the Federal Network Agency (Bundesnetzagentur)."
+          ]
+        },
+        {
+          "title": "10. Verification",
+          "points": [
+            "The “verified” badge is voluntary. It only means that we have seen a document (such as a hunting licence) and that it matches the account. It is no guarantee of identity, entitlement or reliability."
+          ]
+        },
+        {
+          "title": "11. Order of listings",
+          "points": [
+            "By default we sort search results by publication date, newest first; you can re-sort by price and filter. There are no paid placements; business and private listings are treated equally."
+          ]
+        },
+        {
+          "title": "12. Business providers",
+          "points": [
+            "Business providers must fulfil their statutory obligations towards consumers themselves, such as provider identification and information duties.",
+            "If we restrict or block a business account, we state the reasons beforehand or at the latest when it takes effect. We announce an ordinary termination at least 30 days in advance. We handle complaints via the complaint function in the account; for disputes we name the following mediators: [two mediators under Art. 12 of the P2B Regulation]."
+          ]
+        },
+        {
+          "title": "13. Liability",
+          "points": [
+            "We are liable without limitation for intent and gross negligence, for damage resulting from injury to life, body or health and under the Product Liability Act.",
+            "In the case of slight negligence, we are only liable for breach of essential obligations on whose fulfilment you may rely, limited to foreseeable, typical damage.",
+            "We are not liable for user content or for contracts between users. If you infringe third-party rights, you indemnify us against resulting claims insofar as you are responsible for this."
+          ]
+        },
+        {
+          "title": "14. Term and termination",
+          "points": [
+            "You can delete your account at any time in your account.",
+            "We may terminate the user agreement with 30 days' notice. The right to terminate without notice for good cause, for example in the case of serious or repeated breaches, remains unaffected."
+          ]
+        },
+        {
+          "title": "15. Changes to these terms",
+          "points": [
+            "We may change these terms if Huntery or the legal situation changes. We announce changes at least 15 days in advance. To continue using Huntery we ask you to accept the new version; if you do not accept, you can delete your account."
+          ]
+        },
+        {
+          "title": "16. Final provisions",
+          "points": [
+            "German law applies, excluding the UN Convention on Contracts for the International Sale of Goods. If you are a consumer, the protection of mandatory provisions of your country of residence remains unaffected.",
+            "If you are a merchant, the place of jurisdiction is [operator's seat].",
+            "These terms are available in German, English, Czech and Polish; in the event of discrepancies the German version prevails.",
+            "If a provision is invalid, the remainder remains valid."
           ]
         }
       ]
@@ -180,146 +256,262 @@
       "title": "Privacy policy",
       "sections": [
         {
-          "title": "Controller and contact",
+          "title": "1. At a glance",
           "points": [
-            "Name and address of the operator: placeholder, see the legal notice.",
-            "Contact for data protection questions: placeholder."
+            "Huntery is a marketplace for hunting opportunities. We only process the data we need for your account, listings, contact via chat and secure operation.",
+            "We use no advertising or analytics trackers, embed no social networks and load no fonts, maps or scripts from third-party servers into your browser.",
+            "Exact hunting ground locations, postcodes and contact details are never publicly visible."
           ]
         },
         {
-          "title": "Account and sign-in",
+          "title": "2. Controller",
           "points": [
-            "Email address, sign-in codes and, if used, Sign in with Apple.",
-            "A session cookie keeps you signed in (see cookie settings).",
-            "Accounts that are never confirmed are deleted after 7 days."
+            "The controller is [operator, address, see Legal notice].",
+            "Contact for data protection questions: [email address]. We have [appointed a data protection officer: name and contact / not appointed a data protection officer because we are not required to]."
           ]
         },
         {
-          "title": "Profile and listings",
+          "title": "3. Legal bases and retention",
           "points": [
-            "Display name, account type, business name, country and language.",
-            "Listings with texts, prices, game species and photos.",
-            "Photos are re-encoded on our server. This removes metadata such as GPS coordinates."
+            "We process data to perform the user agreement (Art. 6(1)(b) GDPR), to comply with legal obligations, in particular under the Digital Services Act (point (c)), on the basis of legitimate interests in secure operation free of abuse (point (f)) and, where we ask for it, on the basis of your consent (point (a)).",
+            "We store data only as long as the purpose requires. The specific periods are stated for each processing activity. Statutory retention periods remain unaffected."
           ]
         },
         {
-          "title": "Location",
+          "title": "4. Visiting the website",
           "points": [
-            "Public pages show only the region or district, or a deliberately shifted point.",
-            "The postal code and the exact location of a hunting ground are never shown publicly."
+            "When you visit, our hosting provider processes technically necessary data such as IP address, time, requested address and browser identifier in order to deliver the page and fend off attacks (point (f)). These logs are kept only briefly [period according to the Vercel plan].",
+            "The connection is always encrypted with TLS.",
+            "Fonts, illustrations and the map are served from our own server."
           ]
         },
         {
-          "title": "Messages",
+          "title": "5. Cookies and browser storage",
           "points": [
-            "Messages between users are stored for the conversation and delivered in real time.",
-            "Email notifications about new messages can be switched off.",
-            "People you have blocked cannot write to you."
+            "We only set strictly necessary cookies: a session cookie that keeps you signed in and a short-lived cookie for a secure sign-in flow. The legal basis is Section 25(2) no. 2 TDDDG; no consent is required.",
+            "All cookies with purpose and lifetime are listed on the “Cookie settings” page. If we later use services that require consent, we will ask first, and you can withdraw your consent there at any time."
           ]
         },
         {
-          "title": "Saved searches",
+          "title": "6. Account and sign-in",
           "points": [
-            "Filters, frequency and matches of your saved searches. They run for 6 weeks unless you extend them.",
-            "Every email contains a one-click unsubscribe link, valid for 90 days."
+            "For an account we process your email address, sign-in codes and session data (point (b)). There is no password. We will only use “Sign in with Apple” once it is offered; Apple then only gives us the account data required.",
+            "As proof, we store which version of the Terms of use and the Privacy policy you accepted and when (points (c) and (f)).",
+            "Accounts that were never confirmed are deleted after 7 days."
           ]
         },
         {
-          "title": "Map",
+          "title": "7. Profile and listings",
           "points": [
-            "The map is served from our own server. No requests go to third-party map providers.",
-            "The map stores nothing in your browser."
+            "We process your display name, account type (private or business), the company name for business accounts, country and language as well as your listings with texts, prices, game species and photos (point (b)). Other users see your display name or company name, country and, where applicable, the “verified” badge, never your email address.",
+            "We re-encode photos on our server. Metadata such as GPS coordinates and camera data are removed in the process.",
+            "Publicly we only show the region and district or a deliberately offset map point. Only you and our moderation see the postcode and place of the hunting ground.",
+            "Published listings are publicly accessible and can be indexed by search engines. Drafts you have not edited for 12 months are deleted after a notice 30 days in advance."
           ]
         },
         {
-          "title": "Verification",
+          "title": "8. Messages",
           "points": [
-            "Optional: an uploaded hunting licence or similar document is stored privately and is visible only to you and to administrators.",
-            "The document is deleted 30 days after the decision."
+            "We store messages between users to run the conversation and deliver it in real time (point (b)). We only read messages if they are reported to us.",
+            "If a message contains a phone number, email address, bank details or coordinates, the chat shows a safety notice before sending. The check runs automatically and blocks nothing; you decide whether to send.",
+            "We notify you of new messages by email without the message text. You can turn this off in your settings or via the link in the email.",
+            "Blocked people can no longer message you."
           ]
         },
         {
-          "title": "Reports and moderation",
+          "title": "9. Saved searches and favourites",
           "points": [
-            "Reports, moderation decisions and their reasons.",
-            "Copies of reported messages are kept for 12 months after the report has been handled.",
-            "The record of administrative decisions is kept pseudonymised for 24 months."
+            "For saved searches we store filters, frequency and matches already reported and email you suitable new listings (point (b)). Saved searches expire after 6 weeks unless you renew them.",
+            "Every email contains a one-click unsubscribe link, valid for 90 days.",
+            "Favourites are stored in your account until you remove them or delete your account."
           ]
         },
         {
-          "title": "Deleting your account",
+          "title": "10. Verification",
           "points": [
-            "You can delete your account at any time after signing in again.",
-            "Profile, listings, photos, messages, saved searches and documents are deleted immediately.",
-            "Only pseudonymised moderation records and reports concerning the account remain until their deadlines."
+            "You may voluntarily upload a hunting licence, a hunting permit card or a hunting ground certificate to receive the “verified” badge (point (a)). The document is kept in private storage and is visible only to you and to admins; every access by an admin is logged.",
+            "We delete the document 30 days after the decision, or immediately if you delete your account. The decision itself is kept until your account is deleted. You can withdraw your consent at any time; the badge is then removed."
           ]
         },
         {
-          "title": "Data export",
+          "title": "11. Reports and moderation",
           "points": [
-            "You can download all your data as a JSON file in your account."
+            "We review listings before publication and handle reports. In doing so we process reports, decisions, statements of reasons and complaints (point (c) in conjunction with Art. 16, 17 and 20 DSA, and point (f)).",
+            "Reporters only learn the outcome, not the identity of the reported person, and vice versa.",
+            "We keep copies of reported messages and reports for 12 months after handling, and the log of admin decisions in pseudonymised form for 24 months.",
+            "We do not make solely automated decisions within the meaning of Art. 22 GDPR. Automatic hints, for example about contact details in a listing text, only support review by humans."
           ]
         },
         {
-          "title": "Hosting and processors",
+          "title": "12. Protection against abuse",
           "points": [
-            "Database, file storage and sign-in: Supabase, region EU (Frankfurt).",
-            "Email delivery: provider to be named.",
-            "Backups and logs at the hosting and email providers are kept until their own deadlines (to be named)."
+            "To prevent spam and abuse, we limit the number of new listings, conversations and messages per period (point (f)). For this we count your actions without analysing their content."
           ]
         },
         {
-          "title": "Your rights",
+          "title": "13. Emails",
           "points": [
-            "Access, rectification, erasure, restriction, data portability, objection and the right to lodge a complaint with a supervisory authority: placeholder."
+            "We only send messages that belong to your account: sign-in codes, notices about your listings, moderation decisions, message and saved search notifications. We do not send advertising.",
+            "Our emails contain no tracking pixels and no click tracking."
+          ]
+        },
+        {
+          "title": "14. Deleting your account and data export",
+          "points": [
+            "You can delete your account at any time after signing in again. We delete your profile, listings, photos, messages, saved searches and documents immediately; messages that were never reported also disappear for the other person.",
+            "Only the pseudonymised log of admin decisions (24 months), reports about your account and copies of reported messages (12 months after handling) and our encrypted backups until they expire after 14 days remain.",
+            "You can download all your data as a JSON file in your account (Art. 20 GDPR)."
+          ]
+        },
+        {
+          "title": "15. Recipients and processors",
+          "points": [
+            "Website hosting: Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA. The server functions run in Frankfurt am Main. This is based on a data processing agreement; transfers to the USA are covered by the adequacy decision for the EU-US Data Privacy Framework and standard contractual clauses [check certification].",
+            "Database, sign-in, file storage and background functions: Supabase Inc., USA, with data stored in Frankfurt am Main (AWS eu-central-1), based on a data processing agreement and standard contractual clauses.",
+            "Email delivery: united-domains GmbH, Gautinger Straße 10, 82319 Starnberg, Germany, based on a data processing agreement.",
+            "Error monitoring: Functional Software Inc. (Sentry), USA, with data stored in the EU (Frankfurt). We only transmit technical error reports without IP address, cookies, user identifier or content (point (f)), based on a data processing agreement and standard contractual clauses.",
+            "Backups: we back up the database daily in encrypted form and keep the backups for 14 days [state storage location].",
+            "Beyond this we only pass on data where we are legally required to, for example to law enforcement authorities (Art. 18 DSA)."
+          ]
+        },
+        {
+          "title": "16. Your rights",
+          "points": [
+            "You have the right of access (Art. 15 GDPR), rectification (Art. 16), erasure (Art. 17), restriction of processing (Art. 18), data portability (Art. 20) and to object to processing based on legitimate interests (Art. 21).",
+            "You can withdraw consent at any time with effect for the future.",
+            "You can lodge a complaint with a data protection supervisory authority, in particular in the country where you live. The authority responsible for us is [supervisory authority at the operator's seat].",
+            "You can exercise many rights directly in your account: change, export and delete your data. For anything else, write to us at [data protection email]."
+          ]
+        },
+        {
+          "title": "17. Changes",
+          "points": [
+            "We update this policy when Huntery or the legal situation changes. The current version is always available here; we inform signed-in users of material changes."
           ]
         }
       ]
     },
     "imprint": {
-      "title": "Legal notice"
-    },
-    "footerLabel": "Legal",
-    "outlineNote": "This outline lists what the platform actually processes. It is not a legal text.",
-    "guidelines": {
-      "title": "Content guidelines",
-      "intro": "These rules apply to all listings, profiles and messages. Violations lead to rejection or removal and, if repeated, to an account block.",
+      "title": "Legal notice",
       "sections": [
         {
-          "title": "Only hunting opportunities",
+          "title": "Provider",
           "points": [
-            "Every listing must fit one of the categories.",
-            "No sale, purchase or exchange of weapons, ammunition or weapon parts."
+            "Information pursuant to Section 5 of the German Digital Services Act (DDG)",
+            "[Name or company and legal form of the operator]",
+            "[Street and number, postcode and town, country]",
+            "Represented by: [authorised representative(s)]",
+            "Huntery is a service of the Die Jagdbrüder brand."
           ]
         },
         {
-          "title": "Prohibited content",
+          "title": "Contact",
           "points": [
-            "No illegal, discriminatory, threatening or sexual content.",
-            "No offers that violate hunting law, for example hunting during closed seasons.",
-            "No texts copied from other websites and no photos you do not hold the rights to.",
-            "No photos of killed game (for example the bag after a hunt or a trophy on the carcass). Listings with such photos are rejected."
+            "Email: [contact address, e.g. kontakt@huntery.de]",
+            "Phone: [phone number]",
+            "The address no-reply@huntery.de only sends automatic messages and is not monitored."
           ]
         },
         {
-          "title": "Truthful and complete",
+          "title": "Register and VAT",
           "points": [
-            "Information must be complete and plausible.",
-            "No duplicate listings for the same opportunity."
+            "Register court and registration number: [if applicable]",
+            "VAT identification number pursuant to Section 27a UStG: [if applicable]"
+          ]
+        },
+        {
+          "title": "Responsible for content",
+          "points": [
+            "Responsible pursuant to Section 18(2) of the German Interstate Media Treaty: [name, address]",
+            "Users are responsible for the listings, profiles and messages they post."
+          ]
+        },
+        {
+          "title": "Points of contact under the Digital Services Act",
+          "points": [
+            "Single point of contact for authorities, the European Commission and the Board for Digital Services (Art. 11 DSA) and for users (Art. 12 DSA): [email address]. Languages: German and English.",
+            "The fastest way to report illegal content is “Report” directly on the listing, profile or message."
+          ]
+        },
+        {
+          "title": "Consumer dispute resolution",
+          "points": [
+            "We are neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration board (Section 36 VSBG).",
+            "For moderation decisions, the internal complaint and out-of-court dispute settlement under the Digital Services Act are also available (see Terms of use)."
+          ]
+        },
+        {
+          "title": "Liability for content and links",
+          "points": [
+            "We create the content of these pages with care. Under the statutory provisions, we are only responsible for content posted by users once we become aware of a specific infringement. We then remove the content without delay.",
+            "The operators of linked third-party websites are responsible for their content. We remove such links once we become aware of an infringement."
+          ]
+        },
+        {
+          "title": "Copyright",
+          "points": [
+            "Huntery's texts, design, logo and illustrations are protected by copyright. Use outside the platform requires our consent.",
+            "Map data: © OpenStreetMap contributors; further sources and licences are listed on the “Data sources” page."
+          ]
+        }
+      ]
+    },
+    "footerLabel": "Legal",
+    "outlineNote": "This text describes how Huntery actually works and which data it processes.",
+    "guidelines": {
+      "title": "Guidelines",
+      "intro": "These rules apply to all listings, profiles and messages and form part of the Terms of use. Breaches lead to rejection or removal and, if repeated, to a warning or blocking of the account.",
+      "sections": [
+        {
+          "title": "Hunting opportunities only",
+          "points": [
+            "Every listing must fit one of the listing types: hunting lease, hunting permit, driven hunt, trophy or guest hunt, hunting helper or fellow hunter, each as an offer or a request.",
+            "No sale, purchase or exchange of weapons, weapon parts, ammunition or game meat, and no advertising for other goods.",
+            "Choose the right listing type and direction (offer or request). One listing describes exactly one opportunity."
+          ]
+        },
+        {
+          "title": "Lawful and ethical",
+          "points": [
+            "No offers that breach hunting, weapons, nature conservation or animal welfare law, for example hunting in the closed season, of protected species, without a shooting plan or in enclosures where this is prohibited.",
+            "No hunting permits or leases that you are not entitled to grant.",
+            "Guest hunts abroad only if they are permitted under the law of the respective country."
+          ]
+        },
+        {
+          "title": "True and complete",
+          "points": [
+            "Details of area, game species, price, period and conditions must be accurate and plausible. State material restrictions, such as fellow hunters, shooting quotas or costs for game damage.",
+            "No duplicate listings for the same opportunity and no constant re-posting to stay at the top.",
+            "Use your own photos or photos you hold the rights to. No texts or images copied from other websites.",
+            "No photos of killed game (for example a game bag or a whole trophy animal) in listings."
           ]
         },
         {
           "title": "Contact and privacy",
           "points": [
-            "No phone numbers, email addresses or links in listing texts. Contact runs through the chat.",
-            "No exact coordinates of hunting grounds and no personal data of other people."
+            "No phone numbers, email addresses, links or messenger names in the listing text. Contact takes place via chat.",
+            "No exact coordinates of hunting grounds or high seats and no personal data of others, such as names of hunting cooperative members or lessees without their consent."
           ]
         },
         {
-          "title": "Messages",
+          "title": "Respectful conduct",
           "points": [
-            "No spam, harassment or attempted fraud.",
+            "No insulting, discriminatory, threatening, violence-glorifying or sexual content, including in profiles and messages.",
+            "No spam, no mass messages, no harassment and no fraud attempts, such as advance payment for a non-existent hunting ground.",
             "You can report messages and block people."
+          ]
+        },
+        {
+          "title": "Business providers",
+          "points": [
+            "Anyone offering commercially, for example as a hunting travel operator, forestry business or broker, uses a business account and fulfils the statutory information duties themselves."
+          ]
+        },
+        {
+          "title": "Consequences of breaches",
+          "points": [
+            "Depending on severity, we reject a listing, return it for editing, remove it or its map point, warn the account or block it. You always receive a statement of reasons and can lodge a complaint (see Terms of use)."
           ]
         }
       ]

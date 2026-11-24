@@ -223,5 +223,7 @@ test("Impressum, Datenschutz und Nutzungsbedingungen sind von jeder Seite verlin
   await expect(page.getByRole("main").getByRole("link", { name: "Datenschutzerklärung" })).toHaveAttribute("href", "/de/privacy");
   await page.goto("/de/imprint");
   await expect(page.getByRole("heading", { name: "Impressum" })).toBeVisible();
-  await expect(page.getByRole("note")).toContainText("Platzhalter");
+  // Entwurf bis zur anwaltlichen Prüfung (CLAUDE.md): als Hinweis markiert.
+  await expect(page.getByRole("note")).toContainText("Entwurf");
+  await expect(page.getByRole("heading", { name: "Anbieter" })).toBeVisible();
 });

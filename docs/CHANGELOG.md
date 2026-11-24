@@ -2,6 +2,25 @@
 
 Pro Backlog-Schritt ein Eintrag: was geändert wurde, wie man es testet, bekannte Lücken.
 
+## Rechtstexte: Entwürfe für Impressum, Datenschutz, Nutzungsbedingungen, Richtlinien – 2026-11-25
+
+Auftrag des Menschen: Impressum und Datenschutz nach dem Vorbild des Deutschen Jagdportals, Nutzungsbedingungen und Richtlinien nach Recherche. Die Projektregel „keine Inhalte von Konkurrenzseiten kopieren“ hat der Mensch dafür aufgehoben; der Wortlaut ist trotzdem neu geschrieben (Urheberrecht), übernommen sind Gliederung und Pflichtthemen. **Alle Texte bleiben Entwurf bis zur anwaltlichen Prüfung** (CLAUDE.md), sichtbar als Hinweis oben auf jeder Seite, weiter `noindex`.
+
+### Geändert
+- **Impressum** (neu mit Inhalt): § 5 DDG statt TMG, Vertretung, Kontakt, Register/USt-IdNr., Verantwortlicher nach § 18 Abs. 2 MStV, DSA-Kontaktstellen (Art. 11/12), § 36 VSBG; kein Hinweis auf die seit 20.07.2025 abgeschaltete EU-Streitschlichtungsplattform. Betreiberangaben als `[…]` offen.
+- **Datenschutzerklärung** (17 Abschnitte): Gliederung wie beim Vorbild (Überblick, Verantwortlicher, Rechtsgrundlagen, Hosting, Cookies, …), Inhalt aus den tatsächlichen Verarbeitungen von Huntery: Konto ohne Passwort, Anzeigen und Fotos ohne GPS, Standortschutz, Chat mit Sicherheitshinweis, Suchaufträge, Verifizierung (Einwilligung, 30 Tage), Moderation nach DSA, Missbrauchsschutz, E-Mails ohne Tracking, Löschung und Export, Empfänger (Vercel fra1, Supabase Frankfurt, united-domains, Sentry EU), Backups 14 Tage, Rechte, Aufsichtsbehörde offen.
+- **Nutzungsbedingungen** (16 Abschnitte): Huntery nur Plattform, nicht Vertragspartei; Konto ab 18; Anzeigen und Nutzungsrecht an Inhalten; jagdrechtliche Pflichten (§ 11 Abs. 5 BJagdG, Schriftform, Begehungsschein nur durch Jagdausübungsberechtigte, Ausland); Moderation, Begründung, Beschwerde 6 Monate, Streitbeilegung und Sperre nach DSA Art. 14, 16, 17, 20, 21, 23; Verifizierung ohne Garantie; Ranking und gewerbliche Anbieter nach P2B-VO (30 Tage, Mediatoren offen); Haftung; Kündigung; Änderungen mit 15 Tagen Vorlauf; Schlussbestimmungen.
+- **Richtlinien** (7 Abschnitte, Bestandteil der Nutzungsbedingungen): passend zu den Ablehnungsgründen der Moderation; neu u. a. kein Wildbret-Handel, Waidgerechtigkeit und Schonzeiten, Berechtigung des Anbieters, gewerbliche Kennzeichnung, Folgen von Verstößen.
+- de und en handgeschrieben, cs und pl per DeepL (nur `Legal` übernommen); 14 veraltete Legal-Korrekturen und die tote Korrektur `Map.areaRemove` aus `i18n-overrides.json` entfernt, eine Fehlübersetzung („game bag“) in cs/pl von Hand korrigiert.
+- Impressum-Seite zeigt jetzt Abschnitte; Hinweistext „Entwurf (Stand 25.11.2026) …“ statt „Platzhalter“.
+
+### Wie testen
+- `/de/imprint`, `/de/privacy`, `/de/terms`, `/de/guidelines` (auch en/cs/pl). E2E `auth.spec.ts`, `qa-m9a.spec.ts`, `m10a-text.spec.ts` (360 px, axe, 4 Sprachen): 23 grün. `lib/qa-m6.test.ts` (Schlüssel gleich in allen Sprachen) grün.
+
+### Offen
+- Anwaltliche Prüfung; Betreiberangaben, Kontaktstellen, Aufsichtsbehörde, Mediatoren, Gerichtsstand; Vercel-Zertifizierung und Log-Frist; Muttersprachliche Prüfung cs/pl.
+- Versionsnummern der Zustimmung (`legal_terms_version`, `legal_privacy_version`) bleiben `2026-10-draft`; mit der geprüften Fassung hochzählen, dann stimmen alle Nutzer neu zu.
+
 ## M10: Mails aus Stage nachgewiesen – 2026-11-16
 
 - Auth-Konfiguration nach Stage übertragen (`config.sh stage push`, 12 Eigenschaften; danach keine deklarierten Unterschiede).

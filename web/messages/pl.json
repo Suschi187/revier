@@ -122,56 +122,132 @@
     "deleteAccount": "Usuń konto"
   },
   "Legal": {
-    "placeholder": "Tekst zastępczy: ostateczna wersja tekstu zostanie ogłoszona przez prawnika przed uruchomieniem serwisu.",
+    "placeholder": "Szkic (stan na 25 listopada 2026 r.), jeszcze nie sprawdzony przez prawnika. Tylko wersja sprawdzona będzie wiążąca. Szczegóły w nawiasach kwadratowych zostaną dodane przed uruchomieniem serwisu.",
     "terms": {
       "title": "Regulamin",
       "sections": [
         {
-          "title": "Zakres",
+          "title": "1. Zakres i ogłaszający",
           "points": [
-            "Platforma pośredniczy w ofertach związanych z polowaniami: dzierżawa obwodu łowieckiego, zezwolenia na polowanie, polowania zbiorowe, polowania na trofea i polowania dla gości oraz pomocnicy myśliwego – każda z tych opcji może być zarówno ofertą, jak i ogłoszeniem poszukującym pomocy.",
-            "Nie sprzedajemy broni ani amunicji."
+            "Niniejszy regulamin reguluje korzystanie z serwisu Huntery (huntery.de i powiązanej aplikacji) między tobą a [operatorem, patrz nota prawna] („my”).",
+            "Huntery to internetowa platforma z ofertami myśliwskimi: dzierżawa obwodu łowieckiego, zezwolenie na polowanie, polowanie zbiorowe, polowanie na trofea i polowanie dla gości, a także pomocnicy myśliwego i inni myśliwi – wszystko w formie ofert lub zapytań.",
+            "Wytyczne stanowią część niniejszych warunków."
           ]
         },
         {
-          "title": "Konto",
+          "title": "2. Nasza usługa",
           "points": [
-            "Jedno konto na osobę, z prawdziwymi danymi.",
-            "Korzystanie z platformy wymaga zaakceptowania regulaminu i polityki prywatności."
+            "Oferujemy platformę, na której możesz publikować i przeglądać ogłoszenia oraz kontaktować się z innymi użytkownikami przez czat. Korzystanie z serwisu jest obecnie bezpłatne.",
+            "Umowy dotyczące możliwości łowieckich, takie jak dzierżawa obwodu łowieckiego czy zezwolenie na polowanie, zawierane są wyłącznie między użytkownikami. Nie jesteśmy stroną umowy, nie działamy jako odpłatny pośrednik i nie bierzemy udziału w negocjacjach ani w realizacji umowy.",
+            "Przed opublikowaniem sprawdzamy ogłoszenia pod kątem naruszeń tych warunków, ale nie sprawdzamy, czy podane informacje są dokładne, czy ogłaszający ma do tego prawo ani czy teren łowiecki rzeczywiście ma opisane cechy.",
+            "Staramy się zapewnić stałą dostępność serwisu, ale nie możemy jej zagwarantować, na przykład podczas prac konserwacyjnych lub awarii."
           ]
         },
         {
-          "title": "Ogłoszenia",
+          "title": "3. Konto",
           "points": [
-            "Ogłoszenia są sprawdzane przed opublikowaniem.",
-            "Dane kontaktowe nie powinny pojawiać się w opisach ogłoszeń. Kontakt odbywa się przez czat po zalogowaniu.",
-            "Ogłoszenia tracą ważność, ale można je przedłużyć."
+            "Żeby dodawać ogłoszenia, korzystać z czatu, ulubionych i zapisanych wyszukiwań, musisz mieć konto. Musisz mieć co najmniej 18 lat.",
+            "Twoje dane muszą być prawdziwe. Dozwolone jest tylko jedno konto na osobę. Każdy, kto oferuje usługi w ramach działalności gospodarczej lub komercyjnej, musi korzystać z konta firmowego z nazwą firmy.",
+            "Zadbaj o bezpieczeństwo swojej skrzynki e-mailowej; każdy, kto ma do niej dostęp, może się zalogować. Daj nam znać, jeśli podejrzewasz nadużycie."
           ]
         },
         {
-          "title": "Moderacja",
+          "title": "4. Ogłoszenia",
           "points": [
-            "Ogłoszenia mogą zostać odrzucone, odesłane do poprawek lub usunięte. Otrzymasz informację o przyczynie.",
-            "Konta mogą zostać zablokowane za poważne lub powtarzające się naruszenia zasad.",
-            "Możesz odwołać się od decyzji: tekst zastępczy."
+            "Jesteś odpowiedzialny za swoje ogłoszenia. Muszą one odpowiadać wybranemu typowi ogłoszenia, być kompletne i zgodne z prawdą oraz spełniać wytyczne.",
+            "Ceny podajesz w oryginalnej walucie; my ich nie przeliczamy. Lokalizację pokazujemy tylko jako region, powiat lub punkt orientacyjny.",
+            "Ogłoszenia są sprawdzane przed opublikowaniem i wygasają po upływie podanego okresu; możesz je przedłużyć, wstrzymać lub usunąć.",
+            "W przypadku tekstów i zdjęć, które publikujesz, udzielasz nam prostego, bezpłatnego prawa – ograniczonego do czasu trwania ogłoszenia – do wyświetlania ich na Huntery oraz w podglądach (na przykład w wyszukiwarkach lub gdy ktoś udostępnia link) oraz do przetwarzania ich technicznie w tym celu. Potwierdzasz, że posiadasz niezbędne prawa."
           ]
         },
         {
-          "title": "Zgłaszanie",
+          "title": "5. Obowiązki wynikające z przepisów dotyczących polowań",
           "points": [
-            "Ogłoszenia, profile i wiadomości można zgłaszać. Zasady treści opisują, co jest zabronione."
+            "Jesteś odpowiedzialny za to, żeby oferta i skorzystanie z niej były zgodne z obowiązującymi przepisami dotyczącymi łowiectwa, broni i dobrostanu zwierząt – w Niemczech na przykład z federalną ustawą o łowiectwie i odpowiednią ustawą krajową o łowiectwie, a za granicą z przepisami danego kraju.",
+            "W szczególności: w Niemczech tylko osoba, która od co najmniej trzech lat posiada legitymację myśliwską, może wydzierżawić teren łowiecki (art. 11 ust. 5 BJagdG); umowy dzierżawy obwodów łowieckich muszą być sporządzone na piśmie i zgłoszone do odpowiedniego urzędu. Zezwolenia na polowanie może wydawać wyłącznie osoba uprawniona do polowania.",
+            "Ogłaszający muszą mieć prawo do oferowania takich możliwości. Zainteresowani muszą posiadać niezbędne zezwolenia, takie jak ważna legitymacja myśliwska. Przed zawarciem umowy sprawdźcie nawzajem swoje dokumenty.",
+            "Handel bronią, częściami do broni i amunicją jest zabroniony na Huntery."
           ]
         },
         {
-          "title": "Zakończenie użytkowania",
+          "title": "6. Kontakt i wiadomości",
           "points": [
-            "W każdej chwili możesz usunąć swoje konto."
+            "Kontakt odbywa się przez czat po zalogowaniu. Dane kontaktowe nie powinny pojawiać się w ogłoszeniach.",
+            "Wiadomości mogą służyć wyłącznie do nawiązania kontaktu i uzgodnienia szczegółów danej okazji łowieckiej. Reklamy, spam i nękanie są zabronione.",
+            "Nie płacisz nieznajomym z góry i odwiedzasz teren łowiecki przed zawarciem umowy. Pomogą ci w tym wskazówki dotyczące bezpieczeństwa zamieszczone w ogłoszeniu."
           ]
         },
         {
-          "title": "Odpowiedzialność i zmiany",
+          "title": "7. Moderacja",
           "points": [
-            "Tekst zastępczy."
+            "Przed opublikowaniem nowe i zmienione ogłoszenia są sprawdzane przez ludzi. Automatyczne podpowiedzi (na przykład dotyczące danych kontaktowych czy terminów związanych z bronią w treści) służą tylko jako pomoc przy tej weryfikacji. Zgłoszone treści też są sprawdzane przez ludzi.",
+            "Jeśli złamiesz prawo lub te warunki, możemy odrzucić ogłoszenie, odesłać je do poprawek, usunąć je lub usunąć jego punkt na mapie, a także ostrzec cię lub zablokować konto. Wybieramy najłagodniejszy odpowiedni środek, biorąc pod uwagę powagę, częstotliwość i intencję.",
+            "O każdym działaniu na Twoim koncie i w e-mailach podajemy powody, podając podstawę, fakty oraz sposób złożenia skargi (art. 17 DSA).",
+            "Każdy, kto wielokrotnie publikuje treści ewidentnie niezgodne z prawem lub wielokrotnie zgłasza ewidentnie bezpodstawne zgłoszenia, zostanie zablokowany na rozsądny okres po otrzymaniu ostrzeżenia (art. 23 DSA)."
+          ]
+        },
+        {
+          "title": "8. Zgłaszanie",
+          "points": [
+            "Możesz zgłaszać ogłoszenia, profile i wiadomości za pomocą opcji „Zgłoś”, podając powód. Potwierdzamy otrzymanie zgłoszenia, sprawdzamy je szybko, dokładnie i obiektywnie, a potem informujemy cię o wyniku (art. 16 DSA).",
+            "Jeśli nie masz konta, możesz skontaktować się z nami, korzystając z danych kontaktowych podanych w notie prawnej."
+          ]
+        },
+        {
+          "title": "9. Reklamacje i rozstrzyganie sporów",
+          "points": [
+            "W ciągu sześciu miesięcy możesz złożyć bezpłatną skargę na swoim koncie na decyzję moderatora, w tym na decyzję dotyczącą Twojego zgłoszenia. Decyzję podejmuje konkretna osoba, w miarę możliwości inny administrator niż ten, który podjął pierwotną decyzję, nigdy nie odbywa się to automatycznie (art. 20 DSA).",
+            "Możesz też zwrócić się do certyfikowanego organu pozasądowego rozstrzygania sporów zgodnie z art. 21 DSA. Zawsze masz też możliwość wystąpienia na drogę sądową.",
+            "Skargi dotyczące naszej działalności możesz również kierować do koordynatora ds. usług cyfrowych, a w Niemczech do Federalnej Agencji Sieciowej (Bundesnetzagentur)."
+          ]
+        },
+        {
+          "title": "10. Weryfikacja",
+          "points": [
+            "Oznaczenie „zweryfikowany” jest dobrowolne. Oznacza jedynie, że widzieliśmy dokument (np. legitymację myśliowską) i że pasuje on do konta. Nie stanowi to żadnej gwarancji tożsamości, uprawnień ani wiarygodności."
+          ]
+        },
+        {
+          "title": "11. Kolejność ogłoszeń",
+          "points": [
+            "Domyślnie wyniki wyszukiwania sortujemy według daty publikacji, najnowsze na początku; możesz je posortować według ceny i zastosować filtry. Nie ma odpłatnych pozycji; firmowe i prywatne ogłoszenia są traktowane na równi."
+          ]
+        },
+        {
+          "title": "12. Usługodawcy",
+          "points": [
+            "Firmy muszą samodzielnie wypełniać swoje ustawowe obowiązki wobec konsumentów, takie jak obowiązek identyfikacji ogłaszającego i obowiązek informacyjny.",
+            "Jeśli ograniczymy lub zablokujemy konto firmowe, podamy powody z wyprzedzeniem lub najpóźniej w momencie, gdy blokada zacznie obowiązywać. O zwykłym wypowiedzeniu informujemy z co najmniej 30-dniowym wyprzedzeniem. Skargi rozpatrujemy za pomocą funkcji zgłoszenia skargi na koncie; w przypadku sporów wskazujemy następujących mediatorów: [dwóch mediatorów zgodnie z art. 12 rozporządzenia P2B]."
+          ]
+        },
+        {
+          "title": "13. Odpowiedzialność",
+          "points": [
+            "Ponosimy nieograniczoną odpowiedzialność za działania umyślne i rażące zaniedbania, za szkody wynikające z utraty życia, uszkodzenia ciała lub zdrowia oraz na podstawie ustawy o odpowiedzialności za produkt.",
+            "W przypadku niewielkiego zaniedbania ponosimy odpowiedzialność wyłącznie za naruszenie istotnych zobowiązań, na których wypełnieniu możesz polegać, ograniczoną do przewidywalnych, typowych szkód.",
+            "Nie ponosimy odpowiedzialności za treści publikowane przez użytkowników ani za umowy zawierane między użytkownikami. Jeśli naruszysz prawa osób trzecich, zwolnisz nas z odpowiedzialności za wynikające z tego roszczenia w zakresie, w jakim ponosisz za to odpowiedzialność."
+          ]
+        },
+        {
+          "title": "14. Okres obowiązywania i wypowiedzenie",
+          "points": [
+            "W dowolnym momencie możesz usunąć swoje konto w panelu użytkownika.",
+            "Możemy wypowiedzieć umowę użytkownika z 30-dniowym wyprzedzeniem. Nie ma to wpływu na prawo do wypowiedzenia umowy bez wyprzedzenia z ważnych powodów, na przykład w przypadku poważnych lub powtarzających się naruszeń."
+          ]
+        },
+        {
+          "title": "15. Zmiany w niniejszych warunkach",
+          "points": [
+            "Możemy zmienić te warunki, jeśli zmieni się sytuacja serwisu Huntery lub otoczenie prawne. O zmianach informujemy z co najmniej 15-dniowym wyprzedzeniem. Żeby dalej korzystać z serwisu Huntery, musisz zaakceptować nową wersję; jeśli jej nie zaakceptujesz, możesz usunąć swoje konto."
+          ]
+        },
+        {
+          "title": "16. Postanowienia końcowe",
+          "points": [
+            "Obowiązuje prawo niemieckie, z wyłączeniem Konwencji ONZ o umowach międzynarodowej sprzedaży towarów. Jeśli jesteś konsumentem, nie ma to wpływu na ochronę wynikającą z bezwzględnie obowiązujących przepisów kraju, w którym mieszkasz.",
+            "Jeśli jesteś sprzedawcą, miejscem jurysdykcji jest [siedziba operatora].",
+            "Niniejsze warunki są dostępne w języku niemieckim, angielskim, czeskim i polskim; w razie rozbieżności decyduje wersja niemiecka.",
+            "Jeśli któreś z postanowień jest nieważne, pozostałe pozostają w mocy."
           ]
         }
       ]
@@ -180,146 +256,262 @@
       "title": "Polityka prywatności",
       "sections": [
         {
-          "title": "Administrator danych i dane kontaktowe",
+          "title": "1. W skrócie",
           "points": [
-            "Nazwa i adres operatora: tekst zastępczy, zobacz notę prawną.",
-            "Kontakt w sprawach dotyczących ochrony danych: tekst zastępczy."
+            "Huntery to platforma z ofertami myśliwskimi. Przetwarzamy tylko te dane, które są nam potrzebne do obsługi twojego konta, ogłoszeń, kontaktu przez czat i bezpiecznego działania serwisu.",
+            "Nie używamy reklam ani narzędzi analitycznych, nie osadzamy elementów z sieci społecznościowych i nie ładujemy do twojej przeglądarki czcionek, map ani skryptów z serwerów stron trzecich.",
+            "Dokładne lokalizacje terenów łowieckich, kody pocztowe i dane kontaktowe nigdy nie są publicznie widoczne."
           ]
         },
         {
-          "title": "Konto i zalogowanie",
+          "title": "2. Administrator danych",
           "points": [
-            "Adres e-mail, kody logowania oraz, jeśli jest dostępna, opcja „Zaloguj się przez Apple”.",
-            "Plik cookie sesji pozwala ci pozostać zalogowanym (zobacz ustawienia plików cookie).",
-            "Konta, która nigdy nie zostaną potwierdzone, są usuwane po 7 dniach."
+            "Administratorem danych jest [operator, adres, patrz nota prawna].",
+            "Kontakt w sprawach dotyczących ochrony danych: [adres e-mail]. [Wyznaczyliśmy inspektora ochrony danych: imię i nazwisko oraz dane kontaktowe / nie wyznaczyliśmy inspektora ochrony danych, bo nie mamy takiego obowiązku]."
           ]
         },
         {
-          "title": "Profil i ogłoszenia",
+          "title": "3. Podstawy prawne i okres przechowywania danych",
           "points": [
-            "Wyświetlaj nazwę wyświetlaną, typ konta, nazwę firmy, kraj i język.",
-            "Ogłoszenia zawierające opisy, ceny, gatunki zwierzyny łownej i zdjęcia.",
-            "Zdjęcia są ponownie kodowane na naszym serwerze. Dzięki temu metadane, takie jak współrzędne GPS, są usuwane."
+            "Przetwarzamy dane w celu realizacji umowy użytkownika (art. 6(1) lit. b) RODO), w celu wypełnienia obowiązków prawnych, w szczególności wynikających z ustawy o usługach cyfrowych (lit. c)), w oparciu o uzasadnione interesy związane z bezpiecznym funkcjonowaniem serwisu wolnym od nadużyć (lit. f)) oraz, w przypadkach, gdy o to poprosimy, w oparciu o twoją zgodę (lit. a)).",
+            "Przechowujemy dane tylko tak długo, jak tego wymaga cel przetwarzania. Konkretne okresy są podane dla każdego rodzaju przetwarzania. Nie ma to wpływu na ustawowe okresy przechowywania danych."
           ]
         },
         {
-          "title": "Lokalizacja",
+          "title": "4. Odwiedzanie strony",
           "points": [
-            "Na stronach publicznych pokazywany jest tylko region lub powiat albo celowo przesunięty punkt.",
-            "Kod pocztowy i dokładna lokalizacja terenu łowieckiego nigdy nie są publicznie ujawniane."
+            "Kiedy odwiedzasz naszą stronę, nasz dostawca usług hostingowych przetwarza dane niezbędne z technicznego punktu widzenia, takie jak adres IP, czas, adres żądanej strony i identyfikator przeglądarki, żeby wyświetlić stronę i odeprzeć ataki (punkt (f)). Te logi są przechowywane tylko przez krótki czas [okres zgodnie z planem Vercel].",
+            "Połączenie jest zawsze szyfrowane za pomocą protokołu TLS.",
+            "Czcionki, ilustracje i mapa są udostępniane z naszego własnego serwera."
           ]
         },
         {
-          "title": "Wiadomości",
+          "title": "5. Pliki cookie i pamięć przeglądarki",
           "points": [
-            "Wiadomości między użytkownikami są zapisywane w ramach rozmowy i dostarczane w czasie rzeczywistym.",
-            "Powiadomienia e-mailowe o nowych wiadomościach można wyłączyć.",
-            "Osoby, które zablokowałeś, nie mogą do ciebie pisać."
+            "Ustawiamy tylko absolutnie niezbędne pliki cookie: plik sesyjny, który utrzymuje twoje zalogowanie, oraz krótkotrwały plik zapewniający bezpieczny proces zalogowania. Podstawą prawną jest § 25 ust. 2 pkt 2 TDDDG; zgoda nie jest wymagana.",
+            "Wszystkie pliki cookie wraz z ich przeznaczeniem i okresem ważności są wymienione na stronie „Ustawienia plików cookie”. Jeśli w przyszłości zaczniemy korzystać z usług wymagających zgody, najpierw cię o to poprosimy, a ty w każdej chwili możesz wycofać swoją zgodę."
           ]
         },
         {
-          "title": "Zapisane wyszukiwania",
+          "title": "6. Konto i zaloguj się",
           "points": [
-            "Filtry, częstotliwość i wyniki Twoich zapisanych wyszukiwań. Są aktywne przez 6 tygodni, chyba że je przedłużysz.",
-            "Każdy e-mail zawiera link do wypisania się z subskrypcji jednym kliknięciem, ważny przez 90 dni."
+            "W ramach konta przetwarzamy twój adres e-mail, kody logowania i dane sesji (punkt (b)). Nie ma hasła. Funkcja „Zaloguj się przez Apple” jest dostępna w ofercie; Apple udostępni nam wtedy tylko niezbędne dane konta.",
+            "Jako dowód przechowujemy informacje o tym, którą wersję Regulaminu i Polityki prywatności zaakceptowałeś oraz kiedy to zrobiłeś (punkty (c) i (f)).",
+            "Konta, która nigdy nie zostały potwierdzone, są usuwane po 7 dniach."
           ]
         },
         {
-          "title": "Mapa",
+          "title": "7. Profil i ogłoszenia",
           "points": [
-            "Mapa jest wyświetlana z naszego własnego serwera. Żadne zapytania nie są kierowane do zewnętrznych dostawców map.",
-            "Mapa nie zapisuje żadnych danych w twojej przeglądarce."
+            "Przetwarzamy twoją nazwę wyświetlaną, typ konta (prywatne lub firmowe), nazwę firmy w przypadku kont firmowych, kraj i język, a także twoje ogłoszenia wraz z tekstami, cenami, gatunkami zwierzyny i zdjęciami (punkt (b)). Inni użytkownicy widzą twoją nazwę wyświetlaną lub nazwę firmy, kraj oraz, w stosownych przypadkach, oznaczenie „zweryfikowany” – nigdy nie widzą twojego adresu e-mail.",
+            "Zdjęcia są ponownie kodowane na naszym serwerze. W trakcie tego procesu metadane, takie jak współrzędne GPS i dane aparatu, są usuwane.",
+            "Publicznie pokazujemy tylko region i powiat albo celowo przesunięty punkt na mapie. Tylko ty i nasi moderatorzy widzicie kod pocztowy i lokalizację terenu łowieckiego.",
+            "Opublikowane ogłoszenia są dostępne publicznie i mogą być indeksowane przez wyszukiwarki. Szkice, których nie edytowałeś przez 12 miesięcy, zostaną usunięte po 30-dniowym uprzedzeniu."
           ]
         },
         {
-          "title": "Weryfikacja",
+          "title": "8. Wiadomości",
           "points": [
-            "Opcjonalnie: przesłana legitymacja myśliwska lub podobny dokument jest przechowywany prywatnie i widoczny tylko dla ciebie oraz administratorów.",
-            "Dokument zostanie usunięty 30 dni po podjęciu decyzji."
+            "Przechowujemy wiadomości między użytkownikami, żeby prowadzić rozmowę i wyświetlać ją w czasie rzeczywistym (punkt (b)). Czytamy wiadomości tylko wtedy, gdy ktoś je nam zgłosi.",
+            "Jeśli wiadomość zawiera numer telefonu, adres e-mail, dane bankowe lub współrzędne, przed wysłaniem w czacie pojawi się ostrzeżenie dotyczące bezpieczeństwa. Sprawdzanie przebiega automatycznie i nie zablokuje niczego; to ty decydujesz, czy chcesz wysłać wiadomość.",
+            "O nowych wiadomościach informujemy cię e-mailem, nie podając treści wiadomości. Możesz to wyłączyć w ustawieniach albo przez link w e-mailu.",
+            "Osoby zablokowane nie mogą już wysyłać ci wiadomości."
           ]
         },
         {
-          "title": "Zgłoszenia i moderacja",
+          "title": "9. Zapisane wyszukiwania i ulubione",
           "points": [
-            "Zgłoszenia, decyzje moderatorów i ich uzasadnienia.",
-            "Kopie zgłoszonych wiadomości są przechowywane przez 12 miesięcy od momentu rozpatrzenia zgłoszenia.",
-            "Rejestr decyzji administracyjnych jest przechowywany w formie zanonimizowanej przez 24 miesiące."
+            "W przypadku zapisanych wyszukiwań przechowujemy filtry, częstotliwość oraz już zgłoszone dopasowania i wysyłamy ci e-mailem nowe, pasujące ogłoszenia (punkt (b)). Zapisane wyszukiwania wygasają po 6 tygodniach, chyba że je odnowisz.",
+            "Każdy e-mail zawiera link do wypisania się z subskrypcji jednym kliknięciem, ważny przez 90 dni.",
+            "Ulubione są zapisywane na twoim koncie, dopóki nie są usunięte lub skasowane."
           ]
         },
         {
-          "title": "Usunięcie konta",
+          "title": "10. Weryfikacja",
           "points": [
-            "Możesz usunąć swoje konto w dowolnym momencie po ponownym zalogowaniu się.",
-            "Profile, ogłoszenia, zdjęcia, wiadomości, zapisane wyszukiwania i dokumenty są natychmiast usuwane.",
-            "Tylko zanonimizowane zapisy moderacyjne i zgłoszenia dotyczące konta są przechowywane do upływu terminu ich ważności."
+            "Możesz dobrowolnie przesłać legitymację myśliowską, zezwolenie na polowanie lub zaświadczenie o obwodzie łowieckim, żeby otrzymać odznakę „zweryfikowany” (punkt (a)). Dokument jest przechowywany w prywatnym magazynie i widoczny tylko dla ciebie oraz administratorów; każdy dostęp administratora jest rejestrowany.",
+            "Usuwamy dokument 30 dni po podjęciu decyzji lub natychmiast, jeśli usuniesz swoje konto. Sama decyzja jest przechowywana do momentu usunięcia konta. W każdej chwili możesz wycofać swoją zgodę; wtedy ikona zostanie usunięta."
           ]
         },
         {
-          "title": "Eksport danych",
+          "title": "11. Zgłoszenia i moderacja",
           "points": [
-            "Wszystkie swoje dane możesz pobrać jako plik JSON ze swojego konta."
+            "Sprawdzamy ogłoszenia przed publikacją i zajmujemy się zgłoszeniami. W ramach tych działań przetwarzamy zgłoszenia, decyzje, uzasadnienia i skargi (punkt (c) w połączeniu z art. 16, 17 i 20 DSA oraz punkt (f)).",
+            "Reporterzy dowiadują się tylko o wyniku, a nie o tożsamości osoby, której dotyczy zgłoszenie, i na odwrót.",
+            "Kopie zgłoszonych wiadomości i zgłoszeń przechowujemy przez 12 miesięcy od momentu rozpatrzenia, a rejestr decyzji administracyjnych w formie pseudonimizowanej – przez 24 miesiące.",
+            "Nie podejmujemy decyzji wyłącznie w sposób zautomatyzowany w rozumieniu art. 22 RODO. Automatyczne podpowiedzi, na przykład dotyczące danych kontaktowych w treści ogłoszenia, służą jedynie jako wsparcie podczas weryfikacji przez człowieka."
           ]
         },
         {
-          "title": "Hosting i podmioty przetwarzające dane",
+          "title": "12. Ochrona przed nadużyciami",
           "points": [
-            "Baza danych, przechowywanie plików i zaloguj się: Supabase, region UE (Frankfurt).",
-            "Wysyłka e-maili: dostawca zostanie wskazany.",
-            "Kopie zapasowe i logi u dostawców usług hostingowych i poczty e-mail są przechowywane do upływu terminów określonych przez tych dostawców (należy je podać)."
+            "Aby zapobiegać spamowi i nadużyciom, ograniczamy liczbę nowych ogłoszeń, rozmów i wiadomości w danym okresie (punkt (f)). W tym celu zliczamy twoje działania bez analizowania ich treści."
           ]
         },
         {
-          "title": "Twoje prawa",
+          "title": "13. E-maile",
           "points": [
-            "Dostęp, sprostowanie, usunięcie, ograniczenie przetwarzania, przenoszenie danych, sprzeciw oraz prawo do złożenia skargi do organu nadzorczego: tekst zastępczy."
+            "Wysyłamy tylko wiadomości związane z twoim kontem: kody logowania, powiadomienia o twoich ogłoszeniach, decyzje moderatorów oraz powiadomienia o wiadomościach i zapisanych wyszukiwaniach. Nie wysyłamy reklam.",
+            "Nasze e-maile nie zawierają pikseli śledzących ani funkcji śledzenia kliknięć."
+          ]
+        },
+        {
+          "title": "14. Usunięcie konta i eksport danych",
+          "points": [
+            "Możesz usunąć swoje konto w dowolnym momencie po ponownym zalogowaniu się. Natychmiast usuniemy Twój profil, ogłoszenia, zdjęcia, wiadomości, zapisane wyszukiwania i dokumenty; wiadomości, które nigdy nie zostały zgłoszone, znikną również dla drugiej osoby.",
+            "Zachowujemy tylko zanonimizowany rejestr decyzji administratorów (24 miesiące), zgłoszenia dotyczące twojego konta oraz kopie zgłoszonych wiadomości (12 miesięcy od rozpatrzenia) oraz nasze zaszyfrowane kopie zapasowe do momentu ich wygasnięcia po 14 dniach.",
+            "Na swoim koncie możesz pobrać wszystkie swoje dane w postaci pliku JSON (art. 20 RODO)."
+          ]
+        },
+        {
+          "title": "15. Odbiorcy i podmioty przetwarzające dane",
+          "points": [
+            "Hosting strony: Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA. Serwer działa we Frankfurcie nad Menem. Opiera się to na umowie o przetwarzaniu danych; przekazywanie danych do USA jest objęte decyzją o adekwatności w ramach ram ochrony danych UE–USA oraz standardowymi klauzulami umownymi [sprawdź certyfikację].",
+            "Baza danych, zaloguj się, przechowywanie plików i funkcje działające w tle: Supabase Inc., USA, z danymi przechowywanymi we Frankfurcie nad Menem (AWS eu-central-1), na podstawie umowy o przetwarzaniu danych i standardowych klauzul umownych.",
+            "Wysyłka e-maili: united-domains GmbH, Gautinger Straße 10, 82319 Starnberg, Niemcy, na podstawie umowy o przetwarzaniu danych.",
+            "Monitorowanie błędów: Functional Software Inc. (Sentry), USA, z danymi przechowywanymi w UE (Frankfurt). Przesyłamy wyłącznie techniczne zgłoszenia o błędach bez adresu IP, plików cookie, identyfikatora użytkownika ani treści (punkt (f)), na podstawie umowy o przetwarzaniu danych i standardowych klauzul umownych.",
+            "Kopie zapasowe: codziennie tworzymy zaszyfrowane kopie zapasowe bazy danych i przechowujemy je przez 14 dni [podaj miejsce przechowywania].",
+            "Poza tym przekazujemy dane tylko wtedy, gdy wymaga tego prawo, na przykład organom ścigania (art. 18 DSA)."
+          ]
+        },
+        {
+          "title": "16. Twoje prawa",
+          "points": [
+            "Masz prawo do wglądu (art. 15 RODO), sprostowania (art. 16), usunięcia (art. 17), ograniczenia przetwarzania (art. 18), przenoszenia danych (art. 20) oraz do wniesienia sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionych interesach (art. 21).",
+            "W każdej chwili możesz wycofać zgodę ze skutkiem na przyszłość.",
+            "Możesz złożyć skargę do organu nadzorującego ochronę danych, zwłaszcza w kraju, w którym mieszkasz. Organem odpowiedzialnym za nas jest [organ nadzorujący w siedzibie operatora].",
+            "Wiele praw możesz realizować bezpośrednio na swoim koncie: możesz zmieniać, eksportować i usuwać swoje dane. W pozostałych sprawach napisz do nas na adres [adres e-mail ds. ochrony danych]."
+          ]
+        },
+        {
+          "title": "17. Zmiany",
+          "points": [
+            "Aktualizujemy tę politykę, gdy zmienia się Huntery lub sytuacja prawna. Aktualna wersja jest zawsze dostępna tutaj; o istotnych zmianach informujemy użytkowników, którzy się zalogowali."
           ]
         }
       ]
     },
     "imprint": {
-      "title": "Nota prawna"
+      "title": "Nota prawna",
+      "sections": [
+        {
+          "title": "Ogłaszający",
+          "points": [
+            "Informacje zgodnie z § 5 niemieckiej ustawy o usługach cyfrowych (DDG)",
+            "[Imię i nazwisko lub nazwa firmy oraz forma prawna operatora]",
+            "[Ulica i numer, kod pocztowy i miasto, kraj]",
+            "Reprezentowany przez: [upoważniony(-i) przedstawiciel(-e)]",
+            "Huntery to serwis marki Die Jagdbrüder."
+          ]
+        },
+        {
+          "title": "Kontakt",
+          "points": [
+            "E-mail: [adres kontaktowy, np. kontakt@huntery.de]",
+            "Telefon: [numer telefonu]",
+            "Adres no-reply@huntery.de służy wyłącznie do wysyłania automatycznych wiadomości i nie jest monitorowany."
+          ]
+        },
+        {
+          "title": "Rejestracja i VAT",
+          "points": [
+            "Numer rejestru sądowego i numer rejestracyjny: [jeśli dotyczy]",
+            "Numer identyfikacyjny VAT zgodnie z § 27a UStG: [jeśli dotyczy]"
+          ]
+        },
+        {
+          "title": "Odpowiedzialny za treść",
+          "points": [
+            "Osoba odpowiedzialna zgodnie z § 18 ust. 2 niemieckiej Międzypaństwowej umowy o mediach: [imię i nazwisko, adres]",
+            "Użytkownicy są odpowiedzialni za zamieszczane przez siebie ogłoszenia, profile i wiadomości."
+          ]
+        },
+        {
+          "title": "Dane kontaktowe zgodnie z ustawą o usługach cyfrowych",
+          "points": [
+            "Jedyny punkt kontaktowy dla organów władzy, Komisji Europejskiej i Rady ds. Usług Cyfrowych (art. 11 DSA) oraz dla użytkowników (art. 12 DSA): [adres e-mail]. Języki: niemiecki i angielski.",
+            "Najszybszym sposobem na zgłoszenie nielegalnych treści jest przycisk „Zgłoś” bezpośrednio przy ogłoszeniu, profilu lub wiadomości."
+          ]
+        },
+        {
+          "title": "Rozstrzyganie sporów konsumenckich",
+          "points": [
+            "Nie chcemy ani nie jesteśmy zobowiązani do udziału w postępowaniach rozstrzygających spory przed komisją arbitrażową ds. konsumentów (art. 36 VSBG).",
+            "W przypadku decyzji moderacyjnych dostępne są również wewnętrzna procedura rozpatrywania skarg oraz pozasądowe rozstrzyganie sporów zgodnie z ustawą o usługach cyfrowych (zobacz regulamin)."
+          ]
+        },
+        {
+          "title": "Odpowiedzialność za treści i linki",
+          "points": [
+            "Z dbałością przygotowujemy treści na tych stronach. Zgodnie z przepisami prawa ponosimy odpowiedzialność za treści zamieszczane przez użytkowników dopiero wtedy, gdy dowiemy się o konkretnym naruszeniu. W takim przypadku niezwłocznie usuwamy te treści.",
+            "Za treści na stronach osób trzecich, do których prowadzą linki, odpowiadają ich operatorzy. Linki te są usuwane, gdy tylko dowiemy się o naruszeniu."
+          ]
+        },
+        {
+          "title": "Prawa autorskie",
+          "points": [
+            "Teksty, projekt, logo i ilustracje serwisu Huntery są chronione prawem autorskim. Wykorzystanie ich poza platformą wymaga naszej zgody.",
+            "Dane mapowe: © autorzy OpenStreetMap; inne źródła i licencje znajdziesz na stronie „Źródła danych”."
+          ]
+        }
+      ]
     },
     "footerLabel": "Informacje prawne",
-    "outlineNote": "Lista zarysów pokazuje, jakie dane faktycznie przetwarza platforma. Nie jest to tekst prawny.",
+    "outlineNote": "Ten tekst opisuje, jak faktycznie działa Huntery i jakie dane przetwarza.",
     "guidelines": {
-      "title": "Zasady treści",
-      "intro": "Te zasady dotyczą wszystkich ogłoszeń, profili i wiadomości. Ich złamanie skutkuje odrzuceniem lub usunięciem treści, a w przypadku powtórzenia – zablokowaniem konta.",
+      "title": "Wytyczne",
+      "intro": "Te zasady dotyczą wszystkich ogłoszeń, profili i wiadomości oraz stanowią część regulaminu. Ich złamanie skutkuje odrzuceniem lub usunięciem treści, a w przypadku powtórzenia – ostrzeżeniem lub zablokowaniem konta.",
       "sections": [
         {
           "title": "Tylko oferty polowań",
           "points": [
-            "Każde ogłoszenie musi należeć do jednej z kategorii.",
-            "Zabrania się sprzedaży, kupna lub wymiany broni, amunicji oraz części do broni."
+            "Każde ogłoszenie musi należeć do jednej z następujących kategorii: dzierżawa obwodu łowieckiego, zezwolenie na polowanie, polowanie zbiorowe, polowanie na trofea lub polowanie dla gości, pomocnik myśliwego lub towarzysz polowania – każda z nich może być ofertą lub zapytaniem.",
+            "Zabrania się sprzedaży, kupna lub wymiany broni, części do broni, amunicji czy mięsa z dziczyzny, a także reklamowania innych towarów.",
+            "Wybierz odpowiedni typ ogłoszenia i jego kierunek (oferta lub zapytanie). Jedno ogłoszenie opisuje dokładnie jedną okazję."
           ]
         },
         {
-          "title": "Niedozwolone treści",
+          "title": "Zgodne z prawem i etyczne",
           "points": [
-            "Żadnych treści niezgodnych z prawem, dyskryminujących, zawierających groźby ani o charakterze seksualnym.",
-            "Nie wolno zamieszczać ofert naruszających przepisy łowieckie, na przykład dotyczących polowań w okresie ochronnym.",
-            "Nie kopiuj tekstów z innych stron i nie używaj zdjęć, do których nie masz praw.",
-            "Bez zdjęć upolowanej zwierzyny (na przykład pokotu po polowaniu albo trofeum na tuszy). Ogłoszenia z takimi zdjęciami odrzucamy."
+            "Nie wolno zamieszczać ofert naruszających przepisy dotyczące łowiectwa, broni, ochrony przyrody lub dobrostanu zwierząt, na przykład polowań w okresie ochronnym, na gatunki chronione, bez planu odstrzału lub na terenach, gdzie jest to zabronione.",
+            "Nie oferuj zezwoleń na polowanie ani dzierżaw obwodów łowieckich, do których nie masz uprawnień.",
+            "Polowania zagraniczne są dozwolone tylko wtedy, gdy są zgodne z prawem danego kraju."
           ]
         },
         {
           "title": "Prawdziwe i kompletne",
           "points": [
-            "Informacje muszą być kompletne i wiarygodne.",
-            "Nie dodawaj zduplikowanych ogłoszeń."
+            "Szczegóły dotyczące obszaru, gatunków zwierzyny, ceny, terminu i warunków muszą być dokładne i wiarygodne. Podaj istotne ograniczenia, takie jak liczba współmyśliwych, limity odstrzału czy koszty związane ze szkodami spowodowanymi przez zwierzynę.",
+            "Nie wrzucaj zduplikowanych ogłoszeń wielokrotnie i nie publikuj ich ciągle na nowo, żeby utrzymać się na szczycie listy.",
+            "Używaj własnych zdjęć albo takich, do których masz prawa. Nie kopiuj tekstów ani obrazów z innych stron internetowych.",
+            "Żadnych zdjęć upolowanej zwierzyny (na przykład pokotu lub całej sztuki z trofeum) w ogłoszeniach."
           ]
         },
         {
-          "title": "Kontakt i prywatność",
+          "title": "Kontakt i polityka prywatności",
           "points": [
-            "W opisach ogłoszeń nie podawaj numerów telefonów, adresów e-mail ani linków. Kontakt odbywa się przez czat.",
-            "Nie podawaj dokładnych współrzędnych terenów łowieckich ani danych osobowych innych osób."
+            "W treści ogłoszenia nie podawaj numerów telefonów, adresów e-mail, linków ani nazw użytkowników komunikatorów. Kontakt odbywa się przez czat.",
+            "Nie podawaj dokładnych współrzędnych terenów łowieckich ani ambon, a także żadnych danych osobowych innych osób, takich jak nazwiska członków spółdzielni łowieckich czy dzierżawców, bez ich zgody."
           ]
         },
         {
-          "title": "Wiadomości",
+          "title": "Zachowuj się z szacunkiem",
           "points": [
-            "Żadnego spamu, nękania ani prób oszustw.",
+            "Żadnych treści obraźliwych, dyskryminujących, zawierających groźby, gloryfikujących przemoc ani o charakterze seksualnym – również w profilach i wiadomościach.",
+            "Żadnego spamu, żadnych masowych wiadomości, żadnych nękań ani prób oszustw, takich jak żądanie przedpłaty za nieistniejący teren łowiecki.",
             "Możesz zgłaszać wiadomości i zablokować osoby."
+          ]
+        },
+        {
+          "title": "Firmowe ofery usług",
+          "points": [
+            "Każdy, kto oferuje usługi komercyjnie – na przykład jako organizator wyjazdów myśliwskich, firma leśna czy pośrednik – korzysta z konta firmowego i sam wypełnia ustawowe obowiązki informacyjne."
+          ]
+        },
+        {
+          "title": "Konsekwencje naruszeń",
+          "points": [
+            "W zależności od powagi sytuacji odrzucamy ogłoszenie, zwracamy je do poprawek, usuwamy je lub punkt na mapie, ostrzegamy konto albo je zablokujemy. Zawsze dostaniesz uzasadnienie i możesz złożyć skargę (zobacz regulamin)."
           ]
         }
       ]

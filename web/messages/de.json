@@ -122,56 +122,132 @@
     "deleteAccount": "Konto löschen"
   },
   "Legal": {
-    "placeholder": "Platzhalter: Der endgültige Text wird vor dem Start von einem Anwalt geliefert.",
+    "placeholder": "Entwurf (Stand 25.11.2026), noch nicht anwaltlich geprüft. Verbindlich wird erst die geprüfte Fassung. Angaben in eckigen Klammern werden vor dem Start ergänzt.",
     "terms": {
       "title": "Nutzungsbedingungen",
       "sections": [
         {
-          "title": "Geltungsbereich",
+          "title": "1. Geltungsbereich und Anbieter",
           "points": [
-            "Die Plattform vermittelt Jagdgelegenheiten: Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäen-/Gastjagden und Jagdhelfer/Mitjäger, jeweils als Angebot oder Gesuch.",
-            "Kein Verkauf von Waffen oder Munition."
+            "Diese Bedingungen gelten für die Nutzung von Huntery (huntery.de und die zugehörige App) zwischen dir und [Betreiber, siehe Impressum] („wir“).",
+            "Huntery ist ein Online-Marktplatz für Jagdgelegenheiten: Jagdpacht, Begehungsscheine, Gesellschaftsjagden, Trophäen- und Gastjagden sowie Jagdhelfer und Mitjäger, jeweils als Angebot oder Gesuch.",
+            "Die Richtlinien sind Bestandteil dieser Bedingungen."
           ]
         },
         {
-          "title": "Konto",
+          "title": "2. Unsere Leistung",
           "points": [
-            "Ein Konto je Person, mit wahren Angaben.",
-            "Die Nutzung setzt die Zustimmung zu den Nutzungsbedingungen und zur Datenschutzerklärung voraus."
+            "Wir stellen die Plattform bereit, auf der du Anzeigen veröffentlichen, suchen und mit anderen Nutzern über den Chat Kontakt aufnehmen kannst. Die Nutzung ist derzeit kostenlos.",
+            "Verträge über eine Jagdgelegenheit, etwa ein Jagdpachtvertrag oder ein Begehungsschein, kommen ausschließlich zwischen den Nutzern zustande. Wir werden nicht Vertragspartei, vermitteln nicht entgeltlich und wirken an Verhandlung und Abwicklung nicht mit.",
+            "Wir prüfen Anzeigen vor der Veröffentlichung auf Verstöße gegen diese Bedingungen, nicht aber, ob Angaben zutreffen, ob ein Anbieter berechtigt ist oder ob ein Revier die beschriebenen Eigenschaften hat.",
+            "Wir bemühen uns um eine ständige Erreichbarkeit, können sie aber nicht zusichern, etwa bei Wartung oder Störungen."
           ]
         },
         {
-          "title": "Anzeigen",
+          "title": "3. Konto",
           "points": [
-            "Anzeigen werden vor der Veröffentlichung geprüft.",
-            "Kontaktdaten gehören nicht in den Anzeigentext. Der Kontakt läuft nach der Anmeldung über den Chat.",
-            "Anzeigen laufen ab und lassen sich verlängern."
+            "Für Anzeigen, Chat, Merkliste und Suchaufträge brauchst du ein Konto. Du musst mindestens 18 Jahre alt sein.",
+            "Deine Angaben müssen wahr sein. Je Person ist ein Konto erlaubt. Wer als Unternehmen oder im Rahmen einer gewerblichen Tätigkeit anbietet, muss ein gewerbliches Konto mit Firmennamen nutzen.",
+            "Halte den Zugang zu deinem E-Mail-Postfach geschützt; wer darauf Zugriff hat, kann sich anmelden. Bei Verdacht auf Missbrauch informiere uns."
           ]
         },
         {
-          "title": "Moderation",
+          "title": "4. Anzeigen",
           "points": [
-            "Anzeigen können abgelehnt, zur Bearbeitung zurückgegeben oder entfernt werden. Du erhältst die Begründung.",
-            "Konten können bei schweren oder wiederholten Verstößen gesperrt werden.",
-            "Gegen Entscheidungen kannst du Beschwerde einlegen: Platzhalter."
+            "Du bist für deine Anzeigen verantwortlich. Sie müssen zur gewählten Anzeigenart passen, vollständig und wahr sein und den Richtlinien entsprechen.",
+            "Preise gibst du in der Originalwährung an; wir rechnen nicht um. Die Lage zeigen wir nur als Region, Landkreis oder verfremdeten Punkt.",
+            "Anzeigen werden vor der Veröffentlichung geprüft und laufen nach der angezeigten Laufzeit ab; du kannst sie verlängern, pausieren oder löschen.",
+            "An Texten und Fotos, die du einstellst, räumst du uns das einfache, unentgeltliche, auf die Laufzeit der Anzeige beschränkte Recht ein, sie auf Huntery und in Vorschauen (etwa bei Suchmaschinen oder beim Teilen eines Links) zu zeigen und dafür technisch zu bearbeiten. Du versicherst, die nötigen Rechte zu haben."
           ]
         },
         {
-          "title": "Melden",
+          "title": "5. Jagdrechtliche Pflichten",
           "points": [
-            "Anzeigen, Profile und Nachrichten lassen sich melden. Die Richtlinien beschreiben, was nicht erlaubt ist."
+            "Du bist selbst dafür verantwortlich, dass ein Angebot und seine Wahrnehmung dem geltenden Jagd-, Waffen- und Tierschutzrecht entsprechen, in Deutschland etwa dem Bundesjagdgesetz und dem jeweiligen Landesjagdgesetz, im Ausland dem Recht des jeweiligen Landes.",
+            "Insbesondere: Jagdpächter kann in Deutschland nur sein, wer seit mindestens drei Jahren einen Jahresjagdschein besitzt (§ 11 Abs. 5 BJagdG); Jagdpachtverträge bedürfen der Schriftform und sind der Behörde anzuzeigen. Begehungsscheine darf nur der Jagdausübungsberechtigte erteilen.",
+            "Anbieter müssen zur Vergabe berechtigt sein. Interessenten müssen die nötigen Erlaubnisse besitzen, etwa einen gültigen Jagdschein. Prüft vor Vertragsschluss gegenseitig die Unterlagen.",
+            "Der Handel mit Waffen, Waffenteilen und Munition ist auf Huntery nicht erlaubt."
           ]
         },
         {
-          "title": "Ende der Nutzung",
+          "title": "6. Kontakt und Nachrichten",
           "points": [
-            "Du kannst dein Konto jederzeit löschen."
+            "Der Kontakt läuft nach der Anmeldung über den Chat. Kontaktdaten gehören nicht in Anzeigen.",
+            "Nachrichten dürfen nur der Anbahnung und Abwicklung der jeweiligen Jagdgelegenheit dienen. Werbung, Spam und Belästigung sind verboten.",
+            "Zahle nicht im Voraus an Unbekannte und besichtige ein Revier vor Vertragsschluss. Die Sicherheitshinweise in der Anzeige helfen dabei."
           ]
         },
         {
-          "title": "Haftung und Änderungen",
+          "title": "7. Moderation",
           "points": [
-            "Platzhalter."
+            "Wir prüfen neue und geänderte Anzeigen vor der Veröffentlichung durch Menschen. Automatische Hinweise (etwa auf Kontaktdaten oder Waffenbegriffe im Text) unterstützen nur diese Prüfung. Gemeldete Inhalte prüfen wir ebenfalls durch Menschen.",
+            "Bei einem Verstoß gegen Gesetze oder diese Bedingungen können wir eine Anzeige ablehnen, zur Bearbeitung zurückgeben, entfernen oder ihren Kartenpunkt entfernen, ein Konto verwarnen oder sperren. Wir wählen die mildeste geeignete Maßnahme und berücksichtigen Schwere, Häufigkeit und Absicht.",
+            "Jede Maßnahme begründen wir dir im Konto und per E-Mail, mit Angabe des Grundes, der Tatsachen und des Weges zur Beschwerde (Art. 17 DSA).",
+            "Wer wiederholt offensichtlich rechtswidrige Inhalte einstellt oder wiederholt offensichtlich unbegründete Meldungen abgibt, wird nach einer Warnung für einen angemessenen Zeitraum gesperrt (Art. 23 DSA)."
+          ]
+        },
+        {
+          "title": "8. Melden",
+          "points": [
+            "Anzeigen, Profile und Nachrichten kannst du über „Melden“ melden, mit Begründung. Wir bestätigen den Eingang, prüfen zeitnah, sorgfältig und objektiv und teilen dir das Ergebnis mit (Art. 16 DSA).",
+            "Ohne Konto erreichst du uns über die Kontaktstelle im Impressum."
+          ]
+        },
+        {
+          "title": "9. Beschwerde und Streitbeilegung",
+          "points": [
+            "Gegen eine Entscheidung der Moderation, auch gegen die Entscheidung über deine Meldung, kannst du innerhalb von sechs Monaten kostenlos Beschwerde im Konto einlegen. Darüber entscheidet ein Mensch, möglichst ein anderer Admin als bei der ursprünglichen Entscheidung, nie automatisiert (Art. 20 DSA).",
+            "Du kannst dich außerdem an eine zertifizierte außergerichtliche Streitbeilegungsstelle nach Art. 21 DSA wenden. Der Rechtsweg bleibt dir immer offen.",
+            "Beschwerden über uns kannst du auch an den Koordinator für digitale Dienste richten, in Deutschland die Bundesnetzagentur."
+          ]
+        },
+        {
+          "title": "10. Verifizierung",
+          "points": [
+            "Das Kennzeichen „verifiziert“ ist freiwillig. Es bedeutet nur, dass wir ein Dokument (etwa einen Jagdschein) gesehen haben und es zum Konto passt. Es ist keine Garantie für Identität, Berechtigung oder Zuverlässigkeit."
+          ]
+        },
+        {
+          "title": "11. Reihenfolge der Anzeigen",
+          "points": [
+            "Suchergebnisse sortieren wir standardmäßig nach dem Datum der Veröffentlichung, die neuesten zuerst; du kannst nach Preis umsortieren und filtern. Bezahlte Platzierungen gibt es nicht; gewerbliche und private Anzeigen werden gleich behandelt."
+          ]
+        },
+        {
+          "title": "12. Gewerbliche Anbieter",
+          "points": [
+            "Gewerbliche Anbieter müssen die gesetzlichen Pflichten gegenüber Verbrauchern selbst erfüllen, etwa Anbieterkennzeichnung und Informationspflichten.",
+            "Schränken wir ein gewerbliches Konto ein oder sperren es, teilen wir die Gründe vorher oder spätestens mit Wirksamwerden mit. Eine ordentliche Beendigung kündigen wir mindestens 30 Tage vorher an. Beschwerden bearbeiten wir über die Beschwerde im Konto; für Streitigkeiten benennen wir folgende Mediatoren: [zwei Mediatoren nach Art. 12 P2B-Verordnung]."
+          ]
+        },
+        {
+          "title": "13. Haftung",
+          "points": [
+            "Wir haften unbeschränkt bei Vorsatz und grober Fahrlässigkeit, für Schäden aus der Verletzung von Leben, Körper oder Gesundheit und nach dem Produkthaftungsgesetz.",
+            "Bei leichter Fahrlässigkeit haften wir nur für die Verletzung wesentlicher Pflichten, auf deren Erfüllung du vertrauen darfst, und begrenzt auf den vorhersehbaren, typischen Schaden.",
+            "Für Inhalte von Nutzern und für Verträge zwischen Nutzern haften wir nicht. Verletzt du Rechte Dritter, stellst du uns von daraus folgenden Ansprüchen frei, soweit du dies zu vertreten hast."
+          ]
+        },
+        {
+          "title": "14. Laufzeit und Kündigung",
+          "points": [
+            "Du kannst dein Konto jederzeit im Konto löschen.",
+            "Wir können den Nutzungsvertrag mit einer Frist von 30 Tagen kündigen. Das Recht zur fristlosen Kündigung aus wichtigem Grund, etwa bei schweren oder wiederholten Verstößen, bleibt unberührt."
+          ]
+        },
+        {
+          "title": "15. Änderungen dieser Bedingungen",
+          "points": [
+            "Wir können diese Bedingungen ändern, wenn sich Huntery oder die Rechtslage ändert. Wir kündigen Änderungen mindestens 15 Tage vorher an. Für die weitere Nutzung bitten wir dich um Zustimmung zur neuen Fassung; ohne Zustimmung kannst du dein Konto löschen."
+          ]
+        },
+        {
+          "title": "16. Schlussbestimmungen",
+          "points": [
+            "Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Bist du Verbraucher, bleibt der Schutz zwingender Vorschriften deines Wohnsitzstaats erhalten.",
+            "Bist du Kaufmann, ist Gerichtsstand [Sitz des Betreibers].",
+            "Diese Bedingungen gibt es in Deutsch, Englisch, Tschechisch und Polnisch; bei Abweichungen gilt die deutsche Fassung.",
+            "Ist eine Bestimmung unwirksam, bleibt der Rest wirksam."
           ]
         }
       ]
@@ -180,146 +256,262 @@
       "title": "Datenschutzerklärung",
       "sections": [
         {
-          "title": "Verantwortlicher und Kontakt",
+          "title": "1. Auf einen Blick",
           "points": [
-            "Name und Anschrift des Betreibers: Platzhalter, siehe Impressum.",
-            "Kontakt für Fragen zum Datenschutz: Platzhalter."
+            "Huntery ist ein Marktplatz für Jagdgelegenheiten. Wir verarbeiten nur die Daten, die wir für Konto, Anzeigen, Kontakt über den Chat und einen sicheren Betrieb brauchen.",
+            "Wir setzen keine Werbe- oder Analyse-Tracker ein, binden keine sozialen Netzwerke ein und laden keine Schriften, Karten oder Skripte von fremden Servern in deinen Browser.",
+            "Exakte Revierlagen, Postleitzahlen und Kontaktdaten sind nie öffentlich sichtbar."
           ]
         },
         {
-          "title": "Konto und Anmeldung",
+          "title": "2. Verantwortlicher",
           "points": [
-            "E-Mail-Adresse, Anmeldecodes und, falls genutzt, „Mit Apple anmelden“.",
-            "Ein Session-Cookie hält dich angemeldet (siehe Cookie-Einstellungen).",
-            "Nie bestätigte Konten werden nach 7 Tagen gelöscht."
+            "Verantwortlich für die Datenverarbeitung ist [Betreiber, Anschrift, siehe Impressum].",
+            "Kontakt für Fragen zum Datenschutz: [E-Mail-Adresse]. Einen Datenschutzbeauftragten haben wir [benannt: Name und Kontakt / nicht benannt, weil nicht verpflichtet]."
           ]
         },
         {
-          "title": "Profil und Anzeigen",
+          "title": "3. Rechtsgrundlagen und Speicherdauer",
           "points": [
-            "Anzeigename, Kontotyp, Firmenname, Land und Sprache.",
-            "Anzeigen mit Texten, Preisen, Wildarten und Fotos.",
-            "Fotos werden auf unserem Server neu kodiert. Dabei fallen Metadaten wie GPS-Koordinaten weg."
+            "Wir verarbeiten Daten zur Erfüllung des Nutzungsvertrags (Art. 6 Abs. 1 lit. b DSGVO), zur Erfüllung rechtlicher Pflichten, insbesondere aus dem Digital Services Act (lit. c), aufgrund berechtigter Interessen an einem sicheren und missbrauchsfreien Betrieb (lit. f) und, wo wir darum bitten, aufgrund deiner Einwilligung (lit. a).",
+            "Wir speichern Daten nur so lange, wie es der Zweck erfordert. Die konkreten Fristen stehen bei den einzelnen Verarbeitungen. Gesetzliche Aufbewahrungsfristen bleiben unberührt."
           ]
         },
         {
-          "title": "Lage",
+          "title": "4. Aufruf der Website",
           "points": [
-            "Öffentliche Seiten zeigen nur Region bzw. Landkreis oder einen bewusst verfremdeten Punkt.",
-            "Postleitzahl und exakte Lage eines Reviers sind nie öffentlich sichtbar."
+            "Beim Aufruf verarbeitet unser Hosting-Anbieter technisch notwendige Daten wie IP-Adresse, Zeitpunkt, aufgerufene Adresse und Browserkennung, um die Seite auszuliefern und Angriffe abzuwehren (lit. f). Diese Protokolle werden nur kurz aufbewahrt [Frist laut Vercel-Tarif].",
+            "Die Verbindung ist immer per TLS verschlüsselt.",
+            "Schriften, Illustrationen und die Karte liefern wir von unserem eigenen Server aus."
           ]
         },
         {
-          "title": "Nachrichten",
+          "title": "5. Cookies und Speicher im Browser",
           "points": [
-            "Nachrichten zwischen Nutzern werden für die Unterhaltung gespeichert und in Echtzeit zugestellt.",
-            "E-Mail-Benachrichtigungen über neue Nachrichten lassen sich abschalten.",
-            "Blockierte Personen können dir nicht schreiben."
+            "Wir setzen nur unbedingt erforderliche Cookies: ein Sitzungs-Cookie, das dich angemeldet hält, und ein kurzlebiges Cookie für den sicheren Anmeldeablauf. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG; eine Einwilligung ist dafür nicht nötig.",
+            "Alle Cookies mit Zweck und Laufzeit stehen auf der Seite „Cookie-Einstellungen“. Sollten wir später Dienste einsetzen, die eine Einwilligung brauchen, fragen wir vorher und du kannst die Einwilligung dort jederzeit widerrufen."
           ]
         },
         {
-          "title": "Suchaufträge",
+          "title": "6. Konto und Anmeldung",
           "points": [
-            "Filter, Takt und Treffer deiner Suchaufträge. Sie laufen 6 Wochen, sofern du sie nicht verlängerst.",
-            "Jede E-Mail enthält einen Link zum Abbestellen per Klick, gültig 90 Tage."
+            "Für ein Konto verarbeiten wir deine E-Mail-Adresse, Anmeldecodes und Sitzungsdaten (lit. b). Ein Passwort gibt es nicht. „Mit Apple anmelden“ nutzen wir erst, wenn es angeboten wird; dann erhalten wir von Apple nur die nötigen Kontodaten.",
+            "Wir speichern, welcher Fassung der Nutzungsbedingungen und der Datenschutzerklärung du wann zugestimmt hast, als Nachweis (lit. c und f).",
+            "Konten, die nie bestätigt wurden, löschen wir nach 7 Tagen."
           ]
         },
         {
-          "title": "Karte",
+          "title": "7. Profil und Anzeigen",
           "points": [
-            "Die Karte kommt von unserem eigenen Server. Es gehen keine Anfragen an fremde Kartenanbieter.",
-            "Die Karte speichert nichts in deinem Browser."
+            "Wir verarbeiten Anzeigename, Kontotyp (privat oder gewerblich), bei gewerblichen Konten den Firmennamen, Land und Sprache sowie deine Anzeigen mit Texten, Preisen, Wildarten und Fotos (lit. b). Andere Nutzer sehen Anzeigename bzw. Firmenname, Land und gegebenenfalls das Kennzeichen „verifiziert“, nie deine E-Mail-Adresse.",
+            "Fotos kodieren wir auf unserem Server neu. Dabei entfallen Metadaten wie GPS-Koordinaten und Kameradaten.",
+            "Öffentlich zeigen wir nur Region und Landkreis oder einen bewusst verfremdeten Kartenpunkt. Postleitzahl und Ort des Reviers sehen nur du und unsere Moderation.",
+            "Veröffentlichte Anzeigen sind öffentlich abrufbar und können von Suchmaschinen erfasst werden. Entwürfe, die du 12 Monate nicht bearbeitest, löschen wir nach einem Hinweis 30 Tage vorher."
           ]
         },
         {
-          "title": "Verifizierung",
+          "title": "8. Nachrichten",
           "points": [
-            "Freiwillig: Ein hochgeladener Jagdschein oder ein ähnliches Dokument liegt privat und ist nur für dich und für Admins sichtbar.",
-            "Das Dokument wird 30 Tage nach der Entscheidung gelöscht."
+            "Nachrichten zwischen Nutzern speichern wir, um die Unterhaltung zu führen und in Echtzeit zuzustellen (lit. b). Wir lesen Nachrichten nur, wenn sie uns gemeldet werden.",
+            "Enthält eine Nachricht Telefonnummer, E-Mail, Bankverbindung oder Koordinaten, zeigt der Chat vor dem Senden einen Sicherheitshinweis. Die Prüfung läuft automatisch und blockiert nichts; du entscheidest, ob du sendest.",
+            "Über neue Nachrichten informieren wir per E-Mail ohne den Nachrichtentext. Das kannst du in den Einstellungen oder über den Link in der E-Mail abschalten.",
+            "Blockierte Personen können dir nicht mehr schreiben."
           ]
         },
         {
-          "title": "Meldungen und Moderation",
+          "title": "9. Suchaufträge und Merkliste",
           "points": [
-            "Meldungen, Moderationsentscheidungen und ihre Begründungen.",
-            "Kopien gemeldeter Nachrichten bleiben 12 Monate nach der Bearbeitung der Meldung.",
-            "Das Protokoll der Admin-Entscheidungen bleibt pseudonymisiert 24 Monate."
+            "Für Suchaufträge speichern wir Filter, Takt und bereits gemeldete Treffer und schicken dir passende neue Anzeigen per E-Mail (lit. b). Suchaufträge laufen nach 6 Wochen ab, wenn du sie nicht verlängerst.",
+            "Jede E-Mail enthält einen Link zum Abbestellen per Klick; er gilt 90 Tage.",
+            "Gemerkte Anzeigen speichern wir in deinem Konto, bis du sie entfernst oder dein Konto löschst."
           ]
         },
         {
-          "title": "Konto löschen",
+          "title": "10. Verifizierung",
           "points": [
-            "Du kannst dein Konto jederzeit nach einer erneuten Anmeldung löschen.",
-            "Profil, Anzeigen, Fotos, Nachrichten, Suchaufträge und Dokumente werden sofort gelöscht.",
-            "Es bleiben nur pseudonymisierte Moderationsdaten und Meldungen zum Konto bis zu ihrer Frist."
+            "Freiwillig kannst du einen Jagdschein, eine Jagdkarte oder eine Revierbescheinigung hochladen, um das Kennzeichen „verifiziert“ zu erhalten (lit. a). Das Dokument liegt in einem privaten Speicher und ist nur für dich und für Admins sichtbar; jeder Abruf durch Admins wird protokolliert.",
+            "Wir löschen das Dokument 30 Tage nach der Entscheidung, bei Löschung deines Kontos sofort. Die Entscheidung selbst bleibt bis zur Löschung deines Kontos gespeichert. Du kannst die Einwilligung jederzeit widerrufen; das Kennzeichen entfällt dann."
           ]
         },
         {
-          "title": "Datenexport",
+          "title": "11. Meldungen und Moderation",
           "points": [
-            "Du kannst alle deine Daten im Konto als JSON-Datei herunterladen."
+            "Wir prüfen Anzeigen vor der Veröffentlichung und bearbeiten Meldungen. Dabei verarbeiten wir Meldungen, Entscheidungen, Begründungen und Beschwerden (lit. c in Verbindung mit Art. 16, 17 und 20 DSA, sowie lit. f).",
+            "Meldende erfahren nur das Ergebnis, nicht die Identität der Gemeldeten, und umgekehrt.",
+            "Kopien gemeldeter Nachrichten und Meldungen bewahren wir 12 Monate nach der Bearbeitung auf, das Protokoll der Admin-Entscheidungen pseudonymisiert 24 Monate.",
+            "Wir treffen keine ausschließlich automatisierten Entscheidungen im Sinne von Art. 22 DSGVO. Automatische Hinweise, etwa auf Kontaktdaten im Anzeigentext, unterstützen nur die Prüfung durch Menschen."
           ]
         },
         {
-          "title": "Hosting und Auftragsverarbeiter",
+          "title": "12. Schutz vor Missbrauch",
           "points": [
-            "Datenbank, Dateispeicher und Anmeldung: Supabase, Region EU (Frankfurt).",
-            "E-Mail-Versand: Anbieter wird noch benannt.",
-            "Backups und Logs bei Hoster und Mail-Anbieter bleiben bis zu deren Frist (wird noch benannt)."
+            "Um Spam und Missbrauch zu verhindern, begrenzen wir die Zahl neuer Anzeigen, Unterhaltungen und Nachrichten je Zeitraum (lit. f). Dafür zählen wir deine Aktionen, ohne ihren Inhalt auszuwerten."
           ]
         },
         {
-          "title": "Deine Rechte",
+          "title": "13. E-Mails",
           "points": [
-            "Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Beschwerde bei einer Aufsichtsbehörde: Platzhalter."
+            "Wir versenden nur Nachrichten, die zum Konto gehören: Anmeldecodes, Hinweise zu deinen Anzeigen, Moderationsentscheidungen, Nachrichten- und Suchauftragsbenachrichtigungen. Werbung schicken wir nicht.",
+            "Unsere E-Mails enthalten keine Zählpixel und keine Klickverfolgung."
+          ]
+        },
+        {
+          "title": "14. Konto löschen und Datenexport",
+          "points": [
+            "Du kannst dein Konto jederzeit nach einer erneuten Anmeldung löschen. Profil, Anzeigen, Fotos, Nachrichten, Suchaufträge und Dokumente löschen wir sofort; Nachrichten, die nie gemeldet wurden, verschwinden auch beim Gegenüber.",
+            "Es bleiben nur das pseudonymisierte Protokoll der Admin-Entscheidungen (24 Monate), Meldungen zu deinem Konto und Kopien gemeldeter Nachrichten (12 Monate nach Bearbeitung) sowie unsere verschlüsselten Datensicherungen bis zu ihrem Ablauf nach 14 Tagen.",
+            "Alle deine Daten kannst du im Konto als JSON-Datei herunterladen (Art. 20 DSGVO)."
+          ]
+        },
+        {
+          "title": "15. Empfänger und Auftragsverarbeiter",
+          "points": [
+            "Hosting der Website: Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA. Die Server-Funktionen laufen in Frankfurt am Main. Grundlage ist ein Auftragsverarbeitungsvertrag; für Übermittlungen in die USA gelten der Angemessenheitsbeschluss zum EU-US Data Privacy Framework und Standardvertragsklauseln [Zertifizierung prüfen].",
+            "Datenbank, Anmeldung, Dateispeicher und Hintergrundfunktionen: Supabase Inc., USA, mit Speicherort in Frankfurt am Main (AWS eu-central-1), auf Grundlage eines Auftragsverarbeitungsvertrags und von Standardvertragsklauseln.",
+            "E-Mail-Versand: united-domains GmbH, Gautinger Straße 10, 82319 Starnberg, Deutschland, auf Grundlage eines Auftragsverarbeitungsvertrags.",
+            "Fehlerüberwachung: Functional Software Inc. (Sentry), USA, mit Datenspeicherung in der EU (Frankfurt). Wir übermitteln nur technische Fehlerberichte ohne IP-Adresse, Cookies, Nutzerkennung oder Inhalte (lit. f), auf Grundlage eines Auftragsverarbeitungsvertrags und von Standardvertragsklauseln.",
+            "Datensicherung: Wir sichern die Datenbank täglich verschlüsselt und bewahren die Sicherungen 14 Tage auf [Speicherort nennen].",
+            "Darüber hinaus geben wir Daten nur weiter, wenn wir gesetzlich dazu verpflichtet sind, zum Beispiel an Strafverfolgungsbehörden (Art. 18 DSA)."
+          ]
+        },
+        {
+          "title": "16. Deine Rechte",
+          "points": [
+            "Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21).",
+            "Eine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen.",
+            "Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren, insbesondere in dem Land, in dem du wohnst. Für uns zuständig ist [Aufsichtsbehörde am Sitz des Betreibers].",
+            "Viele Rechte kannst du direkt im Konto ausüben: Daten ändern, exportieren und das Konto löschen. Für alles andere schreib uns an [Datenschutz-E-Mail]."
+          ]
+        },
+        {
+          "title": "17. Änderungen",
+          "points": [
+            "Wir passen diese Erklärung an, wenn sich Huntery oder die Rechtslage ändert. Die jeweils aktuelle Fassung steht hier; bei wesentlichen Änderungen informieren wir angemeldete Nutzer."
           ]
         }
       ]
     },
     "imprint": {
-      "title": "Impressum"
+      "title": "Impressum",
+      "sections": [
+        {
+          "title": "Anbieter",
+          "points": [
+            "Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)",
+            "[Name bzw. Firma und Rechtsform des Betreibers]",
+            "[Straße und Hausnummer, PLZ und Ort, Land]",
+            "Vertreten durch: [vertretungsberechtigte Person(en)]",
+            "Huntery ist ein Angebot der Marke Die Jagdbrüder."
+          ]
+        },
+        {
+          "title": "Kontakt",
+          "points": [
+            "E-Mail: [Kontaktadresse, z. B. kontakt@huntery.de]",
+            "Telefon: [Telefonnummer]",
+            "Die Adresse no-reply@huntery.de versendet nur automatische Nachrichten und wird nicht gelesen."
+          ]
+        },
+        {
+          "title": "Register und Umsatzsteuer",
+          "points": [
+            "Registergericht und Registernummer: [falls vorhanden]",
+            "Umsatzsteuer-Identifikationsnummer nach § 27a UStG: [falls vorhanden]"
+          ]
+        },
+        {
+          "title": "Verantwortlich für den Inhalt",
+          "points": [
+            "Verantwortlich nach § 18 Abs. 2 Medienstaatsvertrag: [Name, Anschrift]",
+            "Für Anzeigen, Profile und Nachrichten sind die Nutzer verantwortlich, die sie einstellen."
+          ]
+        },
+        {
+          "title": "Kontaktstellen nach dem Digital Services Act",
+          "points": [
+            "Zentrale Kontaktstelle für Behörden, die EU-Kommission und das Gremium für digitale Dienste (Art. 11 DSA) sowie für Nutzer (Art. 12 DSA): [E-Mail-Adresse]. Sprachen: Deutsch und Englisch.",
+            "Rechtswidrige Inhalte meldest du am schnellsten direkt an der Anzeige, am Profil oder an der Nachricht über „Melden“."
+          ]
+        },
+        {
+          "title": "Verbraucherstreitbeilegung",
+          "points": [
+            "Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen (§ 36 VSBG).",
+            "Für Entscheidungen der Moderation gibt es zusätzlich die interne Beschwerde und die außergerichtliche Streitbeilegung nach dem Digital Services Act (siehe Nutzungsbedingungen)."
+          ]
+        },
+        {
+          "title": "Haftung für Inhalte und Links",
+          "points": [
+            "Wir erstellen die Inhalte dieser Seiten mit Sorgfalt. Für Inhalte, die Nutzer einstellen, sind wir nach den gesetzlichen Vorschriften erst verantwortlich, sobald wir von einer konkreten Rechtsverletzung Kenntnis erhalten. Dann entfernen wir den Inhalt unverzüglich.",
+            "Für Inhalte verlinkter fremder Websites sind deren Betreiber verantwortlich. Bei Kenntnis von Rechtsverletzungen entfernen wir solche Links."
+          ]
+        },
+        {
+          "title": "Urheberrecht",
+          "points": [
+            "Texte, Gestaltung, Logo und Illustrationen von Huntery sind urheberrechtlich geschützt. Die Nutzung außerhalb der Plattform bedarf unserer Zustimmung.",
+            "Kartendaten: © OpenStreetMap-Mitwirkende; weitere Quellen und Lizenzen stehen auf der Seite „Datenquellen“."
+          ]
+        }
+      ]
     },
     "footerLabel": "Rechtliches",
-    "outlineNote": "Diese Gliederung nennt, was die Plattform tatsächlich verarbeitet. Sie ist kein Rechtstext.",
+    "outlineNote": "Dieser Text beschreibt, wie Huntery tatsächlich arbeitet und welche Daten dabei verarbeitet werden.",
     "guidelines": {
       "title": "Richtlinien",
-      "intro": "Diese Regeln gelten für alle Anzeigen, Profile und Nachrichten. Verstöße führen zur Ablehnung oder Entfernung und bei Wiederholung zur Sperre des Kontos.",
+      "intro": "Diese Regeln gelten für alle Anzeigen, Profile und Nachrichten und sind Bestandteil der Nutzungsbedingungen. Verstöße führen zur Ablehnung oder Entfernung, bei Wiederholung zur Verwarnung oder Sperre des Kontos.",
       "sections": [
         {
           "title": "Nur Jagdgelegenheiten",
           "points": [
-            "Jede Anzeige muss in eine der Kategorien passen.",
-            "Kein Verkauf, Kauf oder Tausch von Waffen, Munition oder Waffenteilen."
+            "Jede Anzeige muss in eine der Anzeigenarten passen: Jagdpacht, Begehungsschein, Gesellschaftsjagd, Trophäen- oder Gastjagd, Jagdhelfer oder Mitjäger, jeweils als Angebot oder Gesuch.",
+            "Kein Verkauf, Kauf oder Tausch von Waffen, Waffenteilen, Munition oder Wildbret und keine Werbung für andere Waren.",
+            "Wähle die richtige Anzeigenart und Richtung (Angebot oder Gesuch). Eine Anzeige beschreibt genau eine Gelegenheit."
           ]
         },
         {
-          "title": "Verbotene Inhalte",
+          "title": "Rechtmäßig und waidgerecht",
           "points": [
-            "Keine rechtswidrigen, diskriminierenden, bedrohenden oder sexuellen Inhalte.",
-            "Keine Angebote, die gegen das Jagdrecht verstoßen, zum Beispiel Jagd in der Schonzeit.",
-            "Keine von anderen Websites kopierten Texte und keine Fotos ohne eigene Rechte daran.",
-            "Keine Fotos von erlegtem Wild (zum Beispiel Strecke oder Trophäe am Stück). Anzeigen mit solchen Fotos werden abgelehnt."
+            "Keine Angebote, die gegen Jagd-, Waffen-, Naturschutz- oder Tierschutzrecht verstoßen, zum Beispiel Jagd in der Schonzeit, auf geschützte Arten, ohne Abschussplan oder in Gattern, wo das verboten ist.",
+            "Keine Begehungsscheine oder Pachten, zu deren Vergabe du nicht berechtigt bist.",
+            "Gastjagden im Ausland nur, wenn sie nach dem Recht des jeweiligen Landes zulässig sind."
           ]
         },
         {
           "title": "Wahr und vollständig",
           "points": [
-            "Angaben müssen vollständig und plausibel sein.",
-            "Keine doppelten Anzeigen für dieselbe Gelegenheit."
+            "Angaben zu Fläche, Wildarten, Preis, Zeitraum und Bedingungen müssen zutreffen und plausibel sein. Nenne wesentliche Einschränkungen, etwa Mitjäger, Abschussvorgaben oder Kosten für Wildschaden.",
+            "Keine doppelten Anzeigen für dieselbe Gelegenheit und kein ständiges Neueinstellen, um oben zu stehen.",
+            "Nutze eigene Fotos oder solche, an denen du die Rechte hast. Keine von anderen Websites kopierten Texte oder Bilder.",
+            "Keine Fotos von erlegtem Wild (zum Beispiel Strecke oder Trophäe am Stück) in Anzeigen."
           ]
         },
         {
           "title": "Kontakt und Privatsphäre",
           "points": [
-            "Keine Telefonnummern, E-Mail-Adressen oder Links im Anzeigentext. Der Kontakt läuft über den Chat.",
-            "Keine exakten Koordinaten von Revieren und keine personenbezogenen Daten anderer."
+            "Keine Telefonnummern, E-Mail-Adressen, Links oder Messenger-Namen im Anzeigentext. Der Kontakt läuft über den Chat.",
+            "Keine exakten Koordinaten von Revieren oder Hochsitzen und keine personenbezogenen Daten anderer, etwa Namen von Jagdgenossen oder Pächtern ohne deren Zustimmung."
           ]
         },
         {
-          "title": "Nachrichten",
+          "title": "Respektvoller Umgang",
           "points": [
-            "Kein Spam, keine Belästigung, keine Betrugsversuche.",
+            "Keine beleidigenden, diskriminierenden, bedrohenden, gewaltverherrlichenden oder sexuellen Inhalte, auch nicht in Profilen und Nachrichten.",
+            "Kein Spam, keine Massennachrichten, keine Belästigung und keine Betrugsversuche, etwa Vorkasse für ein nicht existierendes Revier.",
             "Du kannst Nachrichten melden und Personen blockieren."
+          ]
+        },
+        {
+          "title": "Gewerbliche Anbieter",
+          "points": [
+            "Wer gewerblich anbietet, etwa als Jagdreiseveranstalter, Forstbetrieb oder Vermittler, nutzt ein gewerbliches Konto und erfüllt die gesetzlichen Informationspflichten selbst."
+          ]
+        },
+        {
+          "title": "Folgen von Verstößen",
+          "points": [
+            "Je nach Schwere lehnen wir eine Anzeige ab, geben sie zur Bearbeitung zurück, entfernen sie oder ihren Kartenpunkt, verwarnen das Konto oder sperren es. Du erhältst immer eine Begründung und kannst Beschwerde einlegen (siehe Nutzungsbedingungen)."
           ]
         }
       ]

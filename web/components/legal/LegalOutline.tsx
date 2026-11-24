@@ -4,7 +4,7 @@ import { ui } from "@/components/ui/styles";
 
 export type OutlineSection = { title: string; points: string[] };
 
-/** Markierter Hinweis auf Platzhalter-Rechtstexte (CLAUDE.md, SPEC 7.2): nie als fertig ausgeben. */
+/** Markierter Hinweis auf Entwürfe der Rechtstexte (CLAUDE.md, SPEC 7.2): nie als fertig ausgeben. */
 export async function PlaceholderNote() {
   const t = await getTranslations("Legal");
   return (
@@ -15,7 +15,7 @@ export async function PlaceholderNote() {
   );
 }
 
-/** Gliederung aus den tatsächlichen Verarbeitungen (Plan M9 2), als Stichpunkte statt Rechtstext. */
+/** Rechtstext in Abschnitten mit Absätzen (Entwurf 2026-11-25, Grundlage: tatsächliche Verarbeitungen, Plan M9 2). */
 export async function LegalOutline({ sections }: { sections: OutlineSection[] }) {
   const t = await getTranslations("Legal");
   return (
